@@ -1,6 +1,6 @@
 
 
-<div class="orders-action" [ngClass]="{'show-tray': trayOpen, 'hide-tray': !trayOpen}">
+<div id="mainOrderSection" class="orders-action" [ngClass]="{'show-tray': trayOpen, 'hide-tray': !trayOpen}">
 <div class="apierror" *ngIf="apierror">{{apierror}}</div>
   <div class="container-fluid orders-view">
     <div class="row">
@@ -117,7 +117,7 @@
         </div>
         </div>
 
-        <div id="mainOrderSection" class="col-md-12 order-row" *ngIf="sidePanelData">
+        <div  class="col-md-12 order-row" *ngIf="sidePanelData">
 
             <div class="container-fluid orders-tray" *ngFor="let order of sidePanelData">
               <div class="row delivery-details">
@@ -165,11 +165,11 @@
                 <p>Product Components -</p>
                 <div class="col-md-12 product-holder">
                   <div class="row">
-                    <div class="col-md-4 no-padding">
+                    <div class="col-md-4 no-padding comp1">
                       <img class="product-image" src="https://d1xs5fw35mbn8b.cloudfront.net/p/m/p-round-black-forest-cake-half-kg--13461-m.jpg?v=1495502520000" alt="Product 1">
                       <span class="equal-sign">=</span>
                     </div>
-                    <div class="col-md-8 no-padding">
+                    <div class="col-md-8 no-padding comp2">
                       <span *ngFor="let prodComponent of orderProduct.componentList; let i='index'">
                           <div class="product-component">
                             <div class="component-head">{{prodComponent.componentCode}}</div>

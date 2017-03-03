@@ -160,6 +160,17 @@ export class OrdersActionTrayComponent implements OnInit {
               <head>
                   <title>Order List</title>
           <style>
+                  .order-actions{
+                        display:none;
+                    }
+
+                  .comp1, .comp2{
+                      display:inline-block;
+                  }
+
+
+
+
                   .orders-action {
                           width: 61%;
                           height: 100%;
@@ -222,9 +233,7 @@ export class OrdersActionTrayComponent implements OnInit {
                           width: 96%;
                       }
 
-                  .order-details {
-                          border-right: 2px solid #E0E0E0;
-                      }
+
 
                   .order-actions {
                           padding: 2px 35px;
