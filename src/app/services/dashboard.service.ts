@@ -37,7 +37,21 @@ export class DashboardService {
         }
     }
 
-    formarDashBoardData(data){
+    formarDashBoardData(data, dataType){
+        var dataTypeSelect;
+        switch(dataType){
+            case "all": dataTypeSelect = "dateStatusCountAllMap";
+                break;
+
+            case "sla": dataTypeSelect = "dateStatusCountBreachMap";
+                break;
+
+            case "alert": dataTypeSelect = "dateStatusCountAlertMap";
+                break;
+
+            default : dataTypeSelect = "dateStatusCountAllMap";
+        }
+
         var _this = this;
         let apiResponse = data;
         let fesDate;
@@ -171,7 +185,7 @@ export class DashboardService {
             }
         };
 
-        let dashboardCounts = apiResponse.result.dateStatusCountAllMap;
+        let dashboardCounts = apiResponse.result[dataTypeSelect];
         let dashboardCountsArray = []; //Objet is needed to convert into Array as Object doesn't guarntee to maintain order of property
         for(let prop in dashboardCounts){
             if(dashboardCounts.hasOwnProperty(prop)){
@@ -278,9 +292,9 @@ export class DashboardService {
 
                 var response = JSON.parse(response);
                 console.log('dashboard response ----------->', response);
-                if(Object.keys(response.result.dateStatusCountAllMap).length < 4){
+                /*if(Object.keys(response.result.dateStatusCountAllMap).length < 4){
                     response.result.dateStatusCountAllMap['2017-06-26'] = {"Processed"  : 0, "Confirmed" : 0};
-                }
+                }*/
                 return cb(response);
             });
 
@@ -289,7 +303,7 @@ export class DashboardService {
     getDashboardData(specificDate, cb, dataType) {
         var _this = this;
          this.getDashboardCount(specificDate, function(result){
-             let getDashboardDataResponse = _this.formarDashBoardData(result);
+             let getDashboardDataResponse = _this.formarDashBoardData(result, dataType);
              return cb(getDashboardDataResponse);
         });
     }

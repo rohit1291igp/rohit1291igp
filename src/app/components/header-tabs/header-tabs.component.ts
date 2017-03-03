@@ -26,6 +26,8 @@ export class HeaderTabsComponent implements OnInit {
     e.preventDefault();
     this.activeTab = currentTab;
     console.log('Tab clicked:', currentTab);
+
+    this.onTabChanged.emit(e);
   }
 
 }

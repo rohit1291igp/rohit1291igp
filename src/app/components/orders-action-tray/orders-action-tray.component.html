@@ -11,7 +11,7 @@
       </div>
 
         <div class="col-md-11 no-padding">
-            <p class="text-bold uppercase">{{orderByStatus}} orders
+            <p class="text-bold uppercase"><span *ngIf="!orderByStatus">Searched Order</span> <span *ngIf="orderByStatus">{{orderByStatus}} Orders</span>
                 <!--- Delivery for today  {{orderId}}-->
             </p>
             <p class="text-grey no-margin">Total - <span *ngIf="!sidePanelData">0</span><span *ngIf="sidePanelData">{{sidePanelData.length}}</span> Orders</p>

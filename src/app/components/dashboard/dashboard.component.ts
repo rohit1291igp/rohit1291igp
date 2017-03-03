@@ -15,6 +15,7 @@ import { UtilityService } from '../../services/utility.service';
 export class DashboardComponent implements OnInit {
   @ViewChild(OrdersActionTrayComponent) child: OrdersActionTrayComponent;
   searchModel : any = {};
+  dashBoardDataType;
   private mainHeaderComponent: MainHeaderComponent;
   private dashboardData: Object;
   private masterData: Object;
@@ -41,7 +42,7 @@ export class DashboardComponent implements OnInit {
     this.dashboardService.getDashboardData(null, function(result){
         _this.dashboardData = result;
         _this.dateRange = _this.setFestivalDate(result.festivalDate || new Date());
-    },null);
+    },_this.dashBoardDataType);
     this.masterData = this.dashboardService.getMasterData();
     //this.getDashboardData();
   }
@@ -81,7 +82,7 @@ export class DashboardComponent implements OnInit {
         this.dashboardService.getDashboardData(selectedDate, function(result){
             _this.dashboardData = result;
             _this.dateRange = _this.setFestivalDate(result.festivalDate || new Date());
-        }, null);
+        }, _this.dashBoardDataType);
   }
 
   setFestivalDate(fesDate){
@@ -91,12 +92,12 @@ export class DashboardComponent implements OnInit {
   }
 
   loadDashboardCount(e){
-      let dataType = "all";
+      this.dashBoardDataType = e.currentTarget.dataset.tab;
       var _this = this;
       this.dashboardService.getDashboardData(null, function(result){
           _this.dashboardData = result;
           _this.dateRange = _this.setFestivalDate(result.festivalDate || new Date());
-      }, dataType);
+      }, _this.dashBoardDataType);
   }
 
 
