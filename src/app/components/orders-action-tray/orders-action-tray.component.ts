@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { BackendService } from '../../services/backend.service';
+import { UtilityService } from '../../services/utility.service';
 
 @Component({
   selector: 'app-orders-action-tray',
@@ -22,6 +23,7 @@ export class OrdersActionTrayComponent implements OnInit {
   constructor(
       private BackendService : BackendService,
       private router: Router,
+      private UtilityService: UtilityService
       ) { }
 
   ngOnInit() {
@@ -29,6 +31,7 @@ export class OrdersActionTrayComponent implements OnInit {
 
   toggleTray(e, orderByStatus, orderId) {
     e.preventDefault();
+    this.apierror = null;
     this.sidePanelData = null;
     this.orderByStatus = orderByStatus;
     switch(orderByStatus){
@@ -71,7 +74,7 @@ export class OrdersActionTrayComponent implements OnInit {
       if(orderId){
           reqURL ="?responseType=json&scopeId=1&fkassociateId="+fkAssociateId+"&orderId="+orderId+"&method=igp.order.getOrder";
       }else if(orderByStatus){
-          let spDate = Date.now();
+          let spDate = Date.now(); //_this.UtilityService.getDateString(0);
           let orderStatus = orderByStatus;
           reqURL ="?responseType=json&scopeId=1&status="+orderStatus+"&fkassociateId="+fkAssociateId+"&date="+spDate+"&method=igp.order.getOrderByStatusDate";
       }
@@ -83,8 +86,9 @@ export class OrdersActionTrayComponent implements OnInit {
       };
 
       this.BackendService.makeAjax(reqObj, function(err, response, headers){
-          if(err) {
-              console.log(err)
+          if(err || JSON.parse(response).error) {
+              console.log('Error=============>', err, JSON.parse(response).errorCode);
+              _this.apierror = err || JSON.parse(response).errorCode;
               return;
           }
           response = JSON.parse(response);
@@ -106,7 +110,7 @@ export class OrdersActionTrayComponent implements OnInit {
 
       this.BackendService.makeAjax(reqObj, function(err, response, headers){
           if(err || JSON.parse(response).error) {
-              console.log(err, JSON.parse(response).errorCode)
+              console.log('Error=============>', err, JSON.parse(response).errorCode);
               _this.apierror = err || JSON.parse(response).errorCode;
               return;
           }

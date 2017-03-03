@@ -14,7 +14,7 @@ import { UtilityService } from '../../services/utility.service';
 })
 export class DashboardComponent implements OnInit {
   @ViewChild(OrdersActionTrayComponent) child: OrdersActionTrayComponent;
-
+  searchModel : any = {};
   private mainHeaderComponent: MainHeaderComponent;
   private dashboardData: Object;
   private masterData: Object;
@@ -44,6 +44,10 @@ export class DashboardComponent implements OnInit {
     });
     this.masterData = this.dashboardService.getMasterData();
     //this.getDashboardData();
+  }
+
+  search(){
+    console.log('SearchKey==========>', this.searchModel.searchkey);
   }
 
   viewOrders(e) {
