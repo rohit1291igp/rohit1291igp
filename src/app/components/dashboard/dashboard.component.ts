@@ -41,7 +41,7 @@ export class DashboardComponent implements OnInit {
     this.dashboardService.getDashboardData(null, function(result){
         _this.dashboardData = result;
         _this.dateRange = _this.setFestivalDate(result.festivalDate || new Date());
-    });
+    },null);
     this.masterData = this.dashboardService.getMasterData();
     //this.getDashboardData();
   }
@@ -81,7 +81,7 @@ export class DashboardComponent implements OnInit {
         this.dashboardService.getDashboardData(selectedDate, function(result){
             _this.dashboardData = result;
             _this.dateRange = _this.setFestivalDate(result.festivalDate || new Date());
-        });
+        }, null);
   }
 
   setFestivalDate(fesDate){
@@ -90,12 +90,13 @@ export class DashboardComponent implements OnInit {
       return { date: { year: fesDate.getFullYear(), month: (fesDate.getMonth()+1), day: fesDate.getDate() } }
   }
 
-  loadDashboardCount(){
+  loadDashboardCount(e){
+      let dataType = "all";
       var _this = this;
       this.dashboardService.getDashboardData(null, function(result){
           _this.dashboardData = result;
           _this.dateRange = _this.setFestivalDate(result.festivalDate || new Date());
-      });
+      }, dataType);
   }
 
 

@@ -1,4 +1,4 @@
-<app-header-tabs></app-header-tabs>
+<app-header-tabs (onTabChanged)="loadDashboardCount($event)"></app-header-tabs>
 
 <div class="col-md-2 searchbox" style="top: 4.5em; left: 84%; position: absolute;">
     <form name="form" (ngSubmit)="f.form.valid && search($event)" #f="ngForm" novalidate>

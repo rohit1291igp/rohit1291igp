@@ -33,7 +33,7 @@ export class OrdersActionTrayComponent implements OnInit {
     e.preventDefault();
     this.apierror = null;
     this.sidePanelData = null;
-    this.orderByStatus = orderByStatus;
+    /*this.orderByStatus = orderByStatus;
     switch(orderByStatus){
         case "Processed" :  this.orderUpdateByStatus = "Confirmed";
                             this.orderUpdateByStatusDisable = false;
@@ -50,7 +50,7 @@ export class OrdersActionTrayComponent implements OnInit {
         case "Shipped" :    this.orderUpdateByStatus = "Shipped";
                             this.orderUpdateByStatusDisable = true;
             break;
-    }
+    }*/
 
     this.orderId = orderId;
     if(e.currentTarget.dataset.trayopen){
@@ -120,6 +120,33 @@ export class OrdersActionTrayComponent implements OnInit {
           _this.onStatusUpdate.emit(e);
           _this.trayOpen = false;
       });
+  }
+
+  getNxtOrderStatus(orderByStatus){
+      this.orderByStatus = orderByStatus;
+      switch(orderByStatus){
+          case "Processed" :  this.orderUpdateByStatus = "Confirmed";
+              this.orderUpdateByStatusDisable = false;
+              break;
+
+          case "Confirmed" :  this.orderUpdateByStatus = "OutForDelivery";
+              this.orderUpdateByStatusDisable = false;
+              break;
+
+          case "OutForDelivery" : this.orderUpdateByStatus = "Shipped";
+              this.orderUpdateByStatusDisable = false;
+              break;
+
+          case "Shipped" :    this.orderUpdateByStatus = "Shipped";
+              this.orderUpdateByStatusDisable = true;
+              break;
+
+          case "Dispatched" :    this.orderUpdateByStatus = "Shipped";
+              this.orderUpdateByStatusDisable = true;
+              break;
+      }
+
+      return this.orderUpdateByStatus;
   }
 
   printPage(e){

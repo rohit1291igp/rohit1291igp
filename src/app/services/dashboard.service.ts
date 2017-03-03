@@ -286,7 +286,7 @@ export class DashboardService {
 
     }
 
-    getDashboardData(specificDate, cb) {
+    getDashboardData(specificDate, cb, dataType) {
         var _this = this;
          this.getDashboardCount(specificDate, function(result){
              let getDashboardDataResponse = _this.formarDashBoardData(result);
