@@ -46,8 +46,9 @@ export class DashboardComponent implements OnInit {
     //this.getDashboardData();
   }
 
-  search(){
+  search(e){
     console.log('SearchKey==========>', this.searchModel.searchkey);
+    //this.child.toggleTray(e, "", this.searchModel.searchkey);
   }
 
   viewOrders(e) {

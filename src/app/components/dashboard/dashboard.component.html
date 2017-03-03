@@ -1,7 +1,7 @@
 <app-header-tabs></app-header-tabs>
 
 <div class="col-md-2 searchbox" style="top: 4.5em; left: 84%; position: absolute;">
-    <form name="form" (ngSubmit)="f.form.valid && search()" #f="ngForm" novalidate>
+    <form name="form" (ngSubmit)="f.form.valid && search($event)" #f="ngForm" novalidate>
          <input name="searchkey" type="number" class="input-right" placeholder="Search by Order Number" [(ngModel)]="searchModel.searchkey" #searchkey="ngModel" style="width:100%;" required>
          <div *ngIf="f.submitted && !searchkey.valid" class="help-block"></div>
     </form>
