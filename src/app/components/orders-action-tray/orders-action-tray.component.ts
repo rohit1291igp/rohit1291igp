@@ -63,10 +63,10 @@ export class OrdersActionTrayComponent implements OnInit {
 
     //this.trayOpen = !this.trayOpen;
     console.log('trayOpen: and loading data', this.trayOpen);
-    if(orderByStatus || orderId) this.loadTrayData(orderByStatus, orderId);
+    if(orderByStatus || orderId) this.loadTrayData(e, orderByStatus, orderId);
   }
 
-  loadTrayData(orderByStatus, orderId){
+  loadTrayData(e, orderByStatus, orderId){
       let fkAssociateId = localStorage.getItem('fkAssociateId');
       var _this = this;
       var reqURL:string;
@@ -74,9 +74,16 @@ export class OrdersActionTrayComponent implements OnInit {
       if(orderId){
           reqURL ="?responseType=json&scopeId=1&fkassociateId="+fkAssociateId+"&orderId="+orderId+"&method=igp.order.getOrder";
       }else if(orderByStatus){
-          let spDate = Date.now(); //_this.UtilityService.getDateString(0);
+          let orderDate = e.currentTarget.dataset.orderday;
+          let orderDeliveryTime = e.currentTarget.dataset.deliverytime;
+          let spDate = Date.parse(orderDate); //Date.now();
           let orderStatus = orderByStatus;
-          reqURL ="?responseType=json&scopeId=1&status="+orderStatus+"&fkassociateId="+fkAssociateId+"&date="+spDate+"&method=igp.order.getOrderByStatusDate";
+
+          if(orderDeliveryTime === "future"){
+              reqURL ="?responseType=json&scopeId=1&isfuture=true&status="+orderStatus+"&fkassociateId="+fkAssociateId+"&date="+spDate+"&method=igp.order.getOrderByStatusDate";
+          }else{
+              reqURL ="?responseType=json&scopeId=1&status="+orderStatus+"&fkassociateId="+fkAssociateId+"&date="+spDate+"&method=igp.order.getOrderByStatusDate";
+          }
       }
 
       let reqObj =  {
