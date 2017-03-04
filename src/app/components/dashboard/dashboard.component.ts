@@ -40,6 +40,10 @@ export class DashboardComponent implements OnInit {
     this.dashboardData = this.dashboardService.getCustomData();
     this.dateRange = this.setFestivalDate(new Date());
     this.dashboardService.getDashboardData(null, function(result){
+        if(result.new[0].deliveryTimes !== "today") {
+            _this.dashboardData = _this.dashboardService.getCustomData();
+            return;
+        }
         _this.dashboardData = result;
         _this.dateRange = _this.setFestivalDate(result.festivalDate || new Date());
     },_this.dashBoardDataType);
@@ -80,6 +84,10 @@ export class DashboardComponent implements OnInit {
       let selectedDate = new Date(event.jsdate).toLocaleDateString(); //event.jsdate;
         var _this = this;
         this.dashboardService.getDashboardData(selectedDate, function(result){
+            if(result.new[0].deliveryTimes !== "today") {
+                _this.dashboardData = _this.dashboardService.getCustomData();
+                return;
+            }
             _this.dashboardData = result;
             _this.dateRange = _this.setFestivalDate(result.festivalDate || new Date());
         }, _this.dashBoardDataType);
@@ -95,6 +103,10 @@ export class DashboardComponent implements OnInit {
       this.dashBoardDataType = e.currentTarget.dataset.tab;
       var _this = this;
       this.dashboardService.getDashboardData(null, function(result){
+          if(result.new[0].deliveryTimes !== "today") {
+              _this.dashboardData = _this.dashboardService.getCustomData();
+              return;
+          }
           _this.dashboardData = result;
           _this.dateRange = _this.setFestivalDate(result.festivalDate || new Date());
       }, _this.dashBoardDataType);
