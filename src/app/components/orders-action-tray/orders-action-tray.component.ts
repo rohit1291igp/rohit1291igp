@@ -47,9 +47,18 @@ export class OrdersActionTrayComponent implements OnInit {
                                 this.orderUpdateByStatusDisable = false;
             break;
 
+        case "Partially Dispatched" : this.orderUpdateByStatus = "OutForDelivery";
+            this.orderUpdateByStatusDisable = false;
+            break;
+
         case "Shipped" :    this.orderUpdateByStatus = "Shipped";
                             this.orderUpdateByStatusDisable = true;
             break;
+
+        case "Dispatched" :    this.orderUpdateByStatus = "Shipped";
+                               this.orderUpdateByStatusDisable = true;
+            break;
+
     }
 
     this.orderId = orderId;
@@ -141,6 +150,10 @@ export class OrdersActionTrayComponent implements OnInit {
               this.orderUpdateByStatusDisable = false;
               break;
 
+          case "Partially Dispatched" : this.orderUpdateByStatus = "OutForDelivery";
+              this.orderUpdateByStatusDisable = false;
+              break;
+
           case "OutForDelivery" : this.orderUpdateByStatus = "Shipped";
               this.orderUpdateByStatusDisable = false;
               break;
@@ -152,6 +165,7 @@ export class OrdersActionTrayComponent implements OnInit {
           case "Dispatched" :    this.orderUpdateByStatus = "Shipped";
               this.orderUpdateByStatusDisable = true;
               break;
+
       }
 
       return this.orderUpdateByStatus;

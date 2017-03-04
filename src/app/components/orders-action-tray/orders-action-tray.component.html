@@ -135,10 +135,10 @@
                     <div class="btn btn-primary actions-button uppercase text-bold text-black bg-white" (click)="updateOrderStatus($event, 'Rejected', order.orderId)">
                       Reject
                     </div>
-                    <button class="btn btn-primary actions-button uppercase text-bold text-white bg-green" [ngClass]="{'disableBtn' : orderUpdateByStatusDisable}" (click)="updateOrderStatus($event, getNxtOrderStatus(order.ordersStatus), order.orderId)">
+                    <button class="btn btn-primary actions-button uppercase text-bold text-white bg-green" [ngClass]="{'disableBtn' : order.ordersStatus =='Shipped' || order.ordersStatus =='Dispatched'}" (click)="updateOrderStatus($event, getNxtOrderStatus(order.ordersStatus), order.orderId)">
                           <span *ngIf="order.ordersStatus =='Processed'">Confirm</span>
                           <span *ngIf="order.ordersStatus =='Confirmed'">Out For Delivery</span>
-                          <span *ngIf="order.ordersStatus =='OutForDelivery'">Shipped</span>
+                          <span *ngIf="order.ordersStatus =='OutForDelivery' || order.ordersStatus == 'Partially Dispatched'">Shipped</span>
                           <span *ngIf="order.ordersStatus =='Shipped' || order.ordersStatus =='Dispatched'">Shipped</span>
                     </button>
                   </div>
