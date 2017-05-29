@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { User } from 'classes/user';
-import { UserService } from 'services/user.service';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-home',

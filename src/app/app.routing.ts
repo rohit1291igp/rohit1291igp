@@ -4,7 +4,7 @@ import { RegisterComponent } from './components/register/register.component';
 import { LoginComponent } from './components/login/login.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 
-import { AuthGuard } from 'services/auth-guard.service';
+import { AuthGuard } from './services/auth-guard.service';
 
 const route: Routes = [
     { path: '', redirectTo: 'dashboard', pathMatch: 'full' },

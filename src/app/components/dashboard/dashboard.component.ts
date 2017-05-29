@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { IMyOptions, IMyDateModel } from 'mydatepicker';
-import { DashboardService } from 'services/dashboard.service';
-import { AuthenticationService } from 'services/authentication.service';
+import { DashboardService } from '../../services/dashboard.service';
+import { AuthenticationService } from '../../services/authentication.service';
 import { OrdersActionTrayComponent } from '../orders-action-tray/orders-action-tray.component';
 
 @Component({
