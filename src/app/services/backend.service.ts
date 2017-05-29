@@ -1,7 +1,7 @@
 import { Injectable, Type } from '@angular/core';
 
 import { Logger } from '../services/logger.service';
-import { Product } from 'classes/product';
+import { Product } from '../classes/product';
 import { Http } from '@angular/http';
 
 import 'rxjs/add/operator/toPromise';
