@@ -1,11 +1,25 @@
 import { Injectable } from '@angular/core';
+import {Http} from "@angular/http";
 
 @Injectable()
 export class DashboardService {
-    
-    constructor() { }
+    users: Array<any> = [];
+    constructor(
+        private http: Http
+    ) { }
 
     getAlertRow() {
+
+         this.http.post('fakelogin', {"email" : "testuser@gmail.com", "password" : 123456})
+             .subscribe(
+             (users: any) => {
+                 this.users = users.json();
+                 console.log('respnseFake========>', this.users);
+                 //return this.users;
+
+             }
+         )
+
         return {
             "new": true,
             "confirmed": false,

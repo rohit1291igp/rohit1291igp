@@ -8,6 +8,8 @@ declare var md5: any;
 
 @Injectable()
 export class AuthenticationService {
+    // array in local storage for registered users
+    users: any[] = JSON.parse(localStorage.getItem('users')) || [];
     constructor(private http: Http) { }
 
     generateEncryptedPassword(plainPassword) {
@@ -44,8 +46,24 @@ export class AuthenticationService {
 
     login(username: string, password: string) {
 
+        let filteredUsers = this.users.filter(user => {
+            return user.username === username && user.password === password;
+        });
+
+        let user = filteredUsers[0];
+        var currentUser = {
+            id: user.id,
+            username: user.username,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            token: 'fake-jwt-token'
+        };
+
+        localStorage.setItem('currentUser', JSON.stringify(currentUser));
+
+
         // return this.getToken(username, password);
-        return this.http.post('/api/authenticate', JSON.stringify({ username: username, password: password }))
+        /*return this.http.post('/api/authenticate', JSON.stringify({ username: username, password: password }))
             .map((response: Response) => {
                 // login successful if there's a jwt token in the response
                 let user = response.json();
@@ -53,7 +71,7 @@ export class AuthenticationService {
                     // store user details and jwt token in local storage to keep user logged in between page refreshes
                     localStorage.setItem('currentUser', JSON.stringify(user));
                 }
-            });
+            });*/
     }
 
     logout() {

@@ -2,15 +2,10 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { HttpModule } from '@angular/http';
+import { HttpModule, Http, XHRBackend, RequestOptions } from '@angular/http';
 import { BsDropdownModule } from 'ng2-bootstrap';
 import { SelectModule } from 'ng2-select';
 import { MyDatePickerModule } from 'mydatepicker';
-
-// used to create fake backend
-import { fakeBackendProvider } from './helpers/fake-backend';
-import { MockBackend, MockConnection } from '@angular/http/testing';
-import { BaseRequestOptions } from '@angular/http';
 
 // Router and Services
 import { routing } from "./app.routing";
@@ -25,7 +20,6 @@ import { DashboardService } from './services/dashboard.service';
 import { AppComponent } from './components/app.component';
 import { LoginComponent } from './components/login/login.component';
 import { HomeComponent } from './components/home/home.component';
-import { RegisterComponent } from './components/register/register.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { MainHeaderComponent } from './components/main-header/main-header.component';
 import { HeaderTabsComponent } from './components/header-tabs/header-tabs.component';
@@ -35,12 +29,14 @@ import { ButtonViewComponent } from './components/button-view/button-view.compon
 import { NoOrdersComponent } from './components/no-orders/no-orders.component';
 import { OrdersActionTrayComponent } from './components/orders-action-tray/orders-action-tray.component';
 
+//factories
+import {httpFactory} from "./others/http.factory";
+
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     HomeComponent,
-    RegisterComponent,
     DashboardComponent,
     MainHeaderComponent,
     HeaderTabsComponent,
@@ -60,17 +56,18 @@ import { OrdersActionTrayComponent } from './components/orders-action-tray/order
     MyDatePickerModule
   ],
   providers: [
+    {
+      provide: Http,
+      useFactory: httpFactory,
+      deps: [XHRBackend, RequestOptions]
+    },
     BackendService,
     Logger,
     AuthenticationService,
     AuthGuard,
     UserService,
-    DashboardService,
+    DashboardService
 
-    // providers used to create fake backend
-    fakeBackendProvider,
-    MockBackend,
-    BaseRequestOptions
   ],
   bootstrap: [AppComponent]
 })
