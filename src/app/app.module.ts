@@ -8,7 +8,7 @@ import { SelectModule } from 'ng2-select';
 import { MyDatePickerModule } from 'mydatepicker';
 
 // used to create fake backend
-import { fakeBackendProvider } from 'helpers/fake-backend';
+import { fakeBackendProvider } from './helpers/fake-backend';
 import { MockBackend, MockConnection } from '@angular/http/testing';
 import { BaseRequestOptions } from '@angular/http';
 
