@@ -22,18 +22,18 @@ import { UserService } from 'services/user.service';
 import { DashboardService } from 'services/dashboard.service';
 
 // Components
-import { AppComponent } from './app.component';
-import { LoginComponent } from './login/login.component';
-import { HomeComponent } from './home/home.component';
-import { RegisterComponent } from './register/register.component';
-import { DashboardComponent } from './dashboard/dashboard.component';
-import { MainHeaderComponent } from './main-header/main-header.component';
-import { HeaderTabsComponent } from './header-tabs/header-tabs.component';
-import { FooterComponent } from './footer/footer.component';
-import { OrdersButtonComponent } from './orders-button/orders-button.component';
-import { ButtonViewComponent } from './button-view/button-view.component';
-import { NoOrdersComponent } from './no-orders/no-orders.component';
-import { OrdersActionTrayComponent } from './orders-action-tray/orders-action-tray.component';
+import { AppComponent } from './components/app.component';
+import { LoginComponent } from './components/login/login.component';
+import { HomeComponent } from './components/home/home.component';
+import { RegisterComponent } from './components/register/register.component';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { MainHeaderComponent } from './components/main-header/main-header.component';
+import { HeaderTabsComponent } from './components/header-tabs/header-tabs.component';
+import { FooterComponent } from './components/footer/footer.component';
+import { OrdersButtonComponent } from './components/orders-button/orders-button.component';
+import { ButtonViewComponent } from './components/button-view/button-view.component';
+import { NoOrdersComponent } from './components/no-orders/no-orders.component';
+import { OrdersActionTrayComponent } from './components/orders-action-tray/orders-action-tray.component';
 
 @NgModule({
   declarations: [
