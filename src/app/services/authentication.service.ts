@@ -29,23 +29,27 @@ export class AuthenticationService {
         return encryptedPassword;
     }
 
-    private getToken(uname, password) {
-        let encryptedPwd = this.generateEncryptedPassword(password);
-        return this.http.post('http://192.168.0.80:8080/IGPService/login?username=TEST&challenge=$2a$10$04TVADrR6/SPLBjsK0N30.Jf5fNjBugSACeGv1S69dZALR7lSov0y', {
-            username: 'TEST',
-            challenge: '$2a$10$04TVADrR6/SPLBjsK0N30.Jf5fNjBugSACeGv1S69dZALR7lSov0y'
-        })
-        .map((response: Response) => {
-            let token = response.headers.get('token');
-            console.log('User token', token);
+    private getToken(uname, password, cb) {
+        //let encryptedPwd = this.generateEncryptedPassword(password);
+        this.http['post']('IGPService/login?username='+uname+'&password='+password, {})
+        .subscribe(
+            response => {
+                let token = response.headers.get('token');
+                console.log('User token', token);
+                localStorage.setItem('currentUserToken', token);
+                return cb(null, token);
+            },
+            error => {
+                return cb(error);
+            }
+        );
 
-            localStorage.setItem('currentUserToken', token);
-            return response.headers.get('token');
-        });
     }
 
-    login(username: string, password: string) {
+    login(username: string, password: string, cb) {
+        this.getToken(username, password, cb);
 
+        /* without API flow -------->
         let filteredUsers = this.users.filter(user => {
             return user.username === username && user.password === password;
         });
@@ -60,10 +64,11 @@ export class AuthenticationService {
         };
 
         localStorage.setItem('currentUser', JSON.stringify(currentUser));
+        */
 
 
-        // return this.getToken(username, password);
-        /*return this.http.post('/api/authenticate', JSON.stringify({ username: username, password: password }))
+        /* fakeAPI flow ----------->
+        return this.http.post('/api/authenticate', JSON.stringify({ username: username, password: password }))
             .map((response: Response) => {
                 // login successful if there's a jwt token in the response
                 let user = response.json();
@@ -71,7 +76,8 @@ export class AuthenticationService {
                     // store user details and jwt token in local storage to keep user logged in between page refreshes
                     localStorage.setItem('currentUser', JSON.stringify(user));
                 }
-            });*/
+            });
+        */
     }
 
     logout() {

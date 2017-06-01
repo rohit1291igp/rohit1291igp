@@ -10,7 +10,7 @@ export class DashboardService {
 
     getAlertRow() {
 
-         this.http.post('fakelogin', {"email" : "testuser@gmail.com", "password" : 123456})
+         /*this.http.post('fakelogin', {"email" : "testuser@gmail.com", "password" : 123456})
              .subscribe(
              (users: any) => {
                  this.users = users.json();
@@ -18,7 +18,7 @@ export class DashboardService {
                  //return this.users;
 
              }
-         )
+         )*/
 
         return {
             "new": true,
@@ -37,6 +37,29 @@ export class DashboardService {
     }
     
     getDashboardData() {
+        let apiResponse = {
+                    "error": false,
+                    "errorCode": "NO_ERROR",
+                    "errorMessage": null,
+                    "errorParams": [],
+                    "result": {
+                        "dateStatusCountAllMap": {
+                            "2017-05-27": {"Processed"  : 1, "confiremed" : 4 },
+                            "2017-05-28": {"Processed"  : 1, "confiremed" : 4},
+                            "2016-05-16": {"Processed"  : 1, "confiremed" : 4},
+                            "2017-05-26": {"Processed"  : 1, "confiremed" : 4}
+                    },
+                    "dateStatusCountBreachMap": {},
+                    "dateStatusCountAlertMap": {},
+                    "outOfDeliveryOrderIds": [
+                        842661,
+                        841585
+                    ],
+                        "deliveredTodayOrderCount": 0
+                    }
+        };
+        console.log('apiResponse======================>', apiResponse);
+
         return {
             "new": {
                 "today": {

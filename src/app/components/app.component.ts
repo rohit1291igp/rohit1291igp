@@ -10,6 +10,10 @@ export class AppComponent {
 
   constructor(private _ngZone: NgZone) {}
 
+  ngOnInit() {
+   // console.log('app started !!!!!!!!!!!!');
+  }
+
   execute() {
     this._ngZone.run(() => {console.log('NgZone run executed')});
   }

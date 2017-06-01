@@ -6,10 +6,11 @@ import { Component, OnInit } from '@angular/core';
                 <div class="col-md-6 col-md-offset-3 underline">&copy; IGP.com - Intermesh Pvt Ltd. - 2017</div>
             </div>`,
   styles: [`.footer{
+              position: fixed;
               bottom:0;
               text-align: center;
               text-decoration: underline;
-              margin: 10px 0 0;
+              margin: 10px 0 10px;
               width:100%;
           }`]
 })

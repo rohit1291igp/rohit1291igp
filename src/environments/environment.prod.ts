@@ -1,4 +1,6 @@
 export const environment = {
   production: true,
-  origin: 'http://localhost:1337/'
+  log : false,
+  origin: 'http://34.204.124.92:8080/',
+  apiInitial : 'IGPService/web/services/rest'
 };

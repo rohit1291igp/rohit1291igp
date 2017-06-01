@@ -15,7 +15,7 @@ export class InterceptedHttp extends Http {
     }
 
     post(url: string, body: string, options?: RequestOptionsArgs): Observable<Response> {
-        console.log('POST call fired ---------------');
+        if(environment.log) console.log('POST call fired ---------------');
         url = this.updateUrl(url);
         return super.post(url, body, this.getRequestOptionArgs(options));
     }
@@ -31,7 +31,11 @@ export class InterceptedHttp extends Http {
     }
 
     private updateUrl(req: string) {
-        return  environment.origin + req;
+        if((/login/g).test(req)){
+            return  environment.origin + req;
+        }else{
+            return  environment.origin + environment.apiInitial + req;
+        }
     }
 
     private getRequestOptionArgs(options?: RequestOptionsArgs) : RequestOptionsArgs {
@@ -41,7 +45,19 @@ export class InterceptedHttp extends Http {
         if (options.headers == null) {
             options.headers = new Headers();
         }
-        options.headers.append('Content-Type', 'application/json');
+        options.headers.append('Content-Type', 'text/plain');
+        //options.headers.append('Content-Type', 'application/json');
+        //options.headers.append('aaaaa', 'bbb');
+        options.headers.append('token', localStorage.getItem('currentUserToken'));
+        //options.headers.append('Authorization', 'Bearer ' + localStorage.getItem('currentUserToken'));
+        //options.headers.append('Access-Control-Allow-Origin', 'http://localhost:1337');
+
+        /*let headers = new Headers({"token" : localStorage.getItem('currentUserToken')});
+        headers.append('Content-Type', 'application/json');
+        headers.append('aaaaa', 'bbb');
+       // headers.append('token', localStorage.getItem('currentUserToken'));
+
+        options = new RequestOptions({headers: headers});*/
 
         return options;
     }

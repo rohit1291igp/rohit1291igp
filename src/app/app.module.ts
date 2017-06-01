@@ -1,6 +1,6 @@
 // Modules
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, APP_INITIALIZER } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule, Http, XHRBackend, RequestOptions } from '@angular/http';
 import { BsDropdownModule } from 'ng2-bootstrap';
@@ -32,6 +32,12 @@ import { OrdersActionTrayComponent } from './components/orders-action-tray/order
 //factories
 import {httpFactory} from "./others/http.factory";
 
+//env config
+/*import {envConfig} from "./others/env.config";
+export function ConfigLoader(envConfig: envConfig) {
+    return () => envConfig.load();
+}*/
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -61,6 +67,12 @@ import {httpFactory} from "./others/http.factory";
       useFactory: httpFactory,
       deps: [XHRBackend, RequestOptions]
     },
+    /*  envConfig,
+    {
+      provide: APP_INITIALIZER,
+      useFactory: ConfigLoader,
+      deps: [envConfig]
+    },*/
     BackendService,
     Logger,
     AuthenticationService,
