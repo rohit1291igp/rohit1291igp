@@ -17,7 +17,7 @@ export class BackendService {
       this.http[reqObj.method](reqObj.url, reqObj.payload)
           .subscribe(
           response => {
-              return cb(null, response.body, response.headers);
+              return cb(null, (response.body || response._body), response.headers);
           },
           error => {
               return cb(error);

@@ -30,8 +30,12 @@ export class DashboardComponent implements OnInit {
       ) { }
 
   ngOnInit() {
+    var _this = this;
     this.isRowAlert = this.dashboardService.getAlertRow();
-    this.dashboardData = this.dashboardService.getDashboardData();
+    this.dashboardData = this.dashboardService.getCustomData();
+    this.dashboardService.getDashboardData(function(result){
+        _this.dashboardData = result;
+    }, false);
     this.masterData = this.dashboardService.getMasterData();
     //this.getDashboardData();
   }
