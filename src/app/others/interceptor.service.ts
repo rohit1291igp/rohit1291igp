@@ -47,17 +47,8 @@ export class InterceptedHttp extends Http {
         }
         options.headers.append('Content-Type', 'text/plain');
         //options.headers.append('Content-Type', 'application/json');
-        //options.headers.append('aaaaa', 'bbb');
         options.headers.append('token', localStorage.getItem('currentUserToken'));
-        //options.headers.append('Authorization', 'Bearer ' + localStorage.getItem('currentUserToken'));
-        //options.headers.append('Access-Control-Allow-Origin', 'http://localhost:1337');
-
-        /*let headers = new Headers({"token" : localStorage.getItem('currentUserToken')});
-        headers.append('Content-Type', 'application/json');
-        headers.append('aaaaa', 'bbb');
-       // headers.append('token', localStorage.getItem('currentUserToken'));
-
-        options = new RequestOptions({headers: headers});*/
+        //options.headers.append('fkAssociateId', localStorage.getItem('currentUserToken'));
 
         return options;
     }

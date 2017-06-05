@@ -32,6 +32,7 @@ export class MainHeaderComponent implements OnInit {
           }
 
           localStorage.removeItem('currentUserToken');
+          localStorage.removeItem('fkAssociateId');
           _this.router.navigate(['/login']);
       })
   }

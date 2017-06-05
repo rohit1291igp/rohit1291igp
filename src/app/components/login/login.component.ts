@@ -58,10 +58,13 @@ export class LoginComponent implements OnInit {
             }
 
             let token = headers.get('token');
+            let fkAssociateId = headers.get('fkAssociateId');
             console.log('User token', token);
+            console.log('fkAssociateId', fkAssociateId);
             localStorage.setItem('currentUserToken', token);
+            localStorage.setItem('fkAssociateId', fkAssociateId);
             _this.router.navigate(['/dashboard']);
-        })
+        });
 
     }
 }

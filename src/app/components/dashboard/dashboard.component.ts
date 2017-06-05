@@ -3,6 +3,7 @@ import { IMyOptions, IMyDateModel } from 'mydatepicker';
 import { DashboardService } from '../../services/dashboard.service';
 import { AuthenticationService } from '../../services/authentication.service';
 import { OrdersActionTrayComponent } from '../orders-action-tray/orders-action-tray.component';
+import { BackendService } from '../../services/backend.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -25,15 +26,14 @@ export class DashboardComponent implements OnInit {
 
   constructor(
     private dashboardService: DashboardService,
-    private authenticationService: AuthenticationService
-  ) { }
+    private BackendService: BackendService
+      ) { }
 
   ngOnInit() {
-    // this.authenticationService.generateEncryptedPassword('123456');
-
     this.isRowAlert = this.dashboardService.getAlertRow();
     this.dashboardData = this.dashboardService.getDashboardData();
     this.masterData = this.dashboardService.getMasterData();
+    this.getDashboardData();
   }
 
   viewOrders(e, orderStatus, deliveryTime) {
@@ -52,5 +52,24 @@ export class DashboardComponent implements OnInit {
     console.log('Date changed');
     console.log('onDateChanged(): ', event.date, ' - jsdate: ', new Date(event.jsdate).toLocaleDateString(), ' - formatted: ', event.formatted, ' - epoc timestamp: ', event.epoc);
   }
+
+  getDashboardData(){
+      let fkAssociateId = localStorage.getItem('fkAssociateId');
+      let specificDate = Date.now();
+      let reqObj = {
+          url : "?responseType=json&scopeId=1&fkAssociateId="+fkAssociateId+"&specificDate="+specificDate+"&method=igp.vendor.getVendorCountDetail",
+          method : "get",
+          payload : {}
+      };
+
+      this.BackendService.makeAjax(reqObj, function(err, response, headers){
+          if(err) {
+              console.log(err)
+              return;
+          }
+          console.log('dashboard response ----------->', response);
+      });
+  }
+
 
 }
