@@ -33,8 +33,10 @@ export class DashboardComponent implements OnInit {
     var _this = this;
     this.isRowAlert = this.dashboardService.getAlertRow();
     this.dashboardData = this.dashboardService.getCustomData();
+    this.dateRange = this.setFestivalDate(new Date());
     this.dashboardService.getDashboardData(function(result){
         _this.dashboardData = result;
+        _this.dateRange = _this.setFestivalDate(result.festivalDate || new Date());
     });
     this.masterData = this.dashboardService.getMasterData();
     //this.getDashboardData();
@@ -55,6 +57,11 @@ export class DashboardComponent implements OnInit {
   onDateChanged(event: IMyDateModel) {
     console.log('Date changed');
     console.log('onDateChanged(): ', event.date, ' - jsdate: ', new Date(event.jsdate).toLocaleDateString(), ' - formatted: ', event.formatted, ' - epoc timestamp: ', event.epoc);
+  }
+
+  setFestivalDate(fesDate){
+      fesDate = new Date(fesDate);
+      return { date: { year: fesDate.getFullYear(), month: (fesDate.getMonth()+1), day: fesDate.getDate() } }
   }
 
   getDashboardData(){

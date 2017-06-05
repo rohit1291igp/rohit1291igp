@@ -39,6 +39,7 @@ export class DashboardService {
 
     formarDashBoardData(data){
         let apiResponse = data;
+        let fesDate;
         let getDashboardDataResponse = {
             "topLabels" : [
                 {
@@ -78,18 +79,14 @@ export class DashboardService {
 
             if(dateObj.getDate() === today.getDate()){
                 return "today";
-            }
-
-            if(dateObj.getDate() === (today.getDate() + 1)){
+            }else if(dateObj.getDate() === (today.getDate() + 1)){
                 return "tomorrow";
-            }
-
-            if(dateObj.getDate() === (today.getDate() + 2)){
+            }else if(dateObj.getDate() === (today.getDate() + 2)){
                 return "future";
+            }else{
+                fesDate = dateStr;
+                return "bydate";
             }
-
-            return "bydate";
-
         };
 
         let createNewConfimedObj = function(date, day, countObj){
@@ -198,6 +195,7 @@ export class DashboardService {
         /* Delivered orders - end */
 
         console.log('getDashboardDataResponse==============>', getDashboardDataResponse);
+        getDashboardDataResponse["festivalDate"] = fesDate;
         return getDashboardDataResponse;
     }
 
@@ -259,6 +257,7 @@ export class DashboardService {
 
     getCustomData(){
         let customDashboardData =  {
+            "festivalDate" : "2017-06-12",
             "topLabels" : [
                 {
                     deliveryTimes : "tomorrow",
