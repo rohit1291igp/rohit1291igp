@@ -33,7 +33,7 @@ export class DashboardComponent implements OnInit {
     this.isRowAlert = this.dashboardService.getAlertRow();
     this.dashboardData = this.dashboardService.getDashboardData();
     this.masterData = this.dashboardService.getMasterData();
-    this.getDashboardData();
+    //this.getDashboardData();
   }
 
   viewOrders(e, orderStatus, deliveryTime) {
