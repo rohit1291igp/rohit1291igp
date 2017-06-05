@@ -34,10 +34,10 @@ export class DashboardComponent implements OnInit {
     this.isRowAlert = this.dashboardService.getAlertRow();
     this.dashboardData = this.dashboardService.getCustomData();
     this.dateRange = this.setFestivalDate(new Date());
-    this.dashboardService.getDashboardData(function(result){
+    /*this.dashboardService.getDashboardData(function(result){
         _this.dashboardData = result;
         _this.dateRange = _this.setFestivalDate(result.festivalDate || new Date());
-    });
+    });*/
     this.masterData = this.dashboardService.getMasterData();
     //this.getDashboardData();
   }

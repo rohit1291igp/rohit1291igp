@@ -126,7 +126,7 @@
                   </app-orders-button>
                 </div>
               </div>
-              <div class="col-md-3 underline center-align no-padding">
+              <div class="col-md-3 underline center-align no-padding" *ngIf="dashboardData.ofd.length">
                 <a href="#" (click)="openPanel($event, masterData.statuses[2])">View All Out for delivery orders</a>
               </div>
             </div>
@@ -140,7 +140,7 @@
                   <div class="line-height">Orders delivered today - {{dashboardData.delivered.today}}</div>
                   <div class="line-height">Total orders for today's delivery - {{dashboardData.delivered.total}}</div>
                 </div>
-                <div class="col-md-5">
+                <div class="col-md-5" *ngIf="dashboardData.delivered.total">
                   <div class="btn btn-primary custom-button underline" (click)="openPanel($event, masterData.statuses[3])">
                     View all delivered orders
                   </div>
