@@ -31,13 +31,6 @@ export class LoginComponent implements OnInit {
         if (localStorage.getItem('currentUserToken') || localStorage.getItem('currentUser')) {
             this.router.navigate(['/dashboard']);
         }
-        // reset login status
-        //this.authenticationService.logout();
-
-        // get return url from route parameters or default to '/'
-        //console.log('route snapshot---------->', this.route.snapshot.queryParams['returnUrl']);
-        //this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
-        //console.log('return URL---------->', this.returnUrl);
     }
 
     login() {

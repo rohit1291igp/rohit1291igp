@@ -18,7 +18,6 @@ export class DashboardComponent implements OnInit {
   private mainHeaderComponent: MainHeaderComponent;
   private dashboardData: Object;
   private masterData: Object;
-
   private isRowAlert: Object;
 
   private myDatePickerOptions: IMyOptions = {
@@ -49,8 +48,12 @@ export class DashboardComponent implements OnInit {
 
   viewOrders(e, orderStatus, deliveryTime) {
     e.preventDefault();
-    this.child.toggleTray(e);
     console.log('viewOrders called>>>>>>>>>>');
+    this.child.toggleTray(e);
+
+    //changing clicked element position if its index greater than 0
+    let clickEleIndex =  e.currentTarget.parentElement.parentElement.parentElement.dataset.index;
+    if(clickEleIndex > 0) this.dashboardData = this.dashboardService.changeDashboardDataOrder(this.dashboardData, clickEleIndex);
   }
 
   openPanel(e, status) {

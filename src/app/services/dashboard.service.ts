@@ -34,13 +34,14 @@ export class DashboardService {
         let fesDate;
         let getDashboardDataResponse = {
             "topLabels" : [
-                {
-                    deliveryTimes : "tomorrow",
-                    labelName : "Deliver for Tomorrow"
-                },
+
                 {
                     deliveryTimes : "today",
                     labelName : "Deliver for Today"
+                },
+                {
+                    deliveryTimes : "tomorrow",
+                    labelName : "Deliver for Tomorrow"
                 },
 
                 {
@@ -267,13 +268,14 @@ export class DashboardService {
         let customDashboardData =  {
             "festivalDate" : "2017-06-12",
             "topLabels" : [
-                {
-                    deliveryTimes : "tomorrow",
-                    labelName : "Deliver for Tomorrow"
-                },
+
                 {
                     deliveryTimes : "today",
                     labelName : "Deliver for Today"
+                },
+                {
+                    deliveryTimes : "tomorrow",
+                    labelName : "Deliver for Tomorrow"
                 },
 
                 {
@@ -407,6 +409,21 @@ export class DashboardService {
 
         console.log('customDashboardData===================>', customDashboardData);
         return customDashboardData;
+    }
+
+    changeDashboardDataOrder(dashboardData, eleColIndex){
+        eleColIndex = parseInt(eleColIndex);
+
+        let splicedObj = dashboardData.topLabels.splice(eleColIndex, 1);
+        dashboardData.topLabels.unshift(splicedObj[0]);
+
+             splicedObj = dashboardData.new.splice(eleColIndex, 1);
+        dashboardData.new.unshift(splicedObj[0]);
+
+            splicedObj = dashboardData.confirmed.splice(eleColIndex, 1);
+        dashboardData.confirmed.unshift(splicedObj[0]);
+
+        return dashboardData;
     }
     
 }
