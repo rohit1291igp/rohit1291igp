@@ -5,6 +5,7 @@ import { AuthenticationService } from '../../services/authentication.service';
 import { OrdersActionTrayComponent } from '../orders-action-tray/orders-action-tray.component';
 import { BackendService } from '../../services/backend.service';
 import { MainHeaderComponent } from '../main-header/main-header.component';
+import { UtilityService } from '../../services/utility.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -23,12 +24,14 @@ export class DashboardComponent implements OnInit {
   private myDatePickerOptions: IMyOptions = {
     // other options...
     dateFormat: 'ddth mmm. yyyy',
+    disableDateRanges : [{begin: this.UtilityService.getDateObj(0), end: this.UtilityService.getDateObj(2)}]
   };
   private dateRange: Object = { date: { year: 2017, month: 5, day: 10 } };
 
   constructor(
     private dashboardService: DashboardService,
-    private BackendService: BackendService
+    private BackendService: BackendService,
+    private UtilityService: UtilityService
       ) { }
 
   ngOnInit() {
@@ -69,6 +72,7 @@ export class DashboardComponent implements OnInit {
 
   setFestivalDate(fesDate){
       fesDate = new Date(fesDate);
+      let disableDates = [{begin: {year: 2017, month: 6, day: 14}, end: {year: 2017, month: 6, day: 20}}];
       return { date: { year: fesDate.getFullYear(), month: (fesDate.getMonth()+1), day: fesDate.getDate() } }
   }
 
