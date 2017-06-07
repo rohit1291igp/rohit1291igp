@@ -4,6 +4,7 @@ import { DashboardService } from '../../services/dashboard.service';
 import { AuthenticationService } from '../../services/authentication.service';
 import { OrdersActionTrayComponent } from '../orders-action-tray/orders-action-tray.component';
 import { BackendService } from '../../services/backend.service';
+import { MainHeaderComponent } from '../main-header/main-header.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -13,6 +14,7 @@ import { BackendService } from '../../services/backend.service';
 export class DashboardComponent implements OnInit {
   @ViewChild(OrdersActionTrayComponent) child: OrdersActionTrayComponent;
 
+  private mainHeaderComponent: MainHeaderComponent;
   private dashboardData: Object;
   private masterData: Object;
 
@@ -34,10 +36,10 @@ export class DashboardComponent implements OnInit {
     this.isRowAlert = this.dashboardService.getAlertRow();
     this.dashboardData = this.dashboardService.getCustomData();
     this.dateRange = this.setFestivalDate(new Date());
-    /*this.dashboardService.getDashboardData(function(result){
+    this.dashboardService.getDashboardData(null, function(result){
         _this.dashboardData = result;
         _this.dateRange = _this.setFestivalDate(result.festivalDate || new Date());
-    });*/
+    });
     this.masterData = this.dashboardService.getMasterData();
     //this.getDashboardData();
   }
@@ -57,6 +59,12 @@ export class DashboardComponent implements OnInit {
   onDateChanged(event: IMyDateModel) {
     console.log('Date changed');
     console.log('onDateChanged(): ', event.date, ' - jsdate: ', new Date(event.jsdate).toLocaleDateString(), ' - formatted: ', event.formatted, ' - epoc timestamp: ', event.epoc);
+      let selectedDate = event.jsdate;
+        var _this = this;
+        this.dashboardService.getDashboardData(selectedDate, function(result){
+            _this.dashboardData = result;
+            _this.dateRange = _this.setFestivalDate(result.festivalDate || new Date());
+        });
   }
 
   setFestivalDate(fesDate){

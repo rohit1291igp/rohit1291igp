@@ -121,7 +121,7 @@
             <div class="cell col-md-9 no-padding">
               <div class="col-md-9 no-padding">
                 <div class="col-md-3 custom-btn-parent" *ngFor="let order of dashboardData.ofd; let i='index'">
-                  <app-orders-button [displayData]="order" [orderStatus]="masterData.statuses[2]" [deliveryTime]="masterData.deliveryTimes[4]" *ngIf="i<4">
+                  <app-orders-button [displayData]="order" [orderStatus]="masterData.statuses[2]" [deliveryTime]="masterData.deliveryTimes[4]" (onViewOrders)="viewOrders($event)" *ngIf="i<4">
                     <div>{{order.orderNumber}}</div>
                   </app-orders-button>
                 </div>
@@ -137,8 +137,8 @@
             <div class="cell col-md-9">
               <div class="row">
                 <div class="col-md-7">
-                  <div class="line-height">Orders delivered today - {{dashboardData.delivered.today}}</div>
-                  <div class="line-height">Total orders for today's delivery - {{dashboardData.delivered.total}}</div>
+                  <div class="line-height">Orders delivered today - {{dashboardData.delivered.total}}</div>
+                  <div class="line-height">Total orders for today's delivery - {{dashboardData.delivered.today}}</div>
                 </div>
                 <div class="col-md-5" *ngIf="dashboardData.delivered.total">
                   <div class="btn btn-primary custom-button underline" (click)="openPanel($event, masterData.statuses[3])">

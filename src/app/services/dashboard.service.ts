@@ -1,26 +1,18 @@
 import { Injectable } from '@angular/core';
 import {Http} from "@angular/http";
 import { BackendService } from './backend.service';
+import { UtilityService } from './utility.service';
 
 @Injectable()
 export class DashboardService {
     users: Array<any> = [];
     constructor(
         private http: Http,
-        private BackendService: BackendService
+        private BackendService: BackendService,
+        private UtilityService: UtilityService
         ) { }
 
     getAlertRow() {
-         /*this.http.post('fakelogin', {"email" : "testuser@gmail.com", "password" : 123456})
-             .subscribe(
-             (users: any) => {
-                 this.users = users.json();
-                 console.log('respnseFake========>', this.users);
-                 //return this.users;
-
-             }
-         )*/
-
         return {
             "new": true,
             "confirmed": false,
@@ -190,7 +182,7 @@ export class DashboardService {
         /* Out for delivery - end */
 
         /* Delivered orders - start */
-        getDashboardDataResponse.delivered.today = todayOrderTobeDelivered;
+        getDashboardDataResponse.delivered.today = apiResponse.result.deliveredTodayOrderCount*2; //todayOrderTobeDelivered;
         getDashboardDataResponse.delivered.total = apiResponse.result.deliveredTodayOrderCount;
         /* Delivered orders - end */
 
@@ -199,9 +191,48 @@ export class DashboardService {
         return getDashboardDataResponse;
     }
 
-    getDashboardCount(cb){
+    getDashboardCount(spcificDate, cb){
+        var d1 = this.UtilityService.getDateString(0);
+        var d2 = this.UtilityService.getDateString(1);
+        var d3 = this.UtilityService.getDateString(2);
+        var d4 = this.UtilityService.getDateString(7);
+
+        console.log("dates ===>", d1, d2, d3, d4)
+
+        if(localStorage.getItem('dRandom')){
+            let countObj= {};
+            countObj[d1] = {"Processed"  : Math.floor(Math.random()*100), "Confirmed" : Math.floor(Math.random()*100)};
+            countObj[d2] = {"Processed"  : Math.floor(Math.random()*100), "Confirmed" : Math.floor(Math.random()*100)};
+            countObj[d3] = {"Processed"  : Math.floor(Math.random()*100), "Confirmed" : Math.floor(Math.random()*100)};
+            countObj[d4] = {"Processed"  : Math.floor(Math.random()*100), "Confirmed" : Math.floor(Math.random()*100)};
+
+            let oId1 = Math.floor(Math.random()*1000000);
+            let oId2 = Math.floor(Math.random()*1000000);
+            let oId3 = Math.floor(Math.random()*1000000);
+            let oId4 = Math.floor(Math.random()*1000000);
+            let oId5 = Math.floor(Math.random()*1000000);
+            let oId6 = Math.floor(Math.random()*1000000);
+            let outofDeliveryIds = [oId1, oId2, oId3, oId4, oId5, oId6];
+
+            let hardCodedData = {
+                "error": false,
+                "errorCode": "NO_ERROR",
+                "errorMessage": null,
+                "errorParams": [],
+                "result": {
+                    "dateStatusCountAllMap": countObj,
+                    "dateStatusCountBreachMap": {},
+                    "dateStatusCountAlertMap": {},
+                    "outOfDeliveryOrderIds": outofDeliveryIds,
+                    "deliveredTodayOrderCount": Math.floor(Math.random()*100)
+                }
+            };
+
+            return cb(hardCodedData);
+        }
+
             let fkAssociateId = localStorage.getItem('fkAssociateId');
-            let specificDate = 0; //Date.now();
+            let specificDate = Date.parse(spcificDate) || 0;
             let reqObj = {
                 url : "?responseType=json&scopeId=1&fkAssociateId="+fkAssociateId+"&specificDate="+specificDate+"&method=igp.vendor.getVendorCountDetail",
                 method : "get",
@@ -219,37 +250,14 @@ export class DashboardService {
                 if(Object.keys(response.result.dateStatusCountAllMap).length < 4){
                     response.result.dateStatusCountAllMap['2017-06-26'] = {"Processed"  : 0, "Confirmed" : 0};
                 }
-
                 return cb(response);
             });
 
-            /*
-            let hardCodedData = {
-                "error": false,
-                "errorCode": "NO_ERROR",
-                "errorMessage": null,
-                "errorParams": [],
-                "result": {
-                    "dateStatusCountAllMap": {
-                        "2017-06-05": {"Processed"  : 0, "Confirmed" : 0 },
-                        "2017-06-06": {"Processed"  : 0, "Confirmed" : 0},
-                        "2017-06-07": {"Processed"  : 0, "Confirmed" : 0},
-                        "2017-06-26": {"Processed"  : 0, "Confirmed" : 0}
-                    },
-                    "dateStatusCountBreachMap": {},
-                    "dateStatusCountAlertMap": {},
-                    "outOfDeliveryOrderIds": [],
-                    "deliveredTodayOrderCount": 0
-                }
-            };
-            return cb(hardCodedData);
-            */
-
     }
 
-    getDashboardData(cb) {
+    getDashboardData(specificDate, cb) {
         var _this = this;
-         this.getDashboardCount(function(result){
+         this.getDashboardCount(specificDate, function(result){
              let getDashboardDataResponse = _this.formarDashBoardData(result);
              return cb(getDashboardDataResponse);
         });

@@ -10,6 +10,7 @@ import { MyDatePickerModule } from 'mydatepicker';
 // Router and Services
 import { routing } from "./app.routing";
 import { BackendService } from './services/backend.service';
+import { UtilityService } from './services/utility.service';
 import { Logger } from './services/logger.service';
 import { AuthenticationService } from './services/authentication.service';
 import { AuthGuard } from './services/auth-guard.service';
@@ -74,6 +75,7 @@ export function ConfigLoader(envConfig: envConfig) {
       deps: [envConfig]
     },*/
     BackendService,
+    UtilityService,
     Logger,
     AuthenticationService,
     AuthGuard,
