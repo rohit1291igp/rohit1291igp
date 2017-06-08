@@ -23,7 +23,7 @@ export class OrdersActionTrayComponent implements OnInit {
     e.preventDefault();
     this.trayOpen = !this.trayOpen;
     console.log('trayOpen: and loading data', this.trayOpen);
-    this.loadTrayData(orderByStatus, orderId);
+    if(orderByStatus || orderId) this.loadTrayData(orderByStatus, orderId);
   }
 
   loadTrayData(orderByStatus, orderId){

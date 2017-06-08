@@ -49,13 +49,17 @@ export class DashboardComponent implements OnInit {
   viewOrders(e) {
     e.preventDefault();
     let status = e.currentTarget.dataset.status;
+    let orderId = e.currentTarget.dataset.orderid;
 
     console.log('viewOrders called>>>>>>>>>>status', status);
-    this.child.toggleTray(e, status, null);
+    this.child.toggleTray(e, status, orderId);
 
     //changing clicked element position if its index greater than 0
-    let clickEleIndex =  e.currentTarget.parentElement.parentElement.parentElement.dataset.index;
-    if(clickEleIndex > 0) this.dashboardData = this.dashboardService.changeDashboardDataOrder(this.dashboardData, clickEleIndex);
+    if(status === "Processed" || status === "Confirmed"){
+      let clickEleIndex =  e.currentTarget.parentElement.parentElement.parentElement.dataset.index;
+      if(clickEleIndex > 0) this.dashboardData = this.dashboardService.changeDashboardDataOrder(this.dashboardData, clickEleIndex);
+    }
+
   }
 
   openPanel(e, status) {
