@@ -25,8 +25,8 @@ export class LoginComponent implements OnInit {
         ) { }
 
     ngOnInit() {
-        this.model.username = "test";
-        this.model.password = "$2a$10$04TVADrR6/SPLBjsK0N30.Jf5fNjBugSACeGv1S69dZALR7lSov0y";
+        this.model.username = "sandeepfd";
+        this.model.password = "sandeepfd";
 
         if (localStorage.getItem('currentUserToken') || localStorage.getItem('currentUser')) {
             this.router.navigate(['/dashboard']);

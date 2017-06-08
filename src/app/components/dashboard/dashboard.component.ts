@@ -46,10 +46,12 @@ export class DashboardComponent implements OnInit {
     //this.getDashboardData();
   }
 
-  viewOrders(e, orderStatus, deliveryTime) {
+  viewOrders(e) {
     e.preventDefault();
-    console.log('viewOrders called>>>>>>>>>>');
-    this.child.toggleTray(e);
+    let status = e.currentTarget.dataset.status;
+
+    console.log('viewOrders called>>>>>>>>>>status', status);
+    this.child.toggleTray(e, status, null);
 
     //changing clicked element position if its index greater than 0
     let clickEleIndex =  e.currentTarget.parentElement.parentElement.parentElement.dataset.index;
@@ -58,7 +60,7 @@ export class DashboardComponent implements OnInit {
 
   openPanel(e, status) {
     e.preventDefault();
-    this.child.toggleTray(e);
+    this.child.toggleTray(e, status, null);
     console.log('Side-panel opened for status: ', status);
   }
 
@@ -79,23 +81,7 @@ export class DashboardComponent implements OnInit {
       return { date: { year: fesDate.getFullYear(), month: (fesDate.getMonth()+1), day: fesDate.getDate() } }
   }
 
-  getDashboardData(){
-      let fkAssociateId = localStorage.getItem('fkAssociateId');
-      let specificDate = Date.now();
-      let reqObj = {
-          url : "?responseType=json&scopeId=1&fkAssociateId="+fkAssociateId+"&specificDate="+specificDate+"&method=igp.vendor.getVendorCountDetail",
-          method : "get",
-          payload : {}
-      };
 
-      this.BackendService.makeAjax(reqObj, function(err, response, headers){
-          if(err) {
-              console.log(err)
-              return;
-          }
-          console.log('dashboard response ----------->', response);
-      });
-  }
 
 
 }

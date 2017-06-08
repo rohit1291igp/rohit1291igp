@@ -6,6 +6,13 @@ import { UtilityService } from './utility.service';
 @Injectable()
 export class DashboardService {
     users: Array<any> = [];
+    statuslist :Object = {
+        "n" : "Processed",
+        "c" : "Confirmed",
+        "o" : "OutForDelivery",
+        "d" : "Shipped"
+    };
+
     constructor(
         private http: Http,
         private BackendService: BackendService,
@@ -22,14 +29,16 @@ export class DashboardService {
     }
 
     getMasterData() {
+        var _this = this;
         return {
-            displayStatuses: ["New Orders", "Confirmed", "Out for delivery", "Delivered orders"],
-            statuses: ["new", "confirmed", "ofd", "delivered"],
+            displayStatus: ["New Orders", "Confirmed", "Out for delivery", "Delivered orders"],
+            status: [ _this.statuslist['n'], _this.statuslist['c'], _this.statuslist['o'], _this.statuslist['d']],
             deliveryTimes: ["today", "tomorrow", "future", "bydate", "all"]
         }
     }
 
     formarDashBoardData(data){
+        var _this = this;
         let apiResponse = data;
         let fesDate;
         let getDashboardDataResponse = {
@@ -93,13 +102,13 @@ export class DashboardService {
                         var pushObj = {
                             day : date,
                             deliveryTimes : day,
-                            statuses : "",
+                            status : "",
                             ordersCount: "",
                             displayStr: "",
                             isAlert: false
                         };
 
-                        pushObj.statuses = "new";
+                        pushObj.status = _this.statuslist['n'];
                         pushObj.ordersCount = countObj[prop];
 
                         switch(day){
@@ -126,13 +135,13 @@ export class DashboardService {
                         var pushObj = {
                             day : date,
                             deliveryTimes : day,
-                            statuses : "",
+                            status : "",
                             ordersCount: "",
                             displayStr: "",
                             isAlert: false
                         };
 
-                        pushObj.statuses = "confirmed";
+                        pushObj.status = _this.statuslist['c'];
                         pushObj.ordersCount = countObj[prop];
 
                         switch(day){
@@ -172,6 +181,7 @@ export class DashboardService {
         let outForDeliveryList = []; let outOfDeliveryOrderIds = apiResponse.result.outOfDeliveryOrderIds;
         for(let i in outOfDeliveryOrderIds){
             var outForDeliveryObj = {
+                status: _this.statuslist['o'],
                 orderNumber: outOfDeliveryOrderIds[i],
                 displayStr: 'Mark as Delivered',
                 isAlert: false
@@ -292,7 +302,7 @@ export class DashboardService {
                 {
                     day : "tomorrow",
                     deliveryTimes : "tomorrow",
-                    statuses : "new",
+                    status : "new",
                     ordersCount: 0,
                     displayStr: 'View Orders',
                     isAlert: false
@@ -300,7 +310,7 @@ export class DashboardService {
                 {
                     day : "today",
                     deliveryTimes : "today",
-                    statuses : "new",
+                    status : "new",
                     ordersCount: 0,
                     displayStr: 'Take action',
                     isAlert: true
@@ -309,7 +319,7 @@ export class DashboardService {
                 {
                     day : "future",
                     deliveryTimes : "future",
-                    statuses : "new",
+                    status : "new",
                     ordersCount: 0,
                     displayStr: 'View Orders',
                     isAlert: false
@@ -317,7 +327,7 @@ export class DashboardService {
                 {
                     day : "bydate",
                     deliveryTimes : "bydate",
-                    statuses : "new",
+                    status : "new",
                     ordersCount: 0,
                     displayStr: 'View Orders',
                     isAlert: false
@@ -327,7 +337,7 @@ export class DashboardService {
                 {
                     day : "tomorrow",
                     deliveryTimes : "tomorrow",
-                    statuses : "confirmed",
+                    status : "confirmed",
                     ordersCount: 0,
                     displayStr: 'View Orders',
                     isAlert: false
@@ -335,7 +345,7 @@ export class DashboardService {
                 {
                     day : "today",
                     deliveryTimes : "today",
-                    statuses : "confirmed",
+                    status : "confirmed",
                     ordersCount: 0,
                     displayStr: 'View Orders',
                     isAlert: false
@@ -344,7 +354,7 @@ export class DashboardService {
                 {
                     day : "future",
                     deliveryTimes : "future",
-                    statuses : "confirmed",
+                    status : "confirmed",
                     ordersCount: 0,
                     displayStr: 'View Orders',
                     isAlert: false
@@ -352,7 +362,7 @@ export class DashboardService {
                 {
                     day : "future",
                     deliveryTimes : "bydate",
-                    statuses : "confirmed",
+                    status : "confirmed",
                     ordersCount: 0,
                     displayStr: 'View Orders',
                     isAlert: false

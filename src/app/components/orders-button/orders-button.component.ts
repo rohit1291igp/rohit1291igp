@@ -2,7 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-orders-button',
-  template: `<div class="btn btn-primary orders-button" [ngClass]="{'bg-igp text-white': isAlert, 'bg-grey text-black': !isAlert, 'text-bold': orderStatus === 'new'}" (click)="openOrdersTray($event)">
+  template: `<div class="btn btn-primary orders-button" [ngClass]="{'bg-igp text-white': isAlert, 'bg-grey text-black': !isAlert, 'text-bold': orderStatus === 'Processed'}" (click)="openOrdersTray($event)" [attr.data-status]="orderStatus">
                 <ng-content></ng-content>
                 <div>{{displayData.displayStr}}</div>
             </div>`,
