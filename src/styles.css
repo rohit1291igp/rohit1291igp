@@ -66,6 +66,18 @@
 .text-grey {
     color: #888888! important;
 }
+
+.m-left-1{
+    margin-left:1em;
+}
+
+.auto-margin{
+    margin:auto;
+}
+
+.comp-auto-margin{
+    margin:3.5em auto;
+}
 /* Utility css end */
 
 

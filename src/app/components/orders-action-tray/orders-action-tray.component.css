@@ -101,6 +101,13 @@
     background-color: #f2f2f2;
 }
 
+.product-component.mainprod {
+    width: 75%;
+    height: 150px;
+    display: inline-block;
+    background-color: #f2f2f2;
+}
+
 .component-quantity {
     margin: 2px 4px;
     background-color: #C3404E;

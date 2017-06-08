@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { BackendService } from '../../services/backend.service';
 
 @Component({
   selector: 'app-orders-action-tray',
@@ -8,8 +9,12 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 export class OrdersActionTrayComponent implements OnInit {
   private trayOpen: Boolean = false;
   @Output() onTrayToggle: EventEmitter<any> = new EventEmitter();
+  sidePanelDataLoading = true;
+  private sidePanelData: Object;
 
-  constructor() { }
+  constructor(
+      private BackendService : BackendService
+      ) { }
 
   ngOnInit() {
   }

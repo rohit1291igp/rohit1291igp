@@ -29,6 +29,7 @@ import { OrdersButtonComponent } from './components/orders-button/orders-button.
 import { ButtonViewComponent } from './components/button-view/button-view.component';
 import { NoOrdersComponent } from './components/no-orders/no-orders.component';
 import { OrdersActionTrayComponent } from './components/orders-action-tray/orders-action-tray.component';
+import { LoaderComponent } from './components/loader/loader.component';
 
 //factories
 import {httpFactory} from "./others/http.factory";
@@ -51,7 +52,8 @@ export function ConfigLoader(envConfig: envConfig) {
     OrdersButtonComponent,
     ButtonViewComponent,
     NoOrdersComponent,
-    OrdersActionTrayComponent
+    OrdersActionTrayComponent,
+    LoaderComponent
   ],
   imports: [
     BrowserModule,

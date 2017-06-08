@@ -1,0 +1,10 @@
+.loaderbox{
+    width: 75px;
+    height: 75px;
+    padding: 2px 4px;
+}
+
+.loaderBoxWithImage{
+    width: 100%;
+    text-align: center;
+}
