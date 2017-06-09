@@ -125,8 +125,171 @@ export class OrdersActionTrayComponent implements OnInit {
               <head>
                   <title>Order List</title>
           <style>
-              //........Customized style.......
-              </style>
+                  .orders-action {
+                          width: 61%;
+                          height: 100%;
+                          overflow-y: auto;
+                          z-index: 999;
+                          position: fixed;
+                          top: 0;
+                          background-color: white;
+                          border-left: 6px solid rgba(224, 224, 224, .5);
+                          transition: all 1s ease;
+                      }
+
+                  .close-tray {
+                          color: #888888;
+                          font-size: 20px;
+                          font-weight: 100;
+                      }
+
+                  .delivery-details {
+                          margin-bottom: 10px;
+                      }
+
+                  .order-id {
+                          font-size: 12px;
+                          text-decoration: underline;
+                      }
+
+                  .delivery-time {
+                          float: right;
+                          padding-right: 5px;
+                          font-size: 12px;
+                          text-decoration: underline;
+                          color: #25C355;
+                          text-transform: uppercase;
+                      }
+
+                  .address {
+                          height: 40px;
+                      }
+
+                  .contact {
+                          margin-top: 10px;
+                      }
+
+                  .actions-button {
+                          border: none;
+                          font-size: 12px;
+                          margin-bottom: 5px;
+                      }
+
+                  .orders-view {
+                          padding: 10px;
+                      }
+
+                  .order-row {
+                          padding: 7px;
+                          margin: 15px 15px;
+                          background-color: white;
+                          box-shadow: 0 1px 3px #888888;
+                          width: 96%;
+                      }
+
+                  .order-details {
+                          border-right: 2px solid #E0E0E0;
+                      }
+
+                  .order-actions {
+                          padding: 2px 35px;
+                      }
+
+                  .order-actions > .row {
+                          padding-bottom: 5px;
+                      }
+
+                  .product-holder {
+                          margin: 5px 20px 10px;
+                      }
+
+                  .product-image {
+                          width: 150px;
+                          height: 150px;
+                          margin: 0 10px;
+                      }
+
+                  .product-holder {
+                          width: 95%;
+                          margin: 0 10px 10px;
+                          padding-bottom: 10px;
+                          border-bottom: 3px solid #C3404E;
+                          position: relative;
+                      }
+
+                  .product-main {
+                          display: inline-block;
+                      }
+
+                  .product-component {
+                          width: 75px;
+                          height: 150px;
+                          display: inline-block;
+                          background-color: #f2f2f2;
+                      }
+
+                  .product-component.mainprod {
+                          width: 75%;
+                          height: 150px;
+                          display: inline-block;
+                          background-color: #f2f2f2;
+                      }
+
+                  .component-quantity {
+                          margin: 2px 4px;
+                          background-color: #C3404E;
+                          color: #ffffff;
+                          text-align: center;
+                          font-weight: bold;
+                      }
+
+                  .component-image {
+                          width: 75px;
+                          height: 75px;
+                          padding: 2px 4px;
+                      }
+
+                  .component-head {
+                          text-align: center;
+                          font-size: 12px;
+                          color: #C3404E;
+                      }
+
+                  .component-name {
+                          font-size: 12px;
+                          margin: 0 4px;
+                      }
+
+                  .equal-sign {
+                          padding-left: 25px;
+                          color: #C3404E;
+                      }
+
+                  .plus-sign {
+                          display: inline-block;
+                          color: #C3404E;
+                          height: 150px;
+                          vertical-align: top;
+                          padding-top: 13%;
+                      }
+
+                  .show-tray {
+                          right: 0;
+                      }
+
+                  .hide-tray {
+                          right: -61%;
+                      }
+
+                  .container-fluid .orders-tray{
+                          /*padding-left:2em;*/
+                      }
+
+                  .width55{
+                          width:55%;
+                      }
+
+      </style>
           </head>
           <body onload="window.print();window.close()">${printContents}</body>
           </html>`
