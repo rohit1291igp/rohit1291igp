@@ -88,3 +88,8 @@
     background: #eee;
     padding: 0.5em;
 }
+
+.disableBtn{
+    pointer-events: none;
+    opacity: 0.4;
+}

@@ -117,7 +117,7 @@
         </div>
         </div>
 
-        <div class="col-md-12 order-row" *ngIf="sidePanelData">
+        <div id="mainOrderSection" class="col-md-12 order-row" *ngIf="sidePanelData">
 
             <div class="container-fluid orders-tray" *ngFor="let order of sidePanelData">
               <div class="row delivery-details">
@@ -132,15 +132,18 @@
                 </div>
                 <div class="col-md-5 order-actions">
                   <div class="row">
-                    <div class="btn btn-primary actions-button uppercase text-bold text-black bg-white" (click)="openOrdersTray($event)">
+                    <div class="btn btn-primary actions-button uppercase text-bold text-black bg-white" (click)="updateOrderStatus($event, 'Rejected', order.orderId)">
                       Reject
                     </div>
-                    <div class="btn btn-primary actions-button uppercase text-bold text-white bg-green" (click)="openOrdersTray($event)">
-                      Confirm
-                    </div>
+                    <button class="btn btn-primary actions-button uppercase text-bold text-white bg-green" [ngClass]="{'disableBtn' : orderUpdateByStatusDisable}" (click)="updateOrderStatus($event, orderUpdateByStatus, order.orderId)">
+                          <span *ngIf="orderByStatus =='Processed'">Confirm</span>
+                          <span *ngIf="orderByStatus =='Confirmed'">Out For Delivery</span>
+                          <span *ngIf="orderByStatus =='OutForDelivery'">Shipped</span>
+                          <span *ngIf="orderByStatus =='Shipped'">Shipped</span>
+                    </button>
                   </div>
                   <div class="row">
-                    <div class="btn btn-primary actions-button text-bold" [ngClass]="{'bg-igp text-white': isAlert, 'bg-grey text-black': !isAlert}" (click)="openOrdersTray($event)">
+                    <div class="btn btn-primary actions-button text-bold" [ngClass]="{'bg-igp text-white': isAlert, 'bg-grey text-black': !isAlert}" (click)="print($event)">
                       Print Order
                     </div>
                     <div class="btn btn-primary actions-button text-bold" [ngClass]="{'bg-igp text-white': isAlert, 'bg-grey text-black': !isAlert}" (click)="openOrdersTray($event)">
@@ -148,7 +151,7 @@
                     </div>
                   </div>
                   <div class="row">
-                    <div class="btn btn-primary actions-button text-bold text-white bg-black" (click)="openOrdersTray($event)">
+                    <div class="btn btn-primary actions-button text-bold text-white bg-black" (click)="updateOrderStatus($event, 'PutOnHold', order.orderId)">
                       Put On Hold
                     </div>
                     <div class="btn btn-primary actions-button text-bold text-white bg-black" (click)="openOrdersTray($event)">
