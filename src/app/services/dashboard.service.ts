@@ -262,7 +262,8 @@ export class DashboardService {
         }
 
             let fkAssociateId = localStorage.getItem('fkAssociateId');
-            let specificDate = Date.parse(spcificDate) || 0;
+            //let specificDate = Date.parse(spcificDate) || 0;
+            let specificDate = spcificDate || 0;
             let reqObj = {
                 url : "?responseType=json&scopeId=1&fkAssociateId="+fkAssociateId+"&specificDate="+specificDate+"&method=igp.vendor.getVendorCountDetail",
                 method : "get",
