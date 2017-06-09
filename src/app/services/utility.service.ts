@@ -37,4 +37,22 @@ export class UtilityService {
         }
     }
 
+    dynamicSort(property, prop2){
+        //ArrayOfObject.sort(dynamicSort("prop1", "prop2"));
+        var sortOrder = 1;
+        if(property[0] === "-") {
+            sortOrder = -1;
+            property = property.substr(1);
+        }
+        return function (a,b) {
+            var result;
+            if(prop2){
+                result = (a[property][prop2] < b[property][prop2]) ? -1 : (a[property][prop2] > b[property][prop2]) ? 1 : 0;
+            }else{
+                result = (a[property] < b[property]) ? -1 : (a[property] > b[property]) ? 1 : 0;
+            }
+            return result * sortOrder;
+        }
+    }
+
 }

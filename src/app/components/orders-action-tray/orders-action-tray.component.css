@@ -153,3 +153,11 @@
 .hide-tray {
     right: -61%;
 }
+
+.container-fluid .orders-tray{
+    /*padding-left:2em;*/
+}
+
+.width55{
+    width:55%;
+}

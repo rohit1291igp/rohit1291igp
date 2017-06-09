@@ -9,7 +9,10 @@ import { BackendService } from '../../services/backend.service';
 export class OrdersActionTrayComponent implements OnInit {
   private trayOpen: Boolean = false;
   @Output() onTrayToggle: EventEmitter<any> = new EventEmitter();
+  loadercount=[1,1];
   sidePanelDataLoading = true;
+  orderByStatus;
+  orderId;
   private sidePanelData: Object;
 
   constructor(
@@ -21,7 +24,18 @@ export class OrdersActionTrayComponent implements OnInit {
 
   toggleTray(e, orderByStatus, orderId) {
     e.preventDefault();
-    this.trayOpen = !this.trayOpen;
+    this.sidePanelData = null;
+    this.orderByStatus = orderByStatus;
+    this.orderId = orderId;
+    if(e.currentTarget.dataset.trayopen){
+        console.log('close clicked ----->', this.trayOpen);
+        this.trayOpen = false;
+    }else{
+        console.log('close not clicked ----->', this.trayOpen);
+        this.trayOpen = true;
+    }
+
+    //this.trayOpen = !this.trayOpen;
     console.log('trayOpen: and loading data', this.trayOpen);
     if(orderByStatus || orderId) this.loadTrayData(orderByStatus, orderId);
   }
@@ -32,7 +46,7 @@ export class OrdersActionTrayComponent implements OnInit {
       var reqURL:string;
 
       if(orderId){
-          reqURL ="?responseType=json&scopeId=1&orderId="+orderId+"&method=igp.order.getOrder";
+          reqURL ="?responseType=json&scopeId=1&fkassociateId="+fkAssociateId+"&orderId="+orderId+"&method=igp.order.getOrder";
       }else if(orderByStatus){
           let spDate = Date.now();
           let orderStatus = orderByStatus;
@@ -52,7 +66,7 @@ export class OrdersActionTrayComponent implements OnInit {
           }
           response = JSON.parse(response);
           console.log('sidePanel Response --->', response.result);
-          _this.sidePanelData = response.result;
+          _this.sidePanelData = Array.isArray(response.result) ? response.result : [response.result];
       });
   }
 

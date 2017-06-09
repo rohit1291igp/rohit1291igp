@@ -77,13 +77,15 @@ export class DashboardService {
         /* Dashboard count (new/confirmed orders) - start */
         let getDateDay = function(dateStr){
             var today = new Date();
+            var tomorrow = new Date(_this.UtilityService.getDateString(1));
+            var dayAfterTomorrow = new Date(_this.UtilityService.getDateString(2));
             var dateObj = new Date(dateStr);
 
             if(dateObj.getDate() === today.getDate()){
                 return "today";
-            }else if(dateObj.getDate() === (today.getDate() + 1)){
+            }else if(dateObj.getDate() === tomorrow.getDate()){
                 return "tomorrow";
-            }else if(dateObj.getDate() === (today.getDate() + 2)){
+            }else if(dateObj.getDate() === dayAfterTomorrow.getDate()){
                 return "future";
             }else{
                 fesDate = dateStr;
@@ -112,7 +114,7 @@ export class DashboardService {
                         pushObj.ordersCount = countObj[prop];
 
                         switch(day){
-                            case "today" : todayOrderTobeDelivered = countObj[prop];
+                            case "today" : todayOrderTobeDelivered = todayOrderTobeDelivered + parseInt(countObj[prop]);
                                 pushObj.displayStr = "Take action";
                                 pushObj.isAlert = true;
                                 break;
@@ -145,7 +147,8 @@ export class DashboardService {
                         pushObj.ordersCount = countObj[prop];
 
                         switch(day){
-                            case "today" : pushObj.displayStr = "View Orders";
+                            case "today" : todayOrderTobeDelivered = todayOrderTobeDelivered + parseInt(countObj[prop]);
+                                pushObj.displayStr = "View Orders";
                                 pushObj.isAlert = false;
                                 break;
 
@@ -169,11 +172,20 @@ export class DashboardService {
         };
 
         let dashboardCounts = apiResponse.result.dateStatusCountAllMap;
+        let dashboardCountsArray = []; //Objet is needed to convert into Array as Object doesn't guarntee to maintain order of property
         for(let prop in dashboardCounts){
             if(dashboardCounts.hasOwnProperty(prop)){
-                var day = getDateDay(prop);
-                createNewConfimedObj(prop, day, dashboardCounts[prop]);
+                var pushObj = {};
+                pushObj['counts'] = dashboardCounts[prop];
+                pushObj['date'] = prop;
+                dashboardCountsArray.push(pushObj);
             }
+        }
+        dashboardCountsArray = dashboardCountsArray.sort(_this.UtilityService.dynamicSort("date", null));
+        console.log('dashboardCountsArray======>', dashboardCountsArray);
+        for(let i in dashboardCountsArray){
+            var day = getDateDay(dashboardCountsArray[i].date);
+            createNewConfimedObj(dashboardCountsArray[i].date, day, dashboardCountsArray[i].counts);
         }
         /* Dashboard count (new/confirmed orders) - start */
 
@@ -193,7 +205,7 @@ export class DashboardService {
         /* Out for delivery - end */
 
         /* Delivered orders - start */
-        getDashboardDataResponse.delivered.today = apiResponse.result.deliveredTodayOrderCount*2; //todayOrderTobeDelivered;
+        getDashboardDataResponse.delivered.today = todayOrderTobeDelivered //apiResponse.result.deliveredTodayOrderCount*2;
         getDashboardDataResponse.delivered.total = apiResponse.result.deliveredTodayOrderCount;
         /* Delivered orders - end */
 
@@ -203,14 +215,21 @@ export class DashboardService {
     }
 
     getDashboardCount(spcificDate, cb){
-        var d1 = this.UtilityService.getDateString(0);
-        var d2 = this.UtilityService.getDateString(1);
-        var d3 = this.UtilityService.getDateString(2);
-        var d4 = this.UtilityService.getDateString(7);
 
-        console.log("dates ===>", d1, d2, d3, d4)
 
         if(localStorage.getItem('dRandom')){
+            var d1 = this.UtilityService.getDateString(0);
+            var d2 = this.UtilityService.getDateString(1);
+            var d3 = this.UtilityService.getDateString(2);
+            if(spcificDate){
+                let dd = new Date(spcificDate);
+                var d4 = this.UtilityService.getDateString(dd.getDate());
+            }else{
+                var d4 = this.UtilityService.getDateString(7);
+            }
+
+            console.log("dates ===>", d1, d2, d3, d4)
+
             let countObj= {};
             countObj[d1] = {"Processed"  : Math.floor(Math.random()*100), "Confirmed" : Math.floor(Math.random()*100)};
             countObj[d2] = {"Processed"  : Math.floor(Math.random()*100), "Confirmed" : Math.floor(Math.random()*100)};

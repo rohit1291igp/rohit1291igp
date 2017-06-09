@@ -5,14 +5,16 @@
   <div class="container-fluid orders-view">
     <div class="row">
       <div class="col-md-1">
-        <a href="#" (click)="toggleTray($event)">
+        <a href="#" (click)="toggleTray($event)" [attr.data-trayOpen]="trayOpen">
           <i class="glyphicon glyphicon-remove close-tray"></i>
         </a>
       </div>
 
         <div class="col-md-11 no-padding">
-            <p class="text-bold uppercase">New orders - Delivery for today</p>
-            <p class="text-grey no-margin">Total - 6 Orders</p>
+            <p class="text-bold uppercase">{{orderByStatus}} orders
+                <!--- Delivery for today  {{orderId}}-->
+            </p>
+            <p class="text-grey no-margin">Total - <span *ngIf="!sidePanelData">0</span><span *ngIf="sidePanelData">{{sidePanelData.length}}</span> Orders</p>
 
         </div>
 
@@ -20,7 +22,7 @@
     <div class="row">
         <div class="col-md-12 order-row" *ngIf="!sidePanelData" style="height: 85vh;">
 
-                <div class="container-fluid orders-tray">
+                <div class="container-fluid orders-tray" *ngFor="let loaderc of loadercount">
                     <div class="row delivery-details">
                         <div class="col-md-7 order-details no-padding">
                             <p>
@@ -116,16 +118,17 @@
         </div>
 
         <div class="col-md-12 order-row" *ngIf="sidePanelData">
-            <div class="container-fluid orders-tray">
+
+            <div class="container-fluid orders-tray" *ngFor="let order of sidePanelData">
               <div class="row delivery-details">
                 <div class="col-md-7 order-details no-padding">
                   <p>
-                    <span class="order-id">Order ID: IGP12345</span>
-                    <span class="delivery-time">Same Day Delivery 12/4/17 2:00 PM</span>
+                    <span class="order-id">Order ID: {{order.orderId}}</span>
+                    <!--<span class="delivery-time">Same Day Delivery 12/4/17 2:00 PM</span>-->
                   </p>
-                  <div class="text-bold">Deliver to: Vaibhav Singh</div>
-                  <div class="address">Address - Boomerang, Chandivli, Mumbai</div>
-                  <div class="contact">Contact Number - 123456789</div>
+                  <div class="text-bold">Deliver to: {{order.deliveryName}}</div>
+                  <div class="address">Address - {{order.deliveryStreetAddress}}, <span *ngIf="order.deliveryStreetAddress2">{{order.deliveryStreetAddress2}},</span>s{{order.deliveryCity}}-{{order.deliveryPostcode}}, {{order.deliveryState}}</div>
+                  <div class="contact">Contact Number - {{order.deliveryMobile}}</div>
                 </div>
                 <div class="col-md-5 order-actions">
                   <div class="row">
@@ -154,8 +157,8 @@
                   </div>
                 </div>
               </div>
-              <div class="row">
-                <p>Product Name: <span class="uppercase text-igp">Half kg Pineapple cake</span></p>
+              <div class="row" *ngFor="let orderProduct of order.orderProducts">
+                <p class="width55">Product Name: <span class="uppercase text-igp">{{orderProduct.productName}}</span></p>
                 <p>Product Components -</p>
                 <div class="col-md-12 product-holder">
                   <div class="row">
@@ -164,40 +167,16 @@
                       <span class="equal-sign">=</span>
                     </div>
                     <div class="col-md-8 no-padding">
-                      <div class="product-component">
-                        <div class="component-head">EGGLESS</div>
-                        <img class="component-image" src="https://d1xs5fw35mbn8b.cloudfront.net/p/m/p-round-black-forest-cake-half-kg--13461-m.jpg?v=1495502520000" alt="Component 1">
-                        <div class="component-quantity">QTY-3</div>
-                        <div class="component-name">Ferrero Rocher</div>
-                      </div>
-                      <div class="plus-sign">+</div>
-                      <div class="product-component">
-                        <div class="component-head">EGGLESS</div>
-                        <img class="component-image" src="https://d1xs5fw35mbn8b.cloudfront.net/p/m/p-round-black-forest-cake-half-kg--13461-m.jpg?v=1495502520000" alt="Component 1">
-                        <div class="component-quantity">QTY-3</div>
-                        <div class="component-name">Ferrero Rocher</div>
-                      </div>
-                      <span class="plus-sign">+</span>
-                      <div class="product-component">
-                        <div class="component-head">EGGLESS</div>
-                        <img class="component-image" src="https://d1xs5fw35mbn8b.cloudfront.net/p/m/p-round-black-forest-cake-half-kg--13461-m.jpg?v=1495502520000" alt="Component 1">
-                        <div class="component-quantity">QTY-3</div>
-                        <div class="component-name">Ferrero Rocher</div>
-                      </div>
-                      <span class="plus-sign">+</span>
-                      <div class="product-component">
-                        <div class="component-head">EGGLESS</div>
-                        <img class="component-image" src="https://d1xs5fw35mbn8b.cloudfront.net/p/m/p-round-black-forest-cake-half-kg--13461-m.jpg?v=1495502520000" alt="Component 1">
-                        <div class="component-quantity">QTY-3</div>
-                        <div class="component-name">Ferrero Rocher</div>
-                      </div>
-                      <span class="plus-sign">+</span>
-                      <div class="product-component">
-                        <div class="component-head">EGGLESS</div>
-                        <img class="component-image" src="https://d1xs5fw35mbn8b.cloudfront.net/p/m/p-round-black-forest-cake-half-kg--13461-m.jpg?v=1495502520000" alt="Component 1">
-                        <div class="component-quantity">QTY-3</div>
-                        <div class="component-name">Ferrero Rocher</div>
-                      </div>
+                      <span *ngFor="let prodComponent of orderProduct.componentList; let i='index'">
+                          <div class="product-component">
+                            <div class="component-head">{{prodComponent.componentCode}}</div>
+                            <img class="component-image" src="https://d1xs5fw35mbn8b.cloudfront.net/p/m/p-round-black-forest-cake-half-kg--13461-m.jpg?v=1495502520000" alt="Component 1">
+                            <div class="component-quantity">QTY-{{prodComponent.quantity | number : '2.0-0'}}</div>
+                            <div class="component-name">{{prodComponent.componentName}}</div>
+                          </div>
+                          <div class="plus-sign" *ngIf="(i+1) !== orderProduct.componentList.length">+</div>
+                      </span>
+
                     </div>
                   </div>
                 </div>
