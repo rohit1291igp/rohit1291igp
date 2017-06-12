@@ -1,7 +1,7 @@
 
 
 <div class="orders-action" [ngClass]="{'show-tray': trayOpen, 'hide-tray': !trayOpen}">
-
+<div class="apierror" *ngIf="apierror">{{apierror}}</div>
   <div class="container-fluid orders-view">
     <div class="row">
       <div class="col-md-1">

@@ -16,6 +16,7 @@ export class OrdersActionTrayComponent implements OnInit {
   orderUpdateByStatus;
   orderUpdateByStatusDisable=false;
   orderId;
+  apierror;
   private sidePanelData: Object;
 
   constructor(
@@ -105,7 +106,8 @@ export class OrdersActionTrayComponent implements OnInit {
 
       this.BackendService.makeAjax(reqObj, function(err, response, headers){
           if(err || JSON.parse(response).error) {
-              console.log(err, response.errorCode)
+              console.log(err, JSON.parse(response).errorCode)
+              _this.apierror = err || JSON.parse(response).errorCode;
               return;
           }
           response = JSON.parse(response);

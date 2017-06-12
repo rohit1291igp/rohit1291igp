@@ -83,9 +83,9 @@
 
 .apierror{
     font-weight: 500;
-    color: red;
+    color: #fff;
     text-align: center;
-    background: #eee;
+    background: red;
     padding: 0.5em;
 }
 
