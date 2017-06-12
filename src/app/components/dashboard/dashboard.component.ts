@@ -85,6 +85,14 @@ export class DashboardComponent implements OnInit {
       return { date: { year: fesDate.getFullYear(), month: (fesDate.getMonth()+1), day: fesDate.getDate() } }
   }
 
+  loadDashboardCount(){
+      var _this = this;
+      this.dashboardService.getDashboardData(null, function(result){
+          _this.dashboardData = result;
+          _this.dateRange = _this.setFestivalDate(result.festivalDate || new Date());
+      });
+  }
+
 
 
 

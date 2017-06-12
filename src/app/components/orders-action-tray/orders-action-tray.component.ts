@@ -9,7 +9,7 @@ import { BackendService } from '../../services/backend.service';
 })
 export class OrdersActionTrayComponent implements OnInit {
   private trayOpen: Boolean = false;
-  @Output() onTrayToggle: EventEmitter<any> = new EventEmitter();
+  @Output() onStatusUpdate: EventEmitter<any> = new EventEmitter();
   loadercount=[1,1];
   sidePanelDataLoading = true;
   orderByStatus;
@@ -104,14 +104,15 @@ export class OrdersActionTrayComponent implements OnInit {
       };
 
       this.BackendService.makeAjax(reqObj, function(err, response, headers){
-          if(err) {
-              console.log(err)
+          if(err || JSON.parse(response).error) {
+              console.log(err, response.errorCode)
               return;
           }
           response = JSON.parse(response);
           console.log('sidePanel Response --->', response.result);
           //_this.router.navigate(['/dashboard-dfghj']);
-
+          _this.onStatusUpdate.emit(e);
+          _this.trayOpen = false;
       });
   }
 
