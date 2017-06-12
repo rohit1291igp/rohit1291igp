@@ -172,10 +172,10 @@
                     <div class="col-md-8 no-padding comp2">
                       <span *ngFor="let prodComponent of orderProduct.componentList; let i='index'">
                           <div class="product-component">
-                            <div class="component-head">{{prodComponent.componentCode}}</div>
+                            <div class="component-head center-align">{{prodComponent.componentCode}}</div>
                             <img class="component-image" src="https://d1xs5fw35mbn8b.cloudfront.net/p/m/p-round-black-forest-cake-half-kg--13461-m.jpg?v=1495502520000" alt="Component 1">
-                            <div class="component-quantity">QTY-{{prodComponent.quantity | number : '2.0-0'}}</div>
-                            <div class="component-name">{{prodComponent.componentName}}</div>
+                            <div class="component-quantity center-align">QTY-{{prodComponent.quantity | number : '2.0-0'}}</div>
+                            <div class="component-name center-align">{{prodComponent.componentName}}</div>
                           </div>
                           <div class="plus-sign" *ngIf="(i+1) !== orderProduct.componentList.length">+</div>
                       </span>

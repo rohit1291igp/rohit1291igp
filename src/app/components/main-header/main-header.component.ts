@@ -8,8 +8,9 @@ import { BackendService } from '../../services/backend.service';
   styleUrls: ['./main-header.component.css']
 })
 export class MainHeaderComponent implements OnInit {
+    vendorName = localStorage.getItem('vendorName');
 
-  constructor(
+    constructor(
       public router: Router,
       public BackendService : BackendService
       ) { }
