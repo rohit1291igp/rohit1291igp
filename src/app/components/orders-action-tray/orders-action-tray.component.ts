@@ -85,9 +85,14 @@ export class OrdersActionTrayComponent implements OnInit {
               if(orderId){
                   var orderData = Object.assign({}, _this.getDummyOrderData().result[0]);
                   orderData.orderId = orderId;
+                  orderData.ordersStatus = orderByStatus || "Shipped";
                   _this.sidePanelData = [orderData];
               }else{
-                  _this.sidePanelData = _this.getDummyOrderData().result;
+                  var orderDataList = _this.getDummyOrderData().result.slice();
+                  for(let i in orderDataList){
+                      orderDataList[i].ordersStatus = orderByStatus;
+                  }
+                  _this.sidePanelData = orderDataList;
               }
           }, 1000);
           return;
