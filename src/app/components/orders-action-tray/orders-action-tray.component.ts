@@ -63,6 +63,7 @@ export class OrdersActionTrayComponent implements OnInit {
 
     this.orderId = orderId;
     if(e.currentTarget.dataset.trayopen){
+        this.onStatusUpdate.emit("closed");
         console.log('close clicked ----->', this.trayOpen);
         this.trayOpen = false;
     }else{

@@ -60,20 +60,24 @@ export class DashboardService {
 
                 {
                     deliveryTimes : "today",
-                    labelName : "Deliver for Today"
+                    labelName : "Deliver for Today",
+                    position : 1
                 },
                 {
                     deliveryTimes : "tomorrow",
-                    labelName : "Deliver for Tomorrow"
+                    labelName : "Deliver for Tomorrow",
+                    position : 2
                 },
 
                 {
                     deliveryTimes : "future",
-                    labelName : "Future Deliveries"
+                    labelName : "Future Deliveries",
+                    position : 3
                 },
                 {
                     deliveryTimes : "bydate",
-                    labelName : "By Date:"
+                    labelName : "By Date:",
+                    position : 4
                 }
 
             ],
@@ -121,7 +125,8 @@ export class DashboardService {
                             status : "",
                             ordersCount: "",
                             displayStr: "",
-                            isAlert: false
+                            isAlert: false,
+                            position : 0
                         };
 
                         pushObj.status = _this.statuslist['n'];
@@ -131,18 +136,22 @@ export class DashboardService {
                             case "today" : todayOrderTobeDelivered = todayOrderTobeDelivered + parseInt(countObj[prop]);
                                 pushObj.displayStr = "Take action";
                                 pushObj.isAlert = true;
+                                pushObj.position = 1;
                                 break;
 
                             case "tomorrow" : pushObj.displayStr = "View Orders";
                                 pushObj.isAlert = false;
+                                pushObj.position = 2;
                                 break;
 
                             case "future" : pushObj.displayStr = "View Orders";
                                 pushObj.isAlert = false;
+                                pushObj.position = 3;
                                 break;
 
                             case "bydate" : pushObj.displayStr = "View Orders";
                                 pushObj.isAlert = false;
+                                pushObj.position = 4;
                                 break;
                         }
 
@@ -154,7 +163,8 @@ export class DashboardService {
                             status : "",
                             ordersCount: "",
                             displayStr: "",
-                            isAlert: false
+                            isAlert: false,
+                            position : 0
                         };
 
                         pushObj.status = _this.statuslist['c'];
@@ -164,18 +174,22 @@ export class DashboardService {
                             case "today" : todayOrderTobeDelivered = todayOrderTobeDelivered + parseInt(countObj[prop]);
                                 pushObj.displayStr = "View Orders";
                                 pushObj.isAlert = false;
+                                pushObj.position = 1;
                                 break;
 
                             case "tomorrow" : pushObj.displayStr = "View Orders";
                                 pushObj.isAlert = false;
+                                pushObj.position = 2;
                                 break;
 
                             case "future" : pushObj.displayStr = "View Orders";
                                 pushObj.isAlert = false;
+                                pushObj.position = 3;
                                 break;
 
                             case "bydate" : pushObj.displayStr = "View Orders";
                                 pushObj.isAlert = false;
+                                pushObj.position = 4;
                                 break;
                         }
 
@@ -320,20 +334,24 @@ export class DashboardService {
 
                 {
                     deliveryTimes : "today",
-                    labelName : "Deliver for Today"
+                    labelName : "Deliver for Today",
+                    position : 1
                 },
                 {
                     deliveryTimes : "tomorrow",
-                    labelName : "Deliver for Tomorrow"
+                    labelName : "Deliver for Tomorrow",
+                    position : 2
                 },
 
                 {
                     deliveryTimes : "future",
-                    labelName : "Future Deliveries"
+                    labelName : "Future Deliveries",
+                    position : 3
                 },
                 {
                     deliveryTimes : "bydate",
-                    labelName : "By Date:"
+                    labelName : "By Date:",
+                    position : 4
                 }
 
             ],
@@ -473,6 +491,14 @@ export class DashboardService {
         dashboardData.confirmed.unshift(splicedObj[0]);
 
         return dashboardData;
+    }
+
+    reArrangeDbDate(dbData){
+        console.log('---- DbDate rearranged ----');
+        dbData.topLabels = dbData.topLabels.sort(this.UtilityService.dynamicSort("position", null));
+        dbData.confirmed = dbData.confirmed.sort(this.UtilityService.dynamicSort("position", null));
+        dbData.new = dbData.new.sort(this.UtilityService.dynamicSort("position", null));
+        return dbData;
     }
     
 }

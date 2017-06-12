@@ -93,3 +93,20 @@
     pointer-events: none;
     opacity: 0.4;
 }
+
+.table-display{
+    display: table;
+}
+
+.table-cell-display{
+    dispaly:table-cell;
+}
+
+.v-align-middle{
+    vertical-align: middle;
+}
+
+.btnclear.btnclearenabled{
+    pointer-events: none;
+    visibility: hidden;
+}
