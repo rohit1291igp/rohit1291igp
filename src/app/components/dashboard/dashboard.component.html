@@ -128,7 +128,7 @@
             <div class="cell col-md-9 no-padding">
               <div class="col-md-9 no-padding">
                 <div class="col-md-3 custom-btn-parent" *ngFor="let order of dashboardData.ofd; let i='index'">
-                  <app-orders-button [orderId]="order.orderNumber" [displayData]="order" [orderStatus]="order.status" [OrderDay]="dashBoardCount.day" [deliveryTime]="masterData.deliveryTimes[4]" (onViewOrders)="viewOrders($event)" *ngIf="i<4">
+                  <app-orders-button [orderId]="order.orderNumber" [displayData]="order" [orderStatus]="order.status" [OrderDay]="" [deliveryTime]="masterData.deliveryTimes[4]" (onViewOrders)="viewOrders($event)" *ngIf="i<4">
                     <div>{{order.orderNumber}}</div>
                   </app-orders-button>
                 </div>
