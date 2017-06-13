@@ -16,6 +16,7 @@ export class DashboardComponent implements OnInit {
   @ViewChild(OrdersActionTrayComponent) child: OrdersActionTrayComponent;
   searchModel : any = {};
   dashBoardDataType;
+  vendorName = localStorage.getItem('vendorName');
   private mainHeaderComponent: MainHeaderComponent;
   private dashboardData: Object;
   private masterData: Object;

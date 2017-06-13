@@ -59,6 +59,7 @@ export class LoginComponent implements OnInit {
             console.log('fkAssociateId', fkAssociateId);
             localStorage.setItem('currentUserToken', token);
             localStorage.setItem('fkAssociateId', fkAssociateId);
+            localStorage.setItem('vendorName', _this.model.username);
             _this.router.navigate(['/dashboard']);
         });
 
