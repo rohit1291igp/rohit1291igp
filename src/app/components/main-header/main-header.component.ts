@@ -10,14 +10,14 @@ import { BackendService } from '../../services/backend.service';
 export class MainHeaderComponent implements OnInit {
 
   constructor(
-      private router: Router,
-      private BackendService : BackendService
+      public router: Router,
+      public BackendService : BackendService
       ) { }
 
   ngOnInit() {
   }
 
-  logout(){
+  logout(e){
       let _this = this;
       let reqObj = {
           url : "?responseType=json&scopeId=1&token="+localStorage.getItem('currentUserToken')+"&method=igp.auth.doLogOut",

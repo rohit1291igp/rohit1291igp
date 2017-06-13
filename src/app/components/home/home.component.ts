@@ -12,7 +12,7 @@ export class HomeComponent implements OnInit {
     currentUser: User;
     users: User[] = [];
 
-    constructor(private userService: UserService) {
+    constructor(public userService: UserService) {
         this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
     }
 
@@ -24,7 +24,7 @@ export class HomeComponent implements OnInit {
         this.userService.delete(id).subscribe(() => { this.loadAllUsers() });
     }
 
-    private loadAllUsers() {
+    public loadAllUsers() {
         this.userService.getAll().subscribe(users => { this.users = users; });
     }
 

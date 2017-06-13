@@ -9,7 +9,7 @@ import { UtilityService } from '../../services/utility.service';
   styleUrls: ['./orders-action-tray.component.css']
 })
 export class OrdersActionTrayComponent implements OnInit {
-  private trayOpen: Boolean = false;
+  public trayOpen: Boolean = false;
   @Output() onStatusUpdate: EventEmitter<any> = new EventEmitter();
   loadercount=[1,1];
   sidePanelDataLoading = true;
@@ -18,12 +18,12 @@ export class OrdersActionTrayComponent implements OnInit {
   orderUpdateByStatusDisable=false;
   orderId;
   apierror;
-  private sidePanelData: Object;
+  public sidePanelData: Object;
 
   constructor(
-      private BackendService : BackendService,
-      private router: Router,
-      private UtilityService: UtilityService
+      public BackendService : BackendService,
+      public router: Router,
+      public UtilityService: UtilityService
       ) { }
 
   ngOnInit() {

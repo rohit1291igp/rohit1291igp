@@ -5,7 +5,7 @@
   <div class="container-fluid orders-view">
     <div class="row">
       <div class="col-md-1">
-        <a href="#" (click)="toggleTray($event)" [attr.data-trayOpen]="trayOpen">
+        <a href="#" (click)="toggleTray($event, null, null)" [attr.data-trayOpen]="trayOpen">
           <i class="glyphicon glyphicon-remove close-tray"></i>
         </a>
       </div>
@@ -36,26 +36,26 @@
                         </div>
                         <div class="col-md-5 order-actions">
                             <div class="row">
-                                <div class="btn btn-primary actions-button uppercase text-bold text-black bg-white disableBtn" (click)="openOrdersTray($event)">
+                                <div class="btn btn-primary actions-button uppercase text-bold text-black bg-white disableBtn">
                                 Reject
                             </div>
-                            <div class="btn btn-primary actions-button uppercase text-bold text-white bg-green disableBtn" (click)="openOrdersTray($event)">
+                            <div class="btn btn-primary actions-button uppercase text-bold text-white bg-green disableBtn">
                             Confirm
                         </div>
                     </div>
                     <div class="row">
-                        <div class="btn btn-primary actions-button text-bold disableBtn" [ngClass]="{'bg-igp text-white': isAlert, 'bg-grey text-black': !isAlert}" (click)="openOrdersTray($event)">
+                        <div class="btn btn-primary actions-button text-bold disableBtn" [ngClass]="{'bg-igp text-white': isAlert, 'bg-grey text-black': !isAlert}">
                         Print Order
                     </div>
-                    <div class="btn btn-primary actions-button text-bold disableBtn" [ngClass]="{'bg-igp text-white': isAlert, 'bg-grey text-black': !isAlert}" (click)="openOrdersTray($event)">
+                    <div class="btn btn-primary actions-button text-bold disableBtn" [ngClass]="{'bg-igp text-white': isAlert, 'bg-grey text-black': !isAlert}">
                     Print Message
                 </div>
             </div>
               <div class="row">
-                  <div class="btn btn-primary actions-button text-bold text-white bg-black" (click)="openOrdersTray($event)">
+                  <div class="btn btn-primary actions-button text-bold text-white bg-black">
                   Put On Hold
               </div>
-              <div class="btn btn-primary actions-button text-bold text-white bg-black" (click)="openOrdersTray($event)">
+              <div class="btn btn-primary actions-button text-bold text-white bg-black">
               Other
           </div>
         </div>
@@ -154,7 +154,7 @@
                     <div class="btn btn-primary actions-button text-bold text-white bg-black" (click)="updateOrderStatus($event, 'PutOnHold', order.orderId)">
                       Put On Hold
                     </div>
-                    <div class="btn btn-primary actions-button text-bold text-white bg-black" (click)="openOrdersTray($event)">
+                    <div class="btn btn-primary actions-button text-bold text-white bg-black">
                       Other
                     </div>
                   </div>

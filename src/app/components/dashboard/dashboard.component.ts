@@ -17,22 +17,22 @@ export class DashboardComponent implements OnInit {
   searchModel : any = {};
   dashBoardDataType;
   vendorName = localStorage.getItem('vendorName');
-  private mainHeaderComponent: MainHeaderComponent;
-  private dashboardData: Object;
-  private masterData: Object;
-  private isRowAlert: Object;
+  public mainHeaderComponent: MainHeaderComponent;
+  public dashboardData: Object;
+  public masterData: Object;
+  public isRowAlert: Object;
 
-  private myDatePickerOptions: IMyOptions = {
+  public myDatePickerOptions: IMyOptions = {
     // other options...
     dateFormat: 'ddth mmm. yyyy',
     disableDateRanges : [{begin: this.UtilityService.getDateObj(0), end: this.UtilityService.getDateObj(2)}]
   };
-  private dateRange: Object = { date: { year: 2017, month: 5, day: 10 } };
+  public dateRange: Object = { date: { year: 2017, month: 5, day: 10 } };
 
   constructor(
-    private dashboardService: DashboardService,
-    private BackendService: BackendService,
-    private UtilityService: UtilityService
+    public dashboardService: DashboardService,
+    public BackendService: BackendService,
+    public UtilityService: UtilityService
       ) { }
 
   ngOnInit() {

@@ -17,11 +17,11 @@ export class LoginComponent implements OnInit {
     apierror : string;
 
     constructor(
-        private route1: ActivatedRoute,
-        private router: Router,
-        private authenticationService: AuthenticationService,
-        private BackendService: BackendService
-        // private alertService: AlertService
+        public route1: ActivatedRoute,
+        public router: Router,
+        public authenticationService: AuthenticationService,
+        public BackendService: BackendService
+        // public alertService: AlertService
         ) { }
 
     ngOnInit() {
