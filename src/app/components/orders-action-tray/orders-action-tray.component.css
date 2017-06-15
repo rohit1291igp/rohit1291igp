@@ -95,6 +95,7 @@
 }
 
 .product-component {
+    margin-bottom: 1em;
     width: 75px;
     height: 150px;
     display: inline-block;
@@ -130,7 +131,7 @@
 
 .component-name {
     font-size: 12px;
-    margin: 0 4px;
+    margin: 0.5em 0 0;
 }
 
 .equal-sign {
