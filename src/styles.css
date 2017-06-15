@@ -117,3 +117,7 @@
     color: #ffffff;
     left: 7em;
 }
+
+.hideVisibility{
+    visibility:hidden;
+}

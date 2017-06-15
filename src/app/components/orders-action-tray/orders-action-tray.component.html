@@ -132,7 +132,7 @@
                 </div>
                 <div class="col-md-5 order-actions">
                   <div class="row">
-                    <div class="btn btn-primary actions-button uppercase text-bold text-black bg-white" (click)="updateOrderStatus($event, 'Rejected', order.orderId)">
+                    <div class="btn btn-primary actions-button uppercase text-bold text-black bg-white" [ngClass]="{'disableBtn' : order.ordersStatus !=='Processed', 'hideVisibility' : order.ordersStatus !=='Processed'}" (click)="updateOrderStatus($event, 'Rejected', order.orderId)">
                       Reject
                     </div>
                     <button class="btn btn-primary actions-button uppercase text-bold text-white bg-green" [ngClass]="{'disableBtn' : order.ordersStatus =='Shipped' || order.ordersStatus =='Dispatched'}" (click)="updateOrderStatus($event, getNxtOrderStatus(order.ordersStatus), order.orderId)">
