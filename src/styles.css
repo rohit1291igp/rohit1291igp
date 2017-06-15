@@ -110,3 +110,10 @@
     pointer-events: none;
     visibility: hidden;
 }
+
+.headerVendor{
+    top: 0.15em;
+    position: absolute;
+    color: #ffffff;
+    left: 7em;
+}

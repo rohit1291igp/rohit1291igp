@@ -219,7 +219,7 @@ export class DashboardService {
         createNewConfimedObj("", "today", dashboardCounts["today"]);
         createNewConfimedObj("", "tomorrow", dashboardCounts["tomorrow"]);
         createNewConfimedObj("", "future", dashboardCounts["future"]);
-        createNewConfimedObj("", "bydate", dashboardCounts["festivalDate"]);
+        createNewConfimedObj(apiResponse.result.festivalDate, "bydate", dashboardCounts["festivalDate"]);
 
         /* Dashboard count (new/confirmed orders) - start */
 

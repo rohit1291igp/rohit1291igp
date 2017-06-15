@@ -2,6 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { BackendService } from '../../services/backend.service';
 import { UtilityService } from '../../services/utility.service';
+import { DashboardService } from '../../services/dashboard.service';
 
 @Component({
   selector: 'app-orders-action-tray',
@@ -23,7 +24,8 @@ export class OrdersActionTrayComponent implements OnInit {
   constructor(
       public BackendService : BackendService,
       public router: Router,
-      public UtilityService: UtilityService
+      public UtilityService: UtilityService,
+      public dashboardService: DashboardService,
       ) { }
 
   ngOnInit() {
@@ -106,11 +108,52 @@ export class OrdersActionTrayComponent implements OnInit {
           let orderDeliveryTime = e.currentTarget.dataset.deliverytime;
           let spDate = Date.parse(orderDate); //Date.now();
           let orderStatus = orderByStatus;
+          let section;
+          let statusList = this.dashboardService.statuslist;
+          switch(orderStatus){
+              case statusList['n'] :
+                                        switch(orderDeliveryTime){
+                                            case "today" : section = "today";
+                                                break;
+
+                                            case "tomorrow" : section = "tomorrow";
+                                                break;
+
+                                            case "future" : section = "future";
+                                                break;
+
+                                            case "bydate" : section = "specific";
+                                                break;
+                                        }
+                  break;
+
+              case statusList['c'] :
+                                      switch(orderDeliveryTime){
+                                          case "today" : section = "today";
+                                              break;
+
+                                          case "tomorrow" : section = "tomorrow";
+                                              break;
+
+                                          case "future" : section = "future";
+                                              break;
+
+                                          case "bydate" : section = "specific";
+                                              break;
+                                     }
+                  break;
+
+              case statusList['o'] : section = "today";
+                  break;
+
+              case statusList['d'] : section = "today";
+                  break;
+          }
 
           if(orderDeliveryTime === "future"){
-              reqURL ="?responseType=json&scopeId=1&isfuture=true&status="+orderStatus+"&fkassociateId="+fkAssociateId+"&date="+spDate+"&method=igp.order.getOrderByStatusDate";
+              reqURL ="?responseType=json&scopeId=1&isfuture=true&section="+section+"&status="+orderStatus+"&fkassociateId="+fkAssociateId+"&date="+spDate+"&method=igp.order.getOrderByStatusDate";
           }else{
-              reqURL ="?responseType=json&scopeId=1&status="+orderStatus+"&fkassociateId="+fkAssociateId+"&date="+spDate+"&method=igp.order.getOrderByStatusDate";
+              reqURL ="?responseType=json&scopeId=1&section="+section+"&status="+orderStatus+"&fkassociateId="+fkAssociateId+"&date="+spDate+"&method=igp.order.getOrderByStatusDate";
           }
       }
 
@@ -128,7 +171,7 @@ export class OrdersActionTrayComponent implements OnInit {
           }
           response = JSON.parse(response);
           console.log('sidePanel Response --->', response.result);
-          _this.sidePanelData = Array.isArray(response.result) ? response.result : [response.result];
+          _this.sidePanelData = response.result ? Array.isArray(response.result) ? response.result : [response.result] : [];
           //_this.getNxtOrderStatus(_this.sidePanelData[0].ordersStatus);
       });
   }
