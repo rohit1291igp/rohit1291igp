@@ -177,7 +177,8 @@ export class OrdersActionTrayComponent implements OnInit {
   }
 
   updateOrderStatus(e, status, orderId){
-
+      e.currentTarget.textContent = "Updating...";
+      let currentTab = e.currentTarget.dataset.tab;
       let fkAssociateId = localStorage.getItem('fkAssociateId');
       var _this = this;
       var reqURL = "?responseType=json&scopeId=1&status="+status+"&fkAssociateId="+fkAssociateId+"&orderId="+orderId+"&method=igp.order.doUpdateOrderStatus";
@@ -203,7 +204,7 @@ export class OrdersActionTrayComponent implements OnInit {
           response = JSON.parse(response);
           console.log('sidePanel Response --->', response.result);
           //_this.router.navigate(['/dashboard-dfghj']);
-          _this.onStatusUpdate.emit(e);
+          _this.onStatusUpdate.emit(currentTab);
           _this.trayOpen = false;
       });
   }

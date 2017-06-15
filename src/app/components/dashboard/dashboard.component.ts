@@ -24,8 +24,8 @@ export class DashboardComponent implements OnInit {
 
   public myDatePickerOptions: IMyOptions = {
     // other options...
-    dateFormat: 'ddth mmm. yyyy',
-    disableDateRanges : [{begin: this.UtilityService.getDateObj(0), end: this.UtilityService.getDateObj(2)}]
+    dateFormat: 'ddth mmm. yyyy'
+    //disableDateRanges : [{begin: this.UtilityService.getDateObj(0), end: this.UtilityService.getDateObj(2)}]
   };
   public dateRange: Object = { date: { year: 2017, month: 5, day: 10 } };
 
@@ -105,7 +105,7 @@ export class DashboardComponent implements OnInit {
           //reArrange DB data
           this.dashboardData = this.dashboardService.reArrangeDbDate(this.dashboardData);
       }else{
-          this.dashBoardDataType = e.currentTarget.dataset.tab;
+          this.dashBoardDataType = (e && e.currentTarget) ? e.currentTarget.dataset.tab : e;
           var _this = this;
           this.dashboardService.getDashboardData(null, function(result){
               if(!result.new[0] || (result.new[0] && result.new[0].deliveryTimes !== "today")) {

@@ -1,17 +1,18 @@
 <div class="headerVendor navbar-brand" *ngIf="vendorName">- {{vendorName}}</div>
 <app-header-tabs (onTabChanged)="loadDashboardCount($event)"></app-header-tabs>
 
-<div class="col-md-2 searchbox" style="top: 4.5em; left: 84%; position: absolute;">
+<div class="col-md-3 searchbox" style="top: 4em; left: 79.5%; position: absolute;">
     <form name="form" (ngSubmit)="f.form.valid && search($event)" #f="ngForm" novalidate>
-         <input name="searchkey" type="text" class="input-right" placeholder="Search by Order Number" [(ngModel)]="searchModel.searchkey" #searchkey="ngModel" style="width:100%;" required>
-         <div *ngIf="f.submitted && !searchkey.valid" class="help-block"></div>
+         <input name="searchkey" type="text" class="input-right form-control" placeholder="Search by Order Number" [(ngModel)]="searchModel.searchkey" #searchkey="ngModel" style="width:60%; display:inline-block;" required>
+        <input  type="submit" class="btn btn-primary" style="display:inline-block;" value="Search" />
+        <div *ngIf="f.submitted && !searchkey.valid" class="help-block"></div>
     </form>
 </div>
 
 <div class="container-fluid">
   <div class="row padding-extra">
     <p>Hi {{vendorName}} !</p>
-    <p>Below is the schedule of orders you need to fulfill</p>
+    <p>Below is the schedule of orders you need to fulfil</p>
   </div>
   <div class="row dashboard-content">
     <div class="col-md-12">

@@ -60,12 +60,12 @@ export class DashboardService {
 
                 {
                     deliveryTimes : "today",
-                    labelName : "Deliver for Today",
+                    labelName : "Delivery for Today",
                     position : 1
                 },
                 {
                     deliveryTimes : "tomorrow",
-                    labelName : "Deliver for Tomorrow",
+                    labelName : "Delivery for Tomorrow",
                     position : 2
                 },
 
@@ -355,12 +355,12 @@ export class DashboardService {
 
                 {
                     deliveryTimes : "today",
-                    labelName : "Deliver for Today",
+                    labelName : "Delivery for Today",
                     position : 1
                 },
                 {
                     deliveryTimes : "tomorrow",
-                    labelName : "Deliver for Tomorrow",
+                    labelName : "Delivery for Tomorrow",
                     position : 2
                 },
 
