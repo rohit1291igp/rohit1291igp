@@ -200,7 +200,7 @@ export class DashboardService {
         };
 
         let dashboardCounts = apiResponse.result[dataTypeSelect];
-        let dashboardCountsArray = []; //Objet is needed to convert into Array as Object doesn't guarntee to maintain order of property
+        /*let dashboardCountsArray = []; //Objet is needed to convert into Array as Object doesn't guarntee to maintain order of property
         for(let prop in dashboardCounts){
             if(dashboardCounts.hasOwnProperty(prop)){
                 var pushObj = {};
@@ -214,7 +214,13 @@ export class DashboardService {
         for(let i in dashboardCountsArray){
             var day = getDateDay(dashboardCountsArray[i].date);
             createNewConfimedObj(dashboardCountsArray[i].date, day, dashboardCountsArray[i].counts);
-        }
+        }*/
+
+        createNewConfimedObj("", "today", dashboardCounts["today"]);
+        createNewConfimedObj("", "tomorrow", dashboardCounts["tomorrow"]);
+        createNewConfimedObj("", "future", dashboardCounts["future"]);
+        createNewConfimedObj("", "bydate", dashboardCounts["festivalDate"]);
+
         /* Dashboard count (new/confirmed orders) - start */
 
         /* Out for delivery - start */
@@ -238,7 +244,7 @@ export class DashboardService {
         /* Delivered orders - end */
 
         console.log('getDashboardDataResponse==============>', getDashboardDataResponse);
-        getDashboardDataResponse["festivalDate"] = fesDate;
+        getDashboardDataResponse["festivalDate"] = apiResponse.result.festivalDate; //fesDate;
         return getDashboardDataResponse;
     }
 
@@ -264,10 +270,10 @@ export class DashboardService {
             countObj[d3] = {"Processed"  : Math.floor(Math.random()*100), "Confirmed" : Math.floor(Math.random()*100)};
             countObj[d4] = {"Processed"  : Math.floor(Math.random()*100), "Confirmed" : Math.floor(Math.random()*100)};*/
 
-            countObj[d1] = {"Processed"  : Math.floor(Math.random()*100), "Confirmed" : Math.floor(Math.random()*100)};
-            countObj[d2] = {"Processed"  : Math.floor(Math.random()*100), "Confirmed" : Math.floor(Math.random()*100)};
-            countObj[d3] = {"Processed"  : Math.floor(Math.random()*100), "Confirmed" : Math.floor(Math.random()*100)};
-            countObj[d4] = {"Processed"  : Math.floor(Math.random()*100), "Confirmed" : Math.floor(Math.random()*100)};
+            countObj["today"] = {"Processed"  : Math.floor(Math.random()*100), "Confirmed" : Math.floor(Math.random()*100)};
+            countObj["tomorrow"] = {"Processed"  : Math.floor(Math.random()*100), "Confirmed" : Math.floor(Math.random()*100)};
+            countObj["future"] = {"Processed"  : Math.floor(Math.random()*100), "Confirmed" : Math.floor(Math.random()*100)};
+            countObj["festivalDate"] = {"Processed"  : Math.floor(Math.random()*100), "Confirmed" : Math.floor(Math.random()*100)};
 
             let oId1 = Math.floor(Math.random()*1000000);
             let oId2 = Math.floor(Math.random()*1000000);
@@ -291,7 +297,22 @@ export class DashboardService {
                 }
             };
 
-            return cb(hardCodedData);
+            let hardCodedData2 = {
+                "error": false,
+                "errorCode": "NO_ERROR",
+                "errorMessage": null,
+                "errorParams": [],
+                "result": {
+                    "dateStatusCountAllMap": countObj,
+                    "festivalDate" : "2017-09-08",
+                    "dateStatusCountBreachMap": {},
+                    "dateStatusCountAlertMap": {},
+                    "outOfDeliveryOrderIds": outofDeliveryIds,
+                    "deliveredTodayOrderCount": Math.floor(Math.random()*100)
+                    }
+                };
+
+            return cb(hardCodedData2);
         }
 
             let fkAssociateId = localStorage.getItem('fkAssociateId');

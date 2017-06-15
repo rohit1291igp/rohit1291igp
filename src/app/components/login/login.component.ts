@@ -39,29 +39,39 @@ export class LoginComponent implements OnInit {
         //this.authenticationService.login(this.model.username, this.model.password);
         //this.router.navigate([this.returnUrl]);
 
-        let reqObj = {
-            url : "IGPService/login?username="+this.model.username+"&password="+this.model.password,
-            method : "post",
-            payload : {}
-        };
-
-        this.BackendService.makeAjax(reqObj, function(err, response, headers){
-            _this.loading = false;
-            if(err) {
-                console.log(err)
-                _this.apierror = "Login Failed (Either UserId/Password wrong)"
-                return;
-            }
-
-            let token = headers.get('token');
-            let fkAssociateId = headers.get('fkAssociateId');
-            console.log('User token', token);
-            console.log('fkAssociateId', fkAssociateId);
-            localStorage.setItem('currentUserToken', token);
-            localStorage.setItem('fkAssociateId', fkAssociateId);
-            localStorage.setItem('vendorName', _this.model.username);
+        if(localStorage.getItem('dRandom')){
+            localStorage.setItem('currentUserToken', 'dummy');
+            localStorage.setItem('fkAssociateId', 'dummy');
+            localStorage.setItem('vendorName', "Dummy UserID");
+            localStorage.setItem('associateName', "Dummy User Name");
             _this.router.navigate(['/dashboard']);
-        });
+        }else{
+            let reqObj = {
+                url : "IGPService/login?username="+this.model.username+"&password="+this.model.password,
+                method : "post",
+                payload : {}
+            };
+
+            this.BackendService.makeAjax(reqObj, function(err, response, headers){
+                _this.loading = false;
+                if(err) {
+                    console.log(err)
+                    _this.apierror = "Login Failed (Either UserId/Password wrong)"
+                    return;
+                }
+
+                let token = headers.get('token');
+                let fkAssociateId = headers.get('fkAssociateId');
+                let associateName = headers.get('associateName');
+                console.log('User token', token);
+                console.log('fkAssociateId', fkAssociateId);
+                localStorage.setItem('currentUserToken', token);
+                localStorage.setItem('fkAssociateId', fkAssociateId);
+                localStorage.setItem('associateName', associateName);
+                localStorage.setItem('vendorName', _this.model.username);
+                _this.router.navigate(['/dashboard']);
+            });
+        }
 
     }
 }

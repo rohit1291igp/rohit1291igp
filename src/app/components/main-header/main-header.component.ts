@@ -8,7 +8,7 @@ import { BackendService } from '../../services/backend.service';
   styleUrls: ['./main-header.component.css']
 })
 export class MainHeaderComponent implements OnInit {
-    vendorName = localStorage.getItem('vendorName');
+    vendorName = localStorage.getItem('associateName');
 
     constructor(
       public router: Router,
@@ -20,22 +20,34 @@ export class MainHeaderComponent implements OnInit {
 
   logout(e){
       let _this = this;
-      let reqObj = {
-          url : "?responseType=json&scopeId=1&token="+localStorage.getItem('currentUserToken')+"&method=igp.auth.doLogOut",
-          method : "post",
-          payload : {}
-      };
 
-      this.BackendService.makeAjax(reqObj, function(err, response, headers){
-          if(err) {
-              console.log(err)
-              return;
-          }
-
+      if(localStorage.getItem('dRandom')){
           localStorage.removeItem('currentUserToken');
           localStorage.removeItem('fkAssociateId');
+          localStorage.removeItem('vendorName');
+          localStorage.removeItem('associateName');
           _this.router.navigate(['/login']);
-      })
+      }else{
+          let reqObj = {
+              url : "?responseType=json&scopeId=1&token="+localStorage.getItem('currentUserToken')+"&method=igp.auth.doLogOut",
+              method : "post",
+              payload : {}
+          };
+
+          this.BackendService.makeAjax(reqObj, function(err, response, headers){
+              if(err) {
+                  console.log(err)
+                  return;
+              }
+
+              localStorage.removeItem('currentUserToken');
+              localStorage.removeItem('fkAssociateId');
+              localStorage.removeItem('vendorName');
+              localStorage.removeItem('associateName');
+              _this.router.navigate(['/login']);
+          })
+      }
+
   }
 
 }
