@@ -32,7 +32,7 @@
                             </p>
                             <div class="text-bold">Deliver to: <app-loader></app-loader></div>
                             <div class="address">Address - <app-loader></app-loader></div>
-                            <div class="contact">Contact Number - <app-loader></app-loader></div>
+                            <div class="contact">CONTACT NUMBER - <app-loader></app-loader></div>
                         </div>
                         <div class="col-md-5 order-actions">
                             <div class="row">
@@ -132,7 +132,7 @@
                 </div>
                 <div class="col-md-5 order-actions">
                   <div class="row">
-                    <div class="btn btn-primary actions-button uppercase text-bold text-black bg-white" [ngClass]="{'disableBtn' : order.orderProducts[0].ordersProductStatus !=='Processed', 'hide' : order.orderProducts[0].ordersProductStatus !=='Processed'}" (click)="updateOrderStatus($event, 'Rejected', order.orderId)">
+                    <div class="btn btn-primary actions-button uppercase text-bold bg-white text-red" [ngClass]="{'disableBtn' : order.orderProducts[0].ordersProductStatus !=='Processed', 'hide' : order.orderProducts[0].ordersProductStatus !=='Processed'}" (click)="updateOrderStatus($event, 'Rejected', order.orderId)">
                       Reject
                     </div>
                     <button class="btn btn-primary actions-button uppercase text-bold text-white bg-green" [ngClass]="{'disableBtn' : order.orderProducts[0].ordersProductStatus =='Shipped' || order.orderProducts[0].ordersProductStatus =='Dispatched'}" (click)="updateOrderStatus($event, getNxtOrderStatus(order.orderProducts[0].ordersProductStatus), order.orderId)">
@@ -145,7 +145,7 @@
 
                   <div class="row">
                     <div class="btn btn-primary actions-button text-bold text-white bg-black" [ngClass]="{'disableBtn' : !(order.orderProducts[0].ordersProductStatus =='Processed' || order.orderProducts[0].ordersProductStatus =='Confirmed'), 'hide' : !(order.orderProducts[0].ordersProductStatus =='Confirmed' || order.orderProducts[0].ordersProductStatus =='Processed') }" (click)="updateOrderStatus($event, 'PutOnHold', order.orderId)">
-                      Put On Hold 
+                      Put On Hold
                     </div>
                     <!--<div class="btn btn-primary actions-button text-bold text-white bg-black">
                       Other
@@ -175,7 +175,7 @@
                     <div class="col-md-8 no-padding comp2">
                       <span *ngFor="let prodComponent of orderProduct.componentList; let i='index'">
                           <div class="product-component">
-                            <div class="component-head center-align">{{prodComponent.componentCode | slice:0:9}}<span *ngIf="prodComponent.componentName.length > 9">...</span></div>
+                            <div class="component-head center-align uppercase">{{prodComponent.componentCode | slice:0:9}}<span *ngIf="prodComponent.componentName.length > 9">...</span></div>
                             <img class="component-image" src="https://d1xs5fw35mbn8b.cloudfront.net/p/m/p-round-black-forest-cake-half-kg--13461-m.jpg?v=1495502520000" alt="Component 1">
                             <div class="component-quantity center-align">QTY-{{prodComponent.quantity | number : '2.0-0'}}</div>
                             <div class="component-name center-align">{{prodComponent.componentName | slice:0:9}}<span *ngIf="prodComponent.componentName.length > 9">...</span> </div>

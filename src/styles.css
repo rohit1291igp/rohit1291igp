@@ -15,6 +15,10 @@
     font-weight: bold;
 }
 
+.text-red {
+    color: #C3404E;
+}
+
 .uppercase {
     text-transform: uppercase;
 }
