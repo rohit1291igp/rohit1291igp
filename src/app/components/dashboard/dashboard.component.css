@@ -83,3 +83,8 @@
 .no-action {
     border-left: 15px solid white;
 }
+
+.no-ofd-label{
+    text-align: center;
+    margin-top: 1.5em;
+}
