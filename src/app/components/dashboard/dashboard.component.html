@@ -51,7 +51,7 @@
                     <app-orders-button [displayData]="dashBoardCount" [orderStatus]="dashBoardCount.status" [OrderDay]="dashBoardCount.day" [deliveryTime]="dashBoardCount.deliveryTimes" *ngIf="dashBoardCount.ordersCount" (onViewOrders)="viewOrders($event)">
                         <app-button-view [viewData]="dashBoardCount.ordersCount"></app-button-view>
                     </app-orders-button>
-                    <app-no-orders [viewData]="dashBoardCount.ordersCount"></app-no-orders>
+                    <app-no-orders [viewData]="dashBoardCount.ordersCount" [orderStatus]="'new'"></app-no-orders>
                 </div>
             </div>
 
@@ -97,7 +97,7 @@
                   <app-orders-button [displayData]="dashBoardCount" [orderStatus]="dashBoardCount.status" [OrderDay]="dashBoardCount.day" [deliveryTime]="dashBoardCount.deliveryTimes" *ngIf="dashBoardCount.ordersCount" (onViewOrders)="viewOrders($event)">
                     <app-button-view [viewData]="dashBoardCount.ordersCount"></app-button-view>
                   </app-orders-button>
-                  <app-no-orders [viewData]="dashBoardCount.ordersCount"></app-no-orders>
+                  <app-no-orders [viewData]="dashBoardCount.ordersCount" [orderStatus]="'confirmed'"></app-no-orders>
               </div>
           </div>
 

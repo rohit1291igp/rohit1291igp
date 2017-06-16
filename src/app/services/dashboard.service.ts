@@ -139,17 +139,17 @@ export class DashboardService {
                                 pushObj.position = 1;
                                 break;
 
-                            case "tomorrow" : pushObj.displayStr = "View Orders";
+                            case "tomorrow" : pushObj.displayStr = parseInt(pushObj.ordersCount) > 1 ? "View Orders" : "View Order";
                                 pushObj.isAlert = false;
                                 pushObj.position = 2;
                                 break;
 
-                            case "future" : pushObj.displayStr = "View Orders";
+                            case "future" : pushObj.displayStr = parseInt(pushObj.ordersCount) > 1 ? "View Orders" : "View Order";
                                 pushObj.isAlert = false;
                                 pushObj.position = 3;
                                 break;
 
-                            case "bydate" : pushObj.displayStr = "View Orders";
+                            case "bydate" : pushObj.displayStr = parseInt(pushObj.ordersCount) > 1 ? "View Orders" : "View Order";
                                 pushObj.isAlert = false;
                                 pushObj.position = 4;
                                 break;
@@ -172,22 +172,22 @@ export class DashboardService {
 
                         switch(day){
                             case "today" : todayOrderTobeDelivered = todayOrderTobeDelivered + parseInt(countObj[prop]);
-                                pushObj.displayStr = "View Orders";
+                                pushObj.displayStr = parseInt(pushObj.ordersCount) > 1 ? "View Orders" : "View Order";
                                 pushObj.isAlert = false;
                                 pushObj.position = 1;
                                 break;
 
-                            case "tomorrow" : pushObj.displayStr = "View Orders";
+                            case "tomorrow" : pushObj.displayStr = parseInt(pushObj.ordersCount) > 1 ? "View Orders" : "View Order";
                                 pushObj.isAlert = false;
                                 pushObj.position = 2;
                                 break;
 
-                            case "future" : pushObj.displayStr = "View Orders";
+                            case "future" : pushObj.displayStr = parseInt(pushObj.ordersCount) > 1 ? "View Orders" : "View Order";
                                 pushObj.isAlert = false;
                                 pushObj.position = 3;
                                 break;
 
-                            case "bydate" : pushObj.displayStr = "View Orders";
+                            case "bydate" : pushObj.displayStr = parseInt(pushObj.ordersCount) > 1 ? "Confirmed Orders" : "Confirmed Order";
                                 pushObj.isAlert = false;
                                 pushObj.position = 4;
                                 break;
