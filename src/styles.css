@@ -121,3 +121,7 @@
 .hideVisibility{
     visibility:hidden;
 }
+
+.hide{
+    display:none;
+}

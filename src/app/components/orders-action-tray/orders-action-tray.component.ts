@@ -88,12 +88,12 @@ export class OrdersActionTrayComponent implements OnInit {
               if(orderId){
                   var orderData = Object.assign({}, _this.getDummyOrderData().result[0]);
                   orderData.orderId = orderId;
-                  orderData.ordersStatus = orderByStatus || "Shipped";
+                  orderData.orderProducts[0].ordersProductStatus = orderByStatus || "Shipped";
                   _this.sidePanelData = [orderData];
               }else{
                   var orderDataList = _this.getDummyOrderData().result.slice();
                   for(let i in orderDataList){
-                      orderDataList[i].ordersStatus = orderByStatus;
+                      orderDataList[i].orderProducts[0].ordersProductStatus = orderByStatus;
                   }
                   _this.sidePanelData = orderDataList;
               }
