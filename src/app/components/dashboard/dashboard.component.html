@@ -1,7 +1,7 @@
 <div class="headerVendor navbar-brand" *ngIf="vendorName">- {{vendorName}}</div>
 <app-header-tabs (onTabChanged)="loadDashboardCount($event)"></app-header-tabs>
 
-<div class="col-md-3 searchbox" style="top: 4em; left: 79.5%; position: absolute;">
+<div class="col-md-3 searchbox" style="width: 25em; right: -4em; top: 4em; position: absolute;">
     <form name="form" (ngSubmit)="f.form.valid && search($event)" #f="ngForm" novalidate>
          <input name="searchkey" type="text" class="input-right form-control" placeholder="Search by Order Number" [(ngModel)]="searchModel.searchkey" #searchkey="ngModel" style="width:60%; display:inline-block;" required>
         <input  type="submit" class="btn btn-primary" style="display:inline-block;" value="Search" />
@@ -20,15 +20,17 @@
         <div class="container-fluid dashboard-table" *ngIf="dashboardData">
           <!--Table header-->
           <div class="row">
-            <div class="cell col-md-3">Order Type</div>
+            <div class="cell col-md-3 table-display">
+               <div class="table-cell-display v-align-middle"> Order Type</div>
+            </div>
 
 
-              <div class="cell center-align" [ngClass]="{'col-md-2' : dashBoardlabel.deliveryTimes != 'bydate', 'col-md-3' : dashBoardlabel.deliveryTimes == 'bydate'}" *ngFor="let dashBoardlabel of dashboardData.topLabels">
+              <div class="cell center-align table-display" [ngClass]="{'col-md-2' : dashBoardlabel.deliveryTimes != 'bydate', 'col-md-3' : dashBoardlabel.deliveryTimes == 'bydate'}" *ngFor="let dashBoardlabel of dashboardData.topLabels">
 
-                <div class="" *ngIf="dashBoardlabel.deliveryTimes =='tomorrow'" style="height:4em;">{{dashBoardlabel.labelName}}</div>
-                <div *ngIf="dashBoardlabel.deliveryTimes !='bydate' && dashBoardlabel.deliveryTimes !='tomorrow'">{{dashBoardlabel.labelName}}</div>
-                <div class="" *ngIf="dashBoardlabel.deliveryTimes =='bydate'">
-                    <div class="col-md-4 no-padding">{{dashBoardlabel.labelName}} </div>
+                <div class="table-cell-display v-align-middle" *ngIf="dashBoardlabel.deliveryTimes =='tomorrow'">{{dashBoardlabel.labelName}}</div>
+                <div class="table-cell-display v-align-middle" *ngIf="dashBoardlabel.deliveryTimes !='bydate' && dashBoardlabel.deliveryTimes !='tomorrow'">{{dashBoardlabel.labelName}}</div>
+                <div class="table-cell-display v-align-middle" *ngIf="dashBoardlabel.deliveryTimes =='bydate'">
+                    <div class="col-md-4 no-padding" style="margin-top: 8px;">{{dashBoardlabel.labelName}} </div>
                     <div class="col-md-8 no-padding custom-date-picker">
                         <my-date-picker name="mydate" [options]="myDatePickerOptions" [(ngModel)]="dateRange" (dateChanged)="onDateChanged($event)"></my-date-picker>
                     </div>
@@ -40,7 +42,9 @@
 
           <!--Table content-->
           <div class="row">
-            <div class="cell col-md-3" [ngClass]="{'alert-action': isRowAlert['new'], 'no-action': !isRowAlert['new']}">{{masterData.displayStatus[0]}}</div>
+            <div class="cell col-md-3 table-display" [ngClass]="{'alert-action': isRowAlert['new'], 'no-action': !isRowAlert['new']}">
+              <div class="table-cell-display v-align-middle">{{masterData.displayStatus[0]}}</div>
+          </div>
 
             <div *ngFor="let dashBoardCount of dashboardData.new; let i='index'" [attr.data-index]="i" >
                 <div class="cell" [ngClass]="{'col-md-2' : dashBoardCount.deliveryTimes !='bydate', 'col-md-3' : dashBoardCount.deliveryTimes =='bydate', 'custom-btn-parent': dashBoardCount.ordersCount, 'center-align': !dashBoardCount.ordersCount}">
@@ -83,7 +87,9 @@
           </div>
 
           <div class="row">
-            <div class="cell col-md-3" [ngClass]="{'alert-action': isRowAlert['confirmed'], 'no-action': !isRowAlert['confirmed']}">{{masterData.displayStatus[1]}}</div>
+            <div class="cell col-md-3 table-display" [ngClass]="{'alert-action': isRowAlert['confirmed'], 'no-action': !isRowAlert['confirmed']}">
+              <div class="table-cell-display v-align-middle">{{masterData.displayStatus[1]}}</div>
+          </div>
 
 
           <div *ngFor="let dashBoardCount of dashboardData.confirmed; let i='index'" [attr.data-index]="i">
@@ -126,7 +132,9 @@
           </div>
 
           <div class="row">
-            <div class="cell col-md-3" [ngClass]="{'alert-action': isRowAlert['future'], 'no-action': !isRowAlert['future']}">{{masterData.displayStatus[2]}}</div>
+            <div class="cell col-md-3 table-display" [ngClass]="{'alert-action': isRowAlert['future'], 'no-action': !isRowAlert['future']}">
+              <div class="table-cell-display v-align-middle">{{masterData.displayStatus[2]}}</div>
+            </div>
 
             <div class="cell col-md-9 no-padding">
               <div class="col-md-9 no-padding">
@@ -136,13 +144,15 @@
                   </app-orders-button>
                 </div>
               </div>
-              <div class="col-md-3 underline center-align no-padding" *ngIf="dashboardData.ofd.length">
+              <div class="col-md-3 underline center-align" *ngIf="dashboardData.ofd.length" style="padding: 1.5em 0 0;">
                 <a href="#" (click)="openPanel($event, masterData.status[2])"> View All Out for delivery orders</a>
               </div>
             </div>
           </div>
           <div class="row">
-            <div class="cell col-md-3" [ngClass]="{'alert-action': isRowAlert['bydate'], 'no-action': !isRowAlert['bydate']}">{{masterData.displayStatus[3]}}</div>
+            <div class="cell col-md-3 table-display" [ngClass]="{'alert-action': isRowAlert['bydate'], 'no-action': !isRowAlert['bydate']}">
+              <div class="table-cell-display v-align-middle">{{masterData.displayStatus[3]}}</div>
+          </div>
 
             <div class="cell col-md-9">
               <div class="row">
@@ -150,7 +160,7 @@
                   <div class="line-height">Orders delivered today - {{dashboardData.delivered.total}}</div>
                   <div class="line-height">Total orders for today's delivery - {{dashboardData.delivered.today}}</div>
                 </div>
-                <div class="col-md-5" *ngIf="dashboardData.delivered.total">
+                <div class="col-md-5" *ngIf="dashboardData.delivered.total" style="padding: 1.5em 0 0;">
                   <div class="btn btn-primary custom-button underline" (click)="openPanel($event, masterData.status[3])">
                     View all delivered orders
                   </div>

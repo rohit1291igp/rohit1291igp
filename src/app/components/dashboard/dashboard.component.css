@@ -45,7 +45,7 @@
 
 .cell {
     border: 2px solid #E0E0E0;
-    line-height: 65px;
+    height: 65px;
 }
 
 .out-for-delivery {
