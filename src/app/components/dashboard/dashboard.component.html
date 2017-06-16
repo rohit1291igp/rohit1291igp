@@ -22,19 +22,19 @@
           <div class="row">
             <div class="cell col-md-3">Order Type</div>
 
-            <div *ngFor="let dashBoardlabel of dashboardData.topLabels">
-              <div class="cell center-align table-display" [ngClass]="{'col-md-2' : dashBoardlabel.deliveryTimes != 'bydate', 'col-md-3' : dashBoardlabel.deliveryTimes == 'bydate'}">
 
-                <div class="table-cell-display v-align-middle" *ngIf="dashBoardlabel.deliveryTimes =='tomorrow'" style="height:4em;">{{dashBoardlabel.labelName}}</div>
+              <div class="cell center-align" [ngClass]="{'col-md-2' : dashBoardlabel.deliveryTimes != 'bydate', 'col-md-3' : dashBoardlabel.deliveryTimes == 'bydate'}" *ngFor="let dashBoardlabel of dashboardData.topLabels">
+
+                <div class="" *ngIf="dashBoardlabel.deliveryTimes =='tomorrow'" style="height:4em;">{{dashBoardlabel.labelName}}</div>
                 <div *ngIf="dashBoardlabel.deliveryTimes !='bydate' && dashBoardlabel.deliveryTimes !='tomorrow'">{{dashBoardlabel.labelName}}</div>
-                <div class="table-cell-display v-align-middle" *ngIf="dashBoardlabel.deliveryTimes =='bydate'">
+                <div class="" *ngIf="dashBoardlabel.deliveryTimes =='bydate'">
                     <div class="col-md-4 no-padding">{{dashBoardlabel.labelName}} </div>
                     <div class="col-md-8 no-padding custom-date-picker">
                         <my-date-picker name="mydate" [options]="myDatePickerOptions" [(ngModel)]="dateRange" (dateChanged)="onDateChanged($event)"></my-date-picker>
                     </div>
                 </div>
               </div>
-            </div>
+
 
           </div>
 
