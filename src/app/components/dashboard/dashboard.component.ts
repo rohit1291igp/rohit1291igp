@@ -82,7 +82,7 @@ export class DashboardComponent implements OnInit {
   onDateChanged(event: IMyDateModel) {
     console.log('Date changed');
     console.log('onDateChanged(): ', event.date, ' - jsdate: ', new Date(event.jsdate).toLocaleDateString(), ' - formatted: ', event.formatted, ' - epoc timestamp: ', event.epoc);
-      let selectedDate = new Date(event.jsdate).toLocaleDateString(); //event.jsdate;
+      let selectedDate = event.date.year+'-'+event.date.month+'-'+event.date.day; //new Date(event.jsdate).toLocaleDateString(); //event.jsdate;
         var _this = this;
         this.dashboardService.getDashboardData(selectedDate, function(result){
             if(!result.new[0] && (result.new[0] && result.new[0].deliveryTimes !== "today")) {

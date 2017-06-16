@@ -5,8 +5,8 @@ export class UtilityService {
 
   constructor() { }
 
-    getDateString(incrementBy) {
-        let d = new Date();
+    getDateString(incrementBy, date) {
+        let d = date ? new Date(date) : new Date();
          if(incrementBy === 0){
              let year = d.getFullYear();
              let month = d.getMonth() + 1;

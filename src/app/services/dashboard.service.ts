@@ -95,8 +95,8 @@ export class DashboardService {
         /* Dashboard count (new/confirmed orders) - start */
         let getDateDay = function(dateStr){
             var today = new Date();
-            var tomorrow = new Date(_this.UtilityService.getDateString(1));
-            var dayAfterTomorrow = new Date(_this.UtilityService.getDateString(2));
+            var tomorrow = new Date(_this.UtilityService.getDateString(1, null));
+            var dayAfterTomorrow = new Date(_this.UtilityService.getDateString(2, null));
             var dateObj = new Date(dateStr);
 
             if(dateObj.getDate() === today.getDate()){
@@ -252,14 +252,14 @@ export class DashboardService {
 
 
         if(localStorage.getItem('dRandom')){
-            var d1 = this.UtilityService.getDateString(0);
-            var d2 = this.UtilityService.getDateString(1);
-            var d3 = this.UtilityService.getDateString(2);
+            var d1 = this.UtilityService.getDateString(0, null);
+            var d2 = this.UtilityService.getDateString(1, null);
+            var d3 = this.UtilityService.getDateString(2, null);
             if(spcificDate){
                 let dd = new Date(spcificDate);
-                var d4 = this.UtilityService.getDateString(dd.getDate());
+                var d4 = this.UtilityService.getDateString(dd.getDate(), null);
             }else{
-                var d4 = this.UtilityService.getDateString(7);
+                var d4 = this.UtilityService.getDateString(7, null);
             }
 
             console.log("dates ===>", d1, d2, d3, d4)
