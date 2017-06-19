@@ -155,11 +155,11 @@
                     <div class="btn btn-primary actions-button uppercase text-bold bg-white text-red" [ngClass]="{'disableBtn' : order.orderProducts[0].ordersProductStatus !=='Processed', 'hide' : order.orderProducts[0].ordersProductStatus !=='Processed'}" (click)="updateOrderStatus($event, 'Rejected', order.orderId)">
                       Reject
                     </div>
-                    <button class="btn btn-primary actions-button uppercase text-bold text-white bg-green" [ngClass]="{'disableBtn' : order.orderProducts[0].ordersProductStatus =='Shipped' || order.orderProducts[0].ordersProductStatus =='Dispatched', 'hide' : order.orderProducts[0].ordersProductStatus =='Confirmed' && orderUpdateByTime !== 'today'}" (click)="updateOrderStatus($event, getNxtOrderStatus(order.orderProducts[0].ordersProductStatus), order.orderId)">
+                    <button class="btn btn-primary actions-button uppercase text-bold text-white bg-green" [ngClass]="{'disableBtn' : (order.orderProducts[0].ordersProductStatus =='Shipped' && order.orderProducts[0].deliveryStatus === 1) || (order.orderProducts[0].ordersProductStatus =='Dispatched' && order.orderProducts[0].deliveryStatus === 1), 'hide' : order.orderProducts[0].ordersProductStatus =='Confirmed' && orderUpdateByTime !== 'today'}" (click)="updateOrderStatus($event, getNxtOrderStatus(order.orderProducts[0].ordersProductStatus), order.orderId)">
                           <span *ngIf="order.orderProducts[0].ordersProductStatus =='Processed'">Confirm</span>
                           <span *ngIf="order.orderProducts[0].ordersProductStatus =='Confirmed'">Out For Delivery</span>
-                          <span *ngIf="order.orderProducts[0].ordersProductStatus =='OutForDelivery' || order.orderProducts[0].ordersProductStatus == 'Partially Dispatched'">Delivered</span>
-                          <span *ngIf="order.orderProducts[0].ordersProductStatus =='Shipped' || order.orderProducts[0].ordersProductStatus =='Dispatched'">Delivered</span>
+                          <span *ngIf="(order.orderProducts[0].ordersProductStatus =='Shipped' && order.orderProducts[0].deliveryStatus === 0) || order.orderProducts[0].ordersProductStatus =='OutForDelivery' || order.orderProducts[0].ordersProductStatus == 'Partially Dispatched'">Delivered</span>
+                          <span *ngIf="(order.orderProducts[0].ordersProductStatus =='Shipped' && order.orderProducts[0].deliveryStatus === 1)  || (order.orderProducts[0].ordersProductStatus =='Dispatched' && order.orderProducts[0].deliveryStatus === 1)">Delivered</span>
                     </button>
                   </div>
 

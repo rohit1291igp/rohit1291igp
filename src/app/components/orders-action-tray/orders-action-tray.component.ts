@@ -155,43 +155,6 @@ export class OrdersActionTrayComponent implements OnInit {
   }
 
   updateOrderStatus(e, status, orderId){
-
-      function _new(constructor){
-          var newObj = Object.create(constructor.prototype);
-          var cArrgs = Array.prototype.slice.call(arguments, 1);
-          var result = constructor.apply(newObj, cArrgs);
-          if(typeof result === "object"){
-              return result;
-          }
-
-          return newObj;
-      }
-
-      var Rectangle = {
-        create : function(w, h){
-           var newObj = Object.create(this);
-            newObj.width = w;
-            newObj.height = h;
-
-            return newObj;
-        },
-
-        area : function(){
-            return "Area = "+(this.width * this.height)
-        }
-      };
-
-      var r1 =  Rectangle.create(10,20);
-      console.log(r1.area());
-
-      var Square = Object.create(Rectangle);
-      Square.create = function(side){
-          return Rectangle.create(side, side);
-      }
-
-
-
-
       if(e.currentTarget.textContent.indexOf('Mark as Delivered') !== -1){
           e.currentTarget.innerHTML= e.currentTarget.textContent.trim().split('Mark')[0].trim()+"<br/> Updating...";
       }else{
