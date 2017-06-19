@@ -133,7 +133,7 @@
             </div>
         </div>
         <div *ngIf="sidePanelData">
-            <div  class="col-md-12 order-row" *ngFor="let order of sidePanelData">
+            <div  id="order-{{order.orderId}}" class="col-md-12 order-row" *ngFor="let order of sidePanelData">
                 <div class="container-fluid orders-tray">
                   <div class="row delivery-details">
                     <div class="col-md-7 order-details no-padding">

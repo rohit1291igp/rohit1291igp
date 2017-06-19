@@ -18,7 +18,7 @@ export class OrdersActionTrayComponent implements OnInit {
   orderUpdateByTime;
   orderId;
   apierror;
-  public sidePanelData: Object;
+  public sidePanelData;
 
   constructor(
       public BackendService : BackendService,
@@ -168,7 +168,11 @@ export class OrdersActionTrayComponent implements OnInit {
       if(localStorage.getItem('dRandom')){
           setTimeout(function(){
               _this.onStatusUpdate.emit(e);
-              _this.trayOpen = false;
+              //_this.trayOpen = false;
+              let dataLength = _this.sidePanelDataOnStatusUpdate(orderId);
+              if(!dataLength){
+                  _this.trayOpen = false;
+              }
           }, 1000);
           return;
       }
@@ -189,7 +193,11 @@ export class OrdersActionTrayComponent implements OnInit {
           console.log('sidePanel Response --->', response.result);
           //_this.router.navigate(['/dashboard-dfghj']);
           _this.onStatusUpdate.emit(currentTab);
-          _this.trayOpen = false;
+          //_this.trayOpen = false;
+          let dataLength = _this.sidePanelDataOnStatusUpdate(orderId);
+          if(!dataLength){
+              _this.trayOpen = false;
+          }
       });
   }
 
@@ -217,6 +225,18 @@ export class OrdersActionTrayComponent implements OnInit {
       }
 
       return orderUpdateByStatus;
+  }
+
+  sidePanelDataOnStatusUpdate(orderId){
+      var _this = this;
+
+      for(var i in _this.sidePanelData){
+          if(orderId === _this.sidePanelData[i].orderId){
+              if(Array.isArray(_this.sidePanelData)) console.log('splice objData----------------');
+              _this.sidePanelData.splice(i, 1);
+              return _this.sidePanelData.length;
+          }
+      }
   }
 
   print(e){
