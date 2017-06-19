@@ -135,7 +135,8 @@
 }
 
 .equal-sign {
-    padding-left: 25px;
+    /*padding-left: 25px;*/
+    margin-left: -5px;
     color: #C3404E;
 }
 

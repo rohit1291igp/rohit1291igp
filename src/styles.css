@@ -129,3 +129,8 @@
 .hide{
     display:none;
 }
+
+.noBtBorder{
+    border-bottom:0 ! important;
+}
+
