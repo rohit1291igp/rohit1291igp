@@ -1,9 +1,8 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, HostListener, ElementRef } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { BackendService } from '../../services/backend.service';
 import { UtilityService } from '../../services/utility.service';
 import { DashboardService } from '../../services/dashboard.service';
-
 @Component({
   selector: 'app-orders-action-tray',
   templateUrl: './orders-action-tray.component.html',
@@ -21,6 +20,7 @@ export class OrdersActionTrayComponent implements OnInit {
   public sidePanelData;
 
   constructor(
+      private _elementRef: ElementRef,
       public BackendService : BackendService,
       public router: Router,
       public UtilityService: UtilityService,
@@ -29,6 +29,19 @@ export class OrdersActionTrayComponent implements OnInit {
 
   ngOnInit() {
   }
+
+@HostListener('document:click', ['$event.target'])
+    public onClick(targetElement) {
+        console.log('inside clicked ------->');
+        const isClickedInside = this._elementRef.nativeElement.contains(targetElement);
+        if (!isClickedInside) {
+            console.log('outside clicked ------->');
+            console.log('...');
+            if(this.trayOpen){
+                this.trayOpen = false;
+            }
+        }
+    }
 
   toggleTray(e, orderByStatus, orderId) {
     e.preventDefault();

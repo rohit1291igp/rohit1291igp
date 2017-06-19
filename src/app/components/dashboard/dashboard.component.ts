@@ -59,6 +59,7 @@ export class DashboardComponent implements OnInit {
 
   viewOrders(e) {
     e.preventDefault();
+    e.stopPropagation();
     let status = e.currentTarget.dataset.status;
     let orderId = e.currentTarget.dataset.orderid;
 
@@ -75,6 +76,8 @@ export class DashboardComponent implements OnInit {
 
   openPanel(e, status) {
     e.preventDefault();
+    e.stopPropagation();
+
     this.child.toggleTray(e, status, null);
     console.log('Side-panel opened for status: ', status);
   }
