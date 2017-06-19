@@ -36,20 +36,24 @@ export class OrdersActionTrayComponent implements OnInit {
     this.sidePanelData = null;
     this.orderByStatus = orderByStatus;
     this.orderUpdateByTime = e.currentTarget.dataset.deliverytime;
-
     this.orderId = orderId;
-    if(e.currentTarget.dataset.trayopen){
-        this.onStatusUpdate.emit("closed");
-        console.log('close clicked ----->', this.trayOpen);
-        this.trayOpen = false;
-    }else{
-        console.log('close not clicked ----->', this.trayOpen);
-        this.trayOpen = true;
-    }
 
-    //this.trayOpen = !this.trayOpen;
-    console.log('trayOpen: and loading data', this.trayOpen);
-    if(orderByStatus || orderId) this.loadTrayData(e, orderByStatus, orderId);
+    if(this.orderByStatus === "OutForDelivery" && e.currentTarget.dataset.deliverytime === "unknown"){
+        this.updateOrderStatus(e, "shipped", orderId);
+    }else{
+        if(e.currentTarget.dataset.trayopen){
+            this.onStatusUpdate.emit("closed");
+            console.log('close clicked ----->', this.trayOpen);
+            this.trayOpen = false;
+        }else{
+            console.log('close not clicked ----->', this.trayOpen);
+            this.trayOpen = true;
+        }
+
+        //this.trayOpen = !this.trayOpen;
+        console.log('trayOpen: and loading data', this.trayOpen);
+        if(orderByStatus || orderId) this.loadTrayData(e, orderByStatus, orderId);
+    }
   }
 
   loadTrayData(e, orderByStatus, orderId){
@@ -151,15 +155,21 @@ export class OrdersActionTrayComponent implements OnInit {
   }
 
   updateOrderStatus(e, status, orderId){
-      e.currentTarget.textContent = "Updating...";
+      if(e.currentTarget.textContent.indexOf('Mark as Delivered') !== -1){
+          e.currentTarget.innerHTML= e.currentTarget.textContent.trim().split('Mark')[0].trim()+"<br/> Updating...";
+      }else{
+          e.currentTarget.textContent = "Updating...";
+      }
       let currentTab = e.currentTarget.dataset.tab;
       let fkAssociateId = localStorage.getItem('fkAssociateId');
       var _this = this;
       var reqURL = "?responseType=json&scopeId=1&status="+status+"&fkAssociateId="+fkAssociateId+"&orderId="+orderId+"&method=igp.order.doUpdateOrderStatus";
 
       if(localStorage.getItem('dRandom')){
-          _this.onStatusUpdate.emit(e);
-          _this.trayOpen = false;
+          setTimeout(function(){
+              _this.onStatusUpdate.emit(e);
+              _this.trayOpen = false;
+          }, 1000);
           return;
       }
 
