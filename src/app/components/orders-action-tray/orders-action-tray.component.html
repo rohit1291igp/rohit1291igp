@@ -11,7 +11,20 @@
       </div>
 
         <div class="col-md-11 no-padding">
-            <p class="text-bold uppercase"><span *ngIf="!orderByStatus">Searched Order</span> <span *ngIf="orderByStatus">{{orderByStatus}} Orders</span>
+            <p class="text-bold uppercase">
+                <span *ngIf="!orderByStatus">Searched Order</span>
+                <span *ngIf="orderByStatus">
+                     <span class="uppercase" *ngIf="orderByStatus == 'Processed'">New Orders</span>
+                     <span class="uppercase" *ngIf="orderByStatus == 'Confirmed'">Confirmed Orders</span>
+                     <span class="uppercase" *ngIf="orderByStatus == 'OutForDelivery'">Out for delivery Orders</span>
+                     <span class="uppercase" *ngIf="orderByStatus == 'Shipped'">Delivered Orders</span>
+                </span>
+                <span *ngIf="orderUpdateByTime">
+                    <span class="uppercase" *ngIf="orderUpdateByTime == 'today'"> - Deliver for today</span>
+                    <span class="uppercase" *ngIf="orderUpdateByTime == 'tomorrow'"> - Deliver for tomorrow</span>
+                    <span class="uppercase" *ngIf="orderUpdateByTime == 'future'"> - Deliver for future</span>
+                    <span class="uppercase" *ngIf="orderUpdateByTime == 'bydate'"> - Deliver by date </span>
+                </span>
                 <!--- Delivery for today  {{orderId}}-->
             </p>
             <p class="text-grey no-margin">Total - <span *ngIf="!sidePanelData">0</span><span *ngIf="sidePanelData">{{sidePanelData.length}}</span> Orders</p>
@@ -135,7 +148,7 @@
                     <div class="btn btn-primary actions-button uppercase text-bold bg-white text-red" [ngClass]="{'disableBtn' : order.orderProducts[0].ordersProductStatus !=='Processed', 'hide' : order.orderProducts[0].ordersProductStatus !=='Processed'}" (click)="updateOrderStatus($event, 'Rejected', order.orderId)">
                       Reject
                     </div>
-                    <button class="btn btn-primary actions-button uppercase text-bold text-white bg-green" [ngClass]="{'disableBtn' : order.orderProducts[0].ordersProductStatus =='Shipped' || order.orderProducts[0].ordersProductStatus =='Dispatched'}" (click)="updateOrderStatus($event, getNxtOrderStatus(order.orderProducts[0].ordersProductStatus), order.orderId)">
+                    <button class="btn btn-primary actions-button uppercase text-bold text-white bg-green" [ngClass]="{'disableBtn' : order.orderProducts[0].ordersProductStatus =='Shipped' || order.orderProducts[0].ordersProductStatus =='Dispatched', 'hide' : order.orderProducts[0].ordersProductStatus =='Confirmed' && orderUpdateByTime !== 'today'}" (click)="updateOrderStatus($event, getNxtOrderStatus(order.orderProducts[0].ordersProductStatus), order.orderId)">
                           <span *ngIf="order.orderProducts[0].ordersProductStatus =='Processed'">Confirm</span>
                           <span *ngIf="order.orderProducts[0].ordersProductStatus =='Confirmed'">Out For Delivery</span>
                           <span *ngIf="order.orderProducts[0].ordersProductStatus =='OutForDelivery' || order.orderProducts[0].ordersProductStatus == 'Partially Dispatched'">Delivered</span>

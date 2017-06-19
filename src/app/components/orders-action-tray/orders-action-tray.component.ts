@@ -15,8 +15,7 @@ export class OrdersActionTrayComponent implements OnInit {
   loadercount=[1,1];
   sidePanelDataLoading = true;
   orderByStatus;
-  orderUpdateByStatus;
-  orderUpdateByStatusDisable=false;
+  orderUpdateByTime;
   orderId;
   apierror;
   public sidePanelData: Object;
@@ -36,32 +35,7 @@ export class OrdersActionTrayComponent implements OnInit {
     this.apierror = null;
     this.sidePanelData = null;
     this.orderByStatus = orderByStatus;
-    switch(orderByStatus){
-        case "Processed" :  this.orderUpdateByStatus = "Confirmed";
-                            this.orderUpdateByStatusDisable = false;
-            break;
-
-        case "Confirmed" :  this.orderUpdateByStatus = "OutForDelivery";
-                            this.orderUpdateByStatusDisable = false;
-            break;
-
-        case "OutForDelivery" : this.orderUpdateByStatus = "Shipped";
-                                this.orderUpdateByStatusDisable = false;
-            break;
-
-        case "Partially Dispatched" : this.orderUpdateByStatus = "OutForDelivery";
-            this.orderUpdateByStatusDisable = false;
-            break;
-
-        case "Shipped" :    this.orderUpdateByStatus = "Shipped";
-                            this.orderUpdateByStatusDisable = true;
-            break;
-
-        case "Dispatched" :    this.orderUpdateByStatus = "Shipped";
-                               this.orderUpdateByStatusDisable = true;
-            break;
-
-    }
+    this.orderUpdateByTime = e.currentTarget.dataset.deliverytime;
 
     this.orderId = orderId;
     if(e.currentTarget.dataset.trayopen){
@@ -210,35 +184,29 @@ export class OrdersActionTrayComponent implements OnInit {
   }
 
   getNxtOrderStatus(orderByStatus){
-      this.orderByStatus = orderByStatus;
+      let orderUpdateByStatus;
       switch(orderByStatus){
-          case "Processed" :  this.orderUpdateByStatus = "Confirmed";
-              this.orderUpdateByStatusDisable = false;
+          case "Processed" :  orderUpdateByStatus= "Confirmed";
               break;
 
-          case "Confirmed" :  this.orderUpdateByStatus = "OutForDelivery";
-              this.orderUpdateByStatusDisable = false;
+          case "Confirmed" :  orderUpdateByStatus = "OutForDelivery";
               break;
 
-          case "Partially Dispatched" : this.orderUpdateByStatus = "OutForDelivery";
-              this.orderUpdateByStatusDisable = false;
+          case "Partially Dispatched" : orderUpdateByStatus = "OutForDelivery";
               break;
 
-          case "OutForDelivery" : this.orderUpdateByStatus = "Shipped";
-              this.orderUpdateByStatusDisable = false;
+          case "OutForDelivery" : orderUpdateByStatus = "Shipped";
               break;
 
-          case "Shipped" :    this.orderUpdateByStatus = "Shipped";
-              this.orderUpdateByStatusDisable = true;
+          case "Shipped" :  orderUpdateByStatus = "Shipped";
               break;
 
-          case "Dispatched" :    this.orderUpdateByStatus = "Shipped";
-              this.orderUpdateByStatusDisable = true;
+          case "Dispatched" :   orderUpdateByStatus = "Shipped";
               break;
 
       }
 
-      return this.orderUpdateByStatus;
+      return orderUpdateByStatus;
   }
 
   print(e){
