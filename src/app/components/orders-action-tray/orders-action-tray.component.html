@@ -66,12 +66,12 @@
                 </div>
             </div>
               <div class="row">
-                  <div class="btn btn-primary actions-button text-bold text-white bg-black">
-                  Put On Hold
+                  <div class="btn btn-primary actions-button text-bold text-white bg-black disableBtn">
+                      Price Change Request
               </div>
-              <div class="btn btn-primary actions-button text-bold text-white bg-black">
+              <!--<div class="btn btn-primary actions-button text-bold text-white bg-black">
               Other
-          </div>
+          </div>-->
         </div>
         </div>
         </div>
@@ -164,8 +164,8 @@
                   </div>
 
                   <div class="row">
-                    <div class="btn btn-primary actions-button text-bold text-white bg-black" [ngClass]="{'disableBtn' : !(order.orderProducts[0].ordersProductStatus =='Processed' || order.orderProducts[0].ordersProductStatus =='Confirmed'), 'hide' : !(order.orderProducts[0].ordersProductStatus =='Confirmed' || order.orderProducts[0].ordersProductStatus =='Processed') }" (click)="updateOrderStatus($event, 'PutOnHold', order.orderId)">
-                      Put On Hold
+                    <div class="btn btn-primary actions-button text-bold text-white bg-black disableBtn" [ngClass]="{'disableBtn1' : !(order.orderProducts[0].ordersProductStatus =='Processed' || order.orderProducts[0].ordersProductStatus =='Confirmed'), 'hide' : !(order.orderProducts[0].ordersProductStatus =='Confirmed' || order.orderProducts[0].ordersProductStatus =='Processed') }" (click)="updateOrderStatus($event, 'PutOnHold', order.orderId)">
+                      Price Change Request
                     </div>
                     <!--<div class="btn btn-primary actions-button text-bold text-white bg-black">
                       Other
