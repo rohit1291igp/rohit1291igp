@@ -192,7 +192,7 @@
                         <!--<div class="col-md-3 no-padding comp1">-->
                            <span>
                                 <div class="product-main">
-                                    <img class="product-image" src="https://d1xs5fw35mbn8b.cloudfront.net/p/m/p-round-black-forest-cake-half-kg--13461-m.jpg?v=1495502520000" alt="Component 1">
+                                    <img class="product-image" src="{{productsURL}}{{orderProduct.productImage}}" alt="product_img">
                                 </div>
                                 <div class="equal-sign">=</div>
                            </span>
@@ -202,7 +202,7 @@
                               <div class="product-component relative">
                                   <div class="component-eggless abs" *ngIf="prodComponent.eggless">Eggless</div>
                                 <!--<div class="component-head center-align uppercase">{{prodComponent.componentCode | slice:0:9}}<span *ngIf="prodComponent.componentName.length > 9">...</span></div>-->
-                                <img class="component-image" src="https://d1xs5fw35mbn8b.cloudfront.net/p/m/p-round-black-forest-cake-half-kg--13461-m.jpg?v=1495502520000" alt="Component 1">
+                                <img class="component-image" src="{{productsCompURL}}{{prodComponent.componentImage}}" alt="Component_img">
                                 <div class="component-quantity center-align">QTY-{{prodComponent.quantity | number : '2.0-0'}}</div>
                                 <div class="component-name center-align">{{prodComponent.componentName}} </div>
                               </div>

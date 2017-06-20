@@ -4,6 +4,8 @@ import { BackendService } from '../../services/backend.service';
 import { UtilityService } from '../../services/utility.service';
 import { DashboardService } from '../../services/dashboard.service';
 import { DatePipe } from '@angular/common';
+import {environment} from "../../../environments/environment";
+
 @Component({
   selector: 'app-orders-action-tray',
   templateUrl: './orders-action-tray.component.html',
@@ -26,13 +28,16 @@ export class OrdersActionTrayComponent implements OnInit {
       public router: Router,
       public UtilityService: UtilityService,
       public dashboardService: DashboardService,
-      public datePipe: DatePipe,
+      public datePipe: DatePipe
       ) { }
 
   ngOnInit() {
   }
 
-@HostListener('document:click', ['$event.target'])
+  productsURL = environment.productsURL;
+  productsCompURL = environment.productsCompURL;
+
+ @HostListener('document:click', ['$event.target'])
     public onClick(targetElement) {
         console.log('inside clicked ------->');
         const isClickedInside = this._elementRef.nativeElement.contains(targetElement);
