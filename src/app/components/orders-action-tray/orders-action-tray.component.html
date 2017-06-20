@@ -199,7 +199,8 @@
                         <!--</div>-->
                         <!--<div class="col-md-8 no-padding comp2">-->
                           <span *ngFor="let prodComponent of orderProduct.componentList; let i='index'">
-                              <div class="product-component">
+                              <div class="product-component relative">
+                                  <div class="component-eggless abs" *ngIf="prodComponent.eggless">Eggless</div>
                                 <!--<div class="component-head center-align uppercase">{{prodComponent.componentCode | slice:0:9}}<span *ngIf="prodComponent.componentName.length > 9">...</span></div>-->
                                 <img class="component-image" src="https://d1xs5fw35mbn8b.cloudfront.net/p/m/p-round-black-forest-cake-half-kg--13461-m.jpg?v=1495502520000" alt="Component 1">
                                 <div class="component-quantity center-align">QTY-{{prodComponent.quantity | number : '2.0-0'}}</div>

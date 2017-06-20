@@ -192,3 +192,25 @@
     z-index: 9;
     position: fixed;
 }
+
+.component-eggless{
+    left: -4px;
+    background-color: #C3404E;
+    color: #ffffff;
+    /* font-weight: 600; */
+    padding: 0.3em 0.5em;
+    font-size: 0.8em;
+}
+
+
+.component-eggless:before {
+    left:0;
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 0 8px 12px 0;
+    border-color: transparent #792A2D transparent transparent;
+    bottom: -12px;
+}
