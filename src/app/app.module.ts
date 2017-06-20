@@ -6,6 +6,7 @@ import { HttpModule, Http, XHRBackend, RequestOptions } from '@angular/http';
 import { BsDropdownModule } from 'ng2-bootstrap';
 import { SelectModule } from 'ng2-select';
 import { MyDatePickerModule } from 'mydatepicker';
+import { DatePipe } from '@angular/common';
 
 // Router and Services
 import { routing } from "./app.routing";
@@ -82,7 +83,8 @@ export function ConfigLoader(envConfig: envConfig) {
     AuthenticationService,
     AuthGuard,
     UserService,
-    DashboardService
+    DashboardService,
+    DatePipe
 
   ],
   bootstrap: [AppComponent]

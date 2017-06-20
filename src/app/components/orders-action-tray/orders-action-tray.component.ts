@@ -3,6 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { BackendService } from '../../services/backend.service';
 import { UtilityService } from '../../services/utility.service';
 import { DashboardService } from '../../services/dashboard.service';
+import { DatePipe } from '@angular/common';
 @Component({
   selector: 'app-orders-action-tray',
   templateUrl: './orders-action-tray.component.html',
@@ -25,6 +26,7 @@ export class OrdersActionTrayComponent implements OnInit {
       public router: Router,
       public UtilityService: UtilityService,
       public dashboardService: DashboardService,
+      public datePipe: DatePipe,
       ) { }
 
   ngOnInit() {
@@ -250,6 +252,29 @@ export class OrdersActionTrayComponent implements OnInit {
               return _this.sidePanelData.length;
           }
       }
+  }
+
+  getDeliveryDetail(dExtraInfo, purchaseDate){
+      let delDate = this.UtilityService.getDateString(0, dExtraInfo.deliveryDate);
+      let purDate = this.UtilityService.getDateString(0, purchaseDate);
+      let delDetail = "";
+      switch(dExtraInfo.deliveryType){
+          case 1 : delDetail= delDetail + " Standard Delivery ";
+              break;
+
+          case 2 : delDetail= delDetail + ((delDate == purDate) ? "Same Day Delivery" : " Fixed Time Delivery ");
+              break;
+
+          case 3 : delDetail= delDetail + " Midnight Delivery ";
+              break;
+
+          case 4 : delDetail= delDetail + ((delDate == purDate) ? "Same Day Delivery" : " Fixed Date Delivery ");
+              break;
+      }
+
+      delDetail = delDetail+" "+(this.datePipe.transform(delDate, 'dd/MM/yy'));
+      delDetail = delDetail+" "+dExtraInfo.deliveryTime;
+      return delDetail;
   }
 
   print(e){

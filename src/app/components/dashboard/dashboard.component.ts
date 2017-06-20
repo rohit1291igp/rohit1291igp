@@ -68,8 +68,11 @@ export class DashboardComponent implements OnInit {
 
     //changing clicked element position if its index greater than 0
     if(status === "Processed" || status === "Confirmed"){
-      let clickEleIndex =  e.currentTarget.parentElement.parentElement.parentElement.dataset.index;
-      if(clickEleIndex > 0) this.dashboardData = this.dashboardService.changeDashboardDataOrder(this.dashboardData, clickEleIndex);
+        let _this = this;
+        let clickEleIndex =  e.currentTarget.parentElement.parentElement.parentElement.dataset.index;
+        setTimeout(function(){
+            if(clickEleIndex > 0) _this.dashboardData = _this.dashboardService.changeDashboardDataOrder(_this.dashboardData, clickEleIndex);
+        }, 1000);
     }
 
   }
