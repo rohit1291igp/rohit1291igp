@@ -45,6 +45,7 @@ export class OrdersActionTrayComponent implements OnInit {
             console.log('outside clicked ------->');
             console.log('...');
             if(this.trayOpen){
+               this.onStatusUpdate.emit("closed");
                this.trayOpen = false;
             }
         }
