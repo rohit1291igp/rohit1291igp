@@ -47,6 +47,7 @@ export class OrdersActionTrayComponent implements OnInit {
 
   toggleTray(e, orderByStatus, orderId) {
     e.preventDefault();
+    e.stopPropagation();
     this.apierror = null;
     this.sidePanelData = null;
     this.orderByStatus = orderByStatus;
@@ -72,6 +73,7 @@ export class OrdersActionTrayComponent implements OnInit {
   }
 
   loadTrayData(e, orderByStatus, orderId){
+      e.stopPropagation();
       let fkAssociateId = localStorage.getItem('fkAssociateId');
       var _this = this;
       var reqURL:string;
@@ -170,6 +172,7 @@ export class OrdersActionTrayComponent implements OnInit {
   }
 
   updateOrderStatus(e, status, orderId){
+      e.stopPropagation();
       if(e.currentTarget.textContent.indexOf('Mark as Delivered') !== -1){
           e.currentTarget.innerHTML= e.currentTarget.textContent.trim().split('Mark')[0].trim()+"<br/> Updating...";
       }else{
@@ -278,6 +281,7 @@ export class OrdersActionTrayComponent implements OnInit {
   }
 
   print(e){
+      e.stopPropagation();
       let printContents, popupWin;
       printContents = document.getElementById('mainOrderSection').innerHTML;
       popupWin = window.open('', '_blank', 'top=0,left=0,height=100%,width=auto');
