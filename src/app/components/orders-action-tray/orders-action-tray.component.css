@@ -79,7 +79,7 @@
 .product-image {
     width: 150px;
     height: 150px;
-    margin: 0 10px;
+    /*margin: 0 10px;*/
 }
 
 .product-holder {
@@ -95,12 +95,22 @@
 }
 
 .product-component {
+    vertical-align: bottom;
     margin-bottom: 1em;
     width: 75px;
     height: 150px;
     display: inline-block;
     background-color: #f2f2f2;
 }
+.product-main{
+    vertical-align: bottom;
+    margin-bottom: 1em;
+    /*width: 75px;*/
+    height: 150px;
+    display: inline-block;
+    /*background-color: #f2f2f2;*/
+}
+
 
 .product-component.mainprod {
     width: 75%;
@@ -131,13 +141,24 @@
 
 .component-name {
     font-size: 12px;
-    margin: 0.5em 0 0;
+    padding: 0px 2px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
 }
 
 .equal-sign {
     /*padding-left: 25px;*/
-    margin-left: -5px;
+    /*margin-left: -5px;
     color: #C3404E;
+    display: inline-block;*/
+    display: inline-block;
+    color: #C3404E;
+    height: 150px;
+    vertical-align: top;
+    padding-top: 10%;
 }
 
 .plus-sign {
@@ -145,7 +166,7 @@
     color: #C3404E;
     height: 150px;
     vertical-align: top;
-    padding-top: 13%;
+    padding-top: 10%;
 }
 
 .show-tray {
@@ -162,4 +183,12 @@
 
 .width55{
     width:55%;
+}
+
+.layer-caption{
+    top: 0;
+    background: #fff;
+    width: 100%;
+    z-index: 9;
+    position: fixed;
 }
