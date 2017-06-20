@@ -40,7 +40,7 @@ export class OrdersActionTrayComponent implements OnInit {
             console.log('outside clicked ------->');
             console.log('...');
             if(this.trayOpen){
-               // this.trayOpen = false;
+               this.trayOpen = false;
             }
         }
     }
