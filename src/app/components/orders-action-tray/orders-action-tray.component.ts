@@ -21,6 +21,8 @@ export class OrdersActionTrayComponent implements OnInit {
   orderId;
   apierror;
   public sidePanelData;
+  imagePreviewFlag = false;
+  imagePreviewSrc = "";
 
   constructor(
       private _elementRef: ElementRef,
@@ -37,7 +39,7 @@ export class OrdersActionTrayComponent implements OnInit {
   productsURL = environment.productsURL;
   productsCompURL = environment.productsCompURL;
 
- @HostListener('document:click', ['$event.target'])
+ /*@HostListener('document:click', ['$event.target'])
     public onClick(targetElement) {
         console.log('inside clicked ------->');
         const isClickedInside = this._elementRef.nativeElement.contains(targetElement);
@@ -48,8 +50,10 @@ export class OrdersActionTrayComponent implements OnInit {
                this.onStatusUpdate.emit("closed");
                this.trayOpen = false;
             }
+
+           // this.imagePreviewFlag = false;
         }
-    }
+    }*/
 
   toggleTray(e, orderByStatus, orderId) {
     e.preventDefault();
@@ -306,6 +310,16 @@ export class OrdersActionTrayComponent implements OnInit {
       );
       popupWin.document.close();
   }
+
+  imagePreview(e, imgSrc){
+      if(imgSrc){
+          this.imagePreviewFlag = true;
+          this.imagePreviewSrc = imgSrc;
+      }else{
+          this.imagePreviewFlag = false;
+      }
+  }
+
 
   getDummyOrderData(){
       return {

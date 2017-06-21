@@ -1,4 +1,24 @@
+<div class="image-preview" *ngIf="imagePreviewFlag">
+    <div class="modal fade in" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: block; overflow:scroll;">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header" style="border-bottom:none;">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="imagePreview($event)"><span aria-hidden="true">×</span></button>
+                    <!--<h4 class="modal-title" id="myModalLabel">Modal Header</h4>-->
+                </div>
+                <div class="modal-body">
+                    <img class="img-responsive" src="{{imagePreviewSrc}}" alt="product_img_preview">
 
+                    <!--<p>Some text in the modal.</p>-->
+                </div>
+                <!--<div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>-->
+            </div>
+        </div>
+    </div>
+    <div class="modal-backdrop fade in" (click)="imagePreview($event)"></div>
+</div>
 
 <div id="mainOrderSection" class="orders-action" [ngClass]="{'show-tray': trayOpen, 'hide-tray': !trayOpen}" >
 <div class="apierror" *ngIf="apierror">{{apierror}}</div>
@@ -210,7 +230,7 @@
                         <!--<div class="col-md-3 no-padding comp1">-->
                            <span>
                                 <div class="product-main">
-                                    <img class="product-image" src="{{productsURL}}{{orderProduct.productImage}}" alt="product_img">
+                                    <img class="product-image" src="{{productsURL}}{{orderProduct.productImage}}" alt="product_img" (click)="imagePreview($event, productsURL+(orderProduct.productImage))">
                                 </div>
                                 <div class="equal-sign table-inline-display" *ngIf="orderProduct.componentList.length">
                                    <div class="table-cell-display v-align-middle">=</div>
@@ -222,7 +242,7 @@
                               <div class="product-component relative">
                                   <div class="component-eggless abs" *ngIf="prodComponent.eggless">Eggless</div>
                                 <!--<div class="component-head center-align uppercase">{{prodComponent.componentCode | slice:0:9}}<span *ngIf="prodComponent.componentName.length > 9">...</span></div>-->
-                                <img class="component-image" src="{{productsCompURL}}{{prodComponent.componentImage}}" alt="Component_img">
+                                <img class="component-image" src="{{productsCompURL}}{{prodComponent.componentImage}}" alt="Component_img" (click)="imagePreview($event, productsCompURL+(prodComponent.componentImage))">
                                 <div class="component-quantity center-align">X {{prodComponent.quantity | number : '2.0-0'}}</div>
                                 <div class="component-name center-align">{{prodComponent.componentName}} </div>
                               </div>
