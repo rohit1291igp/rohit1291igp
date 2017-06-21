@@ -147,7 +147,8 @@
 }
 
 .img-responsive{
-    width:100%;
+    width:75%;
+    margin:-3.5em auto 0;
 }
 
 

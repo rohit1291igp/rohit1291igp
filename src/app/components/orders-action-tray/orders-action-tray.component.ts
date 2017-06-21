@@ -39,7 +39,7 @@ export class OrdersActionTrayComponent implements OnInit {
   productsURL = environment.productsURL;
   productsCompURL = environment.productsCompURL;
 
- /*@HostListener('document:click', ['$event.target'])
+ @HostListener('document:click', ['$event.target'])
     public onClick(targetElement) {
         console.log('inside clicked ------->');
         const isClickedInside = this._elementRef.nativeElement.contains(targetElement);
@@ -53,7 +53,7 @@ export class OrdersActionTrayComponent implements OnInit {
 
            // this.imagePreviewFlag = false;
         }
-    }*/
+    }
 
   toggleTray(e, orderByStatus, orderId) {
     e.preventDefault();
@@ -312,6 +312,7 @@ export class OrdersActionTrayComponent implements OnInit {
   }
 
   imagePreview(e, imgSrc){
+      e.stopPropagation();
       if(imgSrc){
           this.imagePreviewFlag = true;
           this.imagePreviewSrc = imgSrc;
