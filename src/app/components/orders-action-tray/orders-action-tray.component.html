@@ -208,7 +208,7 @@
                                 <div class="product-main">
                                     <img class="product-image" src="{{productsURL}}{{orderProduct.productImage}}" alt="product_img">
                                 </div>
-                                <div class="equal-sign table-inline-display">
+                                <div class="equal-sign table-inline-display" *ngIf="orderProduct.componentList.length">
                                    <div class="table-cell-display v-align-middle">=</div>
                                 </div>
                            </span>
