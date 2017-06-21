@@ -116,7 +116,9 @@ export class DashboardComponent implements OnInit {
       }else{
           this.dashBoardDataType = (e && e.currentTarget) ? e.currentTarget.dataset.tab : e;
           var _this = this;
-          this.dashboardService.getDashboardData(null, function(result){
+          var cookieFDate = _this.UtilityService.getCookie("festivalDate") ?  JSON.parse(_this.UtilityService.getCookie("festivalDate")) : null;
+          var cookieFDatwFormatted = cookieFDate ? cookieFDate.date.year+'-'+cookieFDate.date.month+'-'+cookieFDate.date.day : null;
+          this.dashboardService.getDashboardData(cookieFDatwFormatted, function(result){
               if(!result.new[0] || (result.new[0] && result.new[0].deliveryTimes !== "today")) {
                   _this.dashboardData = _this.dashboardService.getCustomData();
                   return;
