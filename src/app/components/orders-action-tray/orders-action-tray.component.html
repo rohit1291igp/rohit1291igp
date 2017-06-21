@@ -134,6 +134,10 @@
         </div>
         <div *ngIf="sidePanelData">
             <div  id="order-{{order.orderId}}" class="col-md-12 order-row" *ngFor="let order of sidePanelData" style="margin-bottom: 0;">
+                <!-- Print Template start -->
+                    <app-print-template [order]="order" [printType]="'order'"></app-print-template>
+                    <app-print-template [order]="order" [printType]="'orderMessage'"></app-print-template>
+                <!-- Print Template end -->
                 <div class="container-fluid orders-tray">
                   <div class="row delivery-details">
                     <div class="col-md-7 order-details no-padding">
@@ -173,10 +177,10 @@
                       </div>
 
                     <div class="row">
-                        <div class="btn btn-primary actions-button text-bold" [ngClass]="{'bg-igp text-white': isAlert, 'bg-grey text-black': !isAlert}" (click)="print($event)">
+                        <div class="btn btn-primary actions-button text-bold" [ngClass]="{'bg-igp text-white': isAlert, 'bg-grey text-black': !isAlert}" (click)="print($event, 'order', order.orderId)">
                         Print Order
                     </div>
-                    <div class="btn btn-primary actions-button text-bold" [ngClass]="{'bg-igp text-white': isAlert, 'bg-grey text-black': !isAlert}" (click)="openOrdersTray($event)">
+                    <div class="btn btn-primary actions-button text-bold" [ngClass]="{'bg-igp text-white': isAlert, 'bg-grey text-black': !isAlert, 'disableBtn' : !order.commments}" (click)="print($event, 'order_message', order.orderId)">
                     Print Message
                     </div>
                     </div>

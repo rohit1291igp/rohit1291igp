@@ -34,6 +34,7 @@ import { LoaderComponent } from './components/loader/loader.component';
 
 //factories
 import {httpFactory} from "./others/http.factory";
+import { PrintTemplateComponent } from './components/print-template/print-template.component';
 
 //env config
 /*import {envConfig} from "./others/env.config";
@@ -54,7 +55,8 @@ export function ConfigLoader(envConfig: envConfig) {
     ButtonViewComponent,
     NoOrdersComponent,
     OrdersActionTrayComponent,
-    LoaderComponent
+    LoaderComponent,
+    PrintTemplateComponent
   ],
   imports: [
     BrowserModule,
