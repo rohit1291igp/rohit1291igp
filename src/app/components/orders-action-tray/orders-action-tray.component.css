@@ -1,5 +1,5 @@
 .orders-action {
-    width: 58%;
+    width: 61.3%;
     height: 100%;
     overflow-y: auto;
     z-index: 999;
@@ -86,7 +86,7 @@
     width: 95%;
     margin: 0 10px 10px;
     padding-bottom: 10px;
-    border-bottom: 3px solid #C3404E;
+    border-bottom: 3px dotted #C3404E;
     position: relative;
 }
 
