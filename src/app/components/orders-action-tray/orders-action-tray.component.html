@@ -88,7 +88,9 @@
                                 <div class="component-quantity" style="background:#eee;">&nbsp;</div>
                                 <div class="component-name">&nbsp; <br/> &nbsp;</div>
                             </div>
-                            <div class="plus-sign" style="padding-top: 25%; padding-left: 9%;">=</div>
+                            <div class="table-inline-display plus-sign" style="padding-left: 9%;">
+                               <div class="table-cell-display v-align-middle"> =</div>
+                            </div>
                         </div>
                         <div class="col-md-8 no-padding">
                             <div class="product-component">
@@ -97,28 +99,36 @@
                                 <div class="component-quantity" style="background:#eee;">&nbsp;</div>
                                 <div class="component-name">&nbsp; <br/> &nbsp;</div>
                             </div>
-                            <div class="plus-sign">+</div>
+                            <div class="table-inline-display plus-sign" style="">
+                                <div class="table-cell-display v-align-middle">+</div>
+                            </div>
                             <div class="product-component">
                                 <div class="component-head">&nbsp;</div>
                                 <app-loader [loaderType]="'compsmallboxImg'"></app-loader>
                                 <div class="component-quantity" style="background:#eee;">&nbsp;</div>
                                 <div class="component-name">&nbsp; <br/> &nbsp;</div>
                             </div>
-                            <span class="plus-sign">+</span>
+                            <div class="table-inline-display plus-sign" style="">
+                                <div class="table-cell-display v-align-middle">+</div>
+                            </div>
                             <div class="product-component">
                                 <div class="component-head">&nbsp;</div>
                                 <app-loader [loaderType]="'compsmallboxImg'"></app-loader>
                                 <div class="component-quantity" style="background:#eee;">&nbsp;</div>
                                 <div class="component-name">&nbsp; <br/> &nbsp;</div>
                             </div>
-                            <span class="plus-sign">+</span>
+                            <div class="table-inline-display plus-sign" style="">
+                                <div class="table-cell-display v-align-middle">+</div>
+                            </div>
                             <div class="product-component">
                                 <div class="component-head">&nbsp;</div>
                                 <app-loader [loaderType]="'compsmallboxImg'"></app-loader>
                                 <div class="component-quantity" style="background:#eee;">&nbsp;</div>
                                 <div class="component-name">&nbsp; <br/> &nbsp;</div>
                             </div>
-                            <span class="plus-sign">+</span>
+                            <div class="table-inline-display plus-sign" style="">
+                                <div class="table-cell-display v-align-middle">+</div>
+                            </div>
                             <div class="product-component">
                                 <div class="component-head">&nbsp;</div>
                                 <app-loader [loaderType]="'compsmallboxImg'"></app-loader>
@@ -198,7 +208,9 @@
                                 <div class="product-main">
                                     <img class="product-image" src="{{productsURL}}{{orderProduct.productImage}}" alt="product_img">
                                 </div>
-                                <div class="equal-sign">=</div>
+                                <div class="equal-sign table-inline-display">
+                                   <div class="table-cell-display v-align-middle">=</div>
+                                </div>
                            </span>
                         <!--</div>-->
                         <!--<div class="col-md-8 no-padding comp2">-->
@@ -210,7 +222,9 @@
                                 <div class="component-quantity center-align">QTY-{{prodComponent.quantity | number : '2.0-0'}}</div>
                                 <div class="component-name center-align">{{prodComponent.componentName}} </div>
                               </div>
-                              <div class="plus-sign" *ngIf="(i+1) !== orderProduct.componentList.length">+</div>
+                              <div class="table-inline-display plus-sign" *ngIf="(i+1) !== orderProduct.componentList.length">
+                                <div class="table-cell-display v-align-middle">+</div>
+                              </div>
                           </span>
                         <!--</div>-->
                             </div>

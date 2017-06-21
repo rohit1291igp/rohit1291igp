@@ -102,6 +102,10 @@
     display: table;
 }
 
+.table-inline-display{
+    display: inline-table ! important;
+}
+
 .table-cell-display{
     display: table-cell;
 }
