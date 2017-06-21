@@ -48,7 +48,7 @@ export class DashboardComponent implements OnInit {
         }
         _this.dashboardData = result;
         _this.dateRange = _this.setFestivalDate(result.festivalDate || new Date());
-    },_this.dashBoardDataType);
+    },_this.dashBoardDataType, null);
     this.masterData = this.dashboardService.getMasterData();
     //this.getDashboardData();
   }
@@ -100,7 +100,7 @@ export class DashboardComponent implements OnInit {
             _this.dateRange = _this.setFestivalDate(result.festivalDate || new Date());
             //save dateRange in cookie
             _this.UtilityService.setCookie("festivalDate", JSON.stringify(_this.dateRange), (6*60*60*1000));
-        }, _this.dashBoardDataType);
+        }, _this.dashBoardDataType, null);
   }
 
   setFestivalDate(fesDate){
@@ -119,13 +119,13 @@ export class DashboardComponent implements OnInit {
           var cookieFDate = _this.UtilityService.getCookie("festivalDate") ?  JSON.parse(_this.UtilityService.getCookie("festivalDate")) : null;
           var cookieFDatwFormatted = cookieFDate ? cookieFDate.date.year+'-'+cookieFDate.date.month+'-'+cookieFDate.date.day : null;
           this.dashboardService.getDashboardData(cookieFDatwFormatted, function(result){
-              if(!result.new[0] || (result.new[0] && result.new[0].deliveryTimes !== "today")) {
+              /*if(!result.new[0] || (result.new[0] && result.new[0].deliveryTimes !== "today")) {
                   _this.dashboardData = _this.dashboardService.getCustomData();
                   return;
-              }
+              }*/
               _this.dashboardData = result;
               _this.dateRange = _this.setFestivalDate(result.festivalDate || new Date());
-          }, _this.dashBoardDataType);
+          }, _this.dashBoardDataType, _this.dashboardData);
       }
   }
 

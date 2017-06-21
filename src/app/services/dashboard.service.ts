@@ -37,7 +37,7 @@ export class DashboardService {
         }
     }
 
-    formarDashBoardData(data, dataType){
+    formarDashBoardData(data, dataType, currentDBData){
         var dataTypeSelect;
         switch(dataType){
             case "all": dataTypeSelect = "dateStatusCountAllMap";
@@ -55,41 +55,50 @@ export class DashboardService {
         var _this = this;
         let apiResponse = data;
         let fesDate;
-        let getDashboardDataResponse = {
-            "topLabels" : [
+        let getDashboardDataResponse;
+        if(currentDBData){
+            currentDBData.new = [];
+            currentDBData.confirmed = [];
+            currentDBData.ofd = [];
+            getDashboardDataResponse = currentDBData;
+        }else{
+            getDashboardDataResponse = {
+                "topLabels" : [
 
-                {
-                    deliveryTimes : "today",
-                    labelName : "Delivery for Today",
-                    position : 1
-                },
-                {
-                    deliveryTimes : "tomorrow",
-                    labelName : "Delivery for Tomorrow",
-                    position : 2
-                },
+                    {
+                        deliveryTimes : "today",
+                        labelName : "Delivery for Today",
+                        position : 1
+                    },
+                    {
+                        deliveryTimes : "tomorrow",
+                        labelName : "Delivery for Tomorrow",
+                        position : 2
+                    },
 
-                {
-                    deliveryTimes : "future",
-                    labelName : "Future Deliveries",
-                    position : 3
-                },
-                {
-                    deliveryTimes : "bydate",
-                    labelName : "By Date:",
-                    position : 4
+                    {
+                        deliveryTimes : "future",
+                        labelName : "Future Deliveries",
+                        position : 3
+                    },
+                    {
+                        deliveryTimes : "bydate",
+                        labelName : "By Date:",
+                        position : 4
+                    }
+
+                ],
+                "new" : [],
+                "confirmed" : [],
+                "ofd" : [],
+                "delivered" : {
+                    today: 6,
+                    total: 10,
+                    isAlert: false
                 }
+            };
+        }
 
-            ],
-            "new" : [],
-            "confirmed" : [],
-            "ofd" : [],
-            "delivered" : {
-                today: 6,
-                total: 10,
-                isAlert: false
-            }
-        };
 
         let todayOrderTobeDelivered = 0;
         /* Dashboard count (new/confirmed orders) - start */
@@ -215,11 +224,39 @@ export class DashboardService {
             var day = getDateDay(dashboardCountsArray[i].date);
             createNewConfimedObj(dashboardCountsArray[i].date, day, dashboardCountsArray[i].counts);
         }*/
+        let label1 = getDashboardDataResponse.topLabels[0].deliveryTimes;
+        let label2 = getDashboardDataResponse.topLabels[1].deliveryTimes;
+        let label3 = getDashboardDataResponse.topLabels[2].deliveryTimes;
+        let label4 = getDashboardDataResponse.topLabels[3].deliveryTimes;
 
-        createNewConfimedObj("", "today", dashboardCounts["today"]);
+        if(label1 === "bydate"){
+            createNewConfimedObj(apiResponse.result.festivalDate, "bydate", dashboardCounts["festivalDate"]);
+        }else{
+            createNewConfimedObj("", label1, dashboardCounts[label1]);
+        }
+
+        if(label2 === "bydate"){
+            createNewConfimedObj(apiResponse.result.festivalDate, "bydate", dashboardCounts["festivalDate"]);
+        }else{
+            createNewConfimedObj("", label2, dashboardCounts[label2]);
+        }
+
+        if(label3 === "bydate"){
+            createNewConfimedObj(apiResponse.result.festivalDate, "bydate", dashboardCounts["festivalDate"]);
+        }else{
+            createNewConfimedObj("", label3, dashboardCounts[label3]);
+        }
+
+        if(label4 === "bydate"){
+            createNewConfimedObj(apiResponse.result.festivalDate, "bydate", dashboardCounts["festivalDate"]);
+        }else{
+            createNewConfimedObj("", label4, dashboardCounts[label4]);
+        }
+
+        /*reateNewConfimedObj("", "today", dashboardCounts["today"]);
         createNewConfimedObj("", "tomorrow", dashboardCounts["tomorrow"]);
         createNewConfimedObj("", "future", dashboardCounts["future"]);
-        createNewConfimedObj(apiResponse.result.festivalDate, "bydate", dashboardCounts["festivalDate"]);
+        createNewConfimedObj(apiResponse.result.festivalDate, "bydate", dashboardCounts["festivalDate"]);*/
 
         /* Dashboard count (new/confirmed orders) - start */
 
@@ -340,10 +377,10 @@ export class DashboardService {
 
     }
 
-    getDashboardData(specificDate, cb, dataType) {
+    getDashboardData(specificDate, cb, dataType, currentDBData) {
         var _this = this;
          this.getDashboardCount(specificDate, function(result){
-             let getDashboardDataResponse = _this.formarDashBoardData(result, dataType);
+             let getDashboardDataResponse = _this.formarDashBoardData(result, dataType, currentDBData);
              return cb(getDashboardDataResponse);
         });
     }
