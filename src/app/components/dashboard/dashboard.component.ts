@@ -71,9 +71,9 @@ export class DashboardComponent implements OnInit {
     if(status === "Processed" || status === "Confirmed"){
         let _this = this;
         let clickEleIndex =  e.currentTarget.parentElement.parentElement.parentElement.dataset.index;
-        setTimeout(function(){
+        //setTimeout(function(){
             if(clickEleIndex > 0) _this.dashboardData = _this.dashboardService.changeDashboardDataOrder(_this.dashboardData, clickEleIndex);
-        }, 1000);
+        //}, 1000);
     }
 
   }

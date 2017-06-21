@@ -7,7 +7,7 @@
     top: 0;
     background-color: white;
     border-left: 6px solid rgba(224, 224, 224, .5);
-    transition: all 1s ease;
+    transition: all 0.2s ease;
 }
 
 .close-tray {
