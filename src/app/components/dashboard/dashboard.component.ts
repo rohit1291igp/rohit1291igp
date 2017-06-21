@@ -27,7 +27,7 @@ export class DashboardComponent implements OnInit {
     dateFormat: 'ddth mmm. yyyy'
     //disableDateRanges : [{begin: this.UtilityService.getDateObj(0), end: this.UtilityService.getDateObj(2)}]
   };
-  public dateRange: Object = { date: { year: 2017, month: 5, day: 10 } };
+  public dateRange: Object = {};
 
   constructor(
     public dashboardService: DashboardService,
@@ -39,8 +39,9 @@ export class DashboardComponent implements OnInit {
     var _this = this;
     this.isRowAlert = this.dashboardService.getAlertRow();
     this.dashboardData = this.dashboardService.getCustomData();
-    this.dateRange = this.setFestivalDate(new Date());
-    this.dashboardService.getDashboardData(null, function(result){
+    var cookieFDate = _this.UtilityService.getCookie("festivalDate") ?  JSON.parse(_this.UtilityService.getCookie("festivalDate")) : null;
+    var cookieFDatwFormatted = cookieFDate ? cookieFDate.date.year+'-'+cookieFDate.date.month+'-'+cookieFDate.date.day : null;
+    this.dashboardService.getDashboardData(cookieFDatwFormatted, function(result){
         if(!result.new[0] || (result.new[0] && result.new[0].deliveryTimes !== "today")) {
             _this.dashboardData = _this.dashboardService.getCustomData();
             return;
@@ -97,6 +98,8 @@ export class DashboardComponent implements OnInit {
             }
             _this.dashboardData = result;
             _this.dateRange = _this.setFestivalDate(result.festivalDate || new Date());
+            //save dateRange in cookie
+            _this.UtilityService.setCookie("festivalDate", JSON.stringify(_this.dateRange), (6*60*60*1000));
         }, _this.dashBoardDataType);
   }
 
