@@ -314,6 +314,7 @@ export class OrdersActionTrayComponent implements OnInit {
   imagePreview(e, imgSrc){
       e.stopPropagation();
       if(imgSrc){
+          if(imgSrc === "ignore") return;
           this.imagePreviewFlag = true;
           this.imagePreviewSrc = imgSrc;
       }else{
