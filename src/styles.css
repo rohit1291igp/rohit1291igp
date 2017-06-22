@@ -12,7 +12,7 @@
 }
 
 .text-bold {
-    font-weight: bold;
+    font-weight: 600;
 }
 
 .text-red {
@@ -154,6 +154,11 @@
 .clk{
     cursor: pointer;
 }
+
+.theme-red{
+   color: #c3404e ! important;
+}
+
 
 
 

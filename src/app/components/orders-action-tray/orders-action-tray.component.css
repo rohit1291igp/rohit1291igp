@@ -98,7 +98,7 @@
     vertical-align: bottom;
     margin-bottom: 1em;
     width: 75px;
-    height: 150px;
+    height: 175px;
     display: inline-block;
     background-color: #f2f2f2;
 }
@@ -106,15 +106,15 @@
     vertical-align: bottom;
     margin-bottom: 1em;
     /*width: 75px;*/
-    height: 150px;
+    height: 175px;
     display: inline-block;
-    /*background-color: #f2f2f2;*/
+    background-color: #f2f2f2;
 }
 
 
 .product-component.mainprod {
     width: 75%;
-    height: 150px;
+    height: 175px;
     display: inline-block;
     background-color: #f2f2f2;
 }
@@ -140,6 +140,7 @@
 }
 
 .component-name {
+    height: 51px;
     font-size: 12px;
     padding: 0px 2px;
     overflow: hidden;
@@ -156,7 +157,7 @@
     display: inline-block;*/
     display: inline-block;
     color: #C3404E;
-    height: 150px;
+    height: 175px;
     vertical-align: top;
     /*padding-top: 10%;*/
 }
@@ -164,7 +165,7 @@
 .plus-sign {
     display: inline-block;
     color: #C3404E;
-    height: 150px;
+    height: 175px;
     vertical-align: top;
     /*padding-top: 10%;*/
 }
@@ -221,4 +222,12 @@
     border-width: 0 8px 12px 0;
     border-color: transparent #792A2D transparent transparent;
     bottom: -12px;
+}
+
+.price-display{
+    text-align: center;
+    font-weight: 600;
+    color: #c3404e;
+    background: #f2f2f2;
+    padding: 0.2em 0.2em;
 }
