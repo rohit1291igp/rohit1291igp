@@ -98,7 +98,7 @@
             </div>
             <div class="row">
                 <p>Product Name: <span class="uppercase text-igp"><app-loader></app-loader></span></p>
-                <p>Product Components -</p>
+                <!--<p>Product Components -</p>-->
                 <div class="col-md-12 product-holder noBtBorder">
                     <div class="row">
                         <div class="col-md-4 no-padding">
@@ -223,7 +223,7 @@
                   </div>
                   <div class="row" *ngFor="let orderProduct of order.orderProducts; let z='index'">
                     <p class="">Product Name: <span class="uppercase text-igp">{{orderProduct.productName}}</span></p>
-                    <p>Product Components -</p>
+                    <!--<p>Product Components -</p>-->
                     <div class="col-md-12 product-holder" [ngClass]="{'noBtBorder' : (z+1 === order.orderProducts.length)}">
                       <div class="row">
                           <div class="col-md-12 no-padding comp1">
