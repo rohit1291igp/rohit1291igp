@@ -55,6 +55,20 @@ export class OrdersActionTrayComponent implements OnInit {
         }
     }
 
+ @HostListener('document:keydown', ['$event'])
+    handleKeyboardEvent(event: KeyboardEvent){
+        console.log(event);
+        let x = event.keyCode;
+        if (x === 27) {
+            if(this.imagePreviewFlag){
+                this.imagePreviewFlag = false;
+            }else{
+                this.onStatusUpdate.emit("closed");
+                this.trayOpen = false;
+            }
+        }
+  }
+
   toggleTray(e, orderByStatus, orderId) {
     e.preventDefault();
     e.stopPropagation();

@@ -5,7 +5,7 @@
     z-index: 999;
     position: fixed;
     top: 0;
-    background-color: white;
+    background-color: #F2F2F2;
     border-left: 6px solid rgba(224, 224, 224, .5);
     transition: all 0.2s ease;
 }
