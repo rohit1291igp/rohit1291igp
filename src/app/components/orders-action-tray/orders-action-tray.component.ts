@@ -4,6 +4,7 @@ import { BackendService } from '../../services/backend.service';
 import { UtilityService } from '../../services/utility.service';
 import { DashboardService } from '../../services/dashboard.service';
 import { DatePipe } from '@angular/common';
+import { Time12Pipe } from "../../customPipes/time12.pipe";
 import {environment} from "../../../environments/environment";
 
 @Component({
@@ -30,7 +31,8 @@ export class OrdersActionTrayComponent implements OnInit {
       public router: Router,
       public UtilityService: UtilityService,
       public dashboardService: DashboardService,
-      public datePipe: DatePipe
+      public datePipe: DatePipe,
+      public time12Pipe: Time12Pipe
       ) { }
 
   ngOnInit() {
@@ -300,7 +302,8 @@ export class OrdersActionTrayComponent implements OnInit {
       }
 
       delDetail = delDetail+" "+(this.datePipe.transform(delDate, 'dd/MM/yy'));
-      delDetail = delDetail+" "+dExtraInfo.deliveryTime;
+      //delDetail = delDetail+" "+dExtraInfo.deliveryTime;
+      delDetail = delDetail+" "+(this.time12Pipe.transform(dExtraInfo.deliveryTime));
       return delDetail;
   }
 

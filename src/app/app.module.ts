@@ -35,6 +35,7 @@ import { LoaderComponent } from './components/loader/loader.component';
 //factories
 import {httpFactory} from "./others/http.factory";
 import { PrintTemplateComponent } from './components/print-template/print-template.component';
+import { Time12Pipe } from './customPipes/time12.pipe';
 
 //env config
 /*import {envConfig} from "./others/env.config";
@@ -56,7 +57,8 @@ export function ConfigLoader(envConfig: envConfig) {
     NoOrdersComponent,
     OrdersActionTrayComponent,
     LoaderComponent,
-    PrintTemplateComponent
+    PrintTemplateComponent,
+    Time12Pipe
   ],
   imports: [
     BrowserModule,
@@ -86,7 +88,8 @@ export function ConfigLoader(envConfig: envConfig) {
     AuthGuard,
     UserService,
     DashboardService,
-    DatePipe
+    DatePipe,
+   Time12Pipe
 
   ],
   bootstrap: [AppComponent]

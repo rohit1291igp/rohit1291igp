@@ -247,7 +247,7 @@
                                 <img class="component-image clk" src="{{productsCompURL}}{{prodComponent.componentImage}}" alt="Component_img" (click)="imagePreview($event, productsCompURL+(prodComponent.componentImage))">
                                 <div class="component-quantity center-align">X {{prodComponent.quantity | number : '2.0-0'}}</div>
                                 <div class="component-name center-align">{{prodComponent.componentName}} </div>
-                                <div class="price-display" *ngIf="prodComponent.prodComponentPrice_inr">Rs. {{prodComponent.prodComponentPrice_inr}}</div>
+                                <div class="price-display" *ngIf="prodComponent.componentCharge">Rs. {{prodComponent.componentCharge}}</div>
                               </div>
                               <div class="table-inline-display plus-sign" *ngIf="(i+1) !== orderProduct.componentList.length">
                                 <div class="table-cell-display v-align-middle">+</div>
@@ -259,10 +259,12 @@
                     </div>
                   </div>
                     <div class="row">
-                        <div class="col-md-4 pull-left text-bold">Delivery Charges - <span class="theme-red">Rs. {{order.shippingCostInInr}}</span></div>
+                        <div class="col-md-4 pull-left text-bold">
+                            <div>Delivery Charges - <span class="theme-red">Rs. {{order.shippingCostInInr}}</span></div>
+                            <div class="" style="margin-top:0.5em;">Total Price <span style="margin-left:3em;"> - <span class="theme-red">Rs. {{order.ordersProductTotalInr | number : '2.0-0'}}</span></span></div>
+                        </div>
                         <div class="col-md-4">&nbsp;</div>
                         <div class="col-md-4 text-bold">
-                            <div class="pull-right">Total - <span class="theme-red">Rs. {{order.ordersProductTotalInr | number : '2.0-0'}}</span></div>
                         </div>
                     </div>
                 </div>
