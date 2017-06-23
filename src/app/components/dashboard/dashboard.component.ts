@@ -55,7 +55,7 @@ export class DashboardComponent implements OnInit {
 
   search(e){
     console.log('SearchKey==========>', this.searchModel.searchkey);
-    this.child.toggleTray(e, "", this.searchModel.searchkey);
+    this.child.toggleTray(e, "", this.searchModel.searchkey, null);
   }
 
   viewOrders(e) {
@@ -65,7 +65,7 @@ export class DashboardComponent implements OnInit {
     let orderId = e.currentTarget.dataset.orderid;
 
     console.log('viewOrders called>>>>>>>>>>status', status);
-    this.child.toggleTray(e, status, orderId);
+    this.child.toggleTray(e, status, orderId, this.dashBoardDataType);
 
     //changing clicked element position if its index greater than 0
     if(status === "Processed" || status === "Confirmed"){
@@ -82,7 +82,7 @@ export class DashboardComponent implements OnInit {
     e.preventDefault();
     e.stopPropagation();
 
-    this.child.toggleTray(e, status, null);
+    this.child.toggleTray(e, status, null, this.dashBoardDataType);
     console.log('Side-panel opened for status: ', status);
   }
 

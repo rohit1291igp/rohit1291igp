@@ -38,18 +38,23 @@ export class DashboardService {
     }
 
     formarDashBoardData(data, dataType, currentDBData){
-        var dataTypeSelect;
+        var dataTypeSelect, ofdType;
+        console.log('dataType==================>'+dataType);
         switch(dataType){
             case "all": dataTypeSelect = "dateStatusCountAllMap";
+                        ofdType = "outOfDeliveryOrderIds";
                 break;
 
-            case "sla": dataTypeSelect = "dateStatusCountBreachMap";
+            case "sla": dataTypeSelect = "dateStatusCountNoBreachMap";
+                        ofdType = "slaOutOfDeliveryOrderIds";
                 break;
 
             case "alert": dataTypeSelect = "dateStatusCountAlertMap";
+                          ofdType = "alertOutOfDeliveryOrderIds";
                 break;
 
             default : dataTypeSelect = "dateStatusCountAllMap";
+                      ofdType = "outOfDeliveryOrderIds";
         }
 
         var _this = this;
@@ -131,35 +136,29 @@ export class DashboardService {
                         var pushObj = {
                             day : date,
                             deliveryTimes : day,
-                            status : "",
-                            ordersCount: "",
+                            status : _this.statuslist['n'],
+                            ordersCount: countObj[prop].count,
                             displayStr: "",
-                            isAlert: false,
+                            isAlert: countObj[prop].alert,
+                            sla : countObj[prop].sla,
                             position : 0
                         };
 
-                        pushObj.status = _this.statuslist['n'];
-                        pushObj.ordersCount = countObj[prop];
-
                         switch(day){
-                            case "today" : todayOrderTobeDelivered = todayOrderTobeDelivered + parseInt(countObj[prop]);
+                            case "today" : todayOrderTobeDelivered = todayOrderTobeDelivered + parseInt(countObj[prop].count);
                                 pushObj.displayStr = "Take action";
-                                pushObj.isAlert = true;
                                 pushObj.position = 1;
                                 break;
 
                             case "tomorrow" : pushObj.displayStr = parseInt(pushObj.ordersCount) > 1 ? "View Orders" : "View Order";
-                                pushObj.isAlert = false;
                                 pushObj.position = 2;
                                 break;
 
                             case "future" : pushObj.displayStr = parseInt(pushObj.ordersCount) > 1 ? "View Orders" : "View Order";
-                                pushObj.isAlert = false;
                                 pushObj.position = 3;
                                 break;
 
                             case "bydate" : pushObj.displayStr = parseInt(pushObj.ordersCount) > 1 ? "View Orders" : "View Order";
-                                pushObj.isAlert = false;
                                 pushObj.position = 4;
                                 break;
                         }
@@ -169,35 +168,29 @@ export class DashboardService {
                         var pushObj = {
                             day : date,
                             deliveryTimes : day,
-                            status : "",
-                            ordersCount: "",
+                            status : _this.statuslist['c'],
+                            ordersCount: countObj[prop].count,
                             displayStr: "",
-                            isAlert: false,
+                            isAlert: countObj[prop].alert,
+                            sla : countObj[prop].sla,
                             position : 0
                         };
 
-                        pushObj.status = _this.statuslist['c'];
-                        pushObj.ordersCount = countObj[prop];
-
                         switch(day){
-                            case "today" : todayOrderTobeDelivered = todayOrderTobeDelivered + parseInt(countObj[prop]);
+                            case "today" : todayOrderTobeDelivered = todayOrderTobeDelivered + parseInt(countObj[prop].count);
                                 pushObj.displayStr = parseInt(pushObj.ordersCount) > 1 ? "View Orders" : "View Order";
-                                pushObj.isAlert = false;
                                 pushObj.position = 1;
                                 break;
 
                             case "tomorrow" : pushObj.displayStr = parseInt(pushObj.ordersCount) > 1 ? "View Orders" : "View Order";
-                                pushObj.isAlert = false;
                                 pushObj.position = 2;
                                 break;
 
                             case "future" : pushObj.displayStr = parseInt(pushObj.ordersCount) > 1 ? "View Orders" : "View Order";
-                                pushObj.isAlert = false;
                                 pushObj.position = 3;
                                 break;
 
                             case "bydate" : pushObj.displayStr = parseInt(pushObj.ordersCount) > 1 ? "Confirmed Orders" : "Confirmed Order";
-                                pushObj.isAlert = false;
                                 pushObj.position = 4;
                                 break;
                         }
@@ -261,13 +254,14 @@ export class DashboardService {
         /* Dashboard count (new/confirmed orders) - start */
 
         /* Out for delivery - start */
-        let outForDeliveryList = []; let outOfDeliveryOrderIds = apiResponse.result.outOfDeliveryOrderIds;
+        let outForDeliveryList = []; let outOfDeliveryOrderIds = apiResponse.result[ofdType];
         for(let i in outOfDeliveryOrderIds){
             var outForDeliveryObj = {
                 status: _this.statuslist['o'],
-                orderNumber: outOfDeliveryOrderIds[i],
+                orderNumber: outOfDeliveryOrderIds[i].orderId,
                 displayStr: 'Mark as Delivered',
-                isAlert: false
+                isAlert: outOfDeliveryOrderIds[i].alert,
+                sla: outOfDeliveryOrderIds[i].sla
             };
 
             getDashboardDataResponse.ofd.push(outForDeliveryObj);
@@ -307,10 +301,10 @@ export class DashboardService {
             countObj[d3] = {"Processed"  : Math.floor(Math.random()*100), "Confirmed" : Math.floor(Math.random()*100)};
             countObj[d4] = {"Processed"  : Math.floor(Math.random()*100), "Confirmed" : Math.floor(Math.random()*100)};*/
 
-            countObj["today"] = {"Processed"  : Math.floor(Math.random()*100), "Confirmed" : Math.floor(Math.random()*100)};
-            countObj["tomorrow"] = {"Processed"  : Math.floor(Math.random()*100), "Confirmed" : Math.floor(Math.random()*100)};
-            countObj["future"] = {"Processed"  : Math.floor(Math.random()*100), "Confirmed" : Math.floor(Math.random()*100)};
-            countObj["festivalDate"] = {"Processed"  : Math.floor(Math.random()*100), "Confirmed" : Math.floor(Math.random()*100)};
+            countObj["today"] = {"Processed"  : {"count" : Math.floor(Math.random()*100), "sla" : true, "alert" : true}, "Confirmed" : {"count" : Math.floor(Math.random()*100), "sla" : false, "alert" : false}};
+            countObj["tomorrow"] = {"Processed"  : {"count" : Math.floor(Math.random()*100), "sla" : false, "alert" : false}, "Confirmed" : {"count" : Math.floor(Math.random()*100), "sla" : false, "alert" : false}};
+            countObj["future"] = {"Processed"  : {"count" : Math.floor(Math.random()*100), "sla" : false, "alert" : false}, "Confirmed" : {"count" : Math.floor(Math.random()*100), "sla" : false, "alert" : false}};
+            countObj["festivalDate"] = {"Processed"  : {"count" : Math.floor(Math.random()*100), "sla" : false, "alert" : false}, "Confirmed" : {"count" : Math.floor(Math.random()*100), "sla" : false, "alert" : false}};
 
             let oId1 = Math.floor(Math.random()*1000000);
             let oId2 = Math.floor(Math.random()*1000000);
@@ -318,7 +312,83 @@ export class DashboardService {
             let oId4 = Math.floor(Math.random()*1000000);
             let oId5 = Math.floor(Math.random()*1000000);
             let oId6 = Math.floor(Math.random()*1000000);
-            let outofDeliveryIds = [oId1, oId2, oId3, oId4, oId5, oId6];
+            let oId7 = Math.floor(Math.random()*1000000);
+            let oId8 = Math.floor(Math.random()*1000000);
+            let oId9 = Math.floor(Math.random()*1000000);
+            let oId10 = Math.floor(Math.random()*1000000);
+            let oId11 = Math.floor(Math.random()*1000000);
+            let oId12 = Math.floor(Math.random()*1000000);
+
+
+            let outofDeliveryIds1 = [
+                    {
+                        "orderId": oId1,
+                        "sla": false,
+                        "alert": false
+                    },
+                    {
+                        "orderId": oId2,
+                        "sla": false,
+                        "alert": false
+                    },
+                    {
+                        "orderId": oId3,
+                        "sla": false,
+                        "alert": false
+                    },
+                    {
+                        "orderId": oId4,
+                        "sla": false,
+                        "alert": false
+                    }
+                ];
+
+            let outofDeliveryIds2 = [
+                {
+                    "orderId": oId5,
+                    "sla": false,
+                    "alert": false
+                },
+                {
+                    "orderId": oId6,
+                    "sla": false,
+                    "alert": false
+                },
+                {
+                    "orderId": oId7,
+                    "sla": false,
+                    "alert": false
+                },
+                {
+                    "orderId": oId8,
+                    "sla": false,
+                    "alert": false
+                }
+            ];
+
+            let outofDeliveryIds3 = [
+                {
+                    "orderId": oId9,
+                    "sla": false,
+                    "alert": false
+                },
+                {
+                    "orderId": oId10,
+                    "sla": false,
+                    "alert": false
+                },
+                {
+                    "orderId": oId11,
+                    "sla": false,
+                    "alert": false
+                },
+                {
+                    "orderId": oId12,
+                    "sla": false,
+                    "alert": false
+                }
+            ];
+
 
             let hardCodedData = {
                 "error": false,
@@ -327,29 +397,17 @@ export class DashboardService {
                 "errorParams": [],
                 "result": {
                     "dateStatusCountAllMap": countObj,
-                    "dateStatusCountBreachMap": {},
-                    "dateStatusCountAlertMap": {},
-                    "outOfDeliveryOrderIds": outofDeliveryIds,
-                    "deliveredTodayOrderCount": Math.floor(Math.random()*100)
+                    "dateStatusCountNoBreachMap": countObj,
+                    "dateStatusCountAlertMap": countObj,
+                    "outOfDeliveryOrderIds": outofDeliveryIds1,
+                    "slaOutOfDeliveryOrderIds": outofDeliveryIds2,
+                    "alertOutOfDeliveryOrderIds": outofDeliveryIds3,
+                    "deliveredTodayOrderCount": Math.floor(Math.random()*100),
+                    "festivalDate": "2017-06-06"
                 }
             };
 
-            let hardCodedData2 = {
-                "error": false,
-                "errorCode": "NO_ERROR",
-                "errorMessage": null,
-                "errorParams": [],
-                "result": {
-                    "dateStatusCountAllMap": countObj,
-                    "festivalDate" : "2017-09-08",
-                    "dateStatusCountBreachMap": {},
-                    "dateStatusCountAlertMap": {},
-                    "outOfDeliveryOrderIds": outofDeliveryIds,
-                    "deliveredTodayOrderCount": Math.floor(Math.random()*100)
-                    }
-                };
-
-            return cb(hardCodedData2);
+            return cb(hardCodedData);
         }
 
             let fkAssociateId = localStorage.getItem('fkAssociateId');
@@ -420,7 +478,8 @@ export class DashboardService {
                     status : "new",
                     ordersCount: 0,
                     displayStr: 'View Orders',
-                    isAlert: false
+                    isAlert: false,
+                    sla : false
                 },
                 {
                     day : "today",
@@ -428,7 +487,8 @@ export class DashboardService {
                     status : "new",
                     ordersCount: 0,
                     displayStr: 'Take action',
-                    isAlert: true
+                    isAlert: false,
+                    sla : false
                 },
 
                 {
@@ -437,7 +497,8 @@ export class DashboardService {
                     status : "new",
                     ordersCount: 0,
                     displayStr: 'View Orders',
-                    isAlert: false
+                    isAlert: false,
+                    sla : false
                 },
                 {
                     day : "bydate",
@@ -445,7 +506,8 @@ export class DashboardService {
                     status : "new",
                     ordersCount: 0,
                     displayStr: 'View Orders',
-                    isAlert: false
+                    isAlert: false,
+                    sla : false
                 }
             ],
             "confirmed": [
@@ -455,7 +517,8 @@ export class DashboardService {
                     status : "confirmed",
                     ordersCount: 0,
                     displayStr: 'View Orders',
-                    isAlert: false
+                    isAlert: false,
+                    sla : false
                 },
                 {
                     day : "today",
@@ -463,7 +526,8 @@ export class DashboardService {
                     status : "confirmed",
                     ordersCount: 0,
                     displayStr: 'View Orders',
-                    isAlert: false
+                    isAlert: false,
+                    sla : false
                 },
 
                 {
@@ -472,7 +536,8 @@ export class DashboardService {
                     status : "confirmed",
                     ordersCount: 0,
                     displayStr: 'View Orders',
-                    isAlert: false
+                    isAlert: false,
+                    sla : false
                 },
                 {
                     day : "future",
@@ -480,50 +545,25 @@ export class DashboardService {
                     status : "confirmed",
                     ordersCount: 0,
                     displayStr: 'View Orders',
-                    isAlert: false
+                    isAlert: false,
+                    sla : false
                 }
             ],
             "ofd": [
-               /* {
+               /*
+               {
                     orderNumber: 'IG12345671',
                     displayStr: 'Mark as Delivered',
-                    isAlert: false
+                    isAlert: false,
+                    sla : false
                 },
                 {
                     orderNumber: 'IG12345672',
                     displayStr: 'Mark as Delivered',
-                    isAlert: true
-                },
-                {
-                    orderNumber: 'IG12345673',
-                    displayStr: 'Mark as Delivered',
-                    isAlert: false
-                },
-                {
-                    orderNumber: 'IG12345674',
-                    displayStr: 'Mark as Delivered',
-                    isAlert: false
-                },
-                {
-                    orderNumber: 'IG12345675',
-                    displayStr: 'Mark as Delivered',
-                    isAlert: false
-                },
-                {
-                    orderNumber: 'IG12345676',
-                    displayStr: 'Mark as Delivered',
-                    isAlert: false
-                },
-                {
-                    orderNumber: 'IG12345677',
-                    displayStr: 'Mark as Delivered',
-                    isAlert: false
-                },
-                {
-                    orderNumber: 'IG12345678',
-                    displayStr: 'Mark as Delivered',
-                    isAlert: false
-                }*/
+                    isAlert: false,
+                    sla : false
+                }
+                */
             ],
             "delivered": {
                 today: 0,
