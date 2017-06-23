@@ -222,7 +222,7 @@
                     </div>
                   </div>
                   <div class="row" *ngFor="let orderProduct of order.orderProducts; let z='index'">
-                    <p class="">Product Name: <span class="uppercase text-igp">{{orderProduct.productName}}</span></p>
+                    <p class="">Product Name: <a target="_new" href="https://www.igp.com/{{orderProduct.productNameForUrl}}"><span class="uppercase text-igp">{{orderProduct.productName}}</span></a></p>
                     <!--<p>Product Components -</p>-->
                     <div class="col-md-12 product-holder" [ngClass]="{'noBtBorder' : (z+1 === order.orderProducts.length)}">
                       <div class="row">
@@ -247,7 +247,7 @@
                                 <img class="component-image clk" src="{{productsCompURL}}{{prodComponent.componentImage}}" alt="Component_img" (click)="imagePreview($event, productsCompURL+(prodComponent.componentImage))">
                                 <div class="component-quantity center-align">X {{prodComponent.quantity | number : '2.0-0'}}</div>
                                 <div class="component-name center-align">{{prodComponent.componentName}} </div>
-                                <div class="price-display" *ngIf="prodComponent.componentCharge">Rs. {{prodComponent.componentCharge}}</div>
+                                <div class="price-display" *ngIf="prodComponent.componentPrice">Rs. {{prodComponent.componentPrice | number : '2.0-0'}}</div>
                               </div>
                               <div class="table-inline-display plus-sign" *ngIf="(i+1) !== orderProduct.componentList.length">
                                 <div class="table-cell-display v-align-middle">+</div>
@@ -260,7 +260,7 @@
                   </div>
                     <div class="row">
                         <div class="col-md-4 pull-left text-bold">
-                            <div>Delivery Charges - <span class="theme-red">Rs. {{order.shippingCostInInr}}</span></div>
+                            <div>Delivery Charges - <span class="theme-red">Rs. {{order.vendorDeliveryCharge}}</span></div>
                             <div class="" style="margin-top:0.5em;">Total Price <span style="margin-left:3em;"> - <span class="theme-red">Rs. {{order.ordersProductTotalInr | number : '2.0-0'}}</span></span></div>
                         </div>
                         <div class="col-md-4">&nbsp;</div>
