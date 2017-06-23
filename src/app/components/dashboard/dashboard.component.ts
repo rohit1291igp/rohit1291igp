@@ -42,10 +42,10 @@ export class DashboardComponent implements OnInit {
     var cookieFDate = _this.UtilityService.getCookie("festivalDate") ?  JSON.parse(_this.UtilityService.getCookie("festivalDate")) : null;
     var cookieFDatwFormatted = cookieFDate ? cookieFDate.date.year+'-'+cookieFDate.date.month+'-'+cookieFDate.date.day : null;
     this.dashboardService.getDashboardData(cookieFDatwFormatted, function(result){
-        if(!result.new[0] || (result.new[0] && result.new[0].deliveryTimes !== "today")) {
+        /*if(!result.new[0] || (result.new[0] && result.new[0].deliveryTimes !== "pas")) {
             _this.dashboardData = _this.dashboardService.getCustomData();
             return;
-        }
+        }*/
         _this.dashboardData = result;
         _this.dateRange = _this.setFestivalDate(result.festivalDate || new Date());
     },_this.dashBoardDataType, null);

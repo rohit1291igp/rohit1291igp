@@ -159,6 +159,21 @@
    color: #c3404e ! important;
 }
 
+/* datepicker css override - start */
+.mydp input.selection{
+    font-size:0.8em ! important;
+    font-weight:600 ! important;
+}
+
+.mydp .selector {
+    margin-left: -8em ! important;
+}
+
+.mydp .selectorarrowleft:after, .mydp .selectorarrowleft:before {
+    left: 12em ! important;
+}
+/* datepicker css override - end */
+
 
 
 

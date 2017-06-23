@@ -132,6 +132,9 @@ export class OrdersActionTrayComponent implements OnInit {
           switch(orderStatus){
               case statusList['n'] :
                                         switch(orderDeliveryTime){
+                                            case "past" : section = "past";
+                                                break;
+
                                             case "today" : section = "today";
                                                 break;
 
@@ -148,6 +151,9 @@ export class OrdersActionTrayComponent implements OnInit {
 
               case statusList['c'] :
                                       switch(orderDeliveryTime){
+                                          case "past" : section = "past";
+                                              break;
+
                                           case "today" : section = "today";
                                               break;
 

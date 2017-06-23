@@ -71,25 +71,30 @@ export class DashboardService {
                 "topLabels" : [
 
                     {
+                        deliveryTimes : "past",
+                        labelName : "Past Orders",
+                        position : 1
+                    },
+                    {
                         deliveryTimes : "today",
                         labelName : "Delivery for Today",
-                        position : 1
+                        position : 2
                     },
                     {
                         deliveryTimes : "tomorrow",
                         labelName : "Delivery for Tomorrow",
-                        position : 2
+                        position : 3
                     },
 
                     {
                         deliveryTimes : "future",
                         labelName : "Future Deliveries",
-                        position : 3
+                        position : 4
                     },
                     {
                         deliveryTimes : "bydate",
                         labelName : "By Date:",
-                        position : 4
+                        position : 5
                     }
 
                 ],
@@ -145,21 +150,26 @@ export class DashboardService {
                         };
 
                         switch(day){
-                            case "today" : todayOrderTobeDelivered = todayOrderTobeDelivered + parseInt(countObj[prop].count);
+                            case "past" : todayOrderTobeDelivered = todayOrderTobeDelivered + parseInt(countObj[prop].count);
                                 pushObj.displayStr = "Take action";
                                 pushObj.position = 1;
                                 break;
 
-                            case "tomorrow" : pushObj.displayStr = parseInt(pushObj.ordersCount) > 1 ? "View Orders" : "View Order";
+                            case "today" : todayOrderTobeDelivered = todayOrderTobeDelivered + parseInt(countObj[prop].count);
+                                pushObj.displayStr = "Take action";
                                 pushObj.position = 2;
                                 break;
 
-                            case "future" : pushObj.displayStr = parseInt(pushObj.ordersCount) > 1 ? "View Orders" : "View Order";
+                            case "tomorrow" : pushObj.displayStr = parseInt(pushObj.ordersCount) > 1 ? "View Orders" : "View Order";
                                 pushObj.position = 3;
                                 break;
 
-                            case "bydate" : pushObj.displayStr = parseInt(pushObj.ordersCount) > 1 ? "View Orders" : "View Order";
+                            case "future" : pushObj.displayStr = parseInt(pushObj.ordersCount) > 1 ? "View Orders" : "View Order";
                                 pushObj.position = 4;
+                                break;
+
+                            case "bydate" : pushObj.displayStr = parseInt(pushObj.ordersCount) > 1 ? "View Orders" : "View Order";
+                                pushObj.position = 5;
                                 break;
                         }
 
@@ -177,21 +187,26 @@ export class DashboardService {
                         };
 
                         switch(day){
-                            case "today" : todayOrderTobeDelivered = todayOrderTobeDelivered + parseInt(countObj[prop].count);
-                                pushObj.displayStr = parseInt(pushObj.ordersCount) > 1 ? "View Orders" : "View Order";
+                            case "past" : todayOrderTobeDelivered = todayOrderTobeDelivered + parseInt(countObj[prop].count);
+                                pushObj.displayStr = "Take action";
                                 pushObj.position = 1;
                                 break;
 
-                            case "tomorrow" : pushObj.displayStr = parseInt(pushObj.ordersCount) > 1 ? "View Orders" : "View Order";
+                            case "today" : todayOrderTobeDelivered = todayOrderTobeDelivered + parseInt(countObj[prop].count);
+                                pushObj.displayStr = parseInt(pushObj.ordersCount) > 1 ? "View Orders" : "View Order";
                                 pushObj.position = 2;
                                 break;
 
-                            case "future" : pushObj.displayStr = parseInt(pushObj.ordersCount) > 1 ? "View Orders" : "View Order";
+                            case "tomorrow" : pushObj.displayStr = parseInt(pushObj.ordersCount) > 1 ? "View Orders" : "View Order";
                                 pushObj.position = 3;
                                 break;
 
-                            case "bydate" : pushObj.displayStr = parseInt(pushObj.ordersCount) > 1 ? "Confirmed Orders" : "Confirmed Order";
+                            case "future" : pushObj.displayStr = parseInt(pushObj.ordersCount) > 1 ? "View Orders" : "View Order";
                                 pushObj.position = 4;
+                                break;
+
+                            case "bydate" : pushObj.displayStr = parseInt(pushObj.ordersCount) > 1 ? "Confirmed Orders" : "Confirmed Order";
+                                pushObj.position = 5;
                                 break;
                         }
 
@@ -221,6 +236,7 @@ export class DashboardService {
         let label2 = getDashboardDataResponse.topLabels[1].deliveryTimes;
         let label3 = getDashboardDataResponse.topLabels[2].deliveryTimes;
         let label4 = getDashboardDataResponse.topLabels[3].deliveryTimes;
+        let label5 = getDashboardDataResponse.topLabels[4].deliveryTimes;
 
         if(label1 === "bydate"){
             createNewConfimedObj(apiResponse.result.festivalDate, "bydate", dashboardCounts["festivalDate"]);
@@ -244,6 +260,12 @@ export class DashboardService {
             createNewConfimedObj(apiResponse.result.festivalDate, "bydate", dashboardCounts["festivalDate"]);
         }else{
             createNewConfimedObj("", label4, dashboardCounts[label4]);
+        }
+
+        if(label5 === "bydate"){
+            createNewConfimedObj(apiResponse.result.festivalDate, "bydate", dashboardCounts["festivalDate"]);
+        }else{
+            createNewConfimedObj("", label4, dashboardCounts[label5]);
         }
 
         /*reateNewConfimedObj("", "today", dashboardCounts["today"]);
@@ -301,6 +323,7 @@ export class DashboardService {
             countObj[d3] = {"Processed"  : Math.floor(Math.random()*100), "Confirmed" : Math.floor(Math.random()*100)};
             countObj[d4] = {"Processed"  : Math.floor(Math.random()*100), "Confirmed" : Math.floor(Math.random()*100)};*/
 
+            countObj["past"] = {"Processed"  : {"count" : Math.floor(Math.random()*100), "sla" : true, "alert" : true}, "Confirmed" : {"count" : Math.floor(Math.random()*100), "sla" : false, "alert" : false}};
             countObj["today"] = {"Processed"  : {"count" : Math.floor(Math.random()*100), "sla" : true, "alert" : true}, "Confirmed" : {"count" : Math.floor(Math.random()*100), "sla" : false, "alert" : false}};
             countObj["tomorrow"] = {"Processed"  : {"count" : Math.floor(Math.random()*100), "sla" : false, "alert" : false}, "Confirmed" : {"count" : Math.floor(Math.random()*100), "sla" : false, "alert" : false}};
             countObj["future"] = {"Processed"  : {"count" : Math.floor(Math.random()*100), "sla" : false, "alert" : false}, "Confirmed" : {"count" : Math.floor(Math.random()*100), "sla" : false, "alert" : false}};
@@ -406,7 +429,7 @@ export class DashboardService {
                     "festivalDate": "2017-06-06"
                 }
             };
-
+            console.log("hardCodedData========>", hardCodedData);
             return cb(hardCodedData);
         }
 
@@ -447,34 +470,38 @@ export class DashboardService {
         let customDashboardData =  {
             "festivalDate" : "2017-06-12",
             "topLabels" : [
-
+                {
+                    deliveryTimes : "past",
+                    labelName : "Past Orders",
+                    position : 1
+                },
                 {
                     deliveryTimes : "today",
                     labelName : "Delivery for Today",
-                    position : 1
+                    position : 2
                 },
                 {
                     deliveryTimes : "tomorrow",
                     labelName : "Delivery for Tomorrow",
-                    position : 2
+                    position : 3
                 },
 
                 {
                     deliveryTimes : "future",
                     labelName : "Future Deliveries",
-                    position : 3
+                    position : 4
                 },
                 {
                     deliveryTimes : "bydate",
                     labelName : "By Date:",
-                    position : 4
+                    position : 5
                 }
 
             ],
             "new": [
                 {
-                    day : "tomorrow",
-                    deliveryTimes : "tomorrow",
+                    day : "past",
+                    deliveryTimes : "past",
                     status : "new",
                     ordersCount: 0,
                     displayStr: 'View Orders',
@@ -484,6 +511,15 @@ export class DashboardService {
                 {
                     day : "today",
                     deliveryTimes : "today",
+                    status : "new",
+                    ordersCount: 0,
+                    displayStr: 'View Orders',
+                    isAlert: false,
+                    sla : false
+                },
+                {
+                    day : "tomorrow",
+                    deliveryTimes : "tomorrow",
                     status : "new",
                     ordersCount: 0,
                     displayStr: 'Take action',
@@ -512,8 +548,8 @@ export class DashboardService {
             ],
             "confirmed": [
                 {
-                    day : "tomorrow",
-                    deliveryTimes : "tomorrow",
+                    day : "past",
+                    deliveryTimes : "past",
                     status : "confirmed",
                     ordersCount: 0,
                     displayStr: 'View Orders',
@@ -523,6 +559,15 @@ export class DashboardService {
                 {
                     day : "today",
                     deliveryTimes : "today",
+                    status : "confirmed",
+                    ordersCount: 0,
+                    displayStr: 'View Orders',
+                    isAlert: false,
+                    sla : false
+                },
+                {
+                    day : "tomorrow",
+                    deliveryTimes : "tomorrow",
                     status : "confirmed",
                     ordersCount: 0,
                     displayStr: 'View Orders',

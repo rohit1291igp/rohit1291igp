@@ -15,17 +15,17 @@
     <p>Below is the schedule of orders you need to fulfil</p>
   </div>
   <div class="row dashboard-content">
-    <div class="col-md-11">
+    <div class="col-md-12">
       <div class="table-wrapper">
         <div class="container-fluid dashboard-table" *ngIf="dashboardData">
           <!--Table header-->
           <div class="row">
-            <div class="cell col-md-3 table-display">
+            <div class="cell col-md-2 table-display">
                <div class="table-cell-display v-align-middle"> Order Type</div>
             </div>
 
 
-              <div class="cell center-align table-display" [ngClass]="{'col-md-2' : dashBoardlabel.deliveryTimes != 'bydate', 'col-md-3' : dashBoardlabel.deliveryTimes == 'bydate'}" *ngFor="let dashBoardlabel of dashboardData.topLabels">
+              <div class="cell center-align table-display col-md-2" [ngClass]="{'a' : dashBoardlabel.deliveryTimes != 'bydate', 'b' : dashBoardlabel.deliveryTimes == 'bydate'}" *ngFor="let dashBoardlabel of dashboardData.topLabels">
 
                 <div class="table-cell-display v-align-middle" *ngIf="dashBoardlabel.deliveryTimes =='tomorrow'">{{dashBoardlabel.labelName}}</div>
                 <div class="table-cell-display v-align-middle" *ngIf="dashBoardlabel.deliveryTimes !='bydate' && dashBoardlabel.deliveryTimes !='tomorrow'">{{dashBoardlabel.labelName}}</div>
@@ -42,12 +42,12 @@
 
           <!--Table content-->
           <div class="row">
-            <div class="cell col-md-3 table-display" [ngClass]="{'alert-action': isRowAlert['new'], 'no-action': !isRowAlert['new']}">
+            <div class="cell col-md-2 table-display" [ngClass]="{'alert-action': isRowAlert['new'], 'no-action': !isRowAlert['new']}">
               <div class="table-cell-display v-align-middle">{{masterData.displayStatus[0]}}</div>
           </div>
 
             <div *ngFor="let dashBoardCount of dashboardData.new; let i='index'" [attr.data-index]="i" >
-                <div class="cell" [ngClass]="{'col-md-2' : dashBoardCount.deliveryTimes !='bydate', 'col-md-3' : dashBoardCount.deliveryTimes =='bydate', 'custom-btn-parent': dashBoardCount.ordersCount, 'center-align': !dashBoardCount.ordersCount}">
+                <div class="cell col-md-2" [ngClass]="{'a' : dashBoardCount.deliveryTimes !='bydate', 'b' : dashBoardCount.deliveryTimes =='bydate', 'custom-btn-parent': dashBoardCount.ordersCount, 'center-align': !dashBoardCount.ordersCount}">
                     <app-orders-button [displayData]="dashBoardCount" [orderStatus]="dashBoardCount.status" [OrderDay]="dashBoardCount.day" [deliveryTime]="dashBoardCount.deliveryTimes" *ngIf="dashBoardCount.ordersCount" (onViewOrders)="viewOrders($event)">
                         <app-button-view [viewData]="dashBoardCount.ordersCount"></app-button-view>
                     </app-orders-button>
@@ -87,13 +87,13 @@
           </div>
 
           <div class="row">
-            <div class="cell col-md-3 table-display" [ngClass]="{'alert-action': isRowAlert['confirmed'], 'no-action': !isRowAlert['confirmed']}">
+            <div class="cell col-md-2 table-display" [ngClass]="{'alert-action': isRowAlert['confirmed'], 'no-action': !isRowAlert['confirmed']}">
               <div class="table-cell-display v-align-middle">{{masterData.displayStatus[1]}}</div>
           </div>
 
 
           <div *ngFor="let dashBoardCount of dashboardData.confirmed; let i='index'" [attr.data-index]="i">
-              <div class="cell" [ngClass]="{'col-md-2' : dashBoardCount.deliveryTimes !='bydate', 'col-md-3' : dashBoardCount.deliveryTimes =='bydate', 'custom-btn-parent': dashBoardCount.ordersCount, 'center-align': !dashBoardCount.ordersCount}">
+              <div class="cell col-md-2" [ngClass]="{'a' : dashBoardCount.deliveryTimes !='bydate', 'b' : dashBoardCount.deliveryTimes =='bydate', 'custom-btn-parent': dashBoardCount.ordersCount, 'center-align': !dashBoardCount.ordersCount}">
                   <app-orders-button [displayData]="dashBoardCount" [orderStatus]="dashBoardCount.status" [OrderDay]="dashBoardCount.day" [deliveryTime]="dashBoardCount.deliveryTimes" *ngIf="dashBoardCount.ordersCount" (onViewOrders)="viewOrders($event)">
                     <app-button-view [viewData]="dashBoardCount.ordersCount"></app-button-view>
                   </app-orders-button>
@@ -132,11 +132,11 @@
           </div>
 
           <div class="row">
-            <div class="cell col-md-3 table-display" [ngClass]="{'alert-action': isRowAlert['future'], 'no-action': !isRowAlert['future']}">
+            <div class="cell col-md-2 table-display" [ngClass]="{'alert-action': isRowAlert['future'], 'no-action': !isRowAlert['future']}">
               <div class="table-cell-display v-align-middle">{{masterData.displayStatus[2]}}</div>
             </div>
 
-            <div class="cell col-md-9 no-padding">
+            <div class="cell col-md-10 no-padding">
               <div class="col-md-9 no-padding">
                 <div class="col-md-3 custom-btn-parent" *ngFor="let order of dashboardData.ofd; let i='index'">
                   <app-orders-button [orderId]="order.orderNumber" [displayData]="order" [orderStatus]="order.status" [OrderDay]="" [deliveryTime]="masterData.deliveryTimes[5]" (onViewOrders)="viewOrders($event)" *ngIf="i<4">
@@ -155,11 +155,11 @@
             </div>
           </div>
           <div class="row">
-            <div class="cell col-md-3 table-display" [ngClass]="{'alert-action': isRowAlert['bydate'], 'no-action': !isRowAlert['bydate']}">
+            <div class="cell col-md-2 table-display" [ngClass]="{'alert-action': isRowAlert['bydate'], 'no-action': !isRowAlert['bydate']}">
               <div class="table-cell-display v-align-middle">{{masterData.displayStatus[3]}}</div>
           </div>
 
-            <div class="cell col-md-9">
+            <div class="cell col-md-10">
               <div class="row">
                 <div class="col-md-7">
                   <div class="line-height">Orders delivered today - {{dashboardData.delivered.total}}</div>
