@@ -1,5 +1,136 @@
-<div class="row" id="order_{{order.orderId}}" class="hide" *ngIf="printType === 'order'">
-     <h3>Order !</h3>
+<div class="row page" id="order_{{order.orderId}}" class="hide" *ngIf="printType === 'order'">
+
+    <section class="messgae-box-cont">
+        <div class="messgae-box">
+            <!--<p class="message-caption bold upper-txt">Message</p>-->
+            <div class="message-txt"><pre>{{order.commments}}</pre></div>
+        </div>
+    </section>
+
+      <section class="header">
+          <div class="display-inline igp-logo w-section">
+              <img class="img-logo" src="https://df0paeeejlun4.cloudfront.net/images/igp-logo.png?v=5" title="Indian Gifts Portal" data-pin-nopin="true">
+           </div>
+          <div class="display-inline print-caption w-section">
+              <p class="print-caption-text upper-txt">Delivery Challan</p>
+          </div>
+      </section>
+
+      <section class="order-main-body">
+
+
+        <section class="order-body">
+          <section class="order-body-header border-bottom">
+                <div class="col1 border-right display-inline"><span class="bold">Order Id :</span> <span class="">841532</span></div>
+                <div class="col2 display-inline"><span class="bold">Date of Delivery :</span> <span class="">{{order.orderProducts[0].orderProductExtraInfo.deliveryDate | date : 'dd-MM-yy'}}</span></div>
+          </section>
+
+          <section class="order-body-deliveryDetails border-bottom" style="position:relative;">
+                <div class="col1 display-inline">
+                    <p class="bold">Recipient Details :</p>
+                    <div class="recipient-addr ">
+                        <div>{{order.deliveryName}}</div>
+                        <div>{{order.deliveryStreetAddress}}</div>
+                        <div>{{order.deliveryStreetAddress2}}</div>
+                        <div>{{order.deliveryCity}}-{{order.deliveryPostcode}}</div>
+                        <div>{{order.deliveryState}}</div>
+                    </div>
+                </div>
+                <div class="col2 display-inline">
+                    <div class="">
+                        <div>
+                            <span class="bold">Telephone :</span>
+                            <span class="">-</span>
+                        </div>
+                        <div>
+                            <span class="bold">Mobile :</span>
+                            <span class="">{{order.deliveryMobile}}</span>
+                        </div>
+                    </div>
+                </div>
+          </section>
+
+          <section class="order-body-senderDetails border-bottom">
+                <div>
+                    <span class="bold">Sender Name :</span>
+                    <span class="">{{order.customersName}}</span>
+                </div>
+          </section>
+
+          <section class="order-body-productDetails border-bottom">
+             <div class="order-body-productDetails-head border-bottom">
+                 <div class="t-col-1 display-inline border-right">Sr. No.</div>
+                 <div class="t-col-2 display-inline border-right">Image</div>
+                 <div class="t-col-3 display-inline border-right">Delivery Details</div>
+                 <div class="t-col-4 display-inline border-right">Product Description</div>
+                 <div class="t-col-5 display-inline ">Qty</div>
+             </div>
+
+            <div class="order-body-productDetails-body border-bottom prod-bg" *ngFor="let orderProduct of order.orderProducts; let z='index'">
+              <div class="" style="padding: 0.5em 2em;">
+                    <div class="t-col-1 display-inline ">{{z+1}}.</div>
+                    <div class="t-col-2 display-inline">
+                        <div style="margin-left: 0.7em;">
+                            <img class="product-image" src="{{productsURL}}{{orderProduct.productImage}}" alt="product_img">
+                        </div>
+                    </div>
+                    <div class="t-col-3 display-inline">
+                        <div class="bold">Date:</div>
+                        <div class="">{{orderProduct.orderProductExtraInfo.deliveryDate | date : 'dd-MM-yy'}}</div>
+                    </div>
+                    <div class="t-col-4 display-inline ">{{orderProduct.productName}}</div>
+                    <div class= "t-col-5 display-inline ">{{orderProduct.productQuantity}}</div>
+
+              </div>
+            </div>
+          </section>
+
+          <section class="order-body-feedback border-bottom">
+            <div class="bold display-inline">Presentation & Quality :</div>
+            <div class="feedback-check-box display-inline">
+                    <div class="fd-option display-inline">
+                        <input id="ex" name="feedback" value="Excellent" type="checkbox">
+                        <label id="ex">Excellent</label>
+                    </div>
+
+                    <div class="fd-option display-inline">
+                        <input id="vgud" name="feedback" value="Very Good" type="checkbox">
+                        <label id="vgud">Very Good</label>
+                    </div>
+
+                    <div class="fd-option display-inline">
+                        <input id="gud" name="feedback" value="Good" type="checkbox">
+                        <label id="gud">Good</label>
+                    </div>
+
+                    <div class="fd-option display-inline">
+                        <input id="fair" name="feedback" value="Fair" type="checkbox">
+                        <label id="fair">Fair</label>
+                    </div>
+
+                    <div class="fd-option display-inline">
+                        <input id="tbi" name="feedback" value="To Be Improved" type="checkbox">
+                        <label id="tbi">To Be Improved</label>
+                    </div>
+             </div>
+          </section>
+
+          <section class="order-body-footer" style="padding-right: 0;">
+            <div class="display-inline w45 border-right col1">
+                <div class="bold display-inline">Receiver's Name : </div>
+                <div class="display-inline sign-box border-bottom">&nbsp;</div>
+            </div>
+
+            <div class="display-inline col2">
+                <div class="bold display-inline">Receiver's Signature : </div>
+                <div class="display-inline sign-box border-bottom right-sign-box">&nbsp;</div>
+            </div>
+
+          </section>
+
+        </section>
+      </section>
+     <!--<h3>Order !</h3>
         <div class="col-md-12 order-row" style="margin-bottom: 0;">
             <div class="container-fluid orders-tray">
                 <div class="row delivery-details">
@@ -40,16 +171,16 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div>-->
 
  </div>
 
 
-<div id="order_message_{{order.orderId}}" class="hide" *ngIf="printType === 'orderMessage'">
-    <h3>Order Message !</h3>
-        <h6>Order Id - {{order.orderId}}</h6>
-        <h6>Deliver to - {{order.deliveryName}}</h6>
-        <h6>Address - {{order.deliveryStreetAddress}}, <span *ngIf="order.deliveryStreetAddress2">{{order.deliveryStreetAddress2}},</span>s{{order.deliveryCity}}-{{order.deliveryPostcode}}, {{order.deliveryState}}</h6>
-        <h6>CONTACT NUMBER - {{order.deliveryMobile}}</h6>
-    <pre>{{order.commments}}</pre>
+<div id="order_message_{{order.orderId}}" class="hide page" *ngIf="printType === 'orderMessage'">
+    <section class="messgae-box-cont2">
+        <div class="messgae-box">
+            <!--<p class="message-caption bold upper-txt">Message</p>-->
+            <div class="message-txt"><pre>{{order.commments}}</pre></div>
+        </div>
+    </section>
 </div>
