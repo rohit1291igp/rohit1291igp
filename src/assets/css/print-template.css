@@ -175,7 +175,7 @@ page[size="A5"][layout="portrait"] {
 
     .order-body-header .col2{
         margin-left: 2em;
-        width: 35%;
+        /*width: 35%;*/
     }
 
     .order-body-deliveryDetails{
@@ -440,7 +440,7 @@ page[size="A5"][layout="portrait"] {
 
 .order-body-header .col2{
     margin-left: 2em;
-    width: 35%;
+    /*width: 35%;*/
 }
 
 .order-body-deliveryDetails{

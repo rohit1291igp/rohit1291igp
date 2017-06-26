@@ -22,7 +22,7 @@
         <section class="order-body">
           <section class="order-body-header border-bottom">
                 <div class="col1 border-right display-inline"><span class="bold">Order Id :</span> <span class="">841532</span></div>
-                <div class="col2 display-inline" *ngIf="order.orderProducts[0].orderProductExtraInfo"><span class="bold">Date of Delivery :</span> <span class="">{{order.orderProducts[0].orderProductExtraInfo.deliveryDate | date : 'dd-MM-yy'}}</span></div>
+                <div class="col2 display-inline" *ngIf="order.orderProducts[0].orderProductExtraInfo"><span class="bold">Date of Delivery :</span> <span class="">{{getDeliveryDetail(order.orderProducts[0].orderProductExtraInfo, order.datePurchased)}}</span></div>
           </section>
 
           <section class="order-body-deliveryDetails border-bottom" style="position:relative;">

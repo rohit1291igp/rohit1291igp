@@ -1,5 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import {environment} from "../../../environments/environment";
+import { UtilityService } from '../../services/utility.service';
+import { Time12Pipe } from "../../customPipes/time12.pipe";
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-print-template',
@@ -11,9 +14,37 @@ export class PrintTemplateComponent implements OnInit {
     productsURL = environment.productsURL;
     productsCompURL = environment.productsCompURL;
 
-  constructor() { }
+  constructor(
+      public UtilityService: UtilityService,
+      public datePipe: DatePipe,
+      public time12Pipe: Time12Pipe
+      ) { }
 
   ngOnInit() {
   }
+
+    getDeliveryDetail(dExtraInfo, purchaseDate){
+        let delDate = this.UtilityService.getDateString(0, dExtraInfo.deliveryDate);
+        let purDate = this.UtilityService.getDateString(0, purchaseDate);
+        let delDetail = "";
+        switch(dExtraInfo.deliveryType){
+            case 1 : delDetail= delDetail + " Standard Delivery ";
+                break;
+
+            case 2 : delDetail= delDetail + ((delDate == purDate) ? "Same Day Delivery" : " Fixed Time Delivery ");
+                break;
+
+            case 3 : delDetail= delDetail + " Midnight Delivery ";
+                break;
+
+            case 4 : delDetail= delDetail + ((delDate == purDate) ? "Same Day Delivery" : " Fixed Date Delivery ");
+                break;
+        }
+
+        delDetail = delDetail+" "+(this.datePipe.transform(delDate, 'dd-MM-yy'));
+        //delDetail = delDetail+" "+dExtraInfo.deliveryTime;
+        delDetail = delDetail+" "+(this.time12Pipe.transform(dExtraInfo.deliveryTime));
+        return delDetail;
+    }
 
 }
