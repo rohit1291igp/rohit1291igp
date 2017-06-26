@@ -142,7 +142,7 @@ export class DashboardService {
                             day : date,
                             deliveryTimes : day,
                             status : _this.statuslist['n'],
-                            ordersCount: countObj[prop].count,
+                            ordersCount: parseInt(countObj[prop].count),
                             displayStr: "",
                             isAlert: countObj[prop].alert,
                             sla : countObj[prop].sla,
@@ -160,15 +160,15 @@ export class DashboardService {
                                 pushObj.position = 2;
                                 break;
 
-                            case "tomorrow" : pushObj.displayStr = parseInt(pushObj.ordersCount) > 1 ? "View Orders" : "View Order";
+                            case "tomorrow" : pushObj.displayStr = pushObj.ordersCount > 1 ? "View Orders" : "View Order";
                                 pushObj.position = 3;
                                 break;
 
-                            case "future" : pushObj.displayStr = parseInt(pushObj.ordersCount) > 1 ? "View Orders" : "View Order";
+                            case "future" : pushObj.displayStr = pushObj.ordersCount > 1 ? "View Orders" : "View Order";
                                 pushObj.position = 4;
                                 break;
 
-                            case "bydate" : pushObj.displayStr = parseInt(pushObj.ordersCount) > 1 ? "View Orders" : "View Order";
+                            case "bydate" : pushObj.displayStr = pushObj.ordersCount > 1 ? "View Orders" : "View Order";
                                 pushObj.position = 5;
                                 break;
                         }
@@ -179,7 +179,7 @@ export class DashboardService {
                             day : date,
                             deliveryTimes : day,
                             status : _this.statuslist['c'],
-                            ordersCount: countObj[prop].count,
+                            ordersCount: parseInt(countObj[prop].count),
                             displayStr: "",
                             isAlert: countObj[prop].alert,
                             sla : countObj[prop].sla,
@@ -193,19 +193,19 @@ export class DashboardService {
                                 break;
 
                             case "today" : todayOrderTobeDelivered = todayOrderTobeDelivered + parseInt(countObj[prop].count);
-                                pushObj.displayStr = parseInt(pushObj.ordersCount) > 1 ? "View Orders" : "View Order";
+                                pushObj.displayStr = pushObj.ordersCount > 1 ? "View Orders" : "View Order";
                                 pushObj.position = 2;
                                 break;
 
-                            case "tomorrow" : pushObj.displayStr = parseInt(pushObj.ordersCount) > 1 ? "View Orders" : "View Order";
+                            case "tomorrow" : pushObj.displayStr = pushObj.ordersCount > 1 ? "View Orders" : "View Order";
                                 pushObj.position = 3;
                                 break;
 
-                            case "future" : pushObj.displayStr = parseInt(pushObj.ordersCount) > 1 ? "View Orders" : "View Order";
+                            case "future" : pushObj.displayStr = pushObj.ordersCount > 1 ? "View Orders" : "View Order";
                                 pushObj.position = 4;
                                 break;
 
-                            case "bydate" : pushObj.displayStr = parseInt(pushObj.ordersCount) > 1 ? "Confirmed Orders" : "Confirmed Order";
+                            case "bydate" : pushObj.displayStr = pushObj.ordersCount > 1 ? "Confirmed Orders" : "Confirmed Order";
                                 pushObj.position = 5;
                                 break;
                         }
