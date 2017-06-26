@@ -9,10 +9,10 @@
 
       <section class="header">
           <div class="display-inline igp-logo w-section">
-              <img class="img-logo" src="https://df0paeeejlun4.cloudfront.net/images/igp-logo.png?v=5" title="Indian Gifts Portal" data-pin-nopin="true">
+              <img class="img-logo" src="assets/images/igp_black_logo.jpg" title="Indian Gifts Portal" data-pin-nopin="true">
            </div>
           <div class="display-inline print-caption w-section">
-              <p class="print-caption-text upper-txt">Delivery Challan</p>
+              <div class="print-caption-text upper-txt">Delivery Challan</div>
           </div>
       </section>
 
@@ -22,7 +22,7 @@
         <section class="order-body">
           <section class="order-body-header border-bottom">
                 <div class="col1 border-right display-inline"><span class="bold">Order Id :</span> <span class="">841532</span></div>
-                <div class="col2 display-inline"><span class="bold">Date of Delivery :</span> <span class="">{{order.orderProducts[0].orderProductExtraInfo.deliveryDate | date : 'dd-MM-yy'}}</span></div>
+                <div class="col2 display-inline" *ngIf="order.orderProducts[0].orderProductExtraInfo"><span class="bold">Date of Delivery :</span> <span class="">{{order.orderProducts[0].orderProductExtraInfo.deliveryDate | date : 'dd-MM-yy'}}</span></div>
           </section>
 
           <section class="order-body-deliveryDetails border-bottom" style="position:relative;">
@@ -76,7 +76,7 @@
                     </div>
                     <div class="t-col-3 display-inline">
                         <div class="bold">Date:</div>
-                        <div class="">{{orderProduct.orderProductExtraInfo.deliveryDate | date : 'dd-MM-yy'}}</div>
+                        <div class="" *ngIf="orderProduct.orderProductExtraInfo">{{orderProduct.orderProductExtraInfo.deliveryDate | date : 'dd-MM-yy'}}</div>
                     </div>
                     <div class="t-col-4 display-inline ">{{orderProduct.productName}}</div>
                     <div class= "t-col-5 display-inline ">{{orderProduct.productQuantity}}</div>

@@ -54,7 +54,7 @@ page[size="A5"][layout="portrait"] {
     }
 
     .w-section{
-        width:46%;
+        width:49%;
     }
 
     .w50{
@@ -98,12 +98,13 @@ page[size="A5"][layout="portrait"] {
     }
 
     .border-bottom{
-        border-bottom:1px solid #a7a7a7;
+        padding-bottom: 1px solid #a7a7a7;
     }
 
     .header{
-        padding:0 3em;
+        padding:1em 3em;
         box-shadow: 0 0 0.5cm rgba(0,0,0,0.5);
+        border-bottom:1px solid #a7a7a7;
     }
 
     .order-main-body{
@@ -115,7 +116,7 @@ page[size="A5"][layout="portrait"] {
     }
 
     .print-caption{
-
+        padding-bottom: 1em;
     }
 
     .print-caption .print-caption-text{
@@ -303,11 +304,13 @@ page[size="A5"][layout="portrait"] {
         line-height: 1.3em;
     }
 
-
+    .img-logo{
+        width: 11em;
+    }
 
 }
 
-
+/*----------*/
 .upper-txt{
     text-transform: uppercase;
 }
@@ -316,7 +319,7 @@ page[size="A5"][layout="portrait"] {
 }
 
 .w-section{
-    width:46%;
+    width:49%;
 }
 
 .w50{
@@ -364,8 +367,9 @@ page[size="A5"][layout="portrait"] {
 }
 
 .header{
-    padding:0 3em;
+    padding:1em 3em;
     box-shadow: 0 0 0.5cm rgba(0,0,0,0.5);
+    border-bottom:1px solid #a7a7a7;
 }
 
 .order-main-body{
@@ -377,7 +381,7 @@ page[size="A5"][layout="portrait"] {
 }
 
 .print-caption{
-
+    padding-bottom: 1em;
 }
 
 .print-caption .print-caption-text{
@@ -563,4 +567,8 @@ page[size="A5"][layout="portrait"] {
 
 .recipient-addr {
     line-height: 1.3em;
+}
+
+.img-logo{
+    width: 11em;
 }
