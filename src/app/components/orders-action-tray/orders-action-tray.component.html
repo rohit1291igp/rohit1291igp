@@ -247,7 +247,7 @@
                                 <img class="component-image clk" src="{{productsCompURL}}{{prodComponent.componentImage}}" alt="Component_img" (click)="imagePreview($event, productsCompURL+(prodComponent.componentImage))">
                                 <div class="component-quantity center-align">X {{prodComponent.quantity | number : '2.0-0'}}</div>
                                 <div class="component-name center-align">{{prodComponent.componentName}} </div>
-                                <div class="price-display" *ngIf="prodComponent.componentPrice">Rs. {{prodComponent.componentPrice | number : '2.0-0'}}</div>
+                                <div class="price-display" *ngIf="prodComponent.componentPrice && prodComponent.componentPrice !== 'N/A'">Rs. {{prodComponent.componentPrice | number : '2.0-0'}}</div>
                               </div>
                               <div class="table-inline-display plus-sign" *ngIf="(i+1) !== orderProduct.componentList.length">
                                 <div class="table-cell-display v-align-middle">+</div>
