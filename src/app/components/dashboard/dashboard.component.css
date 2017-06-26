@@ -33,13 +33,13 @@
 }
 
 .dashboard-table > .row > .cell:nth-of-type(1) {
-    font-size: 16px;
+    /*font-size: 16px;*/
     font-weight: bold;
     text-transform: uppercase;
 }
 
 .dashboard-table > .row:nth-of-type(1) {
-    font-size: 16px;
+    /*font-size: 16px;*/
     font-weight: bold;
 }
 
@@ -88,3 +88,5 @@
     margin-left: 1em;
     margin-top: 1.5em;
 }
+
+

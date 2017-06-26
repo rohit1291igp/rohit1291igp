@@ -71,7 +71,7 @@ export class OrdersActionTrayComponent implements OnInit {
         }
   }
 
-  toggleTray(e, orderByStatus, orderId) {
+  toggleTray(e, orderByStatus, orderId, dashBoardDataType) {
     e.preventDefault();
     e.stopPropagation();
     this.apierror = null;
@@ -85,20 +85,20 @@ export class OrdersActionTrayComponent implements OnInit {
     }else{
         if(e.currentTarget.dataset.trayopen){
             this.onStatusUpdate.emit("closed");
-            console.log('close clicked ----->', this.trayOpen);
+            console.log('close clicked ----->', this.trayOpen, dashBoardDataType);
             this.trayOpen = false;
         }else{
-            console.log('close not clicked ----->', this.trayOpen);
+            console.log('close not clicked ----->', this.trayOpen, dashBoardDataType);
             this.trayOpen = true;
         }
 
         //this.trayOpen = !this.trayOpen;
         console.log('trayOpen: and loading data', this.trayOpen);
-        if(orderByStatus || orderId) this.loadTrayData(e, orderByStatus, orderId);
+        if(orderByStatus || orderId) this.loadTrayData(e, orderByStatus, orderId, dashBoardDataType);
     }
   }
 
-  loadTrayData(e, orderByStatus, orderId){
+  loadTrayData(e, orderByStatus, orderId, dashBoardDataType){
       e.stopPropagation();
       let fkAssociateId = localStorage.getItem('fkAssociateId');
       var _this = this;
@@ -134,6 +134,9 @@ export class OrdersActionTrayComponent implements OnInit {
           switch(orderStatus){
               case statusList['n'] :
                                         switch(orderDeliveryTime){
+                                            case "past" : section = "past";
+                                                break;
+
                                             case "today" : section = "today";
                                                 break;
 
@@ -150,6 +153,9 @@ export class OrdersActionTrayComponent implements OnInit {
 
               case statusList['c'] :
                                       switch(orderDeliveryTime){
+                                          case "past" : section = "past";
+                                              break;
+
                                           case "today" : section = "today";
                                               break;
 
@@ -172,9 +178,9 @@ export class OrdersActionTrayComponent implements OnInit {
           }
 
           if(orderDeliveryTime === "future"){
-              reqURL ="?responseType=json&scopeId=1&isfuture=true&section="+section+"&status="+orderStatus+"&fkassociateId="+fkAssociateId+"&date="+spDate+"&method=igp.order.getOrderByStatusDate";
+              reqURL ="?responseType=json&scopeId=1&isfuture=true&orderAction="+dashBoardDataType+"&section="+section+"&status="+orderStatus+"&fkassociateId="+fkAssociateId+"&date="+spDate+"&method=igp.order.getOrderByStatusDate";
           }else{
-              reqURL ="?responseType=json&scopeId=1&section="+section+"&status="+orderStatus+"&fkassociateId="+fkAssociateId+"&date="+spDate+"&method=igp.order.getOrderByStatusDate";
+              reqURL ="?responseType=json&scopeId=1&orderAction="+dashBoardDataType+"&section="+section+"&status="+orderStatus+"&fkassociateId="+fkAssociateId+"&date="+spDate+"&method=igp.order.getOrderByStatusDate";
           }
       }
 
