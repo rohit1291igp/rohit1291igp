@@ -25,7 +25,7 @@
             </div>
 
 
-              <div class="cell center-align table-display col-md-2" [ngClass]="{'a' : dashBoardlabel.deliveryTimes != 'bydate', 'b' : dashBoardlabel.deliveryTimes == 'bydate'}" *ngFor="let dashBoardlabel of dashboardData.topLabels">
+              <div class="cell center-align table-display col-md-2" [ngClass]="{'a' : dashBoardlabel.deliveryTimes != 'bydate', 'bydateWidth' : dashBoardlabel.deliveryTimes == 'bydate'}" *ngFor="let dashBoardlabel of dashboardData.topLabels">
 
                 <div class="table-cell-display v-align-middle" *ngIf="dashBoardlabel.deliveryTimes =='tomorrow'">{{dashBoardlabel.labelName}}</div>
                 <div class="table-cell-display v-align-middle" *ngIf="dashBoardlabel.deliveryTimes !='bydate' && dashBoardlabel.deliveryTimes !='tomorrow'">{{dashBoardlabel.labelName}}</div>

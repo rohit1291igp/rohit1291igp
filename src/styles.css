@@ -161,7 +161,7 @@
 
 /* datepicker css override - start */
 .mydp input.selection{
-    font-size:0.8em ! important;
+    font-size:0.90vw ! important;
     font-weight:600 ! important;
 }
 
@@ -171,6 +171,10 @@
 
 .mydp .selectorarrowleft:after, .mydp .selectorarrowleft:before {
     left: 12em ! important;
+}
+
+.bydateWidth{
+    padding: 0 3px;
 }
 /* datepicker css override - end */
 
