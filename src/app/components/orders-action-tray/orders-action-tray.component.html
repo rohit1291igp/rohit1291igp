@@ -34,16 +34,18 @@
             <p class="text-bold uppercase">
                 <span *ngIf="!orderByStatus">Searched Order</span>
                 <span *ngIf="orderByStatus">
+                     <span class="uppercase" *ngIf="orderUpdateByTime == 'past'">Past - </span>
                      <span class="uppercase" *ngIf="orderByStatus == 'Processed'">New Orders</span>
                      <span class="uppercase" *ngIf="orderByStatus == 'Confirmed'">Confirmed Orders</span>
                      <span class="uppercase" *ngIf="orderByStatus == 'OutForDelivery'">Out for delivery Orders</span>
                      <span class="uppercase" *ngIf="orderByStatus == 'Shipped'">Delivered Orders</span>
                 </span>
                 <span *ngIf="orderUpdateByTime">
-                    <span class="uppercase" *ngIf="orderUpdateByTime == 'today'"> - Deliver for today</span>
-                    <span class="uppercase" *ngIf="orderUpdateByTime == 'tomorrow'"> - Deliver for tomorrow</span>
-                    <span class="uppercase" *ngIf="orderUpdateByTime == 'future'"> - Deliver for future</span>
-                    <span class="uppercase" *ngIf="orderUpdateByTime == 'bydate'"> - Deliver by date </span>
+                    <span class="uppercase" *ngIf="orderUpdateByTime == 'past'"> - Delivery for today</span>
+                    <span class="uppercase" *ngIf="orderUpdateByTime == 'today'"> - Delivery for today</span>
+                    <span class="uppercase" *ngIf="orderUpdateByTime == 'tomorrow'"> - Delivery for tomorrow</span>
+                    <span class="uppercase" *ngIf="orderUpdateByTime == 'future'"> - Delivery for future</span>
+                    <span class="uppercase" *ngIf="orderUpdateByTime == 'bydate'"> - Delivery by date </span>
                 </span>
 
                 <!--- Delivery for today  {{orderId}}-->
@@ -192,7 +194,7 @@
                         <button class="btn btn-primary actions-button uppercase text-bold text-white bg-green"
                         [ngClass]="{'disableBtn' : (order.orderProducts[0].ordersProductStatus =='Shipped' && order.orderProducts[0].deliveryStatus === 1) ||
                         (order.orderProducts[0].ordersProductStatus =='Dispatched' && order.orderProducts[0].deliveryStatus === 1) ||
-                        (order.orderProducts[0].ordersProductStatus =='Confirmed' && orderUpdateByTime !== 'today')}"
+                        (order.orderProducts[0].ordersProductStatus =='Confirmed' && order.deliverWhen !== 'today' && order.deliverWhen !== 'past')}"
                         (click)="updateOrderStatus($event, getNxtOrderStatus(order.orderProducts[0].ordersProductStatus), order.orderId)">
                               <span *ngIf="order.orderProducts[0].ordersProductStatus =='Processed'">Confirm</span>
                               <span *ngIf="order.orderProducts[0].ordersProductStatus =='Confirmed'">Out For Delivery</span>
