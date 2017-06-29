@@ -36,6 +36,7 @@ export class OrdersActionTrayComponent implements OnInit {
       ) { }
 
   ngOnInit() {
+     //this.scrollTo(document.getElementById("mainOrderSection"), 0, 1250);
   }
 
   productsURL = environment.productsURL;
@@ -69,6 +70,35 @@ export class OrdersActionTrayComponent implements OnInit {
                 this.trayOpen = false;
             }
         }
+  }
+
+  scrollTo(element, to, duration) {
+    var _this = this;
+    var start = element.scrollTop,
+        change = to - start,
+        increment = 20;
+
+    var animateScroll = function(elapsedTime) {
+        elapsedTime += increment;
+        var position = _this.easeInOut(elapsedTime, start, change, duration);
+        element.scrollTop = position;
+        if (elapsedTime < duration) {
+            setTimeout(function() {
+                animateScroll(elapsedTime);
+            }, increment);
+        }
+    };
+
+    animateScroll(0);
+  }
+
+  easeInOut(currentTime, start, change, duration) {
+    currentTime /= duration / 2;
+    if (currentTime < 1) {
+        return change / 2 * currentTime * currentTime + start;
+    }
+    currentTime -= 1;
+    return -change / 2 * (currentTime * (currentTime - 2) - 1) + start;
   }
 
   toggleTray(e, orderByStatus, orderId, dashBoardDataType) {
@@ -200,6 +230,8 @@ export class OrdersActionTrayComponent implements OnInit {
           console.log('sidePanel Response --->', response.result);
           _this.sidePanelData = response.result ? Array.isArray(response.result) ? response.result : [response.result] : [];
           //_this.getNxtOrderStatus(_this.sidePanelData[0].ordersStatus);
+
+          _this.scrollTo(document.getElementById("mainOrderSection"), 0, 0); // scroll to top
       });
   }
 
@@ -221,6 +253,7 @@ export class OrdersActionTrayComponent implements OnInit {
               //_this.trayOpen = false;
               let dataLength = _this.sidePanelDataOnStatusUpdate(orderId);
               if(!dataLength){
+                  _this.onStatusUpdate.emit("closed");
                   _this.trayOpen = false;
               }
           }, 1000);
@@ -246,6 +279,7 @@ export class OrdersActionTrayComponent implements OnInit {
           //_this.trayOpen = false;
           let dataLength = _this.sidePanelDataOnStatusUpdate(orderId);
           if(!dataLength){
+              _this.onStatusUpdate.emit("closed");
               _this.trayOpen = false;
           }
       });
@@ -413,6 +447,7 @@ export class OrdersActionTrayComponent implements OnInit {
                   "rlReqId": "",
                   "marketPlaceData": "",
                   "marketPlaceName": "",
+                  "deliverWhen" : "today",
                   "orderProducts": [
                       {
                           "orderProductId": 1383459,
@@ -519,6 +554,7 @@ export class OrdersActionTrayComponent implements OnInit {
                   "rlReqId": "",
                   "marketPlaceData": "",
                   "marketPlaceName": "",
+                  "deliverWhen" : "today",
                   "orderProducts": [
                       {
                           "orderProductId": 1389735,
@@ -646,6 +682,7 @@ export class OrdersActionTrayComponent implements OnInit {
                   "rlReqId": "",
                   "marketPlaceData": "",
                   "marketPlaceName": "",
+                  "deliverWhen" : "today",
                   "orderProducts": [
                       {
                           "orderProductId": 1389727,
