@@ -150,7 +150,7 @@ export class DashboardService {
                         };
 
                         switch(day){
-                            case "past" : todayOrderTobeDelivered = todayOrderTobeDelivered + parseInt(countObj[prop].count);
+                            case "past" :
                                 pushObj.displayStr = "Take action";
                                 pushObj.position = 1;
                                 break;
@@ -187,8 +187,7 @@ export class DashboardService {
                         };
 
                         switch(day){
-                            case "past" : todayOrderTobeDelivered = todayOrderTobeDelivered + parseInt(countObj[prop].count);
-                                pushObj.displayStr = "Take action";
+                            case "past" : pushObj.displayStr = pushObj.ordersCount > 1 ? "View Orders" : "View Order";
                                 pushObj.position = 1;
                                 break;
 
