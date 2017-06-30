@@ -365,7 +365,7 @@ export class OrdersActionTrayComponent implements OnInit {
           <body onload="window.print();window.close()">${printContents}</body>
           </html>`
       );
-      popupWin.document.close();
+     popupWin.document.close();
   }
 
   imagePreview(e, imgSrc){

@@ -136,7 +136,7 @@ page[size="A5"][layout="portrait"] {
     .messgae-box-cont2{
         /*border-bottom: 2px dotted #757575;*/
         background: #fff;
-        padding: 12em 0;
+        padding: 10em 0;
         width: 100%;
         text-align: center;
         display: table;
@@ -308,6 +308,19 @@ page[size="A5"][layout="portrait"] {
         width: 11em;
     }
 
+    .messgae-box pre{
+        margin: 0 auto;
+        width: 40em;
+        white-space: -moz-pre-wrap; /* Mozilla */
+        white-space: -hp-pre-wrap; /* HP printers */
+        white-space: -o-pre-wrap; /* Opera 7 */
+        white-space: -pre-wrap; /* Opera 4-6 */
+        white-space: pre-wrap; /* CSS 2.1 */
+        white-space: pre-line; /* CSS 3 (and 2.1 as well, actually) */
+        word-wrap: break-word; /* IE */
+        word-break: break-all;
+    }
+
 }
 
 /*----------*/
@@ -401,7 +414,7 @@ page[size="A5"][layout="portrait"] {
 .messgae-box-cont2{
     /*border-bottom: 2px dotted #757575;*/
     background: #fff;
-    padding: 12em 0;
+    padding: 10em 0;
     width: 100%;
     text-align: center;
     display: table;
@@ -571,4 +584,17 @@ page[size="A5"][layout="portrait"] {
 
 .img-logo{
     width: 11em;
+}
+
+.messgae-box pre{
+    margin: 0 auto;
+    width: 40em;
+    white-space: -moz-pre-wrap; /* Mozilla */
+    white-space: -hp-pre-wrap; /* HP printers */
+    white-space: -o-pre-wrap; /* Opera 7 */
+    white-space: -pre-wrap; /* Opera 4-6 */
+    white-space: pre-wrap; /* CSS 2.1 */
+    white-space: pre-line; /* CSS 3 (and 2.1 as well, actually) */
+    word-wrap: break-word; /* IE */
+    word-break: break-all;
 }
