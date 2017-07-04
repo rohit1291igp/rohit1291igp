@@ -1,6 +1,6 @@
 <div class="row page" id="order_{{order.orderId}}" class="hide" *ngIf="printType === 'order'">
 
-    <section class="messgae-box-cont" *ngIf="{{order.commments}}">
+    <section class="messgae-box-cont" *ngIf="order.commments">
         <div class="messgae-box">
             <!--<p class="message-caption bold upper-txt">Message</p>-->
             <div class="message-txt"><pre>{{order.commments}}</pre></div>
