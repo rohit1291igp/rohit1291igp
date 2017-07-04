@@ -1,10 +1,11 @@
 <div class="headerVendor navbar-brand" *ngIf="vendorName">- {{vendorName}}</div>
 <app-header-tabs (onTabChanged)="loadDashboardCount($event)"></app-header-tabs>
 
-<div class="col-md-3 searchbox" style="width: 25em; right: -4em; top: 4em; position: absolute;">
+<div class="col-md-3 searchbox relative" style="width: 25em; right: -4em; top: 4em; position: absolute;">
     <form name="form" (ngSubmit)="f.form.valid && search($event)" #f="ngForm" novalidate>
-         <input name="searchkey" type="text" class="input-right form-control" placeholder="Search by Order Number" [(ngModel)]="searchModel.searchkey" #searchkey="ngModel" style="width:60%; display:inline-block;" required>
+         <input name="searchkey" type="text" class="input-right form-control" placeholder="Order Number" [(ngModel)]="searchModel.searchkey" #searchkey="ngModel" style="width:60%; display:inline-block;" required>
         <input  type="submit" class="btn btn-primary" style="display:inline-block;" value="Search" />
+        <div class="glyphicon glyphicon-remove abs searchCross" aria-hidden="true" *ngIf="searchModel.searchkey" (click)="clearSearch($event)" ></div>
         <div *ngIf="f.submitted && !searchkey.valid" class="help-block"></div>
     </form>
 </div>

@@ -5,7 +5,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class Time12Pipe implements PipeTransform {
 
-  transform(value: any, args?: any): any {
+  transform(value) {
       if (!value) return value;
 
       var time24 = value;

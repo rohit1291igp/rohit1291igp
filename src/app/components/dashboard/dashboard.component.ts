@@ -129,6 +129,11 @@ export class DashboardComponent implements OnInit {
       }
   }
 
+  clearSearch(e){
+      this.searchModel.searchkey = "";
+  }
+
+
 
 
 

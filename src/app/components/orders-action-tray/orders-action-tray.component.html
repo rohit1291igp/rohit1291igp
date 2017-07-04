@@ -224,7 +224,10 @@
                     </div>
                   </div>
                   <div class="row" *ngFor="let orderProduct of order.orderProducts; let z='index'">
-                    <p class="">Product Name: <a target="_new" href="https://www.igp.com/{{orderProduct.productNameForUrl}}"><span class="uppercase text-igp">{{orderProduct.productName}}</span></a></p>
+                    <p class="">
+                        Product Name: <a target="_new" href="https://www.igp.com/{{orderProduct.productNameForUrl}}"><span class="uppercase text-igp">{{orderProduct.productName}}</span></a>
+                        <span class="" style="" *ngIf="orderProduct.personalized"> | <a target="_new" href="http://admin.indiangiftsportal.com/persInfo.php?pid={{orderProduct.productId}}&oid={{order.orderId}}">Show Personalized Info</a></span>
+                    </p>
                     <!--<p>Product Components -</p>-->
                     <div class="col-md-12 product-holder" [ngClass]="{'noBtBorder' : (z+1 === order.orderProducts.length)}">
                       <div class="row">
