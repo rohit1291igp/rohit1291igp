@@ -2,7 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-orders-button',
-  template: `<div class="btn btn-primary orders-button" [ngClass]="{'bg-igp text-white': isAlert, 'bg-grey text-black': !isAlert, 'text-bold': orderStatus === 'Processed'}" (click)="openOrdersTray($event)" [attr.data-status]="orderStatus" [attr.data-OrderDay]="OrderDay" [attr.data-deliveryTime]="deliveryTime" [attr.data-orderId]="orderId">
+  template: `<div class="btn btn-primary orders-button" [ngClass]="{'bg-igp text-white': isAlert, 'bg-green text-white': (!isAlert && sla), 'bg-grey text-black': (!isAlert && !sla), 'text-bold': orderStatus === 'Processed'}" (click)="openOrdersTray($event)" [attr.data-status]="orderStatus" [attr.data-OrderDay]="OrderDay" [attr.data-deliveryTime]="deliveryTime" [attr.data-orderId]="orderId">
                 <ng-content></ng-content>
                 <div *ngIf="displayData">{{displayData.displayStr}}</div>
             </div>`,
@@ -25,6 +25,7 @@ export class OrdersButtonComponent implements OnInit {
   @Output() onViewOrders: EventEmitter<any> = new EventEmitter();
   
   isAlert: Boolean;
+  sla: Boolean;
   ordersCount: number;
   displayStr: string;
 
@@ -33,6 +34,7 @@ export class OrdersButtonComponent implements OnInit {
   ngOnInit() {
     console.log('displayData>>>', this.displayData, ', ', this.orderStatus, ', ', this.deliveryTime);
     this.isAlert = this.displayData['isAlert'];
+    this.sla = this.displayData['sla'];
   }
 
   openOrdersTray(e) {

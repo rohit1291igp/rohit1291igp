@@ -13,6 +13,11 @@ export class DashboardService {
         "d" : "Shipped"
     };
 
+    newRow = {"isAlert" : false, "sla" : false};
+    confirmedRow = {"isAlert" : false, "sla" : false};
+    ofdRow = {"isAlert" : false, "sla" : false};
+    bydatedRow = {"isAlert" : false, "sla" : false};
+
     constructor(
         private http: Http,
         private BackendService: BackendService,
@@ -21,10 +26,10 @@ export class DashboardService {
 
     getAlertRow() {
         return {
-            "new": true,
-            "confirmed": false,
-            "future": true,
-            "bydate": false
+            "new": this.newRow,
+            "confirmed": this.confirmedRow,
+            "future": this.ofdRow,
+            "bydate": this.bydatedRow
         }
     }
 
@@ -297,6 +302,45 @@ export class DashboardService {
 
         console.log('getDashboardDataResponse==============>', getDashboardDataResponse);
         getDashboardDataResponse["festivalDate"] = apiResponse.result.festivalDate; //fesDate;
+
+        /* row color code logic - start */
+            var newList = getDashboardDataResponse.new;
+            var confirmedList = getDashboardDataResponse.confirmed;
+            var ofdList = getDashboardDataResponse.ofd;
+
+            for(var i in newList){
+
+                if(newList[i].isAlert && newList[i].isAlert== "true"){
+                    this.newRow.isAlert = true;
+                }
+
+                if(newList[i].sla && newList[i].sla== "true"){
+                    this.newRow.sla = true;
+                }
+
+                if(confirmedList[i].isAlert && confirmedList[i].isAlert== "true"){
+                    this.confirmedRow.isAlert = true;
+                }
+
+                if(confirmedList[i].sla && confirmedList[i].sla== "true"){
+                    this.confirmedRow.sla = true;
+                }
+            }
+
+            for(var i in ofdList ){
+                if(ofdList[i].isAlert && ofdList[i].isAlert== "true"){
+                    this.ofdRow.isAlert = true;
+                }
+
+                if(ofdList[i].sla && ofdList[i].sla== "true"){
+                    this.ofdRow.sla = true;
+                }
+            }
+
+
+        /* row color code logic - end */
+        console.log('alert row data ===================>', this.getAlertRow());
+
         return getDashboardDataResponse;
     }
 
@@ -322,9 +366,9 @@ export class DashboardService {
             countObj[d3] = {"Processed"  : Math.floor(Math.random()*100), "Confirmed" : Math.floor(Math.random()*100)};
             countObj[d4] = {"Processed"  : Math.floor(Math.random()*100), "Confirmed" : Math.floor(Math.random()*100)};*/
 
-            countObj["past"] = {"Processed"  : {"count" : Math.floor(Math.random()*100), "sla" : true, "alert" : true}, "Confirmed" : {"count" : Math.floor(Math.random()*100), "sla" : false, "alert" : false}};
-            countObj["today"] = {"Processed"  : {"count" : Math.floor(Math.random()*100), "sla" : true, "alert" : true}, "Confirmed" : {"count" : Math.floor(Math.random()*100), "sla" : false, "alert" : false}};
-            countObj["tomorrow"] = {"Processed"  : {"count" : Math.floor(Math.random()*100), "sla" : false, "alert" : false}, "Confirmed" : {"count" : Math.floor(Math.random()*100), "sla" : false, "alert" : false}};
+            countObj["past"] = {"Processed"  : {"count" : Math.floor(Math.random()*100), "sla" : "true", "alert" : "true"}, "Confirmed" : {"count" : Math.floor(Math.random()*100), "sla" : "true", "alert" : false}};
+            countObj["today"] = {"Processed"  : {"count" : Math.floor(Math.random()*100), "sla" : "true", "alert" : false}, "Confirmed" : {"count" : Math.floor(Math.random()*100), "sla" : false, "alert" : false}};
+            countObj["tomorrow"] = {"Processed"  : {"count" : Math.floor(Math.random()*100), "sla" : "true", "alert" : false}, "Confirmed" : {"count" : Math.floor(Math.random()*100), "sla" : false, "alert" : false}};
             countObj["future"] = {"Processed"  : {"count" : Math.floor(Math.random()*100), "sla" : false, "alert" : false}, "Confirmed" : {"count" : Math.floor(Math.random()*100), "sla" : false, "alert" : false}};
             countObj["festivalDate"] = {"Processed"  : {"count" : Math.floor(Math.random()*100), "sla" : false, "alert" : false}, "Confirmed" : {"count" : Math.floor(Math.random()*100), "sla" : false, "alert" : false}};
 
@@ -345,7 +389,7 @@ export class DashboardService {
             let outofDeliveryIds1 = [
                     {
                         "orderId": oId1,
-                        "sla": false,
+                        "sla": "true",
                         "alert": false
                     },
                     {
@@ -355,7 +399,7 @@ export class DashboardService {
                     },
                     {
                         "orderId": oId3,
-                        "sla": false,
+                        "sla": "true",
                         "alert": false
                     },
                     {

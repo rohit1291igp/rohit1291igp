@@ -80,6 +80,10 @@
     border-left: 15px solid #C3404E;
 }
 
+.alertg-action {
+    border-left: 15px solid #00ee39;
+}
+
 .no-action {
     border-left: 15px solid white;
 }

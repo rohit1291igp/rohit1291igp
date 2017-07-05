@@ -43,7 +43,7 @@
 
           <!--Table content-->
           <div class="row">
-            <div class="cell col-md-2 table-display" [ngClass]="{'alert-action': isRowAlert['new'], 'no-action': !isRowAlert['new']}">
+            <div class="cell col-md-2 table-display" [ngClass]="{'alert-action': isRowAlert['new'].isAlert, 'alertg-action': (!isRowAlert['new'].isAlert && isRowAlert['new'].sla), 'no-action': (!isRowAlert['new'].isAlert && !isRowAlert['new'].sla)}">
               <div class="table-cell-display v-align-middle">{{masterData.displayStatus[0]}}</div>
           </div>
 
@@ -88,7 +88,7 @@
           </div>
 
           <div class="row">
-            <div class="cell col-md-2 table-display" [ngClass]="{'alert-action': isRowAlert['confirmed'], 'no-action': !isRowAlert['confirmed']}">
+          <div class="cell col-md-2 table-display" [ngClass]="{'alert-action': isRowAlert['confirmed'].isAlert, 'alertg-action': (!isRowAlert['confirmed'].isAlert && isRowAlert['confirmed'].sla), 'no-action': (!isRowAlert['confirmed'].isAlert && !isRowAlert['confirmed'].sla)}">
               <div class="table-cell-display v-align-middle">{{masterData.displayStatus[1]}}</div>
           </div>
 
@@ -133,7 +133,7 @@
           </div>
 
           <div class="row">
-            <div class="cell col-md-2 table-display" [ngClass]="{'alert-action': isRowAlert['future'], 'no-action': !isRowAlert['future']}">
+            <div class="cell col-md-2 table-display" [ngClass]="{'alert-action': isRowAlert['future'].isAlert, 'alertg-action': (!isRowAlert['future'].isAlert && isRowAlert['future'].sla), 'no-action': (!isRowAlert['future'].isAlert && !isRowAlert['future'].sla)}">
               <div class="table-cell-display v-align-middle">{{masterData.displayStatus[2]}}</div>
             </div>
 
@@ -156,7 +156,7 @@
             </div>
           </div>
           <div class="row">
-            <div class="cell col-md-2 table-display" [ngClass]="{'alert-action': isRowAlert['bydate'], 'no-action': !isRowAlert['bydate']}">
+          <div class="cell col-md-2 table-display" [ngClass]="{'alert-action': isRowAlert['bydate'].isAlert, 'alertg-action': (!isRowAlert['bydate'].isAlert && isRowAlert['bydate'].sla), 'no-action': (!isRowAlert['bydate'].isAlert && !isRowAlert['bydate'].sla)}">
               <div class="table-cell-display v-align-middle">{{masterData.displayStatus[3]}}</div>
           </div>
 
