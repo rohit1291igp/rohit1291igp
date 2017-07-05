@@ -183,7 +183,7 @@
                           </span>
                       </p>
                       <div class="text-bold">Deliver to: {{order.deliveryName}}</div>
-                      <div class="address">Address - {{order.deliveryStreetAddress}}, <span *ngIf="order.deliveryStreetAddress2">{{order.deliveryStreetAddress2}},</span>s{{order.deliveryCity}}-{{order.deliveryPostcode}}, {{order.deliveryState}}</div>
+                      <div class="address">Address - {{order.deliveryStreetAddress}}, <span *ngIf="order.deliveryStreetAddress2">{{order.deliveryStreetAddress2}},</span>{{order.deliveryCity}}-{{order.deliveryPostcode}}, {{order.deliveryState}}</div>
                       <div class="contact">CONTACT NUMBER - {{order.deliveryMobile}}</div>
                     </div>
                     <div class="col-md-4 order-actions">
@@ -226,7 +226,7 @@
                   <div class="row" *ngFor="let orderProduct of order.orderProducts; let z='index'">
                     <p class="">
                         Product Name: <a target="_new" href="https://www.igp.com/{{orderProduct.productNameForUrl}}"><span class="uppercase text-igp">{{orderProduct.productName}}</span></a>
-                        <span class="" style="" *ngIf="orderProduct.personalized"> | <a target="_new" href="http://admin.indiangiftsportal.com/persInfo.php?pid={{orderProduct.productId}}&oid={{order.orderId}}">Show Personalized Info</a></span>
+                        <span class="" style="" *ngIf="orderProduct.personalized"> | <a target="_new" href="http://admin.indiangiftsportal.com/myshop/persInfo.php?pid={{orderProduct.productId}}&oid={{order.orderId}}">Download Photo</a></span>
                     </p>
                     <!--<p>Product Components -</p>-->
                     <div class="col-md-12 product-holder" [ngClass]="{'noBtBorder' : (z+1 === order.orderProducts.length)}">
