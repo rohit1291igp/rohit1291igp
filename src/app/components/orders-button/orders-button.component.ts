@@ -33,8 +33,8 @@ export class OrdersButtonComponent implements OnInit {
 
   ngOnInit() {
     console.log('displayData>>>', this.displayData, ', ', this.orderStatus, ', ', this.deliveryTime);
-    this.isAlert = this.displayData['isAlert'];
-    this.sla = this.displayData['sla'];
+    this.isAlert = this.displayData['isAlert'] == "true" ? true : false;
+    this.sla = this.displayData['sla'] == "true" ? true : false;
   }
 
   openOrdersTray(e) {
