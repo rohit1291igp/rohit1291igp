@@ -16,8 +16,12 @@ export class OrdersActionTrayComponent implements OnInit {
   public trayOpen: Boolean = false;
   @Output() onStatusUpdate: EventEmitter<any> = new EventEmitter();
   loadercount=[1,1];
+
+  statusMessageFlag=false;
+  statusReasonModel:any={};
+
   activeDashBoardDataType;
-  sidePanelDataLoading = true;
+  sidePanelDataLoading=true;
   orderByStatus;
   orderUpdateByTime;
   orderId;
@@ -71,6 +75,25 @@ export class OrdersActionTrayComponent implements OnInit {
                 this.trayOpen = false;
             }
         }
+  }
+
+  statusReasonSubmit(_e){
+      _e.preventDefault();
+      _e.stopPropagation();
+      var _this= this;
+      this.statusMessageFlag=false;
+      console.log('statusReason--->', this.statusReasonModel);
+
+      /*
+      var statusMessgae = this.statusReasonModel.message;
+      var orderStatusEvent = this.statusReasonModel.e;
+      var orderStatus = this.statusReasonModel.status;
+      var orderId = this.statusReasonModel.orderId;
+      var orderProducts = this.statusReasonModel.orderProducts;
+      //this.statusReasonModel = {}
+
+      this.updateOrderStatus(orderStatusEvent, orderStatus, orderId, orderProducts);
+      */
   }
 
   scrollTo(element, to, duration) {
@@ -266,8 +289,21 @@ export class OrdersActionTrayComponent implements OnInit {
 
   updateOrderStatus(e, status, orderId, orderProducts){
       e.stopPropagation();
+
+      /*
+      if( (status === "Delivered" || status === "Rejected") && (!this.statusReasonModel.status)){
+          this.statusReasonModel.e = e;
+          this.statusReasonModel.status = status;
+          this.statusReasonModel.orderId = orderId;
+          this.statusReasonModel.orderProducts = orderProducts;
+
+          this.statusMessageFlag=true;
+          return;
+      }
+      */
+
       var _this = this;
-      let currentTab = e.currentTarget.dataset.tab;
+      let currentTab = this.activeDashBoardDataType; //e.currentTarget.dataset.tab;
       var fireUpdateCall = function(){
           var orderProductIds = "";
           if(orderProducts && orderProducts.length){
@@ -286,7 +322,7 @@ export class OrdersActionTrayComponent implements OnInit {
 
           if(localStorage.getItem('dRandom')){
               setTimeout(function(){
-                  _this.onStatusUpdate.emit(e);
+                  _this.onStatusUpdate.emit(currentTab);
                   //_this.trayOpen = false;
                   let dataLength = _this.sidePanelDataOnStatusUpdate(orderId);
                   if(!dataLength){
