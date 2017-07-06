@@ -267,7 +267,7 @@ export class OrdersActionTrayComponent implements OnInit {
   updateOrderStatus(e, status, orderId, orderProducts){
       e.stopPropagation();
       var _this = this;
-      let currentTab = e.currentTarget.dataset.tab;
+      let currentTab = this.activeDashBoardDataType; //e.currentTarget.dataset.tab;
       var fireUpdateCall = function(){
           var orderProductIds = "";
           if(orderProducts && orderProducts.length){
