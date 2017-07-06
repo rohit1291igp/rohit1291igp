@@ -16,6 +16,7 @@ export class OrdersActionTrayComponent implements OnInit {
   public trayOpen: Boolean = false;
   @Output() onStatusUpdate: EventEmitter<any> = new EventEmitter();
   loadercount=[1,1];
+  activeDashBoardDataType;
   sidePanelDataLoading = true;
   orderByStatus;
   orderUpdateByTime;
@@ -104,6 +105,8 @@ export class OrdersActionTrayComponent implements OnInit {
   toggleTray(e, orderByStatus, orderId, dashBoardDataType) {
     e.preventDefault();
     e.stopPropagation();
+    var _this = this;
+    this.activeDashBoardDataType = dashBoardDataType;
     this.apierror = null;
     this.sidePanelData = null;
     this.orderByStatus = orderByStatus;
@@ -111,7 +114,15 @@ export class OrdersActionTrayComponent implements OnInit {
     this.orderId = orderId;
 
     if(this.orderByStatus === "OutForDelivery" && e.currentTarget.dataset.deliverytime === "unknown"){
-        this.updateOrderStatus(e, "Delivered", orderId);
+        this.updateOrderStatus(e, "Delivered", orderId, null);
+        /*this.loadTrayData(e, orderByStatus, orderId, dashBoardDataType, function(err, result){
+            if(err){
+                console.log('Error----->', err);
+            }
+            var orderProductList = result[0].orderProducts;
+            console.log('Mark as delivered ---- orderProduct', orderProductList);
+            _this.updateOrderStatus(e, "Delivered", orderId, orderProductList);
+        });*/
     }else{
         if(e.currentTarget.dataset.trayopen){
             this.onStatusUpdate.emit("closed");
@@ -124,11 +135,11 @@ export class OrdersActionTrayComponent implements OnInit {
 
         //this.trayOpen = !this.trayOpen;
         console.log('trayOpen: and loading data', this.trayOpen);
-        if(orderByStatus || orderId) this.loadTrayData(e, orderByStatus, orderId, dashBoardDataType);
+        if(orderByStatus || orderId) this.loadTrayData(e, orderByStatus, orderId, dashBoardDataType, null);
     }
   }
 
-  loadTrayData(e, orderByStatus, orderId, dashBoardDataType){
+  loadTrayData(e, orderByStatus, orderId, dashBoardDataType, cb){
       e.stopPropagation();
       let fkAssociateId = localStorage.getItem('fkAssociateId');
       var _this = this;
@@ -140,13 +151,23 @@ export class OrdersActionTrayComponent implements OnInit {
                   var orderData = Object.assign({}, _this.getDummyOrderData().result[0]);
                   orderData.orderId = orderId;
                   orderData.orderProducts[0].ordersProductStatus = orderByStatus || "Shipped";
-                  _this.sidePanelData = [orderData];
+                  if(cb){
+                      return cb(null, [orderData]);
+                  }else{
+                      _this.sidePanelData = orderDataList;
+                  }
               }else{
                   var orderDataList = _this.getDummyOrderData().result.slice();
                   for(let i in orderDataList){
                       orderDataList[i].orderProducts[0].ordersProductStatus = orderByStatus;
                   }
-                  _this.sidePanelData = orderDataList;
+
+                  if(cb){
+                      return cb(null, orderDataList);
+                  }else{
+                      _this.sidePanelData = orderDataList;
+                  }
+
               }
           }, 1000);
           return;
@@ -223,66 +244,105 @@ export class OrdersActionTrayComponent implements OnInit {
       this.BackendService.makeAjax(reqObj, function(err, response, headers){
           if(err || JSON.parse(response).error) {
               console.log('Error=============>', err, JSON.parse(response).errorCode);
-              _this.apierror = err || JSON.parse(response).errorCode;
+              if(cb){
+                  return cb(err || JSON.parse(response).errorCode);
+              }else{
+                  _this.apierror = err || JSON.parse(response).errorCode;
+              }
               return;
           }
           response = JSON.parse(response);
           console.log('sidePanel Response --->', response.result);
-          _this.sidePanelData = response.result ? Array.isArray(response.result) ? response.result : [response.result] : [];
-          //_this.getNxtOrderStatus(_this.sidePanelData[0].ordersStatus);
+          if(cb){
+              return cb(null, response.result ? Array.isArray(response.result) ? response.result : [response.result] : []);
+          }else{
+              _this.sidePanelData = response.result ? Array.isArray(response.result) ? response.result : [response.result] : [];
+              //_this.getNxtOrderStatus(_this.sidePanelData[0].ordersStatus);
+              _this.scrollTo(document.getElementById("mainOrderSection"), 0, 0); // scroll to top
+          }
 
-          _this.scrollTo(document.getElementById("mainOrderSection"), 0, 0); // scroll to top
       });
   }
 
-  updateOrderStatus(e, status, orderId){
+  updateOrderStatus(e, status, orderId, orderProducts){
       e.stopPropagation();
-      if(e.currentTarget.textContent.indexOf('Mark as Delivered') !== -1){
-          e.currentTarget.innerHTML= e.currentTarget.textContent.trim().split('Mark')[0].trim()+"<br/> Updating...";
-      }else{
-          e.currentTarget.textContent = "Updating...";
-      }
-      let currentTab = e.currentTarget.dataset.tab;
-      let fkAssociateId = localStorage.getItem('fkAssociateId');
       var _this = this;
-      var reqURL = "?responseType=json&scopeId=1&status="+status+"&fkAssociateId="+fkAssociateId+"&orderId="+orderId+"&method=igp.order.doUpdateOrderStatus";
+      let currentTab = e.currentTarget.dataset.tab;
+      var fireUpdateCall = function(){
+          var orderProductIds = "";
+          if(orderProducts && orderProducts.length){
+              for(var i in orderProducts){
+                  if(!orderProductIds){
+                      orderProductIds = orderProductIds + (orderProducts[i].productId).toString();
+                  }else{
+                      orderProductIds = orderProductIds +", "+(orderProducts[i].productId).toString();
+                  }
+              }
+          }
 
-      if(localStorage.getItem('dRandom')){
-          setTimeout(function(){
-              _this.onStatusUpdate.emit(e);
+          let fkAssociateId = localStorage.getItem('fkAssociateId');
+          //var _this = this;
+          var reqURL = "?responseType=json&scopeId=1&orderProductIds="+orderProductIds+"&status="+status+"&fkAssociateId="+fkAssociateId+"&orderId="+orderId+"&method=igp.order.doUpdateOrderStatus";
+
+          if(localStorage.getItem('dRandom')){
+              setTimeout(function(){
+                  _this.onStatusUpdate.emit(e);
+                  //_this.trayOpen = false;
+                  let dataLength = _this.sidePanelDataOnStatusUpdate(orderId);
+                  if(!dataLength){
+                      _this.onStatusUpdate.emit("closed");
+                      _this.trayOpen = false;
+                  }
+              }, 1000);
+              return;
+          }
+
+          let reqObj =  {
+              url : reqURL,
+              method : "post",
+              payload : {}
+          };
+
+          _this.BackendService.makeAjax(reqObj, function(err, response, headers){
+              if(err || JSON.parse(response).error) {
+                  console.log('Error=============>', err, JSON.parse(response).errorCode);
+                  _this.apierror = err || JSON.parse(response).errorCode;
+                  return;
+              }
+              response = JSON.parse(response);
+              console.log('sidePanel Response --->', response.result);
+              //_this.router.navigate(['/dashboard-dfghj']);
+              _this.onStatusUpdate.emit(currentTab);
               //_this.trayOpen = false;
               let dataLength = _this.sidePanelDataOnStatusUpdate(orderId);
               if(!dataLength){
                   _this.onStatusUpdate.emit("closed");
                   _this.trayOpen = false;
               }
-          }, 1000);
-          return;
+          });
       }
 
-      let reqObj =  {
-          url : reqURL,
-          method : "post",
-          payload : {}
-      };
+      if(e.currentTarget && e.currentTarget.textContent){
+          if(e.currentTarget.textContent.indexOf('Mark as Delivered') !== -1){
+              e.currentTarget.innerHTML= e.currentTarget.textContent.trim().split('Mark')[0].trim()+"<br/> Updating...";
+          }else{
+              e.currentTarget.textContent = "Updating...";
+          }
+      }
 
-      this.BackendService.makeAjax(reqObj, function(err, response, headers){
-          if(err || JSON.parse(response).error) {
-              console.log('Error=============>', err, JSON.parse(response).errorCode);
-              _this.apierror = err || JSON.parse(response).errorCode;
-              return;
-          }
-          response = JSON.parse(response);
-          console.log('sidePanel Response --->', response.result);
-          //_this.router.navigate(['/dashboard-dfghj']);
-          _this.onStatusUpdate.emit(currentTab);
-          //_this.trayOpen = false;
-          let dataLength = _this.sidePanelDataOnStatusUpdate(orderId);
-          if(!dataLength){
-              _this.onStatusUpdate.emit("closed");
-              _this.trayOpen = false;
-          }
-      });
+      if(!orderProducts){
+          this.loadTrayData(e, status, orderId, _this.activeDashBoardDataType, function(err, result){
+              if(err){
+                  console.log('Error----->', err);
+              }
+              orderProducts = result[0].orderProducts;
+              fireUpdateCall();
+          });
+      }else{
+          fireUpdateCall();
+      }
+
+
   }
 
   getNxtOrderStatus(orderByStatus){
