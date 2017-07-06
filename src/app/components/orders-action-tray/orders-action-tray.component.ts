@@ -84,16 +84,15 @@ export class OrdersActionTrayComponent implements OnInit {
       this.statusMessageFlag=false;
       console.log('statusReason--->', this.statusReasonModel);
 
-      /*
       var statusMessgae = this.statusReasonModel.message;
-      var orderStatusEvent = this.statusReasonModel.e;
+      var orderStatusEvent = _e;
+      orderStatusEvent.customCurrentTarget =  _this.statusReasonModel.e[0];
       var orderStatus = this.statusReasonModel.status;
       var orderId = this.statusReasonModel.orderId;
       var orderProducts = this.statusReasonModel.orderProducts;
       //this.statusReasonModel = {}
 
       this.updateOrderStatus(orderStatusEvent, orderStatus, orderId, orderProducts);
-      */
   }
 
   scrollTo(element, to, duration) {
@@ -290,17 +289,18 @@ export class OrdersActionTrayComponent implements OnInit {
   updateOrderStatus(e, status, orderId, orderProducts){
       e.stopPropagation();
 
-      /*
-      if( (status === "Delivered" || status === "Rejected") && (!this.statusReasonModel.status)){
-          this.statusReasonModel.e = e;
+      /*if( (status === "Delivered" || status === "Rejected") && (!e.customCurrentTarget)){
+          this.statusReasonModel.e = [];
+          this.statusReasonModel.e.push(e.currentTarget);
           this.statusReasonModel.status = status;
           this.statusReasonModel.orderId = orderId;
           this.statusReasonModel.orderProducts = orderProducts;
 
           this.statusMessageFlag=true;
           return;
-      }
-      */
+      }else{
+          this.statusReasonModel = {};
+      }*/
 
       var _this = this;
       let currentTab = this.activeDashBoardDataType; //e.currentTarget.dataset.tab;
@@ -358,11 +358,18 @@ export class OrdersActionTrayComponent implements OnInit {
           });
       }
 
-      if(e.currentTarget && e.currentTarget.textContent){
+      if(!e.customCurrentTarget){
           if(e.currentTarget.textContent.indexOf('Mark as Delivered') !== -1){
               e.currentTarget.innerHTML= e.currentTarget.textContent.trim().split('Mark')[0].trim()+"<br/> Updating...";
           }else{
               e.currentTarget.textContent = "Updating...";
+          }
+      }else{
+          //customCurrentTarget
+          if(e.customCurrentTarget.textContent.indexOf('Mark as Delivered') !== -1){
+              e.customCurrentTarget.innerHTML= e.customCurrentTarget.textContent.trim().split('Mark')[0].trim()+"<br/> Updating...";
+          }else{
+              e.customCurrentTarget.textContent = "Updating...";
           }
       }
 
