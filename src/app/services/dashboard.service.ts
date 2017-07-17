@@ -308,6 +308,10 @@ export class DashboardService {
             var confirmedList = getDashboardDataResponse.confirmed;
             var ofdList = getDashboardDataResponse.ofd;
 
+            this.newRow.isAlert = false; this.newRow.sla = false;
+            this.confirmedRow.isAlert = false; this.confirmedRow.sla = false;
+            this.ofdRow.isAlert = false; this.ofdRow.sla = false;
+
             for(var i in newList){
 
                 if(newList[i].isAlert && newList[i].isAlert== "true"){
