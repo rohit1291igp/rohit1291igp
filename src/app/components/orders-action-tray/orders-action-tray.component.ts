@@ -275,7 +275,7 @@ export class OrdersActionTrayComponent implements OnInit {
                   if(!orderProductIds){
                       orderProductIds = orderProductIds + (orderProducts[i].orderProductId).toString();
                   }else{
-                      orderProductIds = orderProductIds +", "+(orderProducts[i].orderProductId).toString();
+                      orderProductIds = orderProductIds +","+(orderProducts[i].orderProductId).toString();
                   }
               }
           }
@@ -425,7 +425,7 @@ export class OrdersActionTrayComponent implements OnInit {
           <body onload="window.print();window.close()">${printContents}</body>
           </html>`
       );
-     popupWin.document.close();
+    // popupWin.document.close();
   }
 
   imagePreview(e, imgSrc){

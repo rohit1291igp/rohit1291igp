@@ -167,7 +167,7 @@ page[size="A5"][layout="portrait"] {
     }
 
     .order-body-header .col1{
-        padding-top: 0.5em;
+        padding-top: 1.5em;
         height: 1.5em;
         width: 35%;
 
@@ -175,7 +175,7 @@ page[size="A5"][layout="portrait"] {
 
     .order-body-header .col2{
         margin-left: 2em;
-        /*width: 35%;*/
+        width: 58%;
     }
 
     .order-body-deliveryDetails{
@@ -445,7 +445,7 @@ page[size="A5"][layout="portrait"] {
 }
 
 .order-body-header .col1{
-    padding-top: 0.5em;
+    padding-top: 1.5em;
     height: 1.5em;
     width: 35%;
 
@@ -453,7 +453,7 @@ page[size="A5"][layout="portrait"] {
 
 .order-body-header .col2{
     margin-left: 2em;
-    /*width: 35%;*/
+    width: 58%;
 }
 
 .order-body-deliveryDetails{

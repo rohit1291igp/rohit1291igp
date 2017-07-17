@@ -55,6 +55,8 @@ export class DashboardComponent implements OnInit {
 
   search(e){
     console.log('SearchKey==========>', this.searchModel.searchkey);
+    this.searchModel.searchkey = this.searchModel.searchkey.trim();
+    if(!this.searchModel.searchkey) return;
     this.child.toggleTray(e, "", this.searchModel.searchkey, null);
   }
 
