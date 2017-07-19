@@ -172,7 +172,7 @@
         <div *ngIf="sidePanelData">
             <div  id="order-{{order.orderId}}" class="col-md-12 order-row" *ngFor="let order of sidePanelData" style="margin-bottom: 0;">
 
-                <div class="blink triangle-topright" [ngClass]="{'redBorder' : order.orderProducts[0].alertFlag, 'greenBorder' : order.orderProducts[0].slaFlag}">
+                <div class=" triangle-topright" [ngClass]="{'redBorder' : order.orderProducts[0].alertFlag, 'greenBorder' : order.orderProducts[0].slaFlag}">
                     <div class="slaAlert-flag abs" *ngIf="order.orderProducts[0].alertFlag">High Alert</div>
                     <div class="slaAlert-flag abs" *ngIf="order.orderProducts[0].slaFlag">Action Required</div>
                 </div>
