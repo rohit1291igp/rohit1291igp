@@ -88,11 +88,11 @@
                     </div>
                 </div>
 
-                    <div class="row">
+                   <!-- <div class="row">
                         <div class="btn btn-primary actions-button text-bold">
                             Order Instruction
                         </div>
-                    </div>
+                    </div>-->
                   <!--<div class="row">
                       <div class="btn btn-primary actions-button text-bold text-white bg-black disableBtn">
                           Price Change Request
@@ -230,13 +230,15 @@
                     </div>
                     </div>
 
-                    <div class="row instruction-cont relative" *ngIf="orderInstruction">
+                    <div class="row instruction-cont relative" *ngIf="order.orderInstruction">
+
                         <div class="btn btn-primary actions-button text-bold">
                             Order Instruction
                         </div>
-                        <div class="order-instruction-detail abs">
+
+                        <div class="order-instruction-detail">
                             <div class="arrow-up abs"></div>
-                            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s
+                            <div>{{order.orderInstruction}}</div>
                         </div>
                     </div>
 
