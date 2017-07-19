@@ -58,7 +58,6 @@
     <div class="row">
         <div *ngIf="!sidePanelData">
             <div class="col-md-12 order-row" *ngFor="let loaderc of loadercount" style="margin-bottom: 0;">
-
                     <div class="container-fluid orders-tray" >
                         <div class="row delivery-details">
                             <div class="col-md-8 order-details no-padding">
@@ -88,6 +87,12 @@
                         Print Message
                     </div>
                 </div>
+
+                    <div class="row">
+                        <div class="btn btn-primary actions-button text-bold">
+                            Order Instruction
+                        </div>
+                    </div>
                   <!--<div class="row">
                       <div class="btn btn-primary actions-button text-bold text-white bg-black disableBtn">
                           Price Change Request
@@ -166,6 +171,12 @@
         </div>
         <div *ngIf="sidePanelData">
             <div  id="order-{{order.orderId}}" class="col-md-12 order-row" *ngFor="let order of sidePanelData" style="margin-bottom: 0;">
+
+                <div class="blink triangle-topright" [ngClass]="{'redBorder' : order.orderProducts[0].alertFlag, 'greenBorder' : order.orderProducts[0].slaFlag}">
+                    <div class="slaAlert-flag abs" *ngIf="order.orderProducts[0].alertFlag">High Alert</div>
+                    <div class="slaAlert-flag abs" *ngIf="order.orderProducts[0].slaFlag">Action Required</div>
+                </div>
+
                 <!-- Print Template start -->
                     <app-print-template [order]="order" [printType]="'order'"></app-print-template>
                     <app-print-template [order]="order" [printType]="'orderMessage'"></app-print-template>
@@ -218,6 +229,20 @@
                     Print Message
                     </div>
                     </div>
+
+                    <div class="row instruction-cont relative" *ngIf="orderInstruction">
+                        <div class="btn btn-primary actions-button text-bold">
+                            Order Instruction
+                        </div>
+                        <div class="order-instruction-detail abs">
+                            <div class="arrow-up abs"></div>
+                            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s
+                        </div>
+                    </div>
+
+                    <!--<div class="row">-->
+                        <!--<button type="button" class="btn btn-lg btn-danger" data-toggle="popover" title="Popover title" data-content="And here's some amazing content. It's very engaging. Right?">Click to toggle popover</button>-->
+                    <!--</div>-->
 
                     </div>
                   </div>
