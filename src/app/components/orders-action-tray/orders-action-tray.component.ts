@@ -92,9 +92,11 @@ export class OrdersActionTrayComponent implements OnInit {
       var orderStatus = this.statusReasonModel.status;
       var orderId = this.statusReasonModel.orderId;
       var orderProducts = this.statusReasonModel.orderProducts;
+      var orderDeliveryDate = this.statusReasonModel.deliveryDate;
+      var orderDeliveryTime = this.statusReasonModel.deliveryTime;
       //this.statusReasonModel = {}
 
-      this.updateOrderStatus(orderStatusEvent, orderStatus, orderId, orderProducts);
+      this.updateOrderStatus(orderStatusEvent, orderStatus, orderId, orderProducts, orderDeliveryDate, orderDeliveryTime);
   }
 
   scrollTo(element, to, duration) {
@@ -139,7 +141,7 @@ export class OrdersActionTrayComponent implements OnInit {
     this.orderId = orderId;
 
     if(this.orderByStatus === "OutForDelivery" && e.currentTarget.dataset.deliverytime === "unknown"){
-        this.updateOrderStatus(e, "Delivered", orderId, null);
+        this.updateOrderStatus(e, "Delivered", orderId, null, null, null);
         /*this.loadTrayData(e, orderByStatus, orderId, dashBoardDataType, function(err, result){
             if(err){
                 console.log('Error----->', err);
@@ -289,7 +291,7 @@ export class OrdersActionTrayComponent implements OnInit {
       });
   }
 
-  updateOrderStatus(e, status, orderId, orderProducts){
+  updateOrderStatus(e, status, orderId, orderProducts, deliveryDate, deliveryTime){
       e.stopPropagation();
       var rejectionMessage, recipientInfo;
       if( (status === "Delivered" || status === "Rejected") && (!e.customCurrentTarget)){
@@ -298,6 +300,8 @@ export class OrdersActionTrayComponent implements OnInit {
           this.statusReasonModel.status = status;
           this.statusReasonModel.orderId = orderId;
           this.statusReasonModel.orderProducts = orderProducts;
+          this.statusReasonModel.deliveryDate = deliveryDate;
+          this.statusReasonModel.deliveryTime = deliveryTime;
 
           this.statusMessageFlag=true;
           return;
@@ -329,7 +333,7 @@ export class OrdersActionTrayComponent implements OnInit {
               setTimeout(function(){
                   _this.onStatusUpdate.emit(currentTab);
                   //_this.trayOpen = false;
-                  let dataLength = _this.sidePanelDataOnStatusUpdate(orderId);
+                  let dataLength = _this.sidePanelDataOnStatusUpdate(orderId, deliveryDate, deliveryTime);
                   if(!dataLength){
                       _this.onStatusUpdate.emit("closed");
                       _this.trayOpen = false;
@@ -355,7 +359,7 @@ export class OrdersActionTrayComponent implements OnInit {
               //_this.router.navigate(['/dashboard-dfghj']);
               _this.onStatusUpdate.emit(currentTab);
               //_this.trayOpen = false;
-              let dataLength = _this.sidePanelDataOnStatusUpdate(orderId);
+              let dataLength = _this.sidePanelDataOnStatusUpdate(orderId, deliveryDate, deliveryTime);
               if(!dataLength){
                   _this.onStatusUpdate.emit("closed");
                   _this.trayOpen = false;
@@ -384,6 +388,8 @@ export class OrdersActionTrayComponent implements OnInit {
                   console.log('Error----->', err);
               }
               orderProducts = result[0].orderProducts;
+              deliveryDate = result[0].orderProducts[0].orderProductExtraInfo.deliveryDate;
+              deliveryDate = result[0].orderProducts[0].orderProductExtraInfo.deliveryTime;
               fireUpdateCall();
           });
       }else{
@@ -419,11 +425,13 @@ export class OrdersActionTrayComponent implements OnInit {
       return orderUpdateByStatus;
   }
 
-  sidePanelDataOnStatusUpdate(orderId){
+  sidePanelDataOnStatusUpdate(orderId, deliveryDate, deliveryTime){
       var _this = this;
 
       for(var i in _this.sidePanelData){
-          if(orderId === _this.sidePanelData[i].orderId){
+          if(orderId === _this.sidePanelData[i].orderId &&
+              deliveryDate === _this.sidePanelData[i].orderProducts[0].orderProductExtraInfo.deliveryDate &&
+              deliveryTime === _this.sidePanelData[i].orderProducts[0].orderProductExtraInfo.deliveryTime){
               if(Array.isArray(_this.sidePanelData)) console.log('splice objData----------------');
               _this.sidePanelData.splice(i, 1);
               return _this.sidePanelData.length;
