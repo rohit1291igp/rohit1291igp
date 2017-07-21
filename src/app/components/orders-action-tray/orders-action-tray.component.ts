@@ -309,9 +309,9 @@ export class OrdersActionTrayComponent implements OnInit {
           if(orderProducts && orderProducts.length){
               for(var i in orderProducts){
                   if(!orderProductIds){
-                      orderProductIds = orderProductIds + (orderProducts[i].productId).toString();
+                      orderProductIds = orderProductIds + (orderProducts[i].orderProductId).toString();
                   }else{
-                      orderProductIds = orderProductIds +", "+(orderProducts[i].productId).toString();
+                      orderProductIds = orderProductIds +","+(orderProducts[i].orderProductId).toString();
                   }
               }
           }
