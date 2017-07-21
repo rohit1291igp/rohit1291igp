@@ -65,11 +65,13 @@ export class OrdersActionTrayComponent implements OnInit {
 
  @HostListener('document:keydown', ['$event'])
     handleKeyboardEvent(event: KeyboardEvent){
-        console.log(event);
+        //console.log(event);
         let x = event.keyCode;
         if (x === 27) {
             if(this.imagePreviewFlag){
                 this.imagePreviewFlag = false;
+            }else if(this.statusMessageFlag){
+                this.statusMessageFlag=false;
             }else{
                 this.onStatusUpdate.emit("closed");
                 this.trayOpen = false;
@@ -128,6 +130,7 @@ export class OrdersActionTrayComponent implements OnInit {
     e.preventDefault();
     e.stopPropagation();
     var _this = this;
+    this.statusMessageFlag=false;
     this.activeDashBoardDataType = dashBoardDataType;
     this.apierror = null;
     this.sidePanelData = null;
@@ -176,7 +179,7 @@ export class OrdersActionTrayComponent implements OnInit {
                   if(cb){
                       return cb(null, [orderData]);
                   }else{
-                      _this.sidePanelData = orderDataList;
+                      _this.sidePanelData = [orderData];
                   }
               }else{
                   var orderDataList = _this.getDummyOrderData().result.slice();
@@ -288,8 +291,8 @@ export class OrdersActionTrayComponent implements OnInit {
 
   updateOrderStatus(e, status, orderId, orderProducts){
       e.stopPropagation();
-
-      /*if( (status === "Delivered" || status === "Rejected") && (!e.customCurrentTarget)){
+      var rejectionMessage, recipientInfo;
+      if( (status === "Delivered" || status === "Rejected") && (!e.customCurrentTarget)){
           this.statusReasonModel.e = [];
           this.statusReasonModel.e.push(e.currentTarget);
           this.statusReasonModel.status = status;
@@ -299,8 +302,10 @@ export class OrdersActionTrayComponent implements OnInit {
           this.statusMessageFlag=true;
           return;
       }else{
+          rejectionMessage = this.statusReasonModel.message ? this.statusReasonModel.message.trim() : "";
+          recipientInfo = this.statusReasonModel.recipientDetail ? this.statusReasonModel.recipientDetail.trim() : "";
           this.statusReasonModel = {};
-      }*/
+      }
 
       var _this = this;
       let currentTab = this.activeDashBoardDataType; //e.currentTarget.dataset.tab;
@@ -317,9 +322,9 @@ export class OrdersActionTrayComponent implements OnInit {
           }
 
           let fkAssociateId = localStorage.getItem('fkAssociateId');
-          //var _this = this;
-          var reqURL = "?responseType=json&scopeId=1&orderProductIds="+orderProductIds+"&status="+status+"&fkAssociateId="+fkAssociateId+"&orderId="+orderId+"&method=igp.order.doUpdateOrderStatus";
-
+          //var _this = this; this.statusReasonModel
+          var reqURL = "?responseType=json&scopeId=1&rejectionMessage="+rejectionMessage+"&recipientInfo="+recipientInfo+"&orderProductIds="+orderProductIds+"&status="+status+"&fkAssociateId="+fkAssociateId+"&orderId="+orderId+"&method=igp.order.doUpdateOrderStatus";
+          console.log('reqURL==============>', reqURL);
           if(localStorage.getItem('dRandom')){
               setTimeout(function(){
                   _this.onStatusUpdate.emit(currentTab);
@@ -482,6 +487,11 @@ export class OrdersActionTrayComponent implements OnInit {
       }
   }
 
+  closePopup(e, ignore){
+      e.stopPropagation();
+      if(ignore) return;
+      this.statusMessageFlag = false;
+  }
 
   getDummyOrderData(){
       return {

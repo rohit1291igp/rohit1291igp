@@ -296,3 +296,13 @@
     -o-transform: rotate(44deg);
 
 }
+
+.viewDetailPopupBtn{
+    right: 37%;
+    position: absolute;
+    top: 53%;
+}
+
+.markdlvBtn{
+    margin-left:-8em ! important;
+}

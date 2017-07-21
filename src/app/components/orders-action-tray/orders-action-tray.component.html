@@ -20,23 +20,37 @@
     <!--<div class="modal-backdrop fade in" (click)="imagePreview($event)"></div>-->
 </div>
 
-    <div class="image-preview" *ngIf="statusMessageFlag">
-    <div class="modal fade in" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: block; overflow:scroll; background: rgba(0, 0, 0, 0.77);">
+<div class="image-preview" *ngIf="statusMessageFlag">
+    <div class="modal fade in" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: block; overflow:scroll; background: rgba(0, 0, 0, 0.77);"  (click)="closePopup($event)">
         <div class="modal-dialog modal-lg">
-            <div class="modal-content">
+            <div class="modal-content" (click)="closePopup($event, 'ignore')">
                 <div class="modal-header" style="border-bottom:none;">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-                    <!--<h4 class="modal-title" id="myModalLabel">Modal Header</h4>-->
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="closePopup($event)"><span aria-hidden="true">×</span></button>
+                    <h4 class="modal-title" id="myModalLabel" *ngIf="statusReasonModel.status === 'Rejected'">Reason for reject</h4>
+                    <h4 class="modal-title" id="myModalLabel" *ngIf="statusReasonModel.status === 'Delivered'">Recipient's Details</h4>
                 </div>
-                <div class="modal-body center-align">
+
+                <div class="modal-body center-align" *ngIf="statusReasonModel.status === 'Rejected'">
                     <div class="form-group">
                         <form (ngSubmit)="f.form.valid && statusReasonSubmit($event)" #f="ngForm" nonvalidate>
                             <textarea name="message" class="form-control custom-control" rows="3" style="resize:none" [(ngModel)]="statusReasonModel.message" #message="ngModel" placeholder="Status Message" required></textarea>
-                            <button class="btn btn-primary m-top-1">Submit</button>
+                            <button class="btn btn-primary m-top-1">Reject</button>
                             <div *ngIf="f.submitted && !message.valid" class="help-block"></div>
                         </form>
                     </div>
                 </div>
+
+                <div class="modal-body center-align" *ngIf="statusReasonModel.status === 'Delivered'">
+                    <div class="form-group">
+                        <form (ngSubmit)="f.form.valid && statusReasonSubmit($event)" #f="ngForm" nonvalidate>
+                            <textarea name="message" class="form-control custom-control" rows="3" style="resize:none" [(ngModel)]="statusReasonModel.recipientDetail" #message="ngModel" placeholder="Recipient's details" required></textarea>
+                            <button class="btn btn-primary m-top-1" [ngClass]="{'markdlvBtn' : !trayOpen}">Mark as Delivered</button>
+                            <div *ngIf="f.submitted && !message.valid" class="help-block"></div>
+                        </form>
+                        <button class="btn btn-primary m-top-1 viewDetailPopupBtn" *ngIf="!trayOpen" (click)="toggleTray($event, '', statusReasonModel.orderId, null)">View Detail</button>
+                    </div>
+                </div>
+
                 <!--<div class="modal-footer">-->
                     <!--<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
                 <!--</div>-->
