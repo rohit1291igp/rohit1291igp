@@ -294,7 +294,7 @@ page[size="A5"][layout="portrait"] {
     }
 
     .feedback-check-box{
-        margin-left: 32px;
+        margin-left: 25px;
         display: inline-block;
     }
 
@@ -578,7 +578,7 @@ page[size="A5"][layout="portrait"] {
 }
 
 .feedback-check-box{
-    margin-left: 32px;
+    margin-left: 25px;
     display: inline-block;
 }
 
