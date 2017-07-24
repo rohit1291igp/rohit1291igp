@@ -299,7 +299,7 @@ page[size="A5"][layout="portrait"] {
     }
 
     .order-body-header, .order-body-deliveryDetails, .order-body-senderDetails, .order-body-productDetails, .order-body-feedback, .order-body-footer{
-        padding:10px 32px;
+        padding:5px 32px;
     }
 
 
@@ -342,7 +342,7 @@ page[size="A5"][layout="portrait"] {
     }
 
     .product-row-cont{
-        padding: 8px 32px;
+        padding: 2px 32px;
     }
 
 }
@@ -583,7 +583,7 @@ page[size="A5"][layout="portrait"] {
 }
 
 .order-body-header, .order-body-deliveryDetails, .order-body-senderDetails, .order-body-productDetails, .order-body-feedback, .order-body-footer{
-    padding:10px 32px;
+    padding:5px 32px;
 }
 
 
@@ -626,5 +626,5 @@ page[size="A5"][layout="portrait"] {
 }
 
 .product-row-cont{
-    padding: 8px 32px;
+    padding: 2px 32px;
 }
