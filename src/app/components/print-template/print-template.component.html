@@ -21,7 +21,7 @@
 
         <section class="order-body">
           <section class="order-body-header border-bottom">
-                <div class="col1 border-right display-inline"><span class="bold">Order Id :</span> <span class="">841532</span></div>
+                <div class="col1 border-right display-inline"><span class="bold">Order Id :</span> <span class="">{{order.orderId}}</span></div>
                 <div class="col2 display-inline" *ngIf="order.orderProducts[0].orderProductExtraInfo"><span class="bold">Date of Delivery :</span> <span class="">{{getDeliveryDetail(order.orderProducts[0].orderProductExtraInfo, order.datePurchased)}}</span></div>
           </section>
 
@@ -67,7 +67,7 @@
              </div>
 
             <div class="order-body-productDetails-body border-bottom prod-bg" *ngFor="let orderProduct of order.orderProducts; let z='index'">
-              <div class="" style="padding: 0.5em 2em;">
+              <div class="" style="padding: 2px 32px;">
                     <div class="t-col-1 display-inline ">{{z+1}}.</div>
                     <div class="t-col-2 display-inline">
                         <div style="margin-left: 0.7em;">

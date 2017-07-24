@@ -3,7 +3,7 @@ body {
     /*background: rgb(204,204,204);*/
     margin: 0;
     box-shadow: 0;
-    padding-bottom: 1em;
+    padding-bottom: 16px;
     -webkit-print-color-adjust: exact;
 }
 page {
@@ -42,7 +42,7 @@ page[size="A5"][layout="portrait"] {
         /*background: rgb(204,204,204);*/
         margin: 0;
         box-shadow: 0;
-        padding-bottom: 1em;
+        padding-bottom: 16px;
         -webkit-print-color-adjust: exact;
     }
 
@@ -102,13 +102,13 @@ page[size="A5"][layout="portrait"] {
     }
 
     .header{
-        padding:1em 3em;
+        padding:16px 48px;
         box-shadow: 0 0 0.5cm rgba(0,0,0,0.5);
         border-bottom:1px solid #a7a7a7;
     }
 
     .order-main-body{
-        padding:0 3em;
+        padding:0 48px;
     }
 
     .igp-logo{
@@ -116,18 +116,18 @@ page[size="A5"][layout="portrait"] {
     }
 
     .print-caption{
-        padding-bottom: 1em;
+        padding-bottom: 16px;
     }
 
     .print-caption .print-caption-text{
         float: right;
-        font-size: 2em;
+        font-size: 32px;
     }
 
     .messgae-box-cont{
         border-bottom: 2px dotted #757575;
         background: #fff;
-        padding: 5em 0;
+        padding: 80px 0;
         width: 100%;
         text-align: center;
         display: table;
@@ -136,7 +136,7 @@ page[size="A5"][layout="portrait"] {
     .messgae-box-cont2{
         /*border-bottom: 2px dotted #757575;*/
         background: #fff;
-        padding: 10em 0;
+        padding: 160px 0;
         width: 100%;
         text-align: center;
         display: table;
@@ -151,7 +151,7 @@ page[size="A5"][layout="portrait"] {
 
     .messgae-box .message-caption{
         letter-spacing: 5px;
-        font-size: 1.5em;
+        font-size: 24px;
     }
 
     .message-txt{
@@ -163,18 +163,18 @@ page[size="A5"][layout="portrait"] {
     }
 
     .order-body-header{
-        padding: 0.5em 0;
+        padding: 8px 0;
     }
 
     .order-body-header .col1{
-        padding-top: 1.5em;
-        height: 1.5em;
+        padding-top: 24px;
+        height: 24px;
         width: 35%;
 
     }
 
     .order-body-header .col2{
-        margin-left: 2em;
+        margin-left: 32px;
         width: 58%;
     }
 
@@ -190,7 +190,7 @@ page[size="A5"][layout="portrait"] {
         top: 50%;
         position: absolute;
         border-left: 1px solid #a7a7a7;
-        padding: 0 1em;
+        padding: 0 16px;
     }
 
     .order-body-deliveryDetails .clo2 div{
@@ -202,11 +202,11 @@ page[size="A5"][layout="portrait"] {
     }
 
     .order-body-productDetails{
-        padding: 1em 0 ! important;
+        padding: 16px 0 ! important;
     }
 
     .order-body-productDetails-head{
-        padding: 0.5em 2em;
+        padding: 5px 32px;
     }
 
     .order-body-productDetails-body{
@@ -215,34 +215,34 @@ page[size="A5"][layout="portrait"] {
     }
 
     .order-body-footer{
-        padding: 1em 2em;
+        padding: 16px 32px;
     }
 
     .order-body-footer .col1{
         width: 45%;
-        padding: 0.3em 0.5em 0.3em 0;
+        padding: 4.8px 8px 4.8px 0;
     }
 
     .order-body-footer .col2{
-        margin-left: 2em;
+        margin-left: 32px;
     }
 
     .sign-box{
         width: 50%;
-        margin-top: -1em;
-        margin-left: 8.5em;
+        margin-top: -16px;
+        margin-left: 136px;
     }
 
     .sign-box.right-sign-box{
-        margin-left: 10em;
+        margin-left: 160px;
     }
 
     .product-image{
-        width: 6em;
+        width: 96px;
     }
 
     .t-col-1,.t-col-2, .t-col-3, .t-col-4, .t-col-5{
-        padding: 0.5em 1em;
+        padding: 8px 16px;
         text-align: center;
         vertical-align: middle;
         display: table-cell;
@@ -270,16 +270,16 @@ page[size="A5"][layout="portrait"] {
     }
 
     .order-body-feedback{
-        padding: 1em 2em;
+        padding: 16px 32px;
     }
 
     .feedback-check-box{
-        margin-left: 2em;
+        margin-left: 32px;
         display: inline;
     }
 
     .order-body-header, .order-body-deliveryDetails, .order-body-senderDetails, .order-body-productDetails, .order-body-feedback, .order-body-footer{
-        padding:1em 2em;
+        padding:10px 32px;
     }
 
 
@@ -301,16 +301,16 @@ page[size="A5"][layout="portrait"] {
     }
 
     .recipient-addr {
-        line-height: 1.3em;
+        line-height: 20.8px;
     }
 
     .img-logo{
-        width: 11em;
+        width: 176px;
     }
 
     .messgae-box pre{
         margin: 0 auto;
-        width: 40em;
+        width: 640px;
         white-space: -moz-pre-wrap; /* Mozilla */
         white-space: -hp-pre-wrap; /* HP printers */
         white-space: -o-pre-wrap; /* Opera 7 */
@@ -380,13 +380,13 @@ page[size="A5"][layout="portrait"] {
 }
 
 .header{
-    padding:1em 3em;
+    padding:16px 48px;
     box-shadow: 0 0 0.5cm rgba(0,0,0,0.5);
     border-bottom:1px solid #a7a7a7;
 }
 
 .order-main-body{
-    padding:0 3em;
+    padding:0 48px;
 }
 
 .igp-logo{
@@ -394,18 +394,18 @@ page[size="A5"][layout="portrait"] {
 }
 
 .print-caption{
-    padding-bottom: 1em;
+    padding-bottom: 16px;
 }
 
 .print-caption .print-caption-text{
     float: right;
-    font-size: 2em;
+    font-size: 32px;
 }
 
 .messgae-box-cont{
     border-bottom: 2px dotted #757575;
     background: #fff;
-    padding: 5em 0;
+    padding: 80px 0;
     width: 100%;
     text-align: center;
     display: table;
@@ -414,7 +414,7 @@ page[size="A5"][layout="portrait"] {
 .messgae-box-cont2{
     /*border-bottom: 2px dotted #757575;*/
     background: #fff;
-    padding: 10em 0;
+    padding: 160px 0;
     width: 100%;
     text-align: center;
     display: table;
@@ -429,7 +429,7 @@ page[size="A5"][layout="portrait"] {
 
 .messgae-box .message-caption{
     letter-spacing: 5px;
-    font-size: 1.5em;
+    font-size: 24px;
 }
 
 .message-txt{
@@ -441,18 +441,18 @@ page[size="A5"][layout="portrait"] {
 }
 
 .order-body-header{
-    padding: 0.5em 0;
+    padding: 8px 0;
 }
 
 .order-body-header .col1{
-    padding-top: 1.5em;
-    height: 1.5em;
+    padding-top: 24px;
+    height: 24px;
     width: 35%;
 
 }
 
 .order-body-header .col2{
-    margin-left: 2em;
+    margin-left:32px;
     width: 58%;
 }
 
@@ -468,7 +468,7 @@ page[size="A5"][layout="portrait"] {
     top: 50%;
     position: absolute;
     border-left: 1px solid #a7a7a7;
-    padding: 0 1em;
+    padding: 0 16px;
 }
 
 .order-body-deliveryDetails .clo2 div{
@@ -480,11 +480,11 @@ page[size="A5"][layout="portrait"] {
 }
 
 .order-body-productDetails{
-    padding: 1em 0 ! important;
+    padding: 16px 0 ! important;
 }
 
 .order-body-productDetails-head{
-    padding: 0.5em 2em;
+    padding: 5px 32px;
 }
 
 .order-body-productDetails-body{
@@ -493,41 +493,41 @@ page[size="A5"][layout="portrait"] {
 }
 
 .order-body-footer{
-    padding: 1em 2em;
+    padding: 16px 32px;
 }
 
 .order-body-footer .col1{
     width: 45%;
-    padding: 0.3em 0.5em 0.3em 0;
+    padding: 4.8px 8px 4.8px 0;
 }
 
 .order-body-footer .col2{
-    margin-left: 2em;
+    margin-left: 32px;
 }
 
 .sign-box{
     width: 50%;
-    margin-top: -1em;
-    margin-left: 8.5em;
+    margin-top: -16px;
+    margin-left: 136px;
 }
 
 .sign-box.right-sign-box{
-    margin-left: 10em;
+    margin-left: 160px;
 }
 
 .product-image{
-    width: 6em;
+    width: 96px;
 }
 
 .t-col-1,.t-col-2, .t-col-3, .t-col-4, .t-col-5{
-    padding: 0.5em 1em;
+    padding: 8px 16px;
     text-align: center;
     vertical-align: middle;
     display: table-cell;
 }
 
 .t-col-1{
-   width:2%;
+    width:2%;
 
 }
 
@@ -548,16 +548,16 @@ page[size="A5"][layout="portrait"] {
 }
 
 .order-body-feedback{
-    padding: 1em 2em;
+    padding: 16px 32px;
 }
 
 .feedback-check-box{
-    margin-left: 2em;
+    margin-left: 32px;
     display: inline;
 }
 
 .order-body-header, .order-body-deliveryDetails, .order-body-senderDetails, .order-body-productDetails, .order-body-feedback, .order-body-footer{
-    padding:1em 2em;
+    padding:10px 32px;
 }
 
 
@@ -579,22 +579,22 @@ page[size="A5"][layout="portrait"] {
 }
 
 .recipient-addr {
-    line-height: 1.3em;
+    line-height: 20.8px;
 }
 
 .img-logo{
-    width: 11em;
+    width: 176px;
 }
 
 .messgae-box pre{
     margin: 0 auto;
-    width: 40em;
-    white-space: -moz-pre-wrap;
-    white-space: -hp-pre-wrap;
-    white-space: -o-pre-wrap;
-    white-space: -pre-wrap;
-    white-space: pre-wrap;
-    white-space: pre-line;
-    word-wrap: break-word;
+    width: 640px;
+    white-space: -moz-pre-wrap; /* Mozilla */
+    white-space: -hp-pre-wrap; /* HP printers */
+    white-space: -o-pre-wrap; /* Opera 7 */
+    white-space: -pre-wrap; /* Opera 4-6 */
+    white-space: pre-wrap; /* CSS 2.1 */
+    white-space: pre-line; /* CSS 3 (and 2.1 as well, actually) */
+    word-wrap: break-word; /* IE */
     word-break: break-all;
 }
