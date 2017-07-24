@@ -232,7 +232,7 @@ page[size="A5"][layout="portrait"] {
     }
 
     .order-body-footer{
-        padding: 16px 32px;
+        padding: 16px 0 16px 32px !important;
     }
 
     .order-body-footer .col1{
@@ -292,7 +292,7 @@ page[size="A5"][layout="portrait"] {
 
     .feedback-check-box{
         margin-left: 32px;
-        display: inline;
+        display: inline-block;
     }
 
     .order-body-header, .order-body-deliveryDetails, .order-body-senderDetails, .order-body-productDetails, .order-body-feedback, .order-body-footer{
@@ -514,7 +514,7 @@ page[size="A5"][layout="portrait"] {
 }
 
 .order-body-footer{
-    padding: 16px 32px;
+    padding: 16px 0 16px 32px !important;
 }
 
 .order-body-footer .col1{
@@ -574,7 +574,7 @@ page[size="A5"][layout="portrait"] {
 
 .feedback-check-box{
     margin-left: 32px;
-    display: inline;
+    display: inline-block;
 }
 
 .order-body-header, .order-body-deliveryDetails, .order-body-senderDetails, .order-body-productDetails, .order-body-feedback, .order-body-footer{
