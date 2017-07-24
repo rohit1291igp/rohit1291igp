@@ -40,10 +40,27 @@ page[size="A5"][layout="portrait"] {
 @media print {
     body, page {
         /*background: rgb(204,204,204);*/
+        width: 21cm;
         margin: 0;
         box-shadow: 0;
         padding-bottom: 16px;
         -webkit-print-color-adjust: exact;
+    }
+
+    @page {
+        background: white;
+        display: block;
+        margin: 0 auto;
+        margin-bottom: 0.5cm;
+        box-shadow: 0 0 0.5cm rgba(0,0,0,0.5);
+    }
+    @page[size="A4"] {
+        width: 21cm;
+        height: 29.7cm;
+    }
+    @page[size="A4"][layout="portrait"] {
+        width: 29.7cm;
+        height: 21cm;
     }
 
     .upper-txt{
@@ -319,6 +336,10 @@ page[size="A5"][layout="portrait"] {
         white-space: pre-line; /* CSS 3 (and 2.1 as well, actually) */
         word-wrap: break-word; /* IE */
         word-break: break-all;
+    }
+
+    .product-row-cont{
+        padding: 16px 32px;
     }
 
 }
@@ -597,4 +618,8 @@ page[size="A5"][layout="portrait"] {
     white-space: pre-line; /* CSS 3 (and 2.1 as well, actually) */
     word-wrap: break-word; /* IE */
     word-break: break-all;
+}
+
+.product-row-cont{
+    padding: 16px 32px;
 }
