@@ -144,9 +144,10 @@ page[size="A5"][layout="portrait"] {
     }
 
     .messgae-box-cont{
+        height:325px;
         border-bottom: 2px dotted #757575;
         background: #fff;
-        padding: 80px 0;
+        /*padding: 80px 0;*/
         width: 100%;
         text-align: center;
         display: table;
@@ -426,15 +427,17 @@ page[size="A5"][layout="portrait"] {
 }
 
 .messgae-box-cont{
+    height:325px;
     border-bottom: 2px dotted #757575;
     background: #fff;
-    padding: 80px 0;
+    /*padding: 80px 0;*/
     width: 100%;
     text-align: center;
     display: table;
 }
 
 .messgae-box-cont2{
+    /*height:290px;*/
     /*border-bottom: 2px dotted #757575;*/
     background: #fff;
     padding: 160px 0;
