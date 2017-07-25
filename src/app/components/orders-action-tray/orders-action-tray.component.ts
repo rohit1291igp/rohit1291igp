@@ -163,6 +163,8 @@ export class OrdersActionTrayComponent implements OnInit {
         //this.trayOpen = !this.trayOpen;
         console.log('trayOpen: and loading data', this.trayOpen);
         if(orderByStatus || orderId) this.loadTrayData(e, orderByStatus, orderId, dashBoardDataType, null);
+
+
     }
   }
 
@@ -333,11 +335,17 @@ export class OrdersActionTrayComponent implements OnInit {
               setTimeout(function(){
                   _this.onStatusUpdate.emit(currentTab);
                   //_this.trayOpen = false;
-                  let dataLength = _this.sidePanelDataOnStatusUpdate(orderId, deliveryDate, deliveryTime);
-                  if(!dataLength){
-                      _this.onStatusUpdate.emit("closed");
-                      _this.trayOpen = false;
+                  if(!(_this.orderByStatus)){
+                      //In case of search order layer - don't remove product, update status on layer
+                      _this.loadTrayData(e, _this.orderByStatus, _this.orderId, _this.activeDashBoardDataType, null);
+                  }else{
+                      let dataLength = _this.sidePanelDataOnStatusUpdate(orderId, deliveryDate, deliveryTime);
+                      if(!dataLength){
+                          _this.onStatusUpdate.emit("closed");
+                          _this.trayOpen = false;
+                      }
                   }
+
               }, 1000);
               return;
           }
@@ -359,11 +367,18 @@ export class OrdersActionTrayComponent implements OnInit {
               //_this.router.navigate(['/dashboard-dfghj']);
               _this.onStatusUpdate.emit(currentTab);
               //_this.trayOpen = false;
-              let dataLength = _this.sidePanelDataOnStatusUpdate(orderId, deliveryDate, deliveryTime);
-              if(!dataLength){
-                  _this.onStatusUpdate.emit("closed");
-                  _this.trayOpen = false;
+
+              if(!(_this.orderByStatus)){
+                  //In case of search order layer - don't remove product, update status on layer
+                  _this.loadTrayData(e, _this.orderByStatus, _this.orderId, _this.activeDashBoardDataType, null);
+              }else{
+                  let dataLength = _this.sidePanelDataOnStatusUpdate(orderId, deliveryDate, deliveryTime);
+                  if(!dataLength){
+                      _this.onStatusUpdate.emit("closed"); // 'closed parameter is sent to rearrange dashboard columns'
+                      _this.trayOpen = false;
+                  }
               }
+
           });
       }
 
@@ -389,7 +404,7 @@ export class OrdersActionTrayComponent implements OnInit {
               }
               orderProducts = result[0].orderProducts;
               deliveryDate = result[0].orderProducts[0].orderProductExtraInfo.deliveryDate;
-              deliveryDate = result[0].orderProducts[0].orderProductExtraInfo.deliveryTime;
+              deliveryTime = result[0].orderProducts[0].orderProductExtraInfo.deliveryTime;
               fireUpdateCall();
           });
       }else{
