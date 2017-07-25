@@ -210,12 +210,18 @@
             </div>
         </div>
         <div *ngIf="sidePanelData">
+
+            <!--scrollTop widget start-->
+            <app-widgets [wOptions]="{type : 'scrollTop', scrollContainer:'#mainOrderSection'}"></app-widgets>
+            <!--scrollTop widget end-->
+
             <div  id="order-{{order.orderId}}" class="col-md-12 order-row" *ngFor="let order of sidePanelData" style="margin-bottom: 0;">
 
                 <div class=" triangle-topright" [ngClass]="{'redBorder' : order.orderProducts[0].alertFlag, 'greenBorder' : order.orderProducts[0].slaFlag}">
                     <div class="slaAlert-flag abs" *ngIf="order.orderProducts[0].alertFlag">High Alert</div>
                     <div class="slaAlert-flag abs" *ngIf="order.orderProducts[0].slaFlag">Action Required</div>
                 </div>
+
 
                 <!-- Print Template start -->
                     <app-print-template [order]="order" [printType]="'order'"></app-print-template>

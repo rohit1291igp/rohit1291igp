@@ -281,7 +281,7 @@ export class OrdersActionTrayComponent implements OnInit {
               return;
           }
           response = JSON.parse(response);
-          console.log('sidePanel Response --->', response.result);
+          //console.log('sidePanel Response --->', response.result);
           if(cb){
               return cb(null, response.result ? Array.isArray(response.result) ? response.result : [response.result] : []);
           }else{
