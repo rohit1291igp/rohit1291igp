@@ -71,8 +71,7 @@ export class OrdersActionTrayComponent implements OnInit {
 
   ngOnInit() {
      //this.scrollTo(document.getElementById("mainOrderSection"), 0, 1250);
-      this.statusReasonModel.rejectOption= "Delivery location not serviceable";
-
+     this.setRejectInitialValue();
   }
 
   productsURL = environment.productsURL;
@@ -108,6 +107,10 @@ export class OrdersActionTrayComponent implements OnInit {
                 this.trayOpen = false;
             }
         }
+  }
+
+  setRejectInitialValue(){
+      this.statusReasonModel.rejectOption= "Delivery location not serviceable";
   }
 
   statusReasonSubmit(_e){
@@ -410,6 +413,8 @@ export class OrdersActionTrayComponent implements OnInit {
                       _this.trayOpen = false;
                   }
               }
+
+              _this.setRejectInitialValue();
 
           });
       }
