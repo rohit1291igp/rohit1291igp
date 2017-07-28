@@ -34,7 +34,7 @@ export class OrdersActionTrayComponent implements OnInit {
   public trayOpen: Boolean = false;
   @Output() onStatusUpdate: EventEmitter<any> = new EventEmitter();
   rejectReasons=[
-      //{"name" : "Select reason for reject", "value" : "" },
+      {"name" : "Select reason for reject", "value" : "" },
       {"name" : "Delivery location not serviceable", "value" : "Delivery location not serviceable" },
       {"name" : "Product not available", "value" : "Product not available" },
       {"name" : "Capacity full", "value" : "Capacity full" },
@@ -110,7 +110,7 @@ export class OrdersActionTrayComponent implements OnInit {
   }
 
   setRejectInitialValue(){
-      this.statusReasonModel.rejectOption= "Delivery location not serviceable";
+      this.statusReasonModel.rejectOption= "";
   }
 
   statusReasonSubmit(_e){

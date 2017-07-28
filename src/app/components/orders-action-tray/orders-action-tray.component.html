@@ -37,12 +37,14 @@
                             <select name="rejectopt" class="form-control" [(ngModel)]="statusReasonModel.rejectOption" #rejectopt="ngModel" required>
                                 <option *ngFor="let reason of rejectReasons" [ngValue]="reason.value">{{reason.name}}</option>
                             </select>
+                            <div *ngIf="f.submitted && !rejectopt.valid" class="help-block theme-red">Select one of the reject reason</div>
 
-                            <textarea *ngIf="statusReasonModel.rejectOption == 'Other'" name="message" class="form-control custom-control m-top-1" rows="3" style="resize:none" [(ngModel)]="statusReasonModel.message" #message="ngModel" placeholder="Reason for reject" required></textarea>
+                            <div *ngIf="statusReasonModel.rejectOption == 'Other'">
+                            <textarea name="message" class="form-control custom-control m-top-1" rows="3" style="resize:none" [(ngModel)]="statusReasonModel.message" #message="ngModel" placeholder="Reason for reject" required></textarea>
+                            <div *ngIf="f.submitted && !message.valid" class="help-block theme-red">Reject reason is required</div>
+                            </div>
 
                             <button class="btn btn-primary m-top-1">Reject</button>
-                            <div *ngIf="f.submitted && !rejectopt.valid" class="help-block">Select one of the reject reason</div>
-                            <div *ngIf="f.submitted && !message.valid" class="help-block">Reject reason is required</div>
                         </form>
                     </div>
                 </div>
@@ -55,7 +57,7 @@
                             <div *ngIf="f.submitted && !message.valid" class="help-block"></div>
                         </form>
                         <button class="btn btn-primary m-top-1 viewDetailPopupBtn" *ngIf="!trayOpen" (click)="toggleTray($event, '', statusReasonModel.orderId, null)">View Detail</button>
-                        <div *ngIf="f.submitted && !message.valid" class="help-block">Recipient's details is required</div>
+                        <div *ngIf="f.submitted && !message.valid" class="help-block theme-red">Recipient's details is required</div>
                     </div>
                 </div>
 
