@@ -33,6 +33,17 @@ import {environment} from "../../../environments/environment";
 export class OrdersActionTrayComponent implements OnInit {
   public trayOpen: Boolean = false;
   @Output() onStatusUpdate: EventEmitter<any> = new EventEmitter();
+  rejectReasons=[
+      //{"name" : "Select reason for reject", "value" : "" },
+      {"name" : "Delivery location not serviceable", "value" : "Delivery location not serviceable" },
+      {"name" : "Product not available", "value" : "Product not available" },
+      {"name" : "Capacity full", "value" : "Capacity full" },
+      {"name" : "Customer's instruction", "value" : "Customer's instruction" },
+      {"name" : "Delivery not possible on given date", "value" : "Delivery not possible on given date" },
+      {"name" : "Fixed time/Midnight not possible", "value" : "Fixed time/Midnight not possible" },
+      {"name" : "Duplicate order", "value" : "Duplicate order" },
+      {"name" : "Other", "value" : "Other" }
+  ];
   loadercount=[1,1];
 
   statusMessageFlag=false;
@@ -60,6 +71,8 @@ export class OrdersActionTrayComponent implements OnInit {
 
   ngOnInit() {
      //this.scrollTo(document.getElementById("mainOrderSection"), 0, 1250);
+      this.statusReasonModel.rejectOption= "Delivery location not serviceable";
+
   }
 
   productsURL = environment.productsURL;
@@ -104,7 +117,7 @@ export class OrdersActionTrayComponent implements OnInit {
       this.statusMessageFlag=false;
       console.log('statusReason--->', this.statusReasonModel);
 
-      var statusMessgae = this.statusReasonModel.message;
+      var statusMessgae = this.statusReasonModel.message ? this.statusReasonModel.message : this.statusReasonModel.rejectOption;
       var orderStatusEvent = _e;
       orderStatusEvent.customCurrentTarget =  _this.statusReasonModel.e[0];
       var orderStatus = this.statusReasonModel.status;
@@ -326,7 +339,8 @@ export class OrdersActionTrayComponent implements OnInit {
           this.statusMessageFlag=true;
           return;
       }else{
-          rejectionMessage = this.statusReasonModel.message ? this.statusReasonModel.message.trim() : "";
+          rejectionMessage = this.statusReasonModel.message ? this.statusReasonModel.message.trim() : this.statusReasonModel.rejectOption;
+          rejectionMessage = rejectionMessage ? rejectionMessage : "";
           recipientInfo = this.statusReasonModel.recipientDetail ? this.statusReasonModel.recipientDetail.trim() : "";
           this.statusReasonModel = {};
       }
