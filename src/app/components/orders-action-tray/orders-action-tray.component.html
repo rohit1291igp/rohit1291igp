@@ -57,8 +57,13 @@
                                 <my-date-picker name="mydate" [options]="myDatePickerOptions" [(ngModel)]="dateRange"></my-date-picker>
                             </div>
 
-                            <div *ngIf="statusReasonModel.rejectOption == 'Product not available'">
-                                <h3>Product List</h3>
+                            <div class="m-top-1 left-align" *ngIf="statusReasonModel.rejectOption == 'Product not available'">
+                                <div class="bold">Select not available products :-</div>
+                                <div *ngFor="let oProd of statusReasonModel.OrderProductsList">
+                                    <label>
+                                        <input name="chk" type="checkbox"> &nbsp; {{oProd.productName}}
+                                    </label>
+                                </div>
                             </div>
 
                             <button class="btn btn-primary m-top-1">Reject</button>

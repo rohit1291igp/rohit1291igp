@@ -27,6 +27,14 @@
     text-align: center;
 }
 
+.left-align {
+    text-align: left;
+}
+
+.right-align {
+    text-align: right;
+}
+
 .underline {
     text-decoration: underline;
 }

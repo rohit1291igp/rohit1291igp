@@ -78,6 +78,7 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
      //this.scrollTo(document.getElementById("mainOrderSection"), 0, 1250);
      this.setlDatePicker(null);
      this.setRejectInitialValue();
+     //this.statusReasonModel.OrderProductsList = [];
   }
 
   ngOnChanges(changes){
@@ -347,6 +348,19 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
       });
   }
 
+  getOrderProductFromPanel(orderId){
+      let panelData = this.sidePanelData;
+      let panelDataLength = this.sidePanelData.length;
+      let OrderProducts;
+      for(var i=0; i<panelDataLength; i++){
+          if(panelData[i].orderId === orderId){
+              OrderProducts = panelData[i].orderProducts;
+              break;
+          }
+      }
+      return OrderProducts;
+  }
+
   updateOrderStatus(e, status, orderId, orderProducts, deliveryDate, deliveryTime){
       e.stopPropagation();
       var rejectionMessage, recipientInfo;
@@ -358,6 +372,7 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
           this.statusReasonModel.orderProducts = orderProducts;
           this.statusReasonModel.deliveryDate = deliveryDate;
           this.statusReasonModel.deliveryTime = deliveryTime;
+          if(status === "Rejected") this.statusReasonModel.OrderProductsList = this.getOrderProductFromPanel(orderId);
 
           this.statusMessageFlag=true;
           return;
