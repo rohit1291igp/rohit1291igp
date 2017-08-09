@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, OnChanges, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-orders-button',
@@ -16,7 +16,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
               box-shadow: 0 1px 3px #888888;
           }`]
 })
-export class OrdersButtonComponent implements OnInit {
+export class OrdersButtonComponent implements OnInit, OnChanges {
   @Input('displayData') displayData: Object;
   @Input('orderStatus') orderStatus: string;
   @Input('orderId') orderId: number;
@@ -36,6 +36,9 @@ export class OrdersButtonComponent implements OnInit {
     this.isAlert = this.displayData['isAlert'] == "true" ? true : false;
     this.sla = this.displayData['sla'] == "true" ? true : false;
   }
+    ngOnChanges(changes){
+        console.log('changes - orders - buttons------------>', changes);
+    }
 
   openOrdersTray(e) {
     console.log('openOrdersTray called..........');

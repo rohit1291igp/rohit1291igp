@@ -37,7 +37,7 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit() {
     var _this = this;
-    this.isRowAlert = this.dashboardService.getAlertRow();
+    this.isRowAlert = this.dashboardService.getAlertRow();0
     this.dashboardData = this.dashboardService.getCustomData();
     var cookieFDate = _this.UtilityService.getCookie("festivalDate") ?  JSON.parse(_this.UtilityService.getCookie("festivalDate")) : null;
     var cookieFDatwFormatted = cookieFDate ? cookieFDate.date.year+'-'+cookieFDate.date.month+'-'+cookieFDate.date.day : null;

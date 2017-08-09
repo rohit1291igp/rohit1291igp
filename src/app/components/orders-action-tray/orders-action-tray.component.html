@@ -26,8 +26,17 @@
             <div class="modal-content" (click)="closePopup($event, 'ignore')">
                 <div class="modal-header" style="border-bottom:none;">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="closePopup($event)"><span aria-hidden="true">×</span></button>
+                    <h4 class="modal-title" id="myModalLabel" *ngIf="statusReasonModel.status === 'Confirmed'">Upload Confirm Order Proof</h4>
                     <h4 class="modal-title" id="myModalLabel" *ngIf="statusReasonModel.status === 'Rejected'">Reason for reject</h4>
                     <h4 class="modal-title" id="myModalLabel" *ngIf="statusReasonModel.status === 'Delivered'">Recipient's Details</h4>
+                </div>
+
+                <div class="modal-body center-align" *ngIf="statusReasonModel.status === 'Confirmed'">
+                    <input name="file1" type="file">
+                    <input name="file2" type="file">
+                    <input name="file3" type="file">
+                    <input name="file4" type="file">
+                    <input name="file5" type="file">
                 </div>
 
                 <div class="modal-body center-align" *ngIf="statusReasonModel.status === 'Rejected'">
@@ -40,8 +49,16 @@
                             <div *ngIf="f.submitted && !rejectopt.valid" class="help-block theme-red">Select one of the reject reason</div>
 
                             <div *ngIf="statusReasonModel.rejectOption == 'Other'">
-                            <textarea name="message" class="form-control custom-control m-top-1" rows="3" style="resize:none" [(ngModel)]="statusReasonModel.message" #message="ngModel" placeholder="Reason for reject" required></textarea>
-                            <div *ngIf="f.submitted && !message.valid" class="help-block theme-red">Reject reason is required</div>
+                                <textarea name="message" class="form-control custom-control m-top-1" rows="3" style="resize:none" [(ngModel)]="statusReasonModel.message" #message="ngModel" placeholder="Reason for reject" required></textarea>
+                                <div *ngIf="f.submitted && !message.valid" class="help-block theme-red">Reject reason is required</div>
+                            </div>
+
+                            <div class="rejectStatusDp" *ngIf="statusReasonModel.rejectOption == 'Delivery not possible on given date'">
+                                <my-date-picker name="mydate" [options]="myDatePickerOptions" [(ngModel)]="dateRange"></my-date-picker>
+                            </div>
+
+                            <div *ngIf="statusReasonModel.rejectOption == 'Product not available'">
+                                <h3>Product List</h3>
                             </div>
 
                             <button class="btn btn-primary m-top-1">Reject</button>

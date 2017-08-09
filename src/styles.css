@@ -184,6 +184,11 @@
 .bydateWidth{
     padding: 0 3px;
 }
+
+
+.mydp input{
+    pointer-events: none ! important;
+}
 /* datepicker css override - end */
 
 .blink {

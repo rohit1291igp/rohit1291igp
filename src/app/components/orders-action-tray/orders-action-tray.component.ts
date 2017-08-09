@@ -1,4 +1,5 @@
-import { Component, OnInit, Input, Output, EventEmitter, HostListener, ElementRef, trigger, sequence, transition, animate, style, state } from '@angular/core';
+import { Component, OnInit, OnChanges, DoCheck, Input, Output, EventEmitter, HostListener, ElementRef, trigger, sequence, transition, animate, style, state } from '@angular/core';
+import { IMyOptions, IMyDateModel } from 'mydatepicker';
 import { Router, ActivatedRoute } from '@angular/router';
 import { BackendService } from '../../services/backend.service';
 import { UtilityService } from '../../services/utility.service';
@@ -30,7 +31,7 @@ import {environment} from "../../../environments/environment";
         ])
     ]
 })
-export class OrdersActionTrayComponent implements OnInit {
+export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
   public trayOpen: Boolean = false;
   @Output() onStatusUpdate: EventEmitter<any> = new EventEmitter();
   rejectReasons=[
@@ -58,6 +59,10 @@ export class OrdersActionTrayComponent implements OnInit {
   public sidePanelData;
   imagePreviewFlag = false;
   imagePreviewSrc = "";
+  public myDatePickerOptions: IMyOptions = {
+        dateFormat: 'ddth mmm. yyyy'
+  };
+  public dateRange: Object = {};
 
   constructor(
       private _elementRef: ElementRef,
@@ -71,7 +76,16 @@ export class OrdersActionTrayComponent implements OnInit {
 
   ngOnInit() {
      //this.scrollTo(document.getElementById("mainOrderSection"), 0, 1250);
+     this.setlDatePicker(null);
      this.setRejectInitialValue();
+  }
+
+  ngOnChanges(changes){
+     //console.log('changes', changes);
+  }
+
+  ngDoCheck(){
+     //console.log('ngDoCheck-------------->', this.sidePanelData);
   }
 
   productsURL = environment.productsURL;
@@ -111,6 +125,12 @@ export class OrdersActionTrayComponent implements OnInit {
 
   setRejectInitialValue(){
       this.statusReasonModel.rejectOption= "";
+  }
+
+  setlDatePicker(initDate){
+      var setDate = initDate || new Date();
+      let disableDates = [{begin: {year: 2017, month: 6, day: 14}, end: {year: 2017, month: 6, day: 20}}];
+      this.dateRange = { date: { year: setDate.getFullYear(), month: (setDate.getMonth()+1), day: setDate.getDate() } };
   }
 
   statusReasonSubmit(_e){
@@ -330,7 +350,7 @@ export class OrdersActionTrayComponent implements OnInit {
   updateOrderStatus(e, status, orderId, orderProducts, deliveryDate, deliveryTime){
       e.stopPropagation();
       var rejectionMessage, recipientInfo;
-      if( (status === "Delivered" || status === "Rejected") && (!e.customCurrentTarget)){
+      if( (status === "Confirmed" || status === "Delivered" || status === "Rejected") && (!e.customCurrentTarget)){
           this.statusReasonModel.e = [];
           this.statusReasonModel.e.push(e.currentTarget);
           this.statusReasonModel.status = status;
