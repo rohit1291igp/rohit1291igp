@@ -237,7 +237,8 @@ export class OrdersActionTrayComponent implements OnInit {
       }
 
       if(orderId){
-          reqURL ="?responseType=json&scopeId=1&fkassociateId="+fkAssociateId+"&orderId="+orderId+"&method=igp.order.getOrder";
+          //reqURL ="?responseType=json&scopeId=1&fkassociateId="+fkAssociateId+"&orderId="+orderId+"&method=igp.order.getOrder";
+          reqURL ="getOrder?responseType=json&scopeId=1&fkassociateId="+fkAssociateId+"&orderId="+orderId;
       }else if(orderByStatus){
           let orderDate = e.currentTarget.dataset.orderday;
           let orderDeliveryTime = e.currentTarget.dataset.deliverytime;
@@ -292,9 +293,9 @@ export class OrdersActionTrayComponent implements OnInit {
           }
 
           if(orderDeliveryTime === "future"){
-              reqURL ="?responseType=json&scopeId=1&isfuture=true&orderAction="+dashBoardDataType+"&section="+section+"&status="+orderStatus+"&fkassociateId="+fkAssociateId+"&date="+spDate+"&method=igp.order.getOrderByStatusDate";
+              reqURL ="getOrderByStatusDate?responseType=json&scopeId=1&isfuture=true&orderAction="+dashBoardDataType+"&section="+section+"&status="+orderStatus+"&fkassociateId="+fkAssociateId+"&date="+spDate;
           }else{
-              reqURL ="?responseType=json&scopeId=1&orderAction="+dashBoardDataType+"&section="+section+"&status="+orderStatus+"&fkassociateId="+fkAssociateId+"&date="+spDate+"&method=igp.order.getOrderByStatusDate";
+              reqURL ="getOrderByStatusDate?responseType=json&scopeId=1&orderAction="+dashBoardDataType+"&section="+section+"&status="+orderStatus+"&fkassociateId="+fkAssociateId+"&date="+spDate;
           }
       }
 
@@ -364,7 +365,8 @@ export class OrdersActionTrayComponent implements OnInit {
 
           let fkAssociateId = localStorage.getItem('fkAssociateId');
           //var _this = this; this.statusReasonModel
-          var reqURL = "?responseType=json&scopeId=1&rejectionMessage="+rejectionMessage+"&recipientInfo="+recipientInfo+"&orderProductIds="+orderProductIds+"&status="+status+"&fkAssociateId="+fkAssociateId+"&orderId="+orderId+"&method=igp.order.doUpdateOrderStatus";
+          //var reqURL = "?responseType=json&scopeId=1&rejectionMessage="+rejectionMessage+"&recipientInfo="+recipientInfo+"&orderProductIds="+orderProductIds+"&status="+status+"&fkAssociateId="+fkAssociateId+"&orderId="+orderId+"&method=igp.order.doUpdateOrderStatus";
+          var reqURL = "doUpdateOrderStatus?responseType=json&scopeId=1&rejectionMessage="+rejectionMessage+"&recipientInfo="+recipientInfo+"&orderProductIds="+orderProductIds+"&status="+status+"&fkAssociateId="+fkAssociateId+"&orderId="+orderId;
           console.log('reqURL==============>', reqURL);
           if(localStorage.getItem('dRandom')){
               setTimeout(function(){

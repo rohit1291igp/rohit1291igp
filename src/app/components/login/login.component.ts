@@ -47,7 +47,8 @@ export class LoginComponent implements OnInit {
             _this.router.navigate(['/dashboard']);
         }else{
             let reqObj = {
-                url : "IGPService/login?username="+this.model.username+"&password="+this.model.password,
+                //url : "IGPService/login?username="+this.model.username+"&password="+this.model.password,
+                url : "login?username="+this.model.username+"&password="+this.model.password,
                 method : "post",
                 payload : {}
             };
