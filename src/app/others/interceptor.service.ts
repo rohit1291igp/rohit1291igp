@@ -31,7 +31,7 @@ export class InterceptedHttp extends Http {
     }
 
     private updateUrl(req: string) {
-        return  environment.origin2 +'v1/'+ req;
+        return  environment.origin2 +'v1/handels/'+ req;
         /*
         if((/login/g).test(req)){
             return  environment.origin + req;
