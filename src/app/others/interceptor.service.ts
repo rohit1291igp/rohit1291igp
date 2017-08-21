@@ -50,7 +50,7 @@ export class InterceptedHttp extends Http {
         }
         options.headers.append('Content-Type', 'text/plain');
         //options.headers.append('Content-Type', 'application/json');
-        options.headers.append('token', localStorage.getItem('currentUserToken'));
+        //options.headers.append('token', localStorage.getItem('currentUserToken'));
         options.headers.append('X-IGP-UISK', 'igpBangaloreHungerForBlood');
         //options.headers.append('fkAssociateId', localStorage.getItem('currentUserToken'));
 
