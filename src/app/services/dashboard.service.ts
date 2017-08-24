@@ -484,7 +484,8 @@ export class DashboardService {
             //let specificDate = Date.parse(spcificDate) || 0;
             let specificDate = spcificDate || 0;
             let reqObj = {
-                url : "?responseType=json&scopeId=1&fkAssociateId="+fkAssociateId+"&specificDate="+specificDate+"&method=igp.vendor.getVendorCountDetail",
+                //url : "?responseType=json&scopeId=1&fkAssociateId="+fkAssociateId+"&specificDate="+specificDate+"&method=igp.vendor.getVendorCountDetail",
+                url : "getVendorCountDetail?responseType=json&scopeId=1&fkAssociateId="+fkAssociateId+"&specificDate="+specificDate,
                 method : "get",
                 payload : {}
             };

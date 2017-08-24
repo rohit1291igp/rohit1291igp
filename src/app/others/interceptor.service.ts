@@ -31,11 +31,14 @@ export class InterceptedHttp extends Http {
     }
 
     private updateUrl(req: string) {
+        return  environment.origin2 +'v1/handels/'+ req;
+        /*
         if((/login/g).test(req)){
             return  environment.origin + req;
         }else{
             return  environment.origin + environment.apiInitial + req;
         }
+        */
     }
 
     private getRequestOptionArgs(options?: RequestOptionsArgs) : RequestOptionsArgs {
@@ -46,8 +49,9 @@ export class InterceptedHttp extends Http {
             options.headers = new Headers();
         }
         options.headers.append('Content-Type', 'text/plain');
-        //options.headers.append('Content-Type', 'application/json');
-        options.headers.append('token', localStorage.getItem('currentUserToken'));
+       // options.headers.append('Content-Type', 'application/json');
+        //options.headers.append('token', localStorage.getItem('currentUserToken'));
+        options.headers.append('X-IGP-UISK', 'igpBangaloreHungerForBlood');
         //options.headers.append('fkAssociateId', localStorage.getItem('currentUserToken'));
 
         return options;

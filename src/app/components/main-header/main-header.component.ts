@@ -29,7 +29,8 @@ export class MainHeaderComponent implements OnInit {
           _this.router.navigate(['/login']);
       }else{
           let reqObj = {
-              url : "?responseType=json&scopeId=1&token="+localStorage.getItem('currentUserToken')+"&method=igp.auth.doLogOut",
+              //url : "?responseType=json&scopeId=1&token="+localStorage.getItem('currentUserToken')+"&method=igp.auth.doLogOut",
+              url : "doLogOut?responseType=json&scopeId=1&token="+localStorage.getItem('currentUserToken'),
               method : "post",
               payload : {}
           };
