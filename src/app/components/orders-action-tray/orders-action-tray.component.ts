@@ -501,7 +501,8 @@ export class OrdersActionTrayComponent implements OnInit {
           case 1 : delDetail= delDetail + " Standard Delivery ";
               break;
 
-          case 2 : delDetail= delDetail + ((delDate == purDate) ? "Same Day Delivery" : " Fixed Time Delivery ");
+          //case 2 : delDetail= delDetail + ((delDate == purDate) ? "Same Day Delivery" : " Fixed Time Delivery ");
+          case 2 : delDetail= " Fixed Time Delivery ";
               break;
 
           case 3 : delDetail= delDetail + " Midnight Delivery ";
