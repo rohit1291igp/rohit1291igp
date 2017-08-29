@@ -43,23 +43,35 @@ export class DashboardService {
     }
 
     formarDashBoardData(data, dataType, currentDBData){
-        var dataTypeSelect, ofdType;
+        var dataTypeSelect, ofdType, newOrderCountProp, confirmedCountProp, ofdOrderCountProp;
         console.log('dataType==================>'+dataType);
         switch(dataType){
             case "all": dataTypeSelect = "dateStatusCountAllMap";
                         ofdType = "outOfDeliveryOrderIds";
+                        newOrderCountProp = "newOrderTotalWhole";
+                        confirmedCountProp = "confirmOrderTotalWhole";
+                        ofdOrderCountProp = "outOfDeliveryOrderTotalWhole";
                 break;
 
             case "sla": dataTypeSelect = "dateStatusCountNoBreachMap";
                         ofdType = "slaOutOfDeliveryOrderIds";
+                        newOrderCountProp = "newOrderTotalActionRequired";
+                        confirmedCountProp = "confirmOrderTotalWholeActionRequired";
+                        ofdOrderCountProp = "outOfDeliveryOrderTotalActionRequired";
                 break;
 
             case "alert": dataTypeSelect = "dateStatusCountAlertMap";
                           ofdType = "alertOutOfDeliveryOrderIds";
+                          newOrderCountProp = "newOrderTotalHighAlert";
+                          confirmedCountProp = "confirmOrderTotalWholeHighAlert";
+                          ofdOrderCountProp = "outOfDeliveryOrderTotalHighAlert";
                 break;
 
             default : dataTypeSelect = "dateStatusCountAllMap";
                       ofdType = "outOfDeliveryOrderIds";
+                      newOrderCountProp = "newOrderTotalWhole";
+                      confirmedCountProp = "confirmOrderTotalWhole";
+                      ofdOrderCountProp = "outOfDeliveryOrderTotalWhole";
         }
 
         var _this = this;
@@ -110,6 +122,14 @@ export class DashboardService {
                     today: 6,
                     total: 10,
                     isAlert: false
+                },
+                "counts" : {
+                    "allOrders": 161,
+                    "actionRequired": 148,
+                    "highAlert": 12,
+                    "newOrders": 1,
+                    "confirmedOrders": 92,
+                    "ofdOrders": 89
                 }
             };
         }
@@ -221,6 +241,16 @@ export class DashboardService {
         };
 
         let dashboardCounts = apiResponse.result[dataTypeSelect];
+
+        getDashboardDataResponse.counts = {
+            "allOrders": apiResponse.result['orderTotalWhole'],
+            "actionRequired": apiResponse.result['orderTotalActionRequired'],
+            "highAlert": apiResponse.result['orderTotalHighAlert'],
+            "newOrders": apiResponse.result[newOrderCountProp],
+            "confirmedOrders": apiResponse.result[confirmedCountProp],
+            "ofdOrders": apiResponse.result[ofdOrderCountProp]
+        };
+
         /*let dashboardCountsArray = []; //Objet is needed to convert into Array as Object doesn't guarntee to maintain order of property
         for(let prop in dashboardCounts){
             if(dashboardCounts.hasOwnProperty(prop)){
@@ -341,8 +371,8 @@ export class DashboardService {
                 }
             }
 
-
         /* row color code logic - end */
+
         console.log('alert row data ===================>', this.getAlertRow());
 
         return getDashboardDataResponse;
@@ -473,7 +503,19 @@ export class DashboardService {
                     "slaOutOfDeliveryOrderIds": outofDeliveryIds2,
                     "alertOutOfDeliveryOrderIds": outofDeliveryIds3,
                     "deliveredTodayOrderCount": Math.floor(Math.random()*100),
-                    "festivalDate": "2017-06-06"
+                    "festivalDate": "2017-06-06",
+                    "orderTotalWhole": 161,
+                    "newOrderTotalWhole": 148,
+                    "confirmOrderTotalWhole": 12,
+                    "outOfDeliveryOrderTotalWhole": 1,
+                    "orderTotalActionRequired": 92,
+                    "newOrderTotalActionRequired": 89,
+                    "confirmOrderTotalWholeActionRequired": 3,
+                    "outOfDeliveryOrderTotalActionRequired": 0,
+                    "orderTotalHighAlert": 68,
+                    "newOrderTotalHighAlert": 59,
+                    "confirmOrderTotalWholeHighAlert": 8,
+                    "outOfDeliveryOrderTotalHighAlert": 1
                 }
             };
             console.log("hardCodedData========>", hardCodedData);
@@ -662,6 +704,20 @@ export class DashboardService {
                 today: 0,
                 total: 0,
                 isAlert: false
+            },
+            "counts" : {
+                "orderTotalWhole": 161,
+                "newOrderTotalWhole": 148,
+                "confirmOrderTotalWhole": 12,
+                "outOfDeliveryOrderTotalWhole": 1,
+                "orderTotalActionRequired": 92,
+                "newOrderTotalActionRequired": 89,
+                "confirmOrderTotalWholeActionRequired": 3,
+                "outOfDeliveryOrderTotalActionRequired": 0,
+                "orderTotalHighAlert": 68,
+                "newOrderTotalHighAlert": 59,
+                "confirmOrderTotalWholeHighAlert": 8,
+                "outOfDeliveryOrderTotalHighAlert": 1
             }
         };
 

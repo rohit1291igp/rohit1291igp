@@ -201,5 +201,58 @@
     }
 }
 
+/* dashBoard counts - start */
+.DbCount{
+    padding-top: 3px;
+    text-align: center;
+    background: #000;
+    width: 40px;
+    border-radius: 50%;
+    height: 25px;
+    color: #fff;
+    margin:auto;
+}
+
+.dashboard-tabs .DbCount{
+    width: 25px ! important;
+    right: -9px;
+    position: absolute;
+    top: 1px;
+    font-size: 0.85em;
+    height: 25px;
+    padding-top: 5px;
+}
+
+.dashboard-tabs .DbCount.action{
+    background-color: #25C355! important;
+}
+
+.dashboard-tabs .DbCount.alertC{
+    background-color: #C3404E! important;
+}
+
+.dashboard-table .DbCount{
+    width: 35px ! important;
+    right: 1em;
+    position: absolute;
+    top: 2px;
+    font-size: 0.9em;
+    height: 30px;
+    padding-top: 5px;
+    margin-top: 1em;
+    letter-spacing: 1px;
+}
+
+.dashboard-table .alertg-action .DbCount{
+    background-color: #25C355! important;
+}
+
+.dashboard-table .alert-action .DbCount{
+    background-color: #C3404E! important;
+}
+
+
+/* dashBoard counts - end */
+
 
 

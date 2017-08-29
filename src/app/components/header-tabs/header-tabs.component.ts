@@ -9,7 +9,7 @@ declare var $:any;
 })
 export class HeaderTabsComponent implements OnInit {
   @Output() onTabChanged: EventEmitter<any> = new EventEmitter();
-
+  @Input('dashboardCounts') dashboardCounts:any;
   elementRef: ElementRef;
   activeTab: number = 1;
 
