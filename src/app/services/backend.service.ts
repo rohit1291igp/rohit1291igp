@@ -14,12 +14,15 @@ export class BackendService {
   }
 
   makeAjax(reqObj : any, cb){
+      document.getElementById("cLoader").classList.remove("hide");
       this.http[reqObj.method](reqObj.url, reqObj.payload)
           .subscribe(
           response => {
+              document.getElementById("cLoader").classList.add("hide");
               return cb(null, (response.body || response._body), response.headers);
           },
           error => {
+              document.getElementById("cLoader").classList.add("hide");
               return cb(error);
           }
       );

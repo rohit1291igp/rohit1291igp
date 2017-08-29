@@ -324,7 +324,7 @@
                               <div class="product-component relative">
                                   <div class="component-eggless abs" *ngIf="prodComponent.eggless">Eggless</div>
                                 <!--<div class="component-head center-align uppercase">{{prodComponent.componentCode | slice:0:9}}<span *ngIf="prodComponent.componentName.length > 9">...</span></div>-->
-                                <img class="component-image clk" src="{{productsCompURL}}th/{{prodComponent.componentCode}}.jpeg" alt="Component_img" (click)="imagePreview($event, productsCompURL+'full/'+(prodComponent.componentCode))">
+                                <img class="component-image clk" src="{{productsCompURL}}th/{{prodComponent.componentImage}}" alt="Component_img" (click)="imagePreview($event, productsCompURL+'full/'+(prodComponent.componentImage))">
                                 <div class="component-quantity center-align">X {{prodComponent.quantity | number : '2.0-0'}}</div>
                                 <div class="component-name center-align">{{prodComponent.componentName}} </div>
                                 <div class="price-display" *ngIf="prodComponent.componentPrice && prodComponent.componentPrice !== 'N/A'">Rs. {{prodComponent.componentPrice | number : '2.0-0'}}</div>
