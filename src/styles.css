@@ -202,6 +202,9 @@
 }
 
 /* dashBoard counts - start */
+.dashboard-tabs ul li{
+    padding: 2px 1em 0 0;
+}
 .DbCount{
     padding-top: 3px;
     text-align: center;
@@ -215,9 +218,9 @@
 
 .dashboard-tabs .DbCount{
     width: 25px ! important;
-    right: -9px;
+    right: 4px;
     position: absolute;
-    top: 1px;
+    top: 3px;
     font-size: 0.85em;
     height: 25px;
     padding-top: 5px;
