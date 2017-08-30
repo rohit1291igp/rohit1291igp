@@ -174,63 +174,31 @@ export class DashboardService {
                             position : 0
                         };
 
+                        pushObj.displayStr = pushObj.ordersCount > 1 ? "View Orders" : "View Order";
+                        if(pushObj.isAlert === "true"){
+                            pushObj.displayStr = "Pending Confirmation";
+                        }else if(pushObj.sla === "true" && pushObj.isAlert !== "true"){
+                            pushObj.displayStr = "Confirm Order";
+                        }
+
                         switch(day){
                             case "past" :
-                                pushObj.displayStr = pushObj.ordersCount > 1 ? "View Orders" : "View Order";
-                                if(pushObj.isAlert){
-                                    pushObj.displayStr = "Pending Confirmation";
-                                }
-                                if(pushObj.sla && !pushObj.isAlert){
-                                    pushObj.displayStr = "Confirm Order";
-                                }
-                                pushObj.displayStr = pushObj.ordersCount > 1 ? "View Orders" : "View Order";
                                 pushObj.position = 1;
                                 break;
 
                             case "today" : todayOrderTobeDelivered = todayOrderTobeDelivered + parseInt(countObj[prop].count);
-                                pushObj.displayStr = pushObj.ordersCount > 1 ? "View Orders" : "View Order";
-                                if(pushObj.isAlert){
-                                    pushObj.displayStr = "Pending Confirmation";
-                                }
-                                if(pushObj.sla && !pushObj.isAlert){
-                                    pushObj.displayStr = "Confirm Order";
-                                }
                                 pushObj.position = 2;
                                 break;
 
                             case "tomorrow" :
-                                pushObj.displayStr = pushObj.ordersCount > 1 ? "View Orders" : "View Order";
-
-                                if(pushObj.isAlert){
-                                    pushObj.displayStr = "Pending Confirmation";
-                                }
-                                if(pushObj.sla && !pushObj.isAlert){
-                                    pushObj.displayStr = "Confirm Order";
-                                }
                                 pushObj.position = 3;
                                 break;
 
                             case "future" :
-                                pushObj.displayStr = pushObj.ordersCount > 1 ? "View Orders" : "View Order";
-
-                                if(pushObj.isAlert){
-                                    pushObj.displayStr = "Pending Confirmation";
-                                }
-                                if(pushObj.sla && !pushObj.isAlert){
-                                    pushObj.displayStr = "Confirm Order";
-                                }
                                 pushObj.position = 4;
                                 break;
 
                             case "bydate" :
-                                pushObj.displayStr = pushObj.ordersCount > 1 ? "View Orders" : "View Order";
-
-                                if(pushObj.isAlert){
-                                    pushObj.displayStr = "Pending Confirmation";
-                                }
-                                if(pushObj.sla && !pushObj.isAlert){
-                                    pushObj.displayStr = "Confirm Order";
-                                }
                                 pushObj.position = 5;
                                 break;
                         }
@@ -248,64 +216,32 @@ export class DashboardService {
                             position : 0
                         };
 
+                        pushObj.displayStr = pushObj.ordersCount > 1 ? "View Orders" : "View Order";
+
+                        if(pushObj.isAlert){
+                            pushObj.displayStr = "Take Action";
+                        }else if(pushObj.sla && !pushObj.isAlert){
+                            pushObj.displayStr = pushObj.ordersCount > 1 ? "View Orders" : "View Order";
+                        }
+
                         switch(day){
                             case "past" :
-                                pushObj.displayStr = pushObj.ordersCount > 1 ? "View Orders" : "View Order";
-
-                                if(pushObj.isAlert){
-                                    pushObj.displayStr = "Take Action";
-                                }
-                                if(pushObj.sla && !pushObj.isAlert){
-                                    pushObj.displayStr = pushObj.ordersCount > 1 ? "View Orders" : "View Order";
-                                }
                                 pushObj.position = 1;
                                 break;
 
                             case "today" : todayOrderTobeDelivered = todayOrderTobeDelivered + parseInt(countObj[prop].count);
-                                pushObj.displayStr = pushObj.ordersCount > 1 ? "View Orders" : "View Order";
-
-                                if(pushObj.isAlert){
-                                    pushObj.displayStr = "Take Action";
-                                }
-                                if(pushObj.sla && !pushObj.isAlert){
-                                    pushObj.displayStr = pushObj.ordersCount > 1 ? "View Orders" : "View Order";
-                                }
                                 pushObj.position = 2;
                                 break;
 
                             case "tomorrow" :
-                                pushObj.displayStr = pushObj.ordersCount > 1 ? "View Orders" : "View Order";
-
-                                if(pushObj.isAlert){
-                                    pushObj.displayStr = "Take Action";
-                                }
-                                if(pushObj.sla && !pushObj.isAlert){
-                                    pushObj.displayStr = pushObj.ordersCount > 1 ? "View Orders" : "View Order";
-                                }
                                 pushObj.position = 3;
                                 break;
 
                             case "future" :
-                                pushObj.displayStr = pushObj.ordersCount > 1 ? "View Orders" : "View Order";
-
-                                if(pushObj.isAlert){
-                                    pushObj.displayStr = "Take Action";
-                                }
-                                if(pushObj.sla && !pushObj.isAlert){
-                                    pushObj.displayStr = pushObj.ordersCount > 1 ? "View Orders" : "View Order";
-                                }
                                 pushObj.position = 4;
                                 break;
 
                             case "bydate" :
-                                pushObj.displayStr = pushObj.ordersCount > 1 ? "View Orders" : "View Order";
-
-                                if(pushObj.isAlert){
-                                    pushObj.displayStr = "Take Action";
-                                }
-                                if(pushObj.sla && !pushObj.isAlert){
-                                    pushObj.displayStr = pushObj.ordersCount > 1 ? "View Orders" : "View Order";
-                                }
                                 pushObj.position = 5;
                                 break;
                         }

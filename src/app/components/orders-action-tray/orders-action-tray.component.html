@@ -331,7 +331,7 @@
                                 <img class="component-image clk" src="{{productsCompURL}}th/{{prodComponent.componentImage}}" alt="Component_img" (click)="imagePreview($event, productsCompURL+'full/'+(prodComponent.componentImage))">
                                 <div class="component-quantity center-align">x {{prodComponent.quantity | number}}</div>
                                 <div class="component-name center-align">{{prodComponent.componentName}} </div>
-                                <div class="price-display" *ngIf="prodComponent.componentPrice && prodComponent.componentPrice !== 'N/A'" style="font-size:0.8em;">{{prodComponent.componentPrice | number : '2.0-0'}}x{{prodComponent.quantity | number}}={{prodComponent.componentPrice | number : '2.0-0' * prodComponent.quantity | number}}</div>
+                                <div class="price-display" *ngIf="prodComponent.componentPrice && prodComponent.componentPrice !== 'N/A'" style="font-size:0.8em;">{{prodComponent.componentPrice | number : '2.0-0'}}x{{prodComponent.quantity | number}}={{prodComponent.componentPrice  * prodComponent.quantity}}</div>
                               </div>
                               <div class="table-inline-display plus-sign" *ngIf="(i+1) !== orderProduct.componentList.length">
                                 <div class="table-cell-display v-align-middle">+</div>
