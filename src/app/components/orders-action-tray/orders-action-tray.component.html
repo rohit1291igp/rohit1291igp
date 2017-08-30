@@ -73,7 +73,7 @@
 <div id="mainOrderSection" class="orders-action" [ngClass]="{'show-tray': trayOpen, 'hide-tray': !trayOpen}" >
 <div class="apierror" *ngIf="apierror">{{apierror}}</div>
   <div class="container-fluid orders-view">
-    <div class="row">
+    <div class="row sidePanelHeader">
       <div class="col-md-1">
         <a href="#" (click)="toggleTray($event, null, null)" [attr.data-trayOpen]="trayOpen">
           <i class="glyphicon glyphicon-remove close-tray"></i>
@@ -85,10 +85,10 @@
                 <span *ngIf="!orderByStatus">Searched Order</span>
                 <span *ngIf="orderByStatus">
                      <span class="uppercase" *ngIf="orderUpdateByTime == 'past'">Past - </span>
-                     <span class="uppercase" *ngIf="orderByStatus == 'Processed'">New Orders</span>
-                     <span class="uppercase" *ngIf="orderByStatus == 'Confirmed'">Confirmed Orders</span>
-                     <span class="uppercase" *ngIf="orderByStatus == 'OutForDelivery'">Out for delivery Orders</span>
-                     <span class="uppercase" *ngIf="orderByStatus == 'Shipped'">Delivered Orders</span>
+                     <span class="uppercase" *ngIf="orderByStatus == 'Processed'">New Orders(To be confirmed)</span>
+                     <span class="uppercase" *ngIf="orderByStatus == 'Confirmed'">Confirmed Orders(To be delivered)</span>
+                     <span class="uppercase" *ngIf="orderByStatus == 'OutForDelivery'">Orders out for delivery</span>
+                     <span class="uppercase" *ngIf="orderByStatus == 'Shipped'">Orders delivered today</span>
                 </span>
                 <span *ngIf="orderUpdateByTime">
                     <span class="uppercase" *ngIf="orderUpdateByTime == 'past'"> - Delivery for today</span>
@@ -105,7 +105,7 @@
         </div>
 
     </div>
-    <div class="row">
+    <div class="row sidePanelContent">
         <div *ngIf="!sidePanelData">
             <div class="col-md-12 order-row" *ngFor="let loaderc of loadercount" style="margin-bottom: 0;">
                     <div class="container-fluid orders-tray" >
@@ -257,8 +257,8 @@
                         (click)="updateOrderStatus($event, getNxtOrderStatus(order.orderProducts[0].ordersProductStatus), order.orderId, order.orderProducts, order.orderProducts[0].orderProductExtraInfo.deliveryDate, order.orderProducts[0].orderProductExtraInfo.deliveryTime)">
                               <span *ngIf="order.orderProducts[0].ordersProductStatus =='Processed'">Confirm</span>
                               <span *ngIf="order.orderProducts[0].ordersProductStatus =='Confirmed'">Out For Delivery</span>
-                              <span *ngIf="(order.orderProducts[0].ordersProductStatus =='Shipped' && order.orderProducts[0].deliveryStatus === 0) || order.orderProducts[0].ordersProductStatus =='OutForDelivery' || order.orderProducts[0].ordersProductStatus == 'Partially Dispatched'">Delivered</span>
-                              <span *ngIf="(order.orderProducts[0].ordersProductStatus =='Shipped' && order.orderProducts[0].deliveryStatus === 1)  || (order.orderProducts[0].ordersProductStatus =='Dispatched' && order.orderProducts[0].deliveryStatus === 1)">Delivered</span>
+                              <span *ngIf="(order.orderProducts[0].ordersProductStatus =='Shipped' && order.orderProducts[0].deliveryStatus === 0) || order.orderProducts[0].ordersProductStatus =='OutForDelivery' || order.orderProducts[0].ordersProductStatus == 'Partially Dispatched'">Mark as Delivered</span>
+                              <span *ngIf="(order.orderProducts[0].ordersProductStatus =='Shipped' && order.orderProducts[0].deliveryStatus === 1)  || (order.orderProducts[0].ordersProductStatus =='Dispatched' && order.orderProducts[0].deliveryStatus === 1)">Mark as Delivered</span>
                         </button>
                       </div>
 
@@ -300,7 +300,11 @@
                   </div>
                   <div class="row" *ngFor="let orderProduct of order.orderProducts; let z='index'">
                     <p class="">
-                        Product Name: <a target="_new" href="https://www.igp.com/{{orderProduct.productNameForUrl}}"><span class="uppercase text-igp">{{orderProduct.productName}}</span></a>
+                        Product Name:
+                        <a target="_new" href="https://www.igp.com/{{orderProduct.productNameForUrl}}">
+                            <span class="uppercase text-igp">{{orderProduct.productName}}</span>
+                            <span class="" *ngIf="orderProduct.sku">({{orderProduct.sku}})  </span>
+                        </a>
                         <span class="" style="" *ngIf="orderProduct.personalized"> | <a target="_new" href="http://admin.indiangiftsportal.com/myshop/persInfo.php?pid={{orderProduct.productId}}&oid={{order.orderId}}">Download Photo</a></span>
                     </p>
                     <!--<p>Product Components -</p>-->
@@ -325,9 +329,9 @@
                                   <div class="component-eggless abs" *ngIf="prodComponent.eggless">Eggless</div>
                                 <!--<div class="component-head center-align uppercase">{{prodComponent.componentCode | slice:0:9}}<span *ngIf="prodComponent.componentName.length > 9">...</span></div>-->
                                 <img class="component-image clk" src="{{productsCompURL}}th/{{prodComponent.componentImage}}" alt="Component_img" (click)="imagePreview($event, productsCompURL+'full/'+(prodComponent.componentImage))">
-                                <div class="component-quantity center-align">X {{prodComponent.quantity | number : '2.0-0'}}</div>
+                                <div class="component-quantity center-align">x {{prodComponent.quantity | number}}</div>
                                 <div class="component-name center-align">{{prodComponent.componentName}} </div>
-                                <div class="price-display" *ngIf="prodComponent.componentPrice && prodComponent.componentPrice !== 'N/A'">Rs. {{prodComponent.componentPrice | number : '2.0-0'}}</div>
+                                <div class="price-display" *ngIf="prodComponent.componentPrice && prodComponent.componentPrice !== 'N/A'" style="font-size:0.8em;">{{prodComponent.componentPrice | number : '2.0-0'}}x{{prodComponent.quantity | number}}={{prodComponent.componentPrice | number : '2.0-0' * prodComponent.quantity | number}}</div>
                               </div>
                               <div class="table-inline-display plus-sign" *ngIf="(i+1) !== orderProduct.componentList.length">
                                 <div class="table-cell-display v-align-middle">+</div>

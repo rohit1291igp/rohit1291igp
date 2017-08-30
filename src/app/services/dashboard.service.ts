@@ -36,7 +36,7 @@ export class DashboardService {
     getMasterData() {
         var _this = this;
         return {
-            displayStatus: ["New Orders", "Confirmed", "Out for delivery", "Delivered orders"],
+            displayStatus: ["New Orders", "Confirmed", "Out for delivery", "Today's Deliveries"],
             status: [ _this.statuslist['n'], _this.statuslist['c'], _this.statuslist['o'], _this.statuslist['d']],
             deliveryTimes: ["today", "tomorrow", "future", "bydate", "all", "unknown"]
         }
@@ -176,24 +176,61 @@ export class DashboardService {
 
                         switch(day){
                             case "past" :
-                                pushObj.displayStr = "Take action";
+                                pushObj.displayStr = pushObj.ordersCount > 1 ? "View Orders" : "View Order";
+                                if(pushObj.isAlert){
+                                    pushObj.displayStr = "Pending Confirmation";
+                                }
+                                if(pushObj.sla && !pushObj.isAlert){
+                                    pushObj.displayStr = "Confirm Order";
+                                }
+                                pushObj.displayStr = pushObj.ordersCount > 1 ? "View Orders" : "View Order";
                                 pushObj.position = 1;
                                 break;
 
                             case "today" : todayOrderTobeDelivered = todayOrderTobeDelivered + parseInt(countObj[prop].count);
-                                pushObj.displayStr = "Take action";
+                                pushObj.displayStr = pushObj.ordersCount > 1 ? "View Orders" : "View Order";
+                                if(pushObj.isAlert){
+                                    pushObj.displayStr = "Pending Confirmation";
+                                }
+                                if(pushObj.sla && !pushObj.isAlert){
+                                    pushObj.displayStr = "Confirm Order";
+                                }
                                 pushObj.position = 2;
                                 break;
 
-                            case "tomorrow" : pushObj.displayStr = pushObj.ordersCount > 1 ? "View Orders" : "View Order";
+                            case "tomorrow" :
+                                pushObj.displayStr = pushObj.ordersCount > 1 ? "View Orders" : "View Order";
+
+                                if(pushObj.isAlert){
+                                    pushObj.displayStr = "Pending Confirmation";
+                                }
+                                if(pushObj.sla && !pushObj.isAlert){
+                                    pushObj.displayStr = "Confirm Order";
+                                }
                                 pushObj.position = 3;
                                 break;
 
-                            case "future" : pushObj.displayStr = pushObj.ordersCount > 1 ? "View Orders" : "View Order";
+                            case "future" :
+                                pushObj.displayStr = pushObj.ordersCount > 1 ? "View Orders" : "View Order";
+
+                                if(pushObj.isAlert){
+                                    pushObj.displayStr = "Pending Confirmation";
+                                }
+                                if(pushObj.sla && !pushObj.isAlert){
+                                    pushObj.displayStr = "Confirm Order";
+                                }
                                 pushObj.position = 4;
                                 break;
 
-                            case "bydate" : pushObj.displayStr = pushObj.ordersCount > 1 ? "View Orders" : "View Order";
+                            case "bydate" :
+                                pushObj.displayStr = pushObj.ordersCount > 1 ? "View Orders" : "View Order";
+
+                                if(pushObj.isAlert){
+                                    pushObj.displayStr = "Pending Confirmation";
+                                }
+                                if(pushObj.sla && !pushObj.isAlert){
+                                    pushObj.displayStr = "Confirm Order";
+                                }
                                 pushObj.position = 5;
                                 break;
                         }
@@ -212,24 +249,63 @@ export class DashboardService {
                         };
 
                         switch(day){
-                            case "past" : pushObj.displayStr = pushObj.ordersCount > 1 ? "View Orders" : "View Order";
+                            case "past" :
+                                pushObj.displayStr = pushObj.ordersCount > 1 ? "View Orders" : "View Order";
+
+                                if(pushObj.isAlert){
+                                    pushObj.displayStr = "Take Action";
+                                }
+                                if(pushObj.sla && !pushObj.isAlert){
+                                    pushObj.displayStr = pushObj.ordersCount > 1 ? "View Orders" : "View Order";
+                                }
                                 pushObj.position = 1;
                                 break;
 
                             case "today" : todayOrderTobeDelivered = todayOrderTobeDelivered + parseInt(countObj[prop].count);
                                 pushObj.displayStr = pushObj.ordersCount > 1 ? "View Orders" : "View Order";
+
+                                if(pushObj.isAlert){
+                                    pushObj.displayStr = "Take Action";
+                                }
+                                if(pushObj.sla && !pushObj.isAlert){
+                                    pushObj.displayStr = pushObj.ordersCount > 1 ? "View Orders" : "View Order";
+                                }
                                 pushObj.position = 2;
                                 break;
 
-                            case "tomorrow" : pushObj.displayStr = pushObj.ordersCount > 1 ? "View Orders" : "View Order";
+                            case "tomorrow" :
+                                pushObj.displayStr = pushObj.ordersCount > 1 ? "View Orders" : "View Order";
+
+                                if(pushObj.isAlert){
+                                    pushObj.displayStr = "Take Action";
+                                }
+                                if(pushObj.sla && !pushObj.isAlert){
+                                    pushObj.displayStr = pushObj.ordersCount > 1 ? "View Orders" : "View Order";
+                                }
                                 pushObj.position = 3;
                                 break;
 
-                            case "future" : pushObj.displayStr = pushObj.ordersCount > 1 ? "View Orders" : "View Order";
+                            case "future" :
+                                pushObj.displayStr = pushObj.ordersCount > 1 ? "View Orders" : "View Order";
+
+                                if(pushObj.isAlert){
+                                    pushObj.displayStr = "Take Action";
+                                }
+                                if(pushObj.sla && !pushObj.isAlert){
+                                    pushObj.displayStr = pushObj.ordersCount > 1 ? "View Orders" : "View Order";
+                                }
                                 pushObj.position = 4;
                                 break;
 
-                            case "bydate" : pushObj.displayStr = pushObj.ordersCount > 1 ? "Confirmed Orders" : "Confirmed Order";
+                            case "bydate" :
+                                pushObj.displayStr = pushObj.ordersCount > 1 ? "View Orders" : "View Order";
+
+                                if(pushObj.isAlert){
+                                    pushObj.displayStr = "Take Action";
+                                }
+                                if(pushObj.sla && !pushObj.isAlert){
+                                    pushObj.displayStr = pushObj.ordersCount > 1 ? "View Orders" : "View Order";
+                                }
                                 pushObj.position = 5;
                                 break;
                         }

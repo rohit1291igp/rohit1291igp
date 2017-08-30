@@ -2,16 +2,16 @@
   <div class="col-md-12">
     <ul class="nav nav-pills">
         <li class="relative" [ngClass]="{'active': activeTab === 1}" (click)="selectTab($event, 1)" data-tab="all">
-          <a href="#">All Orders</a>
-            <div class="DbCount all">{{dashboardCounts.allOrders}}</div>
+          <a href="#">All Orders [{{dashboardCounts.allOrders}}]</a>
+            <!--<div class="DbCount all">{{dashboardCounts.allOrders}}</div>-->
         </li>
         <li class="relative" [ngClass]="{'active': activeTab === 2}" (click)="selectTab($event, 2)" data-tab="sla">
-          <a href="#">Action Required</a>
-          <div class="DbCount action">{{dashboardCounts.actionRequired}}</div>
+          <a href="#">Action Required [{{dashboardCounts.actionRequired}}]</a>
+          <!--<div class="DbCount action">{{dashboardCounts.actionRequired}}</div>-->
         </li>
         <li class="relative" [ngClass]="{'active': activeTab === 3}" (click)="selectTab($event, 3)" data-tab="alert">
-          <a href="#">High Alert</a>
-          <div class="DbCount alertC">{{dashboardCounts.highAlert}}</div>
+          <a href="#">High Alert [{{dashboardCounts.highAlert}}]</a>
+          <!--<div class="DbCount alertC">{{dashboardCounts.highAlert}}</div>-->
         </li>
     </ul>
   </div>
