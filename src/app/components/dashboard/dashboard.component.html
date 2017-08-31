@@ -44,7 +44,7 @@
           <!--Table content-->
           <div class="row">
             <div class="cell col-md-2 table-display" [ngClass]="{'alert-action': isRowAlert['new'].isAlert, 'alertg-action': (!isRowAlert['new'].isAlert && isRowAlert['new'].sla), 'no-action': (!isRowAlert['new'].isAlert && !isRowAlert['new'].sla)}">
-              <div class="table-cell-display v-align-middle">{{masterData.displayStatus[0]}} [{{dashboardData.counts.newOrders}}]</div>
+              <div class="table-cell-display v-align-middle">{{masterData.displayStatus[0]}} ({{dashboardData.counts.newOrders}})</div>
               <!--<div class="DbCount" *ngIf="dashboardData.counts.newOrders">{{dashboardData.counts.newOrders}}</div>-->
             </div>
 
@@ -90,7 +90,7 @@
 
           <div class="row">
           <div class="cell col-md-2 table-display" [ngClass]="{'alert-action': isRowAlert['confirmed'].isAlert, 'alertg-action': (!isRowAlert['confirmed'].isAlert && isRowAlert['confirmed'].sla), 'no-action': (!isRowAlert['confirmed'].isAlert && !isRowAlert['confirmed'].sla)}">
-              <div class="table-cell-display v-align-middle">{{masterData.displayStatus[1]}} [{{dashboardData.counts.confirmedOrders}}]</div>
+              <div class="table-cell-display v-align-middle">{{masterData.displayStatus[1]}} ({{dashboardData.counts.confirmedOrders}})</div>
               <!--<div class="DbCount" *ngIf="dashboardData.counts.confirmedOrders">{{dashboardData.counts.confirmedOrders}}</div>-->
           </div>
 
@@ -136,7 +136,7 @@
 
           <div class="row">
             <div class="cell col-md-2 table-display" [ngClass]="{'alert-action': isRowAlert['future'].isAlert, 'alertg-action': (!isRowAlert['future'].isAlert && isRowAlert['future'].sla), 'no-action': (!isRowAlert['future'].isAlert && !isRowAlert['future'].sla)}">
-              <div class="table-cell-display v-align-middle">{{masterData.displayStatus[2]}} [{{dashboardData.counts.ofdOrders}}]</div>
+              <div class="table-cell-display v-align-middle">{{masterData.displayStatus[2]}} ({{dashboardData.counts.ofdOrders}})</div>
               <!--<div class="DbCount" *ngIf="dashboardData.counts.ofdOrders">{{dashboardData.counts.ofdOrders}}</div>-->
             </div>
 
@@ -166,9 +166,11 @@
             <div class="cell col-md-10">
               <div class="row">
                 <div class="col-md-7 relative">
-                  <div class="abs" style="left:25em; top:1.5em;">Total Orders - {{dashboardData.delivered.total+dashboardData.delivered.today}}</div>
-                  <div class="line-height">Orders Delivered - {{dashboardData.delivered.total}}</div>
-                  <div class="line-height">Orders to be Delivered - {{dashboardData.delivered.today}}</div>
+                  <div class="abs text-bold" style="left:1.5em; top:1.4em;">Total Orders - {{dashboardData.delivered.total+dashboardData.delivered.today}}</div>
+                  <div style="margin-left:25em;">
+                    <div class="line-height">Orders Delivered - {{dashboardData.delivered.total}}</div>
+                    <div class="line-height">Orders to be Delivered - {{dashboardData.delivered.today}}</div>
+                  </div>
                 </div>
                 <div class="col-md-5" *ngIf="dashboardData.delivered.total" style="padding: 1.5em 0 0;">
                   <div class="btn btn-primary custom-button underline" (click)="openPanel($event, masterData.status[3])">
