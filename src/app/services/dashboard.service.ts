@@ -218,9 +218,9 @@ export class DashboardService {
 
                         pushObj.displayStr = pushObj.ordersCount > 1 ? "View Orders" : "View Order";
 
-                        if(pushObj.isAlert){
+                        if(pushObj.isAlert === "true"){
                             pushObj.displayStr = "Take Action";
-                        }else if(pushObj.sla && !pushObj.isAlert){
+                        }else if(pushObj.sla === "true" && pushObj.isAlert !== "true"){
                             pushObj.displayStr = pushObj.ordersCount > 1 ? "View Orders" : "View Order";
                         }
 

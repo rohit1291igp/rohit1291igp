@@ -166,8 +166,8 @@
             <div class="cell col-md-10">
               <div class="row">
                 <div class="col-md-7">
-                  <div class="line-height">Orders delivered today - {{dashboardData.delivered.total}}</div>
-                  <div class="line-height">Total orders for today's delivery - {{dashboardData.delivered.today}}</div>
+                  <div class="line-height">Total Orders Delivered - {{dashboardData.delivered.total}}</div>
+                  <div class="line-height">Total Orders to be Delivered - {{dashboardData.delivered.today}}</div>
                 </div>
                 <div class="col-md-5" *ngIf="dashboardData.delivered.total" style="padding: 1.5em 0 0;">
                   <div class="btn btn-primary custom-button underline" (click)="openPanel($event, masterData.status[3])">
