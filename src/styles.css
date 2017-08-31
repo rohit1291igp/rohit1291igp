@@ -395,7 +395,7 @@
 /* responsive css - start */
 
 body{
-    font-size: 1vw;
+    font-size: 0.96vw;
 }
 
 @media (max-width: 415px) {
