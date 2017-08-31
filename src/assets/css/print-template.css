@@ -121,12 +121,13 @@ page[size="A5"][layout="portrait"] {
     }
 
     .header{
-        padding:16px 48px;
+        padding:1em 48px;
         box-shadow: 0 0 0.5cm rgba(0,0,0,0.5);
         border-bottom:1px solid #a7a7a7;
     }
 
     .order-main-body{
+        margin-top: 0.5em;
         padding:0 48px;
     }
 
@@ -404,12 +405,13 @@ page[size="A5"][layout="portrait"] {
 }
 
 .header{
-    padding:16px 48px;
+    padding:1em 48px;
     box-shadow: 0 0 0.5cm rgba(0,0,0,0.5);
     border-bottom:1px solid #a7a7a7;
 }
 
 .order-main-body{
+    margin-top: 0.5em;
     padding:0 48px;
 }
 
