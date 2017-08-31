@@ -1,7 +1,7 @@
 <div class="headerVendor navbar-brand" *ngIf="vendorName">- {{vendorName}}</div>
 <app-header-tabs (onTabChanged)="loadDashboardCount($event)" [dashboardCounts]="dashboardData.counts"></app-header-tabs>
 
-<div class="col-md-3 searchbox relative" style="width: 25em; right: -4em; top: 4em; position: absolute;">
+<div class="col-md-3 searchbox relative" style="">
     <form name="form" (ngSubmit)="f.form.valid && search($event)" #f="ngForm" novalidate>
          <input name="searchkey" type="text" class="input-right form-control" placeholder="Order Number" [(ngModel)]="searchModel.searchkey" #searchkey="ngModel" style="width:60%; display:inline-block;" required>
         <input  type="submit" class="btn btn-primary" style="display:inline-block;" value="Search" />
@@ -10,8 +10,8 @@
     </form>
 </div>
 
-<div class="container-fluid">
-  <div class="row padding-extra">
+<div class="container-fluid dashboardTable">
+  <div class="row padding-extra dbTableHeader">
     <p>Hi {{vendorName}} !</p>
     <p>Below is the schedule of orders you need to fulfil</p>
   </div>
@@ -165,9 +165,10 @@
 
             <div class="cell col-md-10">
               <div class="row">
-                <div class="col-md-7">
-                  <div class="line-height">Total Orders Delivered - {{dashboardData.delivered.total}}</div>
-                  <div class="line-height">Total Orders to be Delivered - {{dashboardData.delivered.today}}</div>
+                <div class="col-md-7 relative">
+                  <div class="abs" style="left:25em; top:1.5em;">Total Orders - {{dashboardData.delivered.total+dashboardData.delivered.today}}</div>
+                  <div class="line-height">Orders Delivered - {{dashboardData.delivered.total}}</div>
+                  <div class="line-height">Orders to be Delivered - {{dashboardData.delivered.today}}</div>
                 </div>
                 <div class="col-md-5" *ngIf="dashboardData.delivered.total" style="padding: 1.5em 0 0;">
                   <div class="btn btn-primary custom-button underline" (click)="openPanel($event, masterData.status[3])">

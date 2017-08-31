@@ -98,4 +98,11 @@
     right: 42%;
 }
 
+.searchbox{
+    width: 25em;
+    right: -4em;
+    top: 4em;
+    position: absolute;
+}
+
 

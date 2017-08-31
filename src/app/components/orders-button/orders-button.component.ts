@@ -4,7 +4,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
   selector: 'app-orders-button',
   template: `<div class="btn btn-primary orders-button" [ngClass]="{'bg-igp text-white': isAlert, 'bg-green text-white': (!isAlert && sla), 'bg-grey text-black': (!isAlert && !sla), 'text-bold': orderStatus === 'Processed'}" (click)="openOrdersTray($event)" [attr.data-status]="orderStatus" [attr.data-OrderDay]="OrderDay" [attr.data-deliveryTime]="deliveryTime" [attr.data-orderId]="orderId">
                 <ng-content></ng-content>
-                <div *ngIf="displayData">{{displayData.displayStr}}</div>
+                <div class="db-btn-status" *ngIf="displayData">{{displayData.displayStr}}</div>
             </div>`,
   styles: [`.orders-button {
               margin-top: 5px;
