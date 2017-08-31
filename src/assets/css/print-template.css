@@ -1,11 +1,15 @@
 body {
     width: 21cm;
     /*background: rgb(204,204,204);*/
-    margin: 0;
+    margin: 0 auto;
     box-shadow: 0;
     padding-bottom: 16px;
     -webkit-print-color-adjust: exact;
+    height: 14.8cm;
 }
+
+.pagebreak { page-break-before: always; }
+
 page {
     background: white;
     display: block;
@@ -42,11 +46,14 @@ page[size="A5"][layout="portrait"] {
     body, page {
         /*background: rgb(204,204,204);*/
         width: 21cm;
-        margin: 0;
+        margin: 0 auto;
         box-shadow: 0;
         padding-bottom: 16px;
         -webkit-print-color-adjust: exact;
+        height: 14.8cm;
     }
+
+    .pagebreak { page-break-before: always; }
 
     @page {
         background: white;

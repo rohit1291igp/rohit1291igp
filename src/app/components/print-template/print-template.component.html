@@ -1,4 +1,5 @@
-<div class="row page" id="order_{{order.orderId}}" class="hide" *ngIf="printType === 'order'">
+
+<div class="row page" id="order_{{order.orderId}}" class="hide"  *ngIf="printType === 'order'">
 
     <section class="messgae-box-cont" *ngIf="order.commments">
         <div class="messgae-box">
@@ -69,7 +70,7 @@
                  <div class="t-col-5 display-inline ">Qty</div>
              </div>
 
-            <div class="order-body-productDetails-body border-bottom prod-bg" *ngFor="let orderProduct of order.orderProducts; let z='index'">
+            <div class="order-body-productDetails-body border-bottom prod-bg" *ngFor="let orderProduct of order.orderProducts; let z='index'" [ngClass]="{'pagebreak' : z == 2}">
               <div class="product-row-cont">
                     <div class="t-col-1 display-inline ">{{z+1}}.</div>
                     <div class="t-col-2 display-inline">
@@ -187,3 +188,5 @@
         </div>
     </section>
 </div>
+
+

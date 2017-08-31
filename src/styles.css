@@ -394,8 +394,8 @@
 
 /* responsive css - start */
 
-body{
-    font-size: 0.96vw;
+body .dashboard-content{
+    font-size: 0.92vw;
 }
 
 @media (max-width: 415px) {
