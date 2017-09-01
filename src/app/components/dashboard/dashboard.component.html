@@ -160,16 +160,15 @@
           </div>
           <div class="row">
           <div class="cell col-md-2 table-display" [ngClass]="{'alert-action': isRowAlert['bydate'].isAlert, 'alertg-action': (!isRowAlert['bydate'].isAlert && isRowAlert['bydate'].sla), 'no-action': (!isRowAlert['bydate'].isAlert && !isRowAlert['bydate'].sla)}">
-              <div class="table-cell-display v-align-middle">{{masterData.displayStatus[3]}}</div>
+              <div class="table-cell-display v-align-middle">{{masterData.displayStatus[3]}} ({{dashboardData.delivered.total+dashboardData.delivered.today}})</div>
           </div>
 
             <div class="cell col-md-10">
               <div class="row">
                 <div class="col-md-7 relative">
-                  <div class="abs text-bold" style="left:1.5em; top:1.4em;">Total Orders - {{dashboardData.delivered.total+dashboardData.delivered.today}}</div>
-                  <div style="margin-left:25em;">
-                    <div class="line-height">Orders Delivered - {{dashboardData.delivered.total}}</div>
-                    <div class="line-height">Orders to be Delivered - {{dashboardData.delivered.today}}</div>
+                  <div class="abs" style="left:1.5em; top:1.4em;">Orders Delivered - {{dashboardData.delivered.total}}</div>
+                  <div style="margin-left:33em; margin-top: 1.2em;">
+                    <div class="line-height">Orders yet to be Delivered - {{dashboardData.delivered.today}}</div>
                   </div>
                 </div>
                 <div class="col-md-5" *ngIf="dashboardData.delivered.total" style="padding: 1.5em 0 0;">

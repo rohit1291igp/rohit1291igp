@@ -8,4 +8,3 @@ export const environment = {
   productsURL : "https://d1xs5fw35mbn8b.cloudfront.net/p/m/",
   productsCompURL : "http://admin.indiangiftsportal.com/handelscomponents/"
 };
-    
