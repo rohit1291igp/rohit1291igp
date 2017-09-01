@@ -74,8 +74,9 @@ export class DashboardComponent implements OnInit {
         let _this = this;
         let clickEleIndex =  e.currentTarget.parentElement.parentElement.parentElement.dataset.index;
         //setTimeout(function(){
-            if(clickEleIndex > 0) _this.dashboardData = _this.dashboardService.changeDashboardDataOrder(_this.dashboardData, clickEleIndex);
+             _this.dashboardData = _this.dashboardService.changeDashboardDataOrder(_this.dashboardData, clickEleIndex, status);
         //}, 1000);
+
     }
 
   }

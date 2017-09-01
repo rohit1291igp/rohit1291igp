@@ -737,26 +737,55 @@ export class DashboardService {
         return customDashboardData;
     }
 
-    changeDashboardDataOrder(dashboardData, eleColIndex){
+    changeDashboardDataOrder(dashboardData, eleColIndex, row){
         eleColIndex = parseInt(eleColIndex);
 
-        let splicedObj = dashboardData.topLabels.splice(eleColIndex, 1);
-        dashboardData.topLabels.unshift(splicedObj[0]);
+        if(eleColIndex > 0) {
+            let splicedObj = dashboardData.topLabels.splice(eleColIndex, 1);
+            dashboardData.topLabels.unshift(splicedObj[0]);
 
-             splicedObj = dashboardData.new.splice(eleColIndex, 1);
-        dashboardData.new.unshift(splicedObj[0]);
+            splicedObj = dashboardData.new.splice(eleColIndex, 1);
+            dashboardData.new.unshift(splicedObj[0]);
 
             splicedObj = dashboardData.confirmed.splice(eleColIndex, 1);
-        dashboardData.confirmed.unshift(splicedObj[0]);
+            dashboardData.confirmed.unshift(splicedObj[0]);
+        }
+
+        dashboardData = this.blurInactiveTableCell(dashboardData, eleColIndex, row);
+
+        return dashboardData;
+    }
+
+    blurInactiveTableCell(dashboardData, eleColIndex, row){
+        console.log('blurInactiveTableCell ====>', dashboardData, eleColIndex, row);
+        if(row === "Processed"){
+            if(dashboardData.confirmed[0]) dashboardData.confirmed[0].inactive = true;
+            if(dashboardData.ofd[0]) dashboardData.ofd[0].inactive = true;
+            if(dashboardData.ofd[1]) dashboardData.ofd[1].inactive = true;
+        }else if(row === "Confirmed"){
+            if(dashboardData.new[0]) dashboardData.new[0].inactive = true;
+            if(dashboardData.ofd[0]) dashboardData.ofd[0].inactive = true;
+            if(dashboardData.ofd[1]) dashboardData.ofd[1].inactive = true;
+        }else if(row === "OutForDelivery"){
+            //dashboardData.ofd[0].inactive = true;
+        }
 
         return dashboardData;
     }
 
     reArrangeDbDate(dbData){
-        console.log('---- DbDate rearranged ----');
+        //remove all blur classes
+        console.log('---- DbData remove blur ----');
+        if(dbData.confirmed[0] && dbData.confirmed[0].inactive) delete dbData.confirmed[0].inactive;
+        if(dbData.new[0] && dbData.new[0].inactive) delete dbData.new[0].inactive;
+        if(dbData.ofd[0] && dbData.ofd[0].inactive) delete dbData.ofd[0].inactive;
+        if(dbData.ofd[1] && dbData.ofd[1].inactive) delete dbData.ofd[1].inactive;
+
+        console.log('---- DbData rearranged ----');
         dbData.topLabels = dbData.topLabels.sort(this.UtilityService.dynamicSort("position", null));
         dbData.confirmed = dbData.confirmed.sort(this.UtilityService.dynamicSort("position", null));
         dbData.new = dbData.new.sort(this.UtilityService.dynamicSort("position", null));
+
         return dbData;
     }
     
