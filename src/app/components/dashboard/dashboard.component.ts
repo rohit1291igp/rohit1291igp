@@ -70,15 +70,13 @@ export class DashboardComponent implements OnInit {
     this.child.toggleTray(e, status, orderId, this.dashBoardDataType);
 
     //changing clicked element position if its index greater than 0
-    if(status === "Processed" || status === "Confirmed"){
+    if(status === "Processed" || status === "Confirmed" || status === "OutForDelivery"){
         let _this = this;
         let clickEleIndex =  e.currentTarget.parentElement.parentElement.parentElement.dataset.index;
         //setTimeout(function(){
              _this.dashboardData = _this.dashboardService.changeDashboardDataOrder(_this.dashboardData, clickEleIndex, status);
         //}, 1000);
-
     }
-
   }
 
   openPanel(e, status) {

@@ -85,7 +85,7 @@
 
             <div class="cell col-md-10 no-padding">
               <div class="col-md-9 no-padding">
-                <div class="col-md-3 custom-btn-parent" *ngFor="let order of dashboardData.ofd; let i='index'" [ngClass]="{'inactive' : order.inactive}">
+                <div class="col-md-3 custom-btn-parent" *ngFor="let order of dashboardData.ofd; let i='index'" [attr.data-index]="i" [ngClass]="{'inactive' : order.inactive}">
                   <app-orders-button [orderId]="order.orderNumber" [displayData]="order" [orderStatus]="order.status" [OrderDay]="" [deliveryTime]="masterData.deliveryTimes[5]" (onViewOrders)="viewOrders($event)" *ngIf="i<4">
                     <div>{{order.orderNumber}}</div>
                   </app-orders-button>
@@ -109,9 +109,9 @@
             <div class="cell col-md-10">
               <div class="row">
                 <div class="col-md-7 relative">
-                  <div class="abs" style="left:1.5em; top:1.4em;">Orders Delivered - {{dashboardData.delivered.total}}</div>
-                  <div style="margin-left:33em; margin-top: 1.2em;">
-                    <div class="line-height">Orders yet to be Delivered - {{dashboardData.delivered.today}}</div>
+                  <div class="abs" style="left:1.5em; top:1.4em;">Orders already delivered : <span class="text-bold">{{dashboardData.delivered.total}}</span></div>
+                  <div style="margin-left:20em; margin-top: 1.2em;">
+                    <div class="line-height">Orders yet to be delivered : <span class="text-bold">{{dashboardData.delivered.today}}</span></div>
                   </div>
                 </div>
                 <div class="col-md-5" *ngIf="dashboardData.delivered.total" style="padding: 1.5em 0 0;">

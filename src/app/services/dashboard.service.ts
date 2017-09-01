@@ -6,6 +6,8 @@ import { UtilityService } from './utility.service';
 @Injectable()
 export class DashboardService {
     users: Array<any> = [];
+    currentColumn;
+    currentRow;
     statuslist :Object = {
         "n" : "Processed",
         "c" : "Confirmed",
@@ -387,6 +389,8 @@ export class DashboardService {
 
         console.log('alert row data ===================>', this.getAlertRow());
 
+        if(_this.currentRow) getDashboardDataResponse = _this.blurInactiveTableCell(getDashboardDataResponse, _this.currentColumn, _this.currentRow);
+
         return getDashboardDataResponse;
     }
 
@@ -741,14 +745,19 @@ export class DashboardService {
         eleColIndex = parseInt(eleColIndex);
 
         if(eleColIndex > 0) {
-            let splicedObj = dashboardData.topLabels.splice(eleColIndex, 1);
-            dashboardData.topLabels.unshift(splicedObj[0]);
+            if(row !== 'OutForDelivery'){
+                let splicedObj = dashboardData.topLabels.splice(eleColIndex, 1);
+                dashboardData.topLabels.unshift(splicedObj[0]);
 
-            splicedObj = dashboardData.new.splice(eleColIndex, 1);
-            dashboardData.new.unshift(splicedObj[0]);
+                splicedObj = dashboardData.new.splice(eleColIndex, 1);
+                dashboardData.new.unshift(splicedObj[0]);
 
-            splicedObj = dashboardData.confirmed.splice(eleColIndex, 1);
-            dashboardData.confirmed.unshift(splicedObj[0]);
+                splicedObj = dashboardData.confirmed.splice(eleColIndex, 1);
+                dashboardData.confirmed.unshift(splicedObj[0]);
+            }else{
+                //let splicedObj = dashboardData.ofd.splice(eleColIndex, 1);
+                //dashboardData.ofd.unshift(splicedObj);
+            }
         }
 
         dashboardData = this.blurInactiveTableCell(dashboardData, eleColIndex, row);
@@ -757,6 +766,8 @@ export class DashboardService {
     }
 
     blurInactiveTableCell(dashboardData, eleColIndex, row){
+        this.currentColumn = eleColIndex;
+        this.currentRow = row;
         console.log('blurInactiveTableCell ====>', dashboardData, eleColIndex, row);
         if(row === "Processed"){
             if(dashboardData.confirmed[0]) dashboardData.confirmed[0].inactive = true;
@@ -767,7 +778,9 @@ export class DashboardService {
             if(dashboardData.ofd[0]) dashboardData.ofd[0].inactive = true;
             if(dashboardData.ofd[1]) dashboardData.ofd[1].inactive = true;
         }else if(row === "OutForDelivery"){
-            //dashboardData.ofd[0].inactive = true;
+            //if(dashboardData.new[0]) dashboardData.new[0].inactive = true;
+            //if(dashboardData.confirmed[0]) dashboardData.confirmed[0].inactive = true;
+            //if(dashboardData.ofd[1]) dashboardData.ofd[1].inactive = true;
         }
 
         return dashboardData;
@@ -780,6 +793,8 @@ export class DashboardService {
         if(dbData.new[0] && dbData.new[0].inactive) delete dbData.new[0].inactive;
         if(dbData.ofd[0] && dbData.ofd[0].inactive) delete dbData.ofd[0].inactive;
         if(dbData.ofd[1] && dbData.ofd[1].inactive) delete dbData.ofd[1].inactive;
+        this.currentColumn = null;
+        this.currentRow = null;
 
         console.log('---- DbData rearranged ----');
         dbData.topLabels = dbData.topLabels.sort(this.UtilityService.dynamicSort("position", null));
