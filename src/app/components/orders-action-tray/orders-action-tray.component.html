@@ -56,7 +56,7 @@
                             <button class="btn btn-primary m-top-1" [ngClass]="{'markdlvBtn' : !trayOpen}">Mark as Delivered</button>
                             <div *ngIf="f.submitted && !message.valid" class="help-block"></div>
                         </form>
-                        <button class="btn btn-primary m-top-1 viewDetailPopupBtn" *ngIf="!trayOpen" (click)="toggleTray($event, '', statusReasonModel.orderId, null)">View Detail</button>
+                        <button class="btn btn-primary m-top-1 viewDetailPopupBtn" *ngIf="!trayOpen" (click)="toggleTray($event, 'OutForDeliveryView', statusReasonModel.orderId, null)">View Detail</button>
                         <div *ngIf="f.submitted && !message.valid" class="help-block theme-red">Recipient's details is required</div>
                     </div>
                 </div>

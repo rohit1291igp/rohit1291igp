@@ -33,6 +33,7 @@ import {environment} from "../../../environments/environment";
 export class OrdersActionTrayComponent implements OnInit {
   public trayOpen: Boolean = false;
   @Output() onStatusUpdate: EventEmitter<any> = new EventEmitter();
+  @Output() onOfdView: EventEmitter<any> = new EventEmitter();
   rejectReasons=[
       {"name" : "Select reason for reject", "value" : "" },
       {"name" : "Delivery location not serviceable", "value" : "Delivery location not serviceable" },
@@ -191,14 +192,15 @@ export class OrdersActionTrayComponent implements OnInit {
             this.trayOpen = false;
         }else{
             console.log('close not clicked ----->', this.trayOpen, dashBoardDataType);
+            if(orderByStatus === "OutForDeliveryView"){
+               this.onOfdView.emit("OutForDeliveryView");
+            }
             this.trayOpen = true;
         }
 
         //this.trayOpen = !this.trayOpen;
         console.log('trayOpen: and loading data', this.trayOpen);
         if(orderByStatus || orderId) this.loadTrayData(e, orderByStatus, orderId, dashBoardDataType, null);
-
-
     }
   }
 

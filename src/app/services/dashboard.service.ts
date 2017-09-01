@@ -389,7 +389,11 @@ export class DashboardService {
 
         console.log('alert row data ===================>', this.getAlertRow());
 
-        if(_this.currentRow) getDashboardDataResponse = _this.blurInactiveTableCell(getDashboardDataResponse, _this.currentColumn, _this.currentRow);
+        if(_this.currentRow && _this.currentRow !== "all") {
+            getDashboardDataResponse = _this.blurInactiveTableCell(getDashboardDataResponse, _this.currentColumn, _this.currentRow);
+        }else if(_this.currentRow && _this.currentRow === "all"){
+            getDashboardDataResponse = _this.disableAllTableCell(getDashboardDataResponse);
+        }
 
         return getDashboardDataResponse;
     }
@@ -742,10 +746,10 @@ export class DashboardService {
     }
 
     changeDashboardDataOrder(dashboardData, eleColIndex, row){
-        eleColIndex = parseInt(eleColIndex);
+        eleColIndex = parseInt(eleColIndex) || this.currentColumn;
 
         if(eleColIndex > 0) {
-            if(row !== 'OutForDelivery'){
+            if(row === 'Processed' || row === 'Confirmed'){
                 let splicedObj = dashboardData.topLabels.splice(eleColIndex, 1);
                 dashboardData.topLabels.unshift(splicedObj[0]);
 
@@ -754,9 +758,9 @@ export class DashboardService {
 
                 splicedObj = dashboardData.confirmed.splice(eleColIndex, 1);
                 dashboardData.confirmed.unshift(splicedObj[0]);
-            }else{
-                //let splicedObj = dashboardData.ofd.splice(eleColIndex, 1);
-                //dashboardData.ofd.unshift(splicedObj);
+            }else if(row === 'OutForDeliveryView'){
+                let splicedObj = dashboardData.ofd.splice(eleColIndex, 1);
+                dashboardData.ofd.unshift(splicedObj[0]);
             }
         }
 
@@ -777,12 +781,21 @@ export class DashboardService {
             if(dashboardData.new[0]) dashboardData.new[0].inactive = true;
             if(dashboardData.ofd[0]) dashboardData.ofd[0].inactive = true;
             if(dashboardData.ofd[1]) dashboardData.ofd[1].inactive = true;
-        }else if(row === "OutForDelivery"){
-            //if(dashboardData.new[0]) dashboardData.new[0].inactive = true;
-            //if(dashboardData.confirmed[0]) dashboardData.confirmed[0].inactive = true;
-            //if(dashboardData.ofd[1]) dashboardData.ofd[1].inactive = true;
+        }else if(row === "OutForDeliveryView"){
+            if(dashboardData.new[0]) dashboardData.new[0].inactive = true;
+            if(dashboardData.confirmed[0]) dashboardData.confirmed[0].inactive = true;
+            if(dashboardData.ofd[1]) dashboardData.ofd[1].inactive = true;
         }
 
+        return dashboardData;
+    }
+
+    disableAllTableCell(dashboardData){
+        this.currentRow = 'all';
+        if(dashboardData && dashboardData.new[0]) dashboardData.new[0].inactive = true;
+        if(dashboardData && dashboardData.confirmed[0]) dashboardData.confirmed[0].inactive = true;
+        if(dashboardData && dashboardData.ofd[0]) dashboardData.ofd[0].inactive = true;
+        if(dashboardData && dashboardData.ofd[1]) dashboardData.ofd[1].inactive = true;
         return dashboardData;
     }
 
