@@ -99,8 +99,8 @@
 }
 
 .searchbox{
-    width: 25em;
-    right: -4em;
+    /*width: 25em;*/
+    right: 0;
     top: 4em;
     position: absolute;
 }
