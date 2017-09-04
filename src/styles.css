@@ -184,6 +184,10 @@
 .bydateWidth{
     padding: 0 3px;
 }
+
+.mydp, .mydp .headertodaybtn {
+    border: 0.1em solid #CCC ! important;
+}
 /* datepicker css override - end */
 
 .blink {
@@ -394,9 +398,13 @@
 
 /* responsive css - start */
 
-body .dashboard-content{
+body .dashboard-content, body .orders-button{
     font-size: 0.92vw;
 }
+
+/*body #mainOrderSection{
+    font-size: 0.92vw;
+}*/
 
 @media (max-width: 415px) {
     .navbar-brand {

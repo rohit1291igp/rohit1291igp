@@ -337,10 +337,10 @@
                                   <div class="component-eggless abs" *ngIf="prodComponent.eggless">Eggless</div>
                                 <!--<div class="component-head center-align uppercase">{{prodComponent.componentCode | slice:0:9}}<span *ngIf="prodComponent.componentName.length > 9">...</span></div>-->
                                 <img class="component-image clk" src="{{productsCompURL}}th/{{prodComponent.componentImage}}" alt="Component_img" (click)="imagePreview($event, productsCompURL+'full/'+(prodComponent.componentImage))">
-                                <div class="component-quantity center-align">x {{prodComponent.quantity | number}}</div>
+                                <div class="component-quantity center-align">x {{prodComponent.quantity | number | replace}}</div>
                                 <div class="component-name center-align">{{prodComponent.componentName}} </div>
-                                <div class="price-display" *ngIf="prodComponent.componentPrice && prodComponent.componentPrice !== 'N/A' && prodComponent.componentName !== 'Adjustment' " style="font-size:0.93em;">{{prodComponent.componentPrice | number : '2.0-0'}}x{{prodComponent.quantity | number}}={{prodComponent.componentPrice  * prodComponent.quantity}}</div>
-                                <div class="price-display" *ngIf="prodComponent.componentPrice && prodComponent.componentPrice !== 'N/A' && prodComponent.componentName === 'Adjustment'" style="font-size:0.93em;">Rs. {{prodComponent.componentPrice | number}}</div>
+                                <div class="price-display" *ngIf="prodComponent.componentPrice && prodComponent.componentPrice !== 'N/A' && prodComponent.componentName !== 'Adjustment' " style="margin-top: 6px; font-size: 0.80em;">{{prodComponent.componentPrice | number | replace}}x{{prodComponent.quantity | number}}={{prodComponent.componentPrice  * prodComponent.quantity}}</div>
+                                <div class="price-display" *ngIf="prodComponent.componentPrice && prodComponent.componentPrice !== 'N/A' && prodComponent.componentName === 'Adjustment'" style="margin-top: 6px; font-size: 0.80em;">Rs. {{prodComponent.componentPrice | number | replace}}</div>
                               </div>
                               <div class="table-inline-display plus-sign" *ngIf="(i+1) !== orderProduct.componentList.length">
                                 <div class="table-cell-display v-align-middle">+</div>
@@ -353,9 +353,9 @@
                   </div>
                     <div class="row">
                         <div class="col-md-4 pull-left text-bold">
-                            <div>Net Product Price  <span style="margin-left:0.1em;"><span class="theme-red">Rs. {{order.orderNetProductPrice | number : '2.0-0'}}</span></span></div>
-                            <div style="margin-top:0.5em;">Delivery Charges <span style="margin-left:0.5em;">  <span class="theme-red">  Rs. {{order.vendorDeliveryCharge | number : '2.0-0'}}</span></span></div>
-                            <div class="" style="margin-top:0.5em;">Total Order Value <span style="margin-left:0.5em;">  <span class="theme-red">Rs. {{order.vendorOrderTotal | number : '2.0-0'}}</span></span></div>
+                            <div>Net Product Price  <span style="margin-left:0.1em;"><span class="theme-red">Rs. {{order.orderNetProductPrice | number : '2.0-0' | replace}}</span></span></div>
+                            <div style="margin-top:0.5em;">Delivery Charges <span style="margin-left:0.5em;">  <span class="theme-red">  Rs. {{order.vendorDeliveryCharge | number : '2.0-0' | replace}}</span></span></div>
+                            <div class="" style="margin-top:0.5em;">Total Order Value <span style="margin-left:0.5em;">  <span class="theme-red">Rs. {{order.vendorOrderTotal | number : '2.0-0' | replace}}</span></span></div>
                             <!--<div class="" style="margin-top:0.5em;">Price Adjustment <span style="margin-left:0;"> - <span class="theme-red">Rs. {{order.priceAdjustment | number : '2.0-0'}}</span></span></div>-->
                         </div>
                         <div class="col-md-4">&nbsp;</div>
