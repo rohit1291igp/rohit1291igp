@@ -74,13 +74,13 @@
 <div class="apierror" *ngIf="apierror">{{apierror}}</div>
   <div class="container-fluid orders-view">
     <div class="row sidePanelHeader">
-      <div class="col-md-1">
+      <div class="colInline col-sm-1 col-md-1">
         <a href="#" (click)="toggleTray($event, null, null)" [attr.data-trayOpen]="trayOpen">
           <i class="glyphicon glyphicon-remove close-tray"></i>
         </a>
       </div>
 
-        <div class="col-md-11 no-padding">
+        <div class="colInline col-sm-11 col-md-11 no-padding">
             <p class="text-bold ">
                 <span *ngIf="!orderByStatus">Order Information<span *ngIf="sidePanelData">({{sidePanelData[0].orderId}})</span></span>
                 <span *ngIf="orderByStatus">
@@ -245,7 +245,7 @@
                                 </span>)
                         </span>
                         <!--<span class="delivery-time">Same Day Delivery 12/4/17 2:00 PM</span>-->
-                          <span *ngIf="order && order.orderProducts[0] && order.orderProducts[0].orderProductExtraInfo">
+                          <span class="dtm" *ngIf="order && order.orderProducts[0] && order.orderProducts[0].orderProductExtraInfo">
                               <span class="uppercase delivery-time text-bold" attr.data-dt="{{order.orderProducts[0].orderProductExtraInfo.deliveryDate}}" attr.data-pd="{{order.datePurchased}}" >{{getDeliveryDetail(order.orderProducts[0].orderProductExtraInfo, order.datePurchased)}}</span>
                           </span>
                       </p>

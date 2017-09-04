@@ -105,4 +105,14 @@
     position: absolute;
 }
 
+.deliverOrdered1{
+    position:absolute;
+    left:1.5em;
+    top:1.4em;
+}
+
+.deliverOrdered2{
+    margin-left:20em;
+    margin-top: 1.2em;
+}
 
