@@ -9,7 +9,9 @@ import { UtilityService } from '../../services/utility.service';
 
 @Component({
   selector: 'app-dashboard',
-  templateUrl: './dashboard.component.html',
+  templateUrl: "./" + (window.screen.width > 900 ?
+      "dashboard.component.html" :
+      "dashboard.component.html"),
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
