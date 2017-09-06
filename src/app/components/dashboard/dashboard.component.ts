@@ -143,10 +143,4 @@ export class DashboardComponent implements OnInit {
       this.searchModel.searchkey = "";
   }
 
-
-
-
-
-
-
 }
