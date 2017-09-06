@@ -499,6 +499,11 @@ body .dashboard-content, body .orders-button{
         margin-left:0 ! important;
         margin-top: 0.5em ! important;
     }
+
+    .searchCross{
+        top: 2em ! important;
+        right: 10.6em ! important;
+    }
 }
 
 @media (max-width: 1025px) {
