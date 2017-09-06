@@ -318,3 +318,8 @@
 .sidePanelContent{
     margin-top: 4.5em;
 }
+
+.rightAlignrdNumber{
+    display:inline-block;
+    /*width:4.5em;*/
+}

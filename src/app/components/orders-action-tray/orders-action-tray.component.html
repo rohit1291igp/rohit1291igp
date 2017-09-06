@@ -353,9 +353,9 @@
                   </div>
                     <div class="row">
                         <div class="col-md-4 pull-left text-bold">
-                            <div>Net Product Price  <span style="margin-left:0.1em;"><span class="theme-red">Rs. {{order.orderNetProductPrice | number : '2.0-0' | replace}}</span></span></div>
-                            <div style="margin-top:0.5em;">Delivery Charges <span style="margin-left:0.5em;">  <span class="theme-red">  Rs. {{order.vendorDeliveryCharge | number : '2.0-0' | replace}}</span></span></div>
-                            <div class="" style="margin-top:0.5em;">Total Order Value <span style="margin-left:0.5em;">  <span class="theme-red">Rs. {{order.vendorOrderTotal | number : '2.0-0' | replace}}</span></span></div>
+                            <div>Net Product Price  <span style="margin-left:0.1em;"><span class="theme-red rightAlignrdNumber" [style.width]="(order.vendorOrderTotal).toString().length < 4 ? '3.5em': (order.vendorOrderTotal).toString().length+'em' ">Rs. <span class="pull-right">{{order.orderNetProductPrice | number : '2.0-0' | replace}}</span></span></span></div>
+                            <div style="margin-top:0.5em;">Delivery Charges <span style="margin-left:0.5em;">  <span class="theme-red rightAlignrdNumber" [style.width]="(order.vendorOrderTotal).toString().length < 4 ? '3.5em': (order.vendorOrderTotal).toString().length+'em' ">  Rs. <span class="pull-right">{{order.vendorDeliveryCharge | number : '2.0-0' | replace}}</span></span></span></div>
+                            <div class="" style="margin-top:0.5em;">Total Order Value <span style="margin-left:0.5em;">  <span class="theme-red rightAlignrdNumber" [style.width]="(order.vendorOrderTotal).toString().length < 4 ? '3.5em': (order.vendorOrderTotal).toString().length+'em' ">Rs. <span class="pull-right">{{order.vendorOrderTotal | number : '2.0-0' | replace}}</span></span></span></div>
                             <!--<div class="" style="margin-top:0.5em;">Price Adjustment <span style="margin-left:0;"> - <span class="theme-red">Rs. {{order.priceAdjustment | number : '2.0-0'}}</span></span></div>-->
                         </div>
                         <div class="col-md-4">&nbsp;</div>
