@@ -238,12 +238,12 @@
                       <p>
                         <span class="order-id">
                             Order ID: {{order.orderId}}
-                                (<span>
-                                      <span class="" *ngIf="order.orderProducts[0].ordersProductStatus == 'Processed'">New Order</span>
-                                      <span class="" *ngIf="order.orderProducts[0].ordersProductStatus == 'Confirmed'">Confirmed Order</span>
-                                      <span class="" *ngIf="order.orderProducts[0].ordersProductStatus == 'Shipped' && order.orderProducts[0].deliveryStatus === 0">Out for delivery Order</span>
-                                      <span class="" *ngIf="order.orderProducts[0].ordersProductStatus == 'Shipped' && order.orderProducts[0].deliveryStatus === 1">Delivered order</span>
-                                </span>)
+                        </span>
+                        <span>
+                            <span class="" *ngIf="order.orderProducts[0].ordersProductStatus == 'Processed'">(New Order)</span>
+                            <span class="" *ngIf="order.orderProducts[0].ordersProductStatus == 'Confirmed'">(Confirmed Order)</span>
+                            <span class="" *ngIf="order.orderProducts[0].ordersProductStatus == 'Shipped' && order.orderProducts[0].deliveryStatus === 0">(Out for delivery Order)</span>
+                            <span class="" *ngIf="order.orderProducts[0].ordersProductStatus == 'Shipped' && order.orderProducts[0].deliveryStatus === 1">(Delivered order)</span>
                         </span>
                         <!--<span class="delivery-time">Same Day Delivery 12/4/17 2:00 PM</span>-->
                           <span class="dtm" *ngIf="order && order.orderProducts[0] && order.orderProducts[0].orderProductExtraInfo">
