@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter, HostListener, ElementRef, trigger, sequence, transition, animate, style, state } from '@angular/core';
+import { ConnectionBackend, RequestOptions, Request, RequestOptionsArgs, Response, Http, Headers} from "@angular/http";
 import { Router, ActivatedRoute } from '@angular/router';
 import { BackendService } from '../../services/backend.service';
 import { UtilityService } from '../../services/utility.service';
@@ -133,6 +134,46 @@ export class OrdersActionTrayComponent implements OnInit {
 
       this.updateOrderStatus(orderStatusEvent, orderStatus, orderId, orderProducts, orderDeliveryDate, orderDeliveryTime);
   }
+
+    fileChange(event) {
+        let fileList: FileList = event.target.files;
+        if(fileList.length > 0) {
+            let file: File = fileList[0];
+            let formData = new FormData();
+            for (var i = 0; i < fileList.length; i++) {
+                formData.append("file"+i , fileList[i]);
+            }
+            //formData.append('file0', fileList[0]);
+            let headers = new Headers();
+            /** No need to include Content-Type in Angular 4 */
+            headers.append('Content-Type', 'multipart/form-data');
+            headers.append('Accept', 'application/json');
+            let options = new RequestOptions({ headers: headers });
+            console.log('Upload File - formData =============>', formData, options);
+
+            let reqObj =  {
+                url : '/fakeapi',
+                method : "post",
+                payload : formData,
+                options : options
+            };
+
+            this.BackendService.makeAjax(reqObj, function(err, response, headers){
+                if(err || JSON.parse(response).error) {
+                    console.log('Error=============>', err, JSON.parse(response).errorCode);
+                }
+                console.log('sidePanel Response --->', response.result);
+            });
+
+             /*this.http.post('/fakeapi', formData, options)
+         .map(res => res.json())
+                 .catch(error => Observable.throw(error))
+                 .subscribe(
+                 data => console.log('success'),
+                 error => console.log(error)
+             )*/
+        }
+    }
 
   scrollTo(element, to, duration) {
     var _this = this;

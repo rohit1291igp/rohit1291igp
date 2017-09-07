@@ -31,6 +31,9 @@ export class InterceptedHttp extends Http {
     }
 
     private updateUrl(req: string) {
+        if(req === '/fakeapi'){
+            return  'http://localhost:1337/fakeapi'
+        }
         return  environment.origin2 +'v1/handels/'+ req;
         /*
         if((/login/g).test(req)){
@@ -48,14 +51,16 @@ export class InterceptedHttp extends Http {
         if (options.headers == null) {
             options.headers = new Headers();
         }
-        options.headers.append('Content-Type', 'text/plain');
-       // options.headers.append('Content-Type', 'application/json');
+
+        //options.headers.append('Content-Type', 'text/plain');
+        //options.headers.append('Accept', 'application/json');
+        //options.headers.append('Content-Type', 'application/json');
         //options.headers.append('token', localStorage.getItem('currentUserToken'));
         options.headers.append('X-IGP-UISK', 'igpBangaloreHungerForBlood');
         //options.headers.append('fkAssociateId', localStorage.getItem('currentUserToken'));
 
         return options;
     }
-
+ßß
 
 }

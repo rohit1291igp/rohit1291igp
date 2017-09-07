@@ -54,6 +54,8 @@
                         <form (ngSubmit)="f.form.valid && statusReasonSubmit($event)" #f="ngForm" nonvalidate>
                             <input name="recipientName" class="form-control custom-control" [(ngModel)]="statusReasonModel.recipientName" #recipientName="ngModel" placeholder="Recipient's name" required>
                             <textarea name="message" class="form-control custom-control m-top-1" rows="3" style="resize:none" [(ngModel)]="statusReasonModel.recipientComments" #message="ngModel" placeholder="comment" required></textarea>
+                            <input name="deliveredStatusFile" type="file" (change)="fileChange($event)" placeholder="Upload file" accept=".jpeg, .jpg, .png, .svg, .pdf,.doc,.docx" multiple />
+
                             <button class="btn btn-primary m-top-1" [ngClass]="{'markdlvBtn' : !trayOpen}">Mark as Delivered</button>
                             <div *ngIf="f.submitted && !message.valid" class="help-block"></div>
                         </form>
