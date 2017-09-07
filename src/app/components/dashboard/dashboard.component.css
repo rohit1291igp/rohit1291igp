@@ -94,8 +94,25 @@
 }
 
 .searchCross{
-    top: 30%;
-    right: 42%;
+    top: 0.7em;
+    right: 5.5em;
 }
 
+.searchbox{
+    /*width: 25em;*/
+    right: 0;
+    top: 4em;
+    position: absolute;
+}
+
+.deliverOrdered1{
+    position:absolute;
+    left:1.5em;
+    top:1.4em;
+}
+
+.deliverOrdered2{
+    margin-left:20em;
+    margin-top: 1.2em;
+}
 

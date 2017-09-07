@@ -193,9 +193,12 @@
     padding: 0 3px;
 }
 
-
-.mydp input{
+.mydp input {
     pointer-events: none ! important;
+}
+
+.mydp, .mydp .headertodaybtn {
+    border: 0.1em solid #CCC ! important;
 }
 /* datepicker css override - end */
 
@@ -214,5 +217,315 @@
     }
 }
 
+/* dashBoard counts - start */
+.dashboard-tabs ul li{
+    padding: 2px 1em 0 0;
+}
+.DbCount{
+    padding-top: 3px;
+    text-align: center;
+    background: #000;
+    width: 40px;
+    border-radius: 50%;
+    height: 25px;
+    color: #fff;
+    margin:auto;
+}
+
+.dashboard-tabs .DbCount{
+    width: 25px ! important;
+    right: 4px;
+    position: absolute;
+    top: 3px;
+    font-size: 0.85em;
+    height: 25px;
+    padding-top: 5px;
+}
+
+.dashboard-tabs .DbCount.action{
+    background-color: #25C355! important;
+}
+
+.dashboard-tabs .DbCount.alertC{
+    background-color: #C3404E! important;
+}
+
+.dashboard-table .DbCount{
+    width: 35px ! important;
+    right: 5px;
+    position: absolute;
+    top: 2px;
+    font-size: 0.9em;
+    height: 30px;
+    padding-top: 5px;
+    margin-top: 1em;
+    letter-spacing: 1px;
+}
+
+.dashboard-table .alertg-action .DbCount{
+    background-color: #25C355! important;
+}
+
+.dashboard-table .alert-action .DbCount{
+    background-color: #C3404E! important;
+}
 
 
+/* dashBoard counts - end */
+
+
+/* loader - start */
+/* App loader */
+.loader,
+.loader:before,
+.loader:after {
+    border-radius: 50%;
+    width: 2.5em;
+    height: 2.5em;
+    -webkit-animation-fill-mode: both;
+    animation-fill-mode: both;
+    -webkit-animation: load7 1.8s infinite ease-in-out;
+    animation: load7 1.8s infinite ease-in-out;
+}
+.loader {
+    color: #C3404E;
+    font-size: 10px;
+    margin: 25% auto;
+    position: relative;
+    text-indent: -9999em;
+    -webkit-transform: translateZ(0);
+    -ms-transform: translateZ(0);
+    transform: translateZ(0);
+    -webkit-animation-delay: -0.16s;
+    animation-delay: -0.16s;
+}
+.loader:before,
+.loader:after {
+    content: '';
+    position: absolute;
+    top: 0;
+}
+.loader:before {
+    left: -3.5em;
+    -webkit-animation-delay: -0.32s;
+    animation-delay: -0.32s;
+}
+.loader:after {
+    left: 3.5em;
+}
+@-webkit-keyframes load7 {
+    0%,
+    80%,
+    100% {
+        box-shadow: 0 2.5em 0 -1.3em;
+    }
+    40% {
+        box-shadow: 0 2.5em 0 0;
+    }
+}
+@keyframes load7 {
+    0%,
+    80%,
+    100% {
+        box-shadow: 0 2.5em 0 -1.3em;
+    }
+    40% {
+        box-shadow: 0 2.5em 0 0;
+    }
+}
+
+/* common Loader*/
+.cloader {
+    z-index:9999;
+    height: 4px;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+    background-color: #ddd;
+}
+.cloader:before{
+    display: block;
+    position: absolute;
+    content: "";
+    left: -200px;
+    width: 200px;
+    height: 4px;
+    background-color: #2980b9;
+    animation: loading 5s linear infinite;
+}
+
+@keyframes loading {
+    from {left: -200px; width: 30%;}
+    50% {width: 30%;}
+    70% {width: 70%;}
+    80% { left: 50%;}
+    95% {left: 120%;}
+    to {left: 100%;}
+}
+
+/*.animated {
+    -webkit-animation-duration: 20s;
+    animation-duration: 20s;
+    -webkit-animation-fill-mode: both;
+    animation-fill-mode: both;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -webkit-user-select: none;
+}
+
+.yt-loader {
+    -webkit-animation-name: horizontalProgressBar;
+    animation-name: horizontalProgressBar;
+    -webkit-animation-timing-function: ease;
+    animation-timing-function: ease;
+    background: #fff;
+    height: 3px;
+    left: 0;
+    position: fixed;
+    top: 0;
+    width: 0%;
+    z-index: 9999;
+}
+
+@keyframes horizontalProgressBar
+{
+    0%   {width: 0%;}
+    25%  {width: 22%;}
+    50%  {width: 55%;}
+    75%  {width: 83%;}
+    100% {width:100%;}
+}
+
+@-webkit-keyframes horizontalProgressBar *//* Safari and Chrome *//*
+{
+    0%   {width: 0%;}
+    25%  {width: 22%;}
+    50%  {width: 55%;}
+    75%  {width: 83%;}
+    100% {width:100%;}
+}*/
+
+/* loader - end */
+
+
+/* responsive css - start */
+
+body .dashboard-content, body .orders-button{
+    font-size: 0.92vw;
+}
+
+/*body #mainOrderSection{
+    font-size: 0.92vw;
+}*/
+
+@media screen and (max-width: 799px) and (min-width: 300px) {
+    .navbar-brand {
+        font-size:4.2vw;
+    }
+
+    .dashboard-tabs{
+        padding: 0;
+    }
+
+    body{
+        font-size: 2.1vw ! important;
+    }
+
+    body .dashboard-content{
+        font-size: 3vw ! important;
+    }
+
+    .dashboard-tabs ul li {
+        padding:0;
+        font-size: 2.5vw;
+    }
+
+    .dashboardTable{
+        margin-top: 4em ! important;
+    }
+
+    .dbTableHeader p{
+        font-size: 2.1vw;
+    }
+
+    .searchbox{
+        margin-top: 1.5em;
+        position: static ! important;
+        /* left: 0; */
+        width: 43em ! important;
+        /* right: 0 ! important; */
+        /* top: 11.5em ! important; */
+    }
+
+    .db-btn-status{
+        font-size: 3vw ! important;
+    }
+
+    .table-display {
+        width: 100%;
+    }
+
+    .mydp input.selection {
+        font-size: 3vw ! important;
+        font-weight: 600 ! important;
+    }
+
+    .mydp .selector {
+        margin-left: -1em ! important;
+    }
+
+    .orders-action{
+        width:100% ! important;
+    }
+
+    .hide-tray{
+        right:-100% ! important;
+    }
+
+    .sidePanelHeader{
+        width:100% ! important;
+    }
+
+    body #mainOrderSection{
+        font-size: 3vw;
+    }
+
+    .colInline{
+        display:inline-block ! important;
+    }
+
+    .dtm{
+        display:flex ! important;
+    }
+
+    .cellNoHeight{
+        height : auto ! important;
+    }
+
+    .deliverOrdered1{
+        left: 1.1em ! important;
+        top: 1.6em ! important;
+    }
+
+    .deliverOrdered2{
+        margin-left:0 ! important;
+        margin-top: 0.5em ! important;
+    }
+
+    .searchCross{
+        top: 2em ! important;
+        right: 10.6em ! important;
+    }
+}
+
+@media (max-width: 1025px) {
+    .db-btn-status{
+        font-size: 1vw;
+    }
+}
+/* responsive css - end */
+
+.inactive{
+    opacity: 0.2;
+    pointer-events: none;
+}

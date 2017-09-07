@@ -1,14 +1,17 @@
 <div class="container-fluid dashboard-tabs">
   <div class="col-md-12">
     <ul class="nav nav-pills">
-        <li [ngClass]="{'active': activeTab === 1}" (click)="selectTab($event, 1)" data-tab="all">
-          <a href="#">All Orders</a>
+        <li class="relative" [ngClass]="{'active': activeTab === 1}" (click)="selectTab($event, 1)" data-tab="all">
+          <a href="#">All Orders ({{dashboardCounts.allOrders}})</a>
+            <!--<div class="DbCount all">{{dashboardCounts.allOrders}}</div>-->
         </li>
-        <li [ngClass]="{'active': activeTab === 2}" (click)="selectTab($event, 2)" data-tab="sla">
-          <a href="#">Action Required</a>
+        <li class="relative" [ngClass]="{'active': activeTab === 2}" (click)="selectTab($event, 2)" data-tab="sla">
+          <a href="#">Action Required ({{dashboardCounts.actionRequired}})</a>
+          <!--<div class="DbCount action">{{dashboardCounts.actionRequired}}</div>-->
         </li>
-        <li [ngClass]="{'active': activeTab === 3}" (click)="selectTab($event, 3)" data-tab="alert">
-          <a href="#">High Alert</a>
+        <li class="relative" [ngClass]="{'active': activeTab === 3}" (click)="selectTab($event, 3)" data-tab="alert">
+          <a href="#">High Alert ({{dashboardCounts.highAlert}})</a>
+          <!--<div class="DbCount alertC">{{dashboardCounts.highAlert}}</div>-->
         </li>
     </ul>
   </div>

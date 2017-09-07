@@ -78,7 +78,7 @@
                             <button class="btn btn-primary m-top-1" [ngClass]="{'markdlvBtn' : !trayOpen}">Mark as Delivered</button>
                             <div *ngIf="f.submitted && !message.valid" class="help-block"></div>
                         </form>
-                        <button class="btn btn-primary m-top-1 viewDetailPopupBtn" *ngIf="!trayOpen" (click)="toggleTray($event, '', statusReasonModel.orderId, null)">View Detail</button>
+                        <button class="btn btn-primary m-top-1 viewDetailPopupBtn" *ngIf="!trayOpen" (click)="toggleTray($event, 'OutForDeliveryView', statusReasonModel.orderId, null)">View Detail</button>
                         <div *ngIf="f.submitted && !message.valid" class="help-block theme-red">Recipient's details is required</div>
                     </div>
                 </div>
@@ -95,30 +95,30 @@
 <div id="mainOrderSection" class="orders-action" [ngClass]="{'show-tray': trayOpen, 'hide-tray': !trayOpen}" >
 <div class="apierror" *ngIf="apierror">{{apierror}}</div>
   <div class="container-fluid orders-view">
-    <div class="row">
-      <div class="col-md-1">
+    <div class="row sidePanelHeader">
+      <div class="colInline col-sm-1 col-md-1">
         <a href="#" (click)="toggleTray($event, null, null)" [attr.data-trayOpen]="trayOpen">
           <i class="glyphicon glyphicon-remove close-tray"></i>
         </a>
       </div>
 
-        <div class="col-md-11 no-padding">
-            <p class="text-bold uppercase">
-                <span *ngIf="!orderByStatus">Searched Order</span>
+        <div class="colInline col-sm-11 col-md-11 no-padding">
+            <p class="text-bold ">
+                <span *ngIf="!orderByStatus">Order Information<span *ngIf="sidePanelData">({{sidePanelData[0].orderId}})</span></span>
                 <span *ngIf="orderByStatus">
-                     <span class="uppercase" *ngIf="orderUpdateByTime == 'past'">Past - </span>
-                     <span class="uppercase" *ngIf="orderByStatus == 'Processed'">New Orders</span>
-                     <span class="uppercase" *ngIf="orderByStatus == 'Confirmed'">Confirmed Orders</span>
-                     <span class="uppercase" *ngIf="orderByStatus == 'OutForDelivery'">Out for delivery Orders</span>
-                     <span class="uppercase" *ngIf="orderByStatus == 'Shipped'">Delivered Orders</span>
+                     <span class="" *ngIf="orderUpdateByTime == 'past'">Past - </span>
+                     <span class="" *ngIf="orderByStatus == 'Processed'">New Orders (To be confirmed)</span>
+                     <span class="" *ngIf="orderByStatus == 'Confirmed'">Confirmed Orders (To be delivered)</span>
+                     <span class="" *ngIf="orderByStatus == 'OutForDelivery'">Orders out for delivery</span>
+                     <span class="" *ngIf="orderByStatus == 'Shipped'">Orders delivered today</span>
                 </span>
-                <span *ngIf="orderUpdateByTime">
+                <!--<span *ngIf="orderUpdateByTime">
                     <span class="uppercase" *ngIf="orderUpdateByTime == 'past'"> - Delivery for today</span>
                     <span class="uppercase" *ngIf="orderUpdateByTime == 'today'"> - Delivery for today</span>
                     <span class="uppercase" *ngIf="orderUpdateByTime == 'tomorrow'"> - Delivery for tomorrow</span>
                     <span class="uppercase" *ngIf="orderUpdateByTime == 'future'"> - Delivery for future</span>
                     <span class="uppercase" *ngIf="orderUpdateByTime == 'bydate'"> - Delivery by date </span>
-                </span>
+                </span>-->
 
                 <!--- Delivery for today  {{orderId}}-->
             </p>
@@ -127,7 +127,7 @@
         </div>
 
     </div>
-    <div class="row">
+    <div class="row sidePanelContent">
         <div *ngIf="!sidePanelData">
             <div class="col-md-12 order-row" *ngFor="let loaderc of loadercount" style="margin-bottom: 0;">
                     <div class="container-fluid orders-tray" >
@@ -257,10 +257,18 @@
                   <div class="row delivery-details">
                     <div class="col-md-8 order-details no-padding">
                       <p>
-                        <span class="order-id">Order ID: {{order.orderId}}</span>
+                        <span class="order-id">
+                            Order ID: {{order.orderId}}
+                                (<span>
+                                      <span class="" *ngIf="order.orderProducts[0].ordersProductStatus == 'Processed'">New Order</span>
+                                      <span class="" *ngIf="order.orderProducts[0].ordersProductStatus == 'Confirmed'">Confirmed Order</span>
+                                      <span class="" *ngIf="order.orderProducts[0].ordersProductStatus == 'Shipped' && order.orderProducts[0].deliveryStatus === 0">Out for delivery Order</span>
+                                      <span class="" *ngIf="order.orderProducts[0].ordersProductStatus == 'Shipped' && order.orderProducts[0].deliveryStatus === 1">Delivered order</span>
+                                </span>)
+                        </span>
                         <!--<span class="delivery-time">Same Day Delivery 12/4/17 2:00 PM</span>-->
-                          <span *ngIf="order && order.orderProducts[0] && order.orderProducts[0].orderProductExtraInfo">
-                              <span class="uppercase delivery-time" attr.data-dt="{{order.orderProducts[0].orderProductExtraInfo.deliveryDate}}" attr.data-pd="{{order.datePurchased}}" >{{getDeliveryDetail(order.orderProducts[0].orderProductExtraInfo, order.datePurchased)}}</span>
+                          <span class="dtm" *ngIf="order && order.orderProducts[0] && order.orderProducts[0].orderProductExtraInfo">
+                              <span class="uppercase delivery-time text-bold" attr.data-dt="{{order.orderProducts[0].orderProductExtraInfo.deliveryDate}}" attr.data-pd="{{order.datePurchased}}" >{{getDeliveryDetail(order.orderProducts[0].orderProductExtraInfo, order.datePurchased)}}</span>
                           </span>
                       </p>
                       <div class="text-bold">Deliver to: {{order.deliveryName}}</div>
@@ -279,8 +287,8 @@
                         (click)="updateOrderStatus($event, getNxtOrderStatus(order.orderProducts[0].ordersProductStatus), order.orderId, order.orderProducts, order.orderProducts[0].orderProductExtraInfo.deliveryDate, order.orderProducts[0].orderProductExtraInfo.deliveryTime)">
                               <span *ngIf="order.orderProducts[0].ordersProductStatus =='Processed'">Confirm</span>
                               <span *ngIf="order.orderProducts[0].ordersProductStatus =='Confirmed'">Out For Delivery</span>
-                              <span *ngIf="(order.orderProducts[0].ordersProductStatus =='Shipped' && order.orderProducts[0].deliveryStatus === 0) || order.orderProducts[0].ordersProductStatus =='OutForDelivery' || order.orderProducts[0].ordersProductStatus == 'Partially Dispatched'">Delivered</span>
-                              <span *ngIf="(order.orderProducts[0].ordersProductStatus =='Shipped' && order.orderProducts[0].deliveryStatus === 1)  || (order.orderProducts[0].ordersProductStatus =='Dispatched' && order.orderProducts[0].deliveryStatus === 1)">Delivered</span>
+                              <span *ngIf="(order.orderProducts[0].ordersProductStatus =='Shipped' && order.orderProducts[0].deliveryStatus === 0) || order.orderProducts[0].ordersProductStatus =='OutForDelivery' || order.orderProducts[0].ordersProductStatus == 'Partially Dispatched'">Mark as Delivered</span>
+                              <span *ngIf="(order.orderProducts[0].ordersProductStatus =='Shipped' && order.orderProducts[0].deliveryStatus === 1)  || (order.orderProducts[0].ordersProductStatus =='Dispatched' && order.orderProducts[0].deliveryStatus === 1)">Mark as Delivered</span>
                         </button>
                       </div>
 
@@ -322,7 +330,11 @@
                   </div>
                   <div class="row" *ngFor="let orderProduct of order.orderProducts; let z='index'">
                     <p class="">
-                        Product Name: <a target="_new" href="https://www.igp.com/{{orderProduct.productNameForUrl}}"><span class="uppercase text-igp">{{orderProduct.productName}}</span></a>
+                        Product Name:
+                        <!--<a target="_new" href="https://www.igp.com/{{orderProduct.productNameForUrl}}">-->
+                            <span class="uppercase text-igp">{{orderProduct.productName}}</span>
+                            <span class="" *ngIf="orderProduct.products_code">({{orderProduct.products_code}})  </span>
+                        <!--</a>-->
                         <span class="" style="" *ngIf="orderProduct.personalized"> | <a target="_new" href="http://admin.indiangiftsportal.com/myshop/persInfo.php?pid={{orderProduct.productId}}&oid={{order.orderId}}">Download Photo</a></span>
                     </p>
                     <!--<p>Product Components -</p>-->
@@ -346,10 +358,11 @@
                               <div class="product-component relative">
                                   <div class="component-eggless abs" *ngIf="prodComponent.eggless">Eggless</div>
                                 <!--<div class="component-head center-align uppercase">{{prodComponent.componentCode | slice:0:9}}<span *ngIf="prodComponent.componentName.length > 9">...</span></div>-->
-                                <img class="component-image clk" src="{{productsCompURL}}{{prodComponent.componentImage}}" alt="Component_img" (click)="imagePreview($event, productsCompURL+(prodComponent.componentImage))">
-                                <div class="component-quantity center-align">X {{prodComponent.quantity | number : '2.0-0'}}</div>
+                                <img class="component-image clk" src="{{productsCompURL}}th/{{prodComponent.componentImage}}" alt="Component_img" (click)="imagePreview($event, productsCompURL+'full/'+(prodComponent.componentImage))">
+                                <div class="component-quantity center-align">x {{prodComponent.quantity | number | replace}}</div>
                                 <div class="component-name center-align">{{prodComponent.componentName}} </div>
-                                <div class="price-display" *ngIf="prodComponent.componentPrice && prodComponent.componentPrice !== 'N/A'">Rs. {{prodComponent.componentPrice | number : '2.0-0'}}</div>
+                                <div class="price-display" *ngIf="prodComponent.componentPrice && prodComponent.componentPrice !== 'N/A' && prodComponent.componentName !== 'Adjustment' " style="margin-top: 6px; font-size: 0.80em;">{{prodComponent.componentPrice | number | replace}}x{{prodComponent.quantity | number}}={{prodComponent.componentPrice  * prodComponent.quantity}}</div>
+                                <div class="price-display" *ngIf="prodComponent.componentPrice && prodComponent.componentPrice !== 'N/A' && prodComponent.componentName === 'Adjustment'" style="margin-top: 6px; font-size: 0.80em;">Rs. {{prodComponent.componentPrice | number | replace}}</div>
                               </div>
                               <div class="table-inline-display plus-sign" *ngIf="(i+1) !== orderProduct.componentList.length">
                                 <div class="table-cell-display v-align-middle">+</div>
@@ -362,8 +375,12 @@
                   </div>
                     <div class="row">
                         <div class="col-md-4 pull-left text-bold">
-                            <div>Delivery Charges - <span class="theme-red">Rs. {{order.vendorDeliveryCharge}}</span></div>
-                            <div class="" style="margin-top:0.5em;">Total Price <span style="margin-left:3.08em;"> - <span class="theme-red">Rs. {{order.vendorOrderTotal | number : '2.0-0'}}</span></span></div>
+                            <div>Net Product Price  <span style="margin-left:0.1em;">
+                                <span class="theme-red rightAlignrdNumber" *ngIf="order.vendorOrderTotal" [style.width]="(order.vendorOrderTotal).toString().length < 4 ? '3.5em': (order.vendorOrderTotal).toString().length+'em' ">Rs. <span class="pull-right">{{order.orderNetProductPrice | number : '2.0-0' | replace}}</span></span></span>
+                            </div>
+                            <div style="margin-top:0.5em;">Delivery Charges <span style="margin-left:0.5em;">  <span class="theme-red rightAlignrdNumber" *ngIf="order.vendorOrderTotal" [style.width]="(order.vendorOrderTotal).toString().length < 4 ? '3.5em': (order.vendorOrderTotal).toString().length+'em' ">  Rs. <span class="pull-right">{{order.vendorDeliveryCharge | number : '2.0-0' | replace}}</span></span></span></div>
+                            <div class="" style="margin-top:0.5em;">Total Order Value <span style="margin-left:0.5em;">  <span class="theme-red rightAlignrdNumber" *ngIf="order.vendorOrderTotal" [style.width]="(order.vendorOrderTotal).toString().length < 4 ? '3.5em': (order.vendorOrderTotal).toString().length+'em' ">Rs. <span class="pull-right">{{order.vendorOrderTotal | number : '2.0-0' | replace}}</span></span></span></div>
+                            <!--<div class="" style="margin-top:0.5em;">Price Adjustment <span style="margin-left:0;"> - <span class="theme-red">Rs. {{order.priceAdjustment | number : '2.0-0'}}</span></span></div>-->
                         </div>
                         <div class="col-md-4">&nbsp;</div>
                         <div class="col-md-4 text-bold">

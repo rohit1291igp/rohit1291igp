@@ -49,7 +49,7 @@
 }
 
 .orders-view {
-    padding: 10px;
+    padding: 0 10px 10px 10px;
 }
 
 .order-row {
@@ -307,6 +307,23 @@
     margin-left:-8em ! important;
 }
 
-.rejectStatusDp{
+.rejectStatusDp {
     padding: 1em 0 0;
+}
+
+.sidePanelHeader{
+    padding: 1em 0 0.5em;
+    width: 66%;
+    position: fixed;
+    z-index: 999;
+    background: #F2F2F2;
+}
+
+.sidePanelContent{
+    margin-top: 4.5em;
+}
+
+.rightAlignrdNumber{
+    display:inline-block;
+    /*width:4.5em;*/
 }

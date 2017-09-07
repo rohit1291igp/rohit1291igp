@@ -6,6 +6,8 @@ import { UtilityService } from './utility.service';
 @Injectable()
 export class DashboardService {
     users: Array<any> = [];
+    currentColumn;
+    currentRow;
     statuslist :Object = {
         "n" : "Processed",
         "c" : "Confirmed",
@@ -36,30 +38,42 @@ export class DashboardService {
     getMasterData() {
         var _this = this;
         return {
-            displayStatus: ["New Orders", "Confirmed", "Out for delivery", "Delivered orders"],
+            displayStatus: ["New Orders", "Confirmed Orders", "Out for delivery", "Today's Deliveries"],
             status: [ _this.statuslist['n'], _this.statuslist['c'], _this.statuslist['o'], _this.statuslist['d']],
             deliveryTimes: ["today", "tomorrow", "future", "bydate", "all", "unknown"]
         }
     }
 
     formarDashBoardData(data, dataType, currentDBData){
-        var dataTypeSelect, ofdType;
+        var dataTypeSelect, ofdType, newOrderCountProp, confirmedCountProp, ofdOrderCountProp;
         console.log('dataType==================>'+dataType);
         switch(dataType){
             case "all": dataTypeSelect = "dateStatusCountAllMap";
                         ofdType = "outOfDeliveryOrderIds";
+                        newOrderCountProp = "newOrderTotalWhole";
+                        confirmedCountProp = "confirmOrderTotalWhole";
+                        ofdOrderCountProp = "outOfDeliveryOrderTotalWhole";
                 break;
 
             case "sla": dataTypeSelect = "dateStatusCountNoBreachMap";
                         ofdType = "slaOutOfDeliveryOrderIds";
+                        newOrderCountProp = "newOrderTotalActionRequired";
+                        confirmedCountProp = "confirmOrderTotalWholeActionRequired";
+                        ofdOrderCountProp = "outOfDeliveryOrderTotalActionRequired";
                 break;
 
             case "alert": dataTypeSelect = "dateStatusCountAlertMap";
                           ofdType = "alertOutOfDeliveryOrderIds";
+                          newOrderCountProp = "newOrderTotalHighAlert";
+                          confirmedCountProp = "confirmOrderTotalWholeHighAlert";
+                          ofdOrderCountProp = "outOfDeliveryOrderTotalHighAlert";
                 break;
 
             default : dataTypeSelect = "dateStatusCountAllMap";
                       ofdType = "outOfDeliveryOrderIds";
+                      newOrderCountProp = "newOrderTotalWhole";
+                      confirmedCountProp = "confirmOrderTotalWhole";
+                      ofdOrderCountProp = "outOfDeliveryOrderTotalWhole";
         }
 
         var _this = this;
@@ -110,6 +124,14 @@ export class DashboardService {
                     today: 6,
                     total: 10,
                     isAlert: false
+                },
+                "counts" : {
+                    "allOrders": 161,
+                    "actionRequired": 148,
+                    "highAlert": 12,
+                    "newOrders": 1,
+                    "confirmedOrders": 92,
+                    "ofdOrders": 89
                 }
             };
         }
@@ -154,26 +176,31 @@ export class DashboardService {
                             position : 0
                         };
 
+                        pushObj.displayStr = pushObj.ordersCount > 1 ? "View Orders" : "View Order";
+                        if(pushObj.isAlert === "true"){
+                            pushObj.displayStr = "Pending Confirmation";
+                        }else if(pushObj.sla === "true" && pushObj.isAlert !== "true"){
+                            pushObj.displayStr = "Confirm Order";
+                        }
+
                         switch(day){
                             case "past" :
-                                pushObj.displayStr = "Take action";
                                 pushObj.position = 1;
                                 break;
 
                             case "today" : todayOrderTobeDelivered = todayOrderTobeDelivered + parseInt(countObj[prop].count);
-                                pushObj.displayStr = "Take action";
                                 pushObj.position = 2;
                                 break;
 
-                            case "tomorrow" : pushObj.displayStr = pushObj.ordersCount > 1 ? "View Orders" : "View Order";
+                            case "tomorrow" :
                                 pushObj.position = 3;
                                 break;
 
-                            case "future" : pushObj.displayStr = pushObj.ordersCount > 1 ? "View Orders" : "View Order";
+                            case "future" :
                                 pushObj.position = 4;
                                 break;
 
-                            case "bydate" : pushObj.displayStr = pushObj.ordersCount > 1 ? "View Orders" : "View Order";
+                            case "bydate" :
                                 pushObj.position = 5;
                                 break;
                         }
@@ -191,25 +218,32 @@ export class DashboardService {
                             position : 0
                         };
 
+                        pushObj.displayStr = pushObj.ordersCount > 1 ? "View Orders" : "View Order";
+
+                        if(pushObj.isAlert === "true"){
+                            pushObj.displayStr = "Take Action";
+                        }else if(pushObj.sla === "true" && pushObj.isAlert !== "true"){
+                            pushObj.displayStr = pushObj.ordersCount > 1 ? "View Orders" : "View Order";
+                        }
+
                         switch(day){
-                            case "past" : pushObj.displayStr = pushObj.ordersCount > 1 ? "View Orders" : "View Order";
+                            case "past" :
                                 pushObj.position = 1;
                                 break;
 
                             case "today" : todayOrderTobeDelivered = todayOrderTobeDelivered + parseInt(countObj[prop].count);
-                                pushObj.displayStr = pushObj.ordersCount > 1 ? "View Orders" : "View Order";
                                 pushObj.position = 2;
                                 break;
 
-                            case "tomorrow" : pushObj.displayStr = pushObj.ordersCount > 1 ? "View Orders" : "View Order";
+                            case "tomorrow" :
                                 pushObj.position = 3;
                                 break;
 
-                            case "future" : pushObj.displayStr = pushObj.ordersCount > 1 ? "View Orders" : "View Order";
+                            case "future" :
                                 pushObj.position = 4;
                                 break;
 
-                            case "bydate" : pushObj.displayStr = pushObj.ordersCount > 1 ? "Confirmed Orders" : "Confirmed Order";
+                            case "bydate" :
                                 pushObj.position = 5;
                                 break;
                         }
@@ -221,6 +255,16 @@ export class DashboardService {
         };
 
         let dashboardCounts = apiResponse.result[dataTypeSelect];
+
+        getDashboardDataResponse.counts = {
+            "allOrders": apiResponse.result['orderTotalWhole'],
+            "actionRequired": apiResponse.result['orderTotalActionRequired'],
+            "highAlert": apiResponse.result['orderTotalHighAlert'],
+            "newOrders": apiResponse.result[newOrderCountProp],
+            "confirmedOrders": apiResponse.result[confirmedCountProp],
+            "ofdOrders": apiResponse.result[ofdOrderCountProp]
+        };
+
         /*let dashboardCountsArray = []; //Objet is needed to convert into Array as Object doesn't guarntee to maintain order of property
         for(let prop in dashboardCounts){
             if(dashboardCounts.hasOwnProperty(prop)){
@@ -341,9 +385,15 @@ export class DashboardService {
                 }
             }
 
-
         /* row color code logic - end */
+
         console.log('alert row data ===================>', this.getAlertRow());
+
+        if(_this.currentRow && _this.currentRow !== "all") {
+            getDashboardDataResponse = _this.blurInactiveTableCell(getDashboardDataResponse, _this.currentColumn, _this.currentRow);
+        }else if(_this.currentRow && _this.currentRow === "all"){
+            getDashboardDataResponse = _this.disableAllTableCell(getDashboardDataResponse);
+        }
 
         return getDashboardDataResponse;
     }
@@ -473,7 +523,19 @@ export class DashboardService {
                     "slaOutOfDeliveryOrderIds": outofDeliveryIds2,
                     "alertOutOfDeliveryOrderIds": outofDeliveryIds3,
                     "deliveredTodayOrderCount": Math.floor(Math.random()*100),
-                    "festivalDate": "2017-06-06"
+                    "festivalDate": "2017-06-06",
+                    "orderTotalWhole": 161,
+                    "newOrderTotalWhole": 148,
+                    "confirmOrderTotalWhole": 12,
+                    "outOfDeliveryOrderTotalWhole": 1,
+                    "orderTotalActionRequired": 92,
+                    "newOrderTotalActionRequired": 89,
+                    "confirmOrderTotalWholeActionRequired": 3,
+                    "outOfDeliveryOrderTotalActionRequired": 0,
+                    "orderTotalHighAlert": 68,
+                    "newOrderTotalHighAlert": 59,
+                    "confirmOrderTotalWholeHighAlert": 8,
+                    "outOfDeliveryOrderTotalHighAlert": 1
                 }
             };
             console.log("hardCodedData========>", hardCodedData);
@@ -662,6 +724,20 @@ export class DashboardService {
                 today: 0,
                 total: 0,
                 isAlert: false
+            },
+            "counts" : {
+                "orderTotalWhole": 161,
+                "newOrderTotalWhole": 148,
+                "confirmOrderTotalWhole": 12,
+                "outOfDeliveryOrderTotalWhole": 1,
+                "orderTotalActionRequired": 92,
+                "newOrderTotalActionRequired": 89,
+                "confirmOrderTotalWholeActionRequired": 3,
+                "outOfDeliveryOrderTotalActionRequired": 0,
+                "orderTotalHighAlert": 68,
+                "newOrderTotalHighAlert": 59,
+                "confirmOrderTotalWholeHighAlert": 8,
+                "outOfDeliveryOrderTotalHighAlert": 1
             }
         };
 
@@ -669,26 +745,75 @@ export class DashboardService {
         return customDashboardData;
     }
 
-    changeDashboardDataOrder(dashboardData, eleColIndex){
-        eleColIndex = parseInt(eleColIndex);
+    changeDashboardDataOrder(dashboardData, eleColIndex, row){
+        eleColIndex = parseInt(eleColIndex) || this.currentColumn;
 
-        let splicedObj = dashboardData.topLabels.splice(eleColIndex, 1);
-        dashboardData.topLabels.unshift(splicedObj[0]);
+        if(eleColIndex > 0) {
+            if(row === 'Processed' || row === 'Confirmed'){
+                let splicedObj = dashboardData.topLabels.splice(eleColIndex, 1);
+                dashboardData.topLabels.unshift(splicedObj[0]);
 
-             splicedObj = dashboardData.new.splice(eleColIndex, 1);
-        dashboardData.new.unshift(splicedObj[0]);
+                splicedObj = dashboardData.new.splice(eleColIndex, 1);
+                dashboardData.new.unshift(splicedObj[0]);
 
-            splicedObj = dashboardData.confirmed.splice(eleColIndex, 1);
-        dashboardData.confirmed.unshift(splicedObj[0]);
+                splicedObj = dashboardData.confirmed.splice(eleColIndex, 1);
+                dashboardData.confirmed.unshift(splicedObj[0]);
+            }else if(row === 'OutForDeliveryView'){
+                let splicedObj = dashboardData.ofd.splice(eleColIndex, 1);
+                dashboardData.ofd.unshift(splicedObj[0]);
+            }
+        }
+
+        dashboardData = this.blurInactiveTableCell(dashboardData, eleColIndex, row);
 
         return dashboardData;
     }
 
+    blurInactiveTableCell(dashboardData, eleColIndex, row){
+        this.currentColumn = eleColIndex;
+        this.currentRow = row;
+        console.log('blurInactiveTableCell ====>', dashboardData, eleColIndex, row);
+        if(row === "Processed"){
+            if(dashboardData.confirmed[0]) dashboardData.confirmed[0].inactive = true;
+            if(dashboardData.ofd[0]) dashboardData.ofd[0].inactive = true;
+            if(dashboardData.ofd[1]) dashboardData.ofd[1].inactive = true;
+        }else if(row === "Confirmed"){
+            if(dashboardData.new[0]) dashboardData.new[0].inactive = true;
+            if(dashboardData.ofd[0]) dashboardData.ofd[0].inactive = true;
+            if(dashboardData.ofd[1]) dashboardData.ofd[1].inactive = true;
+        }else if(row === "OutForDeliveryView"){
+            if(dashboardData.new[0]) dashboardData.new[0].inactive = true;
+            if(dashboardData.confirmed[0]) dashboardData.confirmed[0].inactive = true;
+            if(dashboardData.ofd[1]) dashboardData.ofd[1].inactive = true;
+        }
+
+        return dashboardData;
+    }
+
+    disableAllTableCell(dashboardData){
+        this.currentRow = 'all';
+        if(dashboardData && dashboardData.new[0]) dashboardData.new[0].inactive = true;
+        if(dashboardData && dashboardData.confirmed[0]) dashboardData.confirmed[0].inactive = true;
+        if(dashboardData && dashboardData.ofd[0]) dashboardData.ofd[0].inactive = true;
+        if(dashboardData && dashboardData.ofd[1]) dashboardData.ofd[1].inactive = true;
+        return dashboardData;
+    }
+
     reArrangeDbDate(dbData){
-        console.log('---- DbDate rearranged ----');
+        //remove all blur classes
+        console.log('---- DbData remove blur ----');
+        if(dbData.confirmed[0] && dbData.confirmed[0].inactive) delete dbData.confirmed[0].inactive;
+        if(dbData.new[0] && dbData.new[0].inactive) delete dbData.new[0].inactive;
+        if(dbData.ofd[0] && dbData.ofd[0].inactive) delete dbData.ofd[0].inactive;
+        if(dbData.ofd[1] && dbData.ofd[1].inactive) delete dbData.ofd[1].inactive;
+        this.currentColumn = null;
+        this.currentRow = null;
+
+        console.log('---- DbData rearranged ----');
         dbData.topLabels = dbData.topLabels.sort(this.UtilityService.dynamicSort("position", null));
         dbData.confirmed = dbData.confirmed.sort(this.UtilityService.dynamicSort("position", null));
         dbData.new = dbData.new.sort(this.UtilityService.dynamicSort("position", null));
+
         return dbData;
     }
     

@@ -9,7 +9,7 @@ import { UtilityService } from '../../services/utility.service';
 
 @Component({
   selector: 'app-dashboard',
-  templateUrl: './dashboard.component.html',
+  templateUrl: window.screen.width > 900 ? './dashboard.component.desktop.html' : './dashboard.component.mobile.html',
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
@@ -18,7 +18,7 @@ export class DashboardComponent implements OnInit {
   dashBoardDataType;
   vendorName = localStorage.getItem('associateName');
   public mainHeaderComponent: MainHeaderComponent;
-  public dashboardData: Object;
+  public dashboardData: any;
   public masterData: Object;
   public isRowAlert: Object;
 
@@ -58,6 +58,7 @@ export class DashboardComponent implements OnInit {
     this.searchModel.searchkey = this.searchModel.searchkey.trim();
     if(!this.searchModel.searchkey) return;
     this.child.toggleTray(e, "", this.searchModel.searchkey, null);
+    this.disableAllTableCell();
   }
 
   viewOrders(e) {
@@ -70,21 +71,28 @@ export class DashboardComponent implements OnInit {
     this.child.toggleTray(e, status, orderId, this.dashBoardDataType);
 
     //changing clicked element position if its index greater than 0
-    if(status === "Processed" || status === "Confirmed"){
+    if(status === "Processed" || status === "Confirmed" || status === "OutForDelivery"){
         let _this = this;
-        let clickEleIndex =  e.currentTarget.parentElement.parentElement.parentElement.dataset.index;
-        //setTimeout(function(){
-            if(clickEleIndex > 0) _this.dashboardData = _this.dashboardService.changeDashboardDataOrder(_this.dashboardData, clickEleIndex);
-        //}, 1000);
+        let clickEleIndex =  status === "OutForDelivery" ? e.currentTarget.parentElement.parentElement.dataset.index : e.currentTarget.parentElement.parentElement.parentElement.dataset.index;
+        _this.dashboardData = _this.dashboardService.changeDashboardDataOrder(_this.dashboardData, clickEleIndex, status);
     }
-
   }
+
+  switchOfdData(status){
+      if(!status) status= 'OutForDeliveryView';
+      this.dashboardService.changeDashboardDataOrder(this.dashboardData, null, status);
+  }
+
+ disableAllTableCell(){
+     this.dashboardData = this.dashboardService.disableAllTableCell(this.dashboardData);
+ }
 
   openPanel(e, status) {
     e.preventDefault();
     e.stopPropagation();
 
     this.child.toggleTray(e, status, null, this.dashBoardDataType);
+      this.disableAllTableCell();
     console.log('Side-panel opened for status: ', status);
   }
 
@@ -134,11 +142,5 @@ export class DashboardComponent implements OnInit {
   clearSearch(e){
       this.searchModel.searchkey = "";
   }
-
-
-
-
-
-
 
 }
