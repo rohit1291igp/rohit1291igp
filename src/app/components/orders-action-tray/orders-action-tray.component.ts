@@ -332,7 +332,7 @@ export class OrdersActionTrayComponent implements OnInit {
 
   updateOrderStatus(e, status, orderId, orderProducts, deliveryDate, deliveryTime){
       e.stopPropagation();
-      var rejectionMessage, recipientInfo;
+      var rejectionMessage, recipientInfo, recipientName, recipientComments;
       if( (status === "Delivered" || status === "Rejected") && (!e.customCurrentTarget)){
           this.statusReasonModel.e = [];
           this.statusReasonModel.e.push(e.currentTarget);
@@ -348,6 +348,8 @@ export class OrdersActionTrayComponent implements OnInit {
           rejectionMessage = this.statusReasonModel.message ? this.statusReasonModel.message.trim() : this.statusReasonModel.rejectOption;
           rejectionMessage = rejectionMessage ? rejectionMessage : "";
           recipientInfo = this.statusReasonModel.recipientDetail ? this.statusReasonModel.recipientDetail.trim() : "";
+          recipientName = this.statusReasonModel.recipientName ? this.statusReasonModel.recipientName.trim() : "";
+          recipientComments = this.statusReasonModel.recipientComments ? this.statusReasonModel.recipientComments.trim() : "";
           this.statusReasonModel = {};
       }
 
@@ -368,7 +370,7 @@ export class OrdersActionTrayComponent implements OnInit {
           let fkAssociateId = localStorage.getItem('fkAssociateId');
           //var _this = this; this.statusReasonModel
           //var reqURL = "?responseType=json&scopeId=1&rejectionMessage="+rejectionMessage+"&recipientInfo="+recipientInfo+"&orderProductIds="+orderProductIds+"&status="+status+"&fkAssociateId="+fkAssociateId+"&orderId="+orderId+"&method=igp.order.doUpdateOrderStatus";
-          var reqURL = "doUpdateOrderStatus?responseType=json&scopeId=1&rejectionMessage="+rejectionMessage+"&recipientInfo="+recipientInfo+"&orderProductIds="+orderProductIds+"&status="+status+"&fkAssociateId="+fkAssociateId+"&orderId="+orderId;
+          var reqURL = "doUpdateOrderStatus?responseType=json&scopeId=1&rejectionMessage="+rejectionMessage+"&recipientInfo="+recipientInfo+"&recipientName="+recipientName+"&comments="+recipientComments+"&orderProductIds="+orderProductIds+"&status="+status+"&fkAssociateId="+fkAssociateId+"&orderId="+orderId;
           console.log('reqURL==============>', reqURL);
           if(localStorage.getItem('dRandom')){
               setTimeout(function(){
@@ -394,6 +396,8 @@ export class OrdersActionTrayComponent implements OnInit {
               method : "post",
               payload : {}
           };
+
+          //console.log('Update status API =============>', reqObj);
 
           _this.BackendService.makeAjax(reqObj, function(err, response, headers){
               if(err || JSON.parse(response).error) {
