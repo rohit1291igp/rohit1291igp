@@ -158,6 +158,7 @@ export class OrdersActionTrayComponent implements OnInit {
             console.log('Upload File - formData =============>', formData, options);
 
             _this.statusReasonModel.fileData = formData;
+            _this.statusReasonModel.fileDateLength = fileList.length;
             _this.statusReasonModel.fileDataOptions = options;
 
             /*let reqObj =  {
@@ -375,7 +376,7 @@ export class OrdersActionTrayComponent implements OnInit {
 
   updateOrderStatus(e, status, orderId, orderProducts, deliveryDate, deliveryTime){
       e.stopPropagation();
-      var rejectionMessage, recipientInfo, recipientName, recipientComments, fileData, fileDataOptions;
+      var rejectionMessage, recipientInfo, recipientName, recipientComments, fileData, fileDateLength, fileDataOptions;
       if( (status === "Delivered" || status === "Rejected") && (!e.customCurrentTarget)){
           this.statusReasonModel.e = [];
           this.statusReasonModel.e.push(e.currentTarget);
@@ -394,6 +395,7 @@ export class OrdersActionTrayComponent implements OnInit {
           recipientName = this.statusReasonModel.recipientName ? this.statusReasonModel.recipientName.trim() : "";
           recipientComments = this.statusReasonModel.recipientComments ? this.statusReasonModel.recipientComments.trim() : "";
           fileData = this.statusReasonModel.fileData ? this.statusReasonModel.fileData : null;
+          fileDateLength = this.statusReasonModel.fileDateLength ? this.statusReasonModel.fileDateLength : 0;
           fileDataOptions = this.statusReasonModel.fileDataOptions ? this.statusReasonModel.fileDataOptions : null;
           this.statusReasonModel = {};
       }
@@ -415,7 +417,7 @@ export class OrdersActionTrayComponent implements OnInit {
           let fkAssociateId = localStorage.getItem('fkAssociateId');
           //var _this = this; this.statusReasonModel
           //var reqURL = "?responseType=json&scopeId=1&rejectionMessage="+rejectionMessage+"&recipientInfo="+recipientInfo+"&orderProductIds="+orderProductIds+"&status="+status+"&fkAssociateId="+fkAssociateId+"&orderId="+orderId+"&method=igp.order.doUpdateOrderStatus";
-          var reqURL = "doUpdateOrderStatus?responseType=json&scopeId=1&rejectionMessage="+rejectionMessage+"&recipientInfo="+recipientInfo+"&recipientName="+recipientName+"&comments="+recipientComments+"&orderProductIds="+orderProductIds+"&status="+status+"&fkAssociateId="+fkAssociateId+"&orderId="+orderId;
+          var reqURL = "doUpdateOrderStatus?fileDateLength="+fileDateLength+"&responseType=json&scopeId=1&rejectionMessage="+rejectionMessage+"&recipientInfo="+recipientInfo+"&recipientName="+recipientName+"&comments="+recipientComments+"&orderProductIds="+orderProductIds+"&status="+status+"&fkAssociateId="+fkAssociateId+"&orderId="+orderId;
           console.log('reqURL==============>', reqURL);
           if(localStorage.getItem('dRandom')){
               setTimeout(function(){
@@ -588,7 +590,7 @@ export class OrdersActionTrayComponent implements OnInit {
           <body onload="window.print();window.close()">${printContents}</body>
           </html>`
       );
-     //popupWin.document.close();
+     popupWin.document.close();
   }
 
   imagePreview(e, imgSrc){
