@@ -31,8 +31,8 @@ export class InterceptedHttp extends Http {
     }
 
     private updateUrl(req: string) {
-        if(req === '/fakeapi'){
-            return  'http://localhost:1337/fakeapi'
+        if(/\/fakeapi/.test(req)){
+            return  'http://localhost:1337'+req
         }
         return  environment.origin2 +'v1/handels/'+ req;
         /*

@@ -89,6 +89,7 @@ export class OrdersActionTrayComponent implements OnInit {
             if(this.trayOpen){
                this.onStatusUpdate.emit("closed");
                this.trayOpen = false;
+               //this.clearPopupData();
             }
 
            // this.imagePreviewFlag = false;
@@ -135,7 +136,12 @@ export class OrdersActionTrayComponent implements OnInit {
       this.updateOrderStatus(orderStatusEvent, orderStatus, orderId, orderProducts, orderDeliveryDate, orderDeliveryTime);
   }
 
+  clearPopupData(){
+      this.statusReasonModel = {};
+  }
+
     fileChange(event) {
+        var _this = this;
         let fileList: FileList = event.target.files;
         if(fileList.length > 0) {
             let file: File = fileList[0];
@@ -151,8 +157,11 @@ export class OrdersActionTrayComponent implements OnInit {
             let options = new RequestOptions({ headers: headers });
             console.log('Upload File - formData =============>', formData, options);
 
-            let reqObj =  {
-                url : '/fakeapi',
+            _this.statusReasonModel.fileData = formData;
+            _this.statusReasonModel.fileDataOptions = options;
+
+            /*let reqObj =  {
+                url : '/fakeapi?fileLength='+fileList.length,
                 method : "post",
                 payload : formData,
                 options : options
@@ -163,15 +172,8 @@ export class OrdersActionTrayComponent implements OnInit {
                     console.log('Error=============>', err, JSON.parse(response).errorCode);
                 }
                 console.log('sidePanel Response --->', response.result);
-            });
+            });*/
 
-             /*this.http.post('/fakeapi', formData, options)
-         .map(res => res.json())
-                 .catch(error => Observable.throw(error))
-                 .subscribe(
-                 data => console.log('success'),
-                 error => console.log(error)
-             )*/
         }
     }
 
@@ -373,7 +375,7 @@ export class OrdersActionTrayComponent implements OnInit {
 
   updateOrderStatus(e, status, orderId, orderProducts, deliveryDate, deliveryTime){
       e.stopPropagation();
-      var rejectionMessage, recipientInfo, recipientName, recipientComments;
+      var rejectionMessage, recipientInfo, recipientName, recipientComments, fileData, fileDataOptions;
       if( (status === "Delivered" || status === "Rejected") && (!e.customCurrentTarget)){
           this.statusReasonModel.e = [];
           this.statusReasonModel.e.push(e.currentTarget);
@@ -391,6 +393,8 @@ export class OrdersActionTrayComponent implements OnInit {
           recipientInfo = this.statusReasonModel.recipientDetail ? this.statusReasonModel.recipientDetail.trim() : "";
           recipientName = this.statusReasonModel.recipientName ? this.statusReasonModel.recipientName.trim() : "";
           recipientComments = this.statusReasonModel.recipientComments ? this.statusReasonModel.recipientComments.trim() : "";
+          fileData = this.statusReasonModel.fileData ? this.statusReasonModel.fileData : null;
+          fileDataOptions = this.statusReasonModel.fileDataOptions ? this.statusReasonModel.fileDataOptions : null;
           this.statusReasonModel = {};
       }
 
@@ -435,10 +439,11 @@ export class OrdersActionTrayComponent implements OnInit {
           let reqObj =  {
               url : reqURL,
               method : "post",
-              payload : {}
+              payload : fileData ? fileData : {}
           };
+          if(fileDataOptions) reqObj['options'] = fileDataOptions;
 
-          //console.log('Update status API =============>', reqObj);
+          console.log('Update status API =============>', reqObj);
 
           _this.BackendService.makeAjax(reqObj, function(err, response, headers){
               if(err || JSON.parse(response).error) {

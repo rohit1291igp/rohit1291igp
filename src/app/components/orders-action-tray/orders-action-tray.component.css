@@ -298,9 +298,8 @@
 }
 
 .viewDetailPopupBtn{
-    right: 37%;
-    position: absolute;
-    top: 63.5%;
+    margin-left: 10em;
+    margin-top: -4em;
 }
 
 .markdlvBtn{
