@@ -162,9 +162,10 @@ page[size="A5"][layout="portrait"] {
     }
 
     .messgae-box-cont2{
+        height:400px;
         /*border-bottom: 2px dotted #757575;*/
         background: #fff;
-        padding: 160px 0;
+        /*padding: 160px 0;*/
         width: 100%;
         /*text-align: center;*/
         /*display: table;*/
@@ -363,10 +364,16 @@ page[size="A5"][layout="portrait"] {
         display:inline-block;
     }
 
-    .mb2 .mb{
+    .messgae-box-cont .mb2 .mb{
         text-align: center;
         display: table;
         height: 335px;
+    }
+
+    .messgae-box-cont2 .mb2 .mb{
+        text-align: center;
+        display: table;
+        height: 400px;
     }
 
     .imgCenter {
@@ -472,10 +479,10 @@ page[size="A5"][layout="portrait"] {
 }
 
 .messgae-box-cont2{
-    /*height:290px;*/
+    height:400px;
     /*border-bottom: 2px dotted #757575;*/
     background: #fff;
-    padding: 160px 0;
+    /*padding: 160px 0;*/
     width: 100%;
     /*text-align: center;*/
     /*display: table;*/
@@ -674,10 +681,16 @@ page[size="A5"][layout="portrait"] {
     display:inline-block;
 }
 
-.mb2 .mb{
+.messgae-box-cont .mb2 .mb{
     text-align: center;
     display: table;
     height: 335px;
+}
+
+.messgae-box-cont2 .mb2 .mb{
+    text-align: center;
+    display: table;
+    height: 400px;
 }
 
 .imgCenter {
