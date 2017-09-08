@@ -2,10 +2,19 @@
 <div class="row page" id="order_{{order.orderId}}" class="hide"  *ngIf="printType === 'order'">
 
     <section class="messgae-box-cont" *ngIf="order.commments">
-        <div class="messgae-box">
-            <!--<p class="message-caption bold upper-txt">Message</p>-->
-            <div class="message-txt"><pre>{{order.commments}}</pre></div>
-        </div>
+            <div style="width:100%;">
+                <div class="mb1">
+                    <!--<img class="imgCenter" src="messageBgImage" >-->
+                </div>
+                <div class="mb2">
+                    <div class="mb">
+                        <div class="messgae-box">
+                            <!--<p class="message-caption bold upper-txt">Message</p>-->
+                            <div class="message-txt"><pre style="margin: 0 auto; width: 30em; white-space: -moz-pre-wrap; white-space: -hp-pre-wrap; white-space: -o-pre-wrap; white-space: -pre-wrap; white-space: pre-wrap; white-space: pre-line; word-wrap: break-word; word-break: break-all;">{{order.commments}}</pre></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
     </section>
 
       <section class="header">
@@ -182,9 +191,18 @@
 
 <div id="order_message_{{order.orderId}}" class="hide page" *ngIf="printType === 'orderMessage'">
     <section class="messgae-box-cont2">
-        <div class="messgae-box">
-            <!--<p class="message-caption bold upper-txt">Message</p>-->
-            <div class="message-txt"><pre style="margin: 0 auto; width: 40em; white-space: -moz-pre-wrap; white-space: -hp-pre-wrap; white-space: -o-pre-wrap; white-space: -pre-wrap; white-space: pre-wrap; white-space: pre-line; word-wrap: break-word; word-break: break-all;">{{order.commments}}</pre></div>
+        <div style="width:100%;">
+            <div class="mb1">
+                <!--<img class="imgCenter" src="messageBgImage" >-->
+            </div>
+            <div class="mb2">
+                <div class="mb">
+                    <div class="messgae-box">
+                        <!--<p class="message-caption bold upper-txt">Message</p>-->
+                        <div class="message-txt"><pre style="margin: 0 auto; width: 30em; white-space: -moz-pre-wrap; white-space: -hp-pre-wrap; white-space: -o-pre-wrap; white-space: -pre-wrap; white-space: pre-wrap; white-space: pre-line; word-wrap: break-word; word-break: break-all;">{{order.commments}}</pre></div>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 </div>
