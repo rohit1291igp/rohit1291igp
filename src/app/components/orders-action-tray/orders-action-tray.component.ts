@@ -11,7 +11,7 @@ import {environment} from "../../../environments/environment";
   selector: 'app-orders-action-tray',
   templateUrl: './orders-action-tray.component.html',
   styleUrls: ['./orders-action-tray.component.css'],
-    animations: [
+  animations: [
         trigger('anim', [
             transition('* => void', [
                 style({ height: '*', opacity: '1', transform: 'translateX(0)', 'box-shadow': '0 1px 4px 0 rgba(0, 0, 0, 0.3)'}),
@@ -332,6 +332,7 @@ export class OrdersActionTrayComponent implements OnInit {
 
   updateOrderStatus(e, status, orderId, orderProducts, deliveryDate, deliveryTime){
       e.stopPropagation();
+      /* dialog popup logic - start */
       var rejectionMessage, recipientInfo, recipientName, recipientComments;
       if( (status === "Delivered" || status === "Rejected") && (!e.customCurrentTarget)){
           this.statusReasonModel.e = [];
@@ -352,10 +353,12 @@ export class OrdersActionTrayComponent implements OnInit {
           recipientComments = this.statusReasonModel.recipientComments ? this.statusReasonModel.recipientComments.trim() : "";
           this.statusReasonModel = {};
       }
+      /* dialog popup logic - end */
 
+      /* variable and methods decleration - start */
       var _this = this;
       let currentTab = this.activeDashBoardDataType; //e.currentTarget.dataset.tab;
-      var fireUpdateCall = function(){
+      var fireUpdateCall = function(){ //order Status update API - Method
           var orderProductIds = "";
           if(orderProducts && orderProducts.length){
               for(var i in orderProducts){
@@ -426,7 +429,9 @@ export class OrdersActionTrayComponent implements OnInit {
 
           });
       }
+      /* variable and methods decleration - start */
 
+      /* api in progress logic - start */
       if(!e.customCurrentTarget){
           if(e.currentTarget.textContent.indexOf('Mark as Delivered') !== -1){
               e.currentTarget.innerHTML= e.currentTarget.textContent.trim().split('Mark')[0].trim()+"<br/> Updating...";
@@ -441,7 +446,9 @@ export class OrdersActionTrayComponent implements OnInit {
               e.customCurrentTarget.textContent = "Updating...";
           }
       }
+      /* api in progress logic - end */
 
+      /* firing status api - start */
       if(!orderProducts){
           this.loadTrayData(e, status, orderId, _this.activeDashBoardDataType, function(err, result){
               if(err){
@@ -455,11 +462,10 @@ export class OrdersActionTrayComponent implements OnInit {
       }else{
           fireUpdateCall();
       }
-
-
+      /* firing status api - start */
   }
 
-  getNxtOrderStatus(orderByStatus){
+  getNxtOrderStatus(orderByStatus){ //Method to get custom status
       let orderUpdateByStatus;
       switch(orderByStatus){
           case "Processed" :  orderUpdateByStatus= "Confirmed";

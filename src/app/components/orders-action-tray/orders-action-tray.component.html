@@ -88,7 +88,7 @@
                      <span class="" *ngIf="orderUpdateByTime == 'past'">Past - </span>
                      <span class="" *ngIf="orderByStatus == 'Processed'">New Orders (To be confirmed)</span>
                      <span class="" *ngIf="orderByStatus == 'Confirmed'">Confirmed Orders (To be delivered)</span>
-                     <span class="" *ngIf="orderByStatus == 'OutForDelivery'">Orders out for delivery</span>
+                     <span class="" *ngIf="orderByStatus == 'OutForDelivery' || orderByStatus=='OutForDeliveryView' ">Orders out for delivery</span>
                      <span class="" *ngIf="orderByStatus == 'Shipped'">Orders delivered today</span>
                 </span>
                 <!--<span *ngIf="orderUpdateByTime">
