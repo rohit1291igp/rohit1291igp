@@ -14,6 +14,7 @@ import { UtilityService } from '../../services/utility.service';
 })
 export class DashboardComponent implements OnInit {
   @ViewChild(OrdersActionTrayComponent) child: OrdersActionTrayComponent;
+  prodOrderstatus : any;
   searchModel : any = {};
   dashBoardDataType;
   vendorName = localStorage.getItem('associateName');
@@ -78,9 +79,9 @@ export class DashboardComponent implements OnInit {
     }
   }
 
-  switchOfdData(status){
-      if(!status) status= 'OutForDeliveryView';
-      this.dashboardService.changeDashboardDataOrder(this.dashboardData, null, status);
+  switchOfdData(prodOrderstatus){
+      if(!prodOrderstatus) prodOrderstatus= 'OutForDeliveryView';
+      this.dashboardService.changeDashboardDataOrder(this.dashboardData, null, prodOrderstatus);
   }
 
  disableAllTableCell(){

@@ -7,6 +7,8 @@ import { BsDropdownModule } from 'ng2-bootstrap';
 import { SelectModule } from 'ng2-select';
 import { MyDatePickerModule } from 'mydatepicker';
 import { DatePipe } from '@angular/common';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
 
 // Router and Services
 import { routing } from "./app.routing";
@@ -69,7 +71,8 @@ export function ConfigLoader(envConfig: envConfig) {
     routing,
     BsDropdownModule.forRoot(),
     SelectModule,
-    MyDatePickerModule
+    MyDatePickerModule,
+    BrowserAnimationsModule
   ],
   providers: [
     {

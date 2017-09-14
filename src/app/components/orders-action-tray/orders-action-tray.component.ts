@@ -151,7 +151,7 @@ export class OrdersActionTrayComponent implements OnInit {
         }
     };
 
-    animateScroll(0);
+    animateScroll(1000);
   }
 
   easeInOut(currentTime, start, change, duration) {
