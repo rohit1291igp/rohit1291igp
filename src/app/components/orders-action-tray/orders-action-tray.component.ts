@@ -151,7 +151,7 @@ export class OrdersActionTrayComponent implements OnInit {
         }
     };
 
-    animateScroll(1000);
+    animateScroll(0);
   }
 
   easeInOut(currentTime, start, change, duration) {
@@ -234,6 +234,8 @@ export class OrdersActionTrayComponent implements OnInit {
                   }
 
               }
+              _this.scrollTo(document.getElementById("mainOrderSection"), 0, 0); // scroll to top
+
           }, 1000);
           return;
       }
