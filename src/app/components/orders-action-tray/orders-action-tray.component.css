@@ -323,3 +323,7 @@
     display:inline-block;
     /*width:4.5em;*/
 }
+
+.modal-content{
+    min-height: 85vh ! important;
+}

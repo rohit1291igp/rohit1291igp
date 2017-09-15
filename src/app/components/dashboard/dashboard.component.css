@@ -7,7 +7,7 @@
 }
 
 .sla-message {
-    color: #C3404E;
+    color: #25C355;
     text-decoration: underline;
     font-weight: bold;
 }
@@ -77,11 +77,11 @@
 }
 
 .alert-action {
-    border-left: 15px solid #C3404E;
+    border-left: 15px solid #25C355;
 }
 
 .alertg-action {
-    border-left: 15px solid #00ee39;
+    border-left: 15px solid #25C355;
 }
 
 .no-action {
