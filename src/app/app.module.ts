@@ -39,6 +39,7 @@ import {httpFactory} from "./others/http.factory";
 import { PrintTemplateComponent } from './components/print-template/print-template.component';
 import { Time12Pipe } from './customPipes/time12.pipe';
 import { ReplacePipe } from './customPipes/replace.pipe';
+import { ReportsComponent } from './components/reports/reports.component';
 
 //env config
 /*import {envConfig} from "./others/env.config";
@@ -62,7 +63,8 @@ export function ConfigLoader(envConfig: envConfig) {
     LoaderComponent,
     PrintTemplateComponent,
     Time12Pipe,
-    ReplacePipe
+    ReplacePipe,
+    ReportsComponent
   ],
   imports: [
     BrowserModule,
