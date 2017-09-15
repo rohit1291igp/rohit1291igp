@@ -1,3 +1,37 @@
-<p>
-  reports works!
-</p>
+<div class="container-fluid reports-cont">
+    <div class="row">
+        <div class="col-sm-12 col-md-12 ">
+
+            <div class="col-sm-8 col-md-8 reprts-search-fields">
+                <h6>Search</h6>
+                <div class="searchFiled" *ngFor="let searchField of reportData.searchFields">
+                    <input class="form-control" type="text" name="{{searchField.name}}" placeholder="{{searchField.placeholder}}">
+                </div>
+            </div>
+
+            <div class="col-sm-4 col-md-4 reprts-summary">
+                <h6>Summary</h6>
+                <div *ngFor="let summ of reportData.summary">
+                    <span>{{summ.lable}} - {{summ.value}}</span>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-sm-12 col-md-12 table-cont">
+            <h6>Summary</h6>
+            <div class="col-sm-12 col-md-12 table-lables">
+                <span *ngFor="let tableLabel of reportData.tableLabels">
+                {{tableLabel}} |
+                </span>
+            </div>  
+
+            <div class="col-sm-12 col-md-12 table-data">
+                <div *ngFor="let tableRowValue of reportData.tableData">
+                <span *ngFor="let tableCol of tableRowValue">{{tableCol}} | </span>
+            </div>
+        </div>
+        </div>
+
+    </div>
+</div>

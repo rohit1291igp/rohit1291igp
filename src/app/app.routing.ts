@@ -10,10 +10,10 @@ const route: Routes = [
     { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
     { path: 'login', component: LoginComponent },
     { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
-    { path: 'reports', component: ReportsComponent, canActivate: [AuthGuard] },
+    { path: 'reports/:type', component: ReportsComponent, canActivate: [AuthGuard] },
 
     // otherwise redirect to home
-    { path: '**', redirectTo: '' }
+    { path: '**', redirectTo: 'dashboard' }
 ]
 
 export const routing = RouterModule.forRoot(route, { useHash: true });
