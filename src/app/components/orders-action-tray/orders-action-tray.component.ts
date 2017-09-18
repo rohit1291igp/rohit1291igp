@@ -543,14 +543,14 @@ export class OrdersActionTrayComponent implements OnInit {
           <html>
               <head>
                   <title>Print Order</title>
-                  <link rel="stylesheet" href="assets/css/print-template.css" type="text/css" />
+                  <link rel="stylesheet" href="/assets/css/print-template.css" type="text/css" />
                   <style>
                   </style>
               </head>
           <body onload="window.print();window.close()">${printContents}</body>
           </html>`
       );
-     popupWin.document.close();
+     //popupWin.document.close();
   }
 
   imagePreview(e, imgSrc){
