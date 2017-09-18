@@ -324,6 +324,6 @@
     /*width:4.5em;*/
 }
 
-.modal-content{
+.image-preview .modal-content{
     min-height: 85vh ! important;
 }
