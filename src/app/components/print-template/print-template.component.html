@@ -74,7 +74,7 @@
                 </div>
           </section>
 
-          <section class="order-body-productDetails border-bottom">
+          <section class="order-body-productDetails border-bottom" [ngClass]="{'scaled' : (order.orderProducts.length > 2 && order.orderProducts.length < 4 && order.commments), 'scaled2' : (order.orderProducts.length > 3 && order.orderProducts.length < 5 && order.commments)}">
              <div class="order-body-productDetails-head border-bottom">
                  <div class="t-col-1 display-inline border-right">Sr. No.</div>
                  <div class="t-col-2 display-inline border-right">Image</div>

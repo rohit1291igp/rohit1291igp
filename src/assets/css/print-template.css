@@ -396,6 +396,26 @@ page[size="A5"][layout="portrait"] {
         vertical-align: middle;
     }
 
+    .scaled .product-image{
+        width: 70px;
+    }
+
+    .scaled .t-col-1, .scaled .t-col-2, .scaled .t-col-3, .scaled .t-col-4, .scaled .t-col-5{
+        padding: 5px 16px;
+    }
+
+    .scaled2 .t-col-1, .scaled2 .t-col-2, .scaled2 .t-col-3, .scaled2 .t-col-4, .scaled2 .t-col-5{
+        padding: 2px 16px;
+    }
+
+    .scaled .pagebreak, .scaled2 .pagebreak{
+        page-break-before: avoid;
+    }
+
+    .scaled2 .product-image{
+        width: 60px;
+    }
+
 }
 
 /*----------*/
@@ -721,3 +741,24 @@ page[size="A5"][layout="portrait"] {
     margin: auto auto;
     vertical-align: middle;
 }
+
+.scaled .product-image{
+    width: 70px;
+}
+
+.scaled .t-col-1, .scaled .t-col-2, .scaled .t-col-3, .scaled .t-col-4, .scaled .t-col-5{
+    padding: 5px 16px;
+}
+
+.scaled2 .t-col-1, .scaled2 .t-col-2, .scaled2 .t-col-3, .scaled2 .t-col-4, .scaled2 .t-col-5{
+    padding: 2px 16px;
+}
+
+.scaled .pagebreak, .scaled2 .pagebreak{
+    page-break-before: avoid;
+}
+
+.scaled2 .product-image{
+    width: 60px;
+}
+
