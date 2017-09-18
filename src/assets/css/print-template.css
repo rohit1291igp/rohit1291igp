@@ -374,7 +374,7 @@ page[size="A5"][layout="portrait"] {
     }
 
     .messgae-box-cont2 .mb2 .mb{
-        text-align: center;
+        text-align: left;
         display: table;
         height: 400px;
     }
@@ -700,7 +700,7 @@ page[size="A5"][layout="portrait"] {
 }
 
 .messgae-box-cont2 .mb2 .mb{
-    text-align: center;
+    text-align: left;
     display: table;
     height: 400px;
 }
