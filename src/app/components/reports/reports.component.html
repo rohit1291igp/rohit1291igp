@@ -2,17 +2,17 @@
     <div class="row">
         <div class="col-sm-12 col-md-12 ">
 
-            <div class="col-sm-8 col-md-8 reprts-search-fields">
+            <div class="col-sm-8 col-md-8 reprts-search-fields bg-white">
                 <h6>Search</h6>
-                <div class="searchFiled" *ngFor="let searchField of reportData.searchFields">
-                    <input class="form-control" type="text" name="{{searchField.name}}" placeholder="{{searchField.placeholder}}">
+                <div class="searchFiled" *ngFor="let searchField of reportData.searchFields; index as i" [ngClass]="{'inline' : (i+1)/2===0}">
+                    {{i+1}}.<input class="form-control" type="text" name="{{searchField.name}}" placeholder="{{searchField.placeholder}}">
                 </div>
             </div>
 
-            <div class="col-sm-4 col-md-4 reprts-summary">
+            <div class="col-sm-4 col-md-4 reprts-summary bg-white">
                 <h6>Summary</h6>
-                <div *ngFor="let summ of reportData.summary">
-                    <span>{{summ.lable}} - {{summ.value}}</span>
+                <div *ngFor="let summ of reportData.summary; index as i">
+                    <span>{{summ.label}} - {{summ.value}}</span>
                 </div>
             </div>
 
@@ -21,10 +21,10 @@
         <div class="col-sm-12 col-md-12 table-cont">
             <h6>Summary</h6>
             <div class="col-sm-12 col-md-12 table-lables">
-                <span *ngFor="let tableLabel of reportData.tableLabels">
+                <span *ngFor="let tableLabel of reportData.tableHeaders">
                 {{tableLabel}} |
                 </span>
-            </div>  
+            </div>
 
             <div class="col-sm-12 col-md-12 table-data">
                 <div *ngFor="let tableRowValue of reportData.tableData">

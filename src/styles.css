@@ -90,6 +90,14 @@
 .comp-auto-margin{
     margin:3.5em auto;
 }
+
+.inline{
+    display:inline-block;
+}
+
+.block{
+    display:block;
+}
 /* Utility css end */
 
 
