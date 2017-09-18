@@ -248,7 +248,7 @@ page[size="A5"][layout="portrait"] {
     }
 
     .order-body-footer .col1{
-        width: 45%;
+        width: 44%;
         padding: 4.8px 8px 4.8px 0;
     }
 
@@ -362,12 +362,13 @@ page[size="A5"][layout="portrait"] {
     }
 
     .mb2{
-        width:50%;
-        display:inline-block;
+        width: 46%;
+        display: inline-block;
+        padding: 0 2%;
     }
 
     .messgae-box-cont .mb2 .mb{
-        text-align: center;
+        text-align: left;
         display: table;
         height: 335px;
     }
@@ -574,7 +575,7 @@ page[size="A5"][layout="portrait"] {
 }
 
 .order-body-footer .col1{
-    width: 45%;
+    width: 44%;
     padding: 4.8px 8px 4.8px 0;
 }
 
@@ -687,12 +688,13 @@ page[size="A5"][layout="portrait"] {
 }
 
 .mb2{
-    width:50%;
-    display:inline-block;
+    width: 46%;
+    display: inline-block;
+    padding: 0 2%;
 }
 
 .messgae-box-cont .mb2 .mb{
-    text-align: center;
+    text-align: left;
     display: table;
     height: 335px;
 }
