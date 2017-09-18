@@ -4,9 +4,10 @@
 
             <div class="col-sm-8 col-md-8 reprts-search-fields bg-white">
                 <h6>Search</h6>
-                <div class="searchFiled" *ngFor="let searchField of reportData.searchFields; index as i" [ngClass]="{'inline' : (i+1)/2===0}">
-                    {{i+1}}.<input class="form-control" type="text" name="{{searchField.name}}" placeholder="{{searchField.placeholder}}">
+                <div class="searchFiled inline" *ngFor="let searchField of reportData.searchFields; var i='index'">
+                    <input class="form-control" type="text" name="{{searchField.name}}" placeholder="{{searchField.placeholder}}">
                 </div>
+                <div class="clearfix" *ngIf="(i+1)%2==0"></div>
             </div>
 
             <div class="col-sm-4 col-md-4 reprts-summary bg-white">
