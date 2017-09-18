@@ -386,7 +386,7 @@ page[size="A5"][layout="portrait"] {
     .messBgCont1{
         width: 100%;
         height: 335px;
-        text-align: center;
+        /*text-align: center;*/
         display: table;
     }
 
