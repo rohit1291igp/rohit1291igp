@@ -83,6 +83,10 @@
     margin-top:1em;
 }
 
+.m-top-2{
+    margin-top:2em;
+}
+
 .auto-margin{
     margin:auto;
 }
@@ -98,6 +102,20 @@
 .block{
     display:block;
 }
+
+.underLine{
+    border-bottom:1px solid #f2f2f2;
+}
+
+.paddingHalf{
+    padding:0.5em;
+}
+
+.padding1{
+    padding:1em;
+}
+
+
 /* Utility css end */
 
 

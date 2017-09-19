@@ -3,7 +3,31 @@
 }
 
 .reprts-search-fields{
+    box-shadow: 0 1px 3px #888;
+    border-radius: 0.5em;
+}
 
+.reprts-summary{
+    width: 24em;
+    margin-left: 1em;
+    box-shadow: 0 1px 3px #888;
+    border-radius: 0.5em;
+    height: 12.39em;
+}
+
+.summaryBlock{
+    margin-top: 2em;
+    font-size: 1.2em;
+    width: 9em;
+    text-align: center;
+}
+
+.searchFields{
+    width:50%;
+}
+
+.searchFieldsSubmit{
+    width: 49%;
 }
 
 .table-lables{
@@ -13,3 +37,54 @@
 .table-data{
 
 }
+
+.searchFiled {
+    margin: 0.5em;
+}
+
+.searchFieldsSubmit{
+
+}
+
+.report-table{
+    background: #fff;
+    border-radius: 0.5em;
+}
+
+.report-table thead{
+
+}
+
+.report-table th, .report-table td{
+    text-align: center;
+    line-height: 3em;
+}
+
+.table-curved {
+    border-collapse: separate;
+    border: solid #ccc 1px;
+    border-radius: 6px;
+    border-left: 0px;
+    border-top: 0px;
+}
+.table-curved > thead:first-child > tr:first-child > th {
+    border-bottom: 0px;
+    border-top: solid #ccc 1px;
+}
+.table-curved td, .table-curved th {
+    border-left: 1px solid #ccc;
+    border-top: 1px solid #ccc;
+}
+.table-curved > :first-child > :first-child > :first-child {
+    border-radius: 6px 0 0 0;
+}
+.table-curved > :first-child > :first-child > :last-child {
+    border-radius: 0 6px 0 0;
+}
+.table-curved > :last-child > :last-child > :first-child {
+    border-radius: 0 0 0 6px;
+}
+.table-curved > :last-child > :last-child > :last-child {
+    border-radius: 0 0 6px 0;
+}
+

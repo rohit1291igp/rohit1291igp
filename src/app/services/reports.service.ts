@@ -120,17 +120,27 @@ export class ReportsService {
                     "summary" : [
                         {
                             "label" : "Total orders",
-                            "icon" : "",
+                            "icon" : "glyphicon glyphicon-gift",
                             "value" : "20"
                         },
                         {
                             "label" : "Total Amount",
-                            "icon" : "",
+                            "icon" : "glyphicon glyphicon-gift",
                             "value" : "4500000"
                         }
                     ],
                     "tableHeaders" : ["order Number", "AWP Number", "Order Placed", "Order Dispatched", "Actions", "Status"],
                     "tableData" : [
+                            [1152915, 1152935, "23/07/17", "25/07/17", ["Edit", "Delete"], "Delivered"],
+                            [1152915, 1152935, "23/07/17", "25/07/17", ["Edit", "Delete"], "Delivered"],
+                            [1152915, 1152935, "23/07/17", "25/07/17", ["Edit", "Delete"], "Delivered"],
+                            [1152915, 1152935, "23/07/17", "25/07/17", ["Edit", "Delete"], "Delivered"],
+                            [1152915, 1152935, "23/07/17", "25/07/17", ["Edit", "Delete"], "Delivered"],
+                            [1152915, 1152935, "23/07/17", "25/07/17", ["Edit", "Delete"], "Delivered"],
+                            [1152915, 1152935, "23/07/17", "25/07/17", ["Edit", "Delete"], "Delivered"],
+                            [1152915, 1152935, "23/07/17", "25/07/17", ["Edit", "Delete"], "Delivered"],
+                            [1152915, 1152935, "23/07/17", "25/07/17", ["Edit", "Delete"], "Delivered"],
+                            [1152915, 1152935, "23/07/17", "25/07/17", ["Edit", "Delete"], "Delivered"],
                             [1152915, 1152935, "23/07/17", "25/07/17", ["Edit", "Delete"], "Delivered"],
                             [1152915, 1152935, "23/07/17", "25/07/17", ["Edit", "Delete"], "Delivered"],
                             [1152915, 1152935, "23/07/17", "25/07/17", ["Edit", "Delete"], "Delivered"],
