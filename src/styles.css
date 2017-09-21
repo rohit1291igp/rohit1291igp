@@ -543,3 +543,75 @@ body .dashboard-content, body .orders-button{
     opacity: 0.2;
     pointer-events: none;
 }
+
+.bg-loader{
+    animation-duration: 1.5s;
+    animation-fill-mode: both;
+    animation-iteration-count: infinite;
+    animation-name: placeHolderShimmer  ! important;
+    animation-timing-function: linear  ! important;
+    background: #f2f2f2  ! important;
+    background: -webkit-gradient(linear, left top, right top, color-stop(8%, #f2f2f2), color-stop(18%, #e2e2e2), color-stop(33%, #f2f2f2))  ! important;
+    background: -webkit-linear-gradient(left, #f2f2f2 8%, #e2e2e2 18%, #f2f2f2 33%)  ! important;
+    background: linear-gradient(to right, #f2f2f2 8%, #e2e2e2 18%, #f2f2f2 33%)  ! important;
+    background-size: 800px 104px  ! important;
+    position: relative  ! important;
+    -webkit-transform-style: preserve-3d  ! important;
+    transform-style: preserve-3d  ! important;
+}
+
+@-webkit-keyframes placeHolderShimmer{
+    0%{
+        background-position: -220px 0
+    }
+    100%{
+        background-position: 220px 0
+    }
+}
+@-moz-keyframes placeHolderShimmer{
+    0%{
+        background-position: -220px 0
+    }
+
+    100%{
+        background-position: 220px 0
+    }
+}
+@-o-keyframes placeHolderShimmer{
+    0%{
+        background-position: -220px 0
+    }
+    100%{
+        background-position: 220px 0
+    }
+}
+@keyframes placeHolderShimmer{
+    0%{
+        background-position: -220px 0
+    }
+    100%{
+        background-position: 220px 0
+    }
+}
+
+.icon{
+    cursor: pointer;
+}
+
+.icon.s img{
+    width: 1em;
+}
+
+.icon.m img{
+    width: 1.5em;
+}
+
+.icon.l img{
+    width: 2em;
+}
+
+.icon img.arrowU{
+    -ms-transform: rotate(180deg); /* IE 9 */
+    -webkit-transform: rotate(180deg); /* Chrome, Safari, Opera */
+    transform: rotate(180deg);
+}

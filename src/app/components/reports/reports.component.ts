@@ -11,8 +11,71 @@ import { ReportsService } from '../../services/reports.service';
   templateUrl: './reports.component.html',
   styleUrls: ['./reports.component.css']
 })
-export class ReportsComponent implements OnInit {
-  reportData:any;
+export class ReportsComponent implements OnInit{
+  reportDataLoader:any={
+      "searchFields" : [
+          {
+              "name" : "deliveryDateFrom",
+              "type" : "date",
+              "placeholder" : "Delivery date from"
+          },
+          {
+              "name" : "deliveryDateTo",
+              "type" : "date",
+              "placeholder" : "Delivery date to"
+          },
+          {
+              "name" : "orderDateFrom",
+              "type" : "date",
+              "placeholder" : "Order date from"
+          },
+          {
+              "name" : "orderDateTo",
+              "type" : "date",
+              "placeholder" : "Order date to"
+          },
+          {
+              "name" : "orderNumber",
+              "type" : "number",
+              "placeholder" : "order Number"
+          },
+          {
+              "name" : "status",
+              "type" : "number",
+              "placeholder" : "status"
+          }
+      ],
+      "summary" : [
+          {
+              "label" : "Total orders",
+              "icon" : "glyphicon glyphicon-gift",
+              "value" : 0
+          },
+          {
+              "label" : "Total Amount",
+              "icon" : "glyphicon glyphicon-gift",
+              "value" : 0
+          }
+      ],
+      "tableHeaders" : ["", "", "", "", "", ""],
+      "tableData" : [
+          ["", "", "", "", "", ""],
+          ["", "", "", "", "", ""],
+          ["", "", "", "", "", ""],
+          ["", "", "", "", "", ""],
+          ["", "", "", "", "", ""],
+          ["", "", "", "", "", ""],
+          ["", "", "", "", "", ""]
+      ]
+  };
+  public myDatePickerOptions: IMyOptions = {
+      // other options...
+      dateFormat: 'ddth mmm. yyyy'
+      //disableDateRanges : [{begin: this.UtilityService.getDateObj(0), end: this.UtilityService.getDateObj(2)}]
+  };
+  public dateRange: Object = {};
+  reportData:any=null;
+  searchResultModel:any={};
   constructor(
       public reportsService: ReportsService,
       public BackendService: BackendService,
@@ -21,18 +84,30 @@ export class ReportsComponent implements OnInit {
 
   ngOnInit() {
       var _this = this;
-      this.reportData = this.reportsService.getReportData('dummy', null);
-      this.reportsService.getReportData('dummy', function(error, _reportData){
+      //this.reportDataLoader = this.reportsService.getReportData('dummy', null);
+      this.reportsService.getReportData('general', function(error, _reportData){
           if(error){
               console.log('_reportData Error=============>', error);
               return;
           }
           console.log('_reportData=============>', _reportData);
-          this.reportData = _reportData;
+          _reportData.searchFields = _this.reportDataLoader.searchFields;
+          _this.reportData = _reportData;
       });
   }
 
+    searchReportSubmit(event){
+        console.log('Search report form submitted ---->', this.searchResultModel);
+    }
 
+
+    /*
+    1.search form validation
+    2.Icon css
+    3.sort and search algo
+    4.Invoke search and sort algo
+    5.Pagination
+    */
 
 
 }

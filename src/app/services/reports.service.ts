@@ -94,29 +94,55 @@ export class ReportsService {
 
     //https://jsonblob.com/9fb80aee-9a1c-11e7-aa97-275b22669468
     //http://www.mocky.io/v2/59bbdd060f0000c202ff878b
+    _reportDataLoader = {
+        "searchFields" : [
+            {
+                "name" : "orderNumber",
+                "type" : "number",
+                "placeholder" : "order Number"
+            },
+            {
+                "name" : "AWPNumber",
+                "type" : "number",
+                "placeholder" : "AWP Number"
+            },
+            {
+                "name" : "OrderPlacedon",
+                "type" : "date",
+                "placeholder" : "Select Delivery Date"
+            },
+            {
+                "name" : "OrderDispatchedOn",
+                "type" : "date",
+                "placeholder" : "Select Dispatch Date"
+            }
+        ],
+        "summary" : [
+            {
+                "label" : "Total orders",
+                "icon" : "glyphicon glyphicon-gift",
+                "value" : 0
+            },
+            {
+                "label" : "Total Amount",
+                "icon" : "glyphicon glyphicon-gift",
+                "value" : 0
+            }
+        ],
+        "tableHeaders" : ["", "", "", "", "", ""],
+        "tableData" : [
+            ["", "", "", "", "", ""],
+            ["", "", "", "", "", ""],
+            ["", "", "", "", "", ""],
+            ["", "", "", "", "", ""],
+            ["", "", "", "", "", ""],
+            ["", "", "", "", "", ""],
+            ["", "", "", "", "", ""],
+            ["", "", "", "", "", ""]
+        ]
+    };
+
     _reportData ={
-                    "searchFields" : [
-                        {
-                            "name" : "orderNumber",
-                            "type" : "number",
-                            "placeholder" : "order Number"
-                        },
-                        {
-                            "name" : "AWPNumber",
-                            "type" : "number",
-                            "placeholder" : "AWP Number"
-                        },
-                        {
-                            "name" : "OrderPlacedon",
-                            "type" : "date",
-                            "placeholder" : "Select Delivery Date"
-                        },
-                        {
-                            "name" : "OrderDispatchedOn",
-                            "type" : "date",
-                            "placeholder" : "Select Dispatch Date"
-                        }
-                    ],
                     "summary" : [
                         {
                             "label" : "Total orders",
@@ -137,15 +163,6 @@ export class ReportsService {
                             [1152915, 1152935, "23/07/17", "25/07/17", ["Edit", "Delete"], "Delivered"],
                             [1152915, 1152935, "23/07/17", "25/07/17", ["Edit", "Delete"], "Delivered"],
                             [1152915, 1152935, "23/07/17", "25/07/17", ["Edit", "Delete"], "Delivered"],
-                            [1152915, 1152935, "23/07/17", "25/07/17", ["Edit", "Delete"], "Delivered"],
-                            [1152915, 1152935, "23/07/17", "25/07/17", ["Edit", "Delete"], "Delivered"],
-                            [1152915, 1152935, "23/07/17", "25/07/17", ["Edit", "Delete"], "Delivered"],
-                            [1152915, 1152935, "23/07/17", "25/07/17", ["Edit", "Delete"], "Delivered"],
-                            [1152915, 1152935, "23/07/17", "25/07/17", ["Edit", "Delete"], "Delivered"],
-                            [1152915, 1152935, "23/07/17", "25/07/17", ["Edit", "Delete"], "Delivered"],
-                            [1152915, 1152935, "23/07/17", "25/07/17", ["Edit", "Delete"], "Delivered"],
-                            [1152915, 1152935, "23/07/17", "25/07/17", ["Edit", "Delete"], "Delivered"],
-                            [1152915, 1152935, "23/07/17", "25/07/17", ["Edit", "Delete"], "Delivered"]
                     ]
                 };
   constructor(
@@ -156,18 +173,50 @@ export class ReportsService {
 
   getReportData(reportType, cb){
       var _this = this;
-      if(!cb){
-          return _this._reportData;
+      if(localStorage.getItem('dRandom')){
+          setTimeout(function(){
+              return cb(null, _this._reportData);
+          },3000);
+      }else{
+          if(reportType === "dummy"){
+              return _this._reportDataLoader;
+          }else{
+              setTimeout(function(){
+                  return cb(null, _this._reportData);
+              },3000);
+          }
+          /* make API call
+           a.tableData
+           b.deduce table label from tableData
+           c.if required change search fields - depending on - report type
+           */
       }
+  }
 
+  manipulate_reportData(type, operation, operationData){
+      if(type === "client"){
+          if(operation === 'sort'){
+              var sortFields = operationData.sort || "";
+              if(sortFields){
 
-      /* make API call
-        a.tableData
-        b.deduce table label from tableData
-        c.if required change search fields - depending on - report type
-       */
+              }else{
+                  console.error('operationData - sortFields - is not sufficient!');
+              }
+          }else if(operation === 'search'){
+              var searchFields = operationData.search || "";
+              if(searchFields){
 
+              }else{
+                  console.error('operationData - searchFields - is not sufficient!');
+              }
+          }else{
+              return;
+          }
+      }else if(type === "server"){
 
+      }else{
+            return;
+      }
   }
 
 }
