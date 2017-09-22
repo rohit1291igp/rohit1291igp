@@ -7,7 +7,9 @@
                 <form name="searchReport">
                     <div class="searchFields m-top-1 inline">
                         <div class="searchFiled inline" *ngFor="let searchField of reportDataLoader.searchFields;">
-                        <input class="form-control" type="text" name="{{searchField.name}}" placeholder="{{searchField.placeholder}}">
+                        <input class="form-control" type="text" name="{{searchField.name}}" placeholder="{{searchField.placeholder}}" [(ngModel)]="searchResultModel[searchField.name]" *ngIf="searchField.type === 'text' || searchField.type === 'number'">
+                        <my-date-picker id="{{searchField.name}}" name="{{searchField.name}}" placeholder="{{searchField.placeholder}}" [options]="myDatePickerOptions" [(ngModel)]="searchResultModel[searchField.name]"  *ngIf="searchField.type === 'date'"></my-date-picker>
+
                     </div>
             </div>
             <div class="searchFieldsSubmit relative inline">
@@ -65,8 +67,10 @@
                 <form name="searchReport" (ngSubmit)="f.form.valid && searchReportSubmit($event)" #f="ngForm" nonvalidate>
                     <div class="searchFields m-top-1 inline">
                         <div class="searchFiled inline" *ngFor="let searchField of reportData.searchFields;" >
+
                             <input class="form-control" type="text" name="{{searchField.name}}" placeholder="{{searchField.placeholder}}" [(ngModel)]="searchResultModel[searchField.name]" *ngIf="searchField.type === 'text' || searchField.type === 'number'">
                             <my-date-picker id="{{searchField.name}}" name="{{searchField.name}}" placeholder="{{searchField.placeholder}}" [options]="myDatePickerOptions" [(ngModel)]="searchResultModel[searchField.name]"  *ngIf="searchField.type === 'date'"></my-date-picker>
+
                         </div>
                     </div>
                     <div class="searchFieldsSubmit relative inline">
