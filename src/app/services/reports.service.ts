@@ -157,12 +157,12 @@ export class ReportsService {
                     ],
                     "tableHeaders" : ["order Number", "AWP Number", "Order Placed", "Order Dispatched", "Actions", "Status"],
                     "tableData" : [
-                            [1152915, 1152935, "23/07/17", "25/07/17", ["Edit", "Delete"], "Delivered"],
-                            [1152915, 1152935, "23/07/17", "25/07/17", ["Edit", "Delete"], "Delivered"],
-                            [1152915, 1152935, "23/07/17", "25/07/17", ["Edit", "Delete"], "Delivered"],
-                            [1152915, 1152935, "23/07/17", "25/07/17", ["Edit", "Delete"], "Delivered"],
-                            [1152915, 1152935, "23/07/17", "25/07/17", ["Edit", "Delete"], "Delivered"],
-                            [1152915, 1152935, "23/07/17", "25/07/17", ["Edit", "Delete"], "Delivered"],
+                            [1152915, 115635, "23/07/17", "25/07/17", ["Edit", "Delete"], "Delivered"],
+                            [1152918, 1152935, "23/07/17", "25/07/17", ["Edit", "Delete"], "Confirmed"],
+                            [1152915, 115235, "23/07/17", "25/07/17", ["Edit", "Delete"], "Out for delivery"],
+                            [1152933, 1152935, "23/07/17", "25/07/17", ["Edit", "Delete"], "Confirmed"],
+                            [11586754, 11520, "23/07/17", "25/07/17", ["Edit", "Delete"], "Delivered"],
+                            [115000, 115835, "23/07/17", "25/07/17", ["Edit", "Delete"], "Processed"],
                     ]
                 };
   constructor(

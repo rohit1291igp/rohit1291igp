@@ -99,11 +99,39 @@ export class ReportsComponent implements OnInit{
     searchReportSubmit(event){
         console.log('Search report form submitted ---->', this.searchResultModel);
     }
+    //sort
+    sortTableCol(e, index, order){
+        if(order === 'asc'){
+            this.reportData.tableData = this.reportData.tableData.sort( function Comparator(a, b) {
+                if (a[index] < b[index]) return -1;
+                if (a[index] > b[index]) return 1;
+                return 0;
+            });
+        }else if(order === 'desc'){
+            this.reportData.tableData = this.reportData.tableData.sort( function Comparator(a, b) {
+                if (a[index] < b[index]) return 1;
+                if (a[index] > b[index]) return -1;
+                return 0;
+            });
+        }else{
+            this.reportData.tableData = this.reportData.tableData.sort( function Comparator(a, b) {
+                if (a[index] < b[index]) return -1;
+                if (a[index] > b[index]) return 1;
+                return 0;
+            });
+        }
+    }
+
+    //pagination
+    showMoreTableDate(){
+
+    }
+
 
 
     /*
     1.search form validation
-    2.Icon css
+    2.Icon css - X
     3.sort and search algo
     4.Invoke search and sort algo
     5.Pagination

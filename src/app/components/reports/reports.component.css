@@ -104,3 +104,9 @@
 .mydp .selector {
     margin-left: 0 ! important;
 }
+
+.sortIcons{
+ line-height:10px;
+ display: inline-block;
+ transform: translate(0,4px);
+}
