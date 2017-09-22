@@ -337,7 +337,7 @@
                               <div class="product-component relative">
                                   <div class="component-eggless abs" *ngIf="prodComponent.eggless">Eggless</div>
                                 <!--<div class="component-head center-align uppercase">{{prodComponent.componentCode | slice:0:9}}<span *ngIf="prodComponent.componentName.length > 9">...</span></div>-->
-                                <img class="component-image clk" src="{{productsCompURL}}th/{{prodComponent.componentImage}}" alt="Component_img" (click)="imagePreview($event, productsCompURL+'full/'+(prodComponent.componentImage))">
+                                <img class="component-image clk" src="{{productsCompURL}}th/{{prodComponent.componentImage}}?th={{prodComponent.timestamp}}" alt="Component_img" (click)="imagePreview($event, productsCompURL+'full/'+(prodComponent.componentImage)+'?th='+prodComponent.timestamp)">
                                 <div class="component-quantity center-align">x {{prodComponent.quantity | number | replace}}</div>
                                 <div class="component-name center-align">{{prodComponent.componentName}} </div>
                                 <div class="price-display" *ngIf="prodComponent.componentPrice && prodComponent.componentPrice !== 'N/A' && prodComponent.componentName !== 'Adjustment' " style="margin-top: 6px; font-size: 0.80em;">{{prodComponent.componentPrice | number | replace}}x{{prodComponent.quantity | number}}={{prodComponent.componentPrice  * prodComponent.quantity}}</div>

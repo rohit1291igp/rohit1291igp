@@ -1,3 +1,121 @@
-<p>
-  reports works!
-</p>
+<div class="container-fluid reports-cont" *ngIf="!reportData">
+<div class="row">
+    <div class="col-sm-12 col-md-12 m-top-1">
+
+     <div class="col-sm-9 col-md-9 reprts-search-fields bg-white padding1">
+            <div class="underLine paddingHalf text-bold">Search Parameters</div>
+            <form name="searchReport">
+                <div class="searchFields m-top-1 inline">
+                    <div class="searchFiled inline" *ngFor="let searchField of reportDataLoader.searchFields;">
+                    <input class="form-control" type="text" name="{{searchField.name}}" placeholder="{{searchField.placeholder}}">
+                </div>
+        </div>
+        <div class="searchFieldsSubmit relative inline">
+            <input  type="submit" class="btn btn-primary pull-right bg-igp searchSubmitBtn"  value="Search All Parameters" />
+        </div>
+        </form>
+    </div>
+
+    <div class="col-sm-3 col-md-3 reprts-summary bg-white padding1">
+        <div class="underLine paddingHalf text-bold">Summary</div>
+        <div class="summaryBlockCont">
+            <div class="summaryBlock inline m-top-1" *ngFor="let summ of reportDataLoader.summary; index as i">
+            <div class="icon l" aria-hidden="true">
+                <img src="assets/images/icons/gift.svg" alt="orders" *ngIf="i === 0">
+                <img src="assets/images/icons/inr.svg" alt="inr" *ngIf="i === 1">
+            </div>
+            <div class="text-igp">{{summ.label}}</div>
+            <div class="text-bold">{{summ.value}}</div>
+        </div>
+    </div>
+</div>
+
+</div>
+<div class="col-sm-12 col-md-12 table-cont m-top-2">
+    <table class="report-table table table-striped table-bordered table-curved">
+        <thead class="bg-igp text-white">
+        <tr>
+            <th *ngFor="let tableLabel of reportDataLoader.tableHeaders">
+            {{tableLabel}} <span>&nbsp;&nbsp;</span>
+            <!--<span class="glyphicon glyphicon-chevron-down"></span>-->
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let tableRowValue of reportDataLoader.tableData">
+        <td  class="bg-loader" *ngFor="let tableCol of tableRowValue; let i='index'">
+        <span>&nbsp;&nbsp;</span>
+        <!--<span class="glyphicon glyphicon-eye-open" *ngIf="i === 0"></span>-->
+        </td>
+        </tr>
+
+        </tbody>
+    </table>
+</div>
+
+</div>
+</div>
+
+<div class="container-fluid reports-cont" *ngIf="reportData">
+    <div class="row">
+        <div class="col-sm-12 col-md-12 m-top-1">
+
+            <div class="col-sm-9 col-md-9 reprts-search-fields bg-white padding1">
+                <div class="underLine paddingHalf text-bold">Search Parameters</div>
+                <form name="searchReport" (ngSubmit)="f.form.valid && searchReportSubmit($event)" #f="ngForm" nonvalidate>
+                    <div class="searchFields m-top-1 inline">
+                        <div class="searchFiled inline" *ngFor="let searchField of reportData.searchFields;" >
+                            <input class="form-control" type="text" name="{{searchField.name}}" placeholder="{{searchField.placeholder}}" [(ngModel)]="searchResultModel[searchField.name]" *ngIf="searchField.type === 'text' || searchField.type === 'number'">
+                            <my-date-picker id="{{searchField.name}}" name="{{searchField.name}}" placeholder="{{searchField.placeholder}}" [options]="myDatePickerOptions" [(ngModel)]="searchResultModel[searchField.name]"  *ngIf="searchField.type === 'date'"></my-date-picker>
+                        </div>
+                    </div>
+                    <div class="searchFieldsSubmit relative inline">
+                        <input  type="submit" class="btn btn-primary pull-right bg-igp searchSubmitBtn"  value="Search All Parameters" />
+                    </div>
+                </form>
+            </div>
+
+            <div class="col-sm-3 col-md-3 reprts-summary bg-white padding1">
+                <div class="underLine paddingHalf text-bold">Summary</div>
+                <div class="summaryBlockCont">
+                    <div class="summaryBlock inline m-top-1" *ngFor="let summ of reportData.summary; index as i">
+                        <div class="icon l" aria-hidden="true">
+                            <img src="assets/images/icons/gift.svg" alt="orders" *ngIf="i === 0">
+                            <img src="assets/images/icons/inr.svg" alt="inr" *ngIf="i === 1">
+                        </div>
+                        <div class="text-igp">{{summ.label}}</div>
+                        <div class="text-bold">{{summ.value}}</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="col-sm-12 col-md-12 table-cont m-top-2">
+                <table class="report-table table table-striped table-bordered table-curved">
+                    <thead class="bg-igp text-white">
+                        <tr>
+                            <th *ngFor="let tableLabel of reportData.tableHeaders">
+                                {{tableLabel}}
+                                <span class="icon s" aria-hidden="true">
+                                    <img class="" src="assets/images/icons/arrowD.svg" alt="inr">
+                                </span>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let tableRowValue of reportData.tableData">
+                            <td *ngFor="let tableCol of tableRowValue; let i='index'">
+                                {{tableCol}} &nbsp; &nbsp; &nbsp;
+                                <span class="icon m" aria-hidden="true" *ngIf="i === 0">
+                                    <img src="assets/images/icons/view.svg" alt="inr">
+                                </span>
+                            </td>
+                        </tr>
+
+                    </tbody>
+                </table>
+
+        </div>
+
+    </div>
+</div>

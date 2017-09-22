@@ -19,6 +19,7 @@ import { AuthenticationService } from './services/authentication.service';
 import { AuthGuard } from './services/auth-guard.service';
 import { UserService } from './services/user.service';
 import { DashboardService } from './services/dashboard.service';
+import { ReportsService } from './services/reports.service';
 
 // Components
 import { AppComponent } from './components/app.component';
@@ -40,6 +41,7 @@ import { PrintTemplateComponent } from './components/print-template/print-templa
 import { Time12Pipe } from './customPipes/time12.pipe';
 import { ReplacePipe } from './customPipes/replace.pipe';
 import { ReportsComponent } from './components/reports/reports.component';
+import { ObjectKeyValuePipe } from './customPipes/object-key-value.pipe';
 
 //env config
 /*import {envConfig} from "./others/env.config";
@@ -64,7 +66,8 @@ export function ConfigLoader(envConfig: envConfig) {
     PrintTemplateComponent,
     Time12Pipe,
     ReplacePipe,
-    ReportsComponent
+    ReportsComponent,
+    ObjectKeyValuePipe
   ],
   imports: [
     BrowserModule,
@@ -95,9 +98,11 @@ export function ConfigLoader(envConfig: envConfig) {
     AuthGuard,
     UserService,
     DashboardService,
+    ReportsService,
     DatePipe,
-   Time12Pipe,
-      ReplacePipe
+    Time12Pipe,
+    ReplacePipe,
+    ObjectKeyValuePipe
 
   ],
   bootstrap: [AppComponent]
