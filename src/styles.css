@@ -199,9 +199,9 @@
     font-weight:600 ! important;
 }
 
-.mydp .selector {
-    margin-left: -8em ! important;
-}
+/*.mydp .selector {*/
+    /*margin-left: -8em ! important;*/
+/*}*/
 
 .mydp .selectorarrowleft:after, .mydp .selectorarrowleft:before {
     left: 12em ! important;

@@ -25,7 +25,9 @@ export class DashboardComponent implements OnInit {
 
   public myDatePickerOptions: IMyOptions = {
     // other options...
-    dateFormat: 'ddth mmm. yyyy'
+    dateFormat: 'ddth mmm. yyyy',
+    inline:false,
+    alignSelectorRight : true
     //disableDateRanges : [{begin: this.UtilityService.getDateObj(0), end: this.UtilityService.getDateObj(2)}]
   };
   public dateRange: Object = {};
