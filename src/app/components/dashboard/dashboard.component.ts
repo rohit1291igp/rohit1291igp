@@ -14,6 +14,7 @@ import { UtilityService } from '../../services/utility.service';
 })
 export class DashboardComponent implements OnInit {
   @ViewChild(OrdersActionTrayComponent) child: OrdersActionTrayComponent;
+  prodOrderstatus : any;
   searchModel : any = {};
   dashBoardDataType;
   vendorName = localStorage.getItem('associateName');
@@ -24,7 +25,9 @@ export class DashboardComponent implements OnInit {
 
   public myDatePickerOptions: IMyOptions = {
     // other options...
-    dateFormat: 'ddth mmm. yyyy'
+    dateFormat: 'ddth mmm. yyyy',
+    inline:false,
+    alignSelectorRight : true
     //disableDateRanges : [{begin: this.UtilityService.getDateObj(0), end: this.UtilityService.getDateObj(2)}]
   };
   public dateRange: Object = {};
@@ -37,7 +40,7 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit() {
     var _this = this;
-    this.isRowAlert = this.dashboardService.getAlertRow();
+    this.isRowAlert = this.dashboardService.getAlertRow();0
     this.dashboardData = this.dashboardService.getCustomData();
     var cookieFDate = _this.UtilityService.getCookie("festivalDate") ?  JSON.parse(_this.UtilityService.getCookie("festivalDate")) : null;
     var cookieFDatwFormatted = cookieFDate ? cookieFDate.date.year+'-'+cookieFDate.date.month+'-'+cookieFDate.date.day : null;
@@ -78,9 +81,9 @@ export class DashboardComponent implements OnInit {
     }
   }
 
-  switchOfdData(status){
-      if(!status) status= 'OutForDeliveryView';
-      this.dashboardService.changeDashboardDataOrder(this.dashboardData, null, status);
+  switchOfdData(prodOrderstatus){
+      if(!prodOrderstatus) prodOrderstatus= 'OutForDeliveryView';
+      this.dashboardService.changeDashboardDataOrder(this.dashboardData, null, prodOrderstatus);
   }
 
  disableAllTableCell(){

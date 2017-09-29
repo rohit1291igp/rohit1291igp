@@ -1,10 +1,10 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, OnChanges, Input } from '@angular/core';
 
 @Component({
   selector: 'app-no-orders',
   template: `<span *ngIf="!viewData" style="display: block; margin-top: 1.5em;"></span>`
 })
-export class NoOrdersComponent implements OnInit {
+export class NoOrdersComponent implements OnInit, OnChanges {
   @Input('viewData') viewData: any;
   @Input('orderStatus') orderStatus: any;
 
@@ -14,6 +14,9 @@ export class NoOrdersComponent implements OnInit {
     console.log('viewData>>>>>', this.viewData);
   }
 
-    /*No {{orderStatus}} orders*/
+  ngOnChanges(changes){
+    console.log('changes - no orders', changes);
+  }
 
+  /*No {{orderStatus}} orders*/
 }

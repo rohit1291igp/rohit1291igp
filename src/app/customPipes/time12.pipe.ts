@@ -12,8 +12,8 @@ export class Time12Pipe implements PipeTransform {
       var startTime = time24.split('-')[0].trim();
       var endTime = time24.split('-')[1].trim();
 
-      startTime = startTime.split(':')[0] > 12 ? (parseInt(startTime.split(':')[0]) - 12)+":00 PM" : startTime.split(':')[0]+":00 AM";
-      endTime = endTime.split(':')[0] > 12 ? (parseInt(endTime.split(':')[0]) - 12)+":00 PM" : endTime.split(':')[0]+":00 AM";
+      startTime = startTime.split(':')[0] > 12 ? (parseInt(startTime.split(':')[0]) - 12)+":"+startTime.split(':')[1].replace("hrs", "").trim()+" PM" : startTime.split(':')[0]+":"+startTime.split(':')[1].replace("hrs", "").trim()+" AM";
+      endTime = endTime.split(':')[0] > 12 ? (parseInt(endTime.split(':')[0]) - 12)+":"+endTime.split(':')[1].replace("hrs", "").trim()+" PM" : endTime.split(':')[0]+":"+endTime.split(':')[1].replace("hrs", "").trim()+" AM";
 
       return startTime+" - "+endTime;
   }
