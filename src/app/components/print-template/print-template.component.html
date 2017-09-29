@@ -2,15 +2,28 @@
 <div class="row page" id="order_{{order.orderId}}" class="hide"  *ngIf="printType === 'order'">
 
     <section class="messgae-box-cont" *ngIf="order.commments">
-        <div class="messgae-box">
-            <!--<p class="message-caption bold upper-txt">Message</p>-->
-            <div class="message-txt"><pre>{{order.commments}}</pre></div>
-        </div>
+            <div style="width:100%;">
+                <div class="mb1">
+                    <div class="messBgCont1">
+                        <div class="messBgCont2">
+                            <img class="imgCenter" src="{{messageBgImage}}" >
+                        </div>
+                    </div>
+                </div>
+                <div class="mb2">
+                    <div class="mb">
+                        <div class="messgae-box" style="text-align:left;">
+                            <!--<p class="message-caption bold upper-txt">Message</p>-->
+                            <div class="message-txt"><div style="font-family: fantasy; margin: 0 auto; white-space: -moz-pre-wrap; white-space: -hp-pre-wrap; white-space: -o-pre-wrap; white-space: -pre-wrap; white-space: pre-wrap;">{{order.commments}}</div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
     </section>
 
       <section class="header">
           <div class="display-inline igp-logo w-section">
-              <img class="img-logo" src="assets/images/igp_black_logo.jpg" title="Indian Gifts Portal" data-pin-nopin="true">
+              <img class="img-logo" src="assets/images/igp_black_logo.png" title="Indian Gifts Portal" data-pin-nopin="true">
            </div>
           <div class="display-inline print-caption w-section">
               <div class="print-caption-text upper-txt">Delivery Challan</div>
@@ -43,8 +56,8 @@
                 <div class="col2 display-inline">
                     <div class="">
                         <div>
-                            <span class="bold">Telephone :</span>
-                            <span class="">-</span>
+                            <!--<span class="bold">Telephone :</span>-->
+                            <!--<span class="">-</span>-->
                         </div>
                         <div>
                             <span class="bold">Mobile :</span>
@@ -61,7 +74,7 @@
                 </div>
           </section>
 
-          <section class="order-body-productDetails border-bottom">
+          <section class="order-body-productDetails border-bottom" [ngClass]="{'scaled' : (order.orderProducts.length > 2 && order.orderProducts.length < 4 && order.commments), 'scaled2' : (order.orderProducts.length > 3 && order.orderProducts.length < 5 && order.commments)}">
              <div class="order-body-productDetails-head border-bottom">
                  <div class="t-col-1 display-inline border-right">Sr. No.</div>
                  <div class="t-col-2 display-inline border-right">Image</div>
@@ -70,12 +83,12 @@
                  <div class="t-col-5 display-inline ">Qty</div>
              </div>
 
-            <div class="order-body-productDetails-body border-bottom prod-bg" *ngFor="let orderProduct of order.orderProducts; let z='index'" [ngClass]="{'pagebreak' : z == 2}">
+            <div class="order-body-productDetails-body border-bottom prod-bg" *ngFor="let orderProduct of order.orderProducts; let z='index'" [ngClass]="{'pagebreak' : z == 2 && order.commments}">
               <div class="product-row-cont">
                     <div class="t-col-1 display-inline ">{{z+1}}.</div>
                     <div class="t-col-2 display-inline">
                         <div style="margin-left: 0.7em;">
-                            <img class="product-image" src="{{productsURL}}{{orderProduct.productImage}}" alt="product_img">
+                            <img class="product-image" src="{{productsURL}}th/{{orderProduct.productImage}}" alt="product_img">
                         </div>
                     </div>
                     <div class="t-col-3 display-inline">
@@ -120,13 +133,13 @@
           </section>
 
           <section class="order-body-footer" style="padding-right: 0;">
-            <div class="display-inline w45 border-right col1">
-                <div class="bold display-inline">Receiver's Name : </div>
+            <div class="display-inline w45 border-right col1" style="width: 44%;">
+                <div class="bold display-inline">Recipient's Name : </div>
                 <div class="display-inline sign-box border-bottom">&nbsp;</div>
             </div>
 
             <div class="display-inline col2">
-                <div class="bold display-inline">Receiver's Signature : </div>
+                <div class="bold display-inline">Recipient's Signature : </div>
                 <div class="display-inline sign-box border-bottom right-sign-box">&nbsp;</div>
             </div>
 
@@ -182,9 +195,22 @@
 
 <div id="order_message_{{order.orderId}}" class="hide page" *ngIf="printType === 'orderMessage'">
     <section class="messgae-box-cont2">
-        <div class="messgae-box">
-            <!--<p class="message-caption bold upper-txt">Message</p>-->
-            <div class="message-txt"><pre style="margin: 0 auto; width: 40em; white-space: -moz-pre-wrap; white-space: -hp-pre-wrap; white-space: -o-pre-wrap; white-space: -pre-wrap; white-space: pre-wrap; white-space: pre-line; word-wrap: break-word; word-break: break-all;">{{order.commments}}</pre></div>
+        <div style="width:100%;">
+            <div class="mb1">
+                <div class="messBgCont1">
+                    <div class="messBgCont2">
+                        <img class="imgCenter" src="{{messageBgImage}}" >
+                    </div>
+                </div>
+            </div>
+            <div class="mb2">
+                <div class="mb">
+                    <div class="messgae-box" style="text-align:left;">
+                        <!--<p class="message-caption bold upper-txt">Message</p>-->
+                        <div class="message-txt"><div style="font-family: fantasy; margin: 0 auto; white-space: -moz-pre-wrap; white-space: -hp-pre-wrap; white-space: -o-pre-wrap; white-space: -pre-wrap; white-space: pre-wrap;">{{order.commments}}</div></div>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 </div>

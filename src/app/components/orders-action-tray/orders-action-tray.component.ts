@@ -12,7 +12,7 @@ import {environment} from "../../../environments/environment";
   selector: 'app-orders-action-tray',
   templateUrl: './orders-action-tray.component.html',
   styleUrls: ['./orders-action-tray.component.css'],
-    animations: [
+  animations: [
         trigger('anim', [
             transition('* => void', [
                 style({ height: '*', opacity: '1', transform: 'translateX(0)', 'box-shadow': '0 1px 4px 0 rgba(0, 0, 0, 0.3)'}),
@@ -36,16 +36,27 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
   @Output() onStatusUpdate: EventEmitter<any> = new EventEmitter();
   @Output() onOfdView: EventEmitter<any> = new EventEmitter();
   rejectReasons=[
-      {"name" : "Select reason for reject", "value" : "" },
-      {"name" : "Delivery location not serviceable", "value" : "Delivery location not serviceable" },
-      {"name" : "Product not available", "value" : "Product not available" },
-      {"name" : "Capacity full", "value" : "Capacity full" },
-      {"name" : "Customer's instruction", "value" : "Customer's instruction" },
-      {"name" : "Delivery not possible on given date", "value" : "Delivery not possible on given date" },
-      {"name" : "Fixed time/Midnight not possible", "value" : "Fixed time/Midnight not possible" },
-      {"name" : "Duplicate order", "value" : "Duplicate order" },
-      {"name" : "Other", "value" : "Other" }
+      {"type" : "0", "name" : "Select reason for reject", "value" : "" },
+      {"type" : "1", "name" : "Delivery location not serviceable", "value" : "Delivery location not serviceable" },
+      {"type" : "2", "name" : "Product not available", "value" : "Product not available" },
+      {"type" : "3", "name" : "Capacity full", "value" : "Capacity full" },
+      {"type" : "4", "name" : "Customer's instruction", "value" : "Customer's instruction" },
+      {"type" : "5", "name" : "Delivery not possible on given date", "value" : "Delivery not possible on given date" },
+      {"type" : "6", "name" : "Fixed time/Midnight not possible", "value" : "Fixed time/Midnight not possible" },
+      {"type" : "7", "name" : "Duplicate order", "value" : "Duplicate order" },
+      {"type" : "8", "name" : "Other", "value" : "Other" }
   ];
+
+  rejectReasonsMap = {
+      "Delivery location not serviceable" : 1,
+      "Product not available" : 2,
+      "Capacity full" : 3,
+      "Customer's instruction" : 4,
+      "Delivery not possible on given date" : 5,
+      "Fixed time/Midnight not possible" : 6,
+      "Duplicate order" : 7,
+      "Other" : 8
+  }
   loadercount=[1,1];
 
   statusMessageFlag=false;
@@ -124,6 +135,10 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
             }
         }
   }
+
+ getRejectionType(rejectionMessage){
+     return this.rejectReasonsMap[rejectionMessage];
+ }
 
   setRejectInitialValue(){
       this.statusReasonModel.rejectOption= "";
@@ -255,6 +270,8 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
                   }
 
               }
+              _this.scrollTo(document.getElementById("mainOrderSection"), 0, 0); // scroll to top
+
           }, 1000);
           return;
       }
@@ -366,8 +383,9 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
 
   updateOrderStatus(e, status, orderId, orderProducts, deliveryDate, deliveryTime){
       e.stopPropagation();
-      var rejectionMessage, recipientInfo;
-      if( (status === "Confirmed" || status === "Delivered" || status === "Rejected") && (!e.customCurrentTarget)){
+      /* dialog popup logic - start */
+      var rejectionMessage, recipientInfo, recipientName, recipientComments;
+      if( (status === "Delivered" || status === "Rejected") && (!e.customCurrentTarget)){
           this.statusReasonModel.e = [];
           this.statusReasonModel.e.push(e.currentTarget);
           this.statusReasonModel.status = status;
@@ -383,12 +401,16 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
           rejectionMessage = this.statusReasonModel.message ? this.statusReasonModel.message.trim() : this.statusReasonModel.rejectOption;
           rejectionMessage = rejectionMessage ? rejectionMessage : "";
           recipientInfo = this.statusReasonModel.recipientDetail ? this.statusReasonModel.recipientDetail.trim() : "";
+          recipientName = this.statusReasonModel.recipientName ? this.statusReasonModel.recipientName.trim() : "";
+          recipientComments = this.statusReasonModel.recipientComments ? this.statusReasonModel.recipientComments.trim() : "";
           this.statusReasonModel = {};
       }
+      /* dialog popup logic - end */
 
+      /* variable and methods decleration - start */
       var _this = this;
       let currentTab = this.activeDashBoardDataType; //e.currentTarget.dataset.tab;
-      var fireUpdateCall = function(){
+      var fireUpdateCall = function(){ //order Status update API - Method
           var orderProductIds = "";
           if(orderProducts && orderProducts.length){
               for(var i in orderProducts){
@@ -403,7 +425,7 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
           let fkAssociateId = localStorage.getItem('fkAssociateId');
           //var _this = this; this.statusReasonModel
           //var reqURL = "?responseType=json&scopeId=1&rejectionMessage="+rejectionMessage+"&recipientInfo="+recipientInfo+"&orderProductIds="+orderProductIds+"&status="+status+"&fkAssociateId="+fkAssociateId+"&orderId="+orderId+"&method=igp.order.doUpdateOrderStatus";
-          var reqURL = "doUpdateOrderStatus?responseType=json&scopeId=1&rejectionMessage="+rejectionMessage+"&recipientInfo="+recipientInfo+"&orderProductIds="+orderProductIds+"&status="+status+"&fkAssociateId="+fkAssociateId+"&orderId="+orderId;
+          var reqURL = "doUpdateOrderStatus?responseType=json&scopeId=1&rejectionType="+_this.getRejectionType(rejectionMessage)+"&rejectionMessage="+rejectionMessage+"&recipientInfo="+recipientInfo+"&recipientName="+recipientName+"&comments="+recipientComments+"&orderProductIds="+orderProductIds+"&status="+status+"&fkAssociateId="+fkAssociateId+"&orderId="+orderId;
           console.log('reqURL==============>', reqURL);
           if(localStorage.getItem('dRandom')){
               setTimeout(function(){
@@ -430,7 +452,9 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
               payload : {}
           };
 
-          _this.BackendService.makeAjax(reqObj, function(err, response, headers){
+          //console.log('Update status API =============>', reqObj);
+
+          /*_this.BackendService.makeAjax(reqObj, function(err, response, headers){
               if(err || JSON.parse(response).error) {
                   console.log('Error=============>', err, JSON.parse(response).errorCode);
                   _this.apierror = err || JSON.parse(response).errorCode;
@@ -455,9 +479,11 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
 
               _this.setRejectInitialValue();
 
-          });
+          });*/
       }
+      /* variable and methods decleration - start */
 
+      /* api in progress logic - start */
       if(!e.customCurrentTarget){
           if(e.currentTarget.textContent.indexOf('Mark as Delivered') !== -1){
               e.currentTarget.innerHTML= e.currentTarget.textContent.trim().split('Mark')[0].trim()+"<br/> Updating...";
@@ -472,7 +498,9 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
               e.customCurrentTarget.textContent = "Updating...";
           }
       }
+      /* api in progress logic - end */
 
+      /* firing status api - start */
       if(!orderProducts){
           this.loadTrayData(e, status, orderId, _this.activeDashBoardDataType, function(err, result){
               if(err){
@@ -486,11 +514,10 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
       }else{
           fireUpdateCall();
       }
-
-
+      /* firing status api - start */
   }
 
-  getNxtOrderStatus(orderByStatus){
+  getNxtOrderStatus(orderByStatus){ //Method to get custom status
       let orderUpdateByStatus;
       switch(orderByStatus){
           case "Processed" :  orderUpdateByStatus= "Confirmed";
@@ -566,14 +593,14 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
           <html>
               <head>
                   <title>Print Order</title>
-                  <link rel="stylesheet" href="assets/css/print-template.css" type="text/css" />
+                  <link rel="stylesheet" href="/assets/css/print-template.css" type="text/css" />
                   <style>
                   </style>
               </head>
           <body onload="window.print();window.close()">${printContents}</body>
           </html>`
       );
-     //popupWin.document.close();
+     popupWin.document.close();
   }
 
   imagePreview(e, imgSrc){
@@ -740,6 +767,78 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
                               "productCostPrice": 500
                           },
                           "specialChargesShip": 25
+                      },
+                      {
+                          "orderProductId": 1393890,
+                          "orderId": 1033652,
+                          "productId": 516732,
+                          "productName": "Bunch of 20 Pink Gerberas in a Glass Vase",
+                          "productPrice": 15.69,
+                          "productPrice_inr": 1020,
+                          "productQuantity": 1,
+                          "productSize": "1x1x1",
+                          "products_weight": "3",
+                          "products_code": "HD1006649",
+                          "fkAssociateId": "731",
+                          "orderShippingAssociatewise": 0,
+                          "ordersProductStatus": "Processed",
+                          "ordersAwbnumberAssociatewise": "0",
+                          "ordersProductsCourierid": 0,
+                          "ordersProductsCancel_id": null,
+                          "airBillWeight": "",
+                          "dispatchDate": "2017-05-16",
+                          "payoutOnHold": 0,
+                          "ordersProductsBaseCurrency": 2,
+                          "ordersProductsBaseCurrencyConversionRateInUsd": 0.01537999976426363,
+                          "ordersProductsBaseCurrencyConversionRateInInr": 1,
+                          "shippingTypeG": "Fix Date Delivery[Rs. 25]",
+                          "deliveryStatus": 0,
+                          "slaCode": 101,
+                          "slaFlag": false,
+                          "alertFlag": true,
+                          "productImage": "p-bunch-of-20-pink-gerberas-in-a-glass-vase-6649-m.jpg",
+                          "productUpdateDateTime": 1500235259000,
+                          "productNameForUrl": "p-bunch-of-20-pink-gerberas-in-a-glass-vase-6649",
+                          "vendorPrice": 340,
+                          "personalized": false,
+                          "componentList": [
+                              {
+                                  "productId": "516732",
+                                  "componentCode": "Gerbera",
+                                  "componentName": "Single Stem Gerberas",
+                                  "type": "0",
+                                  "quantity": "20.00",
+                                  "componentImage": "dummy.jpg",
+                                  "componentPrice": "12.00",
+                                  "eggless": false
+                              },
+                              {
+                                  "productId": "516732",
+                                  "componentCode": "GlassVase",
+                                  "componentName": "Glass Vase",
+                                  "type": "0",
+                                  "quantity": "1.00",
+                                  "componentImage": "dummy.jpg",
+                                  "componentPrice": "100.00",
+                                  "eggless": false
+                              }
+                          ],
+                          "componentTotal": 340,
+                          "priceAdjustmentPerProduct": 0,
+                          "orderProductExtraInfo": {
+                              "id": 0,
+                              "orderId": 1033652,
+                              "orderProductId": 1393890,
+                              "productId": 516732,
+                              "quantity": 1,
+                              "attributes": "[]",
+                              "giftBox": 0,
+                              "deliveryType": 4,
+                              "deliveryDate": "2017-05-13",
+                              "deliveryTime": "",
+                              "productCostPrice": 500
+                          },
+                          "specialChargesShip": 25
                       }
                   ]
               },
@@ -774,7 +873,7 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
                   "ordersProductTotal": 15.23,
                   "ordersProductTotalInr": 989.95,
                   "ordersStatus": "Processed",
-                  "commments": "",
+                  "commments": "To Balbir kaur,\n\nDearest Naniji, \n\nHappy Mothers Day.\n\nFrom,\nD.C. Saab",
                   "delivery_instruction": "<BR><BR><B>IGP Instructions:&nbsp;</B><BR>#REFNW<BR><B>Product Name:&nbsp;</B>Half Kg Round Shape Pineapple Cake<BR><B>City:&nbsp;</B>Batala<BR><B>Product Code:&nbsp;</B>HD1031282<BR><B>Shipping Type:&nbsp;</B>Fix Date Delivery<BR><B>Quantity:&nbsp;</B>1<BR><B>Gift Box:&nbsp;</B>0<BR><B>Selected Attributes:&nbsp;</B>[]<BR><B>Shipping Date:&nbsp;</B>2017-05-13 | ",
                   "currency": "65<",
                   "currencyValue": 1,
@@ -812,6 +911,150 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
                   "priceAdjustment": 0,
                   "orderNetProductPrice": 300,
                   "orderProducts": [
+                      {
+                          "orderProductId": 1398680,
+                          "orderId": 1037474,
+                          "productId": 528581,
+                          "productName": "Half Kg Round Shape Pineapple Cake",
+                          "productPrice": 15.23,
+                          "productPrice_inr": 990,
+                          "productQuantity": 1,
+                          "productSize": "3.94x3.94x3.94",
+                          "products_weight": "200",
+                          "products_code": "HD1031282",
+                          "fkAssociateId": "731",
+                          "orderShippingAssociatewise": 0,
+                          "ordersProductStatus": "Processed",
+                          "ordersAwbnumberAssociatewise": "0",
+                          "ordersProductsCourierid": 0,
+                          "ordersProductsCancel_id": null,
+                          "airBillWeight": "",
+                          "dispatchDate": "2017-05-14",
+                          "payoutOnHold": 0,
+                          "ordersProductsBaseCurrency": 2,
+                          "ordersProductsBaseCurrencyConversionRateInUsd": 0.01537999976426363,
+                          "ordersProductsBaseCurrencyConversionRateInInr": 1,
+                          "shippingTypeG": "Fix Date Delivery[Rs. 225]",
+                          "deliveryStatus": 0,
+                          "slaCode": 101,
+                          "slaFlag": false,
+                          "alertFlag": true,
+                          "productImage": "p-half-kg-round-shape-pineapple-cake-31282-m.jpg",
+                          "productUpdateDateTime": 1500238827000,
+                          "productNameForUrl": "p-half-kg-round-shape-pineapple-cake-31282",
+                          "vendorPrice": 300,
+                          "personalized": false,
+                          "componentList": [
+                              {
+                                  "productId": "528581",
+                                  "componentCode": "31282halfkground",
+                                  "componentName": "Half Kg Round Pineapple Cake",
+                                  "type": "1",
+                                  "quantity": "1.00",
+                                  "componentImage": "dummy.jpg",
+                                  "componentPrice": "350.00",
+                                  "eggless": false
+                              },
+                              {
+                                  "productId": "",
+                                  "componentCode": "",
+                                  "componentName": "Adjustment",
+                                  "type": "",
+                                  "quantity": "1",
+                                  "componentImage": "dummy.jpg",
+                                  "componentPrice": "-50.0",
+                                  "eggless": false
+                              }
+                          ],
+                          "componentTotal": 350,
+                          "priceAdjustmentPerProduct": -50,
+                          "orderProductExtraInfo": {
+                              "id": 0,
+                              "orderId": 1037474,
+                              "orderProductId": 1398680,
+                              "productId": 528581,
+                              "quantity": 1,
+                              "attributes": "[]",
+                              "giftBox": 0,
+                              "deliveryType": 4,
+                              "deliveryDate": "2017-05-13",
+                              "deliveryTime": "",
+                              "productCostPrice": 350
+                          },
+                          "specialChargesShip": 225
+                      },
+                      {
+                          "orderProductId": 1398680,
+                          "orderId": 1037474,
+                          "productId": 528581,
+                          "productName": "Half Kg Round Shape Pineapple Cake",
+                          "productPrice": 15.23,
+                          "productPrice_inr": 990,
+                          "productQuantity": 1,
+                          "productSize": "3.94x3.94x3.94",
+                          "products_weight": "200",
+                          "products_code": "HD1031282",
+                          "fkAssociateId": "731",
+                          "orderShippingAssociatewise": 0,
+                          "ordersProductStatus": "Processed",
+                          "ordersAwbnumberAssociatewise": "0",
+                          "ordersProductsCourierid": 0,
+                          "ordersProductsCancel_id": null,
+                          "airBillWeight": "",
+                          "dispatchDate": "2017-05-14",
+                          "payoutOnHold": 0,
+                          "ordersProductsBaseCurrency": 2,
+                          "ordersProductsBaseCurrencyConversionRateInUsd": 0.01537999976426363,
+                          "ordersProductsBaseCurrencyConversionRateInInr": 1,
+                          "shippingTypeG": "Fix Date Delivery[Rs. 225]",
+                          "deliveryStatus": 0,
+                          "slaCode": 101,
+                          "slaFlag": false,
+                          "alertFlag": true,
+                          "productImage": "p-half-kg-round-shape-pineapple-cake-31282-m.jpg",
+                          "productUpdateDateTime": 1500238827000,
+                          "productNameForUrl": "p-half-kg-round-shape-pineapple-cake-31282",
+                          "vendorPrice": 300,
+                          "personalized": false,
+                          "componentList": [
+                              {
+                                  "productId": "528581",
+                                  "componentCode": "31282halfkground",
+                                  "componentName": "Half Kg Round Pineapple Cake",
+                                  "type": "1",
+                                  "quantity": "1.00",
+                                  "componentImage": "dummy.jpg",
+                                  "componentPrice": "350.00",
+                                  "eggless": false
+                              },
+                              {
+                                  "productId": "",
+                                  "componentCode": "",
+                                  "componentName": "Adjustment",
+                                  "type": "",
+                                  "quantity": "1",
+                                  "componentImage": "dummy.jpg",
+                                  "componentPrice": "-50.0",
+                                  "eggless": false
+                              }
+                          ],
+                          "componentTotal": 350,
+                          "priceAdjustmentPerProduct": -50,
+                          "orderProductExtraInfo": {
+                              "id": 0,
+                              "orderId": 1037474,
+                              "orderProductId": 1398680,
+                              "productId": 528581,
+                              "quantity": 1,
+                              "attributes": "[]",
+                              "giftBox": 0,
+                              "deliveryType": 4,
+                              "deliveryDate": "2017-05-13",
+                              "deliveryTime": "",
+                              "productCostPrice": 350
+                          },
+                          "specialChargesShip": 225
+                      },
                       {
                           "orderProductId": 1398680,
                           "orderId": 1037474,
@@ -955,6 +1198,573 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
                   "priceAdjustment": 0,
                   "orderNetProductPrice": 315,
                   "orderProducts": [
+                      {
+                          "orderProductId": 1399405,
+                          "orderId": 1038064,
+                          "productId": 217267,
+                          "productName": "Bunch of 21 Assorted Colour Roses",
+                          "productPrice": 15.23,
+                          "productPrice_inr": 990,
+                          "productQuantity": 1,
+                          "productSize": "1x1x1",
+                          "products_weight": "3",
+                          "products_code": "HD1006750",
+                          "fkAssociateId": "731",
+                          "orderShippingAssociatewise": 0,
+                          "ordersProductStatus": "Processed",
+                          "ordersAwbnumberAssociatewise": "0",
+                          "ordersProductsCourierid": 0,
+                          "ordersProductsCancel_id": null,
+                          "airBillWeight": "",
+                          "dispatchDate": "2017-05-13",
+                          "payoutOnHold": 0,
+                          "ordersProductsBaseCurrency": 2,
+                          "ordersProductsBaseCurrencyConversionRateInUsd": 0.01537999976426363,
+                          "ordersProductsBaseCurrencyConversionRateInInr": 1,
+                          "shippingTypeG": "Fix Date Delivery[Rs. 0]",
+                          "deliveryStatus": 0,
+                          "slaCode": 101,
+                          "slaFlag": false,
+                          "alertFlag": true,
+                          "productImage": "p-bunch-of-21-assorted-colour-roses-6750-m.jpg",
+                          "productUpdateDateTime": 1500235259000,
+                          "productNameForUrl": "p-bunch-of-21-assorted-colour-roses-6750",
+                          "vendorPrice": 315,
+                          "personalized": false,
+                          "componentList": [
+                              {
+                                  "productId": "217267",
+                                  "componentCode": "Rose",
+                                  "componentName": "Single Stem Rose",
+                                  "type": "0",
+                                  "quantity": "21.00",
+                                  "componentImage": "dummy.jpg",
+                                  "componentPrice": "15.00",
+                                  "eggless": false
+                              }
+                          ],
+                          "componentTotal": 315,
+                          "priceAdjustmentPerProduct": 0,
+                          "orderProductExtraInfo": {
+                              "id": 0,
+                              "orderId": 1038064,
+                              "orderProductId": 1399405,
+                              "productId": 217267,
+                              "quantity": 1,
+                              "attributes": "[Peripheral:10357|Cellophane]",
+                              "giftBox": 0,
+                              "deliveryType": 4,
+                              "deliveryDate": "2017-05-13",
+                              "deliveryTime": "",
+                              "productCostPrice": 415
+                          },
+                          "specialChargesShip": 0
+                      },
+                      {
+                          "orderProductId": 1399405,
+                          "orderId": 1038064,
+                          "productId": 217267,
+                          "productName": "Bunch of 21 Assorted Colour Roses",
+                          "productPrice": 15.23,
+                          "productPrice_inr": 990,
+                          "productQuantity": 1,
+                          "productSize": "1x1x1",
+                          "products_weight": "3",
+                          "products_code": "HD1006750",
+                          "fkAssociateId": "731",
+                          "orderShippingAssociatewise": 0,
+                          "ordersProductStatus": "Processed",
+                          "ordersAwbnumberAssociatewise": "0",
+                          "ordersProductsCourierid": 0,
+                          "ordersProductsCancel_id": null,
+                          "airBillWeight": "",
+                          "dispatchDate": "2017-05-13",
+                          "payoutOnHold": 0,
+                          "ordersProductsBaseCurrency": 2,
+                          "ordersProductsBaseCurrencyConversionRateInUsd": 0.01537999976426363,
+                          "ordersProductsBaseCurrencyConversionRateInInr": 1,
+                          "shippingTypeG": "Fix Date Delivery[Rs. 0]",
+                          "deliveryStatus": 0,
+                          "slaCode": 101,
+                          "slaFlag": false,
+                          "alertFlag": true,
+                          "productImage": "p-bunch-of-21-assorted-colour-roses-6750-m.jpg",
+                          "productUpdateDateTime": 1500235259000,
+                          "productNameForUrl": "p-bunch-of-21-assorted-colour-roses-6750",
+                          "vendorPrice": 315,
+                          "personalized": false,
+                          "componentList": [
+                              {
+                                  "productId": "217267",
+                                  "componentCode": "Rose",
+                                  "componentName": "Single Stem Rose",
+                                  "type": "0",
+                                  "quantity": "21.00",
+                                  "componentImage": "dummy.jpg",
+                                  "componentPrice": "15.00",
+                                  "eggless": false
+                              }
+                          ],
+                          "componentTotal": 315,
+                          "priceAdjustmentPerProduct": 0,
+                          "orderProductExtraInfo": {
+                              "id": 0,
+                              "orderId": 1038064,
+                              "orderProductId": 1399405,
+                              "productId": 217267,
+                              "quantity": 1,
+                              "attributes": "[Peripheral:10357|Cellophane]",
+                              "giftBox": 0,
+                              "deliveryType": 4,
+                              "deliveryDate": "2017-05-13",
+                              "deliveryTime": "",
+                              "productCostPrice": 415
+                          },
+                          "specialChargesShip": 0
+                      },
+                      {
+                          "orderProductId": 1399405,
+                          "orderId": 1038064,
+                          "productId": 217267,
+                          "productName": "Bunch of 21 Assorted Colour Roses",
+                          "productPrice": 15.23,
+                          "productPrice_inr": 990,
+                          "productQuantity": 1,
+                          "productSize": "1x1x1",
+                          "products_weight": "3",
+                          "products_code": "HD1006750",
+                          "fkAssociateId": "731",
+                          "orderShippingAssociatewise": 0,
+                          "ordersProductStatus": "Processed",
+                          "ordersAwbnumberAssociatewise": "0",
+                          "ordersProductsCourierid": 0,
+                          "ordersProductsCancel_id": null,
+                          "airBillWeight": "",
+                          "dispatchDate": "2017-05-13",
+                          "payoutOnHold": 0,
+                          "ordersProductsBaseCurrency": 2,
+                          "ordersProductsBaseCurrencyConversionRateInUsd": 0.01537999976426363,
+                          "ordersProductsBaseCurrencyConversionRateInInr": 1,
+                          "shippingTypeG": "Fix Date Delivery[Rs. 0]",
+                          "deliveryStatus": 0,
+                          "slaCode": 101,
+                          "slaFlag": false,
+                          "alertFlag": true,
+                          "productImage": "p-bunch-of-21-assorted-colour-roses-6750-m.jpg",
+                          "productUpdateDateTime": 1500235259000,
+                          "productNameForUrl": "p-bunch-of-21-assorted-colour-roses-6750",
+                          "vendorPrice": 315,
+                          "personalized": false,
+                          "componentList": [
+                              {
+                                  "productId": "217267",
+                                  "componentCode": "Rose",
+                                  "componentName": "Single Stem Rose",
+                                  "type": "0",
+                                  "quantity": "21.00",
+                                  "componentImage": "dummy.jpg",
+                                  "componentPrice": "15.00",
+                                  "eggless": false
+                              }
+                          ],
+                          "componentTotal": 315,
+                          "priceAdjustmentPerProduct": 0,
+                          "orderProductExtraInfo": {
+                              "id": 0,
+                              "orderId": 1038064,
+                              "orderProductId": 1399405,
+                              "productId": 217267,
+                              "quantity": 1,
+                              "attributes": "[Peripheral:10357|Cellophane]",
+                              "giftBox": 0,
+                              "deliveryType": 4,
+                              "deliveryDate": "2017-05-13",
+                              "deliveryTime": "",
+                              "productCostPrice": 415
+                          },
+                          "specialChargesShip": 0
+                      },
+                      {
+                          "orderProductId": 1399405,
+                          "orderId": 1038064,
+                          "productId": 217267,
+                          "productName": "Bunch of 21 Assorted Colour Roses",
+                          "productPrice": 15.23,
+                          "productPrice_inr": 990,
+                          "productQuantity": 1,
+                          "productSize": "1x1x1",
+                          "products_weight": "3",
+                          "products_code": "HD1006750",
+                          "fkAssociateId": "731",
+                          "orderShippingAssociatewise": 0,
+                          "ordersProductStatus": "Processed",
+                          "ordersAwbnumberAssociatewise": "0",
+                          "ordersProductsCourierid": 0,
+                          "ordersProductsCancel_id": null,
+                          "airBillWeight": "",
+                          "dispatchDate": "2017-05-13",
+                          "payoutOnHold": 0,
+                          "ordersProductsBaseCurrency": 2,
+                          "ordersProductsBaseCurrencyConversionRateInUsd": 0.01537999976426363,
+                          "ordersProductsBaseCurrencyConversionRateInInr": 1,
+                          "shippingTypeG": "Fix Date Delivery[Rs. 0]",
+                          "deliveryStatus": 0,
+                          "slaCode": 101,
+                          "slaFlag": false,
+                          "alertFlag": true,
+                          "productImage": "p-bunch-of-21-assorted-colour-roses-6750-m.jpg",
+                          "productUpdateDateTime": 1500235259000,
+                          "productNameForUrl": "p-bunch-of-21-assorted-colour-roses-6750",
+                          "vendorPrice": 315,
+                          "personalized": false,
+                          "componentList": [
+                              {
+                                  "productId": "217267",
+                                  "componentCode": "Rose",
+                                  "componentName": "Single Stem Rose",
+                                  "type": "0",
+                                  "quantity": "21.00",
+                                  "componentImage": "dummy.jpg",
+                                  "componentPrice": "15.00",
+                                  "eggless": false
+                              }
+                          ],
+                          "componentTotal": 315,
+                          "priceAdjustmentPerProduct": 0,
+                          "orderProductExtraInfo": {
+                              "id": 0,
+                              "orderId": 1038064,
+                              "orderProductId": 1399405,
+                              "productId": 217267,
+                              "quantity": 1,
+                              "attributes": "[Peripheral:10357|Cellophane]",
+                              "giftBox": 0,
+                              "deliveryType": 4,
+                              "deliveryDate": "2017-05-13",
+                              "deliveryTime": "",
+                              "productCostPrice": 415
+                          },
+                          "specialChargesShip": 0
+                      }
+                  ]
+              },
+              {
+                  "orderId": 103806443,
+                  "customerId": 216144,
+                  "customersSalute": "m",
+                  "customersName": "sunit kumar",
+                  "customersStreetAddress": "4 harrison street,magill.5072",
+                  "customersStreetAddress2": null,
+                  "customersCity": "adelaide",
+                  "customersPostcode": "5000",
+                  "customersDate": null,
+                  "customersCountry": "Australia",
+                  "customerstelephone": "425184777",
+                  "customersEmail": "sunny_adl@yahoo.com.au",
+                  "customersMobile": "425184777",
+                  "deliverySalute": "f",
+                  "deliveryName": "malik raj",
+                  "deliveryStreetAddress": "72 fci colony,guru teg bahadur nagar       ",
+                  "deliveryCity": "Jalandhar",
+                  "deliveryPostcode": "144003",
+                  "deliveryState": "Punjab",
+                  "deliveryCountry": "India",
+                  "deliveryEmail": "sunny_adl@yahoo.com.au",
+                  "deliveryMobile": "9815701695",
+                  "lastModified": null,
+                  "datePurchased": "2017-05-13",
+                  "shippingCost": 0,
+                  "shippingCostInInr": 0,
+                  "ordersProductDiscount": 0,
+                  "ordersProductTotal": 15.23,
+                  "ordersProductTotalInr": 989.95,
+                  "ordersStatus": "Processed",
+                  "commments": "To sheela devi (mom,\n\nlove u mom \nfrom sunny and anjala\n\nFrom,\nsunny",
+                  "delivery_instruction": "<BR><BR><B>IGP Instructions:&nbsp;</B><BR>#REFNW<BR><B>Product Name:&nbsp;</B>Bunch of 21 Assorted Colour Roses<BR><B>City:&nbsp;</B>Jalandhar<BR><B>Product Code:&nbsp;</B>HD1006750<BR><B>Shipping Type:&nbsp;</B>Fix Date Delivery<BR><B>Quantity:&nbsp;</B>1<BR><B>Gift Box:&nbsp;</B>0<BR><B>Selected Attributes:&nbsp;</B>[Peripheral:10357|Cellophane]<BR><B>Shipping Date:&nbsp;</B>2017-05-13 | ",
+                  "currency": "65<",
+                  "currencyValue": 1,
+                  "customersFax": null,
+                  "ordersTempId": 2142505,
+                  "dateOfDelivery": "2017-05-13",
+                  "bankTransactionId": null,
+                  "bankAuthorisationCode": null,
+                  "daysConversionFactor": 0,
+                  "ordersIp": null,
+                  "whenToDeliver": null,
+                  "deliverytelephone": null,
+                  "fkAssociateId": 5,
+                  "ordersCancelId": 0,
+                  "themeId": 16,
+                  "ordersOccasionId": 16,
+                  "ordersIsGenerated": 0,
+                  "ordersPaySite": null,
+                  "paypalStatus": null,
+                  "paypalTrnsId": null,
+                  "chk": 0,
+                  "hold": 0,
+                  "blueDartStatus": null,
+                  "blueDartHold": 0,
+                  "ureadCheck": 0,
+                  "rlReqId": null,
+                  "marketPlaceData": null,
+                  "marketPlaceName": null,
+                  "addressType": "Home",
+                  "orderInstruction": "",
+                  "vendorDeliveryCharge": 75,
+                  "vendorOrderTotal": 390,
+                  "deliverWhen": "today",
+                  "componentTotal": 315,
+                  "priceAdjustment": 0,
+                  "orderNetProductPrice": 315,
+                  "orderProducts": [
+                      {
+                          "orderProductId": 1399405,
+                          "orderId": 1038064,
+                          "productId": 217267,
+                          "productName": "Bunch of 21 Assorted Colour Roses",
+                          "productPrice": 15.23,
+                          "productPrice_inr": 990,
+                          "productQuantity": 1,
+                          "productSize": "1x1x1",
+                          "products_weight": "3",
+                          "products_code": "HD1006750",
+                          "fkAssociateId": "731",
+                          "orderShippingAssociatewise": 0,
+                          "ordersProductStatus": "Processed",
+                          "ordersAwbnumberAssociatewise": "0",
+                          "ordersProductsCourierid": 0,
+                          "ordersProductsCancel_id": null,
+                          "airBillWeight": "",
+                          "dispatchDate": "2017-05-13",
+                          "payoutOnHold": 0,
+                          "ordersProductsBaseCurrency": 2,
+                          "ordersProductsBaseCurrencyConversionRateInUsd": 0.01537999976426363,
+                          "ordersProductsBaseCurrencyConversionRateInInr": 1,
+                          "shippingTypeG": "Fix Date Delivery[Rs. 0]",
+                          "deliveryStatus": 0,
+                          "slaCode": 101,
+                          "slaFlag": false,
+                          "alertFlag": true,
+                          "productImage": "p-bunch-of-21-assorted-colour-roses-6750-m.jpg",
+                          "productUpdateDateTime": 1500235259000,
+                          "productNameForUrl": "p-bunch-of-21-assorted-colour-roses-6750",
+                          "vendorPrice": 315,
+                          "personalized": false,
+                          "componentList": [
+                              {
+                                  "productId": "217267",
+                                  "componentCode": "Rose",
+                                  "componentName": "Single Stem Rose",
+                                  "type": "0",
+                                  "quantity": "21.00",
+                                  "componentImage": "dummy.jpg",
+                                  "componentPrice": "15.00",
+                                  "eggless": false
+                              }
+                          ],
+                          "componentTotal": 315,
+                          "priceAdjustmentPerProduct": 0,
+                          "orderProductExtraInfo": {
+                              "id": 0,
+                              "orderId": 1038064,
+                              "orderProductId": 1399405,
+                              "productId": 217267,
+                              "quantity": 1,
+                              "attributes": "[Peripheral:10357|Cellophane]",
+                              "giftBox": 0,
+                              "deliveryType": 4,
+                              "deliveryDate": "2017-05-13",
+                              "deliveryTime": "",
+                              "productCostPrice": 415
+                          },
+                          "specialChargesShip": 0
+                      },
+                      {
+                          "orderProductId": 1399405,
+                          "orderId": 1038064,
+                          "productId": 217267,
+                          "productName": "Bunch of 21 Assorted Colour Roses",
+                          "productPrice": 15.23,
+                          "productPrice_inr": 990,
+                          "productQuantity": 1,
+                          "productSize": "1x1x1",
+                          "products_weight": "3",
+                          "products_code": "HD1006750",
+                          "fkAssociateId": "731",
+                          "orderShippingAssociatewise": 0,
+                          "ordersProductStatus": "Processed",
+                          "ordersAwbnumberAssociatewise": "0",
+                          "ordersProductsCourierid": 0,
+                          "ordersProductsCancel_id": null,
+                          "airBillWeight": "",
+                          "dispatchDate": "2017-05-13",
+                          "payoutOnHold": 0,
+                          "ordersProductsBaseCurrency": 2,
+                          "ordersProductsBaseCurrencyConversionRateInUsd": 0.01537999976426363,
+                          "ordersProductsBaseCurrencyConversionRateInInr": 1,
+                          "shippingTypeG": "Fix Date Delivery[Rs. 0]",
+                          "deliveryStatus": 0,
+                          "slaCode": 101,
+                          "slaFlag": false,
+                          "alertFlag": true,
+                          "productImage": "p-bunch-of-21-assorted-colour-roses-6750-m.jpg",
+                          "productUpdateDateTime": 1500235259000,
+                          "productNameForUrl": "p-bunch-of-21-assorted-colour-roses-6750",
+                          "vendorPrice": 315,
+                          "personalized": false,
+                          "componentList": [
+                              {
+                                  "productId": "217267",
+                                  "componentCode": "Rose",
+                                  "componentName": "Single Stem Rose",
+                                  "type": "0",
+                                  "quantity": "21.00",
+                                  "componentImage": "dummy.jpg",
+                                  "componentPrice": "15.00",
+                                  "eggless": false
+                              }
+                          ],
+                          "componentTotal": 315,
+                          "priceAdjustmentPerProduct": 0,
+                          "orderProductExtraInfo": {
+                              "id": 0,
+                              "orderId": 1038064,
+                              "orderProductId": 1399405,
+                              "productId": 217267,
+                              "quantity": 1,
+                              "attributes": "[Peripheral:10357|Cellophane]",
+                              "giftBox": 0,
+                              "deliveryType": 4,
+                              "deliveryDate": "2017-05-13",
+                              "deliveryTime": "",
+                              "productCostPrice": 415
+                          },
+                          "specialChargesShip": 0
+                      },
+                      {
+                          "orderProductId": 1399405,
+                          "orderId": 1038064,
+                          "productId": 217267,
+                          "productName": "Bunch of 21 Assorted Colour Roses",
+                          "productPrice": 15.23,
+                          "productPrice_inr": 990,
+                          "productQuantity": 1,
+                          "productSize": "1x1x1",
+                          "products_weight": "3",
+                          "products_code": "HD1006750",
+                          "fkAssociateId": "731",
+                          "orderShippingAssociatewise": 0,
+                          "ordersProductStatus": "Processed",
+                          "ordersAwbnumberAssociatewise": "0",
+                          "ordersProductsCourierid": 0,
+                          "ordersProductsCancel_id": null,
+                          "airBillWeight": "",
+                          "dispatchDate": "2017-05-13",
+                          "payoutOnHold": 0,
+                          "ordersProductsBaseCurrency": 2,
+                          "ordersProductsBaseCurrencyConversionRateInUsd": 0.01537999976426363,
+                          "ordersProductsBaseCurrencyConversionRateInInr": 1,
+                          "shippingTypeG": "Fix Date Delivery[Rs. 0]",
+                          "deliveryStatus": 0,
+                          "slaCode": 101,
+                          "slaFlag": false,
+                          "alertFlag": true,
+                          "productImage": "p-bunch-of-21-assorted-colour-roses-6750-m.jpg",
+                          "productUpdateDateTime": 1500235259000,
+                          "productNameForUrl": "p-bunch-of-21-assorted-colour-roses-6750",
+                          "vendorPrice": 315,
+                          "personalized": false,
+                          "componentList": [
+                              {
+                                  "productId": "217267",
+                                  "componentCode": "Rose",
+                                  "componentName": "Single Stem Rose",
+                                  "type": "0",
+                                  "quantity": "21.00",
+                                  "componentImage": "dummy.jpg",
+                                  "componentPrice": "15.00",
+                                  "eggless": false
+                              }
+                          ],
+                          "componentTotal": 315,
+                          "priceAdjustmentPerProduct": 0,
+                          "orderProductExtraInfo": {
+                              "id": 0,
+                              "orderId": 1038064,
+                              "orderProductId": 1399405,
+                              "productId": 217267,
+                              "quantity": 1,
+                              "attributes": "[Peripheral:10357|Cellophane]",
+                              "giftBox": 0,
+                              "deliveryType": 4,
+                              "deliveryDate": "2017-05-13",
+                              "deliveryTime": "",
+                              "productCostPrice": 415
+                          },
+                          "specialChargesShip": 0
+                      },
+                      {
+                          "orderProductId": 1399405,
+                          "orderId": 1038064,
+                          "productId": 217267,
+                          "productName": "Bunch of 21 Assorted Colour Roses",
+                          "productPrice": 15.23,
+                          "productPrice_inr": 990,
+                          "productQuantity": 1,
+                          "productSize": "1x1x1",
+                          "products_weight": "3",
+                          "products_code": "HD1006750",
+                          "fkAssociateId": "731",
+                          "orderShippingAssociatewise": 0,
+                          "ordersProductStatus": "Processed",
+                          "ordersAwbnumberAssociatewise": "0",
+                          "ordersProductsCourierid": 0,
+                          "ordersProductsCancel_id": null,
+                          "airBillWeight": "",
+                          "dispatchDate": "2017-05-13",
+                          "payoutOnHold": 0,
+                          "ordersProductsBaseCurrency": 2,
+                          "ordersProductsBaseCurrencyConversionRateInUsd": 0.01537999976426363,
+                          "ordersProductsBaseCurrencyConversionRateInInr": 1,
+                          "shippingTypeG": "Fix Date Delivery[Rs. 0]",
+                          "deliveryStatus": 0,
+                          "slaCode": 101,
+                          "slaFlag": false,
+                          "alertFlag": true,
+                          "productImage": "p-bunch-of-21-assorted-colour-roses-6750-m.jpg",
+                          "productUpdateDateTime": 1500235259000,
+                          "productNameForUrl": "p-bunch-of-21-assorted-colour-roses-6750",
+                          "vendorPrice": 315,
+                          "personalized": false,
+                          "componentList": [
+                              {
+                                  "productId": "217267",
+                                  "componentCode": "Rose",
+                                  "componentName": "Single Stem Rose",
+                                  "type": "0",
+                                  "quantity": "21.00",
+                                  "componentImage": "dummy.jpg",
+                                  "componentPrice": "15.00",
+                                  "eggless": false
+                              }
+                          ],
+                          "componentTotal": 315,
+                          "priceAdjustmentPerProduct": 0,
+                          "orderProductExtraInfo": {
+                              "id": 0,
+                              "orderId": 1038064,
+                              "orderProductId": 1399405,
+                              "productId": 217267,
+                              "quantity": 1,
+                              "attributes": "[Peripheral:10357|Cellophane]",
+                              "giftBox": 0,
+                              "deliveryType": 4,
+                              "deliveryDate": "2017-05-13",
+                              "deliveryTime": "",
+                              "productCostPrice": 415
+                          },
+                          "specialChargesShip": 0
+                      },
                       {
                           "orderProductId": 1399405,
                           "orderId": 1038064,

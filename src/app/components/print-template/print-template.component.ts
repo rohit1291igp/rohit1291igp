@@ -13,6 +13,7 @@ export class PrintTemplateComponent implements OnInit {
   @Input('printType') printType : string;
     productsURL = environment.productsURL;
     productsCompURL = environment.productsCompURL;
+    messageBgImage = 'assets/images/Order-Sheet-Creative.png';
 
   constructor(
       public UtilityService: UtilityService,

@@ -7,6 +7,8 @@ import { BsDropdownModule } from 'ng2-bootstrap';
 import { SelectModule } from 'ng2-select';
 import { MyDatePickerModule } from 'mydatepicker';
 import { DatePipe } from '@angular/common';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
 
 // Router and Services
 import { routing } from "./app.routing";
@@ -17,6 +19,7 @@ import { AuthenticationService } from './services/authentication.service';
 import { AuthGuard } from './services/auth-guard.service';
 import { UserService } from './services/user.service';
 import { DashboardService } from './services/dashboard.service';
+import { ReportsService } from './services/reports.service';
 
 // Components
 import { AppComponent } from './components/app.component';
@@ -37,6 +40,8 @@ import {httpFactory} from "./others/http.factory";
 import { PrintTemplateComponent } from './components/print-template/print-template.component';
 import { Time12Pipe } from './customPipes/time12.pipe';
 import { ReplacePipe } from './customPipes/replace.pipe';
+import { ReportsComponent } from './components/reports/reports.component';
+import { ObjectKeyValuePipe } from './customPipes/object-key-value.pipe';
 
 //env config
 /*import {envConfig} from "./others/env.config";
@@ -60,7 +65,9 @@ export function ConfigLoader(envConfig: envConfig) {
     LoaderComponent,
     PrintTemplateComponent,
     Time12Pipe,
-    ReplacePipe
+    ReplacePipe,
+    ReportsComponent,
+    ObjectKeyValuePipe
   ],
   imports: [
     BrowserModule,
@@ -69,7 +76,8 @@ export function ConfigLoader(envConfig: envConfig) {
     routing,
     BsDropdownModule.forRoot(),
     SelectModule,
-    MyDatePickerModule
+    MyDatePickerModule,
+    BrowserAnimationsModule
   ],
   providers: [
     {
@@ -90,9 +98,11 @@ export function ConfigLoader(envConfig: envConfig) {
     AuthGuard,
     UserService,
     DashboardService,
+    ReportsService,
     DatePipe,
-   Time12Pipe,
-      ReplacePipe
+    Time12Pipe,
+    ReplacePipe,
+    ObjectKeyValuePipe
 
   ],
   bootstrap: [AppComponent]
