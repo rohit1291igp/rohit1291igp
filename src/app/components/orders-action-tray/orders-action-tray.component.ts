@@ -62,6 +62,8 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
   uploadedFiles = [];
   loadercount=[1,1];
 
+  vendorIssueFlag=false;
+  vendorIssueValue:any={};
   statusMessageFlag=false;
   statusReasonModel:any={};
 
@@ -134,6 +136,8 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
                 this.imagePreviewFlag = false;
             }else if(this.statusMessageFlag){
                 this.statusMessageFlag=false;
+            }else if(this.vendorIssueFlag){
+                this.vendorIssueFlag=false;
             }else{
                 this.onStatusUpdate.emit("closed");
                 this.trayOpen = false;
@@ -141,6 +145,41 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
             }
         }
   }
+
+ vendorIssueOpen($even, orderId, orderProducts){
+        this.vendorIssueValue.orderId = orderId;
+        this.vendorIssueValue.orderProducts = orderProducts;
+        this.vendorIssueFlag=true;
+ }
+
+ vendorIssueSubmit($event){
+     var _this =this;
+     var fkAssociateId = localStorage.getItem('fkAssociateId');
+     var orderProducts = _this.vendorIssueValue.orderProducts;
+     var orderProductIds = "";
+     if(orderProducts && orderProducts.length){
+         for(var i in orderProducts){
+             if(!orderProductIds){
+                 orderProductIds = orderProductIds + (orderProducts[i].orderProductId).toString();
+             }else{
+                 orderProductIds = orderProductIds +","+(orderProducts[i].orderProductId).toString();
+             }
+         }
+     }
+
+     let reqObj =  {
+         url : 'vendorissue?vendorIssue='+_this.vendorIssueValue.reason+'+orderId='+_this.vendorIssueValue.orderId+'&orderProductId='+orderProductIds+'&fkAssociateId='+fkAssociateId,
+         method : 'post'
+     };
+
+     _this.BackendService.makeAjax(reqObj, function(err, response, headers){
+         if(err || JSON.parse(response).error) {
+             console.log('Error=============>', err, JSON.parse(response).errorCode);
+         }
+         console.log('sidePanel Response --->', response.result);
+         _this.vendorIssueFlag=false;
+     });
+ }
 
  getRejectionType(rejectionMessage){
      return this.rejectReasonsMap[rejectionMessage] || "";
@@ -810,6 +849,7 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
       e.stopPropagation();
       if(ignore) return;
       this.statusMessageFlag = false;
+      this.vendorIssueFlag = false;
   }
 
   getDummyOrderData(){
