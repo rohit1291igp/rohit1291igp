@@ -62,6 +62,7 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
   uploadedFiles = [];
   loadercount=[1,1];
 
+  fileUploadValidationError=false;
   vendorIssueFlag=false;
   vendorIssueValue:any={};
   statusMessageFlag=false;
@@ -199,6 +200,14 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
       _e.preventDefault();
       _e.stopPropagation();
       var _this= this;
+
+      if(_this.statusReasonModel.status === "Delivered" || _this.statusReasonModel.status === "OutForDelivery"){
+          if(!_this.uploadedFiles || !_this.uploadedFiles.length){
+              _this.fileUploadValidationError=true;
+              return;
+          }
+      }
+
       this.statusMessageFlag=false;
       console.log('statusReason--->', this.statusReasonModel);
 

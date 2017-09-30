@@ -130,6 +130,7 @@
                                 <div class="clearfix"></div>
                         </div>
                         <div *ngIf="f.submitted && !deliveredStatusFile.valid" class="help-block theme-red">Please upload files!</div>
+                        <div *ngIf="fileUploadValidationError" class="help-block theme-red">Please upload files!</div>
 
 
                         <button class="btn btn-primary m-top-1" [ngClass]="{'markdlvBtn' : !trayOpen}">Mark as Delivered</button>
@@ -167,6 +168,7 @@
 
                     <button class="btn btn-primary m-top-1" [ngClass]="{'markdlvBtn' : !trayOpen}">Mark as Out for delivery</button>
                     <div *ngIf="f.submitted && !deliveredStatusFile.valid" class="help-block theme-red">Please upload files!</div>
+                    <div *ngIf="fileUploadValidationError" class="help-block theme-red">Please upload files!</div>
                     </form>
                     <button class="btn btn-primary m-top-1 viewDetailPopupBtn" *ngIf="!trayOpen" (click)="toggleTray($event, 'OutForDeliveryView', statusReasonModel.orderId, null)">View Detail</button>
                     </div>
