@@ -78,7 +78,7 @@
                             </div>
 
                             <div class="rejectStatusDp" *ngIf="statusReasonModel.rejectOption == 'Delivery not possible on given date'">
-                                <my-date-picker name="mydate" [options]="myDatePickerOptions" [(ngModel)]="statusReasonModel.mydate" #mydate="ngModel" required></my-date-picker>
+                                <my-date-picker name="mydate" [options]="myDatePickerOptions" [(ngModel)]="statusReasonModel.mydate" #mydate="ngModel" placeholder="Choose date" required></my-date-picker>
                                 <div *ngIf="f.submitted && !mydate.valid" class="help-block theme-red">Please select a date!</div>
                             </div>
 
