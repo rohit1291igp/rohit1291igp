@@ -1,5 +1,5 @@
 
-<div class="row page" id="order_{{order.orderId}}" class="hide"  *ngIf="printType === 'order'">
+<div class="row page" id="order_{{getUniqueOrderId(order)}}" class="hide"  *ngIf="printType === 'order'">
 
     <section class="messgae-box-cont" *ngIf="order.commments">
             <div style="width:100%;">
@@ -193,7 +193,7 @@
  </div>
 
 
-<div id="order_message_{{order.orderId}}" class="hide page" *ngIf="printType === 'orderMessage'">
+<div id="order_message_{{getUniqueOrderId(order)}}" class="hide page" *ngIf="printType === 'orderMessage'">
     <section class="messgae-box-cont2">
         <div style="width:100%;">
             <div class="mb1">

@@ -48,4 +48,14 @@ export class PrintTemplateComponent implements OnInit {
         return delDetail;
     }
 
+    getUniqueOrderId(order){
+        var deliveryDate = order.orderProducts[0].orderProductExtraInfo.deliveryDate,
+            deliveryTime = order.orderProducts[0].orderProductExtraInfo.deliveryTime;
+        deliveryDate = deliveryDate ? deliveryDate.replace(/\s/g,'') : "";
+        deliveryTime = deliveryTime ? deliveryTime.replace(/\s/g,'') : "";
+
+        return order.orderId+deliveryDate+deliveryTime;
+    }
+
+
 }

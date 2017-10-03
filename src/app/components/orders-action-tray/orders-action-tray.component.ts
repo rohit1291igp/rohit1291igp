@@ -823,10 +823,16 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
       return delDetail;
   }
 
-  print(e, print_type, orderId){
+  print(e, print_type, orderId, deliveryDate, deliveryTime){
       e.stopPropagation();
+
+      deliveryDate = deliveryDate ? deliveryDate.replace(/\s/g,'') : "";
+      deliveryTime = deliveryTime ? deliveryTime.replace(/\s/g,'') : "";
+      var orderUniqueId = orderId+deliveryDate+deliveryTime;
+
       let printContents, popupWin;
-      let targetId = print_type === "order" ? ("order_"+orderId) : ("order_message_"+orderId);
+      //let targetId = print_type === "order" ? ("order_"+orderId) : ("order_message_"+orderId);
+      let targetId = print_type === "order" ? ("order_"+orderUniqueId) : ("order_message_"+orderUniqueId);
       printContents = document.getElementById(targetId).innerHTML;
       popupWin = window.open('', '_blank', 'top=0,left=0,height=100%,width=auto');
       popupWin.document.open();

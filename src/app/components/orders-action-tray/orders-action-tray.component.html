@@ -393,10 +393,10 @@
                       </div>-->
 
                     <div class="row">
-                        <div class="btn btn-primary actions-button text-bold" [ngClass]="{'bg-igp text-white': isAlert, 'bg-grey text-black': !isAlert}" (click)="print($event, 'order', order.orderId)">
+                        <div class="btn btn-primary actions-button text-bold" [ngClass]="{'bg-igp text-white': isAlert, 'bg-grey text-black': !isAlert}" (click)="print($event, 'order', order.orderId, order.orderProducts[0].orderProductExtraInfo.deliveryDate, order.orderProducts[0].orderProductExtraInfo.deliveryTime)">
                         Print Order
                     </div>
-                    <div class="btn btn-primary actions-button text-bold" [ngClass]="{'bg-igp text-white': isAlert, 'bg-grey text-black': !isAlert, 'disableBtn' : !order.commments}" (click)="print($event, 'order_message', order.orderId)">
+                    <div class="btn btn-primary actions-button text-bold" [ngClass]="{'bg-igp text-white': isAlert, 'bg-grey text-black': !isAlert, 'disableBtn' : !order.commments}" (click)="print($event, 'order_message', order.orderId, order.orderProducts[0].orderProductExtraInfo.deliveryDate, order.orderProducts[0].orderProductExtraInfo.deliveryTime)">
                     Print Message
                     </div>
                     </div>
