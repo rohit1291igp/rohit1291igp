@@ -85,7 +85,7 @@ export class ReportsComponent implements OnInit{
   ngOnInit() {
       var _this = this;
       //this.reportDataLoader = this.reportsService.getReportData('dummy', null);
-      this.reportsService.getReportData('general', function(error, _reportData){
+      this.reportsService.getReportData('general', "", function(error, _reportData){
           if(error){
               console.log('_reportData Error=============>', error);
               return;
@@ -100,25 +100,14 @@ export class ReportsComponent implements OnInit{
         console.log('Search report form submitted ---->', this.searchResultModel);
     }
     //sort
-    sortTableCol(e, index, order){
+    sortTableCol(e, tableLabel, index, order){
+        var _this= this;
         if(order === 'asc'){
-            this.reportData.tableData = this.reportData.tableData.sort( function Comparator(a, b) {
-                if (a[index] < b[index]) return -1;
-                if (a[index] > b[index]) return 1;
-                return 0;
-            });
+            this.reportData.tableData.sort(_this.UtilityService.dynamicSort(tableLabel, null));
         }else if(order === 'desc'){
-            this.reportData.tableData = this.reportData.tableData.sort( function Comparator(a, b) {
-                if (a[index] < b[index]) return 1;
-                if (a[index] > b[index]) return -1;
-                return 0;
-            });
+            this.reportData.tableData.sort(_this.UtilityService.dynamicSort('-'+tableLabel, null));
         }else{
-            this.reportData.tableData = this.reportData.tableData.sort( function Comparator(a, b) {
-                if (a[index] < b[index]) return -1;
-                if (a[index] > b[index]) return 1;
-                return 0;
-            });
+            this.reportData.tableData.sort(_this.UtilityService.dynamicSort(tableLabel, null));
         }
     }
 

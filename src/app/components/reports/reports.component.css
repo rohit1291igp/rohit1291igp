@@ -58,7 +58,8 @@
 
 .report-table th, .report-table td{
     text-align: center;
-    line-height: 3em;
+    /*line-height: 3em;*/
+    padding: 2em 0;
 }
 
 .table-curved {
@@ -110,3 +111,9 @@
  display: inline-block;
  transform: translate(0,4px);
 }
+
+.reportDate{
+    width:10% ! important;
+}
+
+

@@ -296,7 +296,7 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
                 if(err || JSON.parse(response).error) {
                     console.log('Error=============>', err, JSON.parse(response).errorCode);
                 }
-                console.log('sidePanel Response --->', response.result);
+                console.log('dltFile Response --->', response.result);
 
                 //var uploadedFileList = JSON.parse(response).result;
                 if(JSON.parse(response).result){

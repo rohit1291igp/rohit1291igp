@@ -33,8 +33,8 @@
     </div>
 
     </div>
-    <div class="col-sm-12 col-md-12 table-cont m-top-2">
-        <table class="report-table table table-striped table-bordered table-curved">
+    <div class="col-sm-12 col-md-12 table-cont m-top-2 table-fixed">
+        <table class="report-table table table-striped table-bordered table-curved table-fixed">
             <thead class="bg-igp text-white">
             <tr>
                 <th *ngFor="let tableLabel of reportDataLoader.tableHeaders">
@@ -88,7 +88,7 @@
                             <img src="assets/images/icons/inr.svg" alt="inr" *ngIf="i === 1">
                         </div>
                         <div class="text-igp">{{summ.label}}</div>
-                        <div class="text-bold">{{summ.value}}</div>
+                        <div class="text-bold">{{summ.value | number}}</div>
                     </div>
                 </div>
             </div>
@@ -98,24 +98,25 @@
                 <table class="report-table table table-striped table-bordered table-curved">
                     <thead class="bg-igp text-white">
                         <tr>
-                            <th *ngFor="let tableLabel of reportData.tableHeaders; let a='index'">
-                                <span>{{tableLabel}}</span>
+                            <th *ngFor="let tableLabel of reportData.tableHeaders; let a='index'" [ngClass]="{'reportDate' : tableLabel === 'Date'}">
+                                <span>{{tableLabel | replace : '_'}} </span>
                                 <span class="sortIcons">
-                                    <div class="icon s" aria-hidden="true" (click)="sortTableCol($event, a, 'asc')">
+                                    <div class="icon s" aria-hidden="true" (click)="sortTableCol($event, tableLabel, a, 'asc')">
                                         <img class="arrowU" src="assets/images/icons/arrowD.svg" alt="inr">
                                     </div>
-                                    <div class="icon s" aria-hidden="true" (click)="sortTableCol($event, a, 'desc')">
+                                    <div class="icon s" aria-hidden="true" (click)="sortTableCol($event, tableLabel, a, 'desc')">
                                         <img class="" src="assets/images/icons/arrowD.svg" alt="inr">
                                     </div>
                                 </span>
-
                             </th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr *ngFor="let tableRowValue of reportData.tableData">
-                            <td *ngFor="let tableCol of tableRowValue; let i='index'">
-                                {{tableCol}} &nbsp; &nbsp; &nbsp;
+                            <td *ngFor="let tableCol of reportData.tableHeaders; let i='index'">
+                                <span *ngIf="i === 0" >{{tableRowValue[tableCol] | date : 'dd/MM/yy'}}</span>
+                                <span *ngIf="i !== 0" > <span [outerHTML]="tableRowValue[tableCol]  | replace : '['"></span></span>
+                                &nbsp; &nbsp; &nbsp;
                                 <span class="icon m" aria-hidden="true" *ngIf="i === 0">
                                     <img src="assets/images/icons/view.svg" alt="inr">
                                 </span>
