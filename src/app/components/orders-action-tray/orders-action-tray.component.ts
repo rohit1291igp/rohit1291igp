@@ -747,10 +747,31 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
               if(err){
                   console.log('Error----->', err);
               }
-              orderProducts = result[0].orderProducts;
-              deliveryDate = result[0].orderProducts[0].orderProductExtraInfo.deliveryDate;
-              deliveryTime = result[0].orderProducts[0].orderProductExtraInfo.deliveryTime;
-              fireUpdateCall();
+
+              //order.orderProducts[0].ordersProductStatus =='Shipped' && order.orderProducts[0].deliveryStatus === 0
+              for(var i in result){
+                  if(status === "Delivered"){
+                      if(parseInt(orderId) === parseInt(result[i].orderId) &&
+                          result[i].orderProducts[0].ordersProductStatus =='Shipped' &&
+                          result[i].orderProducts[0].deliveryStatus === 0){
+                              orderProducts = result[i].orderProducts;
+                              deliveryDate = result[i].orderProducts[0].orderProductExtraInfo.deliveryDate;
+                              deliveryTime = result[i].orderProducts[0].orderProductExtraInfo.deliveryTime;
+                              fireUpdateCall();
+                          }
+                  }else{
+                      if(parseInt(orderId) === parseInt(result[i].orderId) &&
+                          deliveryDate === result[i].orderProducts[0].orderProductExtraInfo.deliveryDate &&
+                          deliveryTime === result[i].orderProducts[0].orderProductExtraInfo.deliveryTime){
+                              orderProducts = result[i].orderProducts;
+                              deliveryDate = result[i].orderProducts[0].orderProductExtraInfo.deliveryDate;
+                              deliveryTime = result[i].orderProducts[0].orderProductExtraInfo.deliveryTime;
+                              fireUpdateCall();
+                          }
+                  }
+              }
+
+
           });
       }else{
           fireUpdateCall();
@@ -788,7 +809,7 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
       var _this = this;
 
       for(var i in _this.sidePanelData){
-          if(orderId === _this.sidePanelData[i].orderId &&
+          if(parseInt(orderId) === parseInt(_this.sidePanelData[i].orderId) &&
               deliveryDate === _this.sidePanelData[i].orderProducts[0].orderProductExtraInfo.deliveryDate &&
               deliveryTime === _this.sidePanelData[i].orderProducts[0].orderProductExtraInfo.deliveryTime){
               if(Array.isArray(_this.sidePanelData)) console.log('splice objData----------------');
