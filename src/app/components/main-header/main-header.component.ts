@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener, ElementRef } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { BackendService } from '../../services/backend.service';
 
@@ -9,13 +9,27 @@ import { BackendService } from '../../services/backend.service';
 })
 export class MainHeaderComponent implements OnInit {
     vendorName = localStorage.getItem('associateName');
-
+    reportDropdownOpen=false;
+    selectedTopTab;
+    selectedReportTab;
     constructor(
       public router: Router,
-      public BackendService : BackendService
-      ) { }
+      public BackendService : BackendService,
+      private _elementRef: ElementRef
+        ) { }
+
+  @HostListener('document:click', ['$event.target'])
+    public onClick(targetElement) {
+        console.log('inside clicked ------->');
+        const isClickedInside = this._elementRef.nativeElement.contains(targetElement);
+        if (!isClickedInside) {
+            console.log('outside clicked ------->');
+            this.reportDropdownOpen=false;
+        }
+    }
 
   ngOnInit() {
+      this.activeTabHighlight();
   }
 
   logout(e){
@@ -48,6 +62,38 @@ export class MainHeaderComponent implements OnInit {
               _this.router.navigate(['/login']);
           })
       }
+
+  }
+
+  openReportDropdown(e){
+      e.stopPropagation();
+      this.reportDropdownOpen = !this.reportDropdownOpen;
+  }
+
+  activeTabHighlight(){
+      console.log('window.location.pathName------>', window.location.href.split('#')[1]);
+      var _this = this;
+      var currentRoute = window.location.href.split('#')[1];
+
+      if(currentRoute === "/dashboard"){
+          _this.selectedTopTab = "dashboard";
+      }
+
+      if(currentRoute === "/reports/getOrderReport"){
+          _this.selectedTopTab = "reports";
+          _this.selectedReportTab = "getOrderReport";
+      }
+
+      if(currentRoute === "/reports/getVendorReport"){
+          _this.selectedTopTab = "reports";
+          _this.selectedReportTab = "getVendorReport";
+      }
+
+      if(currentRoute === "/reports/getPincodeReport"){
+          _this.selectedTopTab = "reports";
+          _this.selectedReportTab = "getPincodeReport";
+      }
+
 
   }
 

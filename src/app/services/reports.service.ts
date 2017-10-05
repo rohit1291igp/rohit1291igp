@@ -58,15 +58,31 @@ export class ReportsService {
                   queryParmas += '&startLimit=0';
               }
               if(!/endLimit/.test(queryString)){
-                  queryParmas += '&endLimit=20';
+                  queryParmas += '&endLimit=10';
               }
 
               //var queryParmas = "fkAssociateId=fkAssociateId&startLimit=0&endLimit=20";
+              //report url
+              let reportAPIEndpoint;
+              switch(reportType){
+                  case "getOrderReport" : reportAPIEndpoint = "getOrderReport";
+                      break;
+
+                  case "getVendorReport" : reportAPIEndpoint = "getVendorReport";
+                      break;
+
+                  case "getPincodeReport" : reportAPIEndpoint = "getPincodeReport";
+                      break;
+
+                  default : reportAPIEndpoint ="getOrderReport";
+              }
 
               let reqObj= {
-                url : "getOrderReport?"+queryParmas,
+                url : reportAPIEndpoint+"?"+queryParmas,
                 method:"get"
               };
+
+
 
               _this.BackendService.makeAjax(reqObj, function(err, response, headers){
                   if(err || JSON.parse(response).error) {
@@ -78,13 +94,6 @@ export class ReportsService {
                   //reportDataResponse['searchFields'] = _this.searchFields;
                   return cb(null, reportDataResponse);
               });
-
-              /* make API call
-               a.tableData
-               b.deduce table label from tableData
-               c.if required change search fields - depending on - report type
-               */
-
           }
 
       }

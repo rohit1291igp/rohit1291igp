@@ -31,3 +31,59 @@
 .logout:hover {
     color: white;
 }
+
+.fullHeightLi{
+    margin-right: 1em;
+    font-size: 16px;
+    padding: 1em 1em 0.5em;
+}
+
+.fullHeightLi.selected{
+    background: #fff;
+}
+
+.fullHeightLi.selected p{
+    color: #c3404e;
+}
+
+.reportDropdown{
+    right:0;
+    top: 3.5em;
+    background: #c3404e;
+    padding: 0;
+    z-index: 9999;
+    border-top: 1px solid #fff;
+}
+
+.reportsdropdownMenu li{
+    list-style-type: none;
+    white-space: nowrap;
+    padding: 1em 2em;
+    text-align: center;
+    white-space: nowrap;
+    border-bottom: 1px solid #fff;
+}
+
+.reportsdropdownMenu li>a{
+    color: #fff;
+}
+
+.reportsdropdownMenu li.selected{
+    background: #fff;
+}
+
+.reportsdropdownMenu li.selected>a, .navRight li.selected>p>a, .navRight li.selected>p{
+    color: #c3404e;
+}
+
+.reportsdropdownMenu li a, .navRight li a{
+    text-decoration:none ! important;
+}
+
+.reportsdropdownMenu li:last-child{
+
+}
+
+.navRight li{
+    cursor:pointer;
+}

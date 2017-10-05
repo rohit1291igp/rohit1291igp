@@ -1,22 +1,21 @@
 <div class="container-fluid reports-cont" *ngIf="!reportData">
     <div class="row">
-        <div class="col-sm-12 col-md-12 m-top-1">
+        <div class="col-sm-12 col-md-12 m-top-1" *ngIf="reportType === 'getOrderReport'">
 
          <div class="col-sm-9 col-md-9 reprts-search-fields bg-white padding1">
                 <div class="underLine paddingHalf text-bold">Search Parameters</div>
-                <form name="searchReport">
+                <form name="searchReport" (ngSubmit)="f.form.valid && searchReportSubmit($event)" #f="ngForm" nonvalidate>
                     <div class="searchFields m-top-1 inline">
                         <div class="searchFiled inline" *ngFor="let searchField of reportDataLoader.searchFields;">
-                        <input class="form-control" type="text" name="{{searchField.name}}" placeholder="{{searchField.placeholder}}" [(ngModel)]="searchResultModel[searchField.name]" *ngIf="searchField.type === 'text' || searchField.type === 'number'">
-                        <my-date-picker id="{{searchField.name}}" name="{{searchField.name}}" placeholder="{{searchField.placeholder}}" [options]="myDatePickerOptions" [(ngModel)]="searchResultModel[searchField.name]"  *ngIf="searchField.type === 'date'"></my-date-picker>
-
+                            <input class="form-control" type="text" name="{{searchField.name}}" placeholder="{{searchField.placeholder}}" [(ngModel)]="searchResultModel[searchField.name]" *ngIf="searchField.type === 'text' || searchField.type === 'number'">
+                            <my-date-picker id="{{searchField.name}}" name="{{searchField.name}}" placeholder="{{searchField.placeholder}}" [options]="myDatePickerOptions" [(ngModel)]="searchResultModel[searchField.name]"  *ngIf="searchField.type === 'date'"></my-date-picker>
+                        </div>
                     </div>
-            </div>
-            <div class="searchFieldsSubmit relative inline">
-                <input  type="submit" class="btn btn-primary pull-right bg-igp searchSubmitBtn"  value="Search All Parameters" />
-            </div>
-            </form>
-        </div>
+                    <div class="searchFieldsSubmit relative inline">
+                        <input  type="submit" class="btn btn-primary pull-right bg-igp searchSubmitBtn"  value="Search All Parameters" />
+                    </div>
+                </form>
+         </div>
 
         <div class="col-sm-3 col-md-3 reprts-summary bg-white padding1">
             <div class="underLine paddingHalf text-bold">Summary</div>
@@ -60,7 +59,7 @@
 
 <div class="container-fluid reports-cont" *ngIf="reportData">
     <div class="row">
-        <div class="col-sm-12 col-md-12 m-top-1">
+        <div class="col-sm-12 col-md-12 m-top-1" *ngIf="reportType === 'getOrderReport'">
 
             <div class="col-sm-9 col-md-9 reprts-search-fields bg-white padding1">
                 <div class="underLine paddingHalf text-bold">Search Parameters</div>
@@ -114,10 +113,10 @@
                     <tbody>
                         <tr *ngFor="let tableRowValue of reportData.tableData">
                             <td *ngFor="let tableCol of reportData.tableHeaders; let i='index'">
-                                <span *ngIf="i === 0" >{{tableRowValue[tableCol] | date : 'dd/MM/yy'}}</span>
-                                <span *ngIf="i !== 0" > <span [outerHTML]="tableRowValue[tableCol]  | replace : '['"></span></span>
+                                <span *ngIf="tableCol === 'Date'" >{{tableRowValue[tableCol] | date : 'dd/MM/yy'}}</span>
+                                <span *ngIf="tableCol !== 'Date'" > <span [outerHTML]="tableRowValue[tableCol]  | replace : '['"></span></span>
                                 &nbsp; &nbsp; &nbsp;
-                                <span class="icon m" aria-hidden="true" *ngIf="i === 0">
+                                <span class="icon m" aria-hidden="true" *ngIf="tableCol === 'Order_No'">
                                     <img src="assets/images/icons/view.svg" alt="inr">
                                 </span>
                             </td>
@@ -125,7 +124,10 @@
 
                     </tbody>
                 </table>
+        </div>
 
+        <div class="col-sm-12 col-md-12 center-align m-b-1" *ngIf="showMoreBtn">
+            <div class="btn btn-primary bg-igp searchSubmitBtn" (click)="showMoreTableDate($event)">Show more</div>
         </div>
 
     </div>
