@@ -116,7 +116,7 @@
                                 <span *ngIf="tableCol === 'Date'" >{{tableRowValue[tableCol] | date : 'dd/MM/yy'}}</span>
                                 <span *ngIf="tableCol !== 'Date'" > <span [outerHTML]="tableRowValue[tableCol]  | replace : '['"></span></span>
                                 &nbsp; &nbsp; &nbsp;
-                                <span class="icon m" aria-hidden="true" *ngIf="tableCol === 'Order_No'">
+                                <span class="icon m" aria-hidden="true" *ngIf="tableCol === 'Order_No'" (click)="viewOrderDetail($event, tableRowValue[tableCol])">
                                     <img src="assets/images/icons/view.svg" alt="inr">
                                 </span>
                             </td>
@@ -132,3 +132,5 @@
 
     </div>
 </div>
+
+<app-orders-action-tray></app-orders-action-tray>

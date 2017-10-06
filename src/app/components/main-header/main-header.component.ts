@@ -1,5 +1,5 @@
 import { Component, OnInit, HostListener, ElementRef } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { BackendService } from '../../services/backend.service';
 
 @Component({
@@ -29,7 +29,14 @@ export class MainHeaderComponent implements OnInit {
     }
 
   ngOnInit() {
-      this.activeTabHighlight();
+      var _this=this;
+      _this.router.events.subscribe((event) => {
+          if (event instanceof NavigationEnd) {
+              console.log('Url changed');
+              _this.activeTabHighlight();
+          }
+      });
+
   }
 
   logout(e){
@@ -77,6 +84,7 @@ export class MainHeaderComponent implements OnInit {
 
       if(currentRoute === "/dashboard"){
           _this.selectedTopTab = "dashboard";
+          _this.selectedReportTab="";
       }
 
       if(currentRoute === "/reports/getOrderReport"){

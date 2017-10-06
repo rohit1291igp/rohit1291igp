@@ -5,6 +5,7 @@ import { BackendService } from '../../services/backend.service';
 import { UtilityService } from '../../services/utility.service';
 import {environment} from "../../../environments/environment";
 import { ReportsService } from '../../services/reports.service';
+import { OrdersActionTrayComponent } from '../orders-action-tray/orders-action-tray.component';
 
 @Component({
   selector: 'app-reports',
@@ -12,6 +13,7 @@ import { ReportsService } from '../../services/reports.service';
   styleUrls: ['./reports.component.css']
 })
 export class ReportsComponent implements OnInit{
+ @ViewChild(OrdersActionTrayComponent) child: OrdersActionTrayComponent;
   reportType;
   queryString="";
   showMoreBtn=true;
@@ -114,8 +116,9 @@ export class ReportsComponent implements OnInit{
     searchReportSubmit(event){
         var _this=this;
         console.log('Search report form submitted ---->', _this.searchResultModel);
-        _this.queryString = "";
-        for(var prop in _this.searchResultModel){
+        _this.queryString = _this.generateQueryString(_this.searchResultModel);
+
+        /*for(var prop in _this.searchResultModel){
             if(_this.queryString === ""){
                 if(typeof _this.searchResultModel[prop] === 'object' && 'date' in _this.searchResultModel[prop]){
                     _this.queryString += prop+"="+_this.searchResultModel[prop].date.year+"/"+_this.searchResultModel[prop].date.month+"/"+_this.searchResultModel[prop].date.day;
@@ -129,7 +132,7 @@ export class ReportsComponent implements OnInit{
                     _this.queryString += "&"+prop+"="+_this.searchResultModel[prop];
                 }
             }
-        }
+        }*/
 
         console.log('searchReportSubmit =====> queryString ====>', _this.queryString);
         if(_this.queryString === "") return;
@@ -162,11 +165,10 @@ export class ReportsComponent implements OnInit{
         var _this=this;
         console.log('show more clicked');
         var startLimit = _this.reportData.tableData.length + 1;
-        if(_this.queryString === ""){
-            _this.queryString += "startLimit="+startLimit;
-        }else{
-            _this.queryString += "&startLimit="+startLimit;
-        }
+        var queryStrObj = Object.assign({}, _this.searchResultModel);
+        queryStrObj.startLimit = startLimit;
+        _this.queryString = _this.generateQueryString(queryStrObj);
+
 
         _this.reportsService.getReportData(_this.reportType, _this.queryString, function(error, _reportData){
             if(error){
@@ -182,15 +184,30 @@ export class ReportsComponent implements OnInit{
         });
     }
 
+    viewOrderDetail(e, orderId){
+        console.log('viewOrderDetail-------->', orderId);
+        this.child.toggleTray(e, "", orderId, null);
+    }
 
+    generateQueryString(queryObj){
+        var generatedQuertString="";
+        for(var prop in queryObj){
+            if(generatedQuertString === ""){
+                if(typeof queryObj[prop] === 'object' && 'date' in queryObj[prop]){
+                    generatedQuertString += prop+"="+queryObj[prop].date.year+"/"+queryObj[prop].date.month+"/"+queryObj[prop].date.day;
+                }else{
+                    generatedQuertString += prop+"="+queryObj[prop];
+                }
+            }else{
+                if(typeof queryObj[prop] === 'object' &&  'date' in queryObj[prop]){
+                    generatedQuertString += "&"+prop+"="+queryObj[prop].date.year+"/"+queryObj[prop].date.month+"/"+queryObj[prop].date.day;
+                }else{
+                    generatedQuertString += "&"+prop+"="+queryObj[prop];
+                }
+            }
+        }
 
-    /*
-    1.search form validation
-    2.Icon css - X
-    3.sort and search algo
-    4.Invoke search and sort algo
-    5.Pagination
-    */
-
+        return generatedQuertString;
+    }
 
 }
