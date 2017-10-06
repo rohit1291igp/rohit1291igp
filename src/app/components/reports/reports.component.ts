@@ -14,6 +14,7 @@ import { OrdersActionTrayComponent } from '../orders-action-tray/orders-action-t
 })
 export class ReportsComponent implements OnInit{
  @ViewChild(OrdersActionTrayComponent) child: OrdersActionTrayComponent;
+  vendorName = localStorage.getItem('associateName');
   reportType;
   queryString="";
   showMoreBtn=true;
