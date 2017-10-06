@@ -79,7 +79,9 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
   imagePreviewFlag = false;
   imagePreviewSrc = "";
   public myDatePickerOptions: IMyOptions = {
-        dateFormat: 'ddth mmm. yyyy'
+        dateFormat: 'ddth mmm. yyyy',
+      editableDateField:false,
+      openSelectorOnInputClick:true
   };
   public dateRange: Object = {};
 

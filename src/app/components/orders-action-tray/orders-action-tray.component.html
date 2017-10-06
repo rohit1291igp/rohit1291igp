@@ -50,7 +50,7 @@
     <div class="modal fade in" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: block; overflow:scroll; background: rgba(0, 0, 0, 0.77);"  (click)="closePopup($event)">
 
 
-        <div class="modal-dialog modal-lg">
+        <div class="modal-dialog modal-lg" [ngClass]="{'popupSize1' : statusReasonModel.status === 'Rejected'}">
             <div class="modal-content" (click)="closePopup($event, 'ignore')">
                 <div id="cLoader2" class="cloader hide"></div>
                 <div class="modal-header" style="border-bottom:none;">

@@ -27,7 +27,9 @@ export class DashboardComponent implements OnInit {
     // other options...
     dateFormat: 'ddth mmm. yyyy',
     inline:false,
-    alignSelectorRight : true
+    alignSelectorRight : true,
+    editableDateField:false,
+    openSelectorOnInputClick:true
     //disableDateRanges : [{begin: this.UtilityService.getDateObj(0), end: this.UtilityService.getDateObj(2)}]
   };
   public dateRange: Object = {};
