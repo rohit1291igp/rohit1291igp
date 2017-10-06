@@ -91,9 +91,15 @@ export class ReportsComponent implements OnInit{
   ngOnInit() {
       var _this = this;
       this.route.params.subscribe(params => {
+          /* reset all variable - start*/
+          _this.showMoreBtn= true;
+          _this.queryString= "";
+          _this.reportData=null;
+          _this.searchResultModel= {};
+          /* reset all variable - end*/
           console.log('params===>', params);
-          _this.showMoreBtn=true;
           _this.reportType = params['type'];
+
           _this.reportsService.getReportData(_this.reportType, "", function(error, _reportData){
               if(error){
                   console.log('_reportData Error=============>', error);
