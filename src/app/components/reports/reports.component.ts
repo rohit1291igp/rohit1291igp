@@ -18,6 +18,7 @@ export class ReportsComponent implements OnInit{
   reportType;
   queryString="";
   showMoreBtn=true;
+  searchReportFieldsValidation=false;
   reportDataLoader:any={
       "searchFields" : [
           {
@@ -142,7 +143,12 @@ export class ReportsComponent implements OnInit{
         }*/
 
         console.log('searchReportSubmit =====> queryString ====>', _this.queryString);
-        if(_this.queryString === "") return;
+        if(_this.queryString === ""){
+            _this.searchReportFieldsValidation=true;
+            return;
+        }else{
+            _this.searchReportFieldsValidation=false;
+        }
 
         _this.reportsService.getReportData(_this.reportType, _this.queryString, function(error, _reportData){
             if(error){

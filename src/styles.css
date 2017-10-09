@@ -369,7 +369,7 @@
     z-index:9999;
     height: 4px;
     width: 100%;
-    position: relative;
+    position: fixed;
     overflow: hidden;
     background-color: #ddd;
 }

@@ -116,4 +116,9 @@
     width:10% ! important;
 }
 
+.searchValidationError{
+    top: 1.5em;
+    position: absolute;
+    left: 37%;
+}
 

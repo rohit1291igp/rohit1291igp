@@ -81,6 +81,8 @@
                         <input  type="submit" class="btn btn-primary pull-right bg-igp searchSubmitBtn"  value="Search All Parameters" />
                     </div>
                 </form>
+
+                <div class="text-center searchValidationError theme-red text-bold" *ngIf="searchReportFieldsValidation">One of the search parameters must be filled!</div>
             </div>
 
             <div class="col-sm-3 col-md-3 reprts-summary bg-white padding1">
