@@ -98,7 +98,7 @@
                 <a href="#" (click)="openPanel($event, masterData.status[2])"> View all out for delivery orders</a>
               </div>
 
-                <div class="col-md-12 no-padding" *ngIf="!dashboardData.ofd.length">
+                <div class="col-md-12 no-padding no-ofd-label-cont" *ngIf="!dashboardData.ofd.length">
                     <div class="no-ofd-label">Currently there are no orders out for delivery</div>
                 </div>
             </div>

@@ -34,17 +34,17 @@ import {environment} from "../../../environments/environment";
 })
 export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
   public trayOpen: Boolean = false;
-    prodListArgs;
+  prodListArgs;
   @Output() onStatusUpdate: EventEmitter<any> = new EventEmitter();
   @Output() onOfdView: EventEmitter<any> = new EventEmitter();
   rejectReasons=[
-      {"type" : "0", "name" : "Select reason for reject", "value" : "" },
+      {"type" : "0", "name" : "Select reason for rejection", "value" : "" },
       {"type" : "1", "name" : "Delivery location not serviceable", "value" : "Delivery location not serviceable" },
       {"type" : "2", "name" : "Product not available", "value" : "Product not available" },
       {"type" : "3", "name" : "Capacity full", "value" : "Capacity full" },
-      {"type" : "4", "name" : "Customer's instruction", "value" : "Customer's instruction" },
+//      {"type" : "4", "name" : "Customer's instruction", "value" : "Customer's instruction" },
       {"type" : "5", "name" : "Delivery not possible on given date", "value" : "Delivery not possible on given date" },
-      {"type" : "6", "name" : "Fixed time/Midnight not possible", "value" : "Fixed time/Midnight not possible" },
+      {"type" : "6", "name" : "Fixed time or Midnight delivery not possible", "value" : "Fixed time or Midnight delivery not possible" },
       {"type" : "7", "name" : "Duplicate order", "value" : "Duplicate order" },
       {"type" : "8", "name" : "Other", "value" : "Other" }
   ];
@@ -55,13 +55,14 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
       "Capacity full" : 3,
       "Customer's instruction" : 4,
       "Delivery not possible on given date" : 5,
-      "Fixed time/Midnight not possible" : 6,
+      "Fixed time or Midnight delivery not possible" : 6,
       "Duplicate order" : 7,
       "Other" : 8
   }
   uploadedFiles = [];
   loadercount=[1,1];
 
+  fileOversizeValidation=false;
   fileUploadValidationError=false;
   vendorIssueFlag=false;
   vendorIssueValue:any={};
@@ -78,7 +79,9 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
   imagePreviewFlag = false;
   imagePreviewSrc = "";
   public myDatePickerOptions: IMyOptions = {
-        dateFormat: 'ddth mmm. yyyy'
+        dateFormat: 'ddth mmm. yyyy',
+      editableDateField:false,
+      openSelectorOnInputClick:true
   };
   public dateRange: Object = {};
 
@@ -231,12 +234,24 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
 
   fileChange(event) {
         var _this = this;
+        var fileOverSizeFlag= false;
         let fileList: FileList = event.target.files;
         if(fileList.length > 0) {
             let file: File = fileList[0];
             let formData = new FormData();
             for (var i = 0; i < fileList.length; i++) {
+                if((fileList[i].size/1000000) > 5){
+                    fileOverSizeFlag=true;
+                    break;
+                }
                 formData.append("file"+i , fileList[i]);
+            }
+
+            if(fileOverSizeFlag){
+                _this.fileOversizeValidation=true;
+                return;
+            }else{
+                _this.fileOversizeValidation=false;
             }
             //formData.append('file0', fileList[0]);
             let headers = new Headers();

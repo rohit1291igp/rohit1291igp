@@ -314,7 +314,6 @@ export class ReportsComponent implements OnInit{
             _this.reportData.summary[1].value=_orderTotal;
         }
 
-        
         //update current table data
         _this.reportData.tableData = __tableData;
         if(!_this.reportData.tableData.length){

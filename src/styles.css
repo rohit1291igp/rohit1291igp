@@ -227,9 +227,9 @@
     padding: 0 3px;
 }
 
-.mydp input {
+/*.mydp input {
     pointer-events: none ! important;
-}
+}*/
 
 .mydp, .mydp .headertodaybtn {
     border: 0.1em solid #CCC ! important;
@@ -636,7 +636,12 @@ body .dashboard-content, body .orders-button{
     transform: rotate(180deg);
 }
 
-.customSelect{
+.customSelect {
     border: none ! important;
     background: none ! important;
+}
+
+.popupSize1{
+    width:35% ! important;
+
 }
