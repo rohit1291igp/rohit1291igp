@@ -104,16 +104,71 @@
                 <table class="report-table table table-striped table-bordered table-curved">
                     <thead class="bg-igp text-white">
                         <tr>
-                            <th *ngFor="let tableLabel of reportData.tableHeaders; let a='index'" [ngClass]="{'reportDate' : tableLabel === 'Date'}">
-                                <span>{{tableLabel | replace : '_'}} </span>
+                            <th class="relative" [ngClass]="{'selectedHeader' : reportLabelState[tableLabel]['filterdd']}" *ngFor="let tableLabel of reportData.tableHeaders; let a='index';" [ngClass]="{'reportDate' : tableLabel === 'Date'}">
+                                <span>{{tableLabel | replace : '_'}}</span>
                                 <span class="sortIcons">
-                                    <div class="icon s" aria-hidden="true" (click)="sortTableCol($event, tableLabel, a, 'asc')">
-                                        <img class="arrowU" src="assets/images/icons/arrowD.svg" alt="inr">
+                                    <div class="icon s" aria-hidden="true" (click)="setReportsHeadersState(tableLabel, 'filterdd', false)" *ngIf="reportLabelState[tableLabel]['filterdd']">
+                                        <img class="arrowU" src="assets/images/icons/arrowD.svg" alt="up-arrow">
                                     </div>
-                                    <div class="icon s" aria-hidden="true" (click)="sortTableCol($event, tableLabel, a, 'desc')">
-                                        <img class="" src="assets/images/icons/arrowD.svg" alt="inr">
+                                    <div class="icon s" aria-hidden="true" (click)="setReportsHeadersState(tableLabel, 'filterdd', true)" *ngIf="!reportLabelState[tableLabel]['filterdd']">
+                                        <img class="" src="assets/images/icons/arrowD.svg" alt="down-arrow">
                                     </div>
                                 </span>
+
+                                <div class="abs searchSortDd col-sm-12 col-md-12" [ngClass]="{'ddleft' : a==0}" *ngIf="reportLabelState[tableLabel]['filterdd']">
+                                    <div class="col-sm-12 col-md-12 m-top-1 colSearchPadding">
+                                        <div class="col-sm-6 col-md-6 no-padding left-align">Sort By : </div>
+                                        <div class="col-sm-6 col-md-6 no-padding">
+                                            <div class="col-sm-6 col-md-6 no-padding">
+                                                A-Z
+                                            </div>
+                                            <div class="col-sm-6 col-md-6 no-padding">
+                                                <div class="icon s" aria-hidden="true" (click)="sortTableCol($event, tableLabel, a, 'asc')" style="transform: translate(0,-0.6em);" [ngClass]="{'hideVisibility' :!reportLabelState[tableLabel]['sortdec']}">
+                                                    <img class="arrowU" src="assets/images/icons/arrowD.svg" alt="inr">
+                                                </div>
+
+                                                <div class="icon s" aria-hidden="true" (click)="sortTableCol($event, tableLabel, a, 'desc')" style="transform: translate(0,-1.2em);" [ngClass]="{'hideVisibility' : !reportLabelState[tableLabel]['sortIncr']}">
+                                                    <img class="" src="assets/images/icons/arrowD.svg" alt="inr">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="clearfix"></div>
+
+                                    <form (ngSubmit)="f.form.valid && columnFilterSubmit($event)" #f="ngForm" attr.data-colname="{{tableLabel}}" attr.data-coldt="{{determineDataType(orginalReportData.tableData[0][tableLabel])}}" nonvalidate>
+                                        <div class="col-sm-12 col-md-12 m-top-1 bg-grey colSearchPadding filter no-margin">
+                                            <div class="col-sm-6 col-md-6 no-padding left-align">Filter By :  </div>
+                                            <div class="col-sm-6 col-md-6 no-padding">
+
+                                                <select class="col-sm-12 col-md-12 no-padding customSelect" name="filterby" [(ngModel)]="reportLabelState[tableLabel]['filterBy']" *ngIf="determineDataType(orginalReportData.tableData[0][tableLabel]) == 'string'">
+                                                    <option value="=">Equal</option>
+                                                    <option value="contains">Containing</option>
+                                                </select>
+
+                                                <select class="col-sm-12 col-md-12 no-padding customSelect" name="filterby" [(ngModel)]="reportLabelState[tableLabel]['filterBy']" *ngIf="determineDataType(orginalReportData.tableData[0][tableLabel]) == 'date' || determineDataType(orginalReportData.tableData[0][tableLabel]) == 'number'">
+                                                    <option value="="> = </option>
+                                                    <option value=">="> >= </option>
+                                                    <option value="<="> <= </option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                       <div class="clearfix"></div>
+
+                                       <div class="m-top-1">
+                                           <div class="col-sm-12 col-md-12 colSearchPadding">
+                                                <input class="col-sm-12 col-md-12 " type="text" name="filterValue" [(ngModel)]="reportLabelState[tableLabel]['filterValue']" placeholder="Enter value to search" *ngIf="tableLabel !== 'Date'">
+                                               <my-date-picker class="col-sm-12 col-md-12" name="filterValue" placeholder="Select a date" [options]="myDatePickerOptions" [(ngModel)]="reportLabelState[tableLabel]['filterValue']"  *ngIf="tableLabel === 'Date'"></my-date-picker>
+
+                                           </div>
+                                           <div class="col-sm-12 col-md-12 m-b-05 colSearchPadding">
+                                               <input  class="col-sm-12 col-md-12" type="submit" class="btn btn-primary pull-right bg-igp colSearchSubmitBtn"  value="Search" />
+                                           </div>
+                                       </div>
+                                   </form>
+
+                                </div>
                             </th>
                         </tr>
                     </thead>

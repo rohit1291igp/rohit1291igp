@@ -99,6 +99,10 @@
     margin-bottom:1em;
 }
 
+.m-b-05{
+    margin-bottom:0.5em;
+}
+
 .auto-margin{
     margin:auto;
 }
@@ -630,4 +634,9 @@ body .dashboard-content, body .orders-button{
     -ms-transform: rotate(180deg); /* IE 9 */
     -webkit-transform: rotate(180deg); /* Chrome, Safari, Opera */
     transform: rotate(180deg);
+}
+
+.customSelect{
+    border: none ! important;
+    background: none ! important;
 }

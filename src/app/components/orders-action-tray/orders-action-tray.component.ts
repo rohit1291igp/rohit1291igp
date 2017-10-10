@@ -169,7 +169,7 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
      }
 
      let reqObj =  {
-         url : 'vendorissue?vendorIssue='+_this.vendorIssueValue.reason+'+orderId='+_this.vendorIssueValue.orderId+'&orderProductId='+orderProductIds+'&fkAssociateId='+fkAssociateId,
+         url : 'vendorissue?vendorIssue='+_this.vendorIssueValue.reason+'+&orderId='+_this.vendorIssueValue.orderId+'&orderProductIds='+orderProductIds+'&fkAssociateId='+fkAssociateId,
          method : 'post'
      };
 

@@ -49,7 +49,11 @@ export class UtilityService {
             if(prop2){
                 result = (a[property][prop2] < b[property][prop2]) ? -1 : (a[property][prop2] > b[property][prop2]) ? 1 : 0;
             }else{
-                result = (a[property] < b[property]) ? -1 : (a[property] > b[property]) ? 1 : 0;
+                if(property === 'Date'){
+                    result = ((new Date(a[property]).getTime()) < (new Date(b[property]).getTime())) ? -1 : ((new Date(a[property]).getTime()) > (new Date(b[property]).getTime())) ? 1 : 0;
+                }else{
+                    result = (a[property] < b[property]) ? -1 : (a[property] > b[property]) ? 1 : 0;
+                }
             }
             return result * sortOrder;
         }

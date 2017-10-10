@@ -75,13 +75,20 @@ export class ReportsComponent implements OnInit{
           ["", "", "", "", "", ""]
       ]
   };
-  public myDatePickerOptions: IMyOptions = {
-      // other options...
-      dateFormat: 'ddth mmm. yyyy'
-      //disableDateRanges : [{begin: this.UtilityService.getDateObj(0), end: this.UtilityService.getDateObj(2)}]
+  reportLabelState:any={};
+  columnFilterList:any={};
+  columnSearchObj:any={
+      filterby:'='
   };
+  public myDatePickerOptions: IMyOptions = {
+      dateFormat: 'ddth mmm. yyyy',
+      editableDateField:false,
+      openSelectorOnInputClick:true
+  };
+
   public dateRange: Object = {};
   public reportData:any=null;
+  public orginalReportData:any=null;
   searchResultModel:any={};
   constructor(
       public reportsService: ReportsService,
@@ -98,6 +105,7 @@ export class ReportsComponent implements OnInit{
           _this.queryString= "";
           _this.reportData=null;
           _this.searchResultModel= {};
+          _this.reportLabelState={};
           /* reset all variable - end*/
           console.log('params===>', params);
           _this.reportType = params['type'];
@@ -108,17 +116,50 @@ export class ReportsComponent implements OnInit{
                   return;
               }
               console.log('_reportData=============>', _reportData);
+
+              /* report label states - start */
+              var reportLabels = _reportData.tableHeaders;
+              var reportLabelsLength = _reportData.tableHeaders.length;
+              for(var i in reportLabels){
+                  _this.reportLabelState[reportLabels[i]] = {
+                      sortIncr : true,
+                      sortdec : true,
+                      filterdd : false,
+                      searchValue : "",
+                      filterBy:"=",
+                      filterValue:"",
+                      colDataType:_this.determineDataType(_reportData.tableData[0][reportLabels[i]])
+                  };
+              }
+
+              console.log('reportLabelState===>', _this.reportLabelState);
+              /* report label states - end */
+
               _reportData.searchFields = _this.reportDataLoader.searchFields;
               _this.reportData = _reportData;
+              _this.orginalReportData = Object.assign({}, _this.reportData);
           });
           //_this.initialiseState(); // rest and set based on new parameter this time
       });
-
       //this.reportType = this.route.snapshot.params['type'];
       //console.log('reportType==========>', this.reportType);
-
       //this.reportDataLoader = this.reportsService.getReportData('dummy', null);
+  }
 
+  getReportsHeadersState(header, prop){
+        console.log('getReportsHeadersState====>'+header+'----'+prop);
+        return this.reportLabelState[header][prop];
+  }
+
+  setReportsHeadersState(header, prop, value){
+    var _this=this;
+    console.log('getReportsHeadersState====>'+header+'----'+prop+'---'+value);
+    if(value){
+        for(var key in _this.reportLabelState){
+            _this.reportLabelState[key].filterdd = false;
+        }
+    }
+    this.reportLabelState[header][prop]=value ;
   }
 
     searchReportSubmit(event){
@@ -164,11 +205,24 @@ export class ReportsComponent implements OnInit{
     //sort
     sortTableCol(e, tableLabel, index, order){
         var _this= this;
+
+        for(var key in _this.reportLabelState){
+            _this.reportLabelState[key].filterdd = false;
+            _this.reportLabelState[key].sortIncr = true;
+            _this.reportLabelState[key].sortdec = true;
+        }
+
         if(order === 'asc'){
+            _this.reportLabelState[tableLabel].sortIncr = true;
+            _this.reportLabelState[tableLabel].sortdec = false;
             this.reportData.tableData.sort(_this.UtilityService.dynamicSort(tableLabel, null));
         }else if(order === 'desc'){
+            _this.reportLabelState[tableLabel].sortIncr = false;
+            _this.reportLabelState[tableLabel].sortdec = true;
             this.reportData.tableData.sort(_this.UtilityService.dynamicSort('-'+tableLabel, null));
         }else{
+            _this.reportLabelState[tableLabel].sortIncr = true;
+            _this.reportLabelState[tableLabel].sortdec = false;
             this.reportData.tableData.sort(_this.UtilityService.dynamicSort(tableLabel, null));
         }
     }
@@ -192,8 +246,14 @@ export class ReportsComponent implements OnInit{
             if(_reportData.tableData.length < 1){
                 _this.showMoreBtn=false;
             }
-            _this.reportData.summary = _reportData.summary;
-            _this.reportData.tableData = _this.reportData.tableData.concat(_reportData.tableData);
+            //need to handle filter
+            //_this.reportData.summary = _reportData.summary;
+            //_this.reportData.tableData = _this.reportData.tableData.concat(_reportData.tableData);
+
+            _this.orginalReportData.summary = _reportData.summary;
+            _this.orginalReportData.tableData = _this.orginalReportData.tableData.concat(_reportData.tableData);
+            _this.columnFilterSubmit(e);
+
         });
     }
 
@@ -221,6 +281,142 @@ export class ReportsComponent implements OnInit{
         }
 
         return generatedQuertString;
+    }
+
+    determineDataType(value){
+        value=value.toString();
+        var dataType="";
+        if(!isNaN(Date.parse(value))){
+            dataType="number";
+        }else if(!isNaN(Number(value))){
+            dataType="number";
+        }else{
+            dataType="string";
+        }
+        return dataType;
+    }
+
+    columnFilterSubmit(e){
+        var _this=this;
+
+        for(var key in _this.reportLabelState){
+            _this.reportLabelState[key].filterdd = false;
+        }
+
+        var __tableData= _this.filterOperation();
+        //updating table summary
+        if(_this.reportData.summary && _this.reportData.summary[0] && _this.reportData.summary[0].value) _this.reportData.summary[0].value=__tableData.length;
+        if(_this.reportData.summary && _this.reportData.summary[1] && _this.reportData.summary[1].value){
+            var _orderTotal=0;
+            for(var i in __tableData){
+                _orderTotal = _orderTotal + Number(__tableData[i].Amount);
+            }
+            _this.reportData.summary[1].value=_orderTotal;
+        }
+
+        
+        //update current table data
+        _this.reportData.tableData = __tableData;
+        if(!_this.reportData.tableData.length){
+            _this.showMoreBtn=false;
+        }else{
+            _this.showMoreBtn=true;
+        }
+    }
+
+    filterOperation(){
+        var _this=this;
+        var _tableData=[];
+        var filterValueFlag=false;
+        for(var _colName in _this.reportLabelState){
+            var filterBy=_this.reportLabelState[_colName].filterBy,
+                filterValue=_this.reportLabelState[_colName].filterValue,
+                colName=_colName,
+                colDataType= (colName == 'Date') ? 'date' : _this.reportLabelState[_colName].colDataType;
+            if(filterValue){
+                filterValueFlag=true;
+                if(colDataType == 'date'){
+                    var searchDateString=filterValue.date.year+'-'+filterValue.date.month+'-'+filterValue.date.day;
+                    var searchDate=new Date(searchDateString);
+                }
+
+                var originalDataSource = _tableData.length ? _tableData : _this.orginalReportData.tableData;
+                _tableData=[];
+
+                for(var i in originalDataSource){//for start
+                    var currentRow = originalDataSource[i];
+                    if(colDataType === "date"){
+                        var currentDate=new Date(currentRow[colName]);
+                        var cDYear=currentDate.getFullYear(),
+                            cDMonth= currentDate.getMonth()+1, //currentDate.getMonth()+1 > 9 ? currentDate.getMonth()+1 : '0'+(currentDate.getMonth()+1).toString(),
+                            cDDate= currentDate.getDate(); //currentDate.getDate() > 9 ? currentDate.getDate() : '0'+(currentDate.getDate()).toString();
+
+                        var cSearchDateString=cDYear+'-'+cDMonth+'-'+cDDate;
+
+                        if(filterBy == "="){
+                            if(cSearchDateString == searchDateString){
+                                _tableData.push(currentRow);
+                            }
+                        }else if(filterBy == ">="){
+                            if(cSearchDateString == searchDateString || currentDate > searchDate){
+                                _tableData.push(currentRow);
+                            }
+                        }else if(filterBy == "<="){
+                            if(cSearchDateString == searchDateString || currentDate < searchDate){
+                                _tableData.push(currentRow);
+                            }
+                        }else{
+                            if(cSearchDateString == searchDateString){
+                                _tableData.push(currentRow);
+                            }
+                        }
+
+                    }else if(colDataType === "number"){
+                        if(filterBy == "="){
+                            if(Number(currentRow[colName]) == Number(filterValue)){
+                                _tableData.push(currentRow);
+                            }
+                        }else if(filterBy == ">="){
+                            if(Number(currentRow[colName]) >= Number(filterValue)){
+                                _tableData.push(currentRow);
+                            }
+                        }else if(filterBy == "<="){
+                            if(Number(currentRow[colName]) <= Number(filterValue)){
+                                _tableData.push(currentRow);
+                            }
+                        }else{
+                            if(Number(currentRow[colName]) == Number(filterValue)){
+                                _tableData.push(currentRow);
+                            }
+                        }
+
+                    }else if(colDataType === "string"){
+                        if(filterBy == "="){
+                            if((currentRow[colName]).toString().toLowerCase() == (filterValue).toString().toLowerCase()){
+                                _tableData.push(currentRow);
+                            }
+                        }else if(filterBy == "contains"){
+                            var colregex= new RegExp((filterValue).toString().toLowerCase(), 'g')
+                            if(colregex.test((currentRow[colName]).toString().toLowerCase())){
+                                _tableData.push(currentRow);
+                            }
+                        }else{
+                            if((currentRow[colName]).toString().toLowerCase() == (filterValue).toString().toLowerCase()){
+                                _tableData.push(currentRow);
+                            }
+                        }
+                    }else{
+
+                    }
+                }//for end
+            }
+        }
+
+        if(filterValueFlag){
+            return _tableData;
+        }else{
+            return _tableData.length ? _tableData : _this.orginalReportData.tableData;
+        }
     }
 
 }
