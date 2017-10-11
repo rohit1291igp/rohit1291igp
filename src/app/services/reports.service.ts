@@ -54,9 +54,9 @@ export class ReportsService {
               let fkAssociateId = localStorage.getItem('fkAssociateId');
               var queryParmas= queryString;
               queryParmas += queryParmas ? '&fkAssociateId='+fkAssociateId : 'fkAssociateId='+fkAssociateId;
-              if(!/deliveryDateFrom/.test(queryString)){
+              /*if(!/deliveryDateFrom/.test(queryString)){
                   queryParmas += '&deliveryDateFrom='+_this.UtilityService.getDateString(-2, null);
-              }
+              }*/
               if(!/startLimit/.test(queryString)){
                   queryParmas += '&startLimit=0';
               }

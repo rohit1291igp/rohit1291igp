@@ -112,15 +112,21 @@ export class ReportsComponent implements OnInit{
           console.log('params===>', params);
           _this.reportType = params['type'];
 
-          _this.reportsService.getReportData(_this.reportType, "", function(error, _reportData){
+          /* byDefault set deliveryDateFrom 2 days back - start */
+          if(_this.reportType === 'getOrderReport'){
+              var delDateFromObj = _this.UtilityService.getDateObj(-2);
+              _this.searchResultModel["deliveryDateFrom"]= { date: { year: delDateFromObj.year, month: delDateFromObj.month, day: delDateFromObj.day } };
+              _this.queryString = _this.generateQueryString(_this.searchResultModel);
+              console.log('oninit =====> queryString ====>', _this.queryString);
+          }
+          /* byDefault set deliveryDateFrom 2 days back - end */
+
+          _this.reportsService.getReportData(_this.reportType, _this.queryString, function(error, _reportData){
               if(error){
                   console.log('_reportData Error=============>', error);
                   return;
               }
               console.log('_reportData=============>', _reportData);
-
-              var delDateFromObj = _this.UtilityService.getDateObj(-2);
-              _this.searchResultModel["deliveryDateFrom"]= { date: { year: delDateFromObj.year, month: delDateFromObj.month, day: delDateFromObj.day } };
 
               /* report label states - start */
               var reportLabels = _reportData.tableHeaders;
@@ -235,10 +241,10 @@ export class ReportsComponent implements OnInit{
     //pagination
     showMoreTableDate(e){
         var _this=this;
-        var totalOrders= (_this.reportData.summary && _this.reportData.summary[0]) ? _this.reportData.summary[0].value : 0;
+        var totalOrders= (_this.orginalReportData.summary && _this.orginalReportData.summary[0]) ? _this.reportData.summary[0].value : 0;
         console.log('show more clicked');
 
-        while(_this.reportData.tableData.length < totalOrders){
+        while(_this.orginalReportData.tableData.length < totalOrders){
             var startLimit = _this.reportData.tableData.length + 1;
             var queryStrObj = Object.assign({}, _this.searchResultModel);
             queryStrObj.startLimit = startLimit;
