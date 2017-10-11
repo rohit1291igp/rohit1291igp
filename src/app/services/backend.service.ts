@@ -13,10 +13,12 @@ export class BackendService {
     return Promise.reject(error.message || error);
   }
 
+  lastHttpCall:any;
   makeAjax(reqObj : any, cb){
+      var _this=this;
       if(document.getElementById("cLoader")) document.getElementById("cLoader").classList.remove("hide");
       if(document.getElementById("cLoader2")) document.getElementById("cLoader2").classList.remove("hide");
-      this.http[reqObj.method](reqObj.url, reqObj.payload)
+      _this.lastHttpCall = this.http[reqObj.method](reqObj.url, reqObj.payload)
           .subscribe(
           response => {
               if(document.getElementById("cLoader")) document.getElementById("cLoader").classList.add("hide");
@@ -29,6 +31,10 @@ export class BackendService {
               return cb(error);
           }
       );
+  }
+
+  abortLastHttpCall(){
+    if(this.lastHttpCall) this.lastHttpCall.unsubscribe();
   }
 
 }

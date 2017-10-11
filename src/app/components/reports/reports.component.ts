@@ -149,6 +149,7 @@ export class ReportsComponent implements OnInit{
               _reportData.searchFields = _this.reportDataLoader.searchFields;
               _this.reportData = _reportData;
               _this.orginalReportData = Object.assign({}, _this.reportData);
+              _this.showMoreTableData(null);
           });
       });
   }
@@ -209,6 +210,7 @@ export class ReportsComponent implements OnInit{
             _this.orginalReportData.summary = _reportData.summary;
             _this.orginalReportData.tableData = _this.orginalReportData.tableData.concat(_reportData.tableData);
             _this.columnFilterSubmit(e);
+            _this.showMoreTableData(e);
         });
 
    }
@@ -239,12 +241,14 @@ export class ReportsComponent implements OnInit{
     }
 
     //pagination
-    showMoreTableDate(e){
+    showMoreTableData(e){
         var _this=this;
         var totalOrders= (_this.orginalReportData.summary && _this.orginalReportData.summary[0]) ? _this.reportData.summary[0].value : 0;
         console.log('show more clicked');
 
-        while(_this.orginalReportData.tableData.length < totalOrders){
+        if(_this.orginalReportData.tableData.length < totalOrders){
+            _this.BackendService.abortLastHttpCall();
+
             var startLimit = _this.reportData.tableData.length + 1;
             var queryStrObj = Object.assign({}, _this.searchResultModel);
             queryStrObj.startLimit = startLimit;
@@ -269,7 +273,7 @@ export class ReportsComponent implements OnInit{
                 _this.orginalReportData.summary = _reportData.summary;
                 _this.orginalReportData.tableData = _this.orginalReportData.tableData.concat(_reportData.tableData);
                 _this.columnFilterSubmit(e);
-
+                _this.showMoreTableData(e);
             });
         }
     }
