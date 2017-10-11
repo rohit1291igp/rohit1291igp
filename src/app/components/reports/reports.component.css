@@ -136,7 +136,14 @@
     padding: 0;
     top: 4.5em;
     z-index: 9999;
+    
+    transform: scale(0);
+    transition: transform .4s cubic-bezier(.5,0,.3,1);
+}
 
+.searchSortDd.ddOpen{
+    display:block;
+    transform: scale(1);
 }
 
 .searchSortDd.ddleft{

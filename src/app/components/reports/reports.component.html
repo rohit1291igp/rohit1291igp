@@ -120,7 +120,7 @@
                                     <img class="" src="assets/images/icons/removeFilter.png" alt="remove-filter" title="Remove Column Filter">
                                 </div>
 
-                                <div class="abs searchSortDd col-sm-12 col-md-12" [ngClass]="{'ddleft' : a==0}" *ngIf="reportLabelState[tableLabel]['filterdd']">
+                                <div class="abs searchSortDd col-sm-12 col-md-12" [ngClass]="{'ddOpen' :reportLabelState[tableLabel]['filterdd'] ,'ddleft' : a==0}">
                                     <div class="col-sm-12 col-md-12 m-top-1 colSearchPadding">
                                         <div class="col-sm-6 col-md-6 no-padding left-align">Sort By : </div>
                                         <div class="col-sm-6 col-md-6 no-padding">

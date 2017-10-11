@@ -40,10 +40,20 @@
 
 .fullHeightLi.selected{
     background: #fff;
+    -webkit-transition: background 500ms linear;
+    -moz-transition: background 500ms linear;
+    -o-transition: background 500ms linear;
+    -ms-transition: background 500ms linear;
+    transition: background 500ms linear;
 }
 
 .fullHeightLi.selected p{
     color: #c3404e;
+    -webkit-transition: color 500ms linear;
+    -moz-transition: color 500ms linear;
+    -o-transition: color 500ms linear;
+    -ms-transition: color 500ms linear;
+    transition: color 500ms linear;
 }
 
 .reportDropdown{
