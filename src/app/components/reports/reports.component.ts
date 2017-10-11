@@ -172,26 +172,39 @@ export class ReportsComponent implements OnInit{
       });
   }
 
-  /*@HostListener('.report-table thead', ['$event.target'])
+  @HostListener('document:click', ['$event.target'])
     public onClick(targetElement) {
         console.log('inside clicked ------->');
         const isClickedInside = this._elementRef.nativeElement.contains(targetElement);
-        if (!isClickedInside) {
+        /*if (!isClickedInside) {
             console.log('outside clicked ------->');
             for(var key in this.reportLabelState){
                 if(this.reportLabelState[key].filterdd){
                     this.reportLabelState[key].filterdd= false;
                 }
             }
+        }*/
+        for(var key in this.reportLabelState){
+            if(this.reportLabelState[key].filterdd){
+                this.reportLabelState[key].filterdd= false;
+            }
         }
-    }*/
+    }
+
+  stopEventPropgation(_e){
+        console.log('stopEventPropgation fired----');
+       // _e.preventDefault();
+        _e.stopPropagation();
+  }
 
   getReportsHeadersState(header, prop){
         console.log('getReportsHeadersState====>'+header+'----'+prop);
         return this.reportLabelState[header][prop];
   }
 
-  setReportsHeadersState(header, prop, value){
+  setReportsHeadersState(_e, header, prop, value){
+      _e.preventDefault();
+      _e.stopPropagation();
     var _this=this;
     console.log('getReportsHeadersState====>'+header+'----'+prop+'---'+value);
     if(value){
@@ -370,6 +383,10 @@ export class ReportsComponent implements OnInit{
         }*/
     }
 
+    ifDate(colName){
+       return (/Date/g.test(colName) || /date/g.test(colName)) ? 'date' : 'others';
+    }
+
     filterOperation(){
         var _this=this;
         var _tableData=[];
@@ -378,7 +395,7 @@ export class ReportsComponent implements OnInit{
             var filterBy=_this.reportLabelState[_colName].filterBy,
                 filterValue=_this.reportLabelState[_colName].filterValue,
                 colName=_colName,
-                colDataType= (colName == 'Date') ? 'date' : _this.reportLabelState[_colName].colDataType;
+                colDataType= (/Date/g.test(colName) || /date/g.test(colName)) ? 'date' : _this.reportLabelState[_colName].colDataType;
             if(filterValue){
                 filterValueFlag=true;
                 if(colDataType == 'date'){
