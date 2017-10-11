@@ -130,20 +130,47 @@
     box-shadow: 0px 5px 8px rgba(0, 0, 0, 0.3);
     right: 0;
     /*height: 100%;*/
-    width: 16em;
+    width: 0em;
     background: #fff;
     color: #000;
     padding: 0;
     top: 4.5em;
     z-index: 9999;
-    
-    transform: scale(0);
-    transition: transform .4s cubic-bezier(.5,0,.3,1);
+    display:none;
+    visibility: hidden;
+
+    /*transform: scale(0);
+    transition: transform 0.7s cubic-bezier(.5,0,.3,1);*/
+
+    /*visibility: hidden;
+    -webkit-transition: opacity 900ms, visibility 900ms;
+    transition: opacity 900ms, visibility 900ms;*/
 }
 
 .searchSortDd.ddOpen{
-    display:block;
-    transform: scale(1);
+   /* display:block;
+    transform: scale(1);*/
+
+    /*visibility: visible;
+    opacity: 1;*/
+
+    display: block;
+    visibility: visible;
+    opacity: 1;
+    width:16em;
+    animation: fade 0.5s;
+}
+
+@keyframes fade {
+    0% {
+        opacity: 0;
+        width:0;
+    }
+
+    100% {
+        opacity: 1;
+        width:16em;
+    }
 }
 
 .searchSortDd.ddleft{

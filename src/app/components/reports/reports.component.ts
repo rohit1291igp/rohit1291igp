@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, HostListener, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, OnChanges, DoCheck, Input, Output, EventEmitter, HostListener, ElementRef, trigger, sequence, transition, animate, style, state } from '@angular/core';
 import { ActivatedRoute} from '@angular/router';
 import { IMyOptions, IMyDateModel } from 'mydatepicker';
 import { BackendService } from '../../services/backend.service';
@@ -10,7 +10,25 @@ import { OrdersActionTrayComponent } from '../orders-action-tray/orders-action-t
 @Component({
   selector: 'app-reports',
   templateUrl: './reports.component.html',
-  styleUrls: ['./reports.component.css']
+  styleUrls: ['./reports.component.css'],
+    animations: [
+        trigger('anim', [
+            transition('* => void', [
+                style({ height: '*', opacity: '1', transform: 'translateX(0)', 'box-shadow': '0 1px 4px 0 rgba(0, 0, 0, 0.3)'}),
+                sequence([
+                    animate(".4s ease", style({ height: '*', opacity: '.7', transform: 'translateX(5%)', 'box-shadow': 'none'  })),
+                    animate("0.9s ease", style({ height: '0', opacity: 0, transform: 'translateX(5%)', 'box-shadow': 'none'  }))
+                ])
+            ]),
+            transition('void => active', [
+                style({ height: '0', opacity: '0', transform: 'translateX(20px)', 'box-shadow': 'none' }),
+                sequence([
+                    animate(".4s ease", style({ height: '*', opacity: '.2', transform: 'translateX(5%)', 'box-shadow': 'none'  })),
+                    animate(".9s ease", style({ height: '*', opacity: 1, transform: 'translateX(5%)', 'box-shadow': '0 1px 4px 0 rgba(0, 0, 0, 0.3)'  }))
+                ])
+            ])
+        ])
+    ]
 })
 export class ReportsComponent implements OnInit{
  @ViewChild(OrdersActionTrayComponent) child: OrdersActionTrayComponent;
