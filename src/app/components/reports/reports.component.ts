@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, HostListener, ElementRef } from '@angular/core';
 import { ActivatedRoute} from '@angular/router';
 import { IMyOptions, IMyDateModel } from 'mydatepicker';
 import { BackendService } from '../../services/backend.service';
@@ -17,7 +17,7 @@ export class ReportsComponent implements OnInit{
   vendorName = localStorage.getItem('associateName');
   reportType;
   queryString="";
-  showMoreBtn=true;
+  showMoreBtn=false;
   searchReportFieldsValidation=false;
   reportDataLoader:any={
       "searchFields" : [
@@ -91,6 +91,7 @@ export class ReportsComponent implements OnInit{
   public orginalReportData:any=null;
   searchResultModel:any={};
   constructor(
+      private _elementRef: ElementRef,
       public reportsService: ReportsService,
       public BackendService: BackendService,
       public UtilityService: UtilityService,
@@ -101,12 +102,13 @@ export class ReportsComponent implements OnInit{
       var _this = this;
       this.route.params.subscribe(params => {
           /* reset all variable - start*/
-          _this.showMoreBtn= true;
+          _this.showMoreBtn= false;
           _this.queryString= "";
           _this.reportData=null;
           _this.searchResultModel= {};
           _this.reportLabelState={};
           /* reset all variable - end*/
+
           console.log('params===>', params);
           _this.reportType = params['type'];
 
@@ -116,6 +118,9 @@ export class ReportsComponent implements OnInit{
                   return;
               }
               console.log('_reportData=============>', _reportData);
+
+              var delDateFromObj = _this.UtilityService.getDateObj(-2);
+              _this.searchResultModel["deliveryDateFrom"]= { date: { year: delDateFromObj.year, month: delDateFromObj.month, day: delDateFromObj.day } };
 
               /* report label states - start */
               var reportLabels = _reportData.tableHeaders;
@@ -139,12 +144,22 @@ export class ReportsComponent implements OnInit{
               _this.reportData = _reportData;
               _this.orginalReportData = Object.assign({}, _this.reportData);
           });
-          //_this.initialiseState(); // rest and set based on new parameter this time
       });
-      //this.reportType = this.route.snapshot.params['type'];
-      //console.log('reportType==========>', this.reportType);
-      //this.reportDataLoader = this.reportsService.getReportData('dummy', null);
   }
+
+  /*@HostListener('.report-table thead', ['$event.target'])
+    public onClick(targetElement) {
+        console.log('inside clicked ------->');
+        const isClickedInside = this._elementRef.nativeElement.contains(targetElement);
+        if (!isClickedInside) {
+            console.log('outside clicked ------->');
+            for(var key in this.reportLabelState){
+                if(this.reportLabelState[key].filterdd){
+                    this.reportLabelState[key].filterdd= false;
+                }
+            }
+        }
+    }*/
 
   getReportsHeadersState(header, prop){
         console.log('getReportsHeadersState====>'+header+'----'+prop);
@@ -162,28 +177,12 @@ export class ReportsComponent implements OnInit{
     this.reportLabelState[header][prop]=value ;
   }
 
-    searchReportSubmit(event){
+  searchReportSubmit(e){
         var _this=this;
         console.log('Search report form submitted ---->', _this.searchResultModel);
         _this.queryString = _this.generateQueryString(_this.searchResultModel);
-
-        /*for(var prop in _this.searchResultModel){
-            if(_this.queryString === ""){
-                if(typeof _this.searchResultModel[prop] === 'object' && 'date' in _this.searchResultModel[prop]){
-                    _this.queryString += prop+"="+_this.searchResultModel[prop].date.year+"/"+_this.searchResultModel[prop].date.month+"/"+_this.searchResultModel[prop].date.day;
-                }else{
-                    _this.queryString += prop+"="+_this.searchResultModel[prop];
-                }
-            }else{
-                if(typeof _this.searchResultModel[prop] === 'object' &&  'date' in _this.searchResultModel[prop]){
-                    _this.queryString += "&"+prop+"="+_this.searchResultModel[prop].date.year+"/"+_this.searchResultModel[prop].date.month+"/"+_this.searchResultModel[prop].date.day;
-                }else{
-                    _this.queryString += "&"+prop+"="+_this.searchResultModel[prop];
-                }
-            }
-        }*/
-
         console.log('searchReportSubmit =====> queryString ====>', _this.queryString);
+
         if(_this.queryString === ""){
             _this.searchReportFieldsValidation=true;
             return;
@@ -198,12 +197,18 @@ export class ReportsComponent implements OnInit{
             }
             console.log('searchReportSubmit _reportData=============>', _reportData);
             _reportData.searchFields = _this.reportData.searchFields;
-            _this.reportData = _reportData;
+            //_this.reportData = _reportData;
+
+            /* need to handle filter - start */
+            _this.orginalReportData.summary = _reportData.summary;
+            _this.orginalReportData.tableData = _this.orginalReportData.tableData.concat(_reportData.tableData);
+            _this.columnFilterSubmit(e);
         });
 
-    }
-    //sort
-    sortTableCol(e, tableLabel, index, order){
+   }
+
+   //sort
+   sortTableCol(e, tableLabel, index, order){
         var _this= this;
 
         for(var key in _this.reportLabelState){
@@ -230,31 +235,37 @@ export class ReportsComponent implements OnInit{
     //pagination
     showMoreTableDate(e){
         var _this=this;
+        var totalOrders= (_this.reportData.summary && _this.reportData.summary[0]) ? _this.reportData.summary[0].value : 0;
         console.log('show more clicked');
-        var startLimit = _this.reportData.tableData.length + 1;
-        var queryStrObj = Object.assign({}, _this.searchResultModel);
-        queryStrObj.startLimit = startLimit;
-        _this.queryString = _this.generateQueryString(queryStrObj);
+
+        while(_this.reportData.tableData.length < totalOrders){
+            var startLimit = _this.reportData.tableData.length + 1;
+            var queryStrObj = Object.assign({}, _this.searchResultModel);
+            queryStrObj.startLimit = startLimit;
+            _this.queryString = _this.generateQueryString(queryStrObj);
 
 
-        _this.reportsService.getReportData(_this.reportType, _this.queryString, function(error, _reportData){
-            if(error){
-                console.log('searchReportSubmit _reportData Error=============>', error);
-                return;
-            }
-            console.log('searchReportSubmit _reportData=============>', _reportData);
-            if(_reportData.tableData.length < 1){
-                _this.showMoreBtn=false;
-            }
-            //need to handle filter
-            //_this.reportData.summary = _reportData.summary;
-            //_this.reportData.tableData = _this.reportData.tableData.concat(_reportData.tableData);
+            _this.reportsService.getReportData(_this.reportType, _this.queryString, function(error, _reportData){
+                if(error){
+                    console.log('searchReportSubmit _reportData Error=============>', error);
+                    return;
+                }
+                console.log('searchReportSubmit _reportData=============>', _reportData);
+                /*if(_reportData.tableData.length < 1){
+                    _this.showMoreBtn=false;
+                }*/
 
-            _this.orginalReportData.summary = _reportData.summary;
-            _this.orginalReportData.tableData = _this.orginalReportData.tableData.concat(_reportData.tableData);
-            _this.columnFilterSubmit(e);
+                //_this.reportData.summary = _reportData.summary;
+                //_this.reportData.tableData = _this.reportData.tableData.concat(_reportData.tableData);
+                //_this.orginalReportData = Object.assign({}, _this.reportData);
 
-        });
+                /* need to handle filter - start */
+                _this.orginalReportData.summary = _reportData.summary;
+                _this.orginalReportData.tableData = _this.orginalReportData.tableData.concat(_reportData.tableData);
+                _this.columnFilterSubmit(e);
+
+            });
+        }
     }
 
     viewOrderDetail(e, orderId){
@@ -296,6 +307,12 @@ export class ReportsComponent implements OnInit{
         return dataType;
     }
 
+    removeColumnFilter(e, columnName){
+        var _this=this;
+        _this.reportLabelState[columnName]['filterValue']="";
+        _this.columnFilterSubmit(e);
+    }
+
     columnFilterSubmit(e){
         var _this=this;
 
@@ -305,8 +322,8 @@ export class ReportsComponent implements OnInit{
 
         var __tableData= _this.filterOperation();
         //updating table summary
-        if(_this.reportData.summary && _this.reportData.summary[0] && _this.reportData.summary[0].value) _this.reportData.summary[0].value=__tableData.length;
-        if(_this.reportData.summary && _this.reportData.summary[1] && _this.reportData.summary[1].value){
+        if(_this.reportData.summary && _this.reportData.summary[0]) _this.reportData.summary[0].value=__tableData.length;
+        if(_this.reportData.summary && _this.reportData.summary[1]){
             var _orderTotal=0;
             for(var i in __tableData){
                 _orderTotal = _orderTotal + Number(__tableData[i].Amount);
@@ -316,11 +333,11 @@ export class ReportsComponent implements OnInit{
 
         //update current table data
         _this.reportData.tableData = __tableData;
-        if(!_this.reportData.tableData.length){
+        /*if(!_this.reportData.tableData.length){
             _this.showMoreBtn=false;
         }else{
             _this.showMoreBtn=true;
-        }
+        }*/
     }
 
     filterOperation(){

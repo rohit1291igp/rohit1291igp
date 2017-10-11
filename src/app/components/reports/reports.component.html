@@ -115,6 +115,11 @@
                                     </div>
                                 </span>
 
+                                <div class="clearfix"></div>
+                                <div class="removeFilter icon m" (click)="removeColumnFilter($event, tableLabel)" *ngIf="reportLabelState[tableLabel].filterValue">
+                                    <img class="" src="assets/images/icons/removeFilter.png" alt="remove-filter" title="Remove Column Filter">
+                                </div>
+
                                 <div class="abs searchSortDd col-sm-12 col-md-12" [ngClass]="{'ddleft' : a==0}" *ngIf="reportLabelState[tableLabel]['filterdd']">
                                     <div class="col-sm-12 col-md-12 m-top-1 colSearchPadding">
                                         <div class="col-sm-6 col-md-6 no-padding left-align">Sort By : </div>
@@ -122,13 +127,13 @@
                                             <div class="col-sm-6 col-md-6 no-padding">
                                                 A-Z
                                             </div>
-                                            <div class="col-sm-6 col-md-6 no-padding">
-                                                <div class="icon s" aria-hidden="true" (click)="sortTableCol($event, tableLabel, a, 'asc')" style="transform: translate(0,-0.6em);" [ngClass]="{'hideVisibility' :!reportLabelState[tableLabel]['sortdec']}">
-                                                    <img class="arrowU" src="assets/images/icons/arrowD.svg" alt="inr">
+                                            <div class="col-sm-6 col-md-6 no-padding" style="margin-left: -1.5em;">
+                                                <div class="icon s" aria-hidden="true" (click)="sortTableCol($event, tableLabel, a, 'asc')" style="transform: translate(0,-0.5em);" [ngClass]="{'hideVisibility' :!reportLabelState[tableLabel]['sortdec']}">
+                                                    <img class="arrowU" src="assets/images/icons/arrowD.svg" alt="inr" title="Sort asc">
                                                 </div>
 
                                                 <div class="icon s" aria-hidden="true" (click)="sortTableCol($event, tableLabel, a, 'desc')" style="transform: translate(0,-1.2em);" [ngClass]="{'hideVisibility' : !reportLabelState[tableLabel]['sortIncr']}">
-                                                    <img class="" src="assets/images/icons/arrowD.svg" alt="inr">
+                                                    <img class="" src="assets/images/icons/arrowD.svg" alt="inr" title="Sort desc">
                                                 </div>
                                             </div>
                                         </div>

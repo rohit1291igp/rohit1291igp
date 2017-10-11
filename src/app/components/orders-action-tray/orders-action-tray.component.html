@@ -402,22 +402,27 @@
                     </div>
                     </div>
 
-                    <div class="row instruction-cont relative" *ngIf="order.orderInstruction">
 
-                        <div class="btn btn-primary actions-button text-bold">
-                            Order Instruction
+
+                    <div class="row instruction-cont relative no-padding">
+                        <div class="col-md-12 no-padding">
+                            <div class="col-md-6 no-padding" *ngIf="order.orderInstruction">
+                                <div class="btn btn-primary actions-button text-bold">
+                                    Order Instruction
+                                </div>
+
+                                <div class="order-instruction-detail">
+                                    <div class="arrow-up abs"></div>
+                                    <div>{{order.orderInstruction}}</div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 no-padding">
+                                <div class="btn btn-primary actions-button text-bold" (click)="vendorIssueOpen($svent, order.orderId, order.orderProducts)">
+                                     Need Help?
+                                </div>
+                            </div>
                         </div>
 
-                        <div class="order-instruction-detail">
-                            <div class="arrow-up abs"></div>
-                            <div>{{order.orderInstruction}}</div>
-                        </div>
-                    </div>
-
-                    <div class="row instruction-cont relative">
-                        <div class="btn btn-primary actions-button text-bold" (click)="vendorIssueOpen($svent, order.orderId, order.orderProducts)">
-                            Need Help?
-                        </div>
                     </div>
 
                     <!--<div class="row">-->

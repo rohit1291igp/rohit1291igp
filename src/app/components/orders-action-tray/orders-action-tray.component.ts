@@ -124,6 +124,7 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
                this.onStatusUpdate.emit("closed");
                this.trayOpen = false;
                this.sidePanelData=null;
+                document.querySelector('body').classList.remove('removeScroll');
                //this.clearPopupData();
             }
 
@@ -146,6 +147,7 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
                 this.onStatusUpdate.emit("closed");
                 this.trayOpen = false;
                 this.sidePanelData=null;
+                document.querySelector('body').classList.remove('removeScroll');
             }
         }
   }
@@ -379,11 +381,13 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
         });*/
     }else{
         if(e.currentTarget.dataset.trayopen){
+            document.querySelector('body').classList.remove('removeScroll');
             this.onStatusUpdate.emit("closed");
             console.log('close clicked ----->', this.trayOpen, dashBoardDataType);
             this.trayOpen = false;
             this.sidePanelData=null;
         }else{
+            document.querySelector('body').classList.add('removeScroll');
             console.log('close not clicked ----->', this.trayOpen, dashBoardDataType);
             if(orderByStatus === "OutForDeliveryView"){
                this.onOfdView.emit("OutForDeliveryView");

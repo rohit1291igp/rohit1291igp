@@ -637,11 +637,15 @@ body .dashboard-content, body .orders-button{
 }
 
 .customSelect {
-    border: none ! important;
+    /*border: none ! important;*/
     background: none ! important;
 }
 
 .popupSize1{
     width:35% ! important;
 
+}
+
+.removeScroll{
+    overflow:hidden;
 }

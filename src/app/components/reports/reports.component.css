@@ -162,4 +162,9 @@
     padding: 5px ! important;
 }
 
+.removeFilter{
+    left: 38%;
+    position: absolute;
+    top: 65%;
+}
 

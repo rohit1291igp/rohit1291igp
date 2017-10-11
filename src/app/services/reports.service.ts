@@ -54,11 +54,14 @@ export class ReportsService {
               let fkAssociateId = localStorage.getItem('fkAssociateId');
               var queryParmas= queryString;
               queryParmas += queryParmas ? '&fkAssociateId='+fkAssociateId : 'fkAssociateId='+fkAssociateId;
+              if(!/deliveryDateFrom/.test(queryString)){
+                  queryParmas += '&deliveryDateFrom='+_this.UtilityService.getDateString(-2, null);
+              }
               if(!/startLimit/.test(queryString)){
                   queryParmas += '&startLimit=0';
               }
               if(!/endLimit/.test(queryString)){
-                  queryParmas += '&endLimit=10';
+                  queryParmas += '&endLimit=50';
               }
 
               //var queryParmas = "fkAssociateId=fkAssociateId&startLimit=0&endLimit=20";
