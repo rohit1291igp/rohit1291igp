@@ -286,17 +286,19 @@ export class ReportsComponent implements OnInit{
     generateQueryString(queryObj){
         var generatedQuertString="";
         for(var prop in queryObj){
-            if(generatedQuertString === ""){
-                if(typeof queryObj[prop] === 'object' && 'date' in queryObj[prop]){
-                    generatedQuertString += prop+"="+queryObj[prop].date.year+"/"+queryObj[prop].date.month+"/"+queryObj[prop].date.day;
+            if(queryObj[prop] && queryObj[prop] !== null){
+                if(generatedQuertString === ""){
+                    if(typeof queryObj[prop] === 'object' && 'date' in queryObj[prop]){
+                        generatedQuertString += prop+"="+queryObj[prop].date.year+"/"+queryObj[prop].date.month+"/"+queryObj[prop].date.day;
+                    }else{
+                        generatedQuertString += prop+"="+queryObj[prop];
+                    }
                 }else{
-                    generatedQuertString += prop+"="+queryObj[prop];
-                }
-            }else{
-                if(typeof queryObj[prop] === 'object' &&  'date' in queryObj[prop]){
-                    generatedQuertString += "&"+prop+"="+queryObj[prop].date.year+"/"+queryObj[prop].date.month+"/"+queryObj[prop].date.day;
-                }else{
-                    generatedQuertString += "&"+prop+"="+queryObj[prop];
+                    if(typeof queryObj[prop] === 'object' &&  'date' in queryObj[prop]){
+                        generatedQuertString += "&"+prop+"="+queryObj[prop].date.year+"/"+queryObj[prop].date.month+"/"+queryObj[prop].date.day;
+                    }else{
+                        generatedQuertString += "&"+prop+"="+queryObj[prop];
+                    }
                 }
             }
         }
