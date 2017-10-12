@@ -180,6 +180,17 @@
 .selectedHeader{
     background: #fff;
     color: #000;
+    -webkit-transition: color 500ms linear;
+    -moz-transition: color 500ms linear;
+    -o-transition: color 500ms linear;
+    -ms-transition: color 500ms linear;
+    transition: color 500ms linear;
+
+    -webkit-transition: background 500ms linear;
+    -moz-transition: background 500ms linear;
+    -o-transition: background 500ms linear;
+    -ms-transition: background 500ms linear;
+    transition: background 500ms linear;
 }
 
 .colSearchSubmitBtn{
@@ -201,4 +212,47 @@
     position: absolute;
     top: 65%;
 }
+
+/* fixed header - start */
+.table-area {
+    position: relative;
+    z-index: 0;
+    margin-top: 50px;
+}
+
+table.fixed-header {
+    display: table;
+    /* required for table-layout to be used (not normally necessary; included for completeness) */
+    table-layout: fixed;
+    /* this keeps your columns with fixed with exactly the right width */
+    width: 100%;
+    /* table must have width set for fixed layout to work as expected */
+    height: 100%;
+}
+
+table.fixed-header thead {
+    position: absolute;
+    /* top: -5.5em; */
+    /* left: 0; */
+    /* right: 10px; */
+    width: 98%;
+    table-layout: fixed;
+    display: table;
+}
+
+table.fixed-header td {
+    line-height: 2em;
+}
+
+table.fixed-header tbody{
+    height:200px;
+    overflow-y:auto;
+    width: 100%;
+}
+
+/*table.fixed-header tr > td,
+table.fixed-header th {
+    text-align: left;
+}*/
+/* fixed header - end */
 

@@ -100,8 +100,8 @@
             </div>
 
         </div>
-        <div class="col-sm-12 col-md-12 table-cont m-top-2">
-                <table class="report-table table table-striped table-bordered table-curved">
+        <div class="col-sm-12 col-md-12 table-area table-cont m-top-2">
+                <table class="report-table table table-striped table-bordered table-curved fixed-headerx">
                     <thead class="bg-igp text-white" (click)="stopEventPropgation($event)">
                         <tr>
                             <th class="relative" [ngClass]="{'selectedHeader' : reportLabelState[tableLabel]['filterdd']}" *ngFor="let tableLabel of reportData.tableHeaders; let a='index';" [ngClass]="{'reportDate' : tableLabel === 'Date'}">
