@@ -191,6 +191,19 @@ export class ReportsComponent implements OnInit{
         }
     }
 
+   @HostListener('document:keydown', ['$event'])
+    handleKeyboardEvent(event: KeyboardEvent){
+        //console.log(event);
+        let x = event.keyCode;
+        if (x === 27) {
+            for(var key in this.reportLabelState){
+                if(this.reportLabelState[key].filterdd){
+                    this.reportLabelState[key].filterdd= false;
+                }
+            }
+        }
+    }
+
   stopEventPropgation(_e){
         console.log('stopEventPropgation fired----');
        // _e.preventDefault();

@@ -28,6 +28,15 @@ export class MainHeaderComponent implements OnInit {
         }
     }
 
+    @HostListener('document:keydown', ['$event'])
+    handleKeyboardEvent(event: KeyboardEvent){
+        //console.log(event);
+        let x = event.keyCode;
+        if (x === 27) {
+            this.reportDropdownOpen=false;
+        }
+    }
+
   ngOnInit() {
       var _this=this;
       _this.router.events.subscribe((event) => {
