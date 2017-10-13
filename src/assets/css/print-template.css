@@ -1,7 +1,7 @@
-@font-face {
+/*@font-face {
     font-family: message;
     src: url(/assets/fonts/Quicksand-LightItalic.otf);
-}
+}*/
 
 @font-face {
     font-family: message2;
@@ -53,10 +53,10 @@ page[size="A5"][layout="portrait"] {
     height: 14.8cm;
 }
 @media print {
-    @font-face {
+    /*@font-face {
         font-family: message;
         src: url(/assets/fonts/Quicksand-LightItalic.otf);
-    }
+    }*/
 
     @font-face {
         font-family: message2;
