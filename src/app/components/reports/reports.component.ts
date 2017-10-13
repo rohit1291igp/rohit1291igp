@@ -231,16 +231,17 @@ export class ReportsComponent implements OnInit{
 
   searchReportSubmit(e){
         var _this=this;
+        _this.BackendService.abortLastHttpCall();//abort  other  api calls
         console.log('Search report form submitted ---->', _this.searchResultModel);
         _this.queryString = _this.generateQueryString(_this.searchResultModel);
         console.log('searchReportSubmit =====> queryString ====>', _this.queryString);
 
-        if(_this.queryString === ""){
+        /*if(_this.queryString === ""){
             _this.searchReportFieldsValidation=true;
             return;
         }else{
             _this.searchReportFieldsValidation=false;
-        }
+        }*/
 
         _this.reportsService.getReportData(_this.reportType, _this.queryString, function(error, _reportData){
             if(error){
@@ -253,7 +254,7 @@ export class ReportsComponent implements OnInit{
 
             /* need to handle filter - start */
             _this.orginalReportData.summary = _reportData.summary;
-            _this.orginalReportData.tableData = _this.orginalReportData.tableData.concat(_reportData.tableData);
+            _this.orginalReportData.tableData = _reportData.tableData; //_this.orginalReportData.tableData.concat(_reportData.tableData);
             _this.columnFilterSubmit(e);
             _this.showMoreTableData(e);
         });
@@ -389,6 +390,8 @@ export class ReportsComponent implements OnInit{
                 }
                 _this.reportData.summary[1].value=_orderTotal;
             }
+        }else{
+            _this.reportData.summary = _this.orginalReportData.summary;
         }
 
         //update current table data
