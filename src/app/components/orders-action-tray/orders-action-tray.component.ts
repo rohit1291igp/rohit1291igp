@@ -887,7 +887,10 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
           <body onload="window.print();window.close()">${printContents}</body>
           </html>`
       );
-     //popupWin.document.close();
+
+      if(!localStorage.getItem('printpopup')){
+          popupWin.document.close();
+      }
   }
 
   imagePreview(e, imgSrc){
