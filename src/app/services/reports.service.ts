@@ -61,7 +61,7 @@ export class ReportsService {
                   queryParmas += '&startLimit=0';
               }
               if(!/endLimit/.test(queryString)){
-                  queryParmas += '&endLimit=50';
+                  queryParmas += '&endLimit=100';
               }
 
               //var queryParmas = "fkAssociateId=fkAssociateId&startLimit=0&endLimit=20";

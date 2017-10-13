@@ -33,6 +33,7 @@ import { OrdersActionTrayComponent } from '../orders-action-tray/orders-action-t
 export class ReportsComponent implements OnInit{
  @ViewChild(OrdersActionTrayComponent) child: OrdersActionTrayComponent;
   vendorName = localStorage.getItem('associateName');
+  filterValueFlag=false;
   reportType;
   queryString="";
   showMoreBtn=false;
@@ -287,13 +288,13 @@ export class ReportsComponent implements OnInit{
     //pagination
     showMoreTableData(e){
         var _this=this;
-        var totalOrders= (_this.orginalReportData.summary && _this.orginalReportData.summary[0]) ? _this.reportData.summary[0].value : 0;
+        var totalOrders= (_this.orginalReportData.summary && _this.orginalReportData.summary[0]) ? Number(_this.orginalReportData.summary[0].value) : 0;
         console.log('show more clicked');
 
         if(_this.orginalReportData.tableData.length < totalOrders){
             _this.BackendService.abortLastHttpCall();
 
-            var startLimit = _this.reportData.tableData.length + 1;
+            var startLimit = _this.reportData.tableData.length;
             var queryStrObj = Object.assign({}, _this.searchResultModel);
             queryStrObj.startLimit = startLimit;
             _this.queryString = _this.generateQueryString(queryStrObj);
@@ -377,14 +378,17 @@ export class ReportsComponent implements OnInit{
         }
 
         var __tableData= _this.filterOperation();
+
         //updating table summary
-        if(_this.reportData.summary && _this.reportData.summary[0]) _this.reportData.summary[0].value=__tableData.length;
-        if(_this.reportData.summary && _this.reportData.summary[1]){
-            var _orderTotal=0;
-            for(var i in __tableData){
-                _orderTotal = _orderTotal + Number(__tableData[i].Amount);
+        if(_this.filterValueFlag){
+            if(_this.reportData.summary && _this.reportData.summary[0]) _this.reportData.summary[0].value=__tableData.length;
+            if(_this.reportData.summary && _this.reportData.summary[1]){
+                var _orderTotal=0;
+                for(var i in __tableData){
+                    _orderTotal = _orderTotal + Number(__tableData[i].Amount);
+                }
+                _this.reportData.summary[1].value=_orderTotal;
             }
-            _this.reportData.summary[1].value=_orderTotal;
         }
 
         //update current table data
@@ -403,14 +407,14 @@ export class ReportsComponent implements OnInit{
     filterOperation(){
         var _this=this;
         var _tableData=[];
-        var filterValueFlag=false;
+        _this.filterValueFlag=false;
         for(var _colName in _this.reportLabelState){
             var filterBy=_this.reportLabelState[_colName].filterBy,
                 filterValue=_this.reportLabelState[_colName].filterValue,
                 colName=_colName,
                 colDataType= (/Date/g.test(colName) || /date/g.test(colName)) ? 'date' : _this.reportLabelState[_colName].colDataType;
             if(filterValue){
-                filterValueFlag=true;
+                _this.filterValueFlag=true;
                 if(colDataType == 'date'){
                     var searchDateString=filterValue.date.year+'-'+filterValue.date.month+'-'+filterValue.date.day;
                     var searchDate=new Date(searchDateString);
@@ -488,7 +492,7 @@ export class ReportsComponent implements OnInit{
             }
         }
 
-        if(filterValueFlag){
+        if(_this.filterValueFlag){
             return _tableData;
         }else{
             return _tableData.length ? _tableData : _this.orginalReportData.tableData;
