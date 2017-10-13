@@ -1,3 +1,8 @@
+@font-face {
+    font-family: message;
+    src: url(/assets/fonts/Quicksand-LightItalic.otf);
+}
+
 body {
     width: 21cm;
     /*background: rgb(204,204,204);*/
@@ -43,6 +48,11 @@ page[size="A5"][layout="portrait"] {
     height: 14.8cm;
 }
 @media print {
+    @font-face {
+        font-family: message;
+        src: url(/assets/fonts/Quicksand-LightItalic.otf);
+    }
+
     body, page {
         /*background: rgb(204,204,204);*/
         width: 21cm;
@@ -355,6 +365,7 @@ page[size="A5"][layout="portrait"] {
     }
 
     .mb1{
+        height:100%;
         width:49%;
         display:inline-block;
         position:relative;
@@ -385,7 +396,8 @@ page[size="A5"][layout="portrait"] {
 
     .messBgCont1{
         width: 100%;
-        height: 335px;
+        /*height: 335px;*/
+        height:100%;
         text-align: center;
         display: table;
     }
@@ -702,6 +714,7 @@ page[size="A5"][layout="portrait"] {
 }
 
 .mb1{
+    height:100%;
     width:49%;
     display:inline-block;
     position:relative;
@@ -731,7 +744,8 @@ page[size="A5"][layout="portrait"] {
 
 .messBgCont1{
     width: 100%;
-    height: 335px;
+    /*height: 335px;*/
+    height:100%;
     text-align: center;
     display: table;
 }
