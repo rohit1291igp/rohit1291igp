@@ -1,13 +1,12 @@
-/*@font-face {
+@font-face {
     font-family: message;
     src: url(/assets/fonts/Quicksand-LightItalic.otf);
-}*/
+}
 
 @font-face {
     font-family: message2;
     src: url(/assets/fonts/Quicksand-Italic.otf);
 }
-
 body {
     width: 21cm;
     /*background: rgb(204,204,204);*/
@@ -16,6 +15,10 @@ body {
     padding-bottom: 16px;
     -webkit-print-color-adjust: exact;
     height: 14.8cm;
+}
+
+.message-txt{
+    font-family: Papyrus, fantasy, cursive;
 }
 
 .pagebreak { page-break-before: always; }
@@ -53,16 +56,6 @@ page[size="A5"][layout="portrait"] {
     height: 14.8cm;
 }
 @media print {
-    /*@font-face {
-        font-family: message;
-        src: url(/assets/fonts/Quicksand-LightItalic.otf);
-    }*/
-
-    @font-face {
-        font-family: message2;
-        src: url(/assets/fonts/Quicksand-Italic.otf);
-    }
-
     body, page {
         /*background: rgb(204,204,204);*/
         width: 21cm;
@@ -71,6 +64,9 @@ page[size="A5"][layout="portrait"] {
         padding-bottom: 16px;
         -webkit-print-color-adjust: exact;
         height: 14.8cm;
+    }
+    .message-txt{
+        font-family:message2,Papyrus,fantasy;
     }
 
     .pagebreak { page-break-before: always; }
