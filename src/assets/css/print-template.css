@@ -3,6 +3,11 @@
     src: url(/assets/fonts/Quicksand-LightItalic.otf);
 }
 
+@font-face {
+    font-family: message2;
+    src: url(/assets/fonts/Quicksand-Italic.otf);
+}
+
 body {
     width: 21cm;
     /*background: rgb(204,204,204);*/
@@ -51,6 +56,11 @@ page[size="A5"][layout="portrait"] {
     @font-face {
         font-family: message;
         src: url(/assets/fonts/Quicksand-LightItalic.otf);
+    }
+
+    @font-face {
+        font-family: message2;
+        src: url(/assets/fonts/Quicksand-Italic.otf);
     }
 
     body, page {
