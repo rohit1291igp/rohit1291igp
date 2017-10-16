@@ -7,7 +7,7 @@
         <input  type="submit" class="btn btn-primary pull-right" style="" value="Search" />
         <div class="glyphicon glyphicon-remove abs searchCross" aria-hidden="true" *ngIf="searchModel.searchkey" (click)="clearSearch($event)" ></div>
 </div>
-<input name="searchkey" type="text" class="input-right form-control pull-right" placeholder="Order Number" [(ngModel)]="searchModel.searchkey" #searchkey="ngModel" style="width:60%;" required>
+<input name="searchkey" type="text" class="input-right form-control pull-right" placeholder="Order Number..." [(ngModel)]="searchModel.searchkey" #searchkey="ngModel" style="width:60%;" required>
 <div *ngIf="f.submitted && !searchkey.valid" class="help-block"></div>
 </form>
 </div>

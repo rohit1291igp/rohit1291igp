@@ -9,7 +9,7 @@ import { UtilityService } from '../../services/utility.service';
 
 @Component({
   selector: 'app-dashboard',
-  templateUrl: window.screen.width > 900 ? './dashboard.component.desktop.html' : './dashboard.component.mobile.html',
+  templateUrl: window.screen.width > 1000 ? './dashboard.component.desktop.html' : './dashboard.component.mobile.html',
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
