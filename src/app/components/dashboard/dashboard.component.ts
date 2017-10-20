@@ -14,7 +14,7 @@ import { UtilityService } from '../../services/utility.service';
 })
 export class DashboardComponent implements OnInit {
   @ViewChild(OrdersActionTrayComponent) child: OrdersActionTrayComponent;
-  isMobile=window.screen.width < 1000
+  isMobile=window.screen.width < 1000;
   prodOrderstatus : any;
   searchModel : any = {};
   dashBoardDataType;
