@@ -9,11 +9,12 @@ import { UtilityService } from '../../services/utility.service';
 
 @Component({
   selector: 'app-dashboard',
-  templateUrl: window.screen.width > 1000 ? './dashboard.component.desktop.html' : './dashboard.component.mobile.html',
+  templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
   @ViewChild(OrdersActionTrayComponent) child: OrdersActionTrayComponent;
+  isMobile=window.screen.width < 1000
   prodOrderstatus : any;
   searchModel : any = {};
   dashBoardDataType;
@@ -21,6 +22,11 @@ export class DashboardComponent implements OnInit {
   public mainHeaderComponent: MainHeaderComponent;
   public dashboardData: any;
   public masterData: Object;
+  public displayStatusToggle:any={
+        "new" : true,
+        "confirmed" : false,
+        "Ofd":false
+  };
   public isRowAlert: Object;
 
   public myDatePickerOptions: IMyOptions = {
@@ -147,6 +153,14 @@ export class DashboardComponent implements OnInit {
 
   clearSearch(e){
       this.searchModel.searchkey = "";
+  }
+
+  toggleTableColumn(e, _prop, value){
+      var _this=this;
+      for(var prop in _this.displayStatusToggle){
+        _this.displayStatusToggle[prop]=false;
+      }
+      _this.displayStatusToggle[_prop]=value;
   }
 
 }

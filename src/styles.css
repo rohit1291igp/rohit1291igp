@@ -483,10 +483,10 @@ body .dashboard-content, body .orders-button{
     }
 
     .searchbox{
-        margin-top: 1.5em;
+        /*margin-top: 1.5em;*/
         position: static ! important;
         /* left: 0; */
-        width: 43em ! important;
+        /*width: 43em ! important;*/
         /* right: 0 ! important; */
         /* top: 11.5em ! important; */
     }
@@ -555,6 +555,22 @@ body .dashboard-content, body .orders-button{
 @media (max-width: 1025px) {
     .db-btn-status{
         font-size: 1vw;
+    }
+}
+
+
+@media (max-width: 767px) {
+    .page.col-sm-3 {
+        width: 25%;
+        float: left;
+    }
+    .page.col-sm-6 {
+        width: 50%;
+        float: left;
+    }
+    .page.col-sm-9 {
+        width: 75%;
+        float: left;
     }
 }
 /* responsive css - end */
@@ -648,4 +664,34 @@ body .dashboard-content, body .orders-button{
 
 .removeScroll{
     overflow:hidden;
+}
+
+.slideropen{
+    -moz-transition-duration: 0.3s;
+    -webkit-transition-duration: 0.3s;
+    -o-transition-duration: 0.3s;
+    transition-duration: 0.3s;
+    -moz-transition-timing-function: ease-in;
+    -webkit-transition-timing-function: ease-in;
+    -o-transition-timing-function: ease-in;
+    transition-timing-function: ease-in;
+    max-height: 1000px;
+    overflow: hidden;
+}
+
+.sliderclosed {
+    overflow: hidden;
+    max-height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    -moz-transition-duration: 0.3s;
+    -webkit-transition-duration: 0.3s;
+    -o-transition-duration: 0.3s;
+    transition-duration: 0.3s;
+    -moz-transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
+    -webkit-transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
+    -o-transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
+    transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
 }

@@ -38,6 +38,11 @@ export class DashboardService {
     getMasterData() {
         var _this = this;
         return {
+            displayStatusToggle: {
+                "new" : false,
+                "confirmed" : false,
+                "Ofd":false
+            },
             displayStatus: ["New Orders", "Confirmed Orders", "Out for delivery", "Today's Deliveries"],
             status: [ _this.statuslist['n'], _this.statuslist['c'], _this.statuslist['o'], _this.statuslist['d']],
             deliveryTimes: ["today", "tomorrow", "future", "bydate", "all", "unknown"]
