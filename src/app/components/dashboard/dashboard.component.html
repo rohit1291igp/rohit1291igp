@@ -1,6 +1,15 @@
 <div class="headerVendor navbar-brand" *ngIf="vendorName">- {{vendorName}}</div>
 <app-header-tabs (onTabChanged)="loadDashboardCount($event)" [dashboardCounts]="dashboardData.counts"></app-header-tabs>
-
+<div class="col-md-3 searchbox" style="" *ngIf="!isMobile">
+    <form name="form" (ngSubmit)="f.form.valid && search($event)" #f="ngForm" novalidate>
+    <div class="relative">
+        <input  type="submit" class="btn btn-primary pull-right" style="" value="Search" />
+        <div class="glyphicon glyphicon-remove abs searchCross" aria-hidden="true" *ngIf="searchModel.searchkey" (click)="clearSearch($event)" ></div>
+</div>
+<input name="searchkey" type="text" class="input-right form-control pull-right" placeholder="Order Number" [(ngModel)]="searchModel.searchkey" #searchkey="ngModel" style="width:60%;" required>
+<div *ngIf="f.submitted && !searchkey.valid" class="help-block"></div>
+</form>
+</div>
 
 
 <section class="dbMobile" *ngIf="isMobile">
@@ -87,7 +96,7 @@
                     <a href="#" (click)="openPanel($event, masterData.status[2])"> View all out for delivery orders</a>
                 </div>
 
-                <div class="col-md-12 no-padding no-ofd-label-cont" *ngIf="!dashboardData.ofd.length">
+                <div class="col-md-12" *ngIf="!dashboardData.ofd.length" style="padding:1em;">
                     <div class="no-ofd-label">Currently there are no orders out for delivery</div>
                 </div>
             </div>
