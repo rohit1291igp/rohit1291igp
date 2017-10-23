@@ -53,7 +53,7 @@
                         <div class="topLabel text-bold">{{dashboardData.topLabels[i]['labelName']}} <span *ngIf="!dashBoardCount.ordersCount" >- 0</span></div>
                         <div class="col-md-2" *ngIf="dashBoardCount.ordersCount" [ngClass]="{'a' : dashBoardCount.deliveryTimes !='bydate', 'b' : dashBoardCount.deliveryTimes =='bydate', 'custom-btn-parent': dashBoardCount.ordersCount, 'center-align': !dashBoardCount.ordersCount, 'inactive' : dashBoardCount.inactive}">
                             <app-orders-button [displayData]="dashBoardCount" [orderStatus]="dashBoardCount.status" [OrderDay]="dashBoardCount.day" [deliveryTime]="dashBoardCount.deliveryTimes" *ngIf="dashBoardCount.ordersCount" (onViewOrders)="viewOrders($event)">
-                                <app-button-view [viewData]="dashBoardCount.ordersCount"></app-button-view>
+                                <app-button-view [viewData]="dashBoardCount.ordersCount" [displayData]="dashBoardCount"></app-button-view>
                             </app-orders-button>
                             <app-no-orders [viewData]="dashBoardCount.ordersCount" [orderStatus]="'new'"></app-no-orders>
                         </div>

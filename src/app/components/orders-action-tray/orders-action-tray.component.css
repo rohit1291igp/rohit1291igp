@@ -83,6 +83,9 @@
 }
 
 .product-holder {
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
     width: 95%;
     margin: 0 10px 10px;
     padding-bottom: 10px;
