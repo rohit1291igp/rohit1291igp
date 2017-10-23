@@ -6,6 +6,7 @@ import { OrdersActionTrayComponent } from '../orders-action-tray/orders-action-t
 import { BackendService } from '../../services/backend.service';
 import { MainHeaderComponent } from '../main-header/main-header.component';
 import { UtilityService } from '../../services/utility.service';
+import {environment} from "../../../environments/environment";
 
 @Component({
   selector: 'app-dashboard',
@@ -14,7 +15,7 @@ import { UtilityService } from '../../services/utility.service';
 })
 export class DashboardComponent implements OnInit {
   @ViewChild(OrdersActionTrayComponent) child: OrdersActionTrayComponent;
-  isMobile=window.screen.width < 1000;
+  isMobile=environment.isMobile;
   prodOrderstatus : any;
   searchModel : any = {};
   dashBoardDataType;

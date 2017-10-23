@@ -182,6 +182,7 @@ export class DashboardService {
                         };
 
                         pushObj.displayStr = pushObj.ordersCount > 1 ? "View Orders" : "View Order";
+                        //pushObj.displayIconMobile = "view";
                         if(pushObj.isAlert === "true"){
                             pushObj.displayStr = "Pending Confirmation";
                         }else if(pushObj.sla === "true" && pushObj.isAlert !== "true"){

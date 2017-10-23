@@ -33,6 +33,7 @@ import {environment} from "../../../environments/environment";
     ]
 })
 export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
+  isMobile=environment.isMobile;
   public trayOpen: Boolean = false;
   prodListArgs;
   @Output() onStatusUpdate: EventEmitter<any> = new EventEmitter();

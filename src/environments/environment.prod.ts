@@ -6,5 +6,6 @@ export const environment = {
   //origin2: '/',
   apiInitial : 'IGPService/web/services/rest',
   productsURL : "https://d1xs5fw35mbn8b.cloudfront.net/p/",
-  productsCompURL : "http://admin.indiangiftsportal.com/handelscomponents/"
+  productsCompURL : "http://admin.indiangiftsportal.com/handelscomponents/",
+  isMobile:window.screen.width < 1000
 };
