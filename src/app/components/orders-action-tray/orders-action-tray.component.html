@@ -50,7 +50,7 @@
     <div class="modal fade in" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: block; overflow:scroll; background: rgba(0, 0, 0, 0.77);"  (click)="closePopup($event)">
 
 
-        <div class="modal-dialog modal-lg" [ngClass]="{'popupSize1' : statusReasonModel.status === 'Rejected'}">
+        <div class="modal-dialog modal-lg" [ngClass]="{'popupSize1' : (statusReasonModel.status === 'Rejected' && !isMobile)}">
             <div class="modal-content" (click)="closePopup($event, 'ignore')">
                 <div id="cLoader2" class="cloader hide"></div>
                 <div class="modal-header" style="border-bottom:none;">
@@ -189,13 +189,13 @@
 <div class="apierror" *ngIf="apierror">{{apierror}}</div>
   <div class="container-fluid orders-view">
     <div class="row sidePanelHeader">
-      <div class="colInline col-sm-1 col-md-1">
-        <a href="#" (click)="toggleTray($event, null, null, activeDashBoardDataType)" [attr.data-trayOpen]="trayOpen">
-          <i class="glyphicon glyphicon-remove close-tray"></i>
-        </a>
-      </div>
+        <div class="colInline col-sm-1 col-md-1" *ngIf="!isMobile">
+            <a href="#" (click)="toggleTray($event, null, null, activeDashBoardDataType)" [attr.data-trayOpen]="trayOpen">
+              <i class="glyphicon glyphicon-remove close-tray"></i>
+            </a>
+        </div>
 
-        <div class="colInline col-sm-11 col-md-11 no-padding">
+        <div class="colInline col-sm-11 col-md-11 " [ngClass]="{'no-padding':!isMobile}">
             <p class="text-bold ">
                 <span *ngIf="!orderByStatus">Order Information<span *ngIf="sidePanelData && sidePanelData[0]">({{sidePanelData[0].orderId}})</span></span>
                 <span *ngIf="orderByStatus">
@@ -205,19 +205,15 @@
                      <span class="" *ngIf="orderByStatus == 'OutForDelivery' || orderByStatus=='OutForDeliveryView' ">Orders out for delivery</span>
                      <span class="" *ngIf="orderByStatus == 'Shipped'">Orders delivered today</span>
                 </span>
-                <!--<span *ngIf="orderUpdateByTime">
-                    <span class="uppercase" *ngIf="orderUpdateByTime == 'past'"> - Delivery for today</span>
-                    <span class="uppercase" *ngIf="orderUpdateByTime == 'today'"> - Delivery for today</span>
-                    <span class="uppercase" *ngIf="orderUpdateByTime == 'tomorrow'"> - Delivery for tomorrow</span>
-                    <span class="uppercase" *ngIf="orderUpdateByTime == 'future'"> - Delivery for future</span>
-                    <span class="uppercase" *ngIf="orderUpdateByTime == 'bydate'"> - Delivery by date </span>
-                </span>-->
-
-                <!--- Delivery for today  {{orderId}}-->
             </p>
             <p class="text-grey no-margin">Total - <span *ngIf="!sidePanelData">0</span><span *ngIf="sidePanelData">{{sidePanelData.length}}</span> Orders</p>
-
         </div>
+
+      <div class="colInline col-sm-1 col-md-1 pull-right" *ngIf="isMobile">
+          <a href="#" (click)="toggleTray($event, null, null, activeDashBoardDataType)" [attr.data-trayOpen]="trayOpen">
+             <i class="glyphicon glyphicon-remove close-tray"></i>
+          </a>
+      </div>
 
     </div>
     <div class="row sidePanelContent">
@@ -227,7 +223,6 @@
                         <div class="row delivery-details">
                             <div class="col-md-8 order-details no-padding">
                                 <p>
-
                                     <span class="order-id">Order ID: <app-loader></app-loader></span>
                                     <span class="delivery-time">Same Day Delivery <app-loader></app-loader></span>
                                 </p>
@@ -235,38 +230,38 @@
                                 <div class="address">Address - <app-loader></app-loader></div>
                                 <div class="contact">CONTACT NUMBER - <app-loader></app-loader></div>
                             </div>
-                            <div class="col-md-4 order-actions">
+                            <div class="col-md-4 order-actions" *ngIf="!isMobile">
                                 <div class="row">
                                     <div class="btn btn-primary actions-button uppercase text-bold text-black bg-white disableBtn">
-                                    Reject
+                                         Reject
+                                    </div>
+                                    <div class="btn btn-primary actions-button uppercase text-bold text-white bg-green disableBtn">
+                                        Confirm
+                                    </div>
                                 </div>
-                                <div class="btn btn-primary actions-button uppercase text-bold text-white bg-green disableBtn">
-                                Confirm
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="btn btn-primary actions-button text-bold disableBtn" [ngClass]="{'bg-igp text-white': isAlert, 'bg-grey text-black': !isAlert}">
-                            Print Order
-                        </div>
-                        <div class="btn btn-primary actions-button text-bold disableBtn" [ngClass]="{'bg-igp text-white': isAlert, 'bg-grey text-black': !isAlert}">
-                        Print Message
-                    </div>
-                </div>
+                                <div class="row">
+                                    <div class="btn btn-primary actions-button text-bold disableBtn" [ngClass]="{'bg-igp text-white': isAlert, 'bg-grey text-black': !isAlert}">
+                                        Print Order
+                                    </div>
+                                    <div class="btn btn-primary actions-button text-bold disableBtn" [ngClass]="{'bg-igp text-white': isAlert, 'bg-grey text-black': !isAlert}">
+                                        Print Message
+                                    </div>
+                                </div>
 
-                   <!-- <div class="row">
-                        <div class="btn btn-primary actions-button text-bold">
-                            Order Instruction
+                               <!-- <div class="row">
+                                    <div class="btn btn-primary actions-button text-bold">
+                                        Order Instruction
+                                    </div>
+                                </div>-->
+                              <!--<div class="row">
+                                  <div class="btn btn-primary actions-button text-bold text-white bg-black disableBtn">
+                                      Price Change Request
+                                  </div>
+                                  &lt;!&ndash;<div class="btn btn-primary actions-button text-bold text-white bg-black">
+                                        Other
+                                  </div>&ndash;&gt;
+                              </div>-->
                         </div>
-                    </div>-->
-                  <!--<div class="row">
-                      <div class="btn btn-primary actions-button text-bold text-white bg-black disableBtn">
-                          Price Change Request
-                      </div>
-                      &lt;!&ndash;<div class="btn btn-primary actions-button text-bold text-white bg-black">
-                            Other
-                      </div>&ndash;&gt;
-                  </div>-->
-            </div>
             </div>
             <div class="row">
                 <p>Product Name: <span class="uppercase text-igp"><app-loader></app-loader></span></p>
@@ -335,7 +330,7 @@
 
 
 
-                <div class="col-md-12 product-holder noBtBorder">
+                <div class="col-md-12 product-holder noBtBorder no-padding no-margin">
                     <div class="row">
                         <div class="col-md-12 no-padding comp1">
                             <span>
@@ -410,7 +405,40 @@
                 </div>
 
 
+                <div class="col-md-4"*ngIf="isMobile">
+                    <div class="row">
+                        <div class="btn btn-primary actions-button uppercase text-bold text-black bg-white disableBtn" style="width:100%; box-shadow: 0 1px 3px #888888;">
+                            Reject
+                        </div>
+                        <div class="btn btn-primary actions-button uppercase text-bold text-white bg-green disableBtn" style="width:100%;">
+                            Confirm
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div style="width:49.5%;" class="btn btn-primary actions-button text-bold disableBtn"
+                            [ngClass]="{'bg-igp text-white': isAlert, 'bg-grey text-black': !isAlert}">
+                            Print Order
+                        </div>
+                        <div style="width:49.5%;" class="btn btn-primary actions-button text-bold disableBtn"
+                        [ngClass]="{'bg-igp text-white': isAlert, 'bg-grey text-black': !isAlert}">
+                        Print Message
+                        </div>
+                    </div>
 
+                <!-- <div class="row">
+                     <div class="btn btn-primary actions-button text-bold">
+                         Order Instruction
+                     </div>
+                 </div>-->
+                <!--<div class="row">
+                    <div class="btn btn-primary actions-button text-bold text-white bg-black disableBtn">
+                        Price Change Request
+                    </div>
+                    &lt;!&ndash;<div class="btn btn-primary actions-button text-bold text-white bg-black">
+                                                            Other
+                                                      </div>&ndash;&gt;
+                   </div>-->
+              </div>
 
             </div>
             </div>
@@ -430,7 +458,7 @@
                 <!-- Print Template end -->
                 <div class="container-fluid orders-tray">
                   <div class="row delivery-details">
-                    <div class="col-md-8 order-details no-padding">
+                    <div class="col-md-8 order-details no-padding" [ngClass]="{'borderRight': !isMobile}">
                       <p>
                         <span class="order-id">
                             Order ID: {{order.orderId}}
@@ -451,7 +479,7 @@
                       <div class="address">{{order.addressType}} Address - {{order.deliveryStreetAddress}}, <span *ngIf="order.deliveryStreetAddress2">{{order.deliveryStreetAddress2}},</span>{{order.deliveryCity}}-{{order.deliveryPostcode}}, {{order.deliveryState}}</div>
                       <div class="contact">CONTACT NUMBER - {{order.deliveryMobile}}</div>
                     </div>
-                    <div class="col-md-4 order-actions">
+                    <div class="col-md-4 order-actions" *ngIf="!isMobile">
                       <div class="row">
                         <div class="btn  actions-button uppercase text-bold bg-white text-red" [ngClass]="{'disableBtn' : order.orderProducts[0].ordersProductStatus !=='Processed', 'hide' : order.orderProducts[0].ordersProductStatus !=='Processed'}" (click)="updateOrderStatus($event, 'Rejected', order.orderId, order.orderProducts, order.orderProducts[0].orderProductExtraInfo.deliveryDate, order.orderProducts[0].orderProductExtraInfo.deliveryTime)">
                           Reject
@@ -468,25 +496,14 @@
                         </button>
                       </div>
 
-                      <!--<div class="row">
-                        <div class="btn btn-primary actions-button text-bold text-white bg-black disableBtn " [ngClass]="{'disableBtn1' : !(order.orderProducts[0].ordersProductStatus =='Processed' || order.orderProducts[0].ordersProductStatus =='Confirmed'), 'hide' : !(order.orderProducts[0].ordersProductStatus =='Confirmed' || order.orderProducts[0].ordersProductStatus =='Processed') }" (click)="updateOrderStatus($event, 'PutOnHold', order.orderId)">
-                          Price Change Request
-                        </div>
-                        &lt;!&ndash;<div class="btn btn-primary actions-button text-bold text-white bg-black">
-                          Other
-                        </div>&ndash;&gt;
-                      </div>-->
-
                     <div class="row">
                         <div class="btn btn-primary actions-button text-bold" [ngClass]="{'bg-igp text-white': isAlert, 'bg-grey text-black': !isAlert}" (click)="print($event, 'order', order.orderId, order.orderProducts[0].orderProductExtraInfo.deliveryDate, order.orderProducts[0].orderProductExtraInfo.deliveryTime)">
-                        Print Order
+                            Print Order
+                        </div>
+                        <div class="btn btn-primary actions-button text-bold" [ngClass]="{'bg-igp text-white': isAlert, 'bg-grey text-black': !isAlert, 'disableBtn' : !order.commments}" (click)="print($event, 'order_message', order.orderId, order.orderProducts[0].orderProductExtraInfo.deliveryDate, order.orderProducts[0].orderProductExtraInfo.deliveryTime)">
+                            Print Message
+                        </div>
                     </div>
-                    <div class="btn btn-primary actions-button text-bold" [ngClass]="{'bg-igp text-white': isAlert, 'bg-grey text-black': !isAlert, 'disableBtn' : !order.commments}" (click)="print($event, 'order_message', order.orderId, order.orderProducts[0].orderProductExtraInfo.deliveryDate, order.orderProducts[0].orderProductExtraInfo.deliveryTime)">
-                    Print Message
-                    </div>
-                    </div>
-
-
 
                     <div class="row instruction-cont relative no-padding">
                         <div class="col-md-12 no-padding">
@@ -494,7 +511,6 @@
                                 <div class="btn btn-primary actions-button text-bold">
                                     Order Instruction
                                 </div>
-
                                 <div class="order-instruction-detail">
                                     <div class="arrow-up abs"></div>
                                     <div>{{order.orderInstruction}}</div>
@@ -506,14 +522,9 @@
                                 </div>
                             </div>
                         </div>
-
                     </div>
+                  </div>
 
-                    <!--<div class="row">-->
-                        <!--<button type="button" class="btn btn-lg btn-danger" data-toggle="popover" title="Popover title" data-content="And here's some amazing content. It's very engaging. Right?">Click to toggle popover</button>-->
-                    <!--</div>-->
-
-                    </div>
                   </div>
                   <div class="row" *ngFor="let orderProduct of order.orderProducts; let z='index'">
                     <p class="">
@@ -524,8 +535,7 @@
                         <!--</a>-->
                         <span class="" style="" *ngIf="orderProduct.personalized"> | <a target="_new" href="http://admin.indiangiftsportal.com/myshop/persInfo.php?pid={{orderProduct.productId}}&oid={{order.orderId}}">Download Photo</a></span>
                     </p>
-                    <!--<p>Product Components -</p>-->
-                    <div class="col-md-12 product-holder" [ngClass]="{'noBtBorder' : (z+1 === order.orderProducts.length)}">
+                    <div class="col-md-12 product-holder" [ngClass]="{'no-margin' : isMobile, 'noBtBorder' : (z+1 === order.orderProducts.length)}">
                       <div class="row">
                           <div class="col-md-12 no-padding comp1">
                         <!--<div class="col-md-3 no-padding comp1">-->
@@ -539,12 +549,9 @@
                                    <div class="table-cell-display v-align-middle">=</div>
                                 </div>
                            </span>
-                        <!--</div>-->
-                        <!--<div class="col-md-8 no-padding comp2">-->
                           <span *ngFor="let prodComponent of orderProduct.componentList; let i='index'">
                               <div class="product-component relative">
                                   <div class="component-eggless abs" *ngIf="prodComponent.eggless">Eggless</div>
-                                <!--<div class="component-head center-align uppercase">{{prodComponent.componentCode | slice:0:9}}<span *ngIf="prodComponent.componentName.length > 9">...</span></div>-->
                                 <img class="component-image clk" src="{{productsCompURL}}th/{{prodComponent.componentImage}}?th={{prodComponent.timestamp}}" alt="Component_img" (click)="imagePreview($event, productsCompURL+'full/'+(prodComponent.componentImage)+'?th='+prodComponent.timestamp)">
                                 <div class="component-quantity center-align">x {{prodComponent.quantity | number | replace}}</div>
                                 <div class="component-name center-align">{{prodComponent.componentName}} </div>
@@ -555,13 +562,12 @@
                                 <div class="table-cell-display v-align-middle">+</div>
                               </div>
                           </span>
-                        <!--</div>-->
                             </div>
                       </div>
                     </div>
                   </div>
                     <div class="row">
-                        <div class="col-md-4 pull-left text-bold">
+                        <div class="col-md-4 pull-left text-bold" [ngClass]="{'no-padding m-b-1' : isMobile}">
                             <div>Net Product Price  <span style="margin-left:0.1em;">
                                 <span class="theme-red rightAlignrdNumber" *ngIf="order.vendorOrderTotal" [style.width]="(order.vendorOrderTotal).toString().length < 4 ? '3.5em': (order.vendorOrderTotal).toString().length+'em' ">Rs. <span class="pull-right">{{order.orderNetProductPrice | number : '2.0-0' | replace}}</span></span></span>
                             </div>
@@ -573,6 +579,56 @@
                         <div class="col-md-4 text-bold">
                         </div>
                     </div>
+
+
+<div class="col-md-4 order-actions no-padding" *ngIf="isMobile">
+<div class="row">
+    <div class="btn  actions-button uppercase text-bold bg-white text-red" style="width:100%; box-shadow: 0 1px 3px #888888;" [ngClass]="{'disableBtn' : order.orderProducts[0].ordersProductStatus !=='Processed', 'hide' : order.orderProducts[0].ordersProductStatus !=='Processed'}" (click)="updateOrderStatus($event, 'Rejected', order.orderId, order.orderProducts, order.orderProducts[0].orderProductExtraInfo.deliveryDate, order.orderProducts[0].orderProductExtraInfo.deliveryTime)">
+    Reject
+</div>
+<button style="width:100%;" class="btn btn-primary actions-button uppercase text-bold text-white bg-green"
+[ngClass]="{'disableBtn' : (order.orderProducts[0].ordersProductStatus =='Shipped' && order.orderProducts[0].deliveryStatus === 1) ||
+(order.orderProducts[0].ordersProductStatus =='Dispatched' && order.orderProducts[0].deliveryStatus === 1) ||
+(order.orderProducts[0].ordersProductStatus =='Confirmed' && order.deliverWhen !== 'today' && order.deliverWhen !== 'past')}"
+(click)="updateOrderStatus($event, getNxtOrderStatus(order.orderProducts[0].ordersProductStatus), order.orderId, order.orderProducts, order.orderProducts[0].orderProductExtraInfo.deliveryDate, order.orderProducts[0].orderProductExtraInfo.deliveryTime)">
+<span *ngIf="order.orderProducts[0].ordersProductStatus =='Processed'">Confirm</span>
+<span *ngIf="order.orderProducts[0].ordersProductStatus =='Confirmed'">Out For Delivery</span>
+<span *ngIf="(order.orderProducts[0].ordersProductStatus =='Shipped' && order.orderProducts[0].deliveryStatus === 0) || order.orderProducts[0].ordersProductStatus =='OutForDelivery' || order.orderProducts[0].ordersProductStatus == 'Partially Dispatched'">Mark as Delivered</span>
+<span *ngIf="(order.orderProducts[0].ordersProductStatus =='Shipped' && order.orderProducts[0].deliveryStatus === 1)  || (order.orderProducts[0].ordersProductStatus =='Dispatched' && order.orderProducts[0].deliveryStatus === 1)">Mark as Delivered</span>
+</button>
+</div>
+
+<div class="row">
+    <div class="btn btn-primary actions-button text-bold" style="width:49.5%;" [ngClass]="{'bg-igp text-white': isAlert, 'bg-grey text-black': !isAlert}" (click)="print($event, 'order', order.orderId, order.orderProducts[0].orderProductExtraInfo.deliveryDate, order.orderProducts[0].orderProductExtraInfo.deliveryTime)">
+        Print Order
+    </div>
+    <div class="btn btn-primary actions-button text-bold" style="width:49.5%;" [ngClass]="{'bg-igp text-white': isAlert, 'bg-grey text-black': !isAlert, 'disableBtn' : !order.commments}" (click)="print($event, 'order_message', order.orderId, order.orderProducts[0].orderProductExtraInfo.deliveryDate, order.orderProducts[0].orderProductExtraInfo.deliveryTime)">
+        Print Message
+    </div>
+</div>
+
+<div class="row instruction-cont relative no-padding">
+    <div class="col-md-12 no-padding">
+        <div class="col-md-6 no-padding" style="width:49.5%;" *ngIf="order.orderInstruction">
+            <div class="btn btn-primary actions-button text-bold">
+                Order Instruction
+            </div>
+            <div class="order-instruction-detail">
+                <div class="arrow-up abs"></div>
+                <div>{{order.orderInstruction}}</div>
+            </div>
+        </div>
+        <div class="col-md-6 no-padding">
+            <div class="btn btn-primary actions-button text-bold" style="width:49.5%;" (click)="vendorIssueOpen($svent, order.orderId, order.orderProducts)">
+                Need Help?
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+
+
                 </div>
              </div>
         </div>

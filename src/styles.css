@@ -3,6 +3,10 @@
 @import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 
 /* Utility css start */
+.borderRight{
+    border-right: 2px solid #E0E0E0;
+}
+
 .no-padding {
     padding : 0 ! important;
 }
@@ -510,6 +514,16 @@ body .dashboard-content, body .orders-button{
 
     .orders-action{
         width:100% ! important;
+        overflow-x:hidden ! important;
+        border-left: none ! important;
+    }
+
+    .order-row {
+        padding: 1em 1.5em ! important;
+        margin: 15px 0 ! important;
+        background-color: white;
+        box-shadow: 0 1px 3px #888888;
+        width: 100% ! important;
     }
 
     .hide-tray{
