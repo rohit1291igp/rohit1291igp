@@ -1,3 +1,5 @@
+<app-widgets (onConfirmClicked)="confirmYesNo($event)" [wOptions]="{type : 'confirm', data:confirmData}" *ngIf="confirmFlag" [@enterAnimation]></app-widgets>
+
 <div class="image-preview" *ngIf="imagePreviewFlag">
     <div class="modal fade in" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: block; overflow:scroll; background: rgba(0, 0, 0, 0.77); z-index:9999999;" (click)="imagePreview($event)">
         <div class="modal-dialog modal-lg">
@@ -446,11 +448,11 @@
         </div>
         <div *ngIf="sidePanelData">
             <div  id="order-{{order.orderId}}" class="col-md-12 order-row" *ngFor="let order of sidePanelData" style="margin-bottom: 0;" [@anim]="order.state">
-
                 <div class=" triangle-topright" [ngClass]="{'redBorder' : order.orderProducts[0].alertFlag, 'greenBorder' : order.orderProducts[0].slaFlag}">
                     <div class="slaAlert-flag abs" *ngIf="order.orderProducts[0].alertFlag">High Alert</div>
                     <div class="slaAlert-flag abs" *ngIf="order.orderProducts[0].slaFlag">Action Required</div>
                 </div>
+
 
                 <!-- Print Template start -->
                     <app-print-template [order]="order" [printType]="'order'"></app-print-template>

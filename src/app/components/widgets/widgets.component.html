@@ -1,0 +1,29 @@
+<div class="scrollTop" *ngIf="wOptions.type === 'scrollTop'">
+    <span class="glyphicon glyphicon-chevron-up" aria-hidden="true" (click)="scrollTop($event)"></span>
+</div>
+
+
+<div class="confirmMainCont" *ngIf="wOptions.type === 'confirm'">
+        <div class="modal fade in" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: block; overflow:scroll; background: rgba(0, 0, 0, 0.77); z-index:9999999;">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content" style="top: 40vh; border-radius: 0;">
+                    <div class="modal-body center-align no-padding" style="font-size: 1.5em;font-weight: 600;">
+                        <div class="confirmTop" style="padding: 1em;">
+                            <p>{{wOptions.data.confirm.message}}</p>
+                        </div>
+                        <div class="confirmBottom" style="background:#eaeaea">
+                            <div (click)="confirmYesNo($event, 'yes')" class="btn bg-igp text-white" style="float:left; border-radius: 0; width: 50%; height:45px; padding-top: 11px;">{{wOptions.data.confirm.yesBtn}}</div>
+                            <div (click)="confirmYesNo($event, 'no')" class="btn" style="border-radius: 0; width: 50%;height:45px; padding-top: 11px;">{{wOptions.data.confirm.noBtn}}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>
+
+
+<!--
+Examples:-
+<app-widgets [wOptions]="{type : 'scrollTop', scrollContainer:'#mainOrderSection'}"></app-widgets>
+<app-widgets [wOptions]="{type : 'confirm', data: {"confirm" : {"message" : "", "yesBtn": "", "noBtn": ""}}}"></app-widgets>
+-->

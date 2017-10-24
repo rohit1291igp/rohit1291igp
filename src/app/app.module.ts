@@ -42,6 +42,7 @@ import { Time12Pipe } from './customPipes/time12.pipe';
 import { ReplacePipe } from './customPipes/replace.pipe';
 import { ReportsComponent } from './components/reports/reports.component';
 import { ObjectKeyValuePipe } from './customPipes/object-key-value.pipe';
+import { WidgetsComponent } from './components/widgets/widgets.component';
 
 //env config
 /*import {envConfig} from "./others/env.config";
@@ -67,7 +68,8 @@ export function ConfigLoader(envConfig: envConfig) {
     Time12Pipe,
     ReplacePipe,
     ReportsComponent,
-    ObjectKeyValuePipe
+    ObjectKeyValuePipe,
+    WidgetsComponent
   ],
   imports: [
     BrowserModule,

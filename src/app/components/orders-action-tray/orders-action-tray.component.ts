@@ -29,11 +29,32 @@ import {environment} from "../../../environments/environment";
                     animate(".9s ease", style({ height: '*', opacity: 1, transform: 'translateX(5%)', 'box-shadow': '0 1px 4px 0 rgba(0, 0, 0, 0.3)'  }))
                 ])
             ])
-        ])
+        ]),
+      trigger(
+          'enterAnimation', [
+              transition(':enter', [
+                  style({transform: 'translateX(100%)', opacity: 0}),
+                  animate('500ms', style({transform: 'translateX(0)', opacity: 1}))
+              ]),
+              transition(':leave', [
+                  style({transform: 'translateX(0)', opacity: 1}),
+                  animate('500ms', style({transform: 'translateX(100%)', opacity: 0}))
+              ])
+          ]
+      )
     ]
 })
 export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
   isMobile=environment.isMobile;
+  confirmFlag=false;
+  confirmModel:any={};
+  confirmData={
+      "confirm": {
+          "message": "Are you sure you want to reject this order?",
+          "yesBtn": "Reject",
+          "noBtn": "Cancel"
+      }
+  };
   public trayOpen: Boolean = false;
   prodListArgs;
   @Output() onStatusUpdate: EventEmitter<any> = new EventEmitter();
@@ -124,6 +145,7 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
             if(this.trayOpen){
                this.onStatusUpdate.emit("closed");
                this.trayOpen = false;
+                //this.confirmFlag=false;
                this.sidePanelData=null;
                 document.querySelector('body').classList.remove('removeScroll');
                //this.clearPopupData();
@@ -144,6 +166,8 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
                 this.statusMessageFlag=false;
             }else if(this.vendorIssueFlag){
                 this.vendorIssueFlag=false;
+            }else if(this.confirmFlag){
+                this.confirmFlag=false;
             }else{
                 this.onStatusUpdate.emit("closed");
                 this.trayOpen = false;
@@ -518,7 +542,7 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
               return;
           }
           response = JSON.parse(response);
-          console.log('sidePanel Response --->', response.result);
+          //console.log('sidePanel Response --->', response.result);
           if(cb){
               return cb(null, response.result ? Array.isArray(response.result) ? response.result : [response.result] : []);
           }else{
@@ -622,11 +646,45 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
 
   }
 
-
-
-
   updateOrderStatus(e, status, orderId, orderProducts, deliveryDate, deliveryTime){
       e.stopPropagation();
+      /* confirm popup - start */
+        if(this.isMobile){
+            if((status === "Confirmed" /*|| status === "Rejected"*/) && (!e.confirmCurrentTarget)){
+                if(status === "Confirmed"){
+                    this.confirmData={
+                        "confirm": {
+                            "message": "Are you sure you want to confirm this order?",
+                            "yesBtn": "Confirm",
+                            "noBtn": "Cancel"
+                        }
+                    }
+                }else if(status === "Rejected"){
+                    this.confirmData={
+                        "confirm": {
+                            "message": "Are you sure you want to reject this order?",
+                            "yesBtn": "Reject",
+                            "noBtn": "Cancel"
+                        }
+                    }
+                }
+                this.confirmFlag=true;
+
+                this.confirmModel.status = status;
+                this.getMinProdId(orderId, null, e);
+                this.confirmModel.e = [];
+                this.confirmModel.e.push(e.currentTarget);
+                this.confirmModel.orderId = orderId;
+                this.confirmModel.orderProducts = orderProducts;
+                this.confirmModel.deliveryDate = deliveryDate;
+                this.confirmModel.deliveryTime = deliveryTime;
+                return
+            }else{
+                this.confirmModel={};
+            }
+        }
+      /* confirm popup - end */
+
       /* dialog popup logic - start */
       //var rejectionMessage, recipientInfo, recipientName, recipientComments, fileData, fileDateLength, fileDataOptions;
       var rejectionMessage, _rejectOption, recipientInfo, recipientName, recipientComments;
@@ -912,6 +970,28 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
       if(ignore) return;
       this.statusMessageFlag = false;
       this.vendorIssueFlag = false;
+  }
+
+  confirmYesNo(args){
+       var _e=args.e,
+           value=args.value;
+        if(value === "yes"){
+            _e.preventDefault();
+            _e.stopPropagation();
+            var _this= this;
+
+            var orderStatusEvent = _e;
+            orderStatusEvent.confirmCurrentTarget =  _this.confirmModel.e[0];
+            var orderStatus = this.confirmModel.status;
+            var orderId = this.confirmModel.orderId;
+            var orderProducts = this.confirmModel.orderProducts;
+            var orderDeliveryDate = this.confirmModel.deliveryDate;
+            var orderDeliveryTime = this.confirmModel.deliveryTime;
+            this.updateOrderStatus(orderStatusEvent, orderStatus, orderId, orderProducts, orderDeliveryDate, orderDeliveryTime);
+            this.confirmFlag=false;
+        }else{
+            this.confirmFlag=false;
+        }
   }
 
   getDummyOrderData(){
