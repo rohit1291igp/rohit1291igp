@@ -94,6 +94,7 @@ export class MainHeaderComponent implements OnInit {
       if(currentRoute === "/dashboard"){
           _this.selectedTopTab = "dashboard";
           _this.selectedReportTab="";
+          _this.reportDropdownOpen=false;
       }
 
       if(currentRoute === "/reports/getOrderReport"){
