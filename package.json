@@ -24,6 +24,7 @@
     "@types/xlsx": "0.0.32",
     "angular2-jwt": "^0.1.23",
     "core-js": "^2.4.1",
+    "ng-trim-value-accessor": "^1.0.1",
     "ng2-file-upload": "^1.2.0",
     "ng2-trim-directive": "^1.0.5",
     "rxjs": "^5.0.1",

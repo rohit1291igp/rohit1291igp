@@ -72,7 +72,7 @@
                     <div class="searchFields m-top-1 inline">
                         <div class="searchFiled pull-left" *ngFor="let searchField of reportData.searchFields;" >
 
-                            <input class="form-control" type="text" name="{{searchField.name}}" placeholder="{{searchField.placeholder}}" [(ngModel)]="searchResultModel[searchField.name]" *ngIf="searchField.type === 'text' || searchField.type === 'number'" trim="blur">
+                            <input class="form-control" type="text" name="{{searchField.name}}" placeholder="{{searchField.placeholder}}" [(ngModel)]="searchResultModel[searchField.name]" *ngIf="searchField.type === 'text' || searchField.type === 'number'" >
                             <my-date-picker id="{{searchField.name}}" name="{{searchField.name}}" placeholder="{{searchField.placeholder}}" [options]="myDatePickerOptions" [(ngModel)]="searchResultModel[searchField.name]"  *ngIf="searchField.type === 'date'"></my-date-picker>
 
                         </div>
@@ -163,7 +163,7 @@
 
                                        <div class="m-top-1">
                                            <div class="col-sm-12 col-md-12 colSearchPadding">
-                                                <input class="col-sm-12 col-md-12 " type="text" name="filterValue" [(ngModel)]="reportLabelState[tableLabel]['filterValue']" placeholder="Enter value to search" *ngIf="ifDate(tableLabel) != 'date'" trim="blur">
+                                                <input class="col-sm-12 col-md-12 " type="text" name="filterValue" [(ngModel)]="reportLabelState[tableLabel]['filterValue']" placeholder="Enter value to search" *ngIf="ifDate(tableLabel) != 'date'" >
                                                <my-date-picker class="col-sm-12 col-md-12" name="filterValue" placeholder="Select a date" [options]="myDatePickerOptions" [(ngModel)]="reportLabelState[tableLabel]['filterValue']"  *ngIf="ifDate(tableLabel) === 'date'"></my-date-picker>
 
                                            </div>

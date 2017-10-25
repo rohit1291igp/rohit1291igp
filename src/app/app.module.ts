@@ -7,6 +7,7 @@ import { BsDropdownModule } from 'ng2-bootstrap';
 import { SelectModule } from 'ng2-select';
 import { MyDatePickerModule } from 'mydatepicker';
 import { InputTrimDirective } from 'ng2-trim-directive';
+import { TrimValueAccessorModule } from 'ng-trim-value-accessor';
 import { DatePipe } from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -81,7 +82,8 @@ export function ConfigLoader(envConfig: envConfig) {
     BsDropdownModule.forRoot(),
     SelectModule,
     MyDatePickerModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+      TrimValueAccessorModule
   ],
   providers: [
     {
