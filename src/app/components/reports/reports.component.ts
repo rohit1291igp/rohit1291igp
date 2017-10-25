@@ -391,7 +391,7 @@ export class ReportsComponent implements OnInit{
                 _this.reportData.summary[1].value=_orderTotal;
             }
         }else{
-            _this.reportData.summary = _this.orginalReportData.summary;
+            _this.reportData.summary = JSON.parse(JSON.stringify(_this.orginalReportData.summary));
         }
 
         //update current table data
