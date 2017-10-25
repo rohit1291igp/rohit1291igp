@@ -167,7 +167,7 @@ export class ReportsComponent implements OnInit{
 
               _reportData.searchFields = _this.reportDataLoader.searchFields;
               _this.reportData = _reportData;
-              _this.orginalReportData = Object.assign({}, _this.reportData);
+              _this.orginalReportData = JSON.parse(JSON.stringify(_this.reportData)); //Object.assign({}, _this.reportData);
               _this.showMoreTableData(null);
           });
       });
