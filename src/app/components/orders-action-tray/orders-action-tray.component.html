@@ -475,7 +475,7 @@
                           <span class="dtm" *ngIf="order && order.orderProducts[0] && order.orderProducts[0].orderProductExtraInfo">
                               <span class="uppercase delivery-time text-bold" attr.data-dt="{{order.orderProducts[0].orderProductExtraInfo.deliveryDate}}" attr.data-pd="{{order.datePurchased}}" >{{getDeliveryDetail(order.orderProducts[0].orderProductExtraInfo, order.datePurchased)}}</span>
                           </span>
-                          <span *ngIf="order.orderProducts[0].timeSlaVoilates" style="margin-left:1.5em;">SLA Time - {{order.orderProducts[0].timeSlaVoilates}}</span>
+                          <span *ngIf="order.orderProducts[0].timeSlaVoilates" style="margin-left:1.5em; color:#25C355;">SLA Time - {{order.orderProducts[0].timeSlaVoilates | time12}}</span>
                       </p>
                       <div class="text-bold">Deliver to: {{order.deliveryName}}</div>
                       <div class="address">{{order.addressType}} Address - {{order.deliveryStreetAddress}}, <span *ngIf="order.deliveryStreetAddress2">{{order.deliveryStreetAddress2}},</span>{{order.deliveryCity}}-{{order.deliveryPostcode}}, {{order.deliveryState}}</div>
