@@ -8,8 +8,8 @@
 }
 
 .reprts-summary{
-    width: 24em;
-    margin-left: 1em;
+    /*width: 24em;
+    margin-left: 1em;*/
     box-shadow: 0 1px 3px #888;
     border-radius: 0.5em;
     height: 12.9em;
@@ -18,7 +18,7 @@
 .summaryBlock{
     margin-top: 1.5em;
     font-size: 1.2em;
-    width: 9em;
+    width: 50%;
     text-align: center;
 }
 
