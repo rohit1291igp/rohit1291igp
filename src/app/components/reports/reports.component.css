@@ -7,6 +7,10 @@
     border-radius: 0.5em;
 }
 
+.searchFiled .form-control{
+    height:36px;
+}
+
 .reprts-summary{
     /*width: 24em;
     margin-left: 1em;*/

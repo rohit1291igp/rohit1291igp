@@ -690,6 +690,10 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
       var rejectionMessage, _rejectOption, recipientInfo, recipientName, recipientComments;
 
       if( (status === "Delivered" || status === "Rejected" || status === "OutForDelivery") && (!e.customCurrentTarget)){
+          if(status === "Rejected") {
+              this.statusReasonModel = {};
+              this.setRejectInitialValue();
+          }
           this.statusReasonModel.status = status;
           this.getMinProdId(orderId, null, e);
           this.statusReasonModel.e = [];

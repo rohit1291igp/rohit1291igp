@@ -6,6 +6,7 @@ import { HttpModule, Http, XHRBackend, RequestOptions } from '@angular/http';
 import { BsDropdownModule } from 'ng2-bootstrap';
 import { SelectModule } from 'ng2-select';
 import { MyDatePickerModule } from 'mydatepicker';
+import { InputTrimDirective } from 'ng2-trim-directive';
 import { DatePipe } from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -69,7 +70,8 @@ export function ConfigLoader(envConfig: envConfig) {
     ReplacePipe,
     ReportsComponent,
     ObjectKeyValuePipe,
-    WidgetsComponent
+    WidgetsComponent,
+      InputTrimDirective
   ],
   imports: [
     BrowserModule,
