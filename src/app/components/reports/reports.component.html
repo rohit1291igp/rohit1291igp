@@ -106,7 +106,7 @@
                         <tr>
                             <th class="relative" [ngClass]="{'selectedHeader' : reportLabelState[tableLabel]['filterdd']}" *ngFor="let tableLabel of reportData.tableHeaders; let a='index';" [ngClass]="{'reportDate' : tableLabel === 'Date'}">
                                 <span>{{tableLabel | replace : '_'}}</span>
-                                <span class="sortIcons">
+                                <span class="sortIcons" *ngIf="orginalReportData.tableData.length>0">
                                     <div class="icon s" aria-hidden="true" (click)="setReportsHeadersState($event, tableLabel, 'filterdd', false)" *ngIf="reportLabelState[tableLabel]['filterdd']">
                                         <img class="arrowU" src="assets/images/icons/arrowD.svg" alt="up-arrow">
                                     </div>
@@ -120,7 +120,7 @@
                                     <img class="" src="assets/images/icons/removeFilter.png" alt="remove-filter" title="Remove Column Filter">
                                 </div>
 
-                                <div class="abs searchSortDd col-sm-12 col-md-12" [ngClass]="{'ddOpen' :reportLabelState[tableLabel]['filterdd'] ,'ddleft' : a==0}">
+                                <div class="abs searchSortDd col-sm-12 col-md-12" [ngClass]="{'ddOpen' :reportLabelState[tableLabel]['filterdd'] ,'ddleft' : a==0}" *ngIf="orginalReportData.tableData.length>0">
                                     <div class="col-sm-12 col-md-12 m-top-1 colSearchPadding">
                                         <div class="col-sm-6 col-md-6 no-padding left-align">Sort By : </div>
                                         <div class="col-sm-6 col-md-6 no-padding">
@@ -178,7 +178,11 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let tableRowValue of reportData.tableData">
+                        <tr  *ngIf="reportData.tableData.length == 0" style="font-size:2em;">
+                            <td [colSpan]="reportData.tableHeaders.length">No Record Found</td>
+                        </tr>
+
+                        <tr *ngFor="let tableRowValue of reportData.tableData" >
                             <td *ngFor="let tableCol of reportData.tableHeaders; let i='index'">
                                 <span *ngIf="ifDate(tableCol) == 'date'" >{{tableRowValue[tableCol] | date : 'dd/MM/yy'}}</span>
                                 <span *ngIf="ifDate(tableCol) != 'date'" > <span [outerHTML]="tableRowValue[tableCol]  | replace : '['"></span></span>
