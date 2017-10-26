@@ -19,7 +19,9 @@ export class Time12Pipe implements PipeTransform {
           return startTime+" - "+endTime;
       }else{
           var startTime = value.trim();
+          if(startTime.indexOf(':') === -1) startTime=startTime+":00";
           startTime = startTime.split(':')[0] > 12 ? (parseInt(startTime.split(':')[0]) - 12)+":"+startTime.split(':')[1].replace("hrs", "").trim()+" PM" : startTime.split(':')[0]+":"+startTime.split(':')[1].replace("hrs", "").trim()+" AM";
+
           return startTime;;
       }
 
