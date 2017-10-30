@@ -334,8 +334,12 @@
     /*width:4.5em;*/
 }
 
-.image-preview .modal-content{
+.image-preview .modal-content.cHeight{
     min-height: 85vh ! important;
+}
+
+.image-preview .modal-content.mHeight{
+    min-height: 45vh ! important;
 }
 
 .uploadFileSection{
