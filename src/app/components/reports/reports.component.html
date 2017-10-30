@@ -184,8 +184,9 @@
 
                         <tr *ngFor="let tableRowValue of reportData.tableData" >
                             <td *ngFor="let tableCol of reportData.tableHeaders; let i='index'">
+                                <span *ngIf="tableCol == 'Ship_Type'" >{{getDeliveryName(tableRowValue[tableCol])}}</span>
                                 <span *ngIf="ifDate(tableCol) == 'date'" >{{tableRowValue[tableCol] | date : 'dd/MM/yy'}}</span>
-                                <span *ngIf="ifDate(tableCol) != 'date'" > <span [outerHTML]="tableRowValue[tableCol]  | replace : '['"></span></span>
+                                <span *ngIf="ifDate(tableCol) != 'date' && tableCol != 'Ship_Type'" > <span [outerHTML]="tableRowValue[tableCol]  | replace : '['"></span></span>
                                 &nbsp; &nbsp; &nbsp;
                                 <span class="icon m" aria-hidden="true" *ngIf="tableCol === 'Order_No'" (click)="viewOrderDetail($event, tableRowValue[tableCol])">
                                     <img src="assets/images/icons/view.svg" alt="inr">

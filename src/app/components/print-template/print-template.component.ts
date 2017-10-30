@@ -27,22 +27,8 @@ export class PrintTemplateComponent implements OnInit {
     getDeliveryDetail(dExtraInfo, purchaseDate){
         let delDate = this.UtilityService.getDateString(0, dExtraInfo.deliveryDate);
         let purDate = this.UtilityService.getDateString(0, purchaseDate);
-        let delDetail = "";
-        switch(dExtraInfo.deliveryType){
-            case 1 : delDetail= delDetail + " Standard Delivery ";
-                break;
-
-            case 2 : delDetail= delDetail + " Fixed Time Delivery ";
-                break;
-
-            case 3 : delDetail= delDetail + " Midnight Delivery ";
-                break;
-
-            case 4 : delDetail= delDetail + " Fixed Date Delivery ";
-                break;
-        }
-
-        delDetail = delDetail+" "+(this.datePipe.transform(delDate, 'dd-MM-yy'));
+        let delDetail = this.UtilityService.getDeliveryName(dExtraInfo.deliveryType, delDate, purDate);
+        delDetail = delDetail+" "+(this.datePipe.transform(delDate, 'dd/MM/yy'));
         //delDetail = delDetail+" "+dExtraInfo.deliveryTime;
         delDetail = delDetail+" "+(this.time12Pipe.transform(dExtraInfo.deliveryTime));
         return delDetail;

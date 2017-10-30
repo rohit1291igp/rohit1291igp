@@ -902,7 +902,7 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
   }
 
   getDeliveryDetail(dExtraInfo, purchaseDate){
-      let delDate = this.UtilityService.getDateString(0, dExtraInfo.deliveryDate);
+      /*let delDate = this.UtilityService.getDateString(0, dExtraInfo.deliveryDate);
       let purDate = this.UtilityService.getDateString(0, purchaseDate);
       let delDetail = "";
       switch(dExtraInfo.deliveryType){
@@ -918,8 +918,10 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
 
           case 4 : delDetail= delDetail + " Fixed Date Delivery ";
               break;
-      }
-
+      }*/
+      let delDate = this.UtilityService.getDateString(0, dExtraInfo.deliveryDate);
+      let purDate = this.UtilityService.getDateString(0, purchaseDate);
+      let delDetail = this.UtilityService.getDeliveryName(dExtraInfo.deliveryType, delDate, purDate);
       delDetail = delDetail+" "+(this.datePipe.transform(delDate, 'dd/MM/yy'));
       //delDetail = delDetail+" "+dExtraInfo.deliveryTime;
       delDetail = delDetail+" "+(this.time12Pipe.transform(dExtraInfo.deliveryTime));

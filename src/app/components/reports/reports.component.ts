@@ -502,4 +502,11 @@ export class ReportsComponent implements OnInit{
         }
     }
 
+    getDeliveryName(deliveryType){
+        //console.log('getDeliveryName=========>', deliveryType);
+        let delDetail = this.UtilityService.getDeliveryName(deliveryType, null, null);
+        //console.log('getDeliveryName=========>delDetail=========>', delDetail);
+        return delDetail;
+    }
+
 }
