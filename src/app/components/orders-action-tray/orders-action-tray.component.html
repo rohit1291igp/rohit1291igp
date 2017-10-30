@@ -189,8 +189,8 @@
 
 <div id="mainOrderSection" class="orders-action" [ngClass]="{'show-tray': trayOpen, 'hide-tray': !trayOpen}" >
 <div class="apierror" *ngIf="apierror">{{apierror}}</div>
-  <div class="container-fluid orders-view">
-    <div class="row sidePanelHeader">
+  <div class="container-fluid orders-view" [ngClass]="{'no-padding':isMobile}">
+    <div class="row sidePanelHeader" [ngClass]="{'no-margin':isMobile}">
         <div class="colInline col-sm-1 col-md-1" *ngIf="!isMobile">
             <a href="#" (click)="toggleTray($event, null, null, activeDashBoardDataType)" [attr.data-trayOpen]="trayOpen">
               <i class="glyphicon glyphicon-remove close-tray"></i>
