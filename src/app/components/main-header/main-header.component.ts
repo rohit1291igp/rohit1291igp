@@ -44,6 +44,7 @@ export class MainHeaderComponent implements OnInit {
       _this.router.events.subscribe((event) => {
           if (event instanceof NavigationEnd) {
               console.log('Url changed');
+              _this.vendorName = localStorage.getItem('associateName');
               _this.activeTabHighlight();
           }
       });
