@@ -52,7 +52,7 @@
                         <div class="topLabel text-bold">{{dashboardData.topLabels[i]['labelName']}} <span *ngIf="!dashBoardCount.ordersCount" >- 0</span></div>
                         <div class="col-md-2 mobileOrderIdBlockCont" *ngIf="dashBoardCount.ordersCount" [ngClass]="{'a' : dashBoardCount.deliveryTimes !='bydate', 'b' : dashBoardCount.deliveryTimes =='bydate', 'custom-btn-parent': dashBoardCount.ordersCount, 'center-align': !dashBoardCount.ordersCount, 'inactive' : dashBoardCount.inactive}">
 
-                            <div class="mobileOrderIdBlockCont" *ngFor="let order of dashBoardCount.orderIds;" style="">
+                            <div class="mobileOrderIdBlock" *ngFor="let order of dashBoardCount.orderIds;" style="">
                                 <!--<button class="btn">{{order.orderId}}</button>-->
                                 <app-orders-button [orderId]="order.orderId" [displayData]="order" [orderStatus]="" [OrderDay]="" [deliveryTime]="" (onViewOrders)="searchWithProdIds($event, order.orderId, order.orderProductId)">
                                     <div>{{order.orderId}}</div>
@@ -75,7 +75,7 @@
                             <div class="col-md-2 mobileOrderIdBlockCont" *ngIf="dashBoardCount.ordersCount"  [ngClass]="{'a' : dashBoardCount.deliveryTimes !='bydate', 'b' : dashBoardCount.deliveryTimes =='bydate', 'custom-btn-parent': dashBoardCount.ordersCount, 'center-align': !dashBoardCount.ordersCount, 'inactive' : dashBoardCount.inactive}">
                                 <div class="mobileOrderIdBlock" *ngFor="let order of dashBoardCount.orderIds;" style="">
                                     <!--<button class="btn">{{order.orderId}}</button>-->
-                                    <app-orders-button [orderId]="order.orderNumber" [displayData]="order" [orderStatus]="" [OrderDay]="" [deliveryTime]="" (onViewOrders)="searchWithProdIds($event, order.orderId, order.orderProductId)">
+                                    <app-orders-button [orderId]="order.orderId" [displayData]="order" [orderStatus]="" [OrderDay]="" [deliveryTime]="" (onViewOrders)="searchWithProdIds($event, order.orderId, order.orderProductId)">
                                         <div style="">{{order.orderId}}</div>
                                     </app-orders-button>
                                 </div>
@@ -89,8 +89,8 @@
                 <span class="glyphicon glyphicon-chevron-down pull-right" *ngIf="!displayStatusToggle.ofd"></span>
                 <span class="glyphicon glyphicon-chevron-up pull-right" *ngIf="displayStatusToggle.ofd"></span>
             </div>
-            <div class="labelContent" [ngClass]="{'slideropen' : displayStatusToggle.ofd, 'sliderclosed' : !displayStatusToggle.ofd}">
-                <div class="mobileOrderIdBlockCont" style="padding: 0.5em 0.5em 0.8em 1.5em;">
+            <div class="labelContent" style="box-shadow: none;" [ngClass]="{'slideropen' : displayStatusToggle.ofd, 'sliderclosed' : !displayStatusToggle.ofd}">
+                <div class="mobileOrderIdBlockCont" style="padding: 0.5em 0.5em 0.8em 1.5em;" *ngIf="dashboardData.ofd.length">
                     <div class="col-md-3 custom-btn-parent"  style="display: inline-block;" *ngFor="let order of dashboardData.ofd; let i='index'" [attr.data-index]="i" [ngClass]="{'inactive' : order.inactive}">
                         <app-orders-button [orderId]="order.orderNumber" [displayData]="order" [orderStatus]="order.status" [OrderDay]="" [deliveryTime]="masterData.deliveryTimes[5]" (onViewOrders)="viewOrders($event)">
                              <div style="display: inline-block;">{{order.orderNumber}}</div> <!--<span *ngIf="isMobile"> - {{order.displayStr}}</span>-->
