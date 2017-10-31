@@ -464,7 +464,12 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
 
       if(orderId){
           //reqURL ="?responseType=json&scopeId=1&fkassociateId="+fkAssociateId+"&orderId="+orderId+"&method=igp.order.getOrder";
-          reqURL ="getOrder?responseType=json&scopeId=1&fkassociateId="+fkAssociateId+"&orderId="+orderId;
+          if(typeof(orderId) === "object" && 'orderId' in orderId){
+              var orderProductIds= ('orderProductIds' in orderId && orderId.orderProductIds) ? "&orderProductIds="+orderId.orderProductIds : "";
+              reqURL ="getOrder?responseType=json&scopeId=1&fkassociateId="+fkAssociateId+"&orderId="+orderId.orderId+orderProductIds;
+          }else{
+              reqURL ="getOrder?responseType=json&scopeId=1&fkassociateId="+fkAssociateId+"&orderId="+orderId;
+          }
       }else if(orderByStatus){
           let orderDate = e.currentTarget.dataset.orderday;
           let orderDeliveryTime = e.currentTarget.dataset.deliverytime;

@@ -40,60 +40,70 @@
         </div>
 
         <div class="tableSection">
-            <div class="leftLabel" [ngClass]="{'alert-action': isRowAlert['new'].isAlert, 'alertg-action': (!isRowAlert['new'].isAlert && isRowAlert['new'].sla), 'no-action': (!isRowAlert['new'].isAlert && !isRowAlert['new'].sla)}">
+            <div class="leftLabel" (click)="toggleTableColumn($event, 'new', !displayStatusToggle.new)" [ngClass]="{'alert-action': isRowAlert['new'].isAlert, 'alertg-action': (!isRowAlert['new'].isAlert && isRowAlert['new'].sla), 'no-action': (!isRowAlert['new'].isAlert && !isRowAlert['new'].sla)}">
                 {{masterData.displayStatus[0]}} ({{dashboardData.counts.newOrders}})
-                <span class="glyphicon glyphicon-chevron-down pull-right" (click)="toggleTableColumn($event, 'new', true)" *ngIf="!displayStatusToggle.new"></span>
-                <span class="glyphicon glyphicon-chevron-up pull-right" (click)="toggleTableColumn($event, 'new', false)" *ngIf="displayStatusToggle.new"></span>
+                <span class="glyphicon glyphicon-chevron-down pull-right" *ngIf="!displayStatusToggle.new"></span>
+                <span class="glyphicon glyphicon-chevron-up pull-right" *ngIf="displayStatusToggle.new"></span>
             </div>
 
             <div class="labelContent" [ngClass]="{'slideropen' : displayStatusToggle.new, 'sliderclosed' : !displayStatusToggle.new}">
                 <div *ngFor="let dashBoardCount of dashboardData.new; let i='index'" [attr.data-index]="i">
                     <div class="labelContentCell" *ngIf="i>0 && i<4">
                         <div class="topLabel text-bold">{{dashboardData.topLabels[i]['labelName']}} <span *ngIf="!dashBoardCount.ordersCount" >- 0</span></div>
-                        <div class="col-md-2" *ngIf="dashBoardCount.ordersCount" [ngClass]="{'a' : dashBoardCount.deliveryTimes !='bydate', 'b' : dashBoardCount.deliveryTimes =='bydate', 'custom-btn-parent': dashBoardCount.ordersCount, 'center-align': !dashBoardCount.ordersCount, 'inactive' : dashBoardCount.inactive}">
-                            <app-orders-button [displayData]="dashBoardCount" [orderStatus]="dashBoardCount.status" [OrderDay]="dashBoardCount.day" [deliveryTime]="dashBoardCount.deliveryTimes" *ngIf="dashBoardCount.ordersCount" (onViewOrders)="viewOrders($event)">
-                                <app-button-view [viewData]="dashBoardCount.ordersCount" [displayData]="dashBoardCount"></app-button-view>
-                            </app-orders-button>
-                            <app-no-orders [viewData]="dashBoardCount.ordersCount" [orderStatus]="'new'"></app-no-orders>
+                        <div class="col-md-2 mobileOrderIdBlockCont" *ngIf="dashBoardCount.ordersCount" [ngClass]="{'a' : dashBoardCount.deliveryTimes !='bydate', 'b' : dashBoardCount.deliveryTimes =='bydate', 'custom-btn-parent': dashBoardCount.ordersCount, 'center-align': !dashBoardCount.ordersCount, 'inactive' : dashBoardCount.inactive}">
+
+                            <div class="mobileOrderIdBlockCont" *ngFor="let order of dashBoardCount.orderIds;" style="">
+                                <!--<button class="btn">{{order.orderId}}</button>-->
+                                <app-orders-button [orderId]="order.orderId" [displayData]="order" [orderStatus]="" [OrderDay]="" [deliveryTime]="" (onViewOrders)="searchWithProdIds($event, order.orderId, order.orderProductId)">
+                                    <div>{{order.orderId}}</div>
+                                </app-orders-button>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="leftLabel" [ngClass]="{'alert-action': isRowAlert['confirmed'].isAlert, 'alertg-action': (!isRowAlert['confirmed'].isAlert && isRowAlert['confirmed'].sla), 'no-action': (!isRowAlert['confirmed'].isAlert && !isRowAlert['confirmed'].sla)}">
+            <div class="leftLabel" (click)="toggleTableColumn($event, 'confirmed', !displayStatusToggle.confirmed)" [ngClass]="{'alert-action': isRowAlert['confirmed'].isAlert, 'alertg-action': (!isRowAlert['confirmed'].isAlert && isRowAlert['confirmed'].sla), 'no-action': (!isRowAlert['confirmed'].isAlert && !isRowAlert['confirmed'].sla)}">
                 {{masterData.displayStatus[1]}} ({{dashboardData.counts.confirmedOrders}})
-                <span class="glyphicon glyphicon-chevron-down pull-right" (click)="toggleTableColumn($event, 'confirmed', true)" *ngIf="!displayStatusToggle.confirmed"></span>
-                <span class="glyphicon glyphicon-chevron-up pull-right" (click)="toggleTableColumn($event, 'confirmed', false)" *ngIf="displayStatusToggle.confirmed"></span>
+                <span class="glyphicon glyphicon-chevron-down pull-right" *ngIf="!displayStatusToggle.confirmed"></span>
+                <span class="glyphicon glyphicon-chevron-up pull-right" *ngIf="displayStatusToggle.confirmed"></span>
             </div>
             <div class="labelContent" [ngClass]="{'slideropen' : displayStatusToggle.confirmed, 'sliderclosed' : !displayStatusToggle.confirmed}">
                 <div *ngFor="let dashBoardCount of dashboardData.confirmed; let i='index'" [attr.data-index]="i">
                     <div class="labelContentCell" *ngIf="i>0 && i<4">
                             <div class="topLabel text-bold">{{dashboardData.topLabels[i]['labelName']}} <span *ngIf="!dashBoardCount.ordersCount" >- 0</span></div>
-                            <div class="col-md-2" *ngIf="dashBoardCount.ordersCount"  [ngClass]="{'a' : dashBoardCount.deliveryTimes !='bydate', 'b' : dashBoardCount.deliveryTimes =='bydate', 'custom-btn-parent': dashBoardCount.ordersCount, 'center-align': !dashBoardCount.ordersCount, 'inactive' : dashBoardCount.inactive}">
-                                <app-orders-button [displayData]="dashBoardCount" [orderStatus]="dashBoardCount.status" [OrderDay]="dashBoardCount.day" [deliveryTime]="dashBoardCount.deliveryTimes" *ngIf="dashBoardCount.ordersCount" (onViewOrders)="viewOrders($event)">
-                                    <app-button-view [viewData]="dashBoardCount.ordersCount" [displayData]="dashBoardCount"></app-button-view>
-                                </app-orders-button>
-                                <app-no-orders [viewData]="dashBoardCount.ordersCount" [orderStatus]="'new'"></app-no-orders>
+                            <div class="col-md-2 mobileOrderIdBlockCont" *ngIf="dashBoardCount.ordersCount"  [ngClass]="{'a' : dashBoardCount.deliveryTimes !='bydate', 'b' : dashBoardCount.deliveryTimes =='bydate', 'custom-btn-parent': dashBoardCount.ordersCount, 'center-align': !dashBoardCount.ordersCount, 'inactive' : dashBoardCount.inactive}">
+                                <div class="mobileOrderIdBlock" *ngFor="let order of dashBoardCount.orderIds;" style="">
+                                    <!--<button class="btn">{{order.orderId}}</button>-->
+                                    <app-orders-button [orderId]="order.orderNumber" [displayData]="order" [orderStatus]="" [OrderDay]="" [deliveryTime]="" (onViewOrders)="searchWithProdIds($event, order.orderId, order.orderProductId)">
+                                        <div style="">{{order.orderId}}</div>
+                                    </app-orders-button>
+                                </div>
                             </div>
                     </div>
                 </div>
             </div>
 
-            <div class="leftLabel" [ngClass]="{'alert-action': isRowAlert['future'].isAlert, 'alertg-action': (!isRowAlert['future'].isAlert && isRowAlert['future'].sla), 'no-action': (!isRowAlert['future'].isAlert && !isRowAlert['future'].sla)}">
+            <div class="leftLabel" (click)="toggleTableColumn($event, 'ofd', !displayStatusToggle.ofd)" [ngClass]="{'alert-action': isRowAlert['future'].isAlert, 'alertg-action': (!isRowAlert['future'].isAlert && isRowAlert['future'].sla), 'no-action': (!isRowAlert['future'].isAlert && !isRowAlert['future'].sla)}">
                 {{masterData.displayStatus[2]}} ({{dashboardData.counts.ofdOrders}})
-                <span class="glyphicon glyphicon-chevron-down pull-right" (click)="toggleTableColumn($event, 'ofd', true)" *ngIf="!displayStatusToggle.ofd"></span>
-                <span class="glyphicon glyphicon-chevron-up pull-right" (click)="toggleTableColumn($event, 'ofd', false)" *ngIf="displayStatusToggle.ofd"></span>
+                <span class="glyphicon glyphicon-chevron-down pull-right" *ngIf="!displayStatusToggle.ofd"></span>
+                <span class="glyphicon glyphicon-chevron-up pull-right" *ngIf="displayStatusToggle.ofd"></span>
             </div>
             <div class="labelContent" [ngClass]="{'slideropen' : displayStatusToggle.ofd, 'sliderclosed' : !displayStatusToggle.ofd}">
-                <div class="col-md-3 custom-btn-parent" *ngFor="let order of dashboardData.ofd; let i='index'" [attr.data-index]="i" [ngClass]="{'inactive' : order.inactive}">
-                    <app-orders-button [orderId]="order.orderNumber" [displayData]="order" [orderStatus]="order.status" [OrderDay]="" [deliveryTime]="masterData.deliveryTimes[5]" (onViewOrders)="viewOrders($event)" *ngIf="i<4">
-                         <div style="display: inline-block;">{{order.orderNumber}}</div><span *ngIf="isMobile"> - {{order.displayStr}}</span>
-                    </app-orders-button>
+                <div class="mobileOrderIdBlockCont" style="padding: 0.5em 0.5em 0.8em 1.5em;">
+                    <div class="col-md-3 custom-btn-parent"  style="display: inline-block;" *ngFor="let order of dashboardData.ofd; let i='index'" [attr.data-index]="i" [ngClass]="{'inactive' : order.inactive}">
+                        <app-orders-button [orderId]="order.orderNumber" [displayData]="order" [orderStatus]="order.status" [OrderDay]="" [deliveryTime]="masterData.deliveryTimes[5]" (onViewOrders)="viewOrders($event)">
+                             <div style="display: inline-block;">{{order.orderNumber}}</div> <!--<span *ngIf="isMobile"> - {{order.displayStr}}</span>-->
+                            <!--<div class="icon m" aria-hidden="true">
+                                <img src="assets/images/icons/gift.svg" >
+                            </div>-->
+                        </app-orders-button>
+                    </div>
                 </div>
 
-                <div class="col-md-3 underline center-align" *ngIf="dashboardData.ofd.length" style="padding: 1.5em 0 1em;">
+                <!--<div class="col-md-3 underline center-align" *ngIf="dashboardData.ofd.length" style="padding: 1.5em 0 1em;">
                     <a href="#" (click)="openPanel($event, masterData.status[2])"> View all out for delivery orders</a>
-                </div>
+                </div>-->
 
                 <div class="col-md-12" *ngIf="!dashboardData.ofd.length" style="padding:1em;">
                     <div class="no-ofd-label">Currently there are no orders out for delivery</div>

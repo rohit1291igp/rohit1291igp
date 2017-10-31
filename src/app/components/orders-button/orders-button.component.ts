@@ -19,6 +19,7 @@ import {environment} from "../../../environments/environment";
 })
 export class OrdersButtonComponent implements OnInit, OnChanges {
   isMobile=environment.isMobile;
+  @Input('theme') theme: string;
   @Input('displayData') displayData: Object;
   @Input('orderStatus') orderStatus: string;
   @Input('orderId') orderId: number;
@@ -37,6 +38,7 @@ export class OrdersButtonComponent implements OnInit, OnChanges {
     console.log('displayData>>>', this.displayData, ', ', this.orderStatus, ', ', this.deliveryTime);
     this.isAlert = this.displayData['isAlert'] == "true" ? true : false;
     this.sla = this.displayData['sla'] == "true" ? true : false;
+    this.theme= this.theme || "theme1";
   }
     ngOnChanges(changes){
         console.log('changes - orders - buttons------------>', changes);

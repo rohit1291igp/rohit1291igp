@@ -2,9 +2,11 @@ import { Injectable } from '@angular/core';
 import {Http} from "@angular/http";
 import { BackendService } from './backend.service';
 import { UtilityService } from './utility.service';
+import {environment} from "../../environments/environment";
 
 @Injectable()
 export class DashboardService {
+    isMobile=environment.isMobile;
     users: Array<any> = [];
     currentColumn;
     currentRow;
@@ -50,7 +52,7 @@ export class DashboardService {
     }
 
     formarDashBoardData(data, dataType, currentDBData){
-        var dataTypeSelect, ofdType, newOrderCountProp, confirmedCountProp, ofdOrderCountProp;
+        var dataTypeSelect, ofdType, newOrderCountProp, confirmedCountProp, ofdOrderCountProp, orderIdsList;
         console.log('dataType==================>'+dataType);
         switch(dataType){
             case "all": dataTypeSelect = "dateStatusCountAllMap";
@@ -58,6 +60,7 @@ export class DashboardService {
                         newOrderCountProp = "newOrderTotalWhole";
                         confirmedCountProp = "confirmOrderTotalWhole";
                         ofdOrderCountProp = "outOfDeliveryOrderTotalWhole";
+                        orderIdsList = "dateStatusOrderIdAllMap";
                 break;
 
             case "sla": dataTypeSelect = "dateStatusCountNoBreachMap";
@@ -65,6 +68,7 @@ export class DashboardService {
                         newOrderCountProp = "newOrderTotalActionRequired";
                         confirmedCountProp = "confirmOrderTotalWholeActionRequired";
                         ofdOrderCountProp = "outOfDeliveryOrderTotalActionRequired";
+                        orderIdsList = "dateStatusOrderIdNoBreachMap";
                 break;
 
             case "alert": dataTypeSelect = "dateStatusCountAlertMap";
@@ -72,6 +76,7 @@ export class DashboardService {
                           newOrderCountProp = "newOrderTotalHighAlert";
                           confirmedCountProp = "confirmOrderTotalWholeHighAlert";
                           ofdOrderCountProp = "outOfDeliveryOrderTotalHighAlert";
+                          orderIdsList = "dateStatusOrderIdAlertMap";
                 break;
 
             default : dataTypeSelect = "dateStatusCountAllMap";
@@ -79,6 +84,7 @@ export class DashboardService {
                       newOrderCountProp = "newOrderTotalWhole";
                       confirmedCountProp = "confirmOrderTotalWhole";
                       ofdOrderCountProp = "outOfDeliveryOrderTotalWhole";
+                      orderIdsList = "dateStatusOrderIdAllMap";
         }
 
         var _this = this;
@@ -178,7 +184,8 @@ export class DashboardService {
                             displayStr: "",
                             isAlert: countObj[prop].alert,
                             sla : countObj[prop].sla,
-                            position : 0
+                            position : 0,
+                            orderIds:[]
                         };
 
                         pushObj.displayStr = pushObj.ordersCount > 1 ? "View Orders" : "View Order";
@@ -192,22 +199,27 @@ export class DashboardService {
                         switch(day){
                             case "past" :
                                 pushObj.position = 1;
+                                pushObj.orderIds = apiResponse.result[orderIdsList]['past']['Processed'];
                                 break;
 
                             case "today" : todayOrderTobeDelivered = todayOrderTobeDelivered + parseInt(countObj[prop].count);
                                 pushObj.position = 2;
+                                pushObj.orderIds = apiResponse.result[orderIdsList]['today']['Processed'];
                                 break;
 
                             case "tomorrow" :
                                 pushObj.position = 3;
+                                pushObj.orderIds = apiResponse.result[orderIdsList]['tomorrow']['Processed'];
                                 break;
 
                             case "future" :
                                 pushObj.position = 4;
+                                pushObj.orderIds = apiResponse.result[orderIdsList]['future']['Processed'];
                                 break;
 
                             case "bydate" :
                                 pushObj.position = 5;
+                                pushObj.orderIds = apiResponse.result[orderIdsList]['festivalDate']['Processed'];
                                 break;
                         }
 
@@ -221,7 +233,8 @@ export class DashboardService {
                             displayStr: "",
                             isAlert: countObj[prop].alert,
                             sla : countObj[prop].sla,
-                            position : 0
+                            position : 0,
+                            orderIds:[]
                         };
 
                         pushObj.displayStr = pushObj.ordersCount > 1 ? "View Orders" : "View Order";
@@ -235,22 +248,27 @@ export class DashboardService {
                         switch(day){
                             case "past" :
                                 pushObj.position = 1;
+                                pushObj.orderIds = apiResponse.result[orderIdsList]['past']['Confirmed'];
                                 break;
 
                             case "today" : todayOrderTobeDelivered = todayOrderTobeDelivered + parseInt(countObj[prop].count);
                                 pushObj.position = 2;
+                                pushObj.orderIds = apiResponse.result[orderIdsList]['today']['Confirmed'];
                                 break;
 
                             case "tomorrow" :
                                 pushObj.position = 3;
+                                pushObj.orderIds = apiResponse.result[orderIdsList]['tomorrow']['Confirmed'];
                                 break;
 
                             case "future" :
                                 pushObj.position = 4;
+                                pushObj.orderIds = apiResponse.result[orderIdsList]['future']['Confirmed'];
                                 break;
 
                             case "bydate" :
                                 pushObj.position = 5;
+                                pushObj.orderIds = apiResponse.result[orderIdsList]['festivalDate']['Confirmed'];
                                 break;
                         }
 
@@ -349,6 +367,12 @@ export class DashboardService {
         getDashboardDataResponse.delivered.today = todayOrderTobeDelivered //apiResponse.result.deliveredTodayOrderCount*2;
         getDashboardDataResponse.delivered.total = apiResponse.result.deliveredTodayOrderCount;
         /* Delivered orders - end */
+
+        /* orderList - start */
+//        if(_this.isMobile){
+//
+//        }
+        /* orderList - end */
 
         console.log('getDashboardDataResponse==============>', getDashboardDataResponse);
         getDashboardDataResponse["festivalDate"] = apiResponse.result.festivalDate; //fesDate;

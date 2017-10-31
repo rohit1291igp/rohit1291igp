@@ -189,5 +189,15 @@
     border-top: 2px solid #fff;
 }
 
+.mobileOrderIdBlockCont{
+    padding-bottom: 0.2em;
+    overflow: auto;
+    white-space: nowrap;
+}
+
+.mobileOrderIdBlock{
+    display: inline-block;
+    margin-right: 1em;
+}
 /*Mobile css - end*/
 
