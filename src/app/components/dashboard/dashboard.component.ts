@@ -74,8 +74,8 @@ export class DashboardComponent implements OnInit {
     this.disableAllTableCell();
   }
 
-  searchWithProdIds(e, orderId, orderProductId){
-     this.child.toggleTray(e, "", {"orderId":orderId, "orderProductIds":orderProductId}, null);
+  searchWithProdIds(e, orderId, orderProductId, orderStatus){
+     this.child.toggleTray(e, orderStatus, {"orderId":orderId, "orderProductIds":orderProductId}, null);
   }
 
   viewOrders(e) {
