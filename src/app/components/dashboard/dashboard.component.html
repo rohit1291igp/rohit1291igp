@@ -133,12 +133,12 @@
             <div class="row">
                 <div class="col-sm-12 allOrderRow">
                     <div class="col-sm-6 page center-align">
-                        <div class="text-bold">{{dashboardData.delivered.today}}</div>
-                        <div>Today's Delivered</div>
+                        <div class="text-bold">{{dashboardData.delivered.total+dashboardData.delivered.today}}</div>
+                        <div>Orders for Today's Deliveries</div>
                     </div>
                     <div class="col-sm-6 page center-align">
-                        <div class="text-bold">{{dashboardData.delivered.total}}</div>
-                        <div>Order already Delivered</div>
+                        <div class="text-bold">{{dashboardData.delivered.today}}</div>
+                        <div>Orders yet to be delivered</div>
                     </div>
                     <div class="clearfix"></div>
                 </div>
