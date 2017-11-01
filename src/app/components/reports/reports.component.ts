@@ -38,6 +38,14 @@ export class ReportsComponent implements OnInit{
   queryString="";
   showMoreBtn=false;
   searchReportFieldsValidation=false;
+  statusList=[
+        {"type" : "0", "name" : "Select status", "value" : "" },
+        {"type" : "1", "name" : "Shipped", "value" : "Shipped" },
+        {"type" : "1", "name" : "Rejected", "value" : "Rejected" },
+        {"type" : "1", "name" : "Processing", "value" : "Processing" },
+        {"type" : "1", "name" : "Processed", "value" : "Processed" },
+        {"type" : "1", "name" : "Confirmed", "value" : "Confirmed" }
+  ];
   reportDataLoader:any={
       "searchFields" : [
           {
@@ -125,6 +133,7 @@ export class ReportsComponent implements OnInit{
           _this.queryString= "";
           _this.reportData=null;
           _this.searchResultModel= {};
+          _this.searchResultModel.status= "";
           _this.reportLabelState={};
           /* reset all variable - end*/
 
