@@ -42,7 +42,7 @@ export class ReportsComponent implements OnInit{
         {"type" : "0", "name" : "Select status", "value" : "" },
         {"type" : "1", "name" : "Shipped", "value" : "Shipped" },
         {"type" : "1", "name" : "Rejected", "value" : "Rejected" },
-        {"type" : "1", "name" : "Processing", "value" : "Processing" },
+        //{"type" : "1", "name" : "Processing", "value" : "Processing" },
         {"type" : "1", "name" : "Processed", "value" : "Processed" },
         {"type" : "1", "name" : "Confirmed", "value" : "Confirmed" }
   ];
