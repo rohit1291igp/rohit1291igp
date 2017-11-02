@@ -40,12 +40,11 @@ export class ReportsComponent implements OnInit{
   searchReportFieldsValidation=false;
   statusList=[
         {"type" : "0", "name" : "Select status", "value" : "" },
-        {"type" : "1", "name" : "OutForDelivery", "value" : "OutForDelivery" },
-        {"type" : "1", "name" : "Shipped", "value" : "Shipped" },
-        {"type" : "1", "name" : "Rejected", "value" : "Rejected" },
-        {"type" : "1", "name" : "Delivered", "value" : "Delivered" },
         {"type" : "1", "name" : "Processed", "value" : "Processed" },
-        {"type" : "1", "name" : "Confirmed", "value" : "Confirmed" }
+        {"type" : "1", "name" : "Confirmed", "value" : "Confirmed" },
+        {"type" : "1", "name" : "OutForDelivery", "value" : "OutForDelivery" },
+        {"type" : "1", "name" : "Delivered", "value" : "Delivered" },
+        {"type" : "1", "name" : "Rejected", "value" : "Rejected" }
   ];
   reportDataLoader:any={
       "searchFields" : [
