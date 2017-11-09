@@ -5,7 +5,8 @@
                 <div class="mb1">
                     <div class="messBgCont1">
                         <div class="messBgCont2">
-                            <img class="imgCenter" src="{{messageBgImage}}" >
+                            <img class="imgCenter" src="{{messageBgImage}}" *ngIf="order.fkAssociateId === 5">
+                            <img class="imgCenter" src="{{messageBgImageInterflora}}" *ngIf="order.fkAssociateId === 830">
                         </div>
                     </div>
                 </div>
@@ -22,7 +23,8 @@
 
       <section class="header">
           <div class="display-inline igp-logo w-section">
-              <img class="img-logo" src="assets/images/igp_black_logo.png" title="Indian Gifts Portal" data-pin-nopin="true">
+              <img class="img-logo" src="assets/images/igp_black_logo.png" title="Indian Gifts Portal" data-pin-nopin="true" *ngIf="order.fkAssociateId === 5">
+              <img class="img-logo" src="assets/images/interflora_black.png" title="Interflora" data-pin-nopin="true" *ngIf="order.fkAssociateId === 830">
            </div>
           <div class="display-inline print-caption w-section">
               <div class="print-caption-text upper-txt">Delivery Challan</div>
@@ -198,7 +200,8 @@
             <div class="mb1">
                 <div class="messBgCont1">
                     <div class="messBgCont2">
-                        <img class="imgCenter" src="{{messageBgImage}}" >
+                        <img class="imgCenter" src="{{messageBgImage}}" *ngIf="order.fkAssociateId === 5">
+                        <img class="imgCenter" src="{{messageBgImageInterflora}}" *ngIf="order.fkAssociateId === 830">
                     </div>
                 </div>
             </div>

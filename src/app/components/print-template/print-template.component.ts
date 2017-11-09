@@ -14,6 +14,7 @@ export class PrintTemplateComponent implements OnInit {
     productsURL = environment.productsURL;
     productsCompURL = environment.productsCompURL;
     messageBgImage = 'assets/images/Order-Sheet-Creative.png';
+    messageBgImageInterflora = 'assets/images/Order-Sheet-Creative-interflora.png';
 
   constructor(
       public UtilityService: UtilityService,
