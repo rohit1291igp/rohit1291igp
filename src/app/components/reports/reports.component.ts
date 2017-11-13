@@ -216,7 +216,7 @@ export class ReportsComponent implements OnInit{
                     if(this.reportLabelState[key].filterdd){
                         this.reportLabelState[key].filterdd= false;
                     }
-                } 
+                }
             }
         }
     }
@@ -370,7 +370,7 @@ export class ReportsComponent implements OnInit{
 
     determineDataType(value){
         if(!value) return "";
-        value=value.toString();
+        value=value.toString().split('?')[0];
         var dataType="";
         if(!isNaN(Date.parse(value))){
             dataType="number";
