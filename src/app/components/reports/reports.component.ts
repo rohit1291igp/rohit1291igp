@@ -112,7 +112,10 @@ export class ReportsComponent implements OnInit{
       editableDateField:false,
       openSelectorOnInputClick:true
   };
-
+  productsURL = environment.productsURL;
+  productsCompURL = environment.productsCompURL;
+  imagePreviewFlag = false;
+  imagePreviewSrc = "";
   public dateRange: Object = {};
   public reportData:any=null;
   public orginalReportData:any=null;
@@ -206,10 +209,14 @@ export class ReportsComponent implements OnInit{
         //console.log(event);
         let x = event.keyCode;
         if (x === 27) {
-            for(var key in this.reportLabelState){
-                if(this.reportLabelState[key].filterdd){
-                    this.reportLabelState[key].filterdd= false;
-                }
+            if(this.imagePreviewFlag){
+                this.imagePreviewFlag = false;
+            }else{
+                for(var key in this.reportLabelState){
+                    if(this.reportLabelState[key].filterdd){
+                        this.reportLabelState[key].filterdd= false;
+                    }
+                } 
             }
         }
     }
@@ -362,6 +369,7 @@ export class ReportsComponent implements OnInit{
     }
 
     determineDataType(value){
+        if(!value) return "";
         value=value.toString();
         var dataType="";
         if(!isNaN(Date.parse(value))){
@@ -516,6 +524,17 @@ export class ReportsComponent implements OnInit{
         let delDetail = this.UtilityService.getDeliveryName(deliveryType, null, null);
         //console.log('getDeliveryName=========>delDetail=========>', delDetail);
         return delDetail;
+    }
+
+    imagePreview(e, imgSrc){
+        e.stopPropagation();
+        if(imgSrc){
+            if(imgSrc === "ignore") return;
+            this.imagePreviewFlag = true;
+            this.imagePreviewSrc = imgSrc;
+        }else{
+            this.imagePreviewFlag = false;
+        }
     }
 
 }

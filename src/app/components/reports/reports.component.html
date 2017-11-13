@@ -1,3 +1,25 @@
+<div class="image-preview" *ngIf="imagePreviewFlag">
+<div class="modal fade in" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: block; overflow:scroll; background: rgba(0, 0, 0, 0.77); z-index:9999999;" (click)="imagePreview($event)">
+<div class="modal-dialog modal-lg">
+    <div class="modal-content" (click)="imagePreview($event, 'ignore')" [ngClass]="{'mHeight' : isMobile, 'cHeight' : !isMobile}">
+    <div class="modal-header" style="border-bottom:none;">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="imagePreview($event)"><span aria-hidden="true">×</span></button>
+        <!--<h4 class="modal-title" id="myModalLabel">Modal Header</h4>-->
+    </div>
+    <div class="modal-body center-align">
+        <img class="img-responsive" src="{{imagePreviewSrc}}" alt="product_img_preview">
+
+        <!--<p>Some text in the modal.</p>-->
+    </div>
+    <!--<div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+    </div>-->
+</div>
+</div>
+</div>
+<!--<div class="modal-backdrop fade in" (click)="imagePreview($event)"></div>-->
+</div>
+
 <div class="headerVendor navbar-brand" *ngIf="vendorName">- {{vendorName}}</div>
 <div class="row padding-extra dbTableHeader">
     <p style="font-weight: bold; padding: 0.5em 2.5em 0;">Hi {{vendorName}} !</p>
@@ -188,9 +210,12 @@
 
                         <tr *ngFor="let tableRowValue of reportData.tableData" >
                             <td *ngFor="let tableCol of reportData.tableHeaders; let i='index'">
+                                <span *ngIf="tableCol == 'Component Image' || tableCol == 'Component_Image'" >
+                                    <img class="clk" style="width: 5em;" src="{{productsCompURL}}th/{{tableRowValue[tableCol]}}" alt="{{tableRowValue[tableCol]}}" (click)="imagePreview($event, productsCompURL+'full/'+(tableRowValue[tableCol]))">
+                                </span>
                                 <span *ngIf="tableCol == 'Ship_Type'" >{{getDeliveryName(tableRowValue[tableCol])}}</span>
                                 <span *ngIf="ifDate(tableCol) == 'date'" >{{tableRowValue[tableCol] | date : 'dd/MM/yy'}}</span>
-                                <span *ngIf="ifDate(tableCol) != 'date' && tableCol != 'Ship_Type'" > <span [outerHTML]="tableRowValue[tableCol]  | replace : '['"></span></span>
+                                <span *ngIf="ifDate(tableCol) != 'date' && tableCol != 'Ship_Type' && tableCol != 'Component_Image' && tableCol != 'Component Image'" > <span [outerHTML]="tableRowValue[tableCol]  | replace : '['"></span></span>
                                 &nbsp; &nbsp; &nbsp;
                                 <span class="icon m" aria-hidden="true" *ngIf="tableCol === 'Order_No'" (click)="viewOrderDetail($event, tableRowValue[tableCol])">
                                     <img src="assets/images/icons/view.svg" alt="inr">
