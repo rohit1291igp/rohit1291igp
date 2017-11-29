@@ -1,0 +1,9 @@
+<div class="feedsCont" *ngIf="feedData.length" [ngClass]="{'mob' : isMobile}">
+    <div class="text-bold">Updates:</div>
+    <ul class="feeds">
+        <li *ngFor="let feed of feedData;">
+            <span *ngIf="feed.orderId"> <span class="text-bold">{{feed.orderId}}</span> - <span [outerHTML]="feed.instruction"></span></span>
+            <div class="bg-loader" *ngIf="!feed.orderId" style="">&nbsp;</div>
+        </li>
+    </ul>
+</div>

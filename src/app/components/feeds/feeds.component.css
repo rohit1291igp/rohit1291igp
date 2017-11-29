@@ -1,0 +1,24 @@
+.feedsCont.mob{
+   font-size:1.3em;
+    padding: 1em 0.5em;
+}
+
+
+.feedsCont{
+    padding: 0 1em 1em 1em;
+    background: #f2f2f2;
+}
+
+ul.feeds{
+    padding: 1em 0;
+    list-style-type: none;
+    overflow-y: auto;
+    height: 25vh;
+}
+
+ul.feeds li{
+    padding: 0.5em;
+    box-shadow: 0 1px 3px #b3b3b3;
+    margin-top: 0.6em;
+    background: #fff;
+}
