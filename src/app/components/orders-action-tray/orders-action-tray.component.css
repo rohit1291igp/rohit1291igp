@@ -247,6 +247,15 @@
     width:180%;
 }
 
+.order-instruction-detail.mob{
+ bottom:135%;
+}
+
+.order-instruction-detail.mob .arrow-up{
+    top: 103%;
+    transform: rotate(180deg);
+}
+
 .arrow-up {
     left:20%;
     top: -11px;
