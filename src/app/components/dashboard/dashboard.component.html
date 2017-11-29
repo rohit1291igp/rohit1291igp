@@ -33,10 +33,10 @@
 
             <div class="clearfix"></div>
 
-            <div class="col-md-12 vendor-detail m-top-1">
+            <!--<div class="col-md-12 vendor-detail m-top-1">
                 <p>Hi <span class="text-igp">{{vendorName}}!</span></p>
                 <p>Below is the schedule of orders you need to fulfil</p>
-            </div>
+            </div>-->
         </div>
 
         <div class="tableSection">
@@ -153,10 +153,10 @@
 
 <section *ngIf="!isMobile">
 <div class="container-fluid dashboardTable">
-    <div class="row padding-extra dbTableHeader">
+    <!--<div class="row padding-extra dbTableHeader">
         <p>Hi {{vendorName}}!</p>
         <p>Below is the schedule of orders you need to fulfil</p>
-    </div>
+    </div>-->
     <div class="row dashboard-content">
         <div class="col-md-12">
             <div class="table-wrapper">
@@ -268,6 +268,8 @@
 </div>
 </div>
 </div>
+
+
 <div class="row dashboard-content no-padding">
     <div class="padding-extra">
         <!--<p class="sla-message">* Warning Message in case of breach in SLA. Clicking on this opens up the breached orders list</p>-->
@@ -279,3 +281,6 @@
 <app-orders-action-tray (onStatusUpdate)="loadDashboardCount($event)" (onOfdView)="switchOfdData(prodOrderstatus)">
   
 </app-orders-action-tray>
+
+
+<app-feeds></app-feeds>

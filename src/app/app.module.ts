@@ -45,6 +45,7 @@ import { ReplacePipe } from './customPipes/replace.pipe';
 import { ReportsComponent } from './components/reports/reports.component';
 import { ObjectKeyValuePipe } from './customPipes/object-key-value.pipe';
 import { WidgetsComponent } from './components/widgets/widgets.component';
+import { FeedsComponent } from './components/feeds/feeds.component';
 
 //env config
 /*import {envConfig} from "./others/env.config";
@@ -72,7 +73,8 @@ export function ConfigLoader(envConfig: envConfig) {
     ReportsComponent,
     ObjectKeyValuePipe,
     WidgetsComponent,
-      InputTrimDirective
+      InputTrimDirective,
+      FeedsComponent
   ],
   imports: [
     BrowserModule,

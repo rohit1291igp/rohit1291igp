@@ -129,7 +129,8 @@
 
 .topSection{
     background:#f2f2f2;
-    padding:1em 0 0.1em;
+
+    padding: 1em 0 0.7em;
     /*-moz-box-shadow: 0px 5px 8px rgba(0, 0, 0, 0.3);
     -khtml-box-shadow: 0px 5px 8px rgba(0, 0, 0, 0.3);
     -webkit-box-shadow: 0px 5px 8px rgba(0, 0, 0, 0.3);
