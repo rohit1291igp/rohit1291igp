@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { BackendService } from '../../services/backend.service';
 import { UtilityService } from '../../services/utility.service';
 import {environment} from "../../../environments/environment";
+import { Observable } from "rxjs";
 import { IntervalObservable } from "rxjs/observable/IntervalObservable";
 
 @Component({
@@ -57,8 +58,8 @@ export class FeedsComponent implements OnInit {
             "instruction": ""
         }
 
-  ];
-
+    ];
+    public feedObservable;
 
   constructor(
       public BackendService : BackendService,
@@ -66,13 +67,17 @@ export class FeedsComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-     var _this=this;
+     //var _this=this;
      this.getFeeds();
-
-     IntervalObservable.create(1000 * 60)
+     this.feedObservable=Observable.interval(1000 * 60)
           .subscribe(() => {
-              _this.getFeeds();
+               console.log('IntervalObservable working !!!')
+               this.getFeeds();
           });
+  }
+
+  ngOnDestroy(){
+      this.feedObservable.unsubscribe();
   }
 
   getFeeds(){
