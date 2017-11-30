@@ -144,8 +144,11 @@
                 </div>
 
                 <div class="clearfix"></div>
-                <div class="col-md-12 no-padding hide">
-                    <button class="btn btn-primary allOrderBtn bg-igp" (click)="openPanel($event, masterData.status[3])">View all delivered orders</button>
+                <div class="col-md-12 no-padding">
+                    <button class="btn btn-primary allOrderBtn bg-igp" (click)="openPanel($event, masterData.status[3])">
+                    <!--View all delivered orders-->
+                    All orders for today
+                    </button>
                 </div>
             </div>
         </div>
@@ -256,9 +259,10 @@
                 <div class="line-height">Orders yet to be delivered : <span class="text-bold">{{dashboardData.delivered.today}}</span></div>
             </div>
         </div>
-        <div class="col-md-5 hide" *ngIf="dashboardData.delivered.total" style="padding: 1.5em 0 0;">
+        <div class="col-md-5" *ngIf="dashboardData.delivered.total" style="padding: 1.5em 0 0;">
         <div class="btn btn-primary custom-button underline" (click)="openPanel($event, masterData.status[3])">
-        View all delivered orders
+        <!--View all delivered orders -->
+        All orders for today
     </div>
 </div>
 </div>

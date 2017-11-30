@@ -523,6 +523,10 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
                   break;
           }
 
+          if(orderStatus === "Shipped"){
+              orderStatus="all";
+          }
+
           if(orderDeliveryTime === "future"){
               reqURL ="getOrderByStatusDate?responseType=json&scopeId=1&isfuture=true&orderAction="+dashBoardDataType+"&section="+section+"&status="+orderStatus+"&fkassociateId="+fkAssociateId+"&date="+spDate;
           }else{
