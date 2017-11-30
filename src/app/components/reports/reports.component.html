@@ -130,7 +130,7 @@
                 <table class="report-table table table-striped table-bordered table-curved fixed-headerx">
                     <thead class="bg-igp text-white" (click)="stopEventPropgation($event)">
                         <tr>
-                            <th class="relative" [ngClass]="{'selectedHeader' : reportLabelState[tableLabel]['filterdd']}" *ngFor="let tableLabel of reportData.tableHeaders; let a='index';" [ngClass]="{'reportDate' : tableLabel === 'Date'}">
+                            <th class="relative" [ngClass]="{'hide' : isHiddenCell(tableLabel), 'selectedHeader' : reportLabelState[tableLabel]['filterdd']}" *ngFor="let tableLabel of reportData.tableHeaders; let a='index';" [ngClass]="{'reportDate' : tableLabel === 'Date'}">
                                 <span>{{tableLabel | replace : '_'}}</span>
                                 <span class="sortIcons" *ngIf="orginalReportData.tableData.length>0">
                                     <div class="icon s" aria-hidden="true" (click)="setReportsHeadersState($event, tableLabel, 'filterdd', false)" *ngIf="reportLabelState[tableLabel]['filterdd']">
@@ -209,7 +209,7 @@
                         </tr>
 
                         <tr *ngFor="let tableRowValue of reportData.tableData" >
-                            <td *ngFor="let tableCol of reportData.tableHeaders; let i='index'">
+                            <td *ngFor="let tableCol of reportData.tableHeaders; let i='index'" [ngClass]="{'hide' : isHiddenCell(tableCol)}">
                                 <span *ngIf="tableCol == 'Component Image' || tableCol == 'Component_Image'" >
                                     <img class="clk" style="width: 5em;" src="{{productsCompURL}}th/{{tableRowValue[tableCol]}}" alt="{{tableRowValue[tableCol]}}" (click)="imagePreview($event, productsCompURL+'full/'+(tableRowValue[tableCol]))">
                                 </span>

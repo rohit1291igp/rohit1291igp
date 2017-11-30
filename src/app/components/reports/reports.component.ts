@@ -424,6 +424,10 @@ export class ReportsComponent implements OnInit{
        return (/Date/g.test(colName) || /date/g.test(colName)) ? 'date' : 'others';
     }
 
+    isHiddenCell(colName){
+        return (/Hide/g.test(colName) || /hide/g.test(colName));
+    }
+
     filterOperation(){
         var _this=this;
         var _tableData=[];
