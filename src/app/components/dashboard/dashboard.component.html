@@ -178,7 +178,7 @@
             <div class="table-cell-display v-align-middle" *ngIf="dashBoardlabel.deliveryTimes =='bydate'">
             <div class="col-md-4 no-padding" style="margin-top: 8px;">{{dashBoardlabel.labelName}} </div>
             <div class="col-md-8 no-padding custom-date-picker">
-                <my-date-picker name="mydate" [options]="myDatePickerOptions" [(ngModel)]="dateRange" (dateChanged)="onDateChanged($event)"></my-date-picker>
+                <my-date-picker name="mydate" [options]="myDatePickerOptions" [(ngModel)]="dateRange" (ngModelChange)="onDateChanged($event)"></my-date-picker>
             </div>
         </div>
     </div>
