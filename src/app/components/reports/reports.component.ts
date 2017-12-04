@@ -100,7 +100,8 @@ export class ReportsComponent implements OnInit{
           ["", "", "", "", "", ""],
           ["", "", "", "", "", ""],
           ["", "", "", "", "", ""]
-      ]
+      ],
+      "tableDataAction" : []
   };
   reportLabelState:any={};
   columnFilterList:any={};

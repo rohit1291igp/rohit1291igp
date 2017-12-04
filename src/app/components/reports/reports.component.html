@@ -220,6 +220,14 @@
                                 <span class="icon m" aria-hidden="true" *ngIf="tableCol === 'Order_No'" (click)="viewOrderDetail($event, tableRowValue[tableCol])">
                                     <img src="assets/images/icons/view.svg" alt="inr">
                                 </span>
+
+                                <!--<h6>{{reportData.tableDataAction | json}}</h6>-->
+                                <div *ngIf="reportData.tableDataAction && reportData.tableDataAction.length" class="tableDataAction">
+                                    <div class="tableDataActionBtn" *ngFor="let tableAction of reportData.tableDataAction">
+                                        <!--{{tableAction[tableCol] | json}}-->
+                                        <button class="btn btn-primary" *ngFor="let actBtn of tableAction[tableCol]">{{actBtn}}</button>
+                                    </div>
+                                </div>
                             </td>
                         </tr>
 
