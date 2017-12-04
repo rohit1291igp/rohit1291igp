@@ -115,6 +115,11 @@ export class ReportsComponent implements OnInit{
   };
   productsURL = environment.productsURL;
   productsCompURL = environment.productsCompURL;
+  editTableCell = false;
+  editTableCellObj:any={
+      "caption": "",
+      "value" : ""
+  };
   imagePreviewFlag = false;
   imagePreviewSrc = "";
   public dateRange: Object = {};
@@ -191,12 +196,7 @@ export class ReportsComponent implements OnInit{
         console.log('inside clicked ------->');
         const isClickedInside = this._elementRef.nativeElement.contains(targetElement);
         /*if (!isClickedInside) {
-            console.log('outside clicked ------->');
-            for(var key in this.reportLabelState){
-                if(this.reportLabelState[key].filterdd){
-                    this.reportLabelState[key].filterdd= false;
-                }
-            }
+            this.editTableCell = false;
         }*/
         for(var key in this.reportLabelState){
             if(this.reportLabelState[key].filterdd){
@@ -212,6 +212,8 @@ export class ReportsComponent implements OnInit{
         if (x === 27) {
             if(this.imagePreviewFlag){
                 this.imagePreviewFlag = false;
+            }else if(this.editTableCell){
+                this.editTableCell = false;
             }else{
                 for(var key in this.reportLabelState){
                     if(this.reportLabelState[key].filterdd){
@@ -541,6 +543,127 @@ export class ReportsComponent implements OnInit{
         }else{
             this.imagePreviewFlag = false;
         }
+    }
+
+    closePopup(e, ignore){
+        e.stopPropagation();
+        if(ignore) return;
+        this.editTableCell = false;
+    }
+
+    getActBtnTxt(actBtnTxt, cellValue){
+        var _actBtnTxt="";
+        if(/stock/gi.test(actBtnTxt)){
+            if(cellValue === '')
+                _actBtnTxt = "InStock";
+            else
+                _actBtnTxt = "Out of Stock";
+        }else if(/enable/gi.test(actBtnTxt)){
+            if(cellValue === 'Not Servicable')
+                _actBtnTxt = "Enable";
+            else
+                _actBtnTxt = "Disable";
+        }else{
+            _actBtnTxt = actBtnTxt;
+        }
+        return _actBtnTxt;
+    }
+
+    actionBtnInvoke(actBtnTxt, cellValue, rowData, header){
+        var _this=this;
+        console.log(actBtnTxt+'=========='+cellValue+'========='+JSON.stringify(rowData));
+        var actBtnTxtModified=_this.getActBtnTxt(actBtnTxt, cellValue);
+        var apiURLPath="";
+        var paramsObj;
+        switch(_this.reportType){
+            case "getOrderReport" : apiURLPath = "";
+                break;
+
+            case "getVendorReport" : apiURLPath = "handleComponentChange";
+                break;
+
+            case "getPincodeReport" : apiURLPath = "handlePincodeChange";
+                break;
+
+            default : apiURLPath ="";
+        }
+
+        if(/stock/gi.test(actBtnTxt)){
+            paramsObj={
+                componentId:rowData['component_Id_Hide'],
+                inStock: (actBtnTxtModified === "InStock")
+            };
+        }else if(/enable/gi.test(actBtnTxt)){
+            paramsObj={
+                pincode:rowData["Pincode"],
+                updateStatus: (actBtnTxtModified === "Enable" ? 1 : 0),
+                shipType : header
+            };
+        }else if(/edit/gi.test(actBtnTxt)){
+            //editTableCellObj
+            if(!_this.editTableCell){
+
+                _this.editTableCellObj["actBtnTxt"]=actBtnTxt;
+                _this.editTableCellObj["cellValue"]=cellValue;
+                _this.editTableCellObj["rowData"]=rowData;
+                _this.editTableCellObj["header"]=header;
+
+                _this.editTableCellObj["caption"]=header;
+                _this.editTableCellObj["value"]=cellValue;
+                _this.editTableCell=true;
+                return;
+            }else{
+                _this.editTableCell=false;
+                if(header === "Price"){
+                    paramsObj={
+                        componentId:rowData['component_Id_Hide'],
+                        updatePrice: _this.editTableCellObj.value
+                    };
+                }else if(/Delivery/gi.test(header)){
+                    paramsObj={
+                        pincode:rowData["Pincode"],
+                        shipCharge: _this.editTableCellObj.value,
+                        shipType : header
+                    };
+                }else{
+                    paramsObj={};
+                }
+            }
+
+        }else{
+           console.log('Not a valid action');
+        }
+
+        paramsObj.fkAssociateId = localStorage.getItem('fkAssociateId');
+        var paramsStr = _this.UtilityService.formatParams(paramsObj);
+
+        let reqObj= {
+            url : apiURLPath+paramsStr,
+            method:"post"
+        };
+
+        console.log("actionBtnInvoke===================>", reqObj); return;
+
+        /*_this.BackendService.makeAjax(reqObj, function(err, response, headers){
+            if(err || JSON.parse(response).error) {
+                console.log('Error=============>', err, JSON.parse(response).errorCode);
+                return;
+            }
+            response = JSON.parse(response);
+            console.log('sidePanel Response --->', response.result);
+            if(response.result){
+                console.log('Following operation is successful !!!');
+            }else{
+                console.error('Following operation is not fullfilled !!!');
+            }
+
+        });*/
+
+    }
+
+    submitEditCell(e, actBtnTxt, cellValue, rowData, header){
+        var _this=this;
+        _this.actionBtnInvoke(actBtnTxt, cellValue, rowData, header);
     }
 
 }

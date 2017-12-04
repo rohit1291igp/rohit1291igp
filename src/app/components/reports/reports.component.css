@@ -260,3 +260,15 @@ table.fixed-header th {
 }*/
 /* fixed header - end */
 
+.tableactBtn{
+    margin-left:0.5em;
+    display:none;
+}
+
+.reportTableCell:hover .tableactBtn{
+    display:inline-block;
+}
+
+.reporTableRow:hover .tableactBtn{
+    display:inline-block;
+}

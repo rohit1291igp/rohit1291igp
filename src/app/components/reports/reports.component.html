@@ -20,6 +20,33 @@
 <!--<div class="modal-backdrop fade in" (click)="imagePreview($event)"></div>-->
 </div>
 
+
+<div class="image-preview" *ngIf="editTableCell">
+<div class="modal fade in" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: block; overflow:scroll; background: rgba(0, 0, 0, 0.77); z-index:9999999;" (click)="closePopup($event)">
+<div class="modal-dialog modal-lg popupSize1">
+    <div class="modal-content" (click)="closePopup($event, 'ignore')" [ngClass]="{'mHeight' : isMobile, 'cHeight' : !isMobile}">
+    <div class="modal-header" style="border-bottom:none;">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="closePopup($event)"><span aria-hidden="true">×</span></button>
+        <h4 class="modal-title" id="myModalLabel">Edit {{editTableCellObj.caption}}</h4>
+    </div>
+    <div class="modal-body center-align">
+        <label>{{editTableCellObj.caption}}:</label>
+        <form (ngSubmit)="f.form.valid && submitEditCell($event, editTableCellObj.actBtnTxt, editTableCellObj.cellValue, editTableCellObj.rowData, editTableCellObj.header)" #f="ngForm" nonvalidate>
+            <input class="form-control custom-control" type="text" name="editTableCell" placeholder="{{editTableCellObj.caption}}" [(ngModel)]="editTableCellObj.value" #editTableCell="ngModel" required>
+            <div *ngIf="f.submitted && !editTableCell.valid" class="help-block theme-red">Please provide {{editTableCellObj.caption}} value</div>
+            <button class="btn btn-primary m-top-1">Submit</button>
+        </form>
+    </div>
+    <!--<div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+    </div>-->
+</div>
+</div>
+</div>
+<!--<div class="modal-backdrop fade in" (click)="imagePreview($event)"></div>-->
+</div>
+
+
 <div class="headerVendor navbar-brand" *ngIf="vendorName">- {{vendorName}}</div>
 <div class="row padding-extra dbTableHeader">
     <p style="font-weight: bold; padding: 0.5em 2.5em 0;">Hi {{vendorName}} !</p>
@@ -208,8 +235,8 @@
                             <td [colSpan]="reportData.tableHeaders.length">No Record Found</td>
                         </tr>
 
-                        <tr *ngFor="let tableRowValue of reportData.tableData" >
-                            <td *ngFor="let tableCol of reportData.tableHeaders; let i='index'" [ngClass]="{'hide' : isHiddenCell(tableCol)}">
+                        <tr class="reporTableRow" *ngFor="let tableRowValue of reportData.tableData" >
+                            <td class="reportTableCell" *ngFor="let tableCol of reportData.tableHeaders; let i='index'" [ngClass]="{'hide' : isHiddenCell(tableCol)}">
                                 <span *ngIf="tableCol == 'Component Image' || tableCol == 'Component_Image'" >
                                     <img class="clk" style="width: 5em;" src="{{productsCompURL}}th/{{tableRowValue[tableCol]}}" alt="{{tableRowValue[tableCol]}}" (click)="imagePreview($event, productsCompURL+'full/'+(tableRowValue[tableCol]))">
                                 </span>
@@ -225,7 +252,7 @@
                                 <div *ngIf="reportData.tableDataAction && reportData.tableDataAction.length" class="tableDataAction">
                                     <div class="tableDataActionBtn" *ngFor="let tableAction of reportData.tableDataAction">
                                         <!--{{tableAction[tableCol] | json}}-->
-                                        <button class="btn btn-primary" *ngFor="let actBtn of tableAction[tableCol]">{{actBtn}}</button>
+                                        <button class="btn btn-primary tableactBtn" *ngFor="let actBtn of tableAction[tableCol]" (click)="actionBtnInvoke(actBtn, tableRowValue[tableCol], tableRowValue, tableCol)">{{getActBtnTxt(actBtn, tableRowValue[tableCol])}}</button>
                                     </div>
                                 </div>
                             </td>
