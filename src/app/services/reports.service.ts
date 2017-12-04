@@ -61,7 +61,11 @@ export class ReportsService {
                   queryParmas += '&startLimit=0';
               }
               if(!/endLimit/.test(queryString)){
-                  queryParmas += '&endLimit=100';
+                  if(reportType === "getPincodeReport"){
+                      queryParmas += '&endLimit=1000';
+                  }else{
+                      queryParmas += '&endLimit=100';
+                  }
               }
 
               //var queryParmas = "fkAssociateId=fkAssociateId&startLimit=0&endLimit=20";

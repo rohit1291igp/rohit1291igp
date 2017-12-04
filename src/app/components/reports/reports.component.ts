@@ -306,6 +306,7 @@ export class ReportsComponent implements OnInit{
     //pagination
     showMoreTableData(e){
         var _this=this;
+        if(_this.reportType === "getPincodeReport"){return;} // pagination issue 
         var totalOrders= (_this.orginalReportData.summary && _this.orginalReportData.summary[0]) ? Number(_this.orginalReportData.summary[0].value) : 0;
         console.log('show more clicked');
 
