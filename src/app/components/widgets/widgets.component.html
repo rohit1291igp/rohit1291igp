@@ -5,7 +5,7 @@
 
 <div class="confirmMainCont" *ngIf="wOptions.type === 'confirm'">
         <div class="modal fade in" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: block; overflow:scroll; background: rgba(0, 0, 0, 0.77); z-index:9999999;">
-            <div class="modal-dialog modal-lg">
+            <div class="modal-dialog modal-lg" [ngClass]="{'popupSize1' : (!isMobile)}">
                 <div class="modal-content" style="top: 40vh; border-radius: 0;">
                     <div class="modal-body center-align no-padding" style="font-size: 1.5em;font-weight: 600;">
                         <div class="confirmTop" style="padding: 1em;">

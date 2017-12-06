@@ -1,3 +1,5 @@
+<app-widgets (onConfirmClicked)="confirmYesNo($event)" [wOptions]="{type : 'confirm', data:confirmData}" *ngIf="confirmFlag" [@enterAnimation]></app-widgets>
+
 <div class="image-preview" *ngIf="imagePreviewFlag">
 <div class="modal fade in" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: block; overflow:scroll; background: rgba(0, 0, 0, 0.77); z-index:9999999;" (click)="imagePreview($event)">
 <div class="modal-dialog modal-lg">

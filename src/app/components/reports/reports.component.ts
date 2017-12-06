@@ -27,7 +27,20 @@ import { OrdersActionTrayComponent } from '../orders-action-tray/orders-action-t
                     animate(".9s ease", style({ height: '*', opacity: 1, transform: 'translateX(5%)', 'box-shadow': '0 1px 4px 0 rgba(0, 0, 0, 0.3)'  }))
                 ])
             ])
-        ])
+        ]),
+
+        trigger(
+            'enterAnimation', [
+                transition(':enter', [
+                    style({transform: 'translateX(100%)', opacity: 0}),
+                    animate('500ms', style({transform: 'translateX(0)', opacity: 1}))
+                ]),
+                transition(':leave', [
+                    style({transform: 'translateX(0)', opacity: 1}),
+                    animate('500ms', style({transform: 'translateX(100%)', opacity: 0}))
+                ])
+            ]
+        )
     ]
 })
 export class ReportsComponent implements OnInit{
@@ -126,6 +139,15 @@ export class ReportsComponent implements OnInit{
   public reportData:any=null;
   public orginalReportData:any=null;
   searchResultModel:any={};
+  confirmFlag=false;
+  confirmModel:any={};
+  confirmData={
+    "confirm": {
+       "message": "Are you sure you want to reject this order?",
+       "yesBtn": "Reject",
+       "noBtn": "Cancel"
+     }
+  };
   constructor(
       private _elementRef: ElementRef,
       public reportsService: ReportsService,
@@ -589,16 +611,53 @@ export class ReportsComponent implements OnInit{
         }
 
         if(/stock/gi.test(actBtnTxt)){
-            paramsObj={
-                componentId:rowData['component_Id_Hide'],
-                inStock: (actBtnTxtModified === "InStock")
-            };
+            if(!_this.confirmFlag){
+                _this.editTableCellObj["actBtnTxt"]=actBtnTxt;
+                _this.editTableCellObj["cellValue"]=cellValue;
+                _this.editTableCellObj["rowData"]=rowData;
+                _this.editTableCellObj["header"]=header;
+
+                _this.confirmData={
+                    "confirm": {
+                        "message": "Are you sure you want to make "+(actBtnTxtModified === "InStock" ? "InStock":"Out of Stock") +" ?",
+                        "yesBtn": (actBtnTxtModified === "InStock" ? "InStock":"Out of Stock"),
+                        "noBtn": "Cancel"
+                    }
+                }
+                _this.confirmFlag=true;
+                return;
+            }else{
+                paramsObj={
+                    componentId:rowData['component_Id_Hide'],
+                    inStock: (actBtnTxtModified === "InStock")
+                };
+                _this.confirmFlag=false;
+            }
         }else if(/enable/gi.test(actBtnTxt)){
-            paramsObj={
-                pincode:rowData["Pincode"],
-                updateStatus: (actBtnTxtModified === "Enable" ? 1 : 0),
-                shipType : header
-            };
+            if(!_this.confirmFlag){
+                _this.editTableCellObj["actBtnTxt"]=actBtnTxt;
+                _this.editTableCellObj["cellValue"]=cellValue;
+                _this.editTableCellObj["rowData"]=rowData;
+                _this.editTableCellObj["header"]=header;
+
+                _this.confirmData={
+                    "confirm": {
+                        "message": "Are you sure you want to "+(actBtnTxtModified === "Enable" ? "Enable" : "Disable")+" ?",
+                        "yesBtn": (actBtnTxtModified === "Enable" ? "Enable" : "Disable"),
+                        "noBtn": "Cancel"
+                    }
+                }
+                _this.confirmFlag=true;
+                return;
+            }else{
+                paramsObj={
+                    pincode:rowData["Pincode"],
+                    updateStatus: (actBtnTxtModified === "Enable" ? 1 : 0),
+                    shipType : header
+                };
+                _this.confirmFlag=false;
+            }
+
         }else if(/edit/gi.test(actBtnTxt)){
             //editTableCellObj
             if(!_this.editTableCell){
@@ -665,5 +724,19 @@ export class ReportsComponent implements OnInit{
         var _this=this;
         _this.actionBtnInvoke(actBtnTxt, cellValue, rowData, header);
     }
+
+    confirmYesNo(args){
+        var _e=args.e,
+            value=args.value;
+        if(value === "yes"){
+            _e.preventDefault();
+            _e.stopPropagation();
+            var _this= this;
+            _this.actionBtnInvoke(_this.editTableCellObj.actBtnTxt, _this.editTableCellObj.cellValue, _this.editTableCellObj.rowData, _this.editTableCellObj.header);
+        }else{
+            this.confirmFlag=false;
+        }
+    }
+
 
 }
