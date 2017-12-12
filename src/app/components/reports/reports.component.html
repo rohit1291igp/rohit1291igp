@@ -254,7 +254,7 @@
                                 <div *ngIf="reportData.tableDataAction && reportData.tableDataAction.length" class="tableDataAction">
                                     <div class="tableDataActionBtn" *ngFor="let tableAction of reportData.tableDataAction">
                                         <!--{{tableAction[tableCol] | json}}-->
-                                        <button class="btn btn-primary tableactBtn" *ngFor="let actBtn of tableAction[tableCol]" (click)="actionBtnInvoke(actBtn, tableRowValue[tableCol], tableRowValue, tableCol)">{{getActBtnTxt(actBtn, tableRowValue[tableCol])}}</button>
+                                        <button class="btn btn-primary tableactBtn reportActionBtn" *ngFor="let actBtn of tableAction[tableCol]" (click)="actionBtnInvoke(actBtn, tableRowValue[tableCol], tableRowValue, tableCol)">{{getActBtnTxt(actBtn, tableRowValue[tableCol])}}</button>
                                     </div>
                                 </div>
                             </td>

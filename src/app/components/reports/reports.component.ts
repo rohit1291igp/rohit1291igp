@@ -698,7 +698,7 @@ export class ReportsComponent implements OnInit{
 
         let reqObj= {
             url : apiURLPath+paramsStr,
-            method:"post"
+            method:"put"
         };
 
         console.log("actionBtnInvoke===================>", reqObj); return;
