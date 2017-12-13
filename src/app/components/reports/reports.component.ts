@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, OnChanges, DoCheck, Input, Output, EventEmitter, HostListener, ElementRef, trigger, sequence, transition, animate, style, state } from '@angular/core';
+import { Component, OnInit, AfterContentInit, ViewChild, OnChanges, DoCheck, Input, Output, EventEmitter, HostListener, ElementRef, trigger, sequence, transition, animate, style, state } from '@angular/core';
 import { ActivatedRoute} from '@angular/router';
 import { IMyOptions, IMyDateModel } from 'mydatepicker';
 import { BackendService } from '../../services/backend.service';
@@ -45,6 +45,10 @@ import { OrdersActionTrayComponent } from '../orders-action-tray/orders-action-t
 })
 export class ReportsComponent implements OnInit{
  @ViewChild(OrdersActionTrayComponent) child: OrdersActionTrayComponent;
+ /*@Input()
+ set ready(isReady: boolean) {
+        if (isReady) this.resetColumnFilterPosition();
+  }*/
   vendorName = localStorage.getItem('associateName');
   filterValueFlag=false;
   reportType;
@@ -591,7 +595,7 @@ export class ReportsComponent implements OnInit{
         return _actBtnTxt;
     }
 
-    actionBtnInvoke(actBtnTxt, cellValue, rowData, header){
+    actionBtnInvoke(actBtnTxt, cellValue, rowData, header, dataIndex){
         var _this=this;
         console.log(actBtnTxt+'=========='+cellValue+'========='+JSON.stringify(rowData));
         var actBtnTxtModified=_this.getActBtnTxt(actBtnTxt, cellValue);
@@ -616,6 +620,7 @@ export class ReportsComponent implements OnInit{
                 _this.editTableCellObj["cellValue"]=cellValue;
                 _this.editTableCellObj["rowData"]=rowData;
                 _this.editTableCellObj["header"]=header;
+                _this.editTableCellObj["dataIndex"]=dataIndex;
 
                 _this.confirmData={
                     "confirm": {
@@ -639,6 +644,7 @@ export class ReportsComponent implements OnInit{
                 _this.editTableCellObj["cellValue"]=cellValue;
                 _this.editTableCellObj["rowData"]=rowData;
                 _this.editTableCellObj["header"]=header;
+                _this.editTableCellObj["dataIndex"]=dataIndex;
 
                 _this.confirmData={
                     "confirm": {
@@ -666,6 +672,7 @@ export class ReportsComponent implements OnInit{
                 _this.editTableCellObj["cellValue"]=cellValue;
                 _this.editTableCellObj["rowData"]=rowData;
                 _this.editTableCellObj["header"]=header;
+                _this.editTableCellObj["dataIndex"]=dataIndex;
 
                 _this.editTableCellObj["caption"]=header;
                 _this.editTableCellObj["value"]=cellValue;
@@ -701,7 +708,19 @@ export class ReportsComponent implements OnInit{
             method:"put"
         };
 
-        console.log("actionBtnInvoke===================>", reqObj); return;
+        _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header] = _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header]+'`updating';
+        console.log("actionBtnInvoke===================>", reqObj); //return;
+
+        setTimeout(function(){
+            _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header] = _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header].replace(/`updating/g , " ")+'`updated';
+            setTimeout(function(){
+                if(/edit/gi.test(actBtnTxt)){
+                    _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header] = _this.editTableCellObj.value;
+                }else{
+                    _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header] = _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header].replace(/`updated/g , " ");
+                }
+            },1000);
+        },1500);
 
         /*_this.BackendService.makeAjax(reqObj, function(err, response, headers){
             if(err || JSON.parse(response).error) {
@@ -711,7 +730,15 @@ export class ReportsComponent implements OnInit{
             response = JSON.parse(response);
             console.log('sidePanel Response --->', response.result);
             if(response.result){
-                console.log('Following operation is successful !!!');
+                  console.log('Following operation is successful !!!');
+                 _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header] = _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header].replace(/`updating/g , " ")+'`updated';
+                 setTimeout(function(){
+                     if(/edit/gi.test(actBtnTxt)){
+                        _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header] = _this.editTableCellObj.value;
+                     }else{
+                        _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header] = _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header].replace(/`updated/g , " ");
+                     }
+                 },1000);
             }else{
                 console.error('Following operation is not fullfilled !!!');
             }
@@ -720,9 +747,9 @@ export class ReportsComponent implements OnInit{
 
     }
 
-    submitEditCell(e, actBtnTxt, cellValue, rowData, header){
+    submitEditCell(e, actBtnTxt, cellValue, rowData, header, dataIndex){
         var _this=this;
-        _this.actionBtnInvoke(actBtnTxt, cellValue, rowData, header);
+        _this.actionBtnInvoke(actBtnTxt, cellValue, rowData, header, dataIndex);
     }
 
     confirmYesNo(args){
@@ -732,9 +759,27 @@ export class ReportsComponent implements OnInit{
             _e.preventDefault();
             _e.stopPropagation();
             var _this= this;
-            _this.actionBtnInvoke(_this.editTableCellObj.actBtnTxt, _this.editTableCellObj.cellValue, _this.editTableCellObj.rowData, _this.editTableCellObj.header);
+            _this.actionBtnInvoke(_this.editTableCellObj.actBtnTxt, _this.editTableCellObj.cellValue, _this.editTableCellObj.rowData, _this.editTableCellObj.header, _this.editTableCellObj.dataIndex);
         }else{
             this.confirmFlag=false;
+        }
+    }
+
+    resetColumnFilterPosition(){
+        var el=document.querySelectorAll('.report-table th');
+        var elLength= el.length;
+        console.log('elLength----------------->', elLength);
+        //var colFilterDdWidth= document.getElementsByClassName('searchSortDd')[0] ? 0: document.getElementsByClassName('searchSortDd')[0].offsetWidth;
+    }
+
+    isUpdated(value){
+        //console.log('value.includes---------->', value);
+        if( value && value.toString().includes('`updating')){
+            return 'updating';
+        }else if(value && value.toString().includes('`updated')){
+            return 'updated';
+        }else{
+            return "";
         }
     }
 
