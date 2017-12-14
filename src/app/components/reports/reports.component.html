@@ -254,8 +254,8 @@
 
                                 <!--update messgae start-->
                                     <div class="updateTxt" *ngIf="isUpdated(tableRowValue[tableCol]) === 'updating' || isUpdated(tableRowValue[tableCol]) === 'updated'">
-                                        <div class="updateTxtMain" *ngIf="isUpdated(tableRowValue[tableCol]) === 'updating'">Updating...</div>
-                                        <div class="updateTxtMain" *ngIf="isUpdated(tableRowValue[tableCol]) === 'updated'">Updated!</div>
+                                        <div class="updateTxtMain" *ngIf="isUpdated(tableRowValue[tableCol]) === 'updating'"><app-loader></app-loader></div>
+                                        <div class="updateTxtMain" *ngIf="isUpdated(tableRowValue[tableCol]) === 'updated'">Request sent!</div>
                                     </div>
                                 <!--update messgae end-->
 

@@ -714,11 +714,13 @@ export class ReportsComponent implements OnInit{
         setTimeout(function(){
             _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header] = _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header].replace(/`updating/g , " ")+'`updated';
             setTimeout(function(){
-                if(/edit/gi.test(actBtnTxt)){
+                /*if(/edit/gi.test(actBtnTxt)){
                     _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header] = _this.editTableCellObj.value;
                 }else{
                     _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header] = _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header].replace(/`updated/g , " ");
-                }
+                }*/
+                _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header] = _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header].replace(/`updated/g , " ");
+
             },1000);
         },2000);
 
@@ -733,15 +735,11 @@ export class ReportsComponent implements OnInit{
                   console.log('Following operation is successful !!!');
                  _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header] = _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header].replace(/`updating/g , " ")+'`updated';
                  setTimeout(function(){
-                     if(/edit/gi.test(actBtnTxt)){
-                        _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header] = _this.editTableCellObj.value;
-                     }else{
-                        _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header] = _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header].replace(/`updated/g , " ");
-                     }
-                 },1000);
-            }else{
-                console.error('Following operation is not fullfilled !!!');
-            }
+                    _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header] = _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header].replace(/`updated/g , " ");
+             },1000);
+                }else{
+                    console.error('Following operation is not fullfilled !!!');
+                }
 
         });*/
 

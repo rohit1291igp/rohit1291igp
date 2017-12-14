@@ -309,12 +309,13 @@ table.fixed-header th {
     position: absolute;
     background: #020202f2;
     height: 100%;
+    z-index:99;
 }
 
 .updateTxtMain{
     /*margin-top: 2em;*/
-    font-weight: 500;
-    letter-spacing: 2px;
+    /*font-weight: 500;*/
+    /*letter-spacing: 2px;*/
     position:absolute;
     top:50%;
     left:50%;
