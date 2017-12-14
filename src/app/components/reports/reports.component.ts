@@ -659,7 +659,7 @@ export class ReportsComponent implements OnInit{
                 paramsObj={
                     pincode:rowData["Pincode"],
                     updateStatus: (actBtnTxtModified === "Enable" ? 1 : 0),
-                    shipType : header
+                    shipType : _this.UtilityService.getDeliveryType(header)
                 };
                 _this.confirmFlag=false;
             }
@@ -689,7 +689,7 @@ export class ReportsComponent implements OnInit{
                     paramsObj={
                         pincode:rowData["Pincode"],
                         shipCharge: _this.editTableCellObj.value,
-                        shipType : header
+                        shipType : _this.UtilityService.getDeliveryType(header)
                     };
                 }else{
                     paramsObj={};
@@ -720,7 +720,7 @@ export class ReportsComponent implements OnInit{
                     _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header] = _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header].replace(/`updated/g , " ");
                 }
             },1000);
-        },1500);
+        },2000);
 
         /*_this.BackendService.makeAjax(reqObj, function(err, response, headers){
             if(err || JSON.parse(response).error) {

@@ -23,7 +23,7 @@ export class ReplacePipe implements PipeTransform {
                   value = value;
               }
           }else if(_args === "`"){
-              value = value ? value.replace(/`updated/g , "") : value;
+              value = value ? value.replace(/`updated/g , "").replace(/`updating/g , "") : value;
           }else{
               value = value ? value.replace(/,/g , "") : value;
           }

@@ -181,6 +181,13 @@
 
 .searchSortDd.ddleft{
     left: 0 ! important;
+    transform: none;
+}
+
+.searchSortDd.ddRight{
+    right: 0 ! important;
+    transform: none;
+    left:auto ! important;
 }
 
 .selectedHeader{
@@ -305,7 +312,18 @@ table.fixed-header th {
 }
 
 .updateTxtMain{
-    margin-top: 2em;
-    /*font-weight: 500;*/
-    /*letter-spacing: 2px;*/
+    /*margin-top: 2em;*/
+    font-weight: 500;
+    letter-spacing: 2px;
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform: translate(-50%, -50%);
+}
+
+.tdTxt{
+    /*position:absolute;*/
+    /*top:50%;*/
+    /*left:50%;*/
+    /*transform: translate(-50%, -50%);*/
 }
