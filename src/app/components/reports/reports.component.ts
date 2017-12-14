@@ -711,20 +711,20 @@ export class ReportsComponent implements OnInit{
         _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header] = _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header]+'`updating';
         console.log("actionBtnInvoke===================>", reqObj); //return;
 
-        setTimeout(function(){
+        /*setTimeout(function(){
             _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header] = _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header].replace(/`updating/g , " ")+'`updated';
             setTimeout(function(){
-                /*if(/edit/gi.test(actBtnTxt)){
+                *//*if(/edit/gi.test(actBtnTxt)){
                     _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header] = _this.editTableCellObj.value;
                 }else{
                     _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header] = _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header].replace(/`updated/g , " ");
-                }*/
+                }*//*
                 _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header] = _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header].replace(/`updated/g , " ");
 
             },1000);
-        },2000);
+        },2000);*/
 
-        /*_this.BackendService.makeAjax(reqObj, function(err, response, headers){
+        _this.BackendService.makeAjax(reqObj, function(err, response, headers){
             if(err || JSON.parse(response).error) {
                 console.log('Error=============>', err, JSON.parse(response).errorCode);
                 return;
@@ -736,12 +736,12 @@ export class ReportsComponent implements OnInit{
                  _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header] = _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header].replace(/`updating/g , " ")+'`updated';
                  setTimeout(function(){
                     _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header] = _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header].replace(/`updated/g , " ");
-             },1000);
+                 },1000);
                 }else{
                     console.error('Following operation is not fullfilled !!!');
                 }
 
-        });*/
+        });
 
     }
 
