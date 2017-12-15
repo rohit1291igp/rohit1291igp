@@ -8,6 +8,7 @@ import { UtilityService } from '../../services/utility.service';
   styleUrls: ['./widgets.component.css']
 })
 export class WidgetsComponent implements OnInit {
+  isMobile=environment.isMobile;
   @Input('wOptions') wOptions : any;
   @Output() onConfirmClicked:EventEmitter<any>=new EventEmitter();
   constructor(

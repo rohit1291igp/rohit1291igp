@@ -81,6 +81,7 @@
 .table-curved td, .table-curved th {
     border-left: 1px solid #ccc;
     border-top: 1px solid #ccc;
+    position:relative;
 }
 .table-curved > :first-child > :first-child > :first-child {
     border-radius: 6px 0 0 0;
@@ -132,7 +133,8 @@
     -khtml-box-shadow: 0px 5px 8px rgba(0, 0, 0, 0.3);
     -webkit-box-shadow: 0px 5px 8px rgba(0, 0, 0, 0.3);
     box-shadow: 0px 5px 8px rgba(0, 0, 0, 0.3);
-    right: 0;
+    left: 50%;
+    transform: translateX(-50%);
     /*height: 100%;*/
     width: 0em;
     background: #fff;
@@ -179,6 +181,13 @@
 
 .searchSortDd.ddleft{
     left: 0 ! important;
+    transform: none;
+}
+
+.searchSortDd.ddRight{
+    right: 0 ! important;
+    transform: none;
+    left:auto ! important;
 }
 
 .selectedHeader{
@@ -260,3 +269,62 @@ table.fixed-header th {
 }*/
 /* fixed header - end */
 
+.tableactBtn{
+    display:none;
+    /*display: inline-block;*/
+    padding: 0.4em 0.5em;
+    cursor: pointer;
+    border: none;
+    font-weight: 600;
+    background: transparent;
+    color: #000;
+    white-space: nowrap;
+    /*margin-top: 0.5em;*/
+    /* box-shadow: 0 1px 3px #888; */
+}
+
+.reportTableCell:hover .tableactBtn{
+    display:inline-block;
+}
+
+.reporTableRow:hover .tableactBtn{
+    display:inline-block;
+}
+
+.tableactBtn:hover .tableactBtntxt{
+    color: #C3404E;
+}
+
+.tableDataAction{
+    position:absolute;
+    bottom:0;
+    left:50%;
+    transform: translateX(-50%);
+}
+
+.updateTxt{
+    color: #fff;
+    width: 100%;
+    top: 0;
+    position: absolute;
+    background: #020202f2;
+    height: 100%;
+    z-index:99;
+}
+
+.updateTxtMain{
+    /*margin-top: 2em;*/
+    /*font-weight: 500;*/
+    /*letter-spacing: 2px;*/
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform: translate(-50%, -50%);
+}
+
+.tdTxt{
+    /*position:absolute;*/
+    /*top:50%;*/
+    /*left:50%;*/
+    /*transform: translate(-50%, -50%);*/
+}

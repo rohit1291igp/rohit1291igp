@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, OnChanges, DoCheck, Input, Output, EventEmitter, HostListener, ElementRef, trigger, sequence, transition, animate, style, state } from '@angular/core';
+import { Component, OnInit, AfterContentInit, ViewChild, OnChanges, DoCheck, Input, Output, EventEmitter, HostListener, ElementRef, trigger, sequence, transition, animate, style, state } from '@angular/core';
 import { ActivatedRoute} from '@angular/router';
 import { IMyOptions, IMyDateModel } from 'mydatepicker';
 import { BackendService } from '../../services/backend.service';
@@ -27,11 +27,28 @@ import { OrdersActionTrayComponent } from '../orders-action-tray/orders-action-t
                     animate(".9s ease", style({ height: '*', opacity: 1, transform: 'translateX(5%)', 'box-shadow': '0 1px 4px 0 rgba(0, 0, 0, 0.3)'  }))
                 ])
             ])
-        ])
+        ]),
+
+        trigger(
+            'enterAnimation', [
+                transition(':enter', [
+                    style({transform: 'translateX(100%)', opacity: 0}),
+                    animate('500ms', style({transform: 'translateX(0)', opacity: 1}))
+                ]),
+                transition(':leave', [
+                    style({transform: 'translateX(0)', opacity: 1}),
+                    animate('500ms', style({transform: 'translateX(100%)', opacity: 0}))
+                ])
+            ]
+        )
     ]
 })
 export class ReportsComponent implements OnInit{
  @ViewChild(OrdersActionTrayComponent) child: OrdersActionTrayComponent;
+ /*@Input()
+ set ready(isReady: boolean) {
+        if (isReady) this.resetColumnFilterPosition();
+  }*/
   vendorName = localStorage.getItem('associateName');
   filterValueFlag=false;
   reportType;
@@ -100,7 +117,8 @@ export class ReportsComponent implements OnInit{
           ["", "", "", "", "", ""],
           ["", "", "", "", "", ""],
           ["", "", "", "", "", ""]
-      ]
+      ],
+      "tableDataAction" : []
   };
   reportLabelState:any={};
   columnFilterList:any={};
@@ -114,12 +132,26 @@ export class ReportsComponent implements OnInit{
   };
   productsURL = environment.productsURL;
   productsCompURL = environment.productsCompURL;
+  editTableCell = false;
+  editTableCellObj:any={
+      "caption": "",
+      "value" : ""
+  };
   imagePreviewFlag = false;
   imagePreviewSrc = "";
   public dateRange: Object = {};
   public reportData:any=null;
   public orginalReportData:any=null;
   searchResultModel:any={};
+  confirmFlag=false;
+  confirmModel:any={};
+  confirmData={
+    "confirm": {
+       "message": "Are you sure you want to reject this order?",
+       "yesBtn": "Reject",
+       "noBtn": "Cancel"
+     }
+  };
   constructor(
       private _elementRef: ElementRef,
       public reportsService: ReportsService,
@@ -190,12 +222,7 @@ export class ReportsComponent implements OnInit{
         console.log('inside clicked ------->');
         const isClickedInside = this._elementRef.nativeElement.contains(targetElement);
         /*if (!isClickedInside) {
-            console.log('outside clicked ------->');
-            for(var key in this.reportLabelState){
-                if(this.reportLabelState[key].filterdd){
-                    this.reportLabelState[key].filterdd= false;
-                }
-            }
+            this.editTableCell = false;
         }*/
         for(var key in this.reportLabelState){
             if(this.reportLabelState[key].filterdd){
@@ -211,6 +238,8 @@ export class ReportsComponent implements OnInit{
         if (x === 27) {
             if(this.imagePreviewFlag){
                 this.imagePreviewFlag = false;
+            }else if(this.editTableCell){
+                this.editTableCell = false;
             }else{
                 for(var key in this.reportLabelState){
                     if(this.reportLabelState[key].filterdd){
@@ -305,6 +334,7 @@ export class ReportsComponent implements OnInit{
     //pagination
     showMoreTableData(e){
         var _this=this;
+        if(_this.reportType === "getPincodeReport"){return;} // pagination issue 
         var totalOrders= (_this.orginalReportData.summary && _this.orginalReportData.summary[0]) ? Number(_this.orginalReportData.summary[0].value) : 0;
         console.log('show more clicked');
 
@@ -540,5 +570,216 @@ export class ReportsComponent implements OnInit{
             this.imagePreviewFlag = false;
         }
     }
+
+    closePopup(e, ignore){
+        e.stopPropagation();
+        if(ignore) return;
+        this.editTableCell = false;
+    }
+
+    getActBtnTxt(actBtnTxt, cellValue){
+        var _actBtnTxt="";
+        if(/stock/gi.test(actBtnTxt)){
+            if(cellValue === '')
+                _actBtnTxt = "InStock";
+            else
+                _actBtnTxt = "Out of Stock";
+        }else if(/enable/gi.test(actBtnTxt)){
+            if(cellValue === 'Not Servicable')
+                _actBtnTxt = "Enable";
+            else
+                _actBtnTxt = "Disable";
+        }else{
+            _actBtnTxt = actBtnTxt;
+        }
+        return _actBtnTxt;
+    }
+
+    actionBtnInvoke(actBtnTxt, cellValue, rowData, header, dataIndex){
+        var _this=this;
+        console.log(actBtnTxt+'=========='+cellValue+'========='+JSON.stringify(rowData));
+        var actBtnTxtModified=_this.getActBtnTxt(actBtnTxt, cellValue);
+        var apiURLPath="";
+        var paramsObj;
+        switch(_this.reportType){
+            case "getOrderReport" : apiURLPath = "";
+                break;
+
+            case "getVendorReport" : apiURLPath = "handleComponentChange";
+                break;
+
+            case "getPincodeReport" : apiURLPath = "handlePincodeChange";
+                break;
+
+            default : apiURLPath ="";
+        }
+
+        if(/stock/gi.test(actBtnTxt)){
+            if(!_this.confirmFlag){
+                _this.editTableCellObj["actBtnTxt"]=actBtnTxt;
+                _this.editTableCellObj["cellValue"]=cellValue;
+                _this.editTableCellObj["rowData"]=rowData;
+                _this.editTableCellObj["header"]=header;
+                _this.editTableCellObj["dataIndex"]=dataIndex;
+
+                _this.confirmData={
+                    "confirm": {
+                        "message": "Are you sure you want to make "+(actBtnTxtModified === "InStock" ? "InStock":"Out of Stock") +" ?",
+                        "yesBtn": (actBtnTxtModified === "InStock" ? "InStock":"Out of Stock"),
+                        "noBtn": "Cancel"
+                    }
+                }
+                _this.confirmFlag=true;
+                return;
+            }else{
+                paramsObj={
+                    componentId:rowData['component_Id_Hide'],
+                    inStock: (actBtnTxtModified === "InStock")
+                };
+                _this.confirmFlag=false;
+            }
+        }else if(/enable/gi.test(actBtnTxt)){
+            if(!_this.confirmFlag){
+                _this.editTableCellObj["actBtnTxt"]=actBtnTxt;
+                _this.editTableCellObj["cellValue"]=cellValue;
+                _this.editTableCellObj["rowData"]=rowData;
+                _this.editTableCellObj["header"]=header;
+                _this.editTableCellObj["dataIndex"]=dataIndex;
+
+                _this.confirmData={
+                    "confirm": {
+                        "message": "Are you sure you want to "+(actBtnTxtModified === "Enable" ? "Enable" : "Disable")+" ?",
+                        "yesBtn": (actBtnTxtModified === "Enable" ? "Enable" : "Disable"),
+                        "noBtn": "Cancel"
+                    }
+                }
+                _this.confirmFlag=true;
+                return;
+            }else{
+                paramsObj={
+                    pincode:rowData["Pincode"],
+                    updateStatus: (actBtnTxtModified === "Enable" ? 1 : 0),
+                    shipType : _this.UtilityService.getDeliveryType(header)
+                };
+                _this.confirmFlag=false;
+            }
+
+        }else if(/edit/gi.test(actBtnTxt)){
+            //editTableCellObj
+            if(!_this.editTableCell){
+
+                _this.editTableCellObj["actBtnTxt"]=actBtnTxt;
+                _this.editTableCellObj["cellValue"]=cellValue;
+                _this.editTableCellObj["rowData"]=rowData;
+                _this.editTableCellObj["header"]=header;
+                _this.editTableCellObj["dataIndex"]=dataIndex;
+
+                _this.editTableCellObj["caption"]=header;
+                _this.editTableCellObj["value"]=cellValue;
+                _this.editTableCell=true;
+                return;
+            }else{
+                _this.editTableCell=false;
+                if(header === "Price"){
+                    paramsObj={
+                        componentId:rowData['component_Id_Hide'],
+                        updatePrice: _this.editTableCellObj.value
+                    };
+                }else if(/Delivery/gi.test(header)){
+                    paramsObj={
+                        pincode:rowData["Pincode"],
+                        shipCharge: _this.editTableCellObj.value,
+                        shipType : _this.UtilityService.getDeliveryType(header)
+                    };
+                }else{
+                    paramsObj={};
+                }
+            }
+
+        }else{
+           console.log('Not a valid action');
+        }
+
+        paramsObj.fkAssociateId = localStorage.getItem('fkAssociateId');
+        var paramsStr = _this.UtilityService.formatParams(paramsObj);
+
+        let reqObj= {
+            url : apiURLPath+paramsStr,
+            method:"put"
+        };
+
+        _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header] = _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header]+'`updating';
+        console.log("actionBtnInvoke===================>", reqObj); //return;
+
+        /*setTimeout(function(){
+            _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header] = _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header].replace(/`updating/g , " ")+'`updated';
+            setTimeout(function(){
+                *//*if(/edit/gi.test(actBtnTxt)){
+                    _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header] = _this.editTableCellObj.value;
+                }else{
+                    _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header] = _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header].replace(/`updated/g , " ");
+                }*//*
+                _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header] = _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header].replace(/`updated/g , " ");
+
+            },1000);
+        },2000);*/
+
+        _this.BackendService.makeAjax(reqObj, function(err, response, headers){
+            if(err || JSON.parse(response).error) {
+                console.log('Error=============>', err, JSON.parse(response).errorCode);
+                return;
+            }
+            response = JSON.parse(response);
+            console.log('sidePanel Response --->', response.result);
+            if(response.result){
+                  console.log('Following operation is successful !!!');
+                 _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header] = _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header].replace(/`updating/g , " ")+'`updated';
+                 setTimeout(function(){
+                    _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header] = _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header].replace(/`updated/g , " ");
+                 },1000);
+                }else{
+                    console.error('Following operation is not fullfilled !!!');
+                }
+
+        });
+
+    }
+
+    submitEditCell(e, actBtnTxt, cellValue, rowData, header, dataIndex){
+        var _this=this;
+        _this.actionBtnInvoke(actBtnTxt, cellValue, rowData, header, dataIndex);
+    }
+
+    confirmYesNo(args){
+        var _e=args.e,
+            value=args.value;
+        if(value === "yes"){
+            _e.preventDefault();
+            _e.stopPropagation();
+            var _this= this;
+            _this.actionBtnInvoke(_this.editTableCellObj.actBtnTxt, _this.editTableCellObj.cellValue, _this.editTableCellObj.rowData, _this.editTableCellObj.header, _this.editTableCellObj.dataIndex);
+        }else{
+            this.confirmFlag=false;
+        }
+    }
+
+    resetColumnFilterPosition(){
+        var el=document.querySelectorAll('.report-table th');
+        var elLength= el.length;
+        console.log('elLength----------------->', elLength);
+        //var colFilterDdWidth= document.getElementsByClassName('searchSortDd')[0] ? 0: document.getElementsByClassName('searchSortDd')[0].offsetWidth;
+    }
+
+    isUpdated(value){
+        //console.log('value.includes---------->', value);
+        if( value && value.toString().includes('`updating')){
+            return 'updating';
+        }else if(value && value.toString().includes('`updated')){
+            return 'updated';
+        }else{
+            return "";
+        }
+    }
+
 
 }

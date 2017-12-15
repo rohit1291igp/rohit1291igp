@@ -178,7 +178,7 @@
             <div class="table-cell-display v-align-middle" *ngIf="dashBoardlabel.deliveryTimes =='bydate'">
             <div class="col-md-4 no-padding" style="margin-top: 8px;">{{dashBoardlabel.labelName}} </div>
             <div class="col-md-8 no-padding custom-date-picker">
-                <my-date-picker name="mydate" [options]="myDatePickerOptions" [(ngModel)]="dateRange" (dateChanged)="onDateChanged($event)"></my-date-picker>
+                <my-date-picker name="mydate" [options]="myDatePickerOptions" [(ngModel)]="dateRange" (ngModelChange)="onDateChanged($event)"></my-date-picker>
             </div>
         </div>
     </div>
@@ -259,7 +259,7 @@
                 <div class="line-height">Orders yet to be delivered : <span class="text-bold">{{dashboardData.delivered.today}}</span></div>
             </div>
         </div>
-        <div class="col-md-5" *ngIf="dashboardData.delivered.total" style="padding: 1.5em 0 0;">
+        <div class="col-md-5" style="padding: 1.5em 0 0;">
         <div class="btn btn-primary custom-button underline" (click)="openPanel($event, masterData.status[3])">
         <!--View all delivered orders -->
         All orders for today

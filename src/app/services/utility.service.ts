@@ -102,4 +102,31 @@ export class UtilityService {
         return delDetail;
     }
 
+    getDeliveryType(deliveryName){
+        var delType:number;
+        switch(deliveryName){
+            case "Standard Delivery" : delType=1;
+                break;
+
+            //case 2 : delDetail= delDetail + ((delDate == purDate) ? "Same Day Delivery" : " Fixed Time Delivery ");
+            case "Fixed Time Delivery" : delType=2;
+                break;
+
+            case "Midnight Delivery" : delType=3;
+                break;
+
+            case "Fixed Date Delivery" : delType=4;
+                break;
+        }
+        return delType;
+    }
+
+    formatParams(params){
+        return "?" + Object.keys(params)
+                    .map(function(key){
+                        return key+"="+encodeURIComponent(params[key])
+                    })
+                    .join("&");
+    }
+
 }
