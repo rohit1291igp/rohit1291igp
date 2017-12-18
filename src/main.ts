@@ -5,6 +5,7 @@ import { AppModule } from './app/app.module';
 
 if (environment.production) {
   enableProdMode();
+  console.log = function() {} //disable log for production
 }
 
 platformBrowserDynamic().bootstrapModule(AppModule);

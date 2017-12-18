@@ -1015,9 +1015,7 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
           "errorCode": "NO_ERROR",
           "errorMessage": null,
           "errorParams": [],
-          "result": [
-              
-          ]
+          "result": []
       };
   }
 
