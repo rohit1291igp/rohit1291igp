@@ -7,6 +7,7 @@ import { BackendService } from '../../services/backend.service';
 import { MainHeaderComponent } from '../main-header/main-header.component';
 import { UtilityService } from '../../services/utility.service';
 import {environment} from "../../../environments/environment";
+import { Observable } from "rxjs";
 
 @Component({
   selector: 'app-dashboard',
@@ -41,7 +42,7 @@ export class DashboardComponent implements OnInit {
     //disableDateRanges : [{begin: this.UtilityService.getDateObj(0), end: this.UtilityService.getDateObj(2)}]
   };
   public dateRange: Object = {};
-
+  public dashboardObservable;
   constructor(
     public dashboardService: DashboardService,
     public BackendService: BackendService,
@@ -49,21 +50,36 @@ export class DashboardComponent implements OnInit {
       ) { }
 
   ngOnInit() {
-    var _this = this;
+    //var _this = this;
     this.isRowAlert = this.dashboardService.getAlertRow();0
     this.dashboardData = this.dashboardService.getCustomData();
-    var cookieFDate = _this.UtilityService.getCookie("festivalDate") ?  JSON.parse(_this.UtilityService.getCookie("festivalDate")) : null;
-    var cookieFDatwFormatted = cookieFDate ? cookieFDate.date.year+'-'+cookieFDate.date.month+'-'+cookieFDate.date.day : null;
-    this.dashboardService.getDashboardData(cookieFDatwFormatted, function(result){
-        /*if(!result.new[0] || (result.new[0] && result.new[0].deliveryTimes !== "pas")) {
-            _this.dashboardData = _this.dashboardService.getCustomData();
-            return;
-        }*/
-        _this.dashboardData = result;
-        _this.dateRange = _this.setFestivalDate(result.festivalDate || new Date());
-    },_this.dashBoardDataType, null);
-    this.masterData = this.dashboardService.getMasterData();
-    //this.getDashboardData();
+    this.loadDbData();
+
+    this.dashboardObservable=Observable.interval(1000 * 60 * 1.5)
+        .subscribe(() => {
+            console.log('Dasboard IntervalObservable working !!!')
+            this.loadDbData();
+        });
+  }
+
+  ngOnDestroy(){
+    this.dashboardObservable.unsubscribe();
+  }
+
+  loadDbData(){
+      var _this = this;
+      var cookieFDate = this.UtilityService.getCookie("festivalDate") ?  JSON.parse(_this.UtilityService.getCookie("festivalDate")) : null;
+      var cookieFDatwFormatted = cookieFDate ? cookieFDate.date.year+'-'+cookieFDate.date.month+'-'+cookieFDate.date.day : null;
+      this.dashboardService.getDashboardData(cookieFDatwFormatted, function(result){
+          /*if(!result.new[0] || (result.new[0] && result.new[0].deliveryTimes !== "pas")) {
+           _this.dashboardData = _this.dashboardService.getCustomData();
+           return;
+           }*/
+          _this.dashboardData = result;
+          _this.dateRange = _this.setFestivalDate(result.festivalDate || new Date());
+      },_this.dashBoardDataType, null);
+      this.masterData = this.dashboardService.getMasterData();
+      //this.getDashboardData();
   }
 
   search(e){
