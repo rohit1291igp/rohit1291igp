@@ -709,3 +709,33 @@ body .dashboard-content, body .orders-button{
     -o-transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
     transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
 }
+
+/* online/offline css start */
+#status {
+    word-spacing: 5px;
+    letter-spacing: 2px;
+    display:none;
+    z-index: 9;
+    position: fixed;
+    width: 100%;
+    /*font: bold 1em sans-serif;*/
+    color: #FFF;
+    padding: 1.5em 0.5em;
+    text-align: center;
+    -webkit-transition: background-color 1000ms linear;
+    -moz-transition: background-color 1000ms linear;
+    -o-transition: background-color 1000ms linear;
+    -ms-transition: background-color 1000ms linear;
+    transition: background-color 1000ms linear;
+}
+
+.online {
+    background: green;
+    display:block ! important;
+}
+
+.offline {
+    background: red;
+    display:block ! important;
+}
+/* online/offline css end */
