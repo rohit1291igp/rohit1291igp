@@ -81,7 +81,7 @@ export class ReportsService {
                   case "getPincodeReport" : reportAPIEndpoint = "getPincodeReport";
                       break;
 
-                  default : reportAPIEndpoint ="getOrderReport";
+                  default : reportAPIEndpoint =reportType;
               }
 
               let reqObj= {

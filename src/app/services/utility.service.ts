@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-
+import * as jsPDF from 'jspdf';
 @Injectable()
 export class UtilityService {
 
@@ -128,5 +128,20 @@ export class UtilityService {
                     })
                     .join("&");
     }
+
+    createPdfFromHtml(htmlNode){
+        /*
+         this.UtilityService.createPdfFromHtml(htmlContent);
+         */
+        let doc = new jsPDF('p', 'pt', 'a4');
+        let options = {
+            pagesplit: true
+        };
+        let margin=10;
+        doc.addHTML(htmlNode,function() {
+            doc.save('web.pdf');
+        });
+    }
+
 
 }

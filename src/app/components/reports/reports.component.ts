@@ -781,5 +781,10 @@ export class ReportsComponent implements OnInit{
         }
     }
 
+    downloadPDF(e){
+        let htmlContent=document.getElementById('pdf-section');
+        this.UtilityService.createPdfFromHtml(htmlContent);
+    }
+
 
 }
