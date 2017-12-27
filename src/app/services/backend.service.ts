@@ -23,7 +23,11 @@ export class BackendService {
           response => {
               if(document.getElementById("cLoader")) document.getElementById("cLoader").classList.add("hide");
               if(document.getElementById("cLoader2")) document.getElementById("cLoader2").classList.add("hide");
-              return cb(null, (response.body || response._body), response.headers);
+              if(sessionStorage.getItem('offline')){
+                  return cb(null, (response.body[0] || response._body[0]), response.headers);
+              }else{
+                  return cb(null, (response.body || response._body), response.headers);
+              }
           },
           error => {
               if(document.getElementById("cLoader")) document.getElementById("cLoader").classList.add("hide");
