@@ -71,11 +71,11 @@
 
 .reportsdropdownMenu li{
     list-style-type: none;
-    white-space: nowrap;
+    white-space: nowrap ! important;
     padding: 1em 2em;
     text-align: center;
     white-space: nowrap;
-    border-bottom: 1px solid #fff;
+    border-bottom: 1px solid #fff ! important;
 }
 
 .reportsdropdownMenu li:last-child{
@@ -90,11 +90,11 @@
     background: #fff;
 }
 
-.reportsdropdownMenu li.selected>a, .navRight li.selected>p>a, .navRight li.selected>p{
-    color: #c3404e;
+.reportsdropdownMenu li.selected, .navRight li.selected>p, .navRight li.selected>p>a{
+    color: #c3404e ! important;
 }
 
-.reportsdropdownMenu li a, .navRight li a{
+.reportsdropdownMenu ul a, .navRight ul a{
     text-decoration:none ! important;
 }
 

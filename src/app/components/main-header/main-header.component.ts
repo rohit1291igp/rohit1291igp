@@ -48,7 +48,6 @@ export class MainHeaderComponent implements OnInit {
               _this.activeTabHighlight();
           }
       });
-
   }
 
   logout(e){
@@ -81,7 +80,6 @@ export class MainHeaderComponent implements OnInit {
               _this.router.navigate(['/login']);
           })
       }
-
   }
 
   openReportDropdown(e){
@@ -100,22 +98,10 @@ export class MainHeaderComponent implements OnInit {
           _this.reportDropdownOpen=false;
       }
 
-      if(currentRoute === "/reports/getOrderReport"){
+      if(/^\/reports/.test(currentRoute)){
           _this.selectedTopTab = "reports";
-          _this.selectedReportTab = "getOrderReport";
+          _this.selectedReportTab = currentRoute.split('/')[2];
       }
-
-      if(currentRoute === "/reports/getVendorReport"){
-          _this.selectedTopTab = "reports";
-          _this.selectedReportTab = "getVendorReport";
-      }
-
-      if(currentRoute === "/reports/getPincodeReport"){
-          _this.selectedTopTab = "reports";
-          _this.selectedReportTab = "getPincodeReport";
-      }
-
-
   }
 
 }
