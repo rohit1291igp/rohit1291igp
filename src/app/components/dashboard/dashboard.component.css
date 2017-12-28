@@ -99,18 +99,6 @@
     left: 2%;
 }
 
-.searchCross{
-    top: 0.7em;
-    right: 5.5em;
-}
-
-.searchbox{
-    /*width: 25em;*/
-    right: 0;
-    top: 4.5em;
-    position: absolute;
-}
-
 .deliverOrdered1{
     position:absolute;
     left:1.5em;
@@ -130,20 +118,11 @@
 .topSection{
     background:#f2f2f2;
 
-    padding: 1em 0 0.7em;
+    padding: 0.1em 0 0.2em;
     /*-moz-box-shadow: 0px 5px 8px rgba(0, 0, 0, 0.3);
     -khtml-box-shadow: 0px 5px 8px rgba(0, 0, 0, 0.3);
     -webkit-box-shadow: 0px 5px 8px rgba(0, 0, 0, 0.3);
     box-shadow: 0px 5px 8px rgba(0, 0, 0, 0.3);*/
-}
-
-.dbMobile .searchCross{
-    right: 6em ! important;
-    border-radius: 50%;
-    background: #f2f2f2;
-    z-index: 999;
-    padding: 0.4em;
-    top: 0.5em ! important;
 }
 
 .dbMobile .vendor-detail{

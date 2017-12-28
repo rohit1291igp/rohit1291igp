@@ -18,7 +18,6 @@ export class DashboardComponent implements OnInit {
   @ViewChild(OrdersActionTrayComponent) child: OrdersActionTrayComponent;
   isMobile=environment.isMobile;
   prodOrderstatus : any;
-  searchModel : any = {};
   dashBoardDataType;
   vendorName = localStorage.getItem('associateName');
   public mainHeaderComponent: MainHeaderComponent;
@@ -82,11 +81,8 @@ export class DashboardComponent implements OnInit {
       //this.getDashboardData();
   }
 
-  search(e){
-    console.log('SearchKey==========>', this.searchModel.searchkey);
-    this.searchModel.searchkey = this.searchModel.searchkey.trim();
-    if(!this.searchModel.searchkey) return;
-    this.child.toggleTray(e, "", this.searchModel.searchkey, null);
+  search(parameters){
+    this.child.toggleTray(parameters.e, "", parameters.searchkey, null);
     this.disableAllTableCell();
   }
 
@@ -174,10 +170,6 @@ export class DashboardComponent implements OnInit {
               _this.dateRange = _this.setFestivalDate(result.festivalDate || new Date());
           }, _this.dashBoardDataType, _this.dashboardData);
       }
-  }
-
-  clearSearch(e){
-      this.searchModel.searchkey = "";
   }
 
   toggleTableColumn(e, _prop, value){
