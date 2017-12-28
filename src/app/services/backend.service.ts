@@ -23,8 +23,12 @@ export class BackendService {
           response => {
               if(document.getElementById("cLoader")) document.getElementById("cLoader").classList.add("hide");
               if(document.getElementById("cLoader2")) document.getElementById("cLoader2").classList.add("hide");
-              if(sessionStorage.getItem('offline')){
-                  return cb(null, (response.body[0] || response._body[0]), response.headers);
+              if(sessionStorage.getItem('mockAPI')){
+                  let responseBody=response.body || response._body;
+                  responseBody = JSON.parse(responseBody);
+                  if(Array.isArray(responseBody)) responseBody = responseBody[0];
+                  responseBody=JSON.stringify(responseBody);
+                  return cb(null, responseBody, response.headers);
               }else{
                   return cb(null, (response.body || response._body), response.headers);
               }
