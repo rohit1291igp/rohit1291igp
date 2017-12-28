@@ -1,37 +1,9 @@
-<div class="headerVendor navbar-brand" *ngIf="vendorName">- {{vendorName}}</div>
-<app-header-tabs (onTabChanged)="loadDashboardCount($event)" [dashboardCounts]="dashboardData.counts"></app-header-tabs>
-<div class="col-md-3 searchbox" style="" *ngIf="!isMobile">
-    <form name="form" (ngSubmit)="f.form.valid && search($event)" #f="ngForm" novalidate>
-    <div class="relative">
-        <input  type="submit" class="btn btn-primary pull-right" style="" value="Search" />
-        <div class="glyphicon glyphicon-remove abs searchCross" aria-hidden="true" *ngIf="searchModel.searchkey" (click)="clearSearch($event)" ></div>
-</div>
-<input name="searchkey" type="text" class="input-right form-control pull-right" placeholder="Order Number" [(ngModel)]="searchModel.searchkey" #searchkey="ngModel" style="width:60%;" required>
-<div *ngIf="f.submitted && !searchkey.valid" class="help-block"></div>
-</form>
-</div>
-
+<!--<div class="headerVendor navbar-brand" *ngIf="vendorName">- {{vendorName}}</div>-->
+<app-header-tabs (onTabChanged)="loadDashboardCount($event)" (onOrderSearch)="search($event)" [dashboardCounts]="dashboardData.counts"></app-header-tabs>
 
 <section class="dbMobile" *ngIf="isMobile">
         <div class="topSection">
-            <div class="col-md-12" style="">
-                <form name="form" (ngSubmit)="f.form.valid && search($event)" #f="ngForm" novalidate>
-                    <div class="relative">
-                        <div class="glyphicon glyphicon-remove abs searchCross" aria-hidden="true" *ngIf="searchModel.searchkey" (click)="clearSearch($event)" ></div>
-                    </div>
 
-                    <div class="input-group">
-                        <input name="searchkey" type="text" class="form-control" placeholder="Order Number" [(ngModel)]="searchModel.searchkey" #searchkey="ngModel" style="" required>
-                        <div class="input-group-btn">
-                            <button type="submit" class="btn btn-primary">Search</button>
-                        </div>
-                    </div>
-
-                    <div *ngIf="f.submitted && !searchkey.valid" class="help-block"></div>
-                </form>
-            </div>
-
-            <div class="clearfix"></div>
 
             <div class="col-md-12 vendor-detail m-top-1">
                 <!--<p>Hi <span class="text-igp">{{vendorName}}!</span></p>-->
