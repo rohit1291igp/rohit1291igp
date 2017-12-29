@@ -21,7 +21,7 @@
                     <a routerLink="/reports/getOrderReport"><li [ngClass]="{'selected' : selectedReportTab === 'getOrderReport'}">Order Report</li></a>
                     <a routerLink="/reports/getVendorReport"><li [ngClass]="{'selected' : selectedReportTab === 'getVendorReport'}">Product Report</li></a>
                     <a routerLink="/reports/getPincodeReport"><li [ngClass]="{'selected' : selectedReportTab === 'getPincodeReport'}">Pincode Report</li></a>
-                    <a routerLink="/reports/getPayoutAndTaxesReport"><li [ngClass]="{'selected' : selectedReportTab === 'getPayoutAndTaxesReport'}">Payout & Taxes</li></a>
+                    <a class="hide" routerLink="/reports/getPayoutAndTaxesReport"><li [ngClass]="{'selected' : selectedReportTab === 'getPayoutAndTaxesReport'}">Payout & Taxes</li></a>
                 </ul>
             </div>
         </li>
