@@ -380,7 +380,67 @@ export class ReportsComponent implements OnInit{
     dwldInv(e, orderId_, invNo){
         var _this=this;
         console.log('orderId-------->', orderId_, invNo);
-
+        var dummyPdfData={
+            "orderId":orderId_,
+            "invoiceNumber":2314213432,
+            "datePurchased":"23/12/17",
+            "totalNetAmount":123121,
+            "totalTaxAmount":543,
+            "total":56789,
+            "billingAddress":{
+                "name":"IGP.com",
+                "email":"igp@gmail.com",
+                "address":"A-006 - Boomerang Building",
+                "ph":"887656453",
+                "gstn":"4567890",
+                "pan":"45678908765467890",
+            },
+            "sellerAddress":{
+                "name":"RDCM Mumbai",
+                "email":"rdcm@gmail.com",
+                "address":"tfygu ghij yghuij gvhji",
+                "ph":"887656453",
+                "gstn":"4567890",
+                "pan":"45678908765467890",
+            },
+            "gstn":"",
+            "pan":"",
+            "productDetail":[{
+                "productName":"abc",
+                "unitPrice":0.0,
+                "quantity":1,
+                "netAmount":0.0,
+                "taxCode":"",
+                "taxType":"",
+                "taxrate":0.0,
+                "taxAmount":0.0,
+                "totalAmount":0.0,
+                "total":0.0
+            },{
+                "productName":"xyz",
+                "unitPrice":0.0,
+                "quantity":1,
+                "netAmount":0.0,
+                "taxCode":"",
+                "taxType":"",
+                "taxrate":0.0,
+                "taxAmount":0.0,
+                "totalAmount":0.0,
+                "total":0.0
+            },{
+                "productName":"bvc",
+                "unitPrice":0.0,
+                "quantity":1,
+                "netAmount":0.0,
+                "taxCode":"",
+                "taxType":"",
+                "taxrate":0.0,
+                "taxAmount":0.0,
+                "totalAmount":0.0,
+                "total":0.0
+            }
+            ]
+        };
         let reqObj =  {
             url : 'getInvoicePdfData?fkAssociateId='+localStorage.getItem('fkAssociateId')+'&orderId='+orderId_,
             method : "get",
@@ -392,67 +452,7 @@ export class ReportsComponent implements OnInit{
                 if(response){
                     console.log('Error=============>', err, JSON.parse(response).errorCode);
                 }else{
-                    _this.pdfData={
-                        "orderId":orderId_,
-                        "invoiceNumber":2314213432,
-                        "datePurchased":"23/12/17",
-                        "totalNetAmount":123121,
-                        "totalTaxAmount":543,
-                        "total":56789,
-                        "billingAddress":{
-                            "name":"IGP.com",
-                            "email":"igp@gmail.com",
-                            "address":"A-006 - Boomerang Building",
-                            "ph":"887656453",
-                            "gstn":"4567890",
-                            "pan":"45678908765467890",
-                        },
-                        "sellerAddress":{
-                            "name":"RDCM Mumbai",
-                            "email":"rdcm@gmail.com",
-                            "address":"tfygu ghij yghuij gvhji",
-                            "ph":"887656453",
-                            "gstn":"4567890",
-                            "pan":"45678908765467890",
-                        },
-                        "gstn":"",
-                        "pan":"",
-                        "productDetail":[{
-                            "productName":"abc",
-                            "unitPrice":0.0,
-                            "quantity":1,
-                            "netAmount":0.0,
-                            "taxCode":"",
-                            "taxType":"",
-                            "taxrate":0.0,
-                            "taxAmount":0.0,
-                            "totalAmount":0.0,
-                            "total":0.0
-                        },{
-                            "productName":"xyz",
-                            "unitPrice":0.0,
-                            "quantity":1,
-                            "netAmount":0.0,
-                            "taxCode":"",
-                            "taxType":"",
-                            "taxrate":0.0,
-                            "taxAmount":0.0,
-                            "totalAmount":0.0,
-                            "total":0.0
-                        },{
-                            "productName":"bvc",
-                            "unitPrice":0.0,
-                            "quantity":1,
-                            "netAmount":0.0,
-                            "taxCode":"",
-                            "taxType":"",
-                            "taxrate":0.0,
-                            "taxAmount":0.0,
-                            "totalAmount":0.0,
-                            "total":0.0
-                        }
-                        ]
-                    };
+                    _this.pdfData=dummyPdfData;
 
                     var fileName="invoice_"+_this.pdfData.billingAddress.name.replace(/[^a-zA-Z0-9]/g,'_')+"_"+(invNo || orderId_);
                     setTimeout(function(){
@@ -462,7 +462,7 @@ export class ReportsComponent implements OnInit{
                 return;
             }
             console.log('sidePanel Response --->', JSON.parse(response).result);
-            _this.pdfData=JSON.parse(response).result;
+            _this.pdfData=JSON.parse(response).result.billingAddress ? JSON.parse(response).result : dummyPdfData;
 
             var fileName="invoice_"+_this.pdfData.billingAddress.name.replace(/[^a-zA-Z0-9]/g,'_')+"_"+(invNo || orderId_);
             setTimeout(function(){
