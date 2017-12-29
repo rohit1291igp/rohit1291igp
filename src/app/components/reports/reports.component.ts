@@ -50,60 +50,7 @@ export class ReportsComponent implements OnInit{
         if (isReady) this.resetColumnFilterPosition();
   }*/
   pdfDwldFlag=true;
-  pdfData= {
-      "orderId":12345,
-      "invoiceNumber":"kuch bhi",
-      "datePurchased":"kuch bhi",
-      "billingAddress":{
-          "name":"",
-          "email":"",
-          "address":"",
-          "ph":""
-      },
-      "sellerAddress":{
-          "name":"",
-          "email":"",
-          "address":"",
-          "ph":""
-      },
-      "gstn":"",
-      "pan":"",
-      "productDetail":[{
-          "productName":"",
-          "unitPrice":0.0,
-          "quantity":1,
-          "netAmount":0.0,
-          "taxCode":"",
-          "taxType":"",
-          "taxrate":0.0,
-          "taxAmount":0.0,
-          "totalAmount":0.0,
-          "total":0.0
-      },{
-          "productName":"",
-          "unitPrice":0.0,
-          "quantity":1,
-          "netAmount":0.0,
-          "taxCode":"",
-          "taxType":"",
-          "taxrate":0.0,
-          "taxAmount":0.0,
-          "totalAmount":0.0,
-          "total":0.0
-      },{
-          "productName":"",
-          "unitPrice":0.0,
-          "quantity":1,
-          "netAmount":0.0,
-          "taxCode":"",
-          "taxType":"",
-          "taxrate":0.0,
-          "taxAmount":0.0,
-          "totalAmount":0.0,
-          "total":0.0
-      }
-      ]
-  };
+  pdfData:any;
   vendorName = localStorage.getItem('associateName');
   filterValueFlag=false;
   reportType;
@@ -430,12 +377,12 @@ export class ReportsComponent implements OnInit{
         this.child.toggleTray(e, "", orderId, null);
     }
 
-    dwldInv(e, orderId, invNo){
+    dwldInv(e, orderId_, invNo){
         var _this=this;
-        console.log('orderId-------->', orderId, invNo);
+        console.log('orderId-------->', orderId_, invNo);
 
         let reqObj =  {
-            url : 'getInvoicePdfData?fkAssociateId='+localStorage.getItem('fkAssociateId')+'&orderId='+orderId,
+            url : 'getInvoicePdfData?fkAssociateId='+localStorage.getItem('fkAssociateId')+'&orderId='+orderId_,
             method : "get",
             payload : {}
         };
@@ -446,10 +393,10 @@ export class ReportsComponent implements OnInit{
                     console.log('Error=============>', err, JSON.parse(response).errorCode);
                 }else{
                     _this.pdfData={
-                        "orderId":orderId,
-                        "invoiceNumber":"2314213432",
+                        "orderId":orderId_,
+                        "invoiceNumber":2314213432,
                         "datePurchased":"23/12/17",
-                        "totalNetAmount":12312,
+                        "totalNetAmount":123121,
                         "totalTaxAmount":543,
                         "total":56789,
                         "billingAddress":{
@@ -507,7 +454,7 @@ export class ReportsComponent implements OnInit{
                         ]
                     };
 
-                    var fileName="invoice_"+_this.pdfData.billingAddress.name.replace(/[^a-zA-Z0-9]/g,'_')+"_"+(invNo || orderId);
+                    var fileName="invoice_"+_this.pdfData.billingAddress.name.replace(/[^a-zA-Z0-9]/g,'_')+"_"+(invNo || orderId_);
                     setTimeout(function(){
                         _this.downloadPDF(null, fileName);
                     },0);
@@ -517,7 +464,7 @@ export class ReportsComponent implements OnInit{
             console.log('sidePanel Response --->', JSON.parse(response).result);
             _this.pdfData=JSON.parse(response).result;
 
-            var fileName="invoice_"+_this.pdfData.billingAddress.name.replace(/[^a-zA-Z0-9]/g,'_')+"_"+(invNo || orderId);
+            var fileName="invoice_"+_this.pdfData.billingAddress.name.replace(/[^a-zA-Z0-9]/g,'_')+"_"+(invNo || orderId_);
             setTimeout(function(){
                  _this.downloadPDF(null, fileName);
             },0);
