@@ -91,12 +91,12 @@ export class ReportsComponent implements OnInit{
               "name" : "orderNumber",
               "type" : "number",
               "placeholder" : "order Number"
-          },
-          {
+          }
+          /*{
               "name" : "status",
               "type" : "number",
               "placeholder" : "status"
-          }
+          }*/
       ],
       "summary" : [
           {

@@ -52,12 +52,12 @@
                     <td>{{prod.productName}}</td>
                     <td>{{prod.unitPrice}}</td>
                     <td>{{prod.quantity}}</td>
-                    <td>Rs. {{prod.netAmount}}</td>
-                    <td>{{prod.taxrate}}</td>
-                    <td>{{prod.taxCode}}</td>
-                    <td>{{prod.taxType}}</td>
-                    <td>Rs. {{prod.taxAmount}}</td>
-                    <td>Rs. {{prod.totalAmount}}</td>
+                    <td>Rs. <span [innerHTML]="prod.netAmount"></span></td>
+                    <td><span [innerHTML]="prod.taxrate"></span></td>
+                    <td><span [innerHTML]="prod.taxCode"></span></td>
+                    <td><span [innerHTML]="prod.taxType"></span></td>
+                    <td>Rs. <span [innerHTML]="prod.taxAmount"></span></td>
+                    <td>Rs. <span [innerHTML]="prod.totalAmount"></span></td>
                     <!--<td>{{prod.total}}</td>-->
                 </tr>
                 <tr>
@@ -208,6 +208,12 @@
                             </select>
                             <input class="form-control" type="text" name="{{searchField.name}}" placeholder="{{searchField.placeholder}}" [(ngModel)]="searchResultModel[searchField.name]" *ngIf="(searchField.type === 'text' || searchField.type === 'number') && searchField.name != 'status'">
                             <my-date-picker id="{{searchField.name}}" name="{{searchField.name}}" placeholder="{{searchField.placeholder}}" [options]="myDatePickerOptions" [(ngModel)]="searchResultModel[searchField.name]"  *ngIf="searchField.type === 'date' && searchField.name != 'status'"></my-date-picker>
+                        </div>
+
+                        <div class="searchFiled pull-left" *ngIf="reportType === 'getOrderReport' " >
+                            <select class="form-control" name="status"  [(ngModel)]="searchResultModel['status']">
+                                <option *ngFor="let statusName of statusList" [ngValue]="statusName.value" [attr.data-trayOpen]="statusName.type">{{statusName.name}}</option>
+                            </select>
                         </div>
                     </div>
                     <div class="searchFieldsSubmit relative inline">
