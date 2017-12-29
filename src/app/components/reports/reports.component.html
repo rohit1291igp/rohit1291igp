@@ -1,5 +1,83 @@
 <app-widgets (onConfirmClicked)="confirmYesNo($event)" [wOptions]="{type : 'confirm', data:confirmData}" *ngIf="confirmFlag" [@enterAnimation]></app-widgets>
 
+<div class="pdfSection" id="pdf-section" *ngIf="pdfDwldFlag && pdfData">
+    <div class="pdfHead">
+        <div class="pull-left vendorName">{{vendorName}}</div>
+        <div class="pull-right">
+            <div><span class="text-bold">Order Id : </span> {{pdfData.orderId}}</div>
+            <div><span class="text-bold">Invoice No. :</span> {{pdfData.invoiceNumber}}</div>
+            <div><span class="text-bold">Date :</span> {{pdfData.datePurchased}}</div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+
+    <div class="pdfAddr">
+        <div class="pull-left">
+            <div><span class="text-bold">To:</span></div>
+            <div>{{pdfData.billingAddress.name}}</div>
+            <div>{{pdfData.billingAddress.address}}</div>
+            <div>{{pdfData.billingAddress.email}}</div>
+            <div>{{pdfData.billingAddress.ph}}</div>
+            <div><span class="text-bold">PAN No. :</span> {{pdfData.billingAddress.pan}}</div>
+            <div><span class="text-bold">GST Registration No. :</span> {{pdfData.billingAddress.gstn}}</div>
+        </div>
+        <div class="pull-right">
+            <div><span class="text-bold">By:</span></div>
+            <div>{{pdfData.sellerAddress.name}}</div>
+            <div>{{pdfData.sellerAddress.address}}</div>
+            <div>{{pdfData.sellerAddress.email}}</div>
+            <div>{{pdfData.sellerAddress.ph}}</div>
+            <div><span class="text-bold">PAN No. :</span> {{pdfData.sellerAddress.pan}}</div>
+            <div><span class="text-bold">GST Registration No. :</span> {{pdfData.sellerAddress.gstn}}</div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+
+    <div class="pdfTable">
+        <table class="table table-bordered" style="width:100%;">
+            <thead>
+                <th>Product Name</th>
+                <th>Unit Price</th>
+                <th>Quantity</th>
+                <th>Net Amount</th>
+                <th>Tax Rate</th>
+                <th>Tax Code</th>
+                <th>Tax Type</th>
+                <th>Tax Amount</th>
+                <th>Total Amount</th>
+                <!--<th>Total</th>-->
+            </thead>
+            <tbody>
+                <tr *ngFor="let prod of pdfData.productDetail">
+                    <td>{{prod.productName}}</td>
+                    <td>{{prod.unitPrice}}</td>
+                    <td>{{prod.quantity}}</td>
+                    <td>Rs. {{prod.netAmount}}</td>
+                    <td>{{prod.taxrate}}</td>
+                    <td>{{prod.taxCode}}</td>
+                    <td>{{prod.taxType}}</td>
+                    <td>Rs. {{prod.taxAmount}}</td>
+                    <td>Rs. {{prod.totalAmount}}</td>
+                    <!--<td>{{prod.total}}</td>-->
+                </tr>
+                <tr>
+                    <td colspan="3"><span class="text-bold">Total</span></td>
+                    <td ><span class="text-bold">Rs. {{pdfData.totalNetAmount}}</span></td>
+                    <td colspan="3"></td>
+                    <td ><span class="text-bold">Rs. {{pdfData.totalTaxAmount}}</span></td>
+                    <td ><span class="text-bold">Rs. {{pdfData.total}}</span></td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+
+    <div class="pdfFooter">
+        <p>This is computer generated invoice.</p>
+        <p>E. & O.E.</p>
+    </div>
+</div>
+
 <div class="image-preview" *ngIf="imagePreviewFlag">
 <div class="modal fade in" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: block; overflow:scroll; background: rgba(0, 0, 0, 0.77); z-index:9999999;" (click)="imagePreview($event)">
 <div class="modal-dialog modal-lg">
@@ -55,7 +133,7 @@
 
 <div class="container-fluid reports-cont" *ngIf="!reportData">
     <div class="row">
-        <div class="col-sm-12 col-md-12 m-top-1" *ngIf="reportType === 'getOrderReport'" style="width:100%;">
+        <div class="col-sm-12 col-md-12 m-top-1" *ngIf="reportType === 'getOrderReport' || reportType === 'getPayoutAndTaxesReport' " style="width:100%;">
 
          <div class="col-sm-9 col-md-9 reprts-search-fields bg-white padding1" style="width:74.5%; margin-right:0.5%;">
                 <div class="underLine paddingHalf text-bold">Search Parameters</div>
@@ -78,15 +156,16 @@
         <div class="col-sm-3 col-md-3 reprts-summary bg-white padding1" style="width:25%;">
             <div class="underLine paddingHalf text-bold">Summary</div>
             <div class="summaryBlockCont">
-            <div class="summaryBlock inline m-top-1" *ngFor="let summ of reportDataLoader.summary; index as i">
-                <div class="icon l" aria-hidden="true">
-                    <img src="assets/images/icons/gift.svg" alt="orders" *ngIf="i === 0">
-                    <img src="assets/images/icons/inr.svg" alt="inr" *ngIf="i === 1">
+                <div class="summaryBlock inline m-top-1" *ngFor="let summ of reportDataLoader.summary; index as i;">
+                    <div class="icon l" aria-hidden="true">
+                        <img src="assets/images/icons/gift.svg" alt="orders" *ngIf="i === 0">
+                        <img src="assets/images/icons/inr.svg" alt="inr" *ngIf="i === 1">
+                        <img src="assets/images/icons/inr.svg" alt="inr" *ngIf="i === 2">
+                    </div>
+                    <div class="text-igp">{{summ.label}}</div>
+                    <div class="text-bold">{{summ.value}}</div>
                 </div>
-                <div class="text-igp">{{summ.label}}</div>
-                <div class="text-bold">{{summ.value}}</div>
             </div>
-        </div>
     </div>
 
     </div>
@@ -117,9 +196,9 @@
 
 <div class="container-fluid reports-cont" *ngIf="reportData">
     <div class="row">
-        <div class="col-sm-12 col-md-12 m-top-1" *ngIf="reportType === 'getOrderReport'" style="width:100%; height:14em;">
+        <div class="col-sm-12 col-md-12 m-top-1" *ngIf="reportType === 'getOrderReport' || reportType === 'getPayoutAndTaxesReport' " style="width:100%; height:14em;">
 
-            <div class="col-sm-9 col-md-9 reprts-search-fields bg-white padding1" style="width:74.5%; margin-right:0.5%; height:100%;">
+            <div class="col-sm-9 col-md-9 reprts-search-fields bg-white padding1" style="margin-right:0.5%; height:100%;" [style.width]="(getTopBlockWidth()).left">
                 <div class="underLine paddingHalf text-bold">Search Parameters</div>
                 <form name="searchReport" (ngSubmit)="f.form.valid && searchReportSubmit($event)" #f="ngForm" nonvalidate>
                     <div class="searchFields m-top-1 inline">
@@ -139,15 +218,16 @@
                 <div class="text-center searchValidationError theme-red text-bold" *ngIf="searchReportFieldsValidation">One of the search parameters must be filled!</div>
             </div>
 
-            <div class="col-sm-3 col-md-3 reprts-summary bg-white padding1" style="width:25%; height:100%;">
+            <div class="col-sm-3 col-md-3 reprts-summary bg-white padding1" style="height:100%;" [style.width]="(getTopBlockWidth()).right">
                 <div class="underLine paddingHalf text-bold">Summary</div>
                 <div class="summaryBlockCont">
-                    <div class="summaryBlock inline m-top-1" *ngFor="let summ of reportData.summary; index as i">
+                    <div class="summaryBlock inline m-top-1" *ngFor="let summ of reportData.summary; index as i;" [style.width.%]="100/reportData.summary.length">
                         <div class="icon l" aria-hidden="true">
                             <img src="assets/images/icons/gift.svg" alt="orders" *ngIf="i === 0">
                             <img src="assets/images/icons/inr.svg" alt="inr" *ngIf="i === 1">
+                            <img src="assets/images/icons/inr.svg" alt="inr" *ngIf="i === 2">
                         </div>
-                        <div class="text-igp">{{summ.label}}</div>
+                        <div class="text-igp summaryLabel">{{summ.label}}</div>
                         <div class="text-bold">{{summ.value | number}}</div>
                     </div>
                 </div>
@@ -159,7 +239,7 @@
                     <thead class="bg-igp text-white" (click)="stopEventPropgation($event)">
                         <tr>
                             <th class="relative" [ngClass]="{'reportDate' : tableLabel === 'Date', 'hide' : isHiddenCell(tableLabel), 'selectedHeader' : reportLabelState[tableLabel]['filterdd']}" *ngFor="let tableLabel of reportData.tableHeaders; let a='index';">
-                                <span>{{tableLabel | replace : '_'}}</span>
+                                <span class="capitalize">{{tableLabel | replace : '_'}}</span>
                                 <span class="sortIcons" *ngIf="orginalReportData.tableData.length>0">
                                     <div class="icon s" aria-hidden="true" (click)="setReportsHeadersState($event, tableLabel, 'filterdd', false)" *ngIf="reportLabelState[tableLabel]['filterdd']">
                                         <img class="arrowU" src="assets/images/icons/arrowD.svg" alt="up-arrow">
@@ -244,10 +324,13 @@
                                     </span>
                                     <span *ngIf="tableCol == 'Ship_Type'" >{{getDeliveryName(tableRowValue[tableCol]) | replace : '`updated'}}</span>
                                     <span *ngIf="ifDate(tableCol) == 'date'" >{{tableRowValue[tableCol] | date : 'dd/MM/yy'}}</span>
-                                    <span *ngIf="ifDate(tableCol) != 'date' && tableCol != 'Ship_Type' && tableCol != 'Component_Image' && tableCol != 'Component Image'" > <span [innerHTML]="tableRowValue[tableCol]  | replace : '`,['"></span></span>
+                                    <span *ngIf="ifDate(tableCol) != 'date' && tableCol != 'Ship_Type' && tableCol != 'Component_Image' && tableCol != 'Component Image'" > <span *ngIf="tableRowValue[tableCol] === 0">{{tableRowValue[tableCol]}}</span> <span *ngIf="tableRowValue[tableCol] !== 0" [innerHTML]="tableRowValue[tableCol]  | replace : '`,['"></span></span>
                                     &nbsp; &nbsp; &nbsp;
                                     <span class="icon m" aria-hidden="true" *ngIf="tableCol === 'Order_No'" (click)="viewOrderDetail($event, tableRowValue[tableCol])">
-                                    <img src="assets/images/icons/view.svg" alt="inr">
+                                        <img src="assets/images/icons/view.svg" alt="inr">
+                                    </span>
+                                    <span class="icon" aria-hidden="true" *ngIf="tableCol === 'invoice number'" (click)="dwldInv($event, tableRowValue['orderId'], tableRowValue[tableCol])">
+                                        <span class="glyphicon glyphicon-download-alt" title="Download Invoice"></span>
                                     </span>
                                 </div>
 

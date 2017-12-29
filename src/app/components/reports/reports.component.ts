@@ -49,6 +49,61 @@ export class ReportsComponent implements OnInit{
  set ready(isReady: boolean) {
         if (isReady) this.resetColumnFilterPosition();
   }*/
+  pdfDwldFlag=true;
+  pdfData= {
+      "orderId":12345,
+      "invoiceNumber":"kuch bhi",
+      "datePurchased":"kuch bhi",
+      "billingAddress":{
+          "name":"",
+          "email":"",
+          "address":"",
+          "ph":""
+      },
+      "sellerAddress":{
+          "name":"",
+          "email":"",
+          "address":"",
+          "ph":""
+      },
+      "gstn":"",
+      "pan":"",
+      "productDetail":[{
+          "productName":"",
+          "unitPrice":0.0,
+          "quantity":1,
+          "netAmount":0.0,
+          "taxCode":"",
+          "taxType":"",
+          "taxrate":0.0,
+          "taxAmount":0.0,
+          "totalAmount":0.0,
+          "total":0.0
+      },{
+          "productName":"",
+          "unitPrice":0.0,
+          "quantity":1,
+          "netAmount":0.0,
+          "taxCode":"",
+          "taxType":"",
+          "taxrate":0.0,
+          "taxAmount":0.0,
+          "totalAmount":0.0,
+          "total":0.0
+      },{
+          "productName":"",
+          "unitPrice":0.0,
+          "quantity":1,
+          "netAmount":0.0,
+          "taxCode":"",
+          "taxType":"",
+          "taxrate":0.0,
+          "taxAmount":0.0,
+          "totalAmount":0.0,
+          "total":0.0
+      }
+      ]
+  };
   vendorName = localStorage.getItem('associateName');
   filterValueFlag=false;
   reportType;
@@ -373,6 +428,98 @@ export class ReportsComponent implements OnInit{
     viewOrderDetail(e, orderId){
         console.log('viewOrderDetail-------->', orderId);
         this.child.toggleTray(e, "", orderId, null);
+    }
+
+    dwldInv(e, orderId, invNo){
+        var _this=this;
+        console.log('orderId-------->', orderId, invNo);
+        //this.pdfDwldFlag=true;
+        /*_this.pdfData={
+            "orderId":orderId,
+            "invoiceNumber":"2314213432",
+            "datePurchased":"23/12/17",
+            "totalNetAmount":12312,
+            "totalTaxAmount":543,
+            "total":56789,
+            "billingAddress":{
+                "name":"IGP.com",
+                "email":"igp@gmail.com",
+                "address":"A-006 - Boomerang Building",
+                "ph":"887656453",
+                "gstn":"4567890",
+                "pan":"45678908765467890",
+            },
+            "sellerAddress":{
+                "name":"RDCM Mumbai",
+                "email":"rdcm@gmail.com",
+                "address":"tfygu ghij yghuij gvhji",
+                "ph":"887656453",
+                "gstn":"4567890",
+                "pan":"45678908765467890",
+            },
+            "gstn":"",
+            "pan":"",
+            "productDetail":[{
+                "productName":"abc",
+                "unitPrice":0.0,
+                "quantity":1,
+                "netAmount":0.0,
+                "taxCode":"",
+                "taxType":"",
+                "taxrate":0.0,
+                "taxAmount":0.0,
+                "totalAmount":0.0,
+                "total":0.0
+            },{
+                "productName":"xyz",
+                "unitPrice":0.0,
+                "quantity":1,
+                "netAmount":0.0,
+                "taxCode":"",
+                "taxType":"",
+                "taxrate":0.0,
+                "taxAmount":0.0,
+                "totalAmount":0.0,
+                "total":0.0
+            },{
+                "productName":"bvc",
+                "unitPrice":0.0,
+                "quantity":1,
+                "netAmount":0.0,
+                "taxCode":"",
+                "taxType":"",
+                "taxrate":0.0,
+                "taxAmount":0.0,
+                "totalAmount":0.0,
+                "total":0.0
+            }
+            ]
+        };
+
+        var fileName="invoice_"+_this.pdfData.billingAddress.name.replace(/[^a-zA-Z0-9]/g,'_')+"_"+(invNo || orderId);
+        setTimeout(function(){
+            _this.downloadPDF(null, fileName);
+        },0);*/
+
+
+        let reqObj =  {
+            url : 'getInvoicePdfData?fkAssociateId='+localStorage.getItem('fkAssociateId')+'&orderId='+orderId,
+            method : "get",
+            payload : {}
+        };
+
+        _this.BackendService.makeAjax(reqObj, function(err, response, headers){
+            if(err || JSON.parse(response).error) {
+                console.log('Error=============>', err, JSON.parse(response).errorCode);
+            }
+            console.log('sidePanel Response --->', JSON.parse(response).result);
+            _this.pdfData=JSON.parse(response).result;
+
+            var fileName="invoice_"+_this.pdfData.billingAddress.name.replace(/[^a-zA-Z0-9]/g,'_')+"_"+(invNo || orderId);
+            setTimeout(function(){
+                 _this.downloadPDF(null, fileName);
+            },0);
+        });
     }
 
     generateQueryString(queryObj){
@@ -781,10 +928,23 @@ export class ReportsComponent implements OnInit{
         }
     }
 
-    downloadPDF(e){
-        let htmlContent=document.getElementById('pdf-section');
-        this.UtilityService.createPdfFromHtml(htmlContent);
+    downloadPDF(el, fileName){
+        let htmlContent=el || document.getElementById('pdf-section');
+        this.UtilityService.createPdfFromHtml(htmlContent, fileName);
     }
+
+    getTopBlockWidth(){
+        var widthObj={"left" : "74.5%", "right" : "24.5%"};
+        if(this.reportData.summary.length > 0 && this.reportData.summary.length <3){
+            widthObj={"left" : "75%", "right" : "24.5%"};
+        }else if(this.reportData.summary.length > 2 && this.reportData.summary.length <4){
+            widthObj={"left" : "64%", "right" : "35.5%"};
+        }else{
+            widthObj={"left" : "55%", "right" : "44.5%"};
+        }
+        return widthObj;
+    }
+
 
 
 }

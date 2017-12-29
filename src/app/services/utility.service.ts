@@ -129,17 +129,18 @@ export class UtilityService {
                     .join("&");
     }
 
-    createPdfFromHtml(htmlNode){
+    createPdfFromHtml(htmlNode, name){
         /*
          this.UtilityService.createPdfFromHtml(htmlContent);
          */
+        var name=name || 'web.pdf';
         let doc = new jsPDF('p', 'pt', 'a4');
         let options = {
             pagesplit: true
         };
         let margin=10;
         doc.addHTML(htmlNode,function() {
-            doc.save('web.pdf');
+            doc.save(name);
         });
     }
 

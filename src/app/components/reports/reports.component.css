@@ -328,3 +328,57 @@ table.fixed-header th {
     /*left:50%;*/
     /*transform: translate(-50%, -50%);*/
 }
+
+.summaryLabel{
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.dbTableHeader{
+    background: #fff;
+}
+/* pdf start*/
+.pdfSection{
+    height: 100vh;
+    width: 70%;
+    background: #fff;
+    position: fixed;
+    z-index: -1;
+    padding: 2em;
+    top: 0;
+    left: 15%;
+}
+
+.pdfHead{
+    padding-bottom: 1em;
+    border-bottom: 1px solid #eee;
+}
+
+.pdfAddr{
+    margin-top: 2em;
+    padding-bottom: 1em;
+    border-bottom: 1px solid #eee;
+}
+
+.pdfTable{
+    margin-top: 2em;
+    padding-bottom: 1em;
+    border-bottom: 1px solid #eee;
+}
+
+.pdfFooter{
+    margin-top: 2em;
+    padding-bottom: 1em;
+    border-bottom: 1px solid #eee;
+}
+
+.vendorName{
+    font-size:2em;
+}
+
+.pdfSection table thead th, .pdfSection table tr td{
+    padding:0.5em ! important;
+    text-align:center;
+}
+/* pdf end*/

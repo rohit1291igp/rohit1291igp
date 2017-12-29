@@ -3,6 +3,10 @@
 @import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 
 /* Utility css start */
+.capitalize{
+    text-transform: capitalize;
+}
+
 .borderRight{
     border-right: 2px solid #E0E0E0;
 }
