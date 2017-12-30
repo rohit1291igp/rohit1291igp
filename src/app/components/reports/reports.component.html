@@ -6,13 +6,13 @@
         <div class="pull-right">
             <div><span class="text-bold">Order Id : </span> {{pdfData.orderId}}</div>
             <div><span class="text-bold">Invoice No. :</span> {{pdfData.invoiceNumber}}</div>
-            <div><span class="text-bold">Date :</span> {{pdfData.datePurchased}}</div>
+            <div><span class="text-bold">Date :</span> {{pdfData.datePurchased | date : 'dd/MM/yy'}}</div>
         </div>
         <div class="clearfix"></div>
     </div>
 
     <div class="pdfAddr">
-        <div class="pull-left">
+        <div class="pull-left leftSide">
             <div><span class="text-bold">To:</span></div>
             <div>{{pdfData.billingAddress.name}}</div>
             <div>{{pdfData.billingAddress.address}}</div>
@@ -21,7 +21,7 @@
             <div><span class="text-bold">PAN No. :</span> {{pdfData.billingAddress.pan}}</div>
             <div><span class="text-bold">GST Registration No. :</span> {{pdfData.billingAddress.gstn}}</div>
         </div>
-        <div class="pull-right">
+        <div class="pull-right rightSide">
             <div><span class="text-bold">By:</span></div>
             <div>{{pdfData.sellerAddress.name}}</div>
             <div>{{pdfData.sellerAddress.address}}</div>

@@ -359,6 +359,11 @@ table.fixed-header th {
     margin-top: 2em;
     padding-bottom: 1em;
     border-bottom: 1px solid #eee;
+    width:100%;
+}
+
+.pdfAddr .leftSide, .pdfAddr .rightSide{
+    width:50%
 }
 
 .pdfTable{
