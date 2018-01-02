@@ -92,12 +92,12 @@ export class ReportsService {
 
 
               _this.BackendService.makeAjax(reqObj, function(err, response, headers){
-                  if(err || JSON.parse(response).error) {
-                      console.log('Error=============>', err, JSON.parse(response).errorCode);
+                  if(err || response.error) {
+                      console.log('Error=============>', err, response.errorCode);
                   }
 
-                  console.log('getReportData Response --->', JSON.parse(response));
-                  var reportDataResponse = JSON.parse(response);
+                  console.log('getReportData Response --->', response);
+                  var reportDataResponse = response;
                   //reportDataResponse['searchFields'] = _this.searchFields;
                   return cb(null, reportDataResponse);
               });

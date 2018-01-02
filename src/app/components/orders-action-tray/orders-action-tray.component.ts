@@ -204,8 +204,8 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
      };
 
      _this.BackendService.makeAjax(reqObj, function(err, response, headers){
-         if(err || JSON.parse(response).error) {
-             console.log('Error=============>', err, JSON.parse(response).errorCode);
+         if(err || response.error) {
+             console.log('Error=============>', err, response.errorCode);
          }
          console.log('sidePanel Response --->', response.result);
          _this.vendorIssueFlag=false;
@@ -306,11 +306,11 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
                 };
 
                 _this.BackendService.makeAjax(reqObj, function(err, response, headers){
-                    if(err || JSON.parse(response).error) {
-                        console.log('Error=============>', err, JSON.parse(response).errorCode);
+                    if(err || response.error) {
+                        console.log('Error=============>', err, response.errorCode);
                     }
                     console.log('sidePanel Response --->', response.result);
-                    var uploadedFileList = JSON.parse(response).result.uploadedFilePath[_this.statusReasonModel.status];
+                    var uploadedFileList = response.result.uploadedFilePath[_this.statusReasonModel.status];
                     _this.uploadedFiles = uploadedFileList;
                 });
 
@@ -335,13 +335,13 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
             };
 
             _this.BackendService.makeAjax(reqObj, function(err, response, headers){
-                if(err || JSON.parse(response).error) {
-                    console.log('Error=============>', err, JSON.parse(response).errorCode);
+                if(err || response.error) {
+                    console.log('Error=============>', err, response.errorCode);
                 }
                 console.log('dltFile Response --->', response.result);
 
                 //var uploadedFileList = JSON.parse(response).result;
-                if(JSON.parse(response).result){
+                if(response.result){
                     for(var i=0; i<_this.uploadedFiles.length; i++){
                         if(_this.uploadedFiles[i] === fileName){
                             _this.uploadedFiles.splice(i, 1);
@@ -541,16 +541,16 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
       };
 
       this.BackendService.makeAjax(reqObj, function(err, response, headers){
-          if(err || JSON.parse(response).error) {
-              console.log('Error=============>', err, JSON.parse(response).errorCode);
+          if(err || response.error) {
+              console.log('Error=============>', err, response.errorCode);
               if(cb){
-                  return cb(err || JSON.parse(response).errorCode);
+                  return cb(err || response.errorCode);
               }else{
-                  _this.apierror = err || JSON.parse(response).errorCode;
+                  _this.apierror = err || response.errorCode;
               }
               return;
           }
-          response = JSON.parse(response);
+          response = response;
           //console.log('sidePanel Response --->', response.result);
           if(cb){
               return cb(null, response.result ? Array.isArray(response.result) ? response.result : [response.result] : []);
@@ -787,12 +787,12 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
           console.log('Update status API =============>', reqObj);
 
           _this.BackendService.makeAjax(reqObj, function(err, response, headers){
-              if(err || JSON.parse(response).error) {
-                  console.log('Error=============>', err, JSON.parse(response).errorCode);
-                  _this.apierror = err || JSON.parse(response).errorCode;
+              if(err || response.error) {
+                  console.log('Error=============>', err, response.errorCode);
+                  _this.apierror = err || response.errorCode;
                   return;
               }
-              response = JSON.parse(response);
+              //response = JSON.parse(response);
               console.log('sidePanel Response --->', response.result);
               //_this.router.navigate(['/dashboard-dfghj']);
               _this.onStatusUpdate.emit(currentTab);

@@ -88,11 +88,11 @@ export class FeedsComponent implements OnInit {
       };
 
       _this.BackendService.makeAjax(reqObj, function(err, response, headers){
-          if(err || JSON.parse(response).error) {
-              console.log('Error=============>', err, JSON.parse(response).errorCode);
+          if(err || response.error) {
+              console.log('Error=============>', err, response.errorCode);
           }
-          console.log('feeds Response --->', JSON.parse(response).result);
-          _this.feedData=JSON.parse(response).result;
+          console.log('feeds Response --->', response.result);
+          _this.feedData=response.result;
       });
   }
 

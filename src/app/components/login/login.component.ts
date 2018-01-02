@@ -55,7 +55,7 @@ export class LoginComponent implements OnInit {
 
             this.BackendService.makeAjax(reqObj, function(err, response, headers){
                 _this.loading = false;
-                var _response = JSON.parse(response);
+                var _response = response;
                 if(err) {
                     console.log(err)
                     _this.apierror = "Login Failed (Either UserId/Password wrong)"

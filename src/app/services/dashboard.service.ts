@@ -758,7 +758,7 @@ export class DashboardService {
                     return;
                 }
 
-                var response = JSON.parse(response);
+                //var response = JSON.parse(response);
                 console.log('dashboard response ----------->', response);
                 /*if(Object.keys(response.result.dateStatusCountAllMap).length < 4){
                     response.result.dateStatusCountAllMap['2017-06-26'] = {"Processed"  : 0, "Confirmed" : 0};
