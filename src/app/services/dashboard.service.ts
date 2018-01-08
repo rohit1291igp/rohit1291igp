@@ -10,6 +10,35 @@ export class DashboardService {
     users: Array<any> = [];
     currentColumn;
     currentRow;
+    topLabel=[
+        {
+            deliveryTimes : "past",
+            labelName : "Past Orders",
+            position : 1
+        },
+        {
+            deliveryTimes : "today",
+            labelName : "Delivery for Today",
+            position : 2
+        },
+        {
+            deliveryTimes : "tomorrow",
+            labelName : "Delivery for Tomorrow",
+            position : 3
+        },
+
+        {
+            deliveryTimes : "future",
+            labelName : "Future Deliveries",
+            position : 4
+        },
+        {
+            deliveryTimes : "bydate",
+            labelName : "By Date:",
+            position : 5
+        }
+
+    ];
     statuslist :Object = {
         "n" : "Processed",
         "c" : "Confirmed",
@@ -98,36 +127,7 @@ export class DashboardService {
             getDashboardDataResponse = currentDBData;
         }else{
             getDashboardDataResponse = {
-                "topLabels" : [
-
-                    {
-                        deliveryTimes : "past",
-                        labelName : "Past Orders",
-                        position : 1
-                    },
-                    {
-                        deliveryTimes : "today",
-                        labelName : "Delivery for Today",
-                        position : 2
-                    },
-                    {
-                        deliveryTimes : "tomorrow",
-                        labelName : "Delivery for Tomorrow",
-                        position : 3
-                    },
-
-                    {
-                        deliveryTimes : "future",
-                        labelName : "Future Deliveries",
-                        position : 4
-                    },
-                    {
-                        deliveryTimes : "bydate",
-                        labelName : "By Date:",
-                        position : 5
-                    }
-
-                ],
+                "topLabels" : _this.topLabel,
                 "new" : [],
                 "confirmed" : [],
                 "ofd" : [],
@@ -146,7 +146,6 @@ export class DashboardService {
                 }
             };
         }
-
 
         let todayOrderTobeDelivered = 0;
         /* Dashboard count (new/confirmed orders) - start */
@@ -289,21 +288,6 @@ export class DashboardService {
             "ofdOrders": apiResponse.result[ofdOrderCountProp]
         };
 
-        /*let dashboardCountsArray = []; //Objet is needed to convert into Array as Object doesn't guarntee to maintain order of property
-        for(let prop in dashboardCounts){
-            if(dashboardCounts.hasOwnProperty(prop)){
-                var pushObj = {};
-                pushObj['counts'] = dashboardCounts[prop];
-                pushObj['date'] = prop;
-                dashboardCountsArray.push(pushObj);
-            }
-        }
-        dashboardCountsArray = dashboardCountsArray.sort(_this.UtilityService.dynamicSort("date", null));
-        console.log('dashboardCountsArray======>', dashboardCountsArray);
-        for(let i in dashboardCountsArray){
-            var day = getDateDay(dashboardCountsArray[i].date);
-            createNewConfimedObj(dashboardCountsArray[i].date, day, dashboardCountsArray[i].counts);
-        }*/
         let label1 = getDashboardDataResponse.topLabels[0].deliveryTimes;
         let label2 = getDashboardDataResponse.topLabels[1].deliveryTimes;
         let label3 = getDashboardDataResponse.topLabels[2].deliveryTimes;
@@ -340,11 +324,6 @@ export class DashboardService {
             createNewConfimedObj("", label4, dashboardCounts[label5]);
         }
 
-        /*reateNewConfimedObj("", "today", dashboardCounts["today"]);
-        createNewConfimedObj("", "tomorrow", dashboardCounts["tomorrow"]);
-        createNewConfimedObj("", "future", dashboardCounts["future"]);
-        createNewConfimedObj(apiResponse.result.festivalDate, "bydate", dashboardCounts["festivalDate"]);*/
-
         /* Dashboard count (new/confirmed orders) - start */
 
         /* Out for delivery - start */
@@ -368,11 +347,7 @@ export class DashboardService {
         getDashboardDataResponse.delivered.total = apiResponse.result.deliveredTodayOrderCount;
         /* Delivered orders - end */
 
-        /* orderList - start */
-//        if(_this.isMobile){
-//
-//        }
-        /* orderList - end */
+
 
         console.log('getDashboardDataResponse==============>', getDashboardDataResponse);
         getDashboardDataResponse["festivalDate"] = apiResponse.result.festivalDate; //fesDate;
@@ -429,319 +404,6 @@ export class DashboardService {
     }
 
     getDashboardCount(spcificDate, cb){
-
-
-        if(localStorage.getItem('dRandom')){
-            var d1 = this.UtilityService.getDateString(0, null);
-            var d2 = this.UtilityService.getDateString(1, null);
-            var d3 = this.UtilityService.getDateString(2, null);
-            if(spcificDate){
-                let dd = new Date(spcificDate);
-                var d4 = this.UtilityService.getDateString(dd.getDate(), null);
-            }else{
-                var d4 = this.UtilityService.getDateString(7, null);
-            }
-
-            console.log("dates ===>", d1, d2, d3, d4)
-
-            let countObj= {};
-            /*countObj[d1] = {"Processed"  : Math.floor(Math.random()*100), "Confirmed" : Math.floor(Math.random()*100)};
-            countObj[d2] = {"Processed"  : Math.floor(Math.random()*100), "Confirmed" : Math.floor(Math.random()*100)};
-            countObj[d3] = {"Processed"  : Math.floor(Math.random()*100), "Confirmed" : Math.floor(Math.random()*100)};
-            countObj[d4] = {"Processed"  : Math.floor(Math.random()*100), "Confirmed" : Math.floor(Math.random()*100)};*/
-
-            countObj["past"] = {"Processed"  : {"count" : Math.floor(Math.random()*100), "sla" : "true", "alert" : "true"}, "Confirmed" : {"count" : Math.floor(Math.random()*100), "sla" : "true", "alert" : false}};
-            countObj["today"] = {"Processed"  : {"count" : Math.floor(Math.random()*100), "sla" : "true", "alert" : false}, "Confirmed" : {"count" : Math.floor(Math.random()*100), "sla" : false, "alert" : false}};
-            countObj["tomorrow"] = {"Processed"  : {"count" : Math.floor(Math.random()*100), "sla" : "true", "alert" : false}, "Confirmed" : {"count" : Math.floor(Math.random()*100), "sla" : false, "alert" : false}};
-            countObj["future"] = {"Processed"  : {"count" : Math.floor(Math.random()*100), "sla" : false, "alert" : false}, "Confirmed" : {"count" : Math.floor(Math.random()*100), "sla" : false, "alert" : false}};
-            countObj["festivalDate"] = {"Processed"  : {"count" : Math.floor(Math.random()*100), "sla" : false, "alert" : false}, "Confirmed" : {"count" : Math.floor(Math.random()*100), "sla" : false, "alert" : false}};
-
-            let oId1 = Math.floor(Math.random()*1000000);
-            let oId2 = Math.floor(Math.random()*1000000);
-            let oId3 = Math.floor(Math.random()*1000000);
-            let oId4 = Math.floor(Math.random()*1000000);
-            let oId5 = Math.floor(Math.random()*1000000);
-            let oId6 = Math.floor(Math.random()*1000000);
-            let oId7 = Math.floor(Math.random()*1000000);
-            let oId8 = Math.floor(Math.random()*1000000);
-            let oId9 = Math.floor(Math.random()*1000000);
-            let oId10 = Math.floor(Math.random()*1000000);
-            let oId11 = Math.floor(Math.random()*1000000);
-            let oId12 = Math.floor(Math.random()*1000000);
-
-
-            let outofDeliveryIds1 = [
-                    {
-                        "orderId": oId1,
-                        "sla": "true",
-                        "alert": false
-                    },
-                    {
-                        "orderId": oId2,
-                        "sla": false,
-                        "alert": false
-                    },
-                    {
-                        "orderId": oId3,
-                        "sla": "true",
-                        "alert": false
-                    },
-                    {
-                        "orderId": oId4,
-                        "sla": false,
-                        "alert": false
-                    }
-                ];
-
-            let outofDeliveryIds2 = [
-                {
-                    "orderId": oId5,
-                    "sla": false,
-                    "alert": false
-                },
-                {
-                    "orderId": oId6,
-                    "sla": false,
-                    "alert": false
-                },
-                {
-                    "orderId": oId7,
-                    "sla": false,
-                    "alert": false
-                },
-                {
-                    "orderId": oId8,
-                    "sla": false,
-                    "alert": false
-                }
-            ];
-
-            let outofDeliveryIds3 = [
-                {
-                    "orderId": oId9,
-                    "sla": false,
-                    "alert": false
-                },
-                {
-                    "orderId": oId10,
-                    "sla": false,
-                    "alert": false
-                },
-                {
-                    "orderId": oId11,
-                    "sla": false,
-                    "alert": false
-                },
-                {
-                    "orderId": oId12,
-                    "sla": false,
-                    "alert": false
-                }
-            ];
-
-
-            let hardCodedData = {
-                "error": false,
-                "errorCode": "NO_ERROR",
-                "errorMessage": null,
-                "errorParams": [],
-                "result": {
-                    "dateStatusCountAllMap": countObj,
-                    "dateStatusCountNoBreachMap": countObj,
-                    "dateStatusCountAlertMap": countObj,
-                    "outOfDeliveryOrderIds": outofDeliveryIds1,
-                    "slaOutOfDeliveryOrderIds": outofDeliveryIds2,
-                    "alertOutOfDeliveryOrderIds": outofDeliveryIds3,
-                    "deliveredTodayOrderCount": Math.floor(Math.random()*100),
-                    "festivalDate": "2017-06-06",
-                    "orderTotalWhole": 161,
-                    "newOrderTotalWhole": 148,
-                    "confirmOrderTotalWhole": 12,
-                    "outOfDeliveryOrderTotalWhole": 1,
-                    "orderTotalActionRequired": 92,
-                    "newOrderTotalActionRequired": 89,
-                    "confirmOrderTotalWholeActionRequired": 3,
-                    "outOfDeliveryOrderTotalActionRequired": 0,
-                    "orderTotalHighAlert": 68,
-                    "newOrderTotalHighAlert": 59,
-                    "confirmOrderTotalWholeHighAlert": 8,
-                    "outOfDeliveryOrderTotalHighAlert": 1,
-                    "dateStatusOrderIdAllMap": {
-                        "festivalDate": {
-                            "Confirmed": [],
-                            "Processed": [
-                                {
-                                    "orderId": "1174366",
-                                    "alert": "true",
-                                    "sla": "false",
-                                    "orderProductId": "1578545"
-                                }
-                            ]
-                        },
-                        "past": {
-                            "Confirmed": [],
-                            "Processed": []
-                        },
-                        "future": {
-                            "Confirmed": [
-                                {
-                                    "orderId": "1165272",
-                                    "alert": "false",
-                                    "sla": "false",
-                                    "orderProductId": "1567513"
-                                },
-                                {
-                                    "orderId": "1172721",
-                                    "alert": "false",
-                                    "sla": "false",
-                                    "orderProductId": "1576539"
-                                },
-                                {
-                                    "orderId": "1164402",
-                                    "alert": "false",
-                                    "sla": "false",
-                                    "orderProductId": "1566439"
-                                },
-                                {
-                                    "orderId": "1168445",
-                                    "alert": "false",
-                                    "sla": "false",
-                                    "orderProductId": "1571426"
-                                },
-                                {
-                                    "orderId": "1173946",
-                                    "alert": "false",
-                                    "sla": "false",
-                                    "orderProductId": "1578051"
-                                },
-                                {
-                                    "orderId": "1161751",
-                                    "alert": "false",
-                                    "sla": "false",
-                                    "orderProductId": "1562965"
-                                },
-                                {
-                                    "orderId": "1168445",
-                                    "alert": "false",
-                                    "sla": "false",
-                                    "orderProductId": "1571425"
-                                },
-                                {
-                                    "orderId": "1173467",
-                                    "alert": "false",
-                                    "sla": "false",
-                                    "orderProductId": "1577475"
-                                }
-                            ],
-                            "Processed": []
-                        },
-                        "today": {
-                            "Confirmed": [
-                                {
-                                    "orderId": "1174330",
-                                    "alert": "false",
-                                    "sla": "true",
-                                    "orderProductId": "1578505"
-                                }
-                            ],
-                            "Processed": []
-                        },
-                        "tomorrow": {
-                            "Confirmed": [
-                                {
-                                    "orderId": "1173959",
-                                    "alert": "false",
-                                    "sla": "false",
-                                    "orderProductId": "1578069"
-                                },
-                                {
-                                    "orderId": "1174323",
-                                    "alert": "false",
-                                    "sla": "false",
-                                    "orderProductId": "1578496"
-                                }
-                            ],
-                            "Processed": [
-                                {
-                                    "orderId": "1174366",
-                                    "alert": "true",
-                                    "sla": "false",
-                                    "orderProductId": "1578545"
-                                }
-                            ]
-                        }
-                    },
-                    "dateStatusOrderIdNoBreachMap": {
-                        "festivalDate": {
-                            "Confirmed": [],
-                            "Processed": []
-                        },
-                        "past": {
-                            "Confirmed": [],
-                            "Processed": []
-                        },
-                        "future": {
-                            "Confirmed": [],
-                            "Processed": []
-                        },
-                        "today": {
-                            "Confirmed": [
-                                {
-                                    "orderId": "1174330",
-                                    "alert": "false",
-                                    "sla": "true",
-                                    "orderProductId": "1578505"
-                                }
-                            ],
-                            "Processed": []
-                        },
-                        "tomorrow": {
-                            "Confirmed": [],
-                            "Processed": []
-                        }
-                    },
-                    "dateStatusOrderIdAlertMap": {
-                        "festivalDate": {
-                            "Confirmed": [],
-                            "Processed": [
-                                {
-                                    "orderId": "1174366",
-                                    "alert": "true",
-                                    "sla": "false",
-                                    "orderProductId": "1578545"
-                                }
-                            ]
-                        },
-                        "past": {
-                            "Confirmed": [],
-                            "Processed": []
-                        },
-                        "future": {
-                            "Confirmed": [],
-                            "Processed": []
-                        },
-                        "today": {
-                            "Confirmed": [],
-                            "Processed": []
-                        },
-                        "tomorrow": {
-                            "Confirmed": [],
-                            "Processed": [
-                                {
-                                    "orderId": "1174366",
-                                    "alert": "true",
-                                    "sla": "false",
-                                    "orderProductId": "1578545"
-                                }
-                            ]
-                        }
-                    }
-                }
-            };
-            console.log("hardCodedData========>", hardCodedData);
-            return cb(hardCodedData);
-        }
-
             let fkAssociateId = localStorage.getItem('fkAssociateId');
             //let specificDate = Date.parse(spcificDate) || 0;
             let specificDate = spcificDate || 0;
@@ -770,161 +432,21 @@ export class DashboardService {
 
     getDashboardData(specificDate, cb, dataType, currentDBData) {
         var _this = this;
-         this.getDashboardCount(specificDate, function(result){
+        _this.getDashboardCount(specificDate, function(result){
              let getDashboardDataResponse = _this.formarDashBoardData(result, dataType, currentDBData);
              return cb(getDashboardDataResponse);
         });
     }
 
     getCustomData(){
+        var _this=this;
         let customDashboardData =  {
             "festivalDate" : "2017-06-12",
-            "topLabels" : [
-                {
-                    deliveryTimes : "past",
-                    labelName : "Past Orders",
-                    position : 1
-                },
-                {
-                    deliveryTimes : "today",
-                    labelName : "Delivery for Today",
-                    position : 2
-                },
-                {
-                    deliveryTimes : "tomorrow",
-                    labelName : "Delivery for Tomorrow",
-                    position : 3
-                },
-
-                {
-                    deliveryTimes : "future",
-                    labelName : "Future Deliveries",
-                    position : 4
-                },
-                {
-                    deliveryTimes : "bydate",
-                    labelName : "By Date:",
-                    position : 5
-                }
-
-            ],
-            "new": [
-                {
-                    day : "past",
-                    deliveryTimes : "past",
-                    status : "new",
-                    ordersCount: 0,
-                    displayStr: 'View Orders',
-                    isAlert: false,
-                    sla : false
-                },
-                {
-                    day : "today",
-                    deliveryTimes : "today",
-                    status : "new",
-                    ordersCount: 0,
-                    displayStr: 'View Orders',
-                    isAlert: false,
-                    sla : false
-                },
-                {
-                    day : "tomorrow",
-                    deliveryTimes : "tomorrow",
-                    status : "new",
-                    ordersCount: 0,
-                    displayStr: 'Take action',
-                    isAlert: false,
-                    sla : false
-                },
-
-                {
-                    day : "future",
-                    deliveryTimes : "future",
-                    status : "new",
-                    ordersCount: 0,
-                    displayStr: 'View Orders',
-                    isAlert: false,
-                    sla : false
-                },
-                {
-                    day : "bydate",
-                    deliveryTimes : "bydate",
-                    status : "new",
-                    ordersCount: 0,
-                    displayStr: 'View Orders',
-                    isAlert: false,
-                    sla : false
-                }
-            ],
-            "confirmed": [
-                {
-                    day : "past",
-                    deliveryTimes : "past",
-                    status : "confirmed",
-                    ordersCount: 0,
-                    displayStr: 'View Orders',
-                    isAlert: false,
-                    sla : false
-                },
-                {
-                    day : "today",
-                    deliveryTimes : "today",
-                    status : "confirmed",
-                    ordersCount: 0,
-                    displayStr: 'View Orders',
-                    isAlert: false,
-                    sla : false
-                },
-                {
-                    day : "tomorrow",
-                    deliveryTimes : "tomorrow",
-                    status : "confirmed",
-                    ordersCount: 0,
-                    displayStr: 'View Orders',
-                    isAlert: false,
-                    sla : false
-                },
-
-                {
-                    day : "future",
-                    deliveryTimes : "future",
-                    status : "confirmed",
-                    ordersCount: 0,
-                    displayStr: 'View Orders',
-                    isAlert: false,
-                    sla : false
-                },
-                {
-                    day : "future",
-                    deliveryTimes : "bydate",
-                    status : "confirmed",
-                    ordersCount: 0,
-                    displayStr: 'View Orders',
-                    isAlert: false,
-                    sla : false
-                }
-            ],
-            "ofd": [
-               /*
-               {
-                    orderNumber: 'IG12345671',
-                    displayStr: 'Mark as Delivered',
-                    isAlert: false,
-                    sla : false
-                },
-                {
-                    orderNumber: 'IG12345672',
-                    displayStr: 'Mark as Delivered',
-                    isAlert: false,
-                    sla : false
-                }
-                */
-            ],
-            "delivered": {
-                today: 0,
-                total: 0,
-                isAlert: false
-            },
+            "topLabels" : _this.topLabel,
+            "new": [],
+            "confirmed": [],
+            "ofd": [],
+            "delivered": {today: 0, total: 0, isAlert: false},
             "counts" : {
                 "orderTotalWhole": 161,
                 "newOrderTotalWhole": 148,
@@ -940,7 +462,19 @@ export class DashboardService {
                 "outOfDeliveryOrderTotalHighAlert": 1
             }
         };
-
+        for(var i in _this.topLabel){
+            var pObj={
+                day : _this.topLabel[i].deliveryTimes,
+                deliveryTimes : _this.topLabel[i].deliveryTimes,
+                status : "",
+                ordersCount: 0,
+                displayStr: '',
+                isAlert: false,
+                sla : false
+            };
+            customDashboardData.new.push(pObj);
+            customDashboardData.confirmed.push(pObj);
+        }
         console.log('customDashboardData===================>', customDashboardData);
         return customDashboardData;
     }

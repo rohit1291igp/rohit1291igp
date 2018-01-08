@@ -219,6 +219,10 @@ export class ReportsComponent implements OnInit{
       });
   }
 
+  ngOnDestroy(){
+      this.BackendService.abortLastHttpCall();
+  }
+
   @HostListener('document:click', ['$event.target'])
     public onClick(targetElement) {
         console.log('inside clicked ------->');
