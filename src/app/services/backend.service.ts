@@ -23,15 +23,24 @@ export class BackendService {
       if(/\/fakeapi/.test(reqObj.url)){
           reqObj.url=  'http://localhost:1337'+reqObj.url
       }else{
-          reqObj.url= environment.origin2 +'v1/handels/'+ reqObj.url;
+          if(sessionStorage.getItem('mockAPI')){
+              reqObj.url= environment.originMock + reqObj.url;
+          }else{
+              reqObj.url= environment.origin2 +'v1/handels/'+ reqObj.url;
+          }
       }
       _this.lastHttpCall = this.httpClient[reqObj.method](reqObj.url, reqObj.payload)
           .subscribe(
           response => {
               if(document.getElementById("cLoader")) document.getElementById("cLoader").classList.add("hide");
               if(document.getElementById("cLoader2")) document.getElementById("cLoader2").classList.add("hide");
-              //return cb(null, (response.body || response._body), response.headers);
-              return cb(null, response, (response.headers||{}));
+              if(sessionStorage.getItem('mockAPI')){
+                  let responseBody=response;
+                  if(Array.isArray(responseBody)) responseBody = responseBody[0];
+                  return cb(null, responseBody, (response.headers||{}));
+              }else{
+                  return cb(null, response, (response.headers||{}));
+              }
           },
           error => {
               if(document.getElementById("cLoader")) document.getElementById("cLoader").classList.add("hide");

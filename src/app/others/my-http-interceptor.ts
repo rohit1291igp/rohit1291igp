@@ -13,22 +13,18 @@ export class MyHttpInterceptor implements HttpInterceptor {
 
         console.log("intercepted request ... ");
         // Clone the request to add the new header.
-        var _headers=req.headers.set("X-IGP-UISK", "igpBangaloreHungerForBlood");
-        //_headers=_headers.set('token', localStorage.getItem('currentUserToken'));
-        //_headers=_headers.set('Access-Control-Expose-Headers', '*');
+        var _headers=req.headers;
+        if(sessionStorage.getItem('mockAPI')){
+            _headers=_headers.set('Content-Type', 'text/plain');
+        }else{
+            _headers=_headers.set('X-IGP-UISK', 'igpBangaloreHungerForBlood');
+            //_headers=_headers.set('token', localStorage.getItem('currentUserToken'));
+            //_headers=_headers.set('Access-Control-Expose-Headers', '*');
+        }
+
         const authReq = req.clone({ headers: _headers});
 
         console.log("Sending request with new header now ...");
-
-        //send the newly created request
-        /*return next.handle(authReq)
-            .catch((error, caught) => {
-                //intercept the respons error and displace it to the console
-                console.log("Error Occurred");
-                console.log(error);
-                //return the error to the method that called it
-                return Observable.throw(error);
-            }) as any;*/
 
         return next.handle(authReq).do((event: HttpEvent<any>) => {
             if (event instanceof HttpResponse) {
