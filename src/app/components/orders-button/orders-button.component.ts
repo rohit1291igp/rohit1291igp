@@ -7,15 +7,17 @@ import {environment} from "../../../environments/environment";
                 <ng-content></ng-content>
                 <div class="db-btn-status" *ngIf="displayData && !isMobile">{{displayData.displayStr}}</div>
             </div>`,
-  styles: [`.orders-button {
-              margin-top: 5px;
-              border-radius:0;
-              width: 100%;
-              font-size: 14px;
-              text-align: center;
-              border: none;
-              box-shadow: 0 1px 3px #888888;
-          }`]
+  styles: [`
+              .orders-button {
+                  margin-top: 5px;
+                  border-radius:0;
+                  width: 100%;
+                  font-size: 14px;
+                  text-align: center;
+                  border: none;
+                  box-shadow: 0 1px 3px #888888;
+             }
+          `]
 })
 export class OrdersButtonComponent implements OnInit, OnChanges {
   isMobile=environment.isMobile;

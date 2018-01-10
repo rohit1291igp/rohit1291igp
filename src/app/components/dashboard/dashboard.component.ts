@@ -180,4 +180,8 @@ export class DashboardComponent implements OnInit {
       _this.displayStatusToggle[_prop]=value;
   }
 
+  ifExist(obj, prop){
+     return prop in obj;
+  }
+
 }

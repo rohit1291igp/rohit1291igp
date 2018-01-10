@@ -133,19 +133,19 @@ export class DashboardService {
                 "notAssigned" : [],
                 "notConfirmed" : [],
                 "shipped" : {
-                    total: 6,
-                    pending: 10
+                    "total": 0,
+                    "pending": 0
                 },
                 "delivered" : {
-                    total: 6,
-                    pending: 10
+                    "total": 0,
+                    "pending": 0
                 },
                 "counts" : {
-                    "allOrders": 161,
-                    "actionRequired": 148,
-                    "highAlert": 12,
-                    "notAssigned": 1,
-                    "notConfirmed": 92
+                    "allOrders": 0,
+                    "actionRequired": 0,
+                    "highAlert": 0,
+                    "notAssigned": 0,
+                    "notConfirmed": 0
                 }
             };
         }
@@ -181,18 +181,18 @@ export class DashboardService {
                             "notAlloted" : {
                                 day : date,
                                 deliveryTimes : day,
-                                status : _this.statuslist['na'],
+                                status : _this.statuslist['n'],
                                 ordersCount: parseInt(countObj[prop]['notAlloted'].count),
-                                displayStr: "",
+                                displayStr: "Not Alloted",
                                 isAlert: countObj[prop]['notAlloted'].alert,
                                 sla : countObj[prop]['notAlloted'].sla
                             },
                             "processing" : {
                                 day : date,
                                 deliveryTimes : day,
-                                status : _this.statuslist['p'],
+                                status : _this.statuslist['n'],
                                 ordersCount: parseInt(countObj[prop]['processing'].count),
-                                displayStr: "",
+                                displayStr: "Processing",
                                 isAlert: countObj[prop]['processing'].alert,
                                 sla : countObj[prop]['processing'].sla
                             }
@@ -227,18 +227,18 @@ export class DashboardService {
                             "pending" : {
                                 day : date,
                                 deliveryTimes : day,
-                                status : _this.statuslist['n'],
+                                status : _this.statuslist['c'],
                                 ordersCount: parseInt(countObj[prop]['pending'].count),
-                                displayStr: "",
+                                displayStr: "Pending",
                                 isAlert: countObj[prop]['pending'].alert,
                                 sla : countObj[prop]['pending'].sla
                             },
                             "processing" : {
                                 day : date,
                                 deliveryTimes : day,
-                                status : _this.statuslist['n'],
+                                status : _this.statuslist['c'],
                                 ordersCount: parseInt(countObj[prop]['processing'].count),
-                                displayStr: "",
+                                displayStr: "Total",
                                 isAlert: countObj[prop]['processing'].alert,
                                 sla : countObj[prop]['processing'].sla
                             }
@@ -297,7 +297,7 @@ export class DashboardService {
 
         for(var i in getDashboardDataResponse.topLabels){
             var label=getDashboardDataResponse.topLabels[i].deliveryTimes;
-            createNotAssignedConfirmedObj(label === 'bydate' ? apiResponse.result.festivalDate : "", label, dashboardCounts[label]);
+            createNotAssignedConfirmedObj(label === 'bydate' ? apiResponse.result.festivalDate : "", label, label === 'bydate' ? dashboardCounts['festivalDate'] : dashboardCounts[label]);
         }
 
 
@@ -356,6 +356,8 @@ export class DashboardService {
         }else if(_this.currentRow && _this.currentRow === "all"){
             getDashboardDataResponse = _this.disableAllTableCell(getDashboardDataResponse);
         }
+
+        console.log('getDashboardDataResponse========>', getDashboardDataResponse);
 
         return getDashboardDataResponse;
     }
@@ -682,6 +684,7 @@ export class DashboardService {
             getDashboardDataResponse = _this.disableAllTableCell(getDashboardDataResponse);
         }
 
+        console.log('getDashboardDataResponse========>', getDashboardDataResponse);
         return getDashboardDataResponse;
     }
 
@@ -716,8 +719,13 @@ export class DashboardService {
     getDashboardData(specificDate, cb, dataType, currentDBData) {
         var _this = this;
         _this.getDashboardCount(specificDate, function(result){
-             let getDashboardDataResponse = _this.formarDashBoardData(result, dataType, currentDBData);
-             return cb(getDashboardDataResponse);
+            let getDashboardDataResponse;
+            if(_this.isAdmin){
+                getDashboardDataResponse = _this.formarAdminDashBoardData(result, dataType, currentDBData);
+            }else{
+                getDashboardDataResponse = _this.formarDashBoardData(result, dataType, currentDBData);
+            }
+            return cb(getDashboardDataResponse);
         });
     }
 
@@ -828,8 +836,8 @@ export class DashboardService {
             if(dashboardData.ofd && dashboardData.ofd[0]) dashboardData.ofd[0].inactive = true;
             if(dashboardData.ofd && dashboardData.ofd[1]) dashboardData.ofd[1].inactive = true;
 
-            if(dashboardData.notConfirmed && dashboardData.notAssigned[0] && dashboardData.notConfirmed[0].pending) dashboardData.notConfirmed[0].pending.inactive = true;
-            if(dashboardData.notConfirmed && dashboardData.notAssigned[0] && dashboardData.notConfirmed[0].processing) dashboardData.notConfirmed[0].processing.inactive = true;
+            if(dashboardData.notConfirmed && dashboardData.notConfirmed[0] && dashboardData.notConfirmed[0].pending) dashboardData.notConfirmed[0].pending.inactive = true;
+            if(dashboardData.notConfirmed && dashboardData.notConfirmed[0] && dashboardData.notConfirmed[0].processing) dashboardData.notConfirmed[0].processing.inactive = true;
         }else if(row === "Confirmed"){
             if(dashboardData.new && dashboardData.new[0]) dashboardData.new[0].inactive = true;
             if(dashboardData.ofd && dashboardData.ofd[0]) dashboardData.ofd[0].inactive = true;

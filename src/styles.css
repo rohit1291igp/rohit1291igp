@@ -743,3 +743,11 @@ body .dashboard-content, body .orders-button{
     display:block ! important;
 }
 /* online/offline css end */
+
+
+/* override css*/
+.adminDB .orders-button {
+    float:left;
+    width: 50% ! important;
+    font-size: 1em ! important;
+}
