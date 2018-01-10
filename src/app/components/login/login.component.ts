@@ -62,9 +62,9 @@ export class LoginComponent implements OnInit {
                     return;
                 }
 
-                let token = headers.get('token') || _response.result.token;
-                let fkAssociateId = headers.get('fkAssociateId') || _response.result.fkAssociateId;
-                let associateName = headers.get('associateName') || _response.result.associateName;
+                let token = _response.result.token;
+                let fkAssociateId =  _response.result.fkAssociateId;
+                let associateName =  _response.result.associateName;
                 console.log('User token', token);
                 console.log('fkAssociateId', fkAssociateId);
                 localStorage.setItem('currentUserToken', token);
