@@ -751,6 +751,11 @@ body .dashboard-content, body .orders-button{
     padding:0;
 }
 
+.dbMobile .adminDB{
+    height: 50px ! important;
+    border: none ! important;
+}
+
 .adminDB .orders-button{
     float:left;
     width: 48.5% ! important;
