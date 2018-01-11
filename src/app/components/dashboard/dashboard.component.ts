@@ -50,19 +50,19 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit() {
     //var _this = this;
-    this.isRowAlert = this.dashboardService.getAlertRow();0
+    this.isRowAlert = this.dashboardService.getAlertRow();
     this.dashboardData = this.dashboardService.getCustomData();
     this.loadDbData();
 
-    this.dashboardObservable=Observable.interval(1000 * 60 * 1.5)
+    /*this.dashboardObservable=Observable.interval(1000 * 60 * 1.5)
         .subscribe(() => {
             console.log('Dasboard IntervalObservable working !!!')
             this.loadDbData();
-        });
+        });*/
   }
 
   ngOnDestroy(){
-    this.dashboardObservable.unsubscribe();
+   // this.dashboardObservable.unsubscribe();
   }
 
   loadDbData(){
@@ -76,6 +76,7 @@ export class DashboardComponent implements OnInit {
            }*/
           _this.dashboardData = result;
           _this.dateRange = _this.setFestivalDate(result.festivalDate || new Date());
+          _this.isRowAlert = _this.dashboardService.getAlertRow();
       },_this.dashBoardDataType, null);
       this.masterData = this.dashboardService.getMasterData();
       //this.getDashboardData();

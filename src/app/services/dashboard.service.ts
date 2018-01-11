@@ -52,14 +52,8 @@ export class DashboardService {
     confirmedRow = {"isAlert" : false, "sla" : false};
     ofdRow = {"isAlert" : false, "sla" : false};
     bydatedRow = {"isAlert" : false, "sla" : false};
-    notAssignedRow = {
-        "notAlloted" : {"isAlert" : false, "sla" : false},
-        "processing" : {"isAlert" : false, "sla" : false}
-    };
-    notConfirmeddRow = {
-        "pending" : {"isAlert" : false, "sla" : false},
-        "processing" : {"isAlert" : false, "sla" : false}
-    };
+    notAssignedRow = {"isAlert" : false, "sla" : false};
+    notConfirmeddRow = {"isAlert" : false, "sla" : false};
 
     constructor(
         private http: Http,
@@ -132,12 +126,44 @@ export class DashboardService {
                 "notAssigned" : [],
                 "notConfirmed" : [],
                 "shipped" : {
-                    "total": 0,
-                    "pending": 0
+                    "total": {
+                        "day" : "",
+                        "deliveryTimes" : "",
+                        "status" : "",
+                        "ordersCount": 0,
+                        "displayStr": "Total",
+                        "isAlert": "",
+                        "sla" : ""
+                    },
+                    "pending": {
+                        "day" : "",
+                        "deliveryTimes" : "",
+                        "status" : "",
+                        "ordersCount": 0,
+                        "displayStr": "Total",
+                        "isAlert": "",
+                        "sla" : ""
+                    }
                 },
                 "delivered" : {
-                    "total": 0,
-                    "pending": 0
+                    "total": {
+                        "day" : "",
+                        "deliveryTimes" : "",
+                        "status" : "",
+                        "ordersCount": 0,
+                        "displayStr": "Total",
+                        "isAlert": "",
+                        "sla" : ""
+                    },
+                    "pending": {
+                        "day" : "",
+                        "deliveryTimes" : "",
+                        "status" : "",
+                        "ordersCount": 0,
+                        "displayStr": "Total",
+                        "isAlert": "",
+                        "sla" : ""
+                    }
                 },
                 "counts" : {
                     "allOrders": 0,
@@ -274,13 +300,45 @@ export class DashboardService {
         let dashboardCounts = apiResponse.result[dataTypeSelect];
 
         getDashboardDataResponse.shipped={
-            total: apiResponse.result['notShippedTotalOrderCount'],
-            pending: apiResponse.result['notShippedPendingOrderCount']
+            total: {
+                day : "",
+                deliveryTimes : "",
+                status : _this.statuslist['c'],
+                ordersCount: parseInt(apiResponse.result['notShippedTotalOrderCount'].count),
+                displayStr: "Total",
+                isAlert: apiResponse.result['notShippedTotalOrderCount'].alert,
+                sla : apiResponse.result['notShippedTotalOrderCount'].sla
+            },
+            pending: {
+                day : "",
+                deliveryTimes : "",
+                status : _this.statuslist['c'],
+                ordersCount: parseInt(apiResponse.result['notShippedPendingOrderCount'].count),
+                displayStr: "Pending",
+                isAlert: apiResponse.result['notShippedPendingOrderCount'].alert,
+                sla : apiResponse.result['notShippedPendingOrderCount'].sla
+            }
         };
 
         getDashboardDataResponse.delivered={
-            total: apiResponse.result['notDeliveredTotalOrderCount'],
-            pending: apiResponse.result['notDeliveredPendingOrderCount']
+            total: {
+                day : "",
+                deliveryTimes : "",
+                status : _this.statuslist['c'],
+                ordersCount: parseInt(apiResponse.result['notDeliveredTotalOrderCount'].count),
+                displayStr: "Total",
+                isAlert: apiResponse.result['notDeliveredTotalOrderCount'].alert,
+                sla : apiResponse.result['notDeliveredTotalOrderCount'].sla
+            },
+            pending: {
+                day : "",
+                deliveryTimes : "",
+                status : _this.statuslist['c'],
+                ordersCount: parseInt(apiResponse.result['notDeliveredPendingOrderCount'].count),
+                displayStr: "Total",
+                isAlert: apiResponse.result['notDeliveredPendingOrderCount'].alert,
+                sla : apiResponse.result['notDeliveredPendingOrderCount'].sla
+            }
         };
 
         getDashboardDataResponse["festivalDate"] = apiResponse.result.festivalDate; //fesDate;
@@ -301,50 +359,51 @@ export class DashboardService {
 
 
         /* row color code logic - start */
-        var notAssignedList = getDashboardDataResponse.notAssinged;
+        var notAssignedList = getDashboardDataResponse.notAssigned;
         var notConfirmedList = getDashboardDataResponse.notConfirmed;
 
-        this.notAssignedRow.notAlloted.isAlert = false; this.notAssignedRow.notAlloted.sla = false;
-        this.notAssignedRow.processing.isAlert = false; this.notAssignedRow.processing.sla = false;
-        this.notConfirmeddRow.pending.isAlert = false; this.notConfirmeddRow.pending.sla = false;
-        this.notConfirmeddRow.processing.isAlert = false; this.notConfirmeddRow.processing.sla = false;
+        _this.notAssignedRow.isAlert = false; _this.notAssignedRow.sla = false;
+        _this.notConfirmeddRow.isAlert = false; _this.notConfirmeddRow.sla = false;
 
 
         for(var i in notAssignedList){
-
             if(notAssignedList[i].notAlloted.isAlert && notAssignedList[i].notAlloted.isAlert== "true"){
-                this.notAssignedRow.notAlloted.isAlert = true;
+                _this.notAssignedRow.isAlert = true;
             }
 
             if(notAssignedList[i].notAlloted.sla && notAssignedList[i].notAlloted.sla== "true"){
-                this.notAssignedRow.notAlloted.sla = true;
+                _this.notAssignedRow.sla = true;
             }
 
             if(notAssignedList[i].processing.isAlert && notAssignedList[i].processing.isAlert== "true"){
-                this.notAssignedRow.processing.isAlert = true;
+                _this.notAssignedRow.isAlert = true;
             }
 
             if(notAssignedList[i].processing.sla && notAssignedList[i].processing.sla== "true"){
-                this.notAssignedRow.processing.sla = true;
+                _this.notAssignedRow.sla = true;
             }
 
-
             if(notConfirmedList[i].pending.isAlert && notConfirmedList[i].pending.isAlert== "true"){
-                this.notConfirmeddRow.pending.isAlert = true;
+                _this.notConfirmeddRow.isAlert = true;
             }
 
             if(notConfirmedList[i].pending.sla && notConfirmedList[i].pending.sla== "true"){
-                this.notConfirmeddRow.pending.sla = true;
+                _this.notConfirmeddRow.sla = true;
             }
 
             if(notConfirmedList[i].processing.isAlert && notConfirmedList[i].processing.isAlert== "true"){
-                this.notConfirmeddRow.processing.isAlert = true;
+                _this.notConfirmeddRow.isAlert = true;
             }
 
             if(notConfirmedList[i].processing.sla && notConfirmedList[i].processing.sla== "true"){
-                this.notConfirmeddRow.processing.sla = true;
+                _this.notConfirmeddRow.sla = true;
             }
         }
+        //this.confirmedRow = {"isAlert" : true, "sla" : false};
+        _this.newRow=_this.notAssignedRow;
+        _this.confirmedRow=_this.notConfirmeddRow;
+        //_this.ofdRow={"isAlert" : getDashboardDataResponse.shipped.pending.alert, "sla" : getDashboardDataResponse.shipped.pending.sla};
+        //_this.bydatedRow={"isAlert" : getDashboardDataResponse.delivered.pending.alert, "sla" : getDashboardDataResponse.shipped.pending.sla};
 
         /* row color code logic - end */
 
@@ -738,19 +797,51 @@ export class DashboardService {
                 "notAssigned" : [],
                 "notConfirmed" : [],
                 "shipped" : {
-                    total: 6,
-                    pending: 10
+                    "total": {
+                        "day" : "",
+                        "deliveryTimes" : "",
+                        "status" : "",
+                        "ordersCount": 0,
+                        "displayStr": "Total",
+                        "isAlert": "",
+                        "sla" : ""
+                    },
+                    "pending": {
+                        "day" : "",
+                        "deliveryTimes" : "",
+                        "status" : "",
+                        "ordersCount": 0,
+                        "displayStr": "Total",
+                        "isAlert": "",
+                        "sla" : ""
+                    }
                 },
                 "delivered" : {
-                    total: 6,
-                    pending: 10
+                    "total": {
+                        "day" : "",
+                        "deliveryTimes" : "",
+                        "status" : "",
+                        "ordersCount": 0,
+                        "displayStr": "Total",
+                        "isAlert": "",
+                        "sla" : ""
+                    },
+                    "pending": {
+                        "day" : "",
+                        "deliveryTimes" : "",
+                        "status" : "",
+                        "ordersCount": 0,
+                        "displayStr": "Total",
+                        "isAlert": "",
+                        "sla" : ""
+                    }
                 },
                 "counts" : {
-                    "allOrders": 161,
-                    "actionRequired": 148,
-                    "highAlert": 12,
-                    "notAssigned": 1,
-                    "notConfirmed": 92
+                    "allOrders": 0,
+                    "actionRequired": 0,
+                    "highAlert": 0,
+                    "notAssigned": 0,
+                    "notConfirmed": 0
                 }
             };
         }else{

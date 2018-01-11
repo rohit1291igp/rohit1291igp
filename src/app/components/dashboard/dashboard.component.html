@@ -210,21 +210,17 @@
                         <div class="table-cell-display v-align-middle"> Order Type</div>
                     </div>
 
-
                     <div class="cell center-align table-display col-md-2" [ngClass]="{'a' : dashBoardlabel.deliveryTimes != 'bydate', 'bydateWidth' : dashBoardlabel.deliveryTimes == 'bydate'}" *ngFor="let dashBoardlabel of dashboardData.topLabels">
-
-                    <div class="table-cell-display v-align-middle" *ngIf="dashBoardlabel.deliveryTimes =='tomorrow'">{{dashBoardlabel.labelName}}</div>
-                <div class="table-cell-display v-align-middle" *ngIf="dashBoardlabel.deliveryTimes !='bydate' && dashBoardlabel.deliveryTimes !='tomorrow'">{{dashBoardlabel.labelName}}</div>
-            <div class="table-cell-display v-align-middle" *ngIf="dashBoardlabel.deliveryTimes =='bydate'">
-            <div class="col-md-4 no-padding" style="margin-top: 8px;">{{dashBoardlabel.labelName}} </div>
-            <div class="col-md-8 no-padding custom-date-picker">
-                <my-date-picker name="mydate" [options]="myDatePickerOptions" [(ngModel)]="dateRange" (ngModelChange)="onDateChanged($event)"></my-date-picker>
-            </div>
-        </div>
-    </div>
-
-
-</div>
+                        <div class="table-cell-display v-align-middle" *ngIf="dashBoardlabel.deliveryTimes =='tomorrow'">{{dashBoardlabel.labelName}}</div>
+                        <div class="table-cell-display v-align-middle" *ngIf="dashBoardlabel.deliveryTimes !='bydate' && dashBoardlabel.deliveryTimes !='tomorrow'">{{dashBoardlabel.labelName}}</div>
+                        <div class="table-cell-display v-align-middle" *ngIf="dashBoardlabel.deliveryTimes =='bydate'">
+                            <div class="col-md-4 no-padding" style="margin-top: 8px;">{{dashBoardlabel.labelName}} </div>
+                            <div class="col-md-8 no-padding custom-date-picker">
+                                <my-date-picker name="mydate" [options]="myDatePickerOptions" [(ngModel)]="dateRange" (ngModelChange)="onDateChanged($event)"></my-date-picker>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
 <!--Table content-->
 <div class="row">
@@ -310,7 +306,7 @@
     <div class="cell col-md-2 table-display" [ngClass]="{'alert-action': isRowAlert['future'].isAlert, 'alertg-action': (!isRowAlert['future'].isAlert && isRowAlert['future'].sla), 'no-action': (!isRowAlert['future'].isAlert && !isRowAlert['future'].sla)}">
         <div class="table-cell-display v-align-middle">
             {{masterData.displayStatus[2]}}
-            <ng-container *ngIf="!dashboardData.ofd">({{dashboardData.shipped.total + dashboardData.shipped.pending}})</ng-container>
+            <ng-container *ngIf="!dashboardData.ofd">({{dashboardData.shipped.total.ordersCount + dashboardData.shipped.pending.ordersCount}})</ng-container>
             <ng-container *ngIf="dashboardData.ofd">({{dashboardData.counts.ofdOrders}})</ng-container>
         </div>
     </div>
@@ -321,12 +317,12 @@
                 <div class="col-md-12 relative" >
                     <div class="col-md-3" style="">
                         <div class="col-md-6 btn btn-primary" style="margin-top:1em; width:100%;">
-                            <span>Pending</span> - <span>{{dashboardData.shipped.pending}}</span>
+                            <span>Pending</span> - <span>{{dashboardData.shipped.pending.ordersCount}}</span>
                         </div>
                     </div>
                     <div class="col-md-3" style="">
                         <div class="btn btn-primary col-md-6" style="margin-top:1em; width:100%;">
-                            <span>Total</span> - <span>{{dashboardData.shipped.total}}</span>
+                            <span>Total</span> - <span>{{dashboardData.shipped.total.ordersCount}}</span>
                         </div>
                     </div>
                 </div>
@@ -358,7 +354,7 @@
     <div class="cell col-md-2 table-display" [ngClass]="{'alert-action': isRowAlert['bydate'].isAlert, 'alertg-action': (!isRowAlert['bydate'].isAlert && isRowAlert['bydate'].sla), 'no-action': (!isRowAlert['bydate'].isAlert && !isRowAlert['bydate'].sla)}">
         <div class="table-cell-display v-align-middle">
             {{masterData.displayStatus[3]}}
-            <ng-container *ngIf="ifExist(dashboardData.delivered, 'pending')">({{dashboardData.delivered.total+dashboardData.delivered.pending}})</ng-container>
+            <ng-container *ngIf="ifExist(dashboardData.delivered, 'pending')">({{dashboardData.delivered.total.ordersCount+dashboardData.delivered.pending.ordersCount}})</ng-container>
             <ng-container *ngIf="!ifExist(dashboardData.delivered, 'pending')">({{dashboardData.delivered.total+dashboardData.delivered.today}})</ng-container>
         </div>
     </div>
@@ -370,12 +366,12 @@
                     <div class="col-md-12 relative" >
                         <div class="col-md-3" >
                             <div class="col-md-6 btn btn-primary" style="margin-top:1em; width:100%;">
-                                <span>Pending</span> - <span>{{dashboardData.delivered.pending}}</span>
+                                <span>Pending</span> - <span>{{dashboardData.delivered.pending.ordersCount}}</span>
                             </div>
                         </div>
                         <div class="col-md-3" >
                             <div class="col-md-6 btn btn-primary" style="margin-top:1em; width:100%;">
-                                <span>Total</span> - <span>{{dashboardData.delivered.total}}</span>
+                                <span>Total</span> - <span>{{dashboardData.delivered.total.ordersCount}}</span>
                             </div>
                         </div>
                     </div>
