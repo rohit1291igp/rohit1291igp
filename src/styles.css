@@ -751,11 +751,20 @@ body .dashboard-content, body .orders-button{
     padding:0;
 }
 
-.adminDB .orders-button {
-    margin-left:3%;
+.adminDB .orders-button{
     float:left;
-    width: 47% ! important;
+    width: 48.5% ! important;
     font-size: 1em ! important;
+    box-shadow: 0 1px 3px #444242 ! important;
+}
+
+.adminDB .secBtn .orders-button{
+    margin-left:3% ! important;
+}
+
+.adminDB .orders-button:hover{
+    opacity:0.9;
+    font-size:1.1em ! important;
 }
 /* override css - end */
 
