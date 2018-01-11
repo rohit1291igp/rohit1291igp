@@ -45,7 +45,6 @@ export class DashboardService {
         "c" : "Confirmed",
         "o" : "OutForDelivery",
         "d" : "Shipped",
-        "na": "notAlooted",
         "p" : "processing"
     };
 
@@ -190,7 +189,7 @@ export class DashboardService {
                             "processing" : {
                                 day : date,
                                 deliveryTimes : day,
-                                status : _this.statuslist['n'],
+                                status : _this.statuslist['p'],
                                 ordersCount: parseInt(countObj[prop]['processing'].count),
                                 displayStr: "Processing",
                                 isAlert: countObj[prop]['processing'].alert,
@@ -227,7 +226,7 @@ export class DashboardService {
                             "pending" : {
                                 day : date,
                                 deliveryTimes : day,
-                                status : _this.statuslist['c'],
+                                status : _this.statuslist['p'],
                                 ordersCount: parseInt(countObj[prop]['pending'].count),
                                 displayStr: "Pending",
                                 isAlert: countObj[prop]['pending'].alert,

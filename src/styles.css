@@ -745,9 +745,17 @@ body .dashboard-content, body .orders-button{
 /* online/offline css end */
 
 
-/* override css*/
+/* override css - start */
+/* order-button comp */
+.adminDB{
+    padding:0;
+}
+
 .adminDB .orders-button {
+    margin-left:3%;
     float:left;
-    width: 50% ! important;
+    width: 47% ! important;
     font-size: 1em ! important;
 }
+/* override css - end */
+
