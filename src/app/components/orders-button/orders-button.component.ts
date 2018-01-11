@@ -22,6 +22,7 @@ import {environment} from "../../../environments/environment";
 export class OrdersButtonComponent implements OnInit, OnChanges {
   isMobile=environment.isMobile;
   @Input('noLabel') noLabel: boolean;
+  @Input('inLineLabel') inLineLabel: boolean;
   @Input('theme') theme: string;
   @Input('displayData') displayData: Object;
   @Input('orderStatus') orderStatus: string;

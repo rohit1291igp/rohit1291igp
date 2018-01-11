@@ -315,14 +315,26 @@
         <ng-container *ngIf="!dashboardData.ofd">
             <div class="row">
                 <div class="col-md-12 relative" >
-                    <div class="col-md-3" style="">
-                        <div class="col-md-6 btn btn-primary" style="margin-top:1em; width:100%;">
-                            <span>Pending</span> - <span>{{dashboardData.shipped.pending.ordersCount}}</span>
+                    <div class="col-md-3 no-padding" style="">
+                        <div class="col-md-12 no-padding" style="margin-top:1em; width:100%;">
+                            <!--<span>Pending</span> - <span>{{dashboardData.shipped.pending.ordersCount}}</span>-->
+                            <div class="" [ngClass]="{'a' : dashboardData.shipped.pending.deliveryTimes !='bydate', 'b' : dashboardData.shipped.pending.deliveryTimes =='bydate', 'custom-btn-parent': dashboardData.shipped.pending.ordersCount, 'center-align': !dashboardData.shipped.pending.ordersCount, 'inactive' : dashboardData.shipped.pending.inactive}">
+                                <app-orders-button [noLabel]="true" [displayData]="dashboardData.shipped.pending" [orderStatus]="dashboardData.shipped.pending.status" [OrderDay]="dashboardData.shipped.pending.day" [deliveryTime]="dashboardData.shipped.pending.deliveryTimes" *ngIf="dashboardData.shipped.pending.ordersCount" (onViewOrders)="viewOrders($event)">
+                                    <app-button-view [inlineLable]="'pre'" [displayData]="dashboardData.shipped.pending" [viewData]="dashboardData.shipped.pending.ordersCount"></app-button-view>
+                                </app-orders-button>
+                                <app-no-orders [viewData]="dashboardData.shipped.pending.ordersCount" [orderStatus]="dashboardData.shipped.pending.status"></app-no-orders>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-md-3" style="">
-                        <div class="btn btn-primary col-md-6" style="margin-top:1em; width:100%;">
-                            <span>Total</span> - <span>{{dashboardData.shipped.total.ordersCount}}</span>
+                    <div class="col-md-3 no-padding" style="">
+                        <div class="col-md-12 no-padding" style="margin-top:1em; width:100%;">
+                            <!--<span>Total</span> - <span>{{dashboardData.shipped.total.ordersCount}}</span>-->
+                            <div class="" [ngClass]="{'a' : dashboardData.shipped.total.deliveryTimes !='bydate', 'b' : dashboardData.shipped.total.deliveryTimes =='bydate', 'custom-btn-parent': dashboardData.shipped.total.ordersCount, 'center-align': !dashboardData.shipped.total.ordersCount, 'inactive' : dashboardData.shipped.total.inactive}">
+                                <app-orders-button [noLabel]="true" [displayData]="dashboardData.shipped.total" [orderStatus]="dashboardData.shipped.total.status" [OrderDay]="dashboardData.shipped.total.day" [deliveryTime]="dashboardData.shipped.total.deliveryTimes" *ngIf="dashboardData.shipped.total.ordersCount" (onViewOrders)="viewOrders($event)">
+                                    <app-button-view [inlineLable]="'pre'" [displayData]="dashboardData.shipped.total" [viewData]="dashboardData.shipped.total.ordersCount"></app-button-view>
+                                </app-orders-button>
+                                <app-no-orders [viewData]="dashboardData.shipped.total.ordersCount" [orderStatus]="dashboardData.shipped.total.status"></app-no-orders>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -364,14 +376,26 @@
             <div class="cellNoHeight cell col-md-10 no-padding">
                 <div class="row">
                     <div class="col-md-12 relative" >
-                        <div class="col-md-3" >
-                            <div class="col-md-6 btn btn-primary" style="margin-top:1em; width:100%;">
-                                <span>Pending</span> - <span>{{dashboardData.delivered.pending.ordersCount}}</span>
+                        <div class="col-md-3 no-padding" >
+                            <div class="col-md-12 no-padding" style="margin-top:1em; width:100%;">
+                                <!--<span>Pending</span> - <span>{{dashboardData.delivered.pending.ordersCount}}</span>-->
+                                <div class="" [ngClass]="{'a' : dashboardData.delivered.pending.deliveryTimes !='bydate', 'b' : dashboardData.delivered.pending.deliveryTimes =='bydate', 'custom-btn-parent': dashboardData.delivered.pending.ordersCount, 'center-align': !dashboardData.delivered.pending.ordersCount, 'inactive' : dashboardData.delivered.pending.inactive}">
+                                    <app-orders-button [noLabel]="true" [displayData]="dashboardData.delivered.pending" [orderStatus]="dashboardData.delivered.pending.status" [OrderDay]="dashboardData.delivered.pending.day" [deliveryTime]="dashboardData.delivered.pending.deliveryTimes" *ngIf="dashboardData.delivered.pending.ordersCount" (onViewOrders)="viewOrders($event)">
+                                        <app-button-view [inlineLable]="'pre'" [displayData]="dashboardData.delivered.pending" [viewData]="dashboardData.delivered.pending.ordersCount"></app-button-view>
+                                    </app-orders-button>
+                                    <app-no-orders [viewData]="dashboardData.delivered.pending.ordersCount" [orderStatus]="dashboardData.delivered.pending.status"></app-no-orders>
+                                </div>
                             </div>
                         </div>
-                        <div class="col-md-3" >
-                            <div class="col-md-6 btn btn-primary" style="margin-top:1em; width:100%;">
-                                <span>Total</span> - <span>{{dashboardData.delivered.total.ordersCount}}</span>
+                        <div class="col-md-3 no-padding" >
+                            <div class="col-md-12 no-padding" style="margin-top:1em; width:100%;">
+                                <!--<span>Total</span> - <span>{{dashboardData.delivered.total.ordersCount}}</span>-->
+                                <div class="" [ngClass]="{'a' : dashboardData.delivered.total.deliveryTimes !='bydate', 'b' : dashboardData.delivered.total.deliveryTimes =='bydate', 'custom-btn-parent': dashboardData.delivered.total.ordersCount, 'center-align': !dashboardData.delivered.total.ordersCount, 'inactive' : dashboardData.delivered.total.inactive}">
+                                    <app-orders-button [noLabel]="true" [displayData]="dashboardData.delivered.total" [orderStatus]="dashboardData.delivered.total.status" [OrderDay]="dashboardData.delivered.total.day" [deliveryTime]="dashboardData.delivered.total.deliveryTimes" *ngIf="dashboardData.delivered.total.ordersCount" (onViewOrders)="viewOrders($event)">
+                                        <app-button-view [inlineLable]="'pre'" [displayData]="dashboardData.delivered.total" [viewData]="dashboardData.delivered.total.ordersCount"></app-button-view>
+                                    </app-orders-button>
+                                    <app-no-orders [viewData]="dashboardData.delivered.total.ordersCount" [orderStatus]="dashboardData.delivered.total.status"></app-no-orders>
+                                </div>
                             </div>
                         </div>
                     </div>

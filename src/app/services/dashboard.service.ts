@@ -140,7 +140,7 @@ export class DashboardService {
                         "deliveryTimes" : "",
                         "status" : "",
                         "ordersCount": 0,
-                        "displayStr": "Total",
+                        "displayStr": "Pending",
                         "isAlert": "",
                         "sla" : ""
                     }
@@ -160,7 +160,7 @@ export class DashboardService {
                         "deliveryTimes" : "",
                         "status" : "",
                         "ordersCount": 0,
-                        "displayStr": "Total",
+                        "displayStr": "Pending",
                         "isAlert": "",
                         "sla" : ""
                     }
@@ -252,7 +252,7 @@ export class DashboardService {
                             "pending" : {
                                 day : date,
                                 deliveryTimes : day,
-                                status : _this.statuslist['p'],
+                                status : _this.statuslist['n'],
                                 ordersCount: parseInt(countObj[prop]['pending'].count),
                                 displayStr: "Pending",
                                 isAlert: countObj[prop]['pending'].alert,
@@ -261,7 +261,7 @@ export class DashboardService {
                             "processing" : {
                                 day : date,
                                 deliveryTimes : day,
-                                status : _this.statuslist['c'],
+                                status : _this.statuslist['n'],
                                 ordersCount: parseInt(countObj[prop]['processing'].count),
                                 displayStr: "Total",
                                 isAlert: countObj[prop]['processing'].alert,
@@ -302,7 +302,7 @@ export class DashboardService {
         getDashboardDataResponse.shipped={
             total: {
                 day : "",
-                deliveryTimes : "",
+                deliveryTimes : "today",
                 status : _this.statuslist['c'],
                 ordersCount: parseInt(apiResponse.result['notShippedTotalOrderCount'].count),
                 displayStr: "Total",
@@ -311,7 +311,7 @@ export class DashboardService {
             },
             pending: {
                 day : "",
-                deliveryTimes : "",
+                deliveryTimes : "today",
                 status : _this.statuslist['c'],
                 ordersCount: parseInt(apiResponse.result['notShippedPendingOrderCount'].count),
                 displayStr: "Pending",
@@ -324,7 +324,7 @@ export class DashboardService {
             total: {
                 day : "",
                 deliveryTimes : "",
-                status : _this.statuslist['c'],
+                status : _this.statuslist['o'],
                 ordersCount: parseInt(apiResponse.result['notDeliveredTotalOrderCount'].count),
                 displayStr: "Total",
                 isAlert: apiResponse.result['notDeliveredTotalOrderCount'].alert,
@@ -333,9 +333,9 @@ export class DashboardService {
             pending: {
                 day : "",
                 deliveryTimes : "",
-                status : _this.statuslist['c'],
+                status : _this.statuslist['o'],
                 ordersCount: parseInt(apiResponse.result['notDeliveredPendingOrderCount'].count),
-                displayStr: "Total",
+                displayStr: "Pending",
                 isAlert: apiResponse.result['notDeliveredPendingOrderCount'].alert,
                 sla : apiResponse.result['notDeliveredPendingOrderCount'].sla
             }
@@ -399,11 +399,11 @@ export class DashboardService {
                 _this.notConfirmeddRow.sla = true;
             }
         }
-        //this.confirmedRow = {"isAlert" : true, "sla" : false};
+
         _this.newRow=_this.notAssignedRow;
         _this.confirmedRow=_this.notConfirmeddRow;
-        //_this.ofdRow={"isAlert" : getDashboardDataResponse.shipped.pending.alert, "sla" : getDashboardDataResponse.shipped.pending.sla};
-        //_this.bydatedRow={"isAlert" : getDashboardDataResponse.delivered.pending.alert, "sla" : getDashboardDataResponse.shipped.pending.sla};
+        _this.ofdRow={"isAlert" : (getDashboardDataResponse.shipped.pending.isAlert && getDashboardDataResponse.shipped.pending.isAlert == "true") ? true : false, "sla" : (getDashboardDataResponse.shipped.pending.sla && getDashboardDataResponse.shipped.pending.sla =="true") ? true : false};
+        _this.bydatedRow={"isAlert" : (getDashboardDataResponse.delivered.pending.isAlert && getDashboardDataResponse.delivered.pending.isAlert == "true") ? true : false, "sla" : (getDashboardDataResponse.delivered.pending.sla && getDashboardDataResponse.delivered.pending.sla == "true") ? true : false };
 
         /* row color code logic - end */
 
@@ -966,10 +966,10 @@ export class DashboardService {
     reArrangeDbDate(dbData){
         //remove all blur classes
         console.log('---- DbData remove blur ----');
-        if(dbData.confirmed[0] && dbData.confirmed[0].inactive) delete dbData.confirmed[0].inactive;
-        if(dbData.new[0] && dbData.new[0].inactive) delete dbData.new[0].inactive;
-        if(dbData.ofd[0] && dbData.ofd[0].inactive) delete dbData.ofd[0].inactive;
-        if(dbData.ofd[1] && dbData.ofd[1].inactive) delete dbData.ofd[1].inactive;
+        if(dbData.confirmed && dbData.confirmed[0] && dbData.confirmed[0].inactive) delete dbData.confirmed[0].inactive;
+        if(dbData.new && dbData.new[0] && dbData.new[0].inactive) delete dbData.new[0].inactive;
+        if(dbData.ofd && dbData.ofd[0] && dbData.ofd[0].inactive) delete dbData.ofd[0].inactive;
+        if(dbData.ofd && dbData.ofd[1] && dbData.ofd[1].inactive) delete dbData.ofd[1].inactive;
 
         if(dbData.notAssigned && dbData.notAssigned[0] && dbData.notAssigned[0].notAlloted && dbData.notAssigned[0].notAlloted.inactive) delete dbData.notAssigned[0].notAlloted.inactive;
         if(dbData.notAssigned && dbData.notAssigned[0] && dbData.notAssigned[0].processing && dbData.notAssigned[0].processing.inactive) delete dbData.notAssigned[0].processing.inactive;
