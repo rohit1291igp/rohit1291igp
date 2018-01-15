@@ -44,7 +44,7 @@
 
 .actions-button {
     border: none;
-    font-size: 12px;
+    font-size: 0.75vw;
     margin-bottom: 5px;
 }
 
@@ -65,7 +65,7 @@
 }
 
 .order-actions {
-    padding: 2px 35px;
+    padding: 0.1em 5em 0.1em 1.5em;
 }
 
 .order-actions > .row {
@@ -245,7 +245,7 @@
     margin-top: 0.5em;
     z-index:99;
     background: #fff;
-    width:180%;
+    width:98%;
 }
 
 .order-instruction-detail.mob{
@@ -444,6 +444,15 @@
     -o-transition-duration: 1s ! important;
     transition-duration: 1s ! important;
 }
+
+.order-actions-cont .actions-button{
+    width:48.5%;
+}
+
+.order-actions-cont.comm .actions-button{
+    width:32%;
+}
+
 
 
 

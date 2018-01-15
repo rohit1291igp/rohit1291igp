@@ -1028,4 +1028,14 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
        this.sidePanelData[orderIndex].orderLogFlag=val;
   }
 
+  changeDd(e, val, orderIndex){
+      var _this=this;
+      if('changeActionsFlag' in _this.sidePanelData[orderIndex]){
+          _this.sidePanelData[orderIndex].changeActionsFlag= !_this.sidePanelData[orderIndex].changeActionsFlag;
+      }else{
+          this.sidePanelData[orderIndex].changeActionsFlag=true;
+      }
+
+  }
+
 }

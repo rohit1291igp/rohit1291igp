@@ -11,6 +11,10 @@
     border-right: 2px solid #E0E0E0;
 }
 
+.borderLeft{
+    border-left: 2px solid #E0E0E0;
+}
+
 .no-padding {
     padding : 0 ! important;
 }
@@ -773,3 +777,16 @@ body .dashboard-content, body .orders-button{
 }
 /* override css - end */
 
+
+.dropdown-item{
+    display: block;
+    width: 100%;
+    padding: .25rem 1.5rem;
+    clear: both;
+    font-weight: 400;
+    color: #212529;
+    text-align: inherit;
+    white-space: nowrap;
+    background-color: transparent;
+    border: 0;
+}
