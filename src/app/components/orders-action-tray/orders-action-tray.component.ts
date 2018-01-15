@@ -46,6 +46,7 @@ import {environment} from "../../../environments/environment";
 })
 export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
   isMobile=environment.isMobile;
+  isAdmin=localStorage.getItem('admin');
   confirmFlag=false;
   confirmModel:any={};
   confirmData={
@@ -252,7 +253,7 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
       var orderDeliveryTime = this.statusReasonModel.deliveryTime;
       //this.statusReasonModel = {}
 
-      this.updateOrderStatus(orderStatusEvent, orderStatus, orderId, orderProducts, orderDeliveryDate, orderDeliveryTime);
+      this.updateOrderStatus(orderStatusEvent, null, orderStatus, orderId, orderProducts, orderDeliveryDate, orderDeliveryTime);
   }
 
   clearPopupData(){
@@ -395,7 +396,7 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
     this.orderId = orderId;
 
     if(this.orderByStatus === "OutForDelivery" && e.currentTarget.dataset.deliverytime === "unknown"){
-        this.updateOrderStatus(e, "Delivered", orderId, null, null, null);
+        this.updateOrderStatus(e, null, "Delivered", orderId, null, null, null);
         /*this.loadTrayData(e, orderByStatus, orderId, dashBoardDataType, function(err, result){
             if(err){
                 console.log('Error----->', err);
@@ -655,7 +656,7 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
 
   }
 
-  updateOrderStatus(e, status, orderId, orderProducts, deliveryDate, deliveryTime){
+  updateOrderStatus(e, orderIndex, status, orderId, orderProducts, deliveryDate, deliveryTime){
       e.stopPropagation();
       /* confirm popup - start */
         if(this.isMobile){
@@ -766,7 +767,7 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
                       //In case of search order layer - don't remove product, update status on layer
                       _this.loadTrayData(e, _this.orderByStatus, _this.orderId, _this.activeDashBoardDataType, null);
                   }else{
-                      let dataLength = _this.sidePanelDataOnStatusUpdate(orderId, deliveryDate, deliveryTime);
+                      let dataLength = _this.sidePanelDataOnStatusUpdate(orderIndex, orderId, deliveryDate, deliveryTime);
                       if(!dataLength){
                           _this.onStatusUpdate.emit("closed");
                           _this.trayOpen = false;
@@ -802,7 +803,7 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
                   //In case of search order layer - don't remove product, update status on layer
                   _this.loadTrayData(e, _this.orderByStatus, _this.orderId, _this.activeDashBoardDataType, null);
               }else{
-                  let dataLength = _this.sidePanelDataOnStatusUpdate(orderId, deliveryDate, deliveryTime);
+                  let dataLength = _this.sidePanelDataOnStatusUpdate(orderIndex, orderId, deliveryDate, deliveryTime);
                   if(!dataLength){
                       _this.onStatusUpdate.emit("closed"); // 'closed parameter is sent to rearrange dashboard columns'
                       _this.trayOpen = false;
@@ -896,17 +897,21 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
       return orderUpdateByStatus;
   }
 
-  sidePanelDataOnStatusUpdate(orderId, deliveryDate, deliveryTime){
+  sidePanelDataOnStatusUpdate(orderIndex, orderId, deliveryDate, deliveryTime){
       var _this = this;
-
-      for(var i in _this.sidePanelData){
-          if(parseInt(orderId) === parseInt(_this.sidePanelData[i].orderId) &&
-              deliveryDate === _this.sidePanelData[i].orderProducts[0].orderProductExtraInfo.deliveryDate &&
-              deliveryTime === _this.sidePanelData[i].orderProducts[0].orderProductExtraInfo.deliveryTime){
-              if(Array.isArray(_this.sidePanelData)) console.log('splice objData----------------');
-              _this.sidePanelData.splice(i, 1);
-              return _this.sidePanelData.length;
+      if(orderIndex){
+          for(var i in _this.sidePanelData){
+              if(parseInt(orderId) === parseInt(_this.sidePanelData[i].orderId) &&
+                  deliveryDate === _this.sidePanelData[i].orderProducts[0].orderProductExtraInfo.deliveryDate &&
+                  deliveryTime === _this.sidePanelData[i].orderProducts[0].orderProductExtraInfo.deliveryTime){
+                  if(Array.isArray(_this.sidePanelData)) console.log('splice objData----------------');
+                  _this.sidePanelData.splice(i, 1);
+                  return _this.sidePanelData.length;
+              }
           }
+      }else{
+          _this.sidePanelData.splice(orderIndex, 1);
+          return _this.sidePanelData.length;
       }
   }
 
@@ -1002,7 +1007,7 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
             var orderProducts = this.confirmModel.orderProducts;
             var orderDeliveryDate = this.confirmModel.deliveryDate;
             var orderDeliveryTime = this.confirmModel.deliveryTime;
-            this.updateOrderStatus(orderStatusEvent, orderStatus, orderId, orderProducts, orderDeliveryDate, orderDeliveryTime);
+            this.updateOrderStatus(orderStatusEvent, null, orderStatus, orderId, orderProducts, orderDeliveryDate, orderDeliveryTime);
             this.confirmFlag=false;
         }else{
             this.confirmFlag=false;

@@ -399,17 +399,36 @@
 
 .orderLogContInner{
     position: absolute;
-    padding: 0.5em 1em;
+
     left: -1.6em;
     right: 0em;
     width: 105%;
     bottom: -1.7em;
+   /* background: #eee;
+    height: 110% ! important;*/
+}
+
+.orderLogContInner .orderLogContInner2{
     background: #eee;
+    padding: 0.5em 1em;
+}
+
+.orderLogContInner.slideropen .orderLogContInner1{
+    height: 7% ! important;
+    max-height: 7% ! important;
+    background: transparent;
+    padding: 0.5em 1em;
+}
+
+.orderLogContInner.slideropen .orderLogContInner2{
+    height: 103% ! important;
+    max-height: 103% ! important;
+
 }
 
 .orderLogContInner.slideropen{
-    height: 103% ! important;
-    max-height: 103% ! important;
+    height: 110% ! important;
+    max-height: 110% ! important;
     -moz-transition-duration: 0.5s ! important;
     -webkit-transition-duration: 0.5s ! important;
     -o-transition-duration: 0.5s ! important;

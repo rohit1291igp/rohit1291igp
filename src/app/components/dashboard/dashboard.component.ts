@@ -17,6 +17,7 @@ import { Observable } from "rxjs";
 export class DashboardComponent implements OnInit {
   @ViewChild(OrdersActionTrayComponent) child: OrdersActionTrayComponent;
   isMobile=environment.isMobile;
+  isAdmin=localStorage.getItem('admin');
   prodOrderstatus : any;
   dashBoardDataType;
   vendorName = localStorage.getItem('associateName');

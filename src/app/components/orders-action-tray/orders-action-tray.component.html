@@ -418,14 +418,14 @@
                     </div>
                     <div class="col-md-4 order-actions" *ngIf="!isMobile">
                       <div class="row">
-                        <div class="btn  actions-button uppercase text-bold bg-white text-red" [ngClass]="{'disableBtn' : order.orderProducts[0].ordersProductStatus !=='Processed', 'hide' : order.orderProducts[0].ordersProductStatus !=='Processed'}" (click)="updateOrderStatus($event, 'Rejected', order.orderId, order.orderProducts, order.orderProducts[0].orderProductExtraInfo.deliveryDate, order.orderProducts[0].orderProductExtraInfo.deliveryTime)">
+                        <div class="btn  actions-button uppercase text-bold bg-white text-red" [ngClass]="{'disableBtn' : order.orderProducts[0].ordersProductStatus !=='Processed', 'hide' : order.orderProducts[0].ordersProductStatus !=='Processed'}" (click)="updateOrderStatus($event, orderIndex, 'Rejected', order.orderId, order.orderProducts, order.orderProducts[0].orderProductExtraInfo.deliveryDate, order.orderProducts[0].orderProductExtraInfo.deliveryTime)">
                           Reject
                         </div>
                         <button class="btn btn-primary actions-button uppercase text-bold text-white bg-green"
                         [ngClass]="{'disableBtn' : (order.orderProducts[0].ordersProductStatus =='Shipped' && order.orderProducts[0].deliveryStatus === 1) ||
                         (order.orderProducts[0].ordersProductStatus =='Dispatched' && order.orderProducts[0].deliveryStatus === 1) ||
                         (order.orderProducts[0].ordersProductStatus =='Confirmed' && order.deliverWhen !== 'today' && order.deliverWhen !== 'past')}"
-                        (click)="updateOrderStatus($event, getNxtOrderStatus(order.orderProducts[0].ordersProductStatus), order.orderId, order.orderProducts, order.orderProducts[0].orderProductExtraInfo.deliveryDate, order.orderProducts[0].orderProductExtraInfo.deliveryTime)">
+                        (click)="updateOrderStatus($event, orderIndex, getNxtOrderStatus(order.orderProducts[0].ordersProductStatus), order.orderId, order.orderProducts, order.orderProducts[0].orderProductExtraInfo.deliveryDate, order.orderProducts[0].orderProductExtraInfo.deliveryTime)">
                               <span *ngIf="order.orderProducts[0].ordersProductStatus =='Processed'">Confirm</span>
                               <span *ngIf="order.orderProducts[0].ordersProductStatus =='Confirmed'">Out For Delivery</span>
                               <span *ngIf="(order.orderProducts[0].ordersProductStatus =='Shipped' && order.orderProducts[0].deliveryStatus === 0) || order.orderProducts[0].ordersProductStatus =='OutForDelivery' || order.orderProducts[0].ordersProductStatus == 'Partially Dispatched'">Mark as Delivered</span>
@@ -461,7 +461,7 @@
                         </div>
                     </div>
 
-                    <div class="row">
+                    <div class="row" *ngIf="isAdmin">
                         <div class="btn btn-primary actions-button text-bold oLog" (mouseenter)="orderLog($event, true, orderIndex)" (mouseleave)="orderLog($event, false, orderIndex)">
                             Log
                         </div>
@@ -530,22 +530,28 @@
                         </div>
                     </div>
 
-                    <div class="orderLogContInner" [ngClass]="{'slideropen': order.orderLogFlag, 'sliderclosed' : !order.orderLogFlag}">
-                        <h3>Order Logs</h3>
+                    <div class="orderLogContInner" (mouseenter)="orderLog($event, true, orderIndex)" (mouseleave)="orderLog($event, false, orderIndex)" [ngClass]="{'slideropen': order.orderLogFlag, 'sliderclosed' : !order.orderLogFlag}"  *ngIf="isAdmin">
+                        <div class="orderLogContInner1">
+                            &nbsp;
+                        </div>
+                        <div class="orderLogContInner2">
+                            <h3>Order Logs</h3>
+                        </div>
                     </div>
+
             </div>
 
 
 <div class="col-md-4 order-actions no-padding" *ngIf="isMobile">
 <div class="row">
-    <div class="btn  actions-button uppercase text-bold bg-white text-red" style="width:100%; box-shadow: 0 1px 3px #888888;" [ngClass]="{'disableBtn' : order.orderProducts[0].ordersProductStatus !=='Processed', 'hide' : order.orderProducts[0].ordersProductStatus !=='Processed'}" (click)="updateOrderStatus($event, 'Rejected', order.orderId, order.orderProducts, order.orderProducts[0].orderProductExtraInfo.deliveryDate, order.orderProducts[0].orderProductExtraInfo.deliveryTime)">
+    <div class="btn  actions-button uppercase text-bold bg-white text-red" style="width:100%; box-shadow: 0 1px 3px #888888;" [ngClass]="{'disableBtn' : order.orderProducts[0].ordersProductStatus !=='Processed', 'hide' : order.orderProducts[0].ordersProductStatus !=='Processed'}" (click)="updateOrderStatus($event, orderIndex, 'Rejected', order.orderId, order.orderProducts, order.orderProducts[0].orderProductExtraInfo.deliveryDate, order.orderProducts[0].orderProductExtraInfo.deliveryTime)">
     Reject
 </div>
 <button style="width:100%;" class="btn btn-primary actions-button uppercase text-bold text-white bg-green"
 [ngClass]="{'disableBtn' : (order.orderProducts[0].ordersProductStatus =='Shipped' && order.orderProducts[0].deliveryStatus === 1) ||
 (order.orderProducts[0].ordersProductStatus =='Dispatched' && order.orderProducts[0].deliveryStatus === 1) ||
 (order.orderProducts[0].ordersProductStatus =='Confirmed' && order.deliverWhen !== 'today' && order.deliverWhen !== 'past')}"
-(click)="updateOrderStatus($event, getNxtOrderStatus(order.orderProducts[0].ordersProductStatus), order.orderId, order.orderProducts, order.orderProducts[0].orderProductExtraInfo.deliveryDate, order.orderProducts[0].orderProductExtraInfo.deliveryTime)">
+(click)="updateOrderStatus($event, orderIndex, getNxtOrderStatus(order.orderProducts[0].ordersProductStatus), order.orderId, order.orderProducts, order.orderProducts[0].orderProductExtraInfo.deliveryDate, order.orderProducts[0].orderProductExtraInfo.deliveryTime)">
 <span *ngIf="order.orderProducts[0].ordersProductStatus =='Processed'">Confirm</span>
 <span *ngIf="order.orderProducts[0].ordersProductStatus =='Confirmed'">Out For Delivery</span>
 <span *ngIf="(order.orderProducts[0].ordersProductStatus =='Shipped' && order.orderProducts[0].deliveryStatus === 0) || order.orderProducts[0].ordersProductStatus =='OutForDelivery' || order.orderProducts[0].ordersProductStatus == 'Partially Dispatched'">Mark as Delivered</span>
