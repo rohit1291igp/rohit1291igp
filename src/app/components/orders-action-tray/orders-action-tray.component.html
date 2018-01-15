@@ -267,70 +267,6 @@
             </div>
             <div class="row">
                 <p>Product Name: <span class="uppercase text-igp"><app-loader></app-loader></span></p>
-                <!--<p>Product Components -</p>-->
-                <!--<div class="col-md-12 product-holder noBtBorder">
-                    <div class="row">
-                        <div class="col-md-4 no-padding">
-                            <div class="product-component mainprod">
-                                <div class="component-head">&nbsp;</div>
-                                <app-loader [loaderType]="'compsmallboxImg'"></app-loader>
-                                <div class="component-quantity" style="background:#eee;">&nbsp;</div>
-                                <div class="component-name">&nbsp; <br/> &nbsp;</div>
-                            </div>
-                            <div class="table-inline-display plus-sign" style="padding-left: 9%;">
-                               <div class="table-cell-display v-align-middle"> =</div>
-                            </div>
-                        </div>
-                        <div class="col-md-8 no-padding">
-                            <div class="product-component">
-                                <div class="component-head">&nbsp;</div>
-                                <app-loader [loaderType]="'compsmallboxImg'"></app-loader>
-                                <div class="component-quantity" style="background:#eee;">&nbsp;</div>
-                                <div class="component-name">&nbsp; <br/> &nbsp;</div>
-                            </div>
-                            <div class="table-inline-display plus-sign" style="">
-                                <div class="table-cell-display v-align-middle">+</div>
-                            </div>
-                            <div class="product-component">
-                                <div class="component-head">&nbsp;</div>
-                                <app-loader [loaderType]="'compsmallboxImg'"></app-loader>
-                                <div class="component-quantity" style="background:#eee;">&nbsp;</div>
-                                <div class="component-name">&nbsp; <br/> &nbsp;</div>
-                            </div>
-                            <div class="table-inline-display plus-sign" style="">
-                                <div class="table-cell-display v-align-middle">+</div>
-                            </div>
-                            <div class="product-component">
-                                <div class="component-head">&nbsp;</div>
-                                <app-loader [loaderType]="'compsmallboxImg'"></app-loader>
-                                <div class="component-quantity" style="background:#eee;">&nbsp;</div>
-                                <div class="component-name">&nbsp; <br/> &nbsp;</div>
-                            </div>
-                            <div class="table-inline-display plus-sign" style="">
-                                <div class="table-cell-display v-align-middle">+</div>
-                            </div>
-                            <div class="product-component">
-                                <div class="component-head">&nbsp;</div>
-                                <app-loader [loaderType]="'compsmallboxImg'"></app-loader>
-                                <div class="component-quantity" style="background:#eee;">&nbsp;</div>
-                                <div class="component-name">&nbsp; <br/> &nbsp;</div>
-                            </div>
-                            <div class="table-inline-display plus-sign" style="">
-                                <div class="table-cell-display v-align-middle">+</div>
-                            </div>
-                            <div class="product-component">
-                                <div class="component-head">&nbsp;</div>
-                                <app-loader [loaderType]="'compsmallboxImg'"></app-loader>
-                                <div class="component-quantity" style="background:#eee;">&nbsp;</div>
-                                <div class="component-name">&nbsp; <br/> &nbsp;</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>-->
-
-
-
-
 
                 <div class="col-md-12 product-holder noBtBorder no-padding no-margin">
                     <div class="row">
@@ -447,7 +383,7 @@
             </div>
         </div>
         <div *ngIf="sidePanelData">
-            <div  id="order-{{order.orderId}}" class="col-md-12 order-row" *ngFor="let order of sidePanelData" style="margin-bottom: 0;" [@anim]="order.state">
+            <div  id="order-{{order.orderId}}" class="col-md-12 order-row" *ngFor="let order of sidePanelData; let orderIndex='index'" style="margin-bottom: 0;" [@anim]="order.state">
                 <div class=" triangle-topright" [ngClass]="{'mob' : isMobile, 'redBorder' : order.orderProducts[0].alertFlag, 'greenBorder' : order.orderProducts[0].slaFlag}">
                     <div class="slaAlert-flag abs" *ngIf="order.orderProducts[0].alertFlag">High Alert</div>
                     <div class="slaAlert-flag abs" *ngIf="order.orderProducts[0].slaFlag">Action Required</div>
@@ -518,15 +454,27 @@
                                 </div>
                             </div>
                             <div class="col-md-6 no-padding">
-                                <div class="btn btn-primary actions-button text-bold" (click)="vendorIssueOpen($svent, order.orderId, order.orderProducts)">
+                                <div class="btn btn-primary actions-button text-bold needHelp" (click)="vendorIssueOpen($svent, order.orderId, order.orderProducts)">
                                      Need Help?
                                 </div>
                             </div>
                         </div>
                     </div>
+
+                    <div class="row">
+                        <div class="btn btn-primary actions-button text-bold oLog" (mouseenter)="orderLog($event, true, orderIndex)" (mouseleave)="orderLog($event, false, orderIndex)">
+                            Log
+                        </div>
+                        <!--<div class="btn btn-primary actions-button text-bold" >-->
+                            <!---->
+                        <!--</div>-->
+                    </div>
+
                   </div>
 
                   </div>
+
+                <div class="orderLogCont">
                   <div class="row" *ngFor="let orderProduct of order.orderProducts; let z='index'">
                     <p class="">
                         Product Name:
@@ -567,6 +515,7 @@
                       </div>
                     </div>
                   </div>
+
                     <div class="row">
                         <div class="col-md-4 pull-left text-bold" [ngClass]="{'no-padding m-b-1' : isMobile}">
                             <div>Net Product Price  <span style="margin-left:0.1em;">
@@ -580,6 +529,11 @@
                         <div class="col-md-4 text-bold">
                         </div>
                     </div>
+
+                    <div class="orderLogContInner" [ngClass]="{'slideropen': order.orderLogFlag, 'sliderclosed' : !order.orderLogFlag}">
+                        <h3>Order Logs</h3>
+                    </div>
+            </div>
 
 
 <div class="col-md-4 order-actions no-padding" *ngIf="isMobile">
@@ -631,6 +585,9 @@
 
 
                 </div>
+
+
+
              </div>
         </div>
     </div>

@@ -1019,4 +1019,8 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
       };
   }
 
+  orderLog(e, val, orderIndex){
+       this.sidePanelData[orderIndex].orderLogFlag=val;
+  }
+
 }
