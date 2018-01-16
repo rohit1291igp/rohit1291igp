@@ -186,6 +186,86 @@
     </div>
 </div>
 
+<div class="" *ngIf="adminActions.adminActionsFlag">
+    <div class="modal fade in" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: block; overflow:scroll; background: rgba(0, 0, 0, 0.77);" (click)="closePopup($event)">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content" (click)="closePopup($event, 'ignore')">
+                <div class="modal-header" style="border-bottom:none;">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="closePopup($event)"><span aria-hidden="true">×</span></button>
+                    <h4 class="modal-title" id="myModalLabel" *ngIf="adminActions.adminActionsName === 'email'">Email</h4>
+                    <h4 class="modal-title" id="myModalLabel" *ngIf="adminActions.adminActionsName === 'sms'">SMS</h4>
+                    <h4 class="modal-title" id="myModalLabel" *ngIf="adminActions.adminActionsName === 'assignChangeVendor'">Assign/Reassign Vendor</h4>
+                    <h4 class="modal-title" id="myModalLabel" *ngIf="adminActions.adminActionsName === 'changePrice'">Change Price</h4>
+                    <h4 class="modal-title" id="myModalLabel" *ngIf="adminActions.adminActionsName === 'changeDeliveryDate'">Chage Delivery Date</h4>
+                    <h4 class="modal-title" id="myModalLabel" *ngIf="adminActions.adminActionsName === 'changeDeliveryType'">Change Delivery Type</h4>
+                </div>
+
+                <div class="modal-body center-align" *ngIf="adminActions.adminActionsName === 'email'">
+                    <div class="form-group">
+                        <form (ngSubmit)="f.form.valid && adminActionsSubmit($event)" #f="ngForm" nonvalidate>
+                            <textarea name="email" class="form-control custom-control m-top-1" rows="3" style="resize:none" [(ngModel)]="adminActions.adminActionsModel.email" #email="ngModel" placeholder="Email message..." required></textarea>
+                            <div *ngIf="f.submitted && !email.valid" class="help-block theme-red">Please provide email content!</div>
+                            <button class="btn btn-primary m-top-1">Submit</button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="modal-body center-align" *ngIf="adminActions.adminActionsName === 'sms'">
+                    <div class="form-group">
+                        <form (ngSubmit)="f.form.valid && adminActionsSubmit($event)" #f="ngForm" nonvalidate>
+                            <textarea name="sms" class="form-control custom-control m-top-1" rows="3" style="resize:none" [(ngModel)]="adminActions.adminActionsModel.sms" #sms="ngModel" placeholder="SMS" required></textarea>
+                            <div *ngIf="f.submitted && !sms.valid" class="help-block theme-red">Please provide sms content!</div>
+                            <button class="btn btn-primary m-top-1">Submit</button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="modal-body center-align" *ngIf="adminActions.adminActionsName === 'assignChangeVendor'">
+                    <div class="form-group">
+                        <form (ngSubmit)="f.form.valid && adminActionsSubmit($event)" #f="ngForm" nonvalidate>
+                            <input name="assignChangeVendor" class="form-control custom-control m-top-1" [(ngModel)]="adminActions.adminActionsModel.assignChangeVendor" #assignChangeVendor="ngModel" placeholder="Vendor" required>
+                            <div *ngIf="f.submitted && !assignChangeVendor.valid" class="help-block theme-red">Please provide vendor name!</div>
+                            <button class="btn btn-primary m-top-1">Submit</button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="modal-body center-align" *ngIf="adminActions.adminActionsName === 'changePrice'">
+                    <div class="form-group">
+                        <form (ngSubmit)="f.form.valid && adminActionsSubmit($event)" #f="ngForm" nonvalidate>
+                            <input name="price" class="form-control custom-control m-top-1" [(ngModel)]="adminActions.adminActionsModel.price" #price="ngModel" placeholder="Price" required>
+                            <div *ngIf="f.submitted && !price.valid" class="help-block theme-red">Please provide new price!</div>
+                            <button class="btn btn-primary m-top-1">Submit</button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="modal-body center-align" *ngIf="adminActions.adminActionsName === 'changeDeliveryDate'">
+                    <div class="form-group">
+                        <form (ngSubmit)="f.form.valid && adminActionsSubmit($event)" #f="ngForm" nonvalidate>
+                            <!--<input name="deliveryDate" class="form-control custom-control m-top-1" [(ngModel)]="adminActions.adminActionsModel.deliveryDate" #adminAction="ngModel" placeholder="Delivery Date" required>-->
+                            <my-date-picker name="deliveryDate" [options]="myDatePickerOptions" [(ngModel)]="adminActions.adminActionsModel.deliveryDate" #deliveryDate="ngModel" placeholder="Delivery Date"></my-date-picker>
+                            <div *ngIf="f.submitted && !deliveryDate.valid" class="help-block theme-red">Please provide delivery date!</div>
+                            <button class="btn btn-primary m-top-1">Submit</button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="modal-body center-align" *ngIf="adminActions.adminActionsName === 'changeDeliveryType'">
+                    <div class="form-group">
+                        <form (ngSubmit)="f.form.valid && adminActionsSubmit($event)" #f="ngForm" nonvalidate>
+                            <input name="deliveryType" class="form-control custom-control m-top-1" [(ngModel)]="adminActions.adminActionsModel.deliveryType" #deliveryType="ngModel" placeholder="Delivery Type" required>
+                            <div *ngIf="f.submitted && !deliveryType.valid" class="help-block theme-red">Please provide delivery type!</div>
+                            <button class="btn btn-primary m-top-1">Submit</button>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <div id="mainOrderSection" class="orders-action" [ngClass]="{'show-tray': trayOpen, 'hide-tray': !trayOpen}" >
 <div class="apierror" *ngIf="apierror">{{apierror}}</div>
@@ -383,7 +463,7 @@
             </div>
         </div>
         <div *ngIf="sidePanelData">
-            <div  id="order-{{order.orderId}}" class="col-md-12 order-row" *ngFor="let order of sidePanelData; let orderIndex='index'" style="margin-bottom: 0;" [@anim]="order.state">
+            <div  id="order-{{order.orderId}}" class="col-md-12 order-row" *ngFor="let order of sidePanelData; let orderIndex='index'" style="margin-bottom: 0;" [@anim]="order.state" (click)="changeDd($event, false, orderIndex)">
                 <div class=" triangle-topright" [ngClass]="{'mob' : isMobile, 'redBorder' : order.orderProducts[0].alertFlag, 'greenBorder' : order.orderProducts[0].slaFlag}">
                     <div class="slaAlert-flag abs" *ngIf="order.orderProducts[0].alertFlag">High Alert</div>
                     <div class="slaAlert-flag abs" *ngIf="order.orderProducts[0].slaFlag">Action Required</div>
@@ -463,20 +543,20 @@
                     </div>
 
                     <div class="row order-actions-cont comm" *ngIf="isAdmin">
-                        <div class="btn btn-primary actions-button text-bold">
-                            Email
+                        <div class="btn btn-primary actions-button text-bold" (click)="adminActionsInit($event, 'email')">
+                            <i class="glyphicon glyphicon-envelope"></i> Email
                         </div>
-                        <div class="btn btn-primary actions-button text-bold">
-                            SMS
+                        <div class="btn btn-primary actions-button text-bold" (click)="adminActionsInit($event, 'sms')">
+                            <i class="glyphicon glyphicon-phone"></i> SMS
                         </div>
-                        <div class="btn btn-primary actions-button text-bold">
-                            Call
+                        <div class="btn btn-primary actions-button text-bold" (click)="adminActionsInit($event, 'call')">
+                            <i class="glyphicon glyphicon-headphones"></i> Call
                         </div>
                     </div>
 
                     <div class="row order-actions-cont" *ngIf="isAdmin">
 
-                        <div class="btn btn-primary actions-button text-bold">
+                        <div class="btn btn-primary actions-button text-bold" (click)="adminActionsInit($event, 'assignChangeVendor')">
                             Assign/Reassign
                         </div>
 
@@ -485,9 +565,9 @@
                                 Change
                             </div>
                             <div class="dropdown-menu"  style="display:block; margin-top:-0.3em;"  *ngIf="order.changeActionsFlag">
-                                <a class="dropdown-item" href="#">price</a>
-                                <a class="dropdown-item" href="#">Delivery Date</a>
-                                <a class="dropdown-item" href="#">Delivery Type</a>
+                                <a class="dropdown-item" href="#" (click)="adminActionsInit($event, 'changePrice')">Price</a>
+                                <a class="dropdown-item" href="#" (click)="adminActionsInit($event, 'changeDeliveryDate')">Delivery Date</a>
+                                <a class="dropdown-item" href="#" (click)="adminActionsInit($event, 'changeDeliveryType')">Delivery Type</a>
                             </div>
                         </div>
 
@@ -495,7 +575,7 @@
                             Log
                         </div>
 
-                        <div class="btn btn-primary actions-button text-bold">
+                        <div class="btn btn-primary actions-button text-bold" (click)="adminActionsInit($event, 'cancelRefund')">
                             Cancel & Refund
                         </div>
                     </div>

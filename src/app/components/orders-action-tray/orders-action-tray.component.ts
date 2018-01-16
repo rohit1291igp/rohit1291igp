@@ -58,6 +58,11 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
   };
   public trayOpen: Boolean = false;
   prodListArgs;
+  adminActions={
+      adminActionsFlag:false,
+      adminActionsName:"",
+      adminActionsModel:{}
+  };
   @Output() onStatusUpdate: EventEmitter<any> = new EventEmitter();
   @Output() onOfdView: EventEmitter<any> = new EventEmitter();
   rejectReasons=[
@@ -169,6 +174,8 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
                 this.vendorIssueFlag=false;
             }else if(this.confirmFlag){
                 this.confirmFlag=false;
+            }else if(this.adminActions.adminActionsFlag){
+                this.adminActions.adminActionsFlag=false;
             }else{
                 this.onStatusUpdate.emit("closed");
                 this.trayOpen = false;
@@ -990,6 +997,7 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
       if(ignore) return;
       this.statusMessageFlag = false;
       this.vendorIssueFlag = false;
+      this.adminActions.adminActionsFlag=false;
   }
 
   confirmYesNo(args){
@@ -1025,17 +1033,40 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
   }
 
   orderLog(e, val, orderIndex){
-       this.sidePanelData[orderIndex].orderLogFlag=val;
+      e.stopPropagation();
+      this.sidePanelData[orderIndex].orderLogFlag=val;
   }
 
   changeDd(e, val, orderIndex){
+      e.stopPropagation();
       var _this=this;
-      if('changeActionsFlag' in _this.sidePanelData[orderIndex]){
+      this.sidePanelData[orderIndex].changeActionsFlag=val;
+      /*if('changeActionsFlag' in _this.sidePanelData[orderIndex]){
           _this.sidePanelData[orderIndex].changeActionsFlag= !_this.sidePanelData[orderIndex].changeActionsFlag;
       }else{
           this.sidePanelData[orderIndex].changeActionsFlag=true;
-      }
+      }*/
+  }
 
+  adminActionsInit(e, name){
+      e.stopPropagation();
+      var _this=this;
+      if(name === "call"){
+          alert('Call not implemented!');
+      }else if(name === "cancelRefund"){
+          alert('Canotncel & Refund not implemented!');
+      }else{
+          _this.adminActions.adminActionsModel={};
+          _this.adminActions.adminActionsName=name;
+          _this.adminActions.adminActionsFlag=true;
+      }
+  }
+
+  adminActionsSubmit(e){
+      e.stopPropagation();
+      var _this=this;
+      console.log('Action Model --->', _this.adminActions.adminActionsModel);
+      _this.adminActions.adminActionsFlag=false;
   }
 
 }
