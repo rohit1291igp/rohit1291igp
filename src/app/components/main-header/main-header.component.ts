@@ -10,6 +10,7 @@ import {environment} from "../../../environments/environment";
 })
 export class MainHeaderComponent implements OnInit {
     isMobile=environment.isMobile;
+    isAdmin=localStorage.getItem('admin');
     vendorName:any = localStorage.getItem('associateName');
     reportDropdownOpen=false;
     selectedTopTab;

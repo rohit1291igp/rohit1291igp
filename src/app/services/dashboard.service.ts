@@ -45,7 +45,8 @@ export class DashboardService {
         "c" : "Confirmed",
         "o" : "OutForDelivery",
         "d" : "Shipped",
-        "p" : "processing"
+        "p" : "processing",
+        "na" : "notAlloted"
     };
 
     newRow = {"isAlert" : false, "sla" : false};
@@ -125,8 +126,8 @@ export class DashboardService {
                 "topLabels" : _this.topLabel,
                 "notAssigned" : [],
                 "notConfirmed" : [],
-                "shipped" : {
-                    "total": {
+                "shipped" : [
+                     {
                         "day" : "",
                         "deliveryTimes" : "",
                         "status" : "",
@@ -135,7 +136,7 @@ export class DashboardService {
                         "isAlert": "",
                         "sla" : ""
                     },
-                    "pending": {
+                    {
                         "day" : "",
                         "deliveryTimes" : "",
                         "status" : "",
@@ -144,9 +145,9 @@ export class DashboardService {
                         "isAlert": "",
                         "sla" : ""
                     }
-                },
-                "delivered" : {
-                    "total": {
+                ],
+                "delivered" : [
+                    {
                         "day" : "",
                         "deliveryTimes" : "",
                         "status" : "",
@@ -155,7 +156,7 @@ export class DashboardService {
                         "isAlert": "",
                         "sla" : ""
                     },
-                    "pending": {
+                    {
                         "day" : "",
                         "deliveryTimes" : "",
                         "status" : "",
@@ -164,7 +165,7 @@ export class DashboardService {
                         "isAlert": "",
                         "sla" : ""
                     }
-                },
+                ],
                 "counts" : {
                     "allOrders": 0,
                     "actionRequired": 0,
@@ -206,7 +207,7 @@ export class DashboardService {
                             "notAlloted" : {
                                 day : date,
                                 deliveryTimes : day,
-                                status : _this.statuslist['n'],
+                                status : _this.statuslist['na'],
                                 ordersCount: parseInt(countObj[prop]['notAlloted'].count),
                                 displayStr: "Not Alloted",
                                 isAlert: countObj[prop]['notAlloted'].alert,
@@ -299,47 +300,51 @@ export class DashboardService {
 
         let dashboardCounts = apiResponse.result[dataTypeSelect];
 
-        getDashboardDataResponse.shipped={
-            total: {
-                day : "",
-                deliveryTimes : "today",
-                status : _this.statuslist['c'],
-                ordersCount: parseInt(apiResponse.result['notShippedTotalOrderCount'].count),
-                displayStr: "Total",
-                isAlert: apiResponse.result['notShippedTotalOrderCount'].alert,
-                sla : apiResponse.result['notShippedTotalOrderCount'].sla
-            },
-            pending: {
+        getDashboardDataResponse.shipped=[
+            {
                 day : "",
                 deliveryTimes : "today",
                 status : _this.statuslist['c'],
                 ordersCount: parseInt(apiResponse.result['notShippedPendingOrderCount'].count),
                 displayStr: "Pending",
                 isAlert: apiResponse.result['notShippedPendingOrderCount'].alert,
-                sla : apiResponse.result['notShippedPendingOrderCount'].sla
-            }
-        };
-
-        getDashboardDataResponse.delivered={
-            total: {
-                day : "",
-                deliveryTimes : "",
-                status : _this.statuslist['o'],
-                ordersCount: parseInt(apiResponse.result['notDeliveredTotalOrderCount'].count),
-                displayStr: "Total",
-                isAlert: apiResponse.result['notDeliveredTotalOrderCount'].alert,
-                sla : apiResponse.result['notDeliveredTotalOrderCount'].sla
+                sla : apiResponse.result['notShippedPendingOrderCount'].sla,
+                position:0
             },
-            pending: {
+            {
+                day : "",
+                deliveryTimes : "today",
+                status : _this.statuslist['c'],
+                ordersCount: parseInt(apiResponse.result['notShippedTotalOrderCount'].count),
+                displayStr: "Total",
+                isAlert: apiResponse.result['notShippedTotalOrderCount'].alert,
+                sla : apiResponse.result['notShippedTotalOrderCount'].sla,
+                position:1
+            }
+        ];
+
+        getDashboardDataResponse.delivered=[
+            {
                 day : "",
                 deliveryTimes : "",
                 status : _this.statuslist['o'],
                 ordersCount: parseInt(apiResponse.result['notDeliveredPendingOrderCount'].count),
                 displayStr: "Pending",
                 isAlert: apiResponse.result['notDeliveredPendingOrderCount'].alert,
-                sla : apiResponse.result['notDeliveredPendingOrderCount'].sla
+                sla : apiResponse.result['notDeliveredPendingOrderCount'].sla,
+                position:0
+            },
+            {
+                day : "",
+                deliveryTimes : "",
+                status : _this.statuslist['o'],
+                ordersCount: parseInt(apiResponse.result['notDeliveredTotalOrderCount'].count),
+                displayStr: "Total",
+                isAlert: apiResponse.result['notDeliveredTotalOrderCount'].alert,
+                sla : apiResponse.result['notDeliveredTotalOrderCount'].sla,
+                position:1
             }
-        };
+        ];
 
         getDashboardDataResponse["festivalDate"] = apiResponse.result.festivalDate; //fesDate;
 
@@ -402,8 +407,8 @@ export class DashboardService {
 
         _this.newRow=_this.notAssignedRow;
         _this.confirmedRow=_this.notConfirmeddRow;
-        _this.ofdRow={"isAlert" : (getDashboardDataResponse.shipped.pending.isAlert && getDashboardDataResponse.shipped.pending.isAlert == "true") ? true : false, "sla" : (getDashboardDataResponse.shipped.pending.sla && getDashboardDataResponse.shipped.pending.sla =="true") ? true : false};
-        _this.bydatedRow={"isAlert" : (getDashboardDataResponse.delivered.pending.isAlert && getDashboardDataResponse.delivered.pending.isAlert == "true") ? true : false, "sla" : (getDashboardDataResponse.delivered.pending.sla && getDashboardDataResponse.delivered.pending.sla == "true") ? true : false };
+        _this.ofdRow={"isAlert" : (getDashboardDataResponse.shipped[0].isAlert && getDashboardDataResponse.shipped[1].isAlert == "true") ? true : false, "sla" : (getDashboardDataResponse.shipped[0].sla && getDashboardDataResponse.shipped[1].sla =="true") ? true : false};
+        _this.bydatedRow={"isAlert" : (getDashboardDataResponse.delivered[0].isAlert && getDashboardDataResponse.delivered[1].isAlert == "true") ? true : false, "sla" : (getDashboardDataResponse.delivered[0].sla && getDashboardDataResponse.delivered[1].sla == "true") ? true : false };
 
         /* row color code logic - end */
 
@@ -796,46 +801,50 @@ export class DashboardService {
                 "topLabels" : _this.topLabel,
                 "notAssigned" : [],
                 "notConfirmed" : [],
-                "shipped" : {
-                    "total": {
+                "shipped" : [
+                    {
                         "day" : "",
                         "deliveryTimes" : "",
                         "status" : "",
                         "ordersCount": 0,
                         "displayStr": "Total",
                         "isAlert": "",
-                        "sla" : ""
+                        "sla" : "",
+                        "position":0
                     },
-                    "pending": {
+                    {
                         "day" : "",
                         "deliveryTimes" : "",
                         "status" : "",
                         "ordersCount": 0,
                         "displayStr": "Total",
                         "isAlert": "",
-                        "sla" : ""
+                        "sla" : "",
+                        "position":1
                     }
-                },
-                "delivered" : {
-                    "total": {
+                ],
+                "delivered" : [
+                    {
                         "day" : "",
                         "deliveryTimes" : "",
                         "status" : "",
                         "ordersCount": 0,
                         "displayStr": "Total",
                         "isAlert": "",
-                        "sla" : ""
+                        "sla" : "",
+                        "position":0
                     },
-                    "pending": {
+                    {
                         "day" : "",
                         "deliveryTimes" : "",
                         "status" : "",
                         "ordersCount": 0,
                         "displayStr": "Total",
                         "isAlert": "",
-                        "sla" : ""
+                        "sla" : "",
+                        "position":1
                     }
-                },
+                ],
                 "counts" : {
                     "allOrders": 0,
                     "actionRequired": 0,
@@ -894,21 +903,46 @@ export class DashboardService {
     }
 
     changeDashboardDataOrder(dashboardData, eleColIndex, row){
+        if(this.isAdmin && row === "OutForDelivery"){
+            row = "OutForDeliveryView";
+        }
         eleColIndex = parseInt(eleColIndex) || this.currentColumn;
 
         if(eleColIndex > 0) {
-            if(row === 'Processed' || row === 'Confirmed'){
+            if(row === 'processing' || row === 'notAlloted' || row === 'Processed' || row === 'Confirmed'){
                 let splicedObj = dashboardData.topLabels.splice(eleColIndex, 1);
                 dashboardData.topLabels.unshift(splicedObj[0]);
 
-                splicedObj = dashboardData.new ? dashboardData.new.splice(eleColIndex, 1) : dashboardData.notAssigned.splice(eleColIndex, 1);
-                dashboardData.new ? dashboardData.new.unshift(splicedObj[0]) : dashboardData.notAssigned.unshift(splicedObj[0]);
+                if(!this.isAdmin){
+                    splicedObj = dashboardData.new ? dashboardData.new.splice(eleColIndex, 1) : dashboardData.notAssigned.splice(eleColIndex, 1);
+                    dashboardData.new ? dashboardData.new.unshift(splicedObj[0]) : dashboardData.notAssigned.unshift(splicedObj[0]);
 
-                splicedObj = dashboardData.confirmed ? dashboardData.confirmed.splice(eleColIndex, 1) : dashboardData.notConfirmed.splice(eleColIndex, 1);
-                dashboardData.confirmed ? dashboardData.confirmed.unshift(splicedObj[0]) : dashboardData.notConfirmed.unshift(splicedObj[0]);
+                    splicedObj = dashboardData.confirmed ? dashboardData.confirmed.splice(eleColIndex, 1) : dashboardData.notConfirmed.splice(eleColIndex, 1);
+                    dashboardData.confirmed ? dashboardData.confirmed.unshift(splicedObj[0]) : dashboardData.notConfirmed.unshift(splicedObj[0]);
+                }else{
+                    if(row === 'processing' || row === 'notAlloted' || row === 'Processed'){
+                        splicedObj = dashboardData.notAssigned ? dashboardData.notAssigned.splice(eleColIndex, 1) : dashboardData.notAssigned.splice(eleColIndex, 1);
+                        dashboardData.notAssigned ? dashboardData.notAssigned.unshift(splicedObj[0]) : dashboardData.notAssigned.unshift(splicedObj[0]);
+
+                        splicedObj = dashboardData.notConfirmed ? dashboardData.notConfirmed.splice(eleColIndex, 1) : dashboardData.notConfirmed.splice(eleColIndex, 1);
+                        dashboardData.notConfirmed ? dashboardData.notConfirmed.unshift(splicedObj[0]) : dashboardData.notConfirmed.unshift(splicedObj[0]);
+                    }
+
+                    if(row === 'Confirmed'){
+                        splicedObj = dashboardData.shipped ? dashboardData.shipped.splice(eleColIndex, 1) : dashboardData.shipped.splice(eleColIndex, 1);
+                        dashboardData.shipped ? dashboardData.shipped.unshift(splicedObj[0]) : dashboardData.shipped.unshift(splicedObj[0]);
+
+                    }
+                }
+
             }else if(row === 'OutForDeliveryView'){
-                let splicedObj = dashboardData.ofd.splice(eleColIndex, 1);
-                dashboardData.ofd.unshift(splicedObj[0]);
+                if(!this.isAdmin){
+                    let splicedObj = dashboardData.ofd.splice(eleColIndex, 1);
+                    dashboardData.ofd.unshift(splicedObj[0]);
+                }else{
+                    splicedObj = dashboardData.delivered ? dashboardData.delivered.splice(eleColIndex, 1) : dashboardData.delivered.splice(eleColIndex, 1);
+                    dashboardData.delivered ? dashboardData.delivered.unshift(splicedObj[0]) : dashboardData.delivered.unshift(splicedObj[0]);
+                }
             }
         }
 
@@ -918,16 +952,27 @@ export class DashboardService {
     }
 
     blurInactiveTableCell(dashboardData, eleColIndex, row){
+        if(this.isAdmin && row === "OutForDelivery"){
+            row = "OutForDeliveryView";
+        }
         this.currentColumn = eleColIndex;
         this.currentRow = row;
         console.log('blurInactiveTableCell ====>', dashboardData, eleColIndex, row);
-        if(row === "Processed"){
+        if(row === "notAlloted" || row === "processing"){
+            if(dashboardData.notConfirmed && dashboardData.notConfirmed[0] && dashboardData.notConfirmed[0].pending) dashboardData.notConfirmed[0].pending.inactive = true;
+            if(dashboardData.notConfirmed && dashboardData.notConfirmed[0] && dashboardData.notConfirmed[0].processing) dashboardData.notConfirmed[0].processing.inactive = true;
+            if(dashboardData.shipped && dashboardData.shipped[0]) dashboardData.shipped[0].inactive = true;
+            if(dashboardData.delivered && dashboardData.delivered[0]) dashboardData.delivered[0].inactive = true;
+        }else if(row === "Processed"){
             if(dashboardData.confirmed && dashboardData.confirmed[0]) dashboardData.confirmed[0].inactive = true;
             if(dashboardData.ofd && dashboardData.ofd[0]) dashboardData.ofd[0].inactive = true;
             if(dashboardData.ofd && dashboardData.ofd[1]) dashboardData.ofd[1].inactive = true;
 
-            if(dashboardData.notConfirmed && dashboardData.notConfirmed[0] && dashboardData.notConfirmed[0].pending) dashboardData.notConfirmed[0].pending.inactive = true;
-            if(dashboardData.notConfirmed && dashboardData.notConfirmed[0] && dashboardData.notConfirmed[0].processing) dashboardData.notConfirmed[0].processing.inactive = true;
+            if(dashboardData.notAssigned && dashboardData.notAssigned[0] && dashboardData.notAssigned[0].notAlloted) dashboardData.notAssigned[0].notAlloted.inactive = true;
+            if(dashboardData.notAssigned && dashboardData.notAssigned[0] && dashboardData.notAssigned[0].processing) dashboardData.notAssigned[0].processing.inactive = true;
+            if(dashboardData.shipped && dashboardData.shipped[0]) dashboardData.shipped[0].inactive = true;
+            if(dashboardData.delivered && dashboardData.delivered[0]) dashboardData.delivered[0].inactive = true;
+
         }else if(row === "Confirmed"){
             if(dashboardData.new && dashboardData.new[0]) dashboardData.new[0].inactive = true;
             if(dashboardData.ofd && dashboardData.ofd[0]) dashboardData.ofd[0].inactive = true;
@@ -935,6 +980,11 @@ export class DashboardService {
 
             if(dashboardData.notAssigned && dashboardData.notAssigned[0] && dashboardData.notAssigned[0].notAlloted) dashboardData.notAssigned[0].notAlloted.inactive = true;
             if(dashboardData.notAssigned && dashboardData.notAssigned[0] && dashboardData.notAssigned[0].processing) dashboardData.notAssigned[0].processing.inactive = true;
+
+            if(dashboardData.notConfirmed && dashboardData.notConfirmed[0] && dashboardData.notConfirmed[0].pending) dashboardData.notConfirmed[0].pending.inactive = true;
+            if(dashboardData.notConfirmed && dashboardData.notConfirmed[0] && dashboardData.notConfirmed[0].processing) dashboardData.notConfirmed[0].processing.inactive = true;
+            //if(dashboardData.shipped && dashboardData.shipped[0]) dashboardData.shipped[0].inactive = true;
+            if(dashboardData.delivered && dashboardData.delivered[0]) dashboardData.delivered[0].inactive = true;
         }else if(row === "OutForDeliveryView"){
             if(dashboardData.new && dashboardData.new[0]) dashboardData.new[0].inactive = true;
             if(dashboardData.ofd && dashboardData.confirmed[0]) dashboardData.confirmed[0].inactive = true;
@@ -942,6 +992,10 @@ export class DashboardService {
 
             if(dashboardData.notAssigned && dashboardData.notAssigned[0] && dashboardData.notAssigned[0].notAlloted) dashboardData.notAssigned[0].notAlloted.inactive = true;
             if(dashboardData.notAssigned && dashboardData.notAssigned[0] && dashboardData.notAssigned[0].processing) dashboardData.notAssigned[0].processing.inactive = true;
+
+            if(dashboardData.notConfirmed && dashboardData.notConfirmed[0] && dashboardData.notConfirmed[0].pending) dashboardData.notConfirmed[0].pending.inactive = true;
+            if(dashboardData.notConfirmed && dashboardData.notConfirmed[0] && dashboardData.notConfirmed[0].processing) dashboardData.notConfirmed[0].processing.inactive = true;
+            if(dashboardData.shipped && dashboardData.shipped[0]) dashboardData.shipped[0].inactive = true;
         }
 
         return dashboardData;
@@ -960,6 +1014,9 @@ export class DashboardService {
         if(dashboardData.notConfirmed && dashboardData.notConfirmed[0] && dashboardData.notConfirmed[0].pending) dashboardData.notConfirmed[0].pending.inactive = true;
         if(dashboardData.notConfirmed && dashboardData.notConfirmed[0] && dashboardData.notConfirmed[0].processing) dashboardData.notConfirmed[0].processing.inactive = true;
 
+        if(dashboardData.shipped && dashboardData.shipped[0]) dashboardData.shipped[0].inactive = true;
+        if(dashboardData.delivered && dashboardData.delivered[0]) dashboardData.delivered[0].inactive = true;
+
         return dashboardData;
     }
 
@@ -977,6 +1034,9 @@ export class DashboardService {
         if(dbData.notConfirmed && dbData.notConfirmed[0] && dbData.notConfirmed[0].pending && dbData.notConfirmed[0].pending.inactive) delete dbData.notConfirmed[0].pending.inactive;
         if(dbData.notConfirmed && dbData.notConfirmed[0] && dbData.notConfirmed[0].processing && dbData.notConfirmed[0].processing.inactive) delete dbData.notConfirmed[0].processing.inactive;
 
+        if(dbData.shipped && dbData.shipped[0]) delete dbData.shipped[0].inactive;
+        if(dbData.delivered && dbData.delivered[0]) delete dbData.delivered[0].inactive;
+
         this.currentColumn = null;
         this.currentRow = null;
 
@@ -987,6 +1047,9 @@ export class DashboardService {
 
         if(dbData.notAssigned) dbData.notAssigned = dbData.notAssigned.sort(this.UtilityService.dynamicSort("position", null));
         if(dbData.notConfirmed) dbData.notConfirmed = dbData.notConfirmed.sort(this.UtilityService.dynamicSort("position", null));
+
+        if(dbData.shipped) dbData.shipped = dbData.shipped.sort(this.UtilityService.dynamicSort("position", null));
+        if(dbData.delivered) dbData.delivered = dbData.delivered.sort(this.UtilityService.dynamicSort("position", null));
 
         return dbData;
     }

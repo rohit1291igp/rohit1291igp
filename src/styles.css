@@ -790,3 +790,7 @@ body .dashboard-content, body .orders-button{
     background-color: transparent;
     border: 0;
 }
+
+.dropdown-menu .dropdown-item:hover{
+    background:#eee;
+}

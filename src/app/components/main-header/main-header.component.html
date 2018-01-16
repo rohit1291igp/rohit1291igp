@@ -17,11 +17,14 @@
         <li class="fullHeightLi relative" [ngClass]="{'selected' : selectedTopTab === 'reports'}" (click)="openReportDropdown($event)">
            <p>Reports</p>
             <div class="reportDropdown abs" [ngClass]="{'slideropen' : reportDropdownOpen, 'sliderclosed': !reportDropdownOpen}">
-                <ul class="reportsdropdownMenu no-padding">
+                <ul class="reportsdropdownMenu no-padding" *ngIf="!isAdmin">
                     <a routerLink="/reports/getOrderReport"><li [ngClass]="{'selected' : selectedReportTab === 'getOrderReport'}">Order Report</li></a>
                     <a routerLink="/reports/getVendorReport"><li [ngClass]="{'selected' : selectedReportTab === 'getVendorReport'}">Product Report</li></a>
                     <a routerLink="/reports/getPincodeReport"><li [ngClass]="{'selected' : selectedReportTab === 'getPincodeReport'}">Pincode Report</li></a>
                     <a class="" routerLink="/reports/getPayoutAndTaxesReport"><li [ngClass]="{'selected' : selectedReportTab === 'getPayoutAndTaxesReport'}">Payout & Taxes</li></a>
+                </ul>
+                <ul class="reportsdropdownMenu no-padding" *ngIf="isAdmin">
+
                 </ul>
             </div>
         </li>
