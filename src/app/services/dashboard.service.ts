@@ -940,7 +940,7 @@ export class DashboardService {
                     let splicedObj = dashboardData.ofd.splice(eleColIndex, 1);
                     dashboardData.ofd.unshift(splicedObj[0]);
                 }else{
-                    splicedObj = dashboardData.delivered ? dashboardData.delivered.splice(eleColIndex, 1) : dashboardData.delivered.splice(eleColIndex, 1);
+                    let splicedObj = dashboardData.delivered ? dashboardData.delivered.splice(eleColIndex, 1) : dashboardData.delivered.splice(eleColIndex, 1);
                     dashboardData.delivered ? dashboardData.delivered.unshift(splicedObj[0]) : dashboardData.delivered.unshift(splicedObj[0]);
                 }
             }

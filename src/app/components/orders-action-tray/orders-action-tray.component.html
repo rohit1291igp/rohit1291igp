@@ -364,7 +364,7 @@
                                         <div class="btn btn-primary actions-button text-bold dropdown-toggle disableBtn" style="width:100%;" (click)="changeDd($event, true, orderIndex)" id="dropdownMenuButton">
                                             Change <i class="glyphicon glyphicon-triangle-bottom"></i>
                                         </div>
-                                        <div class="dropdown-menu"  style="display:block; margin-top:-0.3em;"  *ngIf="order.changeActionsFlag">
+                                        <div class="dropdown-menu"  style="display:block; margin-top:-0.3em;"  *ngIf="order && order.changeActionsFlag">
                                             <a class="dropdown-item" href="#" (click)="adminActionsInit($event, 'changePrice')">Price</a>
                                             <a class="dropdown-item" href="#" (click)="adminActionsInit($event, 'changeDeliveryType&Date')">Delivery Type & Date</a>
                                         </div>
