@@ -116,7 +116,7 @@
 
             <div class="leftLabel" (click)="toggleTableColumn($event, 'ofd', !displayStatusToggle.ofd)" [ngClass]="{'alert-action': isRowAlert['future'].isAlert, 'alertg-action': (!isRowAlert['future'].isAlert && isRowAlert['future'].sla), 'no-action': (!isRowAlert['future'].isAlert && !isRowAlert['future'].sla)}">
                 {{masterData.displayStatus[2]}}
-                <ng-container *ngIf="!dashboardData.ofd">({{dashboardData.shipped.total + dashboardData.shipped.pending}})</ng-container>
+                <ng-container *ngIf="!dashboardData.ofd">({{dashboardData.shipped[0].ordersCount + dashboardData.shipped[1].ordersCount}})</ng-container>
                 <ng-container *ngIf="dashboardData.ofd">({{dashboardData.counts.ofdOrders}})</ng-container>
                 <div class="icon s pull-right" aria-hidden="true" *ngIf="!displayStatusToggle.ofd">
                     <img src="assets/images/icons/arrowDBlack.svg" >
@@ -131,15 +131,16 @@
             <div class="labelContent" style="box-shadow: none;" [ngClass]="{'slideropen' : displayStatusToggle.ofd, 'sliderclosed' : !displayStatusToggle.ofd}">
                 <ng-container *ngIf="!dashboardData.ofd">
                     <div class="row">
-                        <div class="col-md-12 relative" >
-                            <div class="col-md-3" style="">
-                                <div class="col-md-6 btn btn-primary" style="margin-top:1em; width:100%;">
-                                    <span>Pending</span> - <span>{{dashboardData.shipped.pending}}</span>
-                                </div>
-                            </div>
-                            <div class="col-md-3" style="">
-                                <div class="btn btn-primary col-md-6" style="margin-top:1em; width:100%;">
-                                    <span>Total</span> - <span>{{dashboardData.shipped.total}}</span>
+                        <div class="col-md-12 relative" style="padding-bottom:1em;">
+                            <div class="col-md-2 no-padding" style="" *ngFor="let nso of dashboardData.shipped; let ii='index'">
+                                <div class="col-md-12 no-padding" style="margin-top:0.75em; width:100%;" [attr.data-index]="ii">
+                                     <!--<span>Pending</span> - <span>{{dashboardData.shipped.pending.ordersCount}}</span>-->
+                                    <div class="" [ngClass]="{'a' : nso.deliveryTimes !='bydate', 'b' : nso.deliveryTimes =='bydate', 'custom-btn-parent': nso.ordersCount, 'center-align': !nso.ordersCount, 'inactive' : nso.inactive}">
+                                        <app-orders-button [noLabel]="true" [displayData]="nso" [orderStatus]="nso.status" [OrderDay]="nso.day" [deliveryTime]="nso.deliveryTimes" *ngIf="nso.ordersCount" (onViewOrders)="viewOrders($event)">
+                                            <app-button-view [inlineLable]="'pre'" [displayData]="nso" [viewData]="nso.ordersCount"></app-button-view>
+                                        </app-orders-button>
+                                         <app-no-orders [viewData]="nso.ordersCount" [orderStatus]="nso.status"></app-no-orders>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -167,31 +168,65 @@
                     </div>
                 </ng-container>
             </div>
-        </div>
 
-        <div class="container bottomSection">
-            <div class="row">
-                <div class="col-sm-12 allOrderRow">
-                    <div class="col-sm-6 page center-align">
-                        <div class="text-bold">{{dashboardData.delivered.total+dashboardData.delivered.today}}</div>
-                        <div>Orders for today's deliveries</div>
+            <ng-container *ngIf="!dashboardData.delivered.today && isAdmin">
+                <div class="leftLabel" (click)="toggleTableColumn($event, 'delivered', !displayStatusToggle.delivered)" [ngClass]="{'alert-action': isRowAlert['future'].isAlert, 'alertg-action': (!isRowAlert['future'].isAlert && isRowAlert['future'].sla), 'no-action': (!isRowAlert['future'].isAlert && !isRowAlert['future'].sla)}">
+                    {{masterData.displayStatus[3]}} ({{dashboardData.delivered[0].ordersCount+dashboardData.delivered[1].ordersCount}})
+
+                    <div class="icon s pull-right" aria-hidden="true" *ngIf="!displayStatusToggle.delivered">
+                        <img src="assets/images/icons/arrowDBlack.svg" >
                     </div>
-                    <div class="col-sm-6 page center-align">
-                        <div class="text-bold">{{dashboardData.delivered.today}}</div>
-                        <div>Orders yet to be delivered</div>
+                    <div class="icon s pull-right" aria-hidden="true" *ngIf="displayStatusToggle.delivered">
+                        <img class="arrowU" src="assets/images/icons/arrowDBlack.svg" >
                     </div>
-                    <div class="clearfix"></div>
                 </div>
 
-                <div class="clearfix"></div>
-                <div class="col-md-12 no-padding">
-                    <button class="btn btn-primary allOrderBtn bg-igp" (click)="openPanel($event, masterData.status[3])">
-                    <!--View all delivered orders-->
-                    All orders for today
-                    </button>
+                <div class="labelContent" style="box-shadow: none;" [ngClass]="{'slideropen' : displayStatusToggle.delivered, 'sliderclosed' : !displayStatusToggle.delivered}">
+                    <div class="row">
+                        <div class="col-md-12 relative" style="padding-bottom:1em;">
+                                <div class="col-md-2 no-padding" style="" *ngFor="let ndo of dashboardData.delivered; let jj='index'">
+                                        <div class="col-md-12 no-padding" style="margin-top:0.75em; width:100%;" [attr.data-index]="jj">
+                                            <!--<span>Pending</span> - <span>{{dashboardData.shipped.pending.ordersCount}}</span>-->
+                                            <div class="" [ngClass]="{'a' : ndo.deliveryTimes !='bydate', 'b' : ndo.deliveryTimes =='bydate', 'custom-btn-parent': ndo.ordersCount, 'center-align': !ndo.ordersCount, 'inactive' : ndo.inactive}">
+                                                <app-orders-button [noLabel]="true" [displayData]="ndo" [orderStatus]="ndo.status" [OrderDay]="ndo.day" [deliveryTime]="ndo.deliveryTimes" *ngIf="ndo.ordersCount" (onViewOrders)="viewOrders($event)">
+                                                    <app-button-view [inlineLable]="'pre'" [displayData]="ndo" [viewData]="ndo.ordersCount"></app-button-view>
+                                                </app-orders-button>
+                                                <app-no-orders [viewData]="ndo.ordersCount" [orderStatus]="ndo.status"></app-no-orders>
+                                            </div>
+                                        </div>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+            </ng-container>
+        </div>
+
+        <ng-container *ngIf="dashboardData.delivered.today && isAdmin">
+            <div class="container bottomSection">
+                <div class="row">
+                    <div class="col-sm-12 allOrderRow">
+                        <div class="col-sm-6 page center-align">
+                            <div class="text-bold">{{dashboardData.delivered.total+dashboardData.delivered.today}}</div>
+                            <div>Orders for today's deliveries</div>
+                        </div>
+                        <div class="col-sm-6 page center-align">
+                            <div class="text-bold">{{dashboardData.delivered.today}}</div>
+                            <div>Orders yet to be delivered</div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+
+                    <div class="clearfix"></div>
+                    <div class="col-md-12 no-padding">
+                        <button class="btn btn-primary allOrderBtn bg-igp" (click)="openPanel($event, masterData.status[3])">
+                        <!--View all delivered orders-->
+                        All orders for today
+                        </button>
+                    </div>
                 </div>
             </div>
-        </div>
+        </ng-container>
+
 </section>
 
 <section *ngIf="!isMobile">

@@ -27,7 +27,8 @@ export class DashboardComponent implements OnInit {
   public displayStatusToggle:any={
         "new" : true,
         "confirmed" : false,
-        "Ofd":false
+        "Ofd":false,
+        "delivered":false
   };
   public isRowAlert: Object;
 
