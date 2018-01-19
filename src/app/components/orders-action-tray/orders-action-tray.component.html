@@ -361,7 +361,7 @@
                                     </div>
 
                                     <div class="changeActions dropdown" style="width:48.5%; display:inline-block;">
-                                        <div class="btn btn-primary actions-button text-bold dropdown-toggle disableBtn" style="width:100%;" (click)="changeDd($event, true, orderIndex)" id="dropdownMenuButton">
+                                        <div class="btn btn-primary actions-button text-bold dropdown-toggle disableBtn" style="width:100%;" (click)="changeDd($event, null, orderIndex)" id="dropdownMenuButton">
                                             Change <i class="glyphicon glyphicon-triangle-bottom"></i>
                                         </div>
                                         <div class="dropdown-menu"  style="display:block; margin-top:-0.3em;"  *ngIf="order && order.changeActionsFlag">
@@ -515,7 +515,7 @@
                     </div>
 
                     <div class="changeActions dropdown" style="width:48.5%; display:inline-block;">
-                        <div class="btn btn-primary actions-button text-bold dropdown-toggle disableBtn" style="width:100%;" (click)="changeDd($event, true, orderIndex)" id="dropdownMenuButton">
+                        <div class="btn btn-primary actions-button text-bold dropdown-toggle disableBtn" style="width:100%;" (click)="changeDd($event, null, orderIndex)" id="dropdownMenuButton">
                         Change <i class="glyphicon glyphicon-triangle-bottom"></i>
                     </div>
                     <div class="dropdown-menu"  style="display:block; margin-top:-0.3em;"  *ngIf="order && order.changeActionsFlag">
@@ -641,7 +641,7 @@
                         </div>
 
                         <div class="changeActions dropdown" style="width:48.5%; display:inline-block;">
-                            <div class="btn btn-primary actions-button text-bold dropdown-toggle" style="width:100%;" (click)="changeDd($event, true, orderIndex)" id="dropdownMenuButton">
+                            <div class="btn btn-primary actions-button text-bold dropdown-toggle" style="width:100%;" (click)="changeDd($event, null, orderIndex)" id="dropdownMenuButton">
                                 Change <i class="glyphicon glyphicon-triangle-bottom"></i>
                             </div>
                             <div class="dropdown-menu"  style="display:block; margin-top:-0.3em;"  *ngIf="order.changeActionsFlag">
@@ -800,7 +800,7 @@
                 </div>
 
                 <div class="changeActions dropdown" style="width:48.5%; display:inline-block;">
-                    <div class="btn btn-primary actions-button text-bold dropdown-toggle" style="width:100%;" (click)="changeDd($event, true, orderIndex)" id="dropdownMenuButton">
+                    <div class="btn btn-primary actions-button text-bold dropdown-toggle" style="width:100%;" (click)="changeDd($event, null, orderIndex)" id="dropdownMenuButton">
                     Change <i class="glyphicon glyphicon-triangle-bottom"></i>
                 </div>
                 <div class="dropdown-menu"  style="display:block; margin-top:-0.3em;"  *ngIf="order.changeActionsFlag">

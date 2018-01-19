@@ -65,6 +65,10 @@ export class LoginComponent implements OnInit {
                 let token = _response.result.token;
                 let fkAssociateId =  _response.result.fkAssociateId;
                 let associateName =  _response.result.associateName;
+                /*let admin =  _response.result.admin;
+                if(admin){
+                    localStorage.setItem('admin', true);
+                }*/
                 console.log('User token', token);
                 console.log('fkAssociateId', fkAssociateId);
                 localStorage.setItem('currentUserToken', token);

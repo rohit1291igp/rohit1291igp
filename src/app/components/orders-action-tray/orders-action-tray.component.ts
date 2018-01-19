@@ -1040,12 +1040,11 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
   changeDd(e, val, orderIndex){
       e.stopPropagation();
       var _this=this;
-      this.sidePanelData[orderIndex].changeActionsFlag=val;
-      /*if('changeActionsFlag' in _this.sidePanelData[orderIndex]){
-          _this.sidePanelData[orderIndex].changeActionsFlag= !_this.sidePanelData[orderIndex].changeActionsFlag;
-      }else{
-          this.sidePanelData[orderIndex].changeActionsFlag=true;
-      }*/
+      if(val !== null && val.toString())
+        this.sidePanelData[orderIndex].changeActionsFlag=val;
+      else
+        this.sidePanelData[orderIndex].changeActionsFlag=!this.sidePanelData[orderIndex].changeActionsFlag;
+
   }
 
   adminActionsInit(e, name){
