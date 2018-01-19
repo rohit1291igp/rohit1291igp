@@ -310,7 +310,7 @@
 
     </div>
     <div class="row sidePanelContent">
-        <div *ngIf="!sidePanelData">
+        <div *ngIf="!sidePanelData" [ngClass]="{'mob' : isMobile}">
             <div class="col-md-12 order-row" *ngFor="let loaderc of loadercount" style="margin-bottom: 0;">
                     <div class="container-fluid orders-tray" >
                         <div class="row delivery-details">
@@ -370,7 +370,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="btn btn-primary actions-button text-bold oLog disableBtn" (mouseenter)="orderLog($event, true, orderIndex)" (mouseleave)="orderLog($event, false, orderIndex)">
+                                    <div class="btn btn-primary actions-button text-bold oLog disableBtn" (click)="orderLog($event, true, orderIndex)" >
                                         Log
                                     </div>
 
@@ -473,38 +473,68 @@
 
 
                 <div class="col-md-4"*ngIf="isMobile">
-                    <div class="row">
-                        <div class="btn btn-primary actions-button uppercase text-bold text-black bg-white disableBtn" style="width:100%; box-shadow: 0 1px 3px #888888;">
-                            Reject
+                    <ng-container *ngIf="!isAdmin">
+                        <div class="row">
+                            <div class="btn btn-primary actions-button uppercase text-bold text-black bg-white disableBtn" style="width:100%; box-shadow: 0 1px 3px #888888;">
+                                Reject
+                            </div>
+                            <div class="btn btn-primary actions-button uppercase text-bold text-white bg-green disableBtn" style="width:100%;">
+                                Confirm
+                            </div>
                         </div>
-                        <div class="btn btn-primary actions-button uppercase text-bold text-white bg-green disableBtn" style="width:100%;">
-                            Confirm
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div style="width:49.5%;" class="btn btn-primary actions-button text-bold disableBtn"
+                        <div class="row">
+                            <div style="width:49.5%;" class="btn btn-primary actions-button text-bold disableBtn"
+                                [ngClass]="{'bg-igp text-white': isAlert, 'bg-grey text-black': !isAlert}">
+                                Print Order
+                            </div>
+                            <div style="width:49.5%;" class="btn btn-primary actions-button text-bold disableBtn"
                             [ngClass]="{'bg-igp text-white': isAlert, 'bg-grey text-black': !isAlert}">
-                            Print Order
+                            Print Message
+                            </div>
                         </div>
-                        <div style="width:49.5%;" class="btn btn-primary actions-button text-bold disableBtn"
-                        [ngClass]="{'bg-igp text-white': isAlert, 'bg-grey text-black': !isAlert}">
-                        Print Message
-                        </div>
+                    </ng-container>
+
+                    <ng-container *ngIf="isAdmin">
+                    <div class="row order-actions-cont comm" *ngIf="isAdmin && orderByStatus !== 'processing' ">
+                    <div class="actions-button text-bold text-center disableBtn" (click)="adminActionsInit($event, 'email')">
+                    <i class="glyphicon glyphicon-envelope" title="Send Email"></i>
+                    </div>
+                    <div class="actions-button text-bold text-center disableBtn" (click)="adminActionsInit($event, 'sms')">
+                    <i class="glyphicon glyphicon-phone" title="Send SMS"></i>
+                    </div>
+                    <div class="actions-button text-bold text-center disableBtn" (click)="adminActionsInit($event, 'call')">
+                    <i class="glyphicon glyphicon-headphones" title="Call"></i>
+                    </div>
                     </div>
 
-                <!-- <div class="row">
-                     <div class="btn btn-primary actions-button text-bold">
-                         Order Instruction
-                     </div>
-                 </div>-->
-                <!--<div class="row">
-                    <div class="btn btn-primary actions-button text-bold text-white bg-black disableBtn">
-                        Price Change Request
+                    <div class="row order-actions-cont" *ngIf="isAdmin && orderByStatus !== 'processing'">
+
+                    <div class="btn btn-primary actions-button text-bold disableBtn" (click)="adminActionsInit($event, 'assignChangeVendor')">
+                    <ng-container *ngIf="orderByStatus == 'notAlloted'">Assign</ng-container>
+                    <ng-container *ngIf="orderByStatus !== 'notAlloted'">Reassign</ng-container>
                     </div>
-                    &lt;!&ndash;<div class="btn btn-primary actions-button text-bold text-white bg-black">
-                                                            Other
-                                                      </div>&ndash;&gt;
-                   </div>-->
+
+                    <div class="changeActions dropdown" style="width:48.5%; display:inline-block;">
+                        <div class="btn btn-primary actions-button text-bold dropdown-toggle disableBtn" style="width:100%;" (click)="changeDd($event, true, orderIndex)" id="dropdownMenuButton">
+                        Change <i class="glyphicon glyphicon-triangle-bottom"></i>
+                    </div>
+                    <div class="dropdown-menu"  style="display:block; margin-top:-0.3em;"  *ngIf="order && order.changeActionsFlag">
+                    <a class="dropdown-item" href="#" (click)="adminActionsInit($event, 'changePrice')">Price</a>
+                    <a class="dropdown-item" href="#" (click)="adminActionsInit($event, 'changeDeliveryType&Date')">Delivery Type & Date</a>
+                    </div>
+                    </div>
+
+                    <div class="btn btn-primary actions-button text-bold oLog disableBtn" (click)="orderLog($event, true, orderIndex)">
+                    Log
+                    </div>
+
+                    <div class="btn btn-primary actions-button text-bold disableBtn" (click)="adminActionsInit($event, 'cancelRefund')">
+                    Cancel & Refund
+                    </div>
+                    </div>
+                    </ng-container>
+
+
               </div>
 
             </div>
@@ -512,7 +542,7 @@
             </div>
         </div>
         <div *ngIf="sidePanelData">
-            <div  id="order-{{order.orderId}}" class="col-md-12 order-row" *ngFor="let order of sidePanelData; let orderIndex='index'" style="margin-bottom: 0;" [@anim]="order.state" (click)="changeDd($event, false, orderIndex)">
+            <div  id="order-{{order.orderId}}" class="col-md-12 order-row" *ngFor="let order of sidePanelData; let orderIndex='index'" style="margin-bottom: 0;" [@anim]="order.state" (click)="changeDd($event, false, orderIndex)" [ngClass]="{'mob' : isMobile}">
                 <div class=" triangle-topright" [ngClass]="{'mob' : isMobile, 'redBorder' : order.orderProducts[0].alertFlag, 'greenBorder' : order.orderProducts[0].slaFlag}">
                     <div class="slaAlert-flag abs" *ngIf="order.orderProducts[0].alertFlag">High Alert</div>
                     <div class="slaAlert-flag abs" *ngIf="order.orderProducts[0].slaFlag">Action Required</div>
@@ -620,7 +650,7 @@
                             </div>
                         </div>
 
-                        <div class="btn btn-primary actions-button text-bold oLog" (mouseenter)="orderLog($event, true, orderIndex)" (mouseleave)="orderLog($event, false, orderIndex)">
+                        <div class="btn btn-primary actions-button text-bold oLog" (click)="orderLog($event, true, orderIndex)">
                             Log
                         </div>
 
@@ -689,7 +719,8 @@
                         </div>
                     </div>
 
-                    <div class="orderLogContInner" (mouseenter)="orderLog($event, true, orderIndex)" (mouseleave)="orderLog($event, false, orderIndex)" [ngClass]="{'slideropen': order.orderLogFlag, 'sliderclosed' : !order.orderLogFlag}"  *ngIf="isAdmin">
+                    <div class="orderLogContInner"  [ngClass]="{'slideropen': order.orderLogFlag, 'sliderclosed' : !order.orderLogFlag}"  *ngIf="isAdmin">
+                        <div class="pull-right logClosebtn" (click)="orderLog($event, false, orderIndex)"> × </div>
                         <div class="orderLogContInner1">
                             &nbsp;
                         </div>
@@ -701,51 +732,95 @@
             </div>
 
 
-<div class="col-md-4 order-actions no-padding" *ngIf="isMobile">
-<div class="row">
-    <div class="btn  actions-button uppercase text-bold bg-white text-red" style="width:100%; box-shadow: 0 1px 3px #888888;" [ngClass]="{'disableBtn' : order.orderProducts[0].ordersProductStatus !=='Processed', 'hide' : order.orderProducts[0].ordersProductStatus !=='Processed'}" (click)="updateOrderStatus($event, orderIndex, 'Rejected', order.orderId, order.orderProducts, order.orderProducts[0].orderProductExtraInfo.deliveryDate, order.orderProducts[0].orderProductExtraInfo.deliveryTime)">
-    Reject
-</div>
-<button style="width:100%;" class="btn btn-primary actions-button uppercase text-bold text-white bg-green"
-[ngClass]="{'disableBtn' : (order.orderProducts[0].ordersProductStatus =='Shipped' && order.orderProducts[0].deliveryStatus === 1) ||
-(order.orderProducts[0].ordersProductStatus =='Dispatched' && order.orderProducts[0].deliveryStatus === 1) ||
-(order.orderProducts[0].ordersProductStatus =='Confirmed' && order.deliverWhen !== 'today' && order.deliverWhen !== 'past')}"
-(click)="updateOrderStatus($event, orderIndex, getNxtOrderStatus(order.orderProducts[0].ordersProductStatus), order.orderId, order.orderProducts, order.orderProducts[0].orderProductExtraInfo.deliveryDate, order.orderProducts[0].orderProductExtraInfo.deliveryTime)">
-<span *ngIf="order.orderProducts[0].ordersProductStatus =='Processed'">Confirm</span>
-<span *ngIf="order.orderProducts[0].ordersProductStatus =='Confirmed'">Out For Delivery</span>
-<span *ngIf="(order.orderProducts[0].ordersProductStatus =='Shipped' && order.orderProducts[0].deliveryStatus === 0) || order.orderProducts[0].ordersProductStatus =='OutForDelivery' || order.orderProducts[0].ordersProductStatus == 'Partially Dispatched'">Mark as Delivered</span>
-<span *ngIf="(order.orderProducts[0].ordersProductStatus =='Shipped' && order.orderProducts[0].deliveryStatus === 1)  || (order.orderProducts[0].ordersProductStatus =='Dispatched' && order.orderProducts[0].deliveryStatus === 1)">Mark as Delivered</span>
-</button>
-</div>
+        <div class="col-md-4 order-actions no-padding" *ngIf="isMobile">
+            <ng-container *ngIf="!isAdmin">
+                <div class="row">
+                    <div class="btn  actions-button uppercase text-bold bg-white text-red" style="width:100%; box-shadow: 0 1px 3px #888888;" [ngClass]="{'disableBtn' : order.orderProducts[0].ordersProductStatus !=='Processed', 'hide' : order.orderProducts[0].ordersProductStatus !=='Processed'}" (click)="updateOrderStatus($event, orderIndex, 'Rejected', order.orderId, order.orderProducts, order.orderProducts[0].orderProductExtraInfo.deliveryDate, order.orderProducts[0].orderProductExtraInfo.deliveryTime)">
+                     Reject
+                    </div>
+                    <button style="width:100%;" class="btn btn-primary actions-button uppercase text-bold text-white bg-green"
+                    [ngClass]="{'disableBtn' : (order.orderProducts[0].ordersProductStatus =='Shipped' && order.orderProducts[0].deliveryStatus === 1) ||
+                    (order.orderProducts[0].ordersProductStatus =='Dispatched' && order.orderProducts[0].deliveryStatus === 1) ||
+                    (order.orderProducts[0].ordersProductStatus =='Confirmed' && order.deliverWhen !== 'today' && order.deliverWhen !== 'past')}"
+                    (click)="updateOrderStatus($event, orderIndex, getNxtOrderStatus(order.orderProducts[0].ordersProductStatus), order.orderId, order.orderProducts, order.orderProducts[0].orderProductExtraInfo.deliveryDate, order.orderProducts[0].orderProductExtraInfo.deliveryTime)">
+                    <span *ngIf="order.orderProducts[0].ordersProductStatus =='Processed'">Confirm</span>
+                    <span *ngIf="order.orderProducts[0].ordersProductStatus =='Confirmed'">Out For Delivery</span>
+                    <span *ngIf="(order.orderProducts[0].ordersProductStatus =='Shipped' && order.orderProducts[0].deliveryStatus === 0) || order.orderProducts[0].ordersProductStatus =='OutForDelivery' || order.orderProducts[0].ordersProductStatus == 'Partially Dispatched'">Mark as Delivered</span>
+                    <span *ngIf="(order.orderProducts[0].ordersProductStatus =='Shipped' && order.orderProducts[0].deliveryStatus === 1)  || (order.orderProducts[0].ordersProductStatus =='Dispatched' && order.orderProducts[0].deliveryStatus === 1)">Mark as Delivered</span>
+                    </button>
+                </div>
 
-<div class="row">
-    <div class="btn btn-primary actions-button text-bold" style="width:49.5%;" [ngClass]="{'bg-igp text-white': isAlert, 'bg-grey text-black': !isAlert}" (click)="print($event, 'order', order.orderId, order.orderProducts[0].orderProductExtraInfo.deliveryDate, order.orderProducts[0].orderProductExtraInfo.deliveryTime)">
-        Print Order
-    </div>
-    <div class="btn btn-primary actions-button text-bold" style="width:49.5%;" [ngClass]="{'bg-igp text-white': isAlert, 'bg-grey text-black': !isAlert, 'disableBtn' : !order.commments}" (click)="print($event, 'order_message', order.orderId, order.orderProducts[0].orderProductExtraInfo.deliveryDate, order.orderProducts[0].orderProductExtraInfo.deliveryTime)">
-        Print Message
-    </div>
-</div>
+                <div class="row">
+                    <div class="btn btn-primary actions-button text-bold" style="width:49.5%;" [ngClass]="{'bg-igp text-white': isAlert, 'bg-grey text-black': !isAlert}" (click)="print($event, 'order', order.orderId, order.orderProducts[0].orderProductExtraInfo.deliveryDate, order.orderProducts[0].orderProductExtraInfo.deliveryTime)">
+                        Print Order
+                     </div>
+                    <div class="btn btn-primary actions-button text-bold" style="width:49.5%;" [ngClass]="{'bg-igp text-white': isAlert, 'bg-grey text-black': !isAlert, 'disableBtn' : !order.commments}" (click)="print($event, 'order_message', order.orderId, order.orderProducts[0].orderProductExtraInfo.deliveryDate, order.orderProducts[0].orderProductExtraInfo.deliveryTime)">
+                        Print Message
+                    </div>
+                </div>
 
-<div class="row instruction-cont relative no-padding">
-    <div class="col-md-12 no-padding">
-        <div class="col-md-6 no-padding" style="width:49.5%; float:left;" *ngIf="order.orderInstruction">
-            <div class="btn btn-primary actions-button text-bold" style="width:100%;" >
-                Order Instruction
-            </div>
-            <div class="order-instruction-detail mob">
-                <div class="arrow-up abs"></div>
-                <div style="white-space: -moz-pre-wrap; white-space: -hp-pre-wrap; white-space: -o-pre-wrap; white-space: -pre-wrap; white-space: pre-wrap;"><div [outerHTML]="order.orderInstruction"></div></div>
-            </div>
+                <div class="row instruction-cont relative no-padding">
+                    <div class="col-md-12 no-padding">
+                            <div class="col-md-6 no-padding" style="width:49.5%; float:left;" *ngIf="order.orderInstruction">
+                                    <div class="btn btn-primary actions-button text-bold" style="width:100%;" >
+                                        Order Instruction
+                                    </div>
+                                    <div class="order-instruction-detail mob">
+                                        <div class="arrow-up abs"></div>
+                                        <div style="white-space: -moz-pre-wrap; white-space: -hp-pre-wrap; white-space: -o-pre-wrap; white-space: -pre-wrap; white-space: pre-wrap;"><div [outerHTML]="order.orderInstruction"></div></div>
+                                    </div>
+                            </div>
+                            <div class="col-md-6 no-padding">
+                                <div class="btn btn-primary actions-button text-bold" style="width:49.5%; margin-left:0.5%;" (click)="vendorIssueOpen($svent, order.orderId, order.orderProducts)">
+                                    Need Help?
+                                </div>
+                            </div>
+                    </div>
+                </div>
+            </ng-container>
+
+            <ng-container *ngIf="isAdmin">
+                <div class="row order-actions-cont comm" *ngIf="isAdmin && orderByStatus !== 'processing' ">
+                <div class="actions-button text-bold text-center" (click)="adminActionsInit($event, 'email')">
+                <i class="glyphicon glyphicon-envelope" title="Send Email"></i>
+                </div>
+                <div class="actions-button text-bold text-center" (click)="adminActionsInit($event, 'sms')">
+                <i class="glyphicon glyphicon-phone" title="Send SMS"></i>
+                </div>
+                <div class="actions-button text-bold text-center" (click)="adminActionsInit($event, 'call')">
+                <i class="glyphicon glyphicon-headphones" title="Call"></i>
+                </div>
+                </div>
+
+                <div class="row order-actions-cont" *ngIf="isAdmin && orderByStatus !== 'processing'">
+
+                <div class="btn btn-primary actions-button text-bold" (click)="adminActionsInit($event, 'assignChangeVendor')">
+                <ng-container *ngIf="orderByStatus == 'notAlloted'">Assign</ng-container>
+                <ng-container *ngIf="orderByStatus !== 'notAlloted'">Reassign</ng-container>
+                </div>
+
+                <div class="changeActions dropdown" style="width:48.5%; display:inline-block;">
+                    <div class="btn btn-primary actions-button text-bold dropdown-toggle" style="width:100%;" (click)="changeDd($event, true, orderIndex)" id="dropdownMenuButton">
+                    Change <i class="glyphicon glyphicon-triangle-bottom"></i>
+                </div>
+                <div class="dropdown-menu"  style="display:block; margin-top:-0.3em;"  *ngIf="order.changeActionsFlag">
+                <a class="dropdown-item" href="#" (click)="adminActionsInit($event, 'changePrice')">Price</a>
+                <a class="dropdown-item" href="#" (click)="adminActionsInit($event, 'changeDeliveryType&Date')">Delivery Type & Date</a>
+                </div>
+                </div>
+
+                <div class="btn btn-primary actions-button text-bold oLog" (click)="orderLog($event, true, orderIndex)">
+                Log
+                </div>
+
+                <div class="btn btn-primary actions-button text-bold" (click)="adminActionsInit($event, 'cancelRefund')">
+                Cancel & Refund
+                </div>
+                </div>
+            </ng-container>
+
+
         </div>
-        <div class="col-md-6 no-padding">
-            <div class="btn btn-primary actions-button text-bold" style="width:49.5%; margin-left:0.5%;" (click)="vendorIssueOpen($svent, order.orderId, order.orderProducts)">
-                Need Help?
-            </div>
-        </div>
-    </div>
-</div>
-</div>
 
 
 

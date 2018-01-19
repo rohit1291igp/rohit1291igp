@@ -48,6 +48,11 @@
     margin-bottom: 5px;
     display: inline-block;
 }
+
+.mob .actions-button {
+    font-size: 1em ! important;
+}
+
 .comm .actions-button{
     font-size:1.5em;
     cursor:pointer;
@@ -414,6 +419,13 @@
     height: 110% ! important;*/
 }
 
+.mob .orderLogContInner{
+    left: -2em;
+    width: 114%;
+    bottom: -9em;
+    z-index:2;
+}
+
 .orderLogContInner .orderLogContInner2{
     background: #eee;
     padding: 0.5em 1em;
@@ -426,9 +438,22 @@
     padding: 0.5em 1em;
 }
 
+.mob .orderLogContInner.slideropen .orderLogContInner1{
+    height: 7% ! important;
+    max-height: 7% ! important;
+    background: transparent;
+    padding: 0.5em 1em;
+}
+
 .orderLogContInner.slideropen .orderLogContInner2{
     height: 103% ! important;
     max-height: 103% ! important;
+
+}
+
+.mob .orderLogContInner.slideropen .orderLogContInner2{
+    height: 150% ! important;
+    max-height: 150% ! important;
 
 }
 
@@ -440,6 +465,16 @@
     -o-transition-duration: 0.5s ! important;
     transition-duration: 0.5s ! important;
     bottom: -0.5em ! important;
+}
+
+.mob .orderLogContInner.slideropen{
+    height: 150% ! important;
+    max-height: 150% ! important;
+    -moz-transition-duration: 0.5s ! important;
+    -webkit-transition-duration: 0.5s ! important;
+    -o-transition-duration: 0.5s ! important;
+    transition-duration: 0.5s ! important;
+    bottom: -9em ! important;
 }
 
 .orderLogContInner.sliderclosed{
@@ -459,6 +494,14 @@
     width:32%;
 }
 
+.logClosebtn {
+    font-weight: 600;
+    margin-top: 1.5em;
+    font-size: 1.7em;
+    margin-right: 0.5em;
+    z-index:9;
+    cursor:pointer;
+}
 
 
 
