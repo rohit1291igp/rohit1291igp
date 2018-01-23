@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-
+import {environment} from "../../../environments/environment";
 import { AuthenticationService } from '../../services/authentication.service';
 import { BackendService } from '../../services/backend.service';
+import { UtilityService } from '../../services/utility.service';
 
 @Component({
     selector: 'app-login',
@@ -20,8 +21,8 @@ export class LoginComponent implements OnInit {
         public route1: ActivatedRoute,
         public router: Router,
         public authenticationService: AuthenticationService,
-        public BackendService: BackendService
-        // public alertService: AlertService
+        public BackendService: BackendService,
+        public UtilityService: UtilityService
         ) { }
 
     ngOnInit() {
@@ -62,16 +63,28 @@ export class LoginComponent implements OnInit {
                     return;
                 }
 
-                let token = headers.get('token') || _response.result.token;
-                let fkAssociateId = headers.get('fkAssociateId') || _response.result.fkAssociateId;
-                let associateName = headers.get('associateName') || _response.result.associateName;
+
+                let token = _response.result.token;
+                let fkAssociateId =  _response.result.fkAssociateId;
+                let associateName =  _response.result.associateName;
+                let userType =  _response.result.userType; // || 'upload';
+                /*let admin =  _response.result.admin;
+                if(admin){
+                    localStorage.setItem('admin', true);
+                }*/
+
+
                 console.log('User token', token);
                 console.log('fkAssociateId', fkAssociateId);
                 localStorage.setItem('currentUserToken', token);
                 localStorage.setItem('fkAssociateId', fkAssociateId);
                 localStorage.setItem('associateName', associateName);
                 localStorage.setItem('vendorName', _this.model.username);
+                localStorage.setItem('userType', userType);
+
+                _this.UtilityService.changeRouteComponent();
                 _this.router.navigate(['/dashboard']);
+
             });
         }
 

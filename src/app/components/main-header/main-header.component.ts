@@ -11,6 +11,7 @@ import {environment} from "../../../environments/environment";
 export class MainHeaderComponent implements OnInit {
     isMobile=environment.isMobile;
     vendorName:any = localStorage.getItem('associateName');
+    userType:any = localStorage.getItem('userType');
     reportDropdownOpen=false;
     selectedTopTab;
     selectedReportTab;
@@ -77,6 +78,8 @@ export class MainHeaderComponent implements OnInit {
               localStorage.removeItem('fkAssociateId');
               localStorage.removeItem('vendorName');
               localStorage.removeItem('associateName');
+              localStorage.removeItem('admin');
+              localStorage.removeItem('userType');
               _this.router.navigate(['/login']);
           })
       }

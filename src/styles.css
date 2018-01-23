@@ -3,6 +3,11 @@
 @import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 
 /* Utility css start */
+.caption{
+    font-weight:600;
+    font-size:1.1em;
+}
+
 .capitalize{
     text-transform: capitalize;
 }

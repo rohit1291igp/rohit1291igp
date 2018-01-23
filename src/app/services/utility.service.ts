@@ -1,9 +1,15 @@
 import { Injectable } from '@angular/core';
 import * as jsPDF from 'jspdf';
+import { UploadExcelComponent } from '../components/upload-excel/upload-excel.component';
+import { DashboardComponent } from '../components/dashboard/dashboard.component';
+import { Router} from '@angular/router';
+
 @Injectable()
 export class UtilityService {
 
-  constructor() { }
+  constructor(
+      public router: Router
+      ) { }
 
     getDateString(incrementBy, date) {
         let d = date ? new Date(date) : new Date();
@@ -144,5 +150,15 @@ export class UtilityService {
         });
     }
 
+    changeRouteComponent(){
+        var _this=this, userType = localStorage.getItem('userType');
+        for (var i in _this.router.config) {
+            if (userType ==='upload' && _this.router.config[i].path == "dashboard") {
+                _this.router.config[i].component = UploadExcelComponent;
+                break;
+            }
+        }
+
+    }
 
 }
