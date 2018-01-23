@@ -205,7 +205,7 @@ export class UtilityService {
             }
             tableCSV.push(colArr.join(','));
         }
-        downloadCSV(tableCSV.join("\n"), fileName);
+        downloadCSV(tableCSV.join("\n"), fileName.replace('get', '')+'.csv');
     }
 
 }

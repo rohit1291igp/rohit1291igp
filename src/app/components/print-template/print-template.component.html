@@ -152,7 +152,7 @@
  </div>
 
 
-<div id="order_message_{{getUniqueOrderId(order)}}" class="hide page messagePage" *ngIf="printType === 'orderMessage'">
+<div id="order_message_{{getUniqueOrderId(order)}}" class="hide page messagePage" *ngIf="order.commments && printType === 'orderMessage'">
     <section class="innerContent">
         <section class="messgae-box-cont2">
             <div style="width:100%;">

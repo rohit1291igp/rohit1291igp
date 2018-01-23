@@ -392,3 +392,7 @@ table.fixed-header th {
     margin-bottom: 0.5em;
     margin-right: 3px;
 }
+
+table thead th{
+    font-weight:0.8vw ! important;
+}
