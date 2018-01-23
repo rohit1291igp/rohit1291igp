@@ -20,7 +20,10 @@ export class UploadExcelComponent implements OnInit {
 
     _data={
         uploadErrorList:[],
-        uploadErrorCount:{}
+        uploadErrorCount:{
+            correct:"",
+            fail:""
+        }
     };
     constructor(
       public BackendService: BackendService

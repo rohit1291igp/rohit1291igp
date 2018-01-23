@@ -21,12 +21,12 @@
 </div>
 
 <div class="error-section" [ngClass]="{'show-error-section': _data.uploadErrorList.length, 'hide-error-section': !_data.uploadErrorList.length}">
-        <div class="count text-green">
+        <div class="count text-green" *ngIf="_data.uploadErrorCount && _data.uploadErrorCount.correct">
             Success - {{_data.uploadErrorCount.correct}}
         </div>
 
         <div>
-            <div class="count text-igp">Failed - {{_data.uploadErrorCount.fail}}</div>
+            <div class="count text-igp" *ngIf="_data.uploadErrorCount && _data.uploadErrorCount.fail">Failed - {{_data.uploadErrorCount.fail}}</div>
             <div class="caption ">Error list:-</div>
             <div class="errorCont" *ngFor="let err of _data.uploadErrorList">
                 <div> Row - {{err.row}} - {{err.msg}}</div>

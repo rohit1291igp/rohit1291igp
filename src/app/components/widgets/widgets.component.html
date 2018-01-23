@@ -21,6 +21,27 @@
         </div>
 </div>
 
+<ng-container *ngIf="wOptions.type === 'dropDown'">
+    <div class="widget dropdown">
+        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" (click)="dDOpen($event)">
+            {{wOptions.data.title}}
+            <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu ddleft no-padding" style="display:block;" *ngIf="widgetDdFlag">
+            <ng-container *ngFor="let option of wOptions.data.dDOptions">
+                <ng-container *ngIf="option.anchor">
+                    <a href="{{option.anchor}}"><li>{{option.title}}</li></a>
+                </ng-container>
+                <ng-container *ngIf="option.event">
+                    <li (click)="widgetClkEvent($event, option.event)">{{option.title}}</li>
+                </ng-container>
+            </ng-container>
+        </ul>
+    </div>
+</ng-container>
+
+
+
 
 <!--
 Examples:-

@@ -748,3 +748,31 @@ body .dashboard-content, body .orders-button{
     display:block ! important;
 }
 /* online/offline css end */
+
+.triangle-topright {
+    top: 0;
+    right: 0;
+    z-index: 99;
+    position: absolute;
+    width: 0;
+    height: 0;
+
+    border-left: 70px solid transparent;
+}
+
+.triangle-topright.mob{
+    right: 1.2em;
+}
+
+.triangle-topright.redBorder{
+    border-top: 70px solid #C3404E;
+}
+
+.triangle-topright.greenBorder{
+    border-top: 70px solid #25C355;
+}
+
+.triangle-topright.whiteBorder{
+    border-top: 70px solid #fff;
+    color:#C3404E;
+}

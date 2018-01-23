@@ -240,7 +240,10 @@
             </div>
 
         </div>
-        <div class="col-sm-12 col-md-12 table-area table-cont m-top-2" id="table-section">
+        <div class="col-sm-12 col-md-12 table-area table-cont m-top-1" id="table-section">
+                <div class="reportDwld pull-right btn btn-primary" (click)="downLoadCSV($event, reportType)">
+                  Download <span class="glyphicon glyphicon-download-alt" title="Download Report"></span>
+                </div>
                 <table class="report-table table table-striped table-bordered table-curved fixed-headerx">
                     <thead class="bg-igp text-white" (click)="stopEventPropgation($event)">
                         <tr>
@@ -314,6 +317,7 @@
                                    </form>
 
                                 </div>
+
                             </th>
                         </tr>
                     </thead>

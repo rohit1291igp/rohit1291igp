@@ -55,6 +55,13 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
           "noBtn": "Cancel"
       }
   };
+  printDropDwonData={
+      title:"Print All",
+      dDOptions : [
+                    {"title":"Orders", "anchor" : false, "event": "order"},
+                    {"title":"Messages", "anchor" : false, "event": "message"}
+                   ]
+  };
   public trayOpen: Boolean = false;
   prodListArgs;
   @Output() onStatusUpdate: EventEmitter<any> = new EventEmitter();
@@ -937,17 +944,29 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
       return delDetail;
   }
 
-  print(e, print_type, orderId, deliveryDate, deliveryTime){
+  print(e, print_type, orderId, deliveryDate, deliveryTime, all){
       e.stopPropagation();
 
-      deliveryDate = deliveryDate ? deliveryDate.replace(/\s/g,'') : "";
-      deliveryTime = deliveryTime ? deliveryTime.replace(/\s/g,'') : "";
-      var orderUniqueId = orderId+deliveryDate+deliveryTime;
-
-      let printContents, popupWin;
+      let printContents="", popupWin;
       //let targetId = print_type === "order" ? ("order_"+orderId) : ("order_message_"+orderId);
-      let targetId = print_type === "order" ? ("order_"+orderUniqueId) : ("order_message_"+orderUniqueId);
-      printContents = document.getElementById(targetId).innerHTML;
+      if(all){
+          let targetClass= print_type === 'order' ? 'orderPage' : 'messagePage';
+          let printTargetCont = document.getElementsByClassName(targetClass);
+          for(var i in printTargetCont){
+              if(printTargetCont[i] && printTargetCont[i].innerHTML){
+                  printTargetCont[i].querySelector('.innerContent').classList.add('pagebreak');
+                  printContents = printContents +  printTargetCont[i].innerHTML;
+              }
+          }
+      }else{
+          deliveryDate = deliveryDate ? deliveryDate.replace(/\s/g,'') : "";
+          deliveryTime = deliveryTime ? deliveryTime.replace(/\s/g,'') : "";
+          var orderUniqueId = orderId+deliveryDate+deliveryTime;
+          let targetId = print_type === "order" ? ("order_"+orderUniqueId) : ("order_message_"+orderUniqueId);
+          let printTargetCont = document.getElementById(targetId);
+          printContents = printTargetCont.innerHTML;
+      }
+
       popupWin = window.open('', '_blank', 'top=0,left=0,height=100%,width=auto');
       popupWin.document.open();
       popupWin.document.write(`
@@ -1017,6 +1036,16 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
           "errorParams": [],
           "result": []
       };
+  }
+
+  printDropDown(args){
+      var _this=this, _e=args.e,
+          value=args.value;
+      if(value === 'order'){
+          _this.print(_e, 'order', null, null, null, 'all');
+      }else{
+          _this.print(_e, 'message', null, null, null, 'all');
+      }
   }
 
 }

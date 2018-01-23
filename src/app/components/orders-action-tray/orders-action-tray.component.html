@@ -209,6 +209,11 @@
                 </span>
             </p>
             <p class="text-grey no-margin">Total - <span *ngIf="!sidePanelData">0</span><span *ngIf="sidePanelData">{{sidePanelData.length}}</span> Orders</p>
+
+            <div class="pullAll" *ngIf="!isMobile" [ngClass]="{'disableBtn' : !sidePanelData}">
+                <app-widgets (onWidgetClickEvent)="printDropDown($event)" [wOptions]="{type : 'dropDown', data:printDropDwonData}"></app-widgets>
+                <!--<button type="button" class="btn btn-secondary" (click)="print($event, 'order', null, null, null, 'all')">Print All</button>-->
+            </div>
         </div>
 
       <div class="colInline col-sm-1 col-md-1 pull-right" *ngIf="isMobile">
@@ -498,10 +503,10 @@
                       </div>
 
                     <div class="row">
-                        <div class="btn btn-primary actions-button text-bold" [ngClass]="{'bg-igp text-white': isAlert, 'bg-grey text-black': !isAlert}" (click)="print($event, 'order', order.orderId, order.orderProducts[0].orderProductExtraInfo.deliveryDate, order.orderProducts[0].orderProductExtraInfo.deliveryTime)">
+                        <div class="btn btn-primary actions-button text-bold" [ngClass]="{'bg-igp text-white': isAlert, 'bg-grey text-black': !isAlert}" (click)="print($event, 'order', order.orderId, order.orderProducts[0].orderProductExtraInfo.deliveryDate, order.orderProducts[0].orderProductExtraInfo.deliveryTime, null)">
                             Print Order
                         </div>
-                        <div class="btn btn-primary actions-button text-bold" [ngClass]="{'bg-igp text-white': isAlert, 'bg-grey text-black': !isAlert, 'disableBtn' : !order.commments}" (click)="print($event, 'order_message', order.orderId, order.orderProducts[0].orderProductExtraInfo.deliveryDate, order.orderProducts[0].orderProductExtraInfo.deliveryTime)">
+                        <div class="btn btn-primary actions-button text-bold" [ngClass]="{'bg-igp text-white': isAlert, 'bg-grey text-black': !isAlert, 'disableBtn' : !order.commments}" (click)="print($event, 'order_message', order.orderId, order.orderProducts[0].orderProductExtraInfo.deliveryDate, order.orderProducts[0].orderProductExtraInfo.deliveryTime, null)">
                             Print Message
                         </div>
                     </div>
@@ -600,10 +605,10 @@
 </div>
 
 <div class="row">
-    <div class="btn btn-primary actions-button text-bold" style="width:49.5%;" [ngClass]="{'bg-igp text-white': isAlert, 'bg-grey text-black': !isAlert}" (click)="print($event, 'order', order.orderId, order.orderProducts[0].orderProductExtraInfo.deliveryDate, order.orderProducts[0].orderProductExtraInfo.deliveryTime)">
+    <div class="btn btn-primary actions-button text-bold" style="width:49.5%;" [ngClass]="{'bg-igp text-white': isAlert, 'bg-grey text-black': !isAlert}" (click)="print($event, 'order', order.orderId, order.orderProducts[0].orderProductExtraInfo.deliveryDate, order.orderProducts[0].orderProductExtraInfo.deliveryTime, null)">
         Print Order
     </div>
-    <div class="btn btn-primary actions-button text-bold" style="width:49.5%;" [ngClass]="{'bg-igp text-white': isAlert, 'bg-grey text-black': !isAlert, 'disableBtn' : !order.commments}" (click)="print($event, 'order_message', order.orderId, order.orderProducts[0].orderProductExtraInfo.deliveryDate, order.orderProducts[0].orderProductExtraInfo.deliveryTime)">
+    <div class="btn btn-primary actions-button text-bold" style="width:49.5%;" [ngClass]="{'bg-igp text-white': isAlert, 'bg-grey text-black': !isAlert, 'disableBtn' : !order.commments}" (click)="print($event, 'order_message', order.orderId, order.orderProducts[0].orderProductExtraInfo.deliveryDate, order.orderProducts[0].orderProductExtraInfo.deliveryTime, null)">
         Print Message
     </div>
 </div>
