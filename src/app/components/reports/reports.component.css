@@ -394,5 +394,6 @@ table.fixed-header th {
 }
 
 table thead th{
-    font-weight:0.8vw ! important;
+    
+    white-space: nowrap;
 }
