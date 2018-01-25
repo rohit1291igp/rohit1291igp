@@ -7,7 +7,7 @@ import {environment} from "../../environments/environment";
 @Injectable()
 export class DashboardService {
     isMobile=environment.isMobile;
-    isAdmin=localStorage.getItem('admin');
+    isAdmin=(environment.userType && environment.userType === "admin");
     users: Array<any> = [];
     currentColumn;
     currentRow;
@@ -755,6 +755,7 @@ export class DashboardService {
             let fkAssociateId = localStorage.getItem('fkAssociateId');
             //let specificDate = Date.parse(spcificDate) || 0;
             let specificDate = spcificDate || 0;
+            //console.log('environment----->', environment);
             let apiPath = this.isAdmin ? 'getAdminCountDetail' : 'getVendorCountDetail';
             let reqObj = {
                 //url : "?responseType=json&scopeId=1&fkAssociateId="+fkAssociateId+"&specificDate="+specificDate+"&method=igp.vendor.getVendorCountDetail",

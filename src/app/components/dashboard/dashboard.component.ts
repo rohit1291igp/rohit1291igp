@@ -18,7 +18,7 @@ import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 export class DashboardComponent implements OnInit {
   @ViewChild(OrdersActionTrayComponent) child: OrdersActionTrayComponent;
   isMobile=environment.isMobile;
-  isAdmin=localStorage.getItem('admin');
+  isAdmin=(environment.userType && environment.userType === "admin");
   prodOrderstatus : any;
   dashBoardDataType;
   vendorName = localStorage.getItem('associateName');
@@ -54,12 +54,6 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit() {
     //var _this = this;
-    this.router.events.subscribe((event) => {
-          if (event instanceof NavigationEnd) {
-              console.log('Dashboard Url changed ********--->');
-              this.dashboardService.isAdmin=localStorage.getItem('admin');
-          }
-    });
 
     this.isRowAlert = this.dashboardService.getAlertRow();
     this.dashboardData = this.dashboardService.getCustomData();

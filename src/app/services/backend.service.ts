@@ -23,10 +23,14 @@ export class BackendService {
       if(/\/fakeapi/.test(reqObj.url)){
           reqObj.url=  'http://localhost:1337'+reqObj.url
       }else{
-          if(sessionStorage.getItem('mockAPI')){
+          if(environment.mockAPI){
               reqObj.url= environment.originMock + reqObj.url;
           }else{
-              reqObj.url= environment.origin2 +'v1/handels/'+ reqObj.url;
+              if(environment.userType && !(reqObj.url.includes('login')) && !(reqObj.url.includes('doLogOut')) ){
+                  reqObj.url= environment.origin2 +'v1/admin/'+ reqObj.url;
+              }else{
+                  reqObj.url= environment.origin2 +'v1/handels/'+ reqObj.url;
+              }
           }
       }
       _this.lastHttpCall = this.httpClient[reqObj.method](reqObj.url, reqObj.payload)
@@ -34,7 +38,7 @@ export class BackendService {
           response => {
               if(document.getElementById("cLoader")) document.getElementById("cLoader").classList.add("hide");
               if(document.getElementById("cLoader2")) document.getElementById("cLoader2").classList.add("hide");
-              if(sessionStorage.getItem('mockAPI')){
+              if(environment.mockAPI){
                   let responseBody=response;
                   if(Array.isArray(responseBody)) responseBody = responseBody[0];
                   return cb(null, responseBody, (response.headers||{}));

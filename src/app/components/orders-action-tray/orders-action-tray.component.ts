@@ -45,8 +45,9 @@ import {environment} from "../../../environments/environment";
     ]
 })
 export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
+  env=environment;
   isMobile=environment.isMobile;
-  isAdmin=localStorage.getItem('admin');
+  isAdmin=(environment.userType && environment.userType === "admin");
   confirmFlag=false;
   confirmModel:any={};
   confirmData={

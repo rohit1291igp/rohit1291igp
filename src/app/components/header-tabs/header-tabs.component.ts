@@ -8,6 +8,7 @@ declare var $:any;
   styleUrls: ['./header-tabs.component.css']
 })
 export class HeaderTabsComponent implements OnInit {
+  environment=environment;
   isMobile=environment.isMobile;
   @Output() onTabChanged: EventEmitter<any> = new EventEmitter();
   @Output() onOrderSearch: EventEmitter<any> = new EventEmitter();

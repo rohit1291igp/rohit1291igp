@@ -11,7 +11,7 @@ import { ConnectionBackend, RequestOptions, Request, RequestOptionsArgs, Respons
 })
 export class UploadExcelComponent implements OnInit {
     isMobile=environment.isMobile;
-
+    environment=environment;
     _flags={
         fileOversizeValidation:false,
         emptyFileValidation:false,

@@ -3,6 +3,7 @@ import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { BackendService } from '../../services/backend.service';
 import {environment} from "../../../environments/environment";
 import { DashboardComponent } from '../dashboard/dashboard.component';
+import { DashboardService } from '../../services/dashboard.service';
 
 @Component({
   selector: 'app-main-header',
@@ -10,8 +11,9 @@ import { DashboardComponent } from '../dashboard/dashboard.component';
   styleUrls: ['./main-header.component.css']
 })
 export class MainHeaderComponent implements OnInit {
+    environment=environment;
     isMobile=environment.isMobile;
-    isAdmin=localStorage.getItem('admin');
+    isAdmin=(environment.userType && environment.userType === "admin");
     vendorName:any = localStorage.getItem('associateName');
     userType:any = localStorage.getItem('userType');
     reportDropdownOpen=false;
@@ -20,7 +22,8 @@ export class MainHeaderComponent implements OnInit {
     constructor(
       public router: Router,
       public BackendService : BackendService,
-      private _elementRef: ElementRef
+      private _elementRef: ElementRef,
+      public dashboardService: DashboardService
         ) { }
 
   @HostListener('document:click', ['$event.target'])
@@ -49,7 +52,8 @@ export class MainHeaderComponent implements OnInit {
               console.log('Url changed');
               _this.vendorName = localStorage.getItem('associateName');
               _this.activeTabHighlight();
-              _this.userType= localStorage.getItem('userType');
+              environment.userType= localStorage.getItem('userType');
+              _this.dashboardService.isAdmin=(environment.userType && environment.userType === "admin");
           }
       });
   }
@@ -62,10 +66,10 @@ export class MainHeaderComponent implements OnInit {
           localStorage.removeItem('fkAssociateId');
           localStorage.removeItem('vendorName');
           localStorage.removeItem('associateName');
-          localStorage.removeItem('admin');
           localStorage.removeItem('userType');
-          localStorage.removeItem('upload');
           sessionStorage.removeItem('mockAPI');
+          environment.mockAPI="";
+          environment.userType="";
           _this.router.navigate(['/login']);
       }else{
           let reqObj = {
@@ -85,10 +89,10 @@ export class MainHeaderComponent implements OnInit {
               localStorage.removeItem('fkAssociateId');
               localStorage.removeItem('vendorName');
               localStorage.removeItem('associateName');
-              localStorage.removeItem('admin');
               localStorage.removeItem('userType');
-              localStorage.removeItem('upload');
               sessionStorage.removeItem('mockAPI');
+              environment.mockAPI="";
+              environment.userType="";
               _this.router.navigate(['/login']);
           })
       }

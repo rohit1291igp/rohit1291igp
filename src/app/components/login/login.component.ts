@@ -38,12 +38,12 @@ export class LoginComponent implements OnInit {
         let _this = this;
         this.loading = true;
             if(this.model.password === "ng"){
-                sessionStorage.setItem('mockAPI', 'true');
+                sessionStorage.setItem('mockAPI', 'true'); environment.mockAPI='true';
+
                 if(this.model.username === "admin"){
-                    localStorage.setItem('admin', 'true');
-                    localStorage.setItem('userType', 'admin');
+                    localStorage.setItem('userType', 'admin'); environment.userType='admin';
                 }else if(this.model.username === "upload"){
-                    localStorage.setItem('userType', 'upload');
+                    localStorage.setItem('userType', 'upload'); environment.userType='upload';
                 }
 
                 localStorage.setItem('currentUserToken', "test");
@@ -52,6 +52,7 @@ export class LoginComponent implements OnInit {
                 localStorage.setItem('vendorName', "Test");
                 _this.UtilityService.changeRouteComponent();
                 _this.router.navigate(['/dashboard']);
+                //window.location.reload();
             }else{
                 let reqObj = {
                     //url : "IGPService/login?username="+this.model.username+"&password="+this.model.password,
@@ -84,7 +85,15 @@ export class LoginComponent implements OnInit {
                     localStorage.setItem('fkAssociateId', fkAssociateId);
                     localStorage.setItem('associateName', associateName);
                     localStorage.setItem('vendorName', _this.model.username);
-                    localStorage.setItem('userType', userType);
+                    //localStorage.setItem('userType', userType);
+
+                    if(_this.model.username === "iipsroot"){
+                        localStorage.setItem('userType', 'upload');
+                        environment.userType='upload';
+                    }else if(_this.model.username === "Handels"){
+                        localStorage.setItem('userType', 'admin');
+                        environment.userType='admin';
+                    }
 
                     _this.UtilityService.changeRouteComponent();
                     _this.router.navigate(['/dashboard']);

@@ -8,5 +8,7 @@ export const environment = {
   apiInitial : 'IGPService/web/services/rest',
   productsURL : "https://d1xs5fw35mbn8b.cloudfront.net/p/",
   productsCompURL : "http://admin.indiangiftsportal.com/handelscomponents/",
-  isMobile:window.screen.width < 1000
+  isMobile:window.screen.width < 1000,
+  userType:localStorage.getItem('userType'),
+  mockAPI:sessionStorage.getItem('mockAPI')
 };

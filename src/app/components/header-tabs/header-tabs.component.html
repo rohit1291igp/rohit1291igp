@@ -6,6 +6,7 @@
             <a href="#">All Orders ({{dashboardCounts.allOrders}})</a>
             <!--<div class="DbCount all">{{dashboardCounts.allOrders}}</div>-->
             </li>
+            <ng-container *ngIf="!environment.userType">
             <li class="relative" [ngClass]="{'active': activeTab === 2}" (click)="selectTab($event, 2)" data-tab="sla">
             <a href="#">Action Required ({{dashboardCounts.actionRequired}})</a>
             <!--<div class="DbCount action">{{dashboardCounts.actionRequired}}</div>-->
@@ -14,6 +15,7 @@
             <a href="#">High Alert ({{dashboardCounts.highAlert}})</a>
             <!--<div class="DbCount alertC">{{dashboardCounts.highAlert}}</div>-->
             </li>
+            </ng-container>
         </ul>
     </div>
 
