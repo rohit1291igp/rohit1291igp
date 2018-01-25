@@ -9,3 +9,22 @@
     right: 1.5em;
     bottom: 1em;
 }
+
+.ddleft{
+    left: auto ! important;
+    right: 0 ! important;
+}
+
+.widget.dropdown ul li{
+    padding:0.5em;
+    cursor:pointer;
+    border-bottom: 1px solid #eee;
+}
+.widget.dropdown ul li:last-child{
+    border-bottom: none;
+}
+
+.widget.dropdown ul li:hover{
+    background:#eee;
+    font-weight:600;
+}

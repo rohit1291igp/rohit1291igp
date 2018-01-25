@@ -11,23 +11,22 @@
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse navRight" id="bs-example-navbar-collapse-1" *ngIf="!isMobile && vendorName">
       <ul class="nav navbar-nav navbar-right">
-        <li class="fullHeightLi" [ngClass]="{'selected' : selectedTopTab === 'dashboard'}">
-          <p><a ng-href="#/dashboard" routerLink="/dashboard">Dashboard</a></p>
-        </li>
-        <li class="fullHeightLi relative" [ngClass]="{'selected' : selectedTopTab === 'reports'}" (click)="openReportDropdown($event)">
-           <p>Reports</p>
-            <div class="reportDropdown abs" [ngClass]="{'slideropen' : reportDropdownOpen, 'sliderclosed': !reportDropdownOpen}">
-                <ul class="reportsdropdownMenu no-padding" *ngIf="!isAdmin">
-                    <a routerLink="/reports/getOrderReport"><li [ngClass]="{'selected' : selectedReportTab === 'getOrderReport'}">Order Report</li></a>
-                    <a routerLink="/reports/getVendorReport"><li [ngClass]="{'selected' : selectedReportTab === 'getVendorReport'}">Product Report</li></a>
-                    <a routerLink="/reports/getPincodeReport"><li [ngClass]="{'selected' : selectedReportTab === 'getPincodeReport'}">Pincode Report</li></a>
-                    <a class="" routerLink="/reports/getPayoutAndTaxesReport"><li [ngClass]="{'selected' : selectedReportTab === 'getPayoutAndTaxesReport'}">Payout & Taxes</li></a>
-                </ul>
-                <ul class="reportsdropdownMenu no-padding" *ngIf="isAdmin">
-
-                </ul>
-            </div>
-        </li>
+        <ng-container *ngIf="(userType !== 'upload') && (userType !== 'admin')">
+            <li class="fullHeightLi" [ngClass]="{'selected' : selectedTopTab === 'dashboard'}">
+              <p><a ng-href="#/dashboard" routerLink="/dashboard">Dashboard</a></p>
+            </li>
+            <li class="fullHeightLi relative" [ngClass]="{'selected' : selectedTopTab === 'reports'}" (click)="openReportDropdown($event)">
+               <p>Reports</p>
+                <div class="reportDropdown abs" [ngClass]="{'slideropen' : reportDropdownOpen, 'sliderclosed': !reportDropdownOpen}">
+                    <ul class="reportsdropdownMenu no-padding">
+                        <a routerLink="/reports/getOrderReport"><li [ngClass]="{'selected' : selectedReportTab === 'getOrderReport'}">Order Report</li></a>
+                        <a routerLink="/reports/getVendorReport"><li [ngClass]="{'selected' : selectedReportTab === 'getVendorReport'}">Product Report</li></a>
+                        <a routerLink="/reports/getPincodeReport"><li [ngClass]="{'selected' : selectedReportTab === 'getPincodeReport'}">Pincode Report</li></a>
+                        <a class="" routerLink="/reports/getPayoutAndTaxesReport"><li [ngClass]="{'selected' : selectedReportTab === 'getPayoutAndTaxesReport'}">Payout & Taxes</li></a>
+                    </ul>
+                </div>
+            </li>
+        </ng-container>
         <li>
             <!--<a href="#" class="logout" [routerLink]="['/login']">Logout
               <i class="icon glyphicon glyphicon-off"></i>
@@ -36,7 +35,6 @@
             <div  class="logout" (click)="logout($event)">Logout
               <i class="icon glyphicon glyphicon-off"></i>
             </div>
-
         </li>
       </ul>
     </div>

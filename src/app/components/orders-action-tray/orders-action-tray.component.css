@@ -281,28 +281,7 @@
     display:block;
 }
 
-.triangle-topright {
-    top: 0;
-    right: 0;
-    z-index: 99;
-    position: absolute;
-    width: 0;
-    height: 0;
 
-    border-left: 70px solid transparent;
-}
-
-.triangle-topright.mob{
-    right: 1.2em;
-}
-
-.triangle-topright.redBorder{
-    border-top: 70px solid #C3404E;
-}
-
-.triangle-topright.greenBorder{
-    border-top: 70px solid #25C355;
-}
 
 .slaAlert-flag{
     font-weight: bold;
@@ -401,6 +380,7 @@
     box-shadow: 0 2px 5px 0 rgba(0,0,0,.16), 0 2px 10px 0 rgba(0,0,0,.12);
 
 }
+
 
 .orderLogCont {
     width:100%;
@@ -503,5 +483,10 @@
     cursor:pointer;
 }
 
+.pullAll{
+    position:absolute;
+    top:0;
+    right:2em;
+}
 
 

@@ -2,6 +2,7 @@ import { Component, OnInit, HostListener, ElementRef } from '@angular/core';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { BackendService } from '../../services/backend.service';
 import {environment} from "../../../environments/environment";
+import { DashboardComponent } from '../dashboard/dashboard.component';
 
 @Component({
   selector: 'app-main-header',
@@ -12,6 +13,7 @@ export class MainHeaderComponent implements OnInit {
     isMobile=environment.isMobile;
     isAdmin=localStorage.getItem('admin');
     vendorName:any = localStorage.getItem('associateName');
+    userType:any = localStorage.getItem('userType');
     reportDropdownOpen=false;
     selectedTopTab;
     selectedReportTab;
@@ -47,6 +49,7 @@ export class MainHeaderComponent implements OnInit {
               console.log('Url changed');
               _this.vendorName = localStorage.getItem('associateName');
               _this.activeTabHighlight();
+              _this.userType= localStorage.getItem('userType');
           }
       });
   }
@@ -54,11 +57,15 @@ export class MainHeaderComponent implements OnInit {
   logout(e){
       let _this = this;
 
-      if(localStorage.getItem('dRandom')){
+      if(localStorage.getItem('currentUserToken') === "test"){
           localStorage.removeItem('currentUserToken');
           localStorage.removeItem('fkAssociateId');
           localStorage.removeItem('vendorName');
           localStorage.removeItem('associateName');
+          localStorage.removeItem('admin');
+          localStorage.removeItem('userType');
+          localStorage.removeItem('upload');
+          sessionStorage.removeItem('mockAPI');
           _this.router.navigate(['/login']);
       }else{
           let reqObj = {
@@ -78,8 +85,19 @@ export class MainHeaderComponent implements OnInit {
               localStorage.removeItem('fkAssociateId');
               localStorage.removeItem('vendorName');
               localStorage.removeItem('associateName');
+              localStorage.removeItem('admin');
+              localStorage.removeItem('userType');
+              localStorage.removeItem('upload');
+              sessionStorage.removeItem('mockAPI');
               _this.router.navigate(['/login']);
           })
+      }
+
+      for (var i in _this.router.config) {
+          if (_this.router.config[i].path == "dashboard") {
+              _this.router.config[i].component = DashboardComponent;
+              break;
+          }
       }
   }
 

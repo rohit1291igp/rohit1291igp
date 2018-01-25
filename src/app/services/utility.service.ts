@@ -1,9 +1,15 @@
 import { Injectable } from '@angular/core';
 import * as jsPDF from 'jspdf';
+import { UploadExcelComponent } from '../components/upload-excel/upload-excel.component';
+import { DashboardComponent } from '../components/dashboard/dashboard.component';
+import { Router} from '@angular/router';
+
 @Injectable()
 export class UtilityService {
 
-  constructor() { }
+  constructor(
+      public router: Router
+      ) { }
 
     getDateString(incrementBy, date) {
         let d = date ? new Date(date) : new Date();
@@ -144,5 +150,62 @@ export class UtilityService {
         });
     }
 
+    changeRouteComponent(){
+        var _this=this, userType = localStorage.getItem('userType');
+        for (var i in _this.router.config) {
+            if (userType ==='upload' && _this.router.config[i].path == "dashboard") {
+                _this.router.config[i].component = UploadExcelComponent;
+                break;
+            }
+        }
+
+    }
+
+    createCSV(tableSelector, fileName){
+        function downloadCSV(csv, filename) {
+            var csvFile;
+            var downloadLink;
+
+            // CSV file
+            csvFile = new Blob([csv], {type: "text/csv"});
+
+            // Download link
+            downloadLink = document.createElement("a");
+
+            // File name
+            downloadLink.download = filename;
+
+            // Create a link to the file
+            downloadLink.href = window.URL.createObjectURL(csvFile);
+
+            // Hide download link
+            downloadLink.style.display = "none";
+
+            // Add the link to DOM
+            document.body.appendChild(downloadLink);
+
+            // Click download link
+            downloadLink.click();
+        }
+
+        var rows= document.querySelectorAll(tableSelector);
+        var rowsLen= rows.length;
+        var tableCSV=[];
+        for(var i=0; i<rowsLen; i++){
+            var row=rows[i];
+            var thFlag=row.querySelectorAll('th').length;
+            var columns=row.querySelectorAll('th').length ? row.querySelectorAll('th') : row.querySelectorAll('td');
+            var columnsLen=columns.length;
+            var colArr=[];
+            for(var j=0; j<columnsLen; j++){
+                if(Array.prototype.slice.call(columns[j].classList).indexOf('hide') === -1){
+                    var colVal= columns[j].innerText.replace(/(\r\n|\n|\r)/gm,"").trim();
+                    colArr.push(colVal);
+                }
+            }
+            tableCSV.push(colArr.join(','));
+        }
+        downloadCSV(tableCSV.join("\n"), fileName.replace('get', '')+'.csv');
+    }
 
 }

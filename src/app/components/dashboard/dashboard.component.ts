@@ -8,6 +8,7 @@ import { MainHeaderComponent } from '../main-header/main-header.component';
 import { UtilityService } from '../../services/utility.service';
 import {environment} from "../../../environments/environment";
 import { Observable } from "rxjs";
+import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard',
@@ -45,6 +46,7 @@ export class DashboardComponent implements OnInit {
   public dateRange: Object = {};
   public dashboardObservable;
   constructor(
+    public router: Router,
     public dashboardService: DashboardService,
     public BackendService: BackendService,
     public UtilityService: UtilityService
@@ -52,6 +54,13 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit() {
     //var _this = this;
+    this.router.events.subscribe((event) => {
+          if (event instanceof NavigationEnd) {
+              console.log('Dashboard Url changed ********--->');
+              this.dashboardService.isAdmin=localStorage.getItem('admin');
+          }
+    });
+
     this.isRowAlert = this.dashboardService.getAlertRow();
     this.dashboardData = this.dashboardService.getCustomData();
     this.loadDbData();

@@ -1,5 +1,5 @@
-<div class="row page" id="order_{{getUniqueOrderId(order)}}" class="hide"  *ngIf="printType === 'order'">
-
+    <div class="row page orderPage hide" id="order_{{getUniqueOrderId(order)}}"  *ngIf="printType === 'order'">
+    <section class="innerContent">
     <section class="messgae-box-cont" *ngIf="order.commments">
             <div style="width:100%;">
                 <div class="mb1">
@@ -148,72 +148,32 @@
 
         </section>
       </section>
-     <!--<h3>Order !</h3>
-        <div class="col-md-12 order-row" style="margin-bottom: 0;">
-            <div class="container-fluid orders-tray">
-                <div class="row delivery-details">
-                    <div class="col-md-7 order-details no-padding">
-                        <p>
-                            <span class="order-id">Order ID: {{order.orderId}}</span>
-                        </p>
-                        <div class="text-bold">Deliver to: {{order.deliveryName}}</div>
-                        <div class="address">Address - {{order.deliveryStreetAddress}}, <span *ngIf="order.deliveryStreetAddress2">{{order.deliveryStreetAddress2}},</span>s{{order.deliveryCity}}-{{order.deliveryPostcode}}, {{order.deliveryState}}</div>
-                        <div class="contact">CONTACT NUMBER - {{order.deliveryMobile}}</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="row" *ngFor="let orderProduct of order.orderProducts; let z='index'">
-            <p class="">Product Name: <span class="uppercase text-igp">{{orderProduct.productName}}</span></p>
-            <p>Product Components -</p>
-            <div class="col-md-12 product-holder" [ngClass]="{'noBtBorder' : (z+1 === order.orderProducts.length)}">
-                <div class="row">
-                    <div class="col-md-12 no-padding comp1">
-                       <span>
-                            <div class="product-main">
-                                <img class="product-image" src="{{productsURL}}{{orderProduct.productImage}}" alt="product_img">
-                            </div>
-                            <div class="equal-sign">=</div>
-                       </span>
-
-                        <span *ngFor="let prodComponent of orderProduct.componentList; let i='index'">
-                            <div class="product-component relative">
-                                <div class="component-eggless abs" *ngIf="prodComponent.eggless">Eggless</div>
-                                <img class="component-image" src="{{productsCompURL}}{{prodComponent.componentImage}}" alt="Component_img">
-                                <div class="component-quantity center-align">QTY-{{prodComponent.quantity | number : '2.0-0'}}</div>
-                                <div class="component-name center-align">{{prodComponent.componentName}} </div>
-                            </div>
-                            <div class="plus-sign" *ngIf="(i+1) !== orderProduct.componentList.length">+</div>
-                        </span>
-                    </div>
-                </div>
-            </div>
-        </div>-->
-
+            </section>
  </div>
 
 
-<div id="order_message_{{getUniqueOrderId(order)}}" class="hide page" *ngIf="printType === 'orderMessage'">
-    <section class="messgae-box-cont2">
-        <div style="width:100%;">
-            <div class="mb1">
-                <div class="messBgCont1">
-                    <div class="messBgCont2">
-                        <img class="imgCenter" src="{{messageBgImage}}" *ngIf="order.fkAssociateId === 5">
-                        <img class="imgCenter" src="{{messageBgImageInterflora}}" *ngIf="order.fkAssociateId === 830">
+<div id="order_message_{{getUniqueOrderId(order)}}" class="hide page messagePage" *ngIf="order.commments && printType === 'orderMessage'">
+    <section class="innerContent">
+        <section class="messgae-box-cont2">
+            <div style="width:100%;">
+                <div class="mb1">
+                    <div class="messBgCont1">
+                        <div class="messBgCont2">
+                            <img class="imgCenter" src="{{messageBgImage}}" *ngIf="order.fkAssociateId === 5">
+                            <img class="imgCenter" src="{{messageBgImageInterflora}}" *ngIf="order.fkAssociateId === 830">
+                        </div>
+                    </div>
+                </div>
+                <div class="mb2">
+                    <div class="mb">
+                        <div class="messgae-box" style="text-align:left;">
+                            <!--<p class="message-caption bold upper-txt">Message</p>-->
+                            <div class="message-txt"><div style="margin: 0 auto; white-space: -moz-pre-wrap; white-space: -hp-pre-wrap; white-space: -o-pre-wrap; white-space: -pre-wrap; white-space: pre-wrap;">{{order.commments}}</div></div>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="mb2">
-                <div class="mb">
-                    <div class="messgae-box" style="text-align:left;">
-                        <!--<p class="message-caption bold upper-txt">Message</p>-->
-                        <div class="message-txt"><div style="margin: 0 auto; white-space: -moz-pre-wrap; white-space: -hp-pre-wrap; white-space: -o-pre-wrap; white-space: -pre-wrap; white-space: pre-wrap;">{{order.commments}}</div></div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        </section>
     </section>
 </div>
 

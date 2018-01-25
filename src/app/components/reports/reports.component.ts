@@ -898,6 +898,10 @@ export class ReportsComponent implements OnInit{
         return widthObj;
     }
 
+    downLoadCSV(e, fileName){
+      this.UtilityService.createCSV('table tr', (fileName || 'report'));
+    }
+
 
 
 }

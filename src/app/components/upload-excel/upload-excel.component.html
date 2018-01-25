@@ -1,0 +1,35 @@
+<div class="" style="height:85vh;">
+    <div class=""   style="display: block; overflow:scroll; background: transparent;">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content" style="margin-top:25%; margin-left:25%; width:50%;">
+                <div class="modal-header" style="border-bottom:none;">
+                    <div class="caption">Upload Excel File</div>
+                </div>
+                <div class="modal-body center-align">
+                    <form (ngSubmit)="uploadExcel($event)">
+                        <div class="m-top-1 left-align">
+                            <input id="excelFile" class="form-control custom-control m-top-1" type="file" name="file" (change)="fileChange($event)" accept=".xls, .xlsx, .csv" required>
+                        </div>
+                        <button class="btn btn-primary m-top-1">Upload</button>
+                        <div class="help-block theme-red" *ngIf="_flags.emptyFileValidation">Please choose a excel file</div>
+                        <div class="m-top-1 text-bold text-green" *ngIf="_flags.uploadSuccessFlag">All orders are uploaded successfully!</div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="error-section" [ngClass]="{'show-error-section': _data.uploadErrorList.length, 'hide-error-section': !_data.uploadErrorList.length}">
+        <div class="count text-green" *ngIf="_data.uploadErrorCount && _data.uploadErrorCount.correct">
+            Success - {{_data.uploadErrorCount.correct}}
+        </div>
+
+        <div>
+            <div class="count text-igp" *ngIf="_data.uploadErrorCount && _data.uploadErrorCount.fail">Failed - {{_data.uploadErrorCount.fail}}</div>
+            <div class="caption m-top-1">Error list:-</div>
+            <div class="errorCont" *ngFor="let err of _data.uploadErrorList">
+                <div> Row - {{err.row}} - {{err.msg}}</div>
+            </div>
+        </div>
+</div>

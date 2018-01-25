@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, HostListener, ElementRef } from '@angular/core';
 import {environment} from "../../../environments/environment";
 import { UtilityService } from '../../services/utility.service';
 
@@ -9,15 +9,28 @@ import { UtilityService } from '../../services/utility.service';
 })
 export class WidgetsComponent implements OnInit {
   isMobile=environment.isMobile;
+  widgetDdFlag=false;
   @Input('wOptions') wOptions : any;
   @Output() onConfirmClicked:EventEmitter<any>=new EventEmitter();
+  @Output() onWidgetClickEvent:EventEmitter<any>=new EventEmitter();
   constructor(
-      public UtilityService: UtilityService
+      public UtilityService: UtilityService,
+      private _elementRef: ElementRef
       ) { }
 
   ngOnInit() {
     //console.log('wOptions==========>', this.wOptions);
   }
+
+ @HostListener('document:click', ['$event.target'])
+    public onClick(targetElement) {
+        console.log('inside dd clicked ------->');
+        const isClickedInside = this._elementRef.nativeElement.contains(targetElement);
+        if (!isClickedInside) {
+            console.log('outside dd clicked ------->');
+           this.widgetDdFlag=false;
+        }
+ }
 
   scrollTop(e){
       e.preventDefault();
@@ -33,8 +46,24 @@ export class WidgetsComponent implements OnInit {
   }
 
   confirmYesNo(e, value){
+      e.preventDefault();
+      e.stopPropagation();
       var parameters = {e:e, value: value}
       this.onConfirmClicked.emit(parameters);
+  }
+
+  widgetClkEvent(e, value){
+      e.preventDefault();
+      e.stopPropagation();
+      this.widgetDdFlag=false;
+      var parameters = {e:e, value: value};
+      this.onWidgetClickEvent.emit(parameters);
+  }
+
+  dDOpen(e){
+      e.preventDefault();
+      e.stopPropagation();
+      this.widgetDdFlag=true;
   }
 
 }

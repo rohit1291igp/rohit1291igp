@@ -48,6 +48,7 @@ import { ReportsComponent } from './components/reports/reports.component';
 import { ObjectKeyValuePipe } from './customPipes/object-key-value.pipe';
 import { WidgetsComponent } from './components/widgets/widgets.component';
 import { FeedsComponent } from './components/feeds/feeds.component';
+import { UploadExcelComponent } from './components/upload-excel/upload-excel.component';
 
 //env config
 /*import {envConfig} from "./others/env.config";
@@ -76,7 +77,8 @@ export function ConfigLoader(envConfig: envConfig) {
     ObjectKeyValuePipe,
     WidgetsComponent,
     //  InputTrimDirective,
-      FeedsComponent
+      FeedsComponent,
+    UploadExcelComponent
   ],
   imports: [
     BrowserModule,
@@ -119,6 +121,7 @@ export function ConfigLoader(envConfig: envConfig) {
     ObjectKeyValuePipe
 
   ],
+    entryComponents:[UploadExcelComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

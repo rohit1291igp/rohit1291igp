@@ -240,19 +240,24 @@
             </div>
 
         </div>
-        <div class="col-sm-12 col-md-12 table-area table-cont m-top-2" id="table-section">
+        <div class="col-sm-12 col-md-12 table-area table-cont m-top-1" id="table-section">
+                <div class="reportDwld pull-right btn btn-primary" (click)="downLoadCSV($event, reportType)">
+                  Download <span class="glyphicon glyphicon-download-alt" title="Download Report"></span>
+                </div>
                 <table class="report-table table table-striped table-bordered table-curved fixed-headerx">
                     <thead class="bg-igp text-white" (click)="stopEventPropgation($event)">
                         <tr>
                             <th class="relative" [ngClass]="{'reportDate' : tableLabel === 'Date', 'hide' : isHiddenCell(tableLabel), 'selectedHeader' : reportLabelState[tableLabel]['filterdd']}" *ngFor="let tableLabel of reportData.tableHeaders; let a='index';">
-                                <span class="capitalize">{{tableLabel | replace : '_'}}</span>
-                                <span class="sortIcons" *ngIf="orginalReportData.tableData.length>0">
-                                    <div class="icon s" aria-hidden="true" (click)="setReportsHeadersState($event, tableLabel, 'filterdd', false)" *ngIf="reportLabelState[tableLabel]['filterdd']">
-                                        <img class="arrowU" src="assets/images/icons/arrowD.svg" alt="up-arrow">
-                                    </div>
-                                    <div class="icon s" aria-hidden="true" (click)="setReportsHeadersState($event, tableLabel, 'filterdd', true)" *ngIf="!reportLabelState[tableLabel]['filterdd']">
-                                        <img class="" src="assets/images/icons/arrowD.svg" alt="down-arrow">
-                                    </div>
+                                <span>
+                                    <span class="capitalize">{{tableLabel | replace : '_'}}</span>
+                                    <span class="sortIcons" *ngIf="orginalReportData.tableData.length>0">
+                                        <span class="icon s" aria-hidden="true" (click)="setReportsHeadersState($event, tableLabel, 'filterdd', false)" *ngIf="reportLabelState[tableLabel]['filterdd']">
+                                            <img class="arrowU" src="assets/images/icons/arrowD.svg" alt="up-arrow">
+                                        </span>
+                                        <span class="icon s" aria-hidden="true" (click)="setReportsHeadersState($event, tableLabel, 'filterdd', true)" *ngIf="!reportLabelState[tableLabel]['filterdd']">
+                                            <img class="" src="assets/images/icons/arrowD.svg" alt="down-arrow">
+                                        </span>
+                                    </span>
                                 </span>
 
                                 <div class="clearfix"></div>
@@ -314,6 +319,7 @@
                                    </form>
 
                                 </div>
+
                             </th>
                         </tr>
                     </thead>

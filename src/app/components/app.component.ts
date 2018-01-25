@@ -1,4 +1,5 @@
 import { Component, NgZone, OnInit, OnChanges } from '@angular/core';
+import { UtilityService } from '../services/utility.service';
 
 @Component({
   selector: 'app-root',
@@ -8,10 +9,11 @@ import { Component, NgZone, OnInit, OnChanges } from '@angular/core';
 export class AppComponent implements OnInit, OnChanges{
   title = 'app works!';
   onlineFlag=navigator.onLine;
-  constructor(private _ngZone: NgZone) {}
+  constructor(private _ngZone: NgZone, public UtilityService: UtilityService) {}
 
   ngOnInit() {
         console.log('app started !!!!!!!!!!!!');
+        this.UtilityService.changeRouteComponent();
         window.addEventListener('online',  this.updateOnlineStatus);
         window.addEventListener('offline', this.updateOnlineStatus);
   }
