@@ -202,6 +202,7 @@ export class DashboardService {
                 if(countObj.hasOwnProperty(prop)){
 
                     if(prop === "unAssigned"){
+                        console.log('else --->', countObj, prop)
                         let pushObj={
                             "position" : 0,
                             "notAlloted" : {
@@ -211,7 +212,9 @@ export class DashboardService {
                                 ordersCount: parseInt(countObj[prop]['notAlloted'].count),
                                 displayStr: "Not Alloted",
                                 isAlert: countObj[prop]['notAlloted'].alert,
-                                sla : countObj[prop]['notAlloted'].sla
+                                sla : countObj[prop]['notAlloted'].sla,
+                                cat:"unAssigned",
+                                subCat:"notAlloted"
                             },
                             "processing" : {
                                 day : date,
@@ -220,7 +223,9 @@ export class DashboardService {
                                 ordersCount: parseInt(countObj[prop]['processing'].count),
                                 displayStr: "Processing",
                                 isAlert: countObj[prop]['processing'].alert,
-                                sla : countObj[prop]['processing'].sla
+                                sla : countObj[prop]['processing'].sla,
+                                cat:"unAssigned",
+                                subCat:"processing"
                             }
                         }
 
@@ -248,6 +253,7 @@ export class DashboardService {
 
                         getDashboardDataResponse.notAssigned.push(pushObj);
                     }else{
+                        console.log('else --->', countObj, prop)
                         let pushObj={
                             "position" : 0,
                             "pending" : {
@@ -257,16 +263,20 @@ export class DashboardService {
                                 ordersCount: parseInt(countObj[prop]['pending'].count),
                                 displayStr: "Pending",
                                 isAlert: countObj[prop]['pending'].alert,
-                                sla : countObj[prop]['pending'].sla
+                                sla : countObj[prop]['pending'].sla,
+                                cat:"notConfirmed",
+                                subCat:"pending"
                             },
                             "processing" : {
                                 day : date,
                                 deliveryTimes : day,
                                 status : _this.statuslist['n'],
-                                ordersCount: parseInt(countObj[prop]['processing'].count),
+                                ordersCount: parseInt(countObj[prop]['total'].count),
                                 displayStr: "Total",
-                                isAlert: countObj[prop]['processing'].alert,
-                                sla : countObj[prop]['processing'].sla
+                                isAlert: countObj[prop]['total'].alert,
+                                sla : countObj[prop]['total'].sla,
+                                cat:"notConfirmed",
+                                subCat:"total"
                             }
                         };
 
@@ -309,7 +319,9 @@ export class DashboardService {
                 displayStr: "Pending",
                 isAlert: apiResponse.result['notShippedPendingOrderCount'].alert,
                 sla : apiResponse.result['notShippedPendingOrderCount'].sla,
-                position:0
+                position:0,
+                cat:"notShipped",
+                subCat:"pending"
             },
             {
                 day : "",
@@ -319,7 +331,9 @@ export class DashboardService {
                 displayStr: "Total",
                 isAlert: apiResponse.result['notShippedTotalOrderCount'].alert,
                 sla : apiResponse.result['notShippedTotalOrderCount'].sla,
-                position:1
+                position:1,
+                cat:"notShipped",
+                subCat:"total"
             }
         ];
 
@@ -332,7 +346,9 @@ export class DashboardService {
                 displayStr: "Pending",
                 isAlert: apiResponse.result['notDeliveredPendingOrderCount'].alert,
                 sla : apiResponse.result['notDeliveredPendingOrderCount'].sla,
-                position:0
+                position:0,
+                cat:"notDelivered",
+                subCat:"pending"
             },
             {
                 day : "",
@@ -342,7 +358,9 @@ export class DashboardService {
                 displayStr: "Total",
                 isAlert: apiResponse.result['notDeliveredTotalOrderCount'].alert,
                 sla : apiResponse.result['notDeliveredTotalOrderCount'].sla,
-                position:1
+                position:1,
+                cat:"notDelivered",
+                subCat:"total"
             }
         ];
 
@@ -756,7 +774,7 @@ export class DashboardService {
             //let specificDate = Date.parse(spcificDate) || 0;
             let specificDate = spcificDate || 0;
             //console.log('environment----->', environment);
-            let apiPath = this.isAdmin ? 'getAdminCountDetail' : 'getVendorCountDetail';
+            let apiPath = this.isAdmin ? 'getDashboardDetail' : 'getVendorCountDetail';
             let reqObj = {
                 //url : "?responseType=json&scopeId=1&fkAssociateId="+fkAssociateId+"&specificDate="+specificDate+"&method=igp.vendor.getVendorCountDetail",
                 url : apiPath+"?responseType=json&scopeId=1&fkAssociateId="+fkAssociateId+"&specificDate="+specificDate,

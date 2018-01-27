@@ -99,9 +99,15 @@ export class DashboardComponent implements OnInit {
   viewOrders(e) {
     e.preventDefault();
     e.stopPropagation();
+    let cat = e.currentTarget.dataset.cat;
+    let subCat = e.currentTarget.dataset.subcat;
+
     let status = e.currentTarget.dataset.status;
     let orderId = e.currentTarget.dataset.orderid;
 
+    if(cat && subCat){
+        status = {"cat":cat, "subCat":subCat, "status":status};
+    }
     console.log('viewOrders called>>>>>>>>>>status', status);
     this.child.toggleTray(e, status, orderId, this.dashBoardDataType);
 

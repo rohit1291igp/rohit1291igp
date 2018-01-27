@@ -3,7 +3,7 @@ import {environment} from "../../../environments/environment";
 
 @Component({
   selector: 'app-orders-button',
-  template: `<div class="btn btn-primary orders-button" [ngClass]="{'bg-igp text-white text-bold': isAlert, 'bg-green text-white': (!isAlert && sla), 'bg-grey text-black': (!isAlert && !sla)}" (click)="openOrdersTray($event)" [attr.data-status]="orderStatus" [attr.data-OrderDay]="OrderDay" [attr.data-deliveryTime]="deliveryTime" [attr.data-orderId]="orderId">
+  template: `<div class="btn btn-primary orders-button" [ngClass]="{'bg-igp text-white text-bold': isAlert, 'bg-green text-white': (!isAlert && sla), 'bg-grey text-black': (!isAlert && !sla)}" (click)="openOrdersTray($event)" [attr.data-status]="orderStatus" [attr.data-cat]="displayData.cat" [attr.data-subcat]="displayData.subCat"  [attr.data-OrderDay]="OrderDay" [attr.data-deliveryTime]="deliveryTime" [attr.data-orderId]="orderId">
                 <ng-content></ng-content>
                 <div class="db-btn-status" *ngIf="displayData && !noLabel">{{displayData.displayStr}}</div>
             </div>`,

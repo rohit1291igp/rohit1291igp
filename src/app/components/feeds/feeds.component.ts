@@ -68,16 +68,23 @@ export class FeedsComponent implements OnInit {
 
   ngOnInit() {
      //var _this=this;
-     this.getFeeds();
-     this.feedObservable=Observable.interval(1000 * 60)
-          .subscribe(() => {
-               console.log('IntervalObservable working !!!')
-               this.getFeeds();
-          });
+      if(!environment.userType){
+          this.getFeeds();
+          this.feedObservable=Observable.interval(1000 * 60)
+              .subscribe(() => {
+                  console.log('IntervalObservable working !!!')
+                  this.getFeeds();
+              });
+      }else{
+          this.feedData=[];
+      }
+
   }
 
   ngOnDestroy(){
-      this.feedObservable.unsubscribe();
+      if(this.feedObservable){
+          this.feedObservable.unsubscribe();
+      }
   }
 
   getFeeds(){

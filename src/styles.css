@@ -767,13 +767,17 @@ body .dashboard-content, body .orders-button{
 }
 
 .adminDB .orders-button{
-    float:left;
-    width: 48.5% ! important;
+    width: 100% ! important;
     font-size: 1em ! important;
     box-shadow: 0 1px 3px #444242 ! important;
 }
 
-.adminDB .secBtn .orders-button{
+.adminDB .both .orders-button{
+    float:left;
+    width: 48.5% ! important;
+}
+
+.adminDB .secBtn.both .orders-button{
     margin-left:3% ! important;
 }
 

@@ -406,7 +406,11 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
     this.activeDashBoardDataType = dashBoardDataType;
     this.apierror = null;
     this.sidePanelData = null;
-    this.orderByStatus = orderByStatus;
+    if(typeof(orderByStatus) === "object" && 'cat' in orderByStatus && 'subCat' in orderByStatus){
+        this.orderByStatus = orderByStatus.status;
+    }else{
+        this.orderByStatus = orderByStatus;
+    }
     this.orderUpdateByTime = e.currentTarget.dataset.deliverytime;
     this.orderId = orderId;
 
@@ -430,7 +434,7 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
         }else{
             document.querySelector('body').classList.add('removeScroll');
             console.log('close not clicked ----->', this.trayOpen, dashBoardDataType);
-            if(orderByStatus === "OutForDeliveryView"){
+            if(this.orderByStatus === "OutForDeliveryView"){
                this.onOfdView.emit("OutForDeliveryView");
             }
             this.trayOpen = true;
@@ -438,7 +442,7 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
 
         //this.trayOpen = !this.trayOpen;
         console.log('trayOpen: and loading data', this.trayOpen);
-        if(orderByStatus || orderId) this.loadTrayData(e, orderByStatus, orderId, dashBoardDataType, null);
+        if(this.orderByStatus || orderId) this.loadTrayData(e, orderByStatus, orderId, dashBoardDataType, null);
     }
   }
 
@@ -447,37 +451,11 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
       let fkAssociateId = localStorage.getItem('fkAssociateId');
       var _this = this;
       var reqURL:string;
-
-      if(localStorage.getItem('dRandom')){
-          setTimeout(function(){
-              if(orderId){
-                  var orderData = Object.assign({}, _this.getDummyOrderData().result[0]);
-                  orderData.orderId = orderId;
-                  orderData.orderProducts[0].ordersProductStatus = orderByStatus || "Shipped";
-                  if(cb){
-                      return cb(null, [orderData]);
-                  }else{
-                      _this.sidePanelData = [orderData];
-                  }
-              }else{
-                  var orderDataList = _this.getDummyOrderData().result.slice();
-                  for(let i in orderDataList){
-                      orderDataList[i].orderProducts[0].ordersProductStatus = orderByStatus;
-                  }
-
-                  if(cb){
-                      return cb(null, orderDataList);
-                  }else{
-                      _this.sidePanelData = orderDataList;
-                  }
-
-              }
-              _this.scrollTo(document.getElementById("mainOrderSection"), 0, 0); // scroll to top
-
-          }, 1000);
-          return;
+      if(typeof(orderByStatus) === "object" && 'cat' in orderByStatus && 'subCat' in orderByStatus){
+          var cat=orderByStatus.cat;
+          var subCat=orderByStatus.subCat;
+          orderByStatus = orderByStatus.status;
       }
-
       if(orderId){
           //reqURL ="?responseType=json&scopeId=1&fkassociateId="+fkAssociateId+"&orderId="+orderId+"&method=igp.order.getOrder";
           if(typeof(orderId) === "object" && 'orderId' in orderId){
@@ -547,6 +525,10 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
               reqURL ="getOrderByStatusDate?responseType=json&scopeId=1&isfuture=true&orderAction="+dashBoardDataType+"&section="+section+"&status="+orderStatus+"&fkassociateId="+fkAssociateId+"&date="+spDate;
           }else{
               reqURL ="getOrderByStatusDate?responseType=json&scopeId=1&orderAction="+dashBoardDataType+"&section="+section+"&status="+orderStatus+"&fkassociateId="+fkAssociateId+"&date="+spDate;
+          }
+
+          if(cat && subCat){
+              reqURL = reqURL+"&categories="+cat+"&subCategories="+subCat;
           }
       }
 

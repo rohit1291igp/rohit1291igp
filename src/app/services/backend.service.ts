@@ -27,7 +27,11 @@ export class BackendService {
               reqObj.url= environment.originMock + reqObj.url;
           }else{
               if(environment.userType && !(reqObj.url.includes('login')) && !(reqObj.url.includes('doLogOut')) ){
-                  reqObj.url= environment.origin2 +'v1/admin/'+ reqObj.url;
+                  if(environment.userType === "upload"){
+                      reqObj.url= environment.origin2 +'v1/admin/'+ reqObj.url;
+                  }else{
+                      reqObj.url= environment.origin2 +'v1/admin/handels/'+ reqObj.url;
+                  }
               }else{
                   reqObj.url= environment.origin2 +'v1/handels/'+ reqObj.url;
               }
