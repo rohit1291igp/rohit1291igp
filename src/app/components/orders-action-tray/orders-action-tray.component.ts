@@ -472,7 +472,10 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
           let section;
           let statusList = this.dashboardService.statuslist;
           switch(orderStatus){
-              case statusList['n'] :
+              case statusList['n']:
+              case statusList['c']:
+              case statusList['p']:
+              case statusList['na']:
                                         switch(orderDeliveryTime){
                                             case "past" : section = "past";
                                                 break;
@@ -491,30 +494,11 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
                                         }
                   break;
 
-              case statusList['c'] :
-                                      switch(orderDeliveryTime){
-                                          case "past" : section = "past";
-                                              break;
-
-                                          case "today" : section = "today";
-                                              break;
-
-                                          case "tomorrow" : section = "tomorrow";
-                                              break;
-
-                                          case "future" : section = "future";
-                                              break;
-
-                                          case "bydate" : section = "specific";
-                                              break;
-                                     }
+              case statusList['o'] :
+              case statusList['d'] :
+                  section = "today";
                   break;
 
-              case statusList['o'] : section = "today";
-                  break;
-
-              case statusList['d'] : section = "today";
-                  break;
           }
 
           if(orderStatus === "Shipped"){
