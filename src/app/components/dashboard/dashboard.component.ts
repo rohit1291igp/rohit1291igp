@@ -102,6 +102,7 @@ export class DashboardComponent implements OnInit {
     let cat = e.currentTarget.dataset.cat;
     let subCat = e.currentTarget.dataset.subcat;
 
+    let _status = e.currentTarget.dataset.status;
     let status = e.currentTarget.dataset.status;
     let orderId = e.currentTarget.dataset.orderid;
 
@@ -112,10 +113,10 @@ export class DashboardComponent implements OnInit {
     this.child.toggleTray(e, status, orderId, this.dashBoardDataType);
 
     //changing clicked element position if its index greater than 0
-    if(status === "processing" || status === "notAlloted" || status === "Processed" || status === "Confirmed" || status === "OutForDelivery"){
+    if(_status === "processing" || _status === "notAlloted" || _status === "Processed" || _status === "Confirmed" || _status === "OutForDelivery"){
         let _this = this;
-        let clickEleIndex =  (status === "OutForDelivery" && !this.isAdmin) ? e.currentTarget.parentElement.parentElement.dataset.index : e.currentTarget.parentElement.parentElement.parentElement.dataset.index;
-        _this.dashboardData = _this.dashboardService.changeDashboardDataOrder(_this.dashboardData, clickEleIndex, status);
+        let clickEleIndex =  (_status === "OutForDelivery" && !this.isAdmin) ? e.currentTarget.parentElement.parentElement.dataset.index : e.currentTarget.parentElement.parentElement.parentElement.dataset.index;
+        _this.dashboardData = _this.dashboardService.changeDashboardDataOrder(_this.dashboardData, clickEleIndex, _status);
     }
   }
 
