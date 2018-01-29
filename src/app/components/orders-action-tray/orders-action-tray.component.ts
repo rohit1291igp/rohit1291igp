@@ -70,6 +70,7 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
       adminActionsFlag:false,
       adminActionsName:"",
       adminActionsModel:{},
+      adminActionDepData:{}
   };
   @Output() onStatusUpdate: EventEmitter<any> = new EventEmitter();
   @Output() onOfdView: EventEmitter<any> = new EventEmitter();
@@ -1036,15 +1037,78 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
   adminActionsInit(e, name, args){
       e.stopPropagation();
       var _this=this;
-      if(name === "call"){
-          alert('Call not implemented!');
-      }else if(name === "cancelRefund"){
-          alert('Canotncel & Refund not implemented!');
-      }else{
-          _this.adminActions.adminActionsModel={};
-          _this.adminActions.adminActionsName=name;
-          _this.adminActions.adminActionsFlag=true;
+
+      _this.getAdminActionDepData(e, name, args, function(err, result){
+          if(err){
+              console.log(err); return;
+          }
+
+          if(name === "call"){
+              alert('Call not implemented!');
+          }else if(name === "cancelRefund"){
+              alert('Canotncel & Refund not implemented!');
+          }else{
+              _this.adminActions.adminActionsModel={};
+              _this.adminActions.adminActionsModel.orderProduct="";
+              _this.adminActions.adminActionsModel.assignChangeVendor="";
+              _this.adminActions.adminActionsModel.deliveryTime="";
+              _this.adminActions.adminActionsModel.deliveryType="";
+
+              _this.adminActions.adminActionsName=name;
+              _this.adminActions.adminActionsFlag=true;
+          }
+      });
+  }
+
+  getAdminActionDepData(e, name, args, cb){
+      e.stopPropagation();
+      var _this=this;
+      _this.adminActions.adminActionDepData = JSON.parse(JSON.stringify(args));
+      if(name === "assignChangeVendor"){
+          _this.adminActions.adminActionDepData.orderProducts.unshift({"orderId" : "", "productId": "", "productName": "Select Order Product"});
+          let reqObj =  {
+              url : '/getVendorList?pincode='+_this.adminActions.adminActionDepData.pincode+'&shippingType='+_this.adminActions.adminActionDepData.deliveryType,
+              method : 'get'
+          };
+
+          _this.BackendService.makeAjax(reqObj, function(err, response, headers){
+              if(err || response.error) {
+                  console.log('Error=============>', err);
+              }
+              console.log('vendorList Response --->', response.result);
+              _this.adminActions.adminActionDepData.vendorList=response.result;
+              _this.adminActions.adminActionDepData.vendorList.unshift({"vendorId" : "", "associateName": "Select Vendor"});
+              return cb(null);
+          });
+      }else if(name === "changeDeliveryType&Date"){
+          _this.adminActions.adminActionDepData.deliveryTimes = [
+              {"name" : "Select Delivery Time", "value":""},
+              {"name" : "10:00 hrs - 12:00 hrs", "value":"10:00 hrs - 12:00 hrs"},
+              {"name" : "12:00 hrs - 14:00 hrs", "value":"12:00 hrs - 14:00 hrs"},
+              {"name" : "14:00 hrs - 16:00 hrs", "value":"14:00 hrs - 16:00 hrs"},
+              {"name" : "16:00 hrs - 18:00 hrs", "value":"16:00 hrs - 18:00 hrs"},
+              {"name" : "18:00 hrs - 20:00 hrs", "value":"18:00 hrs - 20:00 hrs"},
+              {"name" : "20:00 hrs - 22:00 hrs", "value":"20:00 hrs - 22:00 hrs"}
+          ];
+
+          _this.adminActions.adminActionDepData.deliveryTypes = [
+              {"name" : "Select Delivery Type", "value":""},
+              {"name" : "Standard Delivery", "value":"1"},
+              {"name" : "Fixed Time Delivery", "value":"2"},
+              {"name" : "Midnight Delivery", "value":"3"},
+              {"name" : "Fixed Date Delivery", "value":"4"},
+          ];
+
+          for(var i in _this.adminActions.adminActionDepData.deliveryTypes){
+            if(_this.adminActions.adminActionDepData.deliveryTypes[i].value === (_this.adminActions.adminActionDepData.deliveryType).toString() ){
+                _this.adminActions.adminActionDepData.deliveryTypes.splice(i,1);
+                break;
+            }
+          }
+
       }
+
+      return cb(null);
   }
 
   adminActionsSubmit(e){

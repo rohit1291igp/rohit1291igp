@@ -226,8 +226,19 @@
                 <div class="modal-body center-align" *ngIf="adminActions.adminActionsName === 'assignChangeVendor'">
                     <div class="form-group">
                         <form (ngSubmit)="f.form.valid && adminActionsSubmit($event)" #f="ngForm" nonvalidate>
-                            <input name="assignChangeVendor" class="form-control custom-control m-top-1" [(ngModel)]="adminActions.adminActionsModel.assignChangeVendor" #assignChangeVendor="ngModel" placeholder="Vendor" required>
-                            <div *ngIf="f.submitted && !assignChangeVendor.valid" class="help-block theme-red">Please provide vendor name!</div>
+
+                            <select name="orderProduct" class="form-control" [(ngModel)]="adminActions.adminActionsModel.orderProduct" #orderProduct="ngModel" required>
+                                <option *ngFor="let orderProduct of adminActions.adminActionDepData.orderProducts" [ngValue]="orderProduct.productId" [attr.data-orderid]="orderProduct.orderId">{{orderProduct.productName}}</option>
+                            </select>
+
+                            <select name="assignChangeVendor" class="form-control m-top-1" [(ngModel)]="adminActions.adminActionsModel.assignChangeVendor" #assignChangeVendor="ngModel" required>
+                                <option *ngFor="let vendor of adminActions.adminActionDepData.vendorList" [ngValue]="vendor.vendorId">{{vendor.associateName}}</option>
+                            </select>
+
+                            <!--<input name="assignChangeVendor" class="form-control custom-control m-top-1" [(ngModel)]="adminActions.adminActionsModel.assignChangeVendor" #assignChangeVendor="ngModel" placeholder="Vendor" required>-->
+
+                            <div *ngIf="f.submitted && !orderProduct.valid" class="help-block theme-red">Please Select Order Product!</div>
+                            <div *ngIf="f.submitted && !assignChangeVendor.valid" class="help-block theme-red">Please Select vendor name!</div>
                             <button class="btn btn-primary m-top-1">Submit</button>
                         </form>
                     </div>
@@ -246,10 +257,22 @@
                 <div class="modal-body center-align" *ngIf="adminActions.adminActionsName === 'changeDeliveryType&Date'">
                     <div class="form-group">
                         <form (ngSubmit)="f.form.valid && adminActionsSubmit($event)" #f="ngForm" nonvalidate>
-                            <input name="deliveryType" class="form-control custom-control m-top-1" [(ngModel)]="adminActions.adminActionsModel.deliveryType" #deliveryType="ngModel" placeholder="Delivery Type" required>
-                            <my-date-picker name="deliveryDate" [options]="myDatePickerOptions" [(ngModel)]="adminActions.adminActionsModel.deliveryDate" #deliveryDate="ngModel" placeholder="Delivery Date"></my-date-picker>
-                            <div *ngIf="f.submitted && !deliveryType.valid" class="help-block theme-red">Please provide delivery type!</div>
-                            <div *ngIf="f.submitted && !deliveryDate.valid" class="help-block theme-red">Please provide delivery date!</div>
+                            <!--<input name="deliveryType" class="form-control custom-control m-top-1" [(ngModel)]="adminActions.adminActionsModel.deliveryType" #deliveryType="ngModel" placeholder="Delivery Type" required>-->
+
+                            <select name="deliveryType" class="form-control m-top-1" [(ngModel)]="adminActions.adminActionsModel.deliveryType" #deliveryType="ngModel" required>
+                                <option *ngFor="let deliveryType of adminActions.adminActionDepData.deliveryTypes" [ngValue]="deliveryType.value">{{deliveryType.name}}</option>
+                            </select>
+
+                            <div class="m-top-1"></div>
+                            <my-date-picker name="deliveryDate" [options]="myDatePickerOptions" [(ngModel)]="adminActions.adminActionsModel.deliveryDate" #deliveryDate="ngModel" placeholder="Delivery Date" required></my-date-picker>
+
+                            <select name="deliveryTime" class="form-control m-top-1" [(ngModel)]="adminActions.adminActionsModel.deliveryTime" #deliveryTime="ngModel" required>
+                                <option *ngFor="let deliveryTime of adminActions.adminActionDepData.deliveryTimes" [ngValue]="deliveryTime.value">{{deliveryTime.name}}</option>
+                            </select>
+
+                            <div *ngIf="f.submitted && !deliveryType.valid" class="help-block theme-red">Please select delivery type!</div>
+                            <div *ngIf="f.submitted && !deliveryDate.valid" class="help-block theme-red">Please select delivery date!</div>
+                            <div *ngIf="f.submitted && !deliveryTime.valid" class="help-block theme-red">Please select delivery time!</div>
                             <button class="btn btn-primary m-top-1">Submit</button>
                         </form>
                     </div>
@@ -639,7 +662,7 @@
 
                     <div class="row order-actions-cont" *ngIf="isAdmin && orderByStatus !== 'processing'">
 
-                        <div class="btn btn-primary actions-button text-bold" (click)="adminActionsInit($event, 'assignChangeVendor', null)">
+                        <div class="btn btn-primary actions-button text-bold" (click)="adminActionsInit($event, 'assignChangeVendor', {pincode : order.deliveryPostcode, orderProducts:order.orderProducts, deliveryType : order.orderProducts[0].orderProductExtraInfo.deliveryType} )">
                             <ng-container *ngIf="orderByStatus == 'notAlloted'">Assign</ng-container>
                             <ng-container *ngIf="orderByStatus !== 'notAlloted'">Reassign</ng-container>
                         </div>
@@ -650,7 +673,7 @@
                             </div>
                             <div class="dropdown-menu"  style="display:block; margin-top:-0.3em;"  *ngIf="order.changeActionsFlag">
                                 <a class="dropdown-item" href="#" (click)="adminActionsInit($event, 'changePrice', null)">Price</a>
-                                <a class="dropdown-item" href="#" (click)="adminActionsInit($event, 'changeDeliveryType&Date', null)">Delivery Type & Date</a>
+                                <a class="dropdown-item" href="#" (click)="adminActionsInit($event, 'changeDeliveryType&Date', {deliveryType : order.orderProducts[0].orderProductExtraInfo.deliveryType})">Delivery Type & Date</a>
                             </div>
                         </div>
 
@@ -687,7 +710,7 @@
                                     <img class="product-image clk" src="{{productsURL}}th/{{orderProduct.productImage}}" alt="product_img" (click)="imagePreview($event, productsURL+'l/'+(orderProduct.productImage))">
                                     <div class="price-display">Rs. {{orderProduct.vendorPrice}}</div>
                                 </div>
-                                <div class="equal-sign table-inline-display" *ngIf="orderProduct.componentList.length">
+                                <div class="equal-sign table-inline-display" *ngIf="orderProduct && orderProduct.componentList && orderProduct.componentList.length">
                                    <div class="table-cell-display v-align-middle">=</div>
                                 </div>
                            </span>
