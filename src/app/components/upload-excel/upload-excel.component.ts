@@ -19,6 +19,7 @@ export class UploadExcelComponent implements OnInit {
     };
 
     _data={
+        uploadFileName:"",
         uploadErrorList:[],
         uploadErrorCount:{
             correct:"",
@@ -67,7 +68,7 @@ export class UploadExcelComponent implements OnInit {
          console.log('Upload File - formData =============>', formData, options);
 
          let reqObj =  {
-             url : 'marketplaceorder?fkAssociateId='+localStorage.getItem('fkAssociateId'),
+             url : 'marketplaceorder?user='+localStorage.getItem('vendorName')+'&fkasid='+localStorage.getItem('fkAssociateId'),
              method : "post",
              payload : formData,
              options : options
@@ -107,14 +108,14 @@ export class UploadExcelComponent implements OnInit {
                              }
                      }
                  };
-                 response=JSON.stringify(response);
-             }
-             if(err || JSON.parse(response).error) {
-                 console.log('Error=============>', err, JSON.parse(response).errorCode);
              }
 
-             response=JSON.parse(response);
+             if(err || response.error) {
+                 console.log('Error=============>', err, response.errorCode);
+             }
+
              console.log('upload excel Response --->', response.data);
+             _this._data.uploadFileName=document.querySelector('#excelFile').value.slice(document.querySelector('#excelFile').value.lastIndexOf('\\')+1);
              if(response.data.error.length){
                  _this._data.uploadErrorList=response.data.error;
                  _this._data.uploadErrorCount=response.data.count;
@@ -122,6 +123,7 @@ export class UploadExcelComponent implements OnInit {
                  _this._data.uploadErrorList=[];
                  _this._flags.uploadSuccessFlag=true;
              }
+             document.querySelector('#excelFile').value="";
          });
 
      }else{
