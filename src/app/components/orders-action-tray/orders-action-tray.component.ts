@@ -451,14 +451,14 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
       let fkAssociateId = localStorage.getItem('fkAssociateId');
       var _this = this;
       var reqURL:string;
-      if(typeof(orderByStatus) === "object" && 'cat' in orderByStatus && 'subCat' in orderByStatus){
+      if(orderByStatus && typeof(orderByStatus) === "object" && 'cat' in orderByStatus && 'subCat' in orderByStatus){
           var cat=orderByStatus.cat;
           var subCat=orderByStatus.subCat;
           orderByStatus = orderByStatus.status;
       }
       if(orderId){
           //reqURL ="?responseType=json&scopeId=1&fkassociateId="+fkAssociateId+"&orderId="+orderId+"&method=igp.order.getOrder";
-          if(typeof(orderId) === "object" && 'orderId' in orderId){
+          if(orderId && typeof(orderId) === "object" && 'orderId' in orderId){
               var orderProductIds= ('orderProductIds' in orderId && orderId.orderProductIds) ? "&orderProductIds="+orderId.orderProductIds : "";
               reqURL ="getOrder?responseType=json&scopeId=1&fkassociateId="+fkAssociateId+"&orderId="+orderId.orderId+orderProductIds;
           }else{

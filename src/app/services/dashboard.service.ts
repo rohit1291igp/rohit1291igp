@@ -1061,14 +1061,14 @@ export class DashboardService {
 
         console.log('---- DbData rearranged ----');
         dbData.topLabels = dbData.topLabels.sort(this.UtilityService.dynamicSort("position", null));
-        if(dbData.confirmed) dbData.confirmed = dbData.confirmed.sort(this.UtilityService.dynamicSort("position", null));
-        if(dbData.new) dbData.new = dbData.new.sort(this.UtilityService.dynamicSort("position", null));
+        if(dbData.confirmed && dbData.confirmed.length) dbData.confirmed = dbData.confirmed.sort(this.UtilityService.dynamicSort("position", null));
+        if(dbData.new && dbData.new.length) dbData.new = dbData.new.sort(this.UtilityService.dynamicSort("position", null));
 
-        if(dbData.notAssigned) dbData.notAssigned = dbData.notAssigned.sort(this.UtilityService.dynamicSort("position", null));
-        if(dbData.notConfirmed) dbData.notConfirmed = dbData.notConfirmed.sort(this.UtilityService.dynamicSort("position", null));
+        if(dbData.notAssigned && dbData.notAssigned.length) dbData.notAssigned = dbData.notAssigned.sort(this.UtilityService.dynamicSort("position", null));
+        if(dbData.notConfirmed && dbData.notConfirmed.lebgth) dbData.notConfirmed = dbData.notConfirmed.sort(this.UtilityService.dynamicSort("position", null));
 
-        if(dbData.shipped) dbData.shipped = dbData.shipped.sort(this.UtilityService.dynamicSort("position", null));
-        if(dbData.delivered) dbData.delivered = dbData.delivered.sort(this.UtilityService.dynamicSort("position", null));
+        if(dbData.shipped && dbData.shipped.length) dbData.shipped = dbData.shipped.sort(this.UtilityService.dynamicSort("position", null));
+        if(dbData.delivered && dbData.delivered.length) dbData.delivered = dbData.delivered.sort(this.UtilityService.dynamicSort("position", null));
 
         return dbData;
     }
