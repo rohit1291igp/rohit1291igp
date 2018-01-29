@@ -347,20 +347,20 @@
                                 </div>
 
                                 <div class="row order-actions-cont comm" *ngIf="isAdmin && orderByStatus !== 'processing' ">
-                                    <div class="actions-button text-bold text-center disableBtn" (click)="adminActionsInit($event, 'email')">
+                                    <div class="actions-button text-bold text-center disableBtn" (click)="adminActionsInit($event, 'email', null)">
                                         <i class="glyphicon glyphicon-envelope" title="Send Email"></i>
                                     </div>
-                                    <div class="actions-button text-bold text-center disableBtn" (click)="adminActionsInit($event, 'sms')">
+                                    <div class="actions-button text-bold text-center disableBtn" (click)="adminActionsInit($event, 'sms', null)">
                                          <i class="glyphicon glyphicon-phone" title="Send SMS"></i>
                                     </div>
-                                    <div class="actions-button text-bold text-center disableBtn" (click)="adminActionsInit($event, 'call')">
+                                    <div class="actions-button text-bold text-center disableBtn" (click)="adminActionsInit($event, 'call', null)">
                                         <i class="glyphicon glyphicon-headphones" title="Call"></i>
                                     </div>
                                 </div>
 
                                 <div class="row order-actions-cont" *ngIf="isAdmin && orderByStatus !== 'processing'">
 
-                                    <div class="btn btn-primary actions-button text-bold disableBtn" (click)="adminActionsInit($event, 'assignChangeVendor')">
+                                    <div class="btn btn-primary actions-button text-bold disableBtn" (click)="adminActionsInit($event, 'assignChangeVendor', null)">
                                         <ng-container *ngIf="orderByStatus == 'notAlloted'">Assign</ng-container>
                                         <ng-container *ngIf="orderByStatus !== 'notAlloted'">Reassign</ng-container>
                                     </div>
@@ -370,8 +370,8 @@
                                             Change <i class="glyphicon glyphicon-triangle-bottom"></i>
                                         </div>
                                         <div class="dropdown-menu"  style="display:block; margin-top:-0.3em;"  *ngIf="order && order.changeActionsFlag">
-                                            <a class="dropdown-item" href="#" (click)="adminActionsInit($event, 'changePrice')">Price</a>
-                                            <a class="dropdown-item" href="#" (click)="adminActionsInit($event, 'changeDeliveryType&Date')">Delivery Type & Date</a>
+                                            <a class="dropdown-item" href="#" (click)="adminActionsInit($event, 'changePrice', null)">Price</a>
+                                            <a class="dropdown-item" href="#" (click)="adminActionsInit($event, 'changeDeliveryType&Date', null)">Delivery Type & Date</a>
                                         </div>
                                     </div>
 
@@ -379,7 +379,7 @@
                                         Log
                                     </div>
 
-                                    <div class="btn btn-primary actions-button text-bold disableBtn" (click)="adminActionsInit($event, 'cancelRefund')">
+                                    <div class="btn btn-primary actions-button text-bold disableBtn" (click)="adminActionsInit($event, 'cancelRefund', null)">
                                         Cancel & Refund
                                     </div>
                                 </div>
@@ -501,20 +501,20 @@
 
                     <ng-container *ngIf="isAdmin">
                     <div class="row order-actions-cont comm" *ngIf="isAdmin && orderByStatus !== 'processing' ">
-                    <div class="actions-button text-bold text-center disableBtn" (click)="adminActionsInit($event, 'email')">
+                    <div class="actions-button text-bold text-center disableBtn" (click)="adminActionsInit($event, 'email', null)">
                     <i class="glyphicon glyphicon-envelope" title="Send Email"></i>
                     </div>
-                    <div class="actions-button text-bold text-center disableBtn" (click)="adminActionsInit($event, 'sms')">
+                    <div class="actions-button text-bold text-center disableBtn" (click)="adminActionsInit($event, 'sms', null)">
                     <i class="glyphicon glyphicon-phone" title="Send SMS"></i>
                     </div>
-                    <div class="actions-button text-bold text-center disableBtn" (click)="adminActionsInit($event, 'call')">
+                    <div class="actions-button text-bold text-center disableBtn" (click)="adminActionsInit($event, 'call', null)">
                     <i class="glyphicon glyphicon-headphones" title="Call"></i>
                     </div>
                     </div>
 
                     <div class="row order-actions-cont" *ngIf="isAdmin && orderByStatus !== 'processing'">
 
-                    <div class="btn btn-primary actions-button text-bold disableBtn" (click)="adminActionsInit($event, 'assignChangeVendor')">
+                    <div class="btn btn-primary actions-button text-bold disableBtn" (click)="adminActionsInit($event, 'assignChangeVendor', null)">
                     <ng-container *ngIf="orderByStatus == 'notAlloted'">Assign</ng-container>
                     <ng-container *ngIf="orderByStatus !== 'notAlloted'">Reassign</ng-container>
                     </div>
@@ -524,8 +524,8 @@
                         Change <i class="glyphicon glyphicon-triangle-bottom"></i>
                     </div>
                     <div class="dropdown-menu"  style="display:block; margin-top:-0.3em;"  *ngIf="order && order.changeActionsFlag">
-                    <a class="dropdown-item" href="#" (click)="adminActionsInit($event, 'changePrice')">Price</a>
-                    <a class="dropdown-item" href="#" (click)="adminActionsInit($event, 'changeDeliveryType&Date')">Delivery Type & Date</a>
+                    <a class="dropdown-item" href="#" (click)="adminActionsInit($event, 'changePrice', null)">Price</a>
+                    <a class="dropdown-item" href="#" (click)="adminActionsInit($event, 'changeDeliveryType&Date', null)">Delivery Type & Date</a>
                     </div>
                     </div>
 
@@ -626,20 +626,20 @@
                     </div>
 
                     <div class="row order-actions-cont comm" *ngIf="isAdmin && orderByStatus !== 'processing' ">
-                        <div class="actions-button text-bold text-center" (click)="adminActionsInit($event, 'email')">
+                        <div class="actions-button text-bold text-center" (click)="adminActionsInit($event, 'email', null)">
                             <i class="glyphicon glyphicon-envelope" title="Send Email"></i>
                         </div>
-                        <div class="actions-button text-bold text-center" (click)="adminActionsInit($event, 'sms')">
+                        <div class="actions-button text-bold text-center" (click)="adminActionsInit($event, 'sms', null)">
                             <i class="glyphicon glyphicon-phone" title="Send SMS"></i>
                         </div>
-                        <div class="actions-button text-bold text-center" (click)="adminActionsInit($event, 'call')">
+                        <div class="actions-button text-bold text-center" (click)="adminActionsInit($event, 'call', null)">
                             <i class="glyphicon glyphicon-headphones" title="Call"></i>
                         </div>
                     </div>
 
                     <div class="row order-actions-cont" *ngIf="isAdmin && orderByStatus !== 'processing'">
 
-                        <div class="btn btn-primary actions-button text-bold" (click)="adminActionsInit($event, 'assignChangeVendor')">
+                        <div class="btn btn-primary actions-button text-bold" (click)="adminActionsInit($event, 'assignChangeVendor', null)">
                             <ng-container *ngIf="orderByStatus == 'notAlloted'">Assign</ng-container>
                             <ng-container *ngIf="orderByStatus !== 'notAlloted'">Reassign</ng-container>
                         </div>
@@ -649,8 +649,8 @@
                                 Change <i class="glyphicon glyphicon-triangle-bottom"></i>
                             </div>
                             <div class="dropdown-menu"  style="display:block; margin-top:-0.3em;"  *ngIf="order.changeActionsFlag">
-                                <a class="dropdown-item" href="#" (click)="adminActionsInit($event, 'changePrice')">Price</a>
-                                <a class="dropdown-item" href="#" (click)="adminActionsInit($event, 'changeDeliveryType&Date')">Delivery Type & Date</a>
+                                <a class="dropdown-item" href="#" (click)="adminActionsInit($event, 'changePrice', null)">Price</a>
+                                <a class="dropdown-item" href="#" (click)="adminActionsInit($event, 'changeDeliveryType&Date', null)">Delivery Type & Date</a>
                             </div>
                         </div>
 
@@ -658,7 +658,7 @@
                             Log
                         </div>
 
-                        <div class="btn btn-primary actions-button text-bold" (click)="adminActionsInit($event, 'cancelRefund')">
+                        <div class="btn btn-primary actions-button text-bold" (click)="adminActionsInit($event, 'cancelRefund', null)">
                             Cancel & Refund
                         </div>
                     </div>
@@ -785,20 +785,20 @@
 
             <ng-container *ngIf="isAdmin">
                 <div class="row order-actions-cont comm" *ngIf="isAdmin && orderByStatus !== 'processing' ">
-                <div class="actions-button text-bold text-center" (click)="adminActionsInit($event, 'email')">
+                <div class="actions-button text-bold text-center" (click)="adminActionsInit($event, 'email', null)">
                 <i class="glyphicon glyphicon-envelope" title="Send Email"></i>
                 </div>
-                <div class="actions-button text-bold text-center" (click)="adminActionsInit($event, 'sms')">
+                <div class="actions-button text-bold text-center" (click)="adminActionsInit($event, 'sms', null)">
                 <i class="glyphicon glyphicon-phone" title="Send SMS"></i>
                 </div>
-                <div class="actions-button text-bold text-center" (click)="adminActionsInit($event, 'call')">
+                <div class="actions-button text-bold text-center" (click)="adminActionsInit($event, 'call', null)">
                 <i class="glyphicon glyphicon-headphones" title="Call"></i>
                 </div>
                 </div>
 
                 <div class="row order-actions-cont" *ngIf="isAdmin && orderByStatus !== 'processing'">
 
-                <div class="btn btn-primary actions-button text-bold" (click)="adminActionsInit($event, 'assignChangeVendor')">
+                <div class="btn btn-primary actions-button text-bold" (click)="adminActionsInit($event, 'assignChangeVendor', null)">
                 <ng-container *ngIf="orderByStatus == 'notAlloted'">Assign</ng-container>
                 <ng-container *ngIf="orderByStatus !== 'notAlloted'">Reassign</ng-container>
                 </div>
@@ -808,8 +808,8 @@
                     Change <i class="glyphicon glyphicon-triangle-bottom"></i>
                 </div>
                 <div class="dropdown-menu"  style="display:block; margin-top:-0.3em;"  *ngIf="order.changeActionsFlag">
-                <a class="dropdown-item" href="#" (click)="adminActionsInit($event, 'changePrice')">Price</a>
-                <a class="dropdown-item" href="#" (click)="adminActionsInit($event, 'changeDeliveryType&Date')">Delivery Type & Date</a>
+                <a class="dropdown-item" href="#" (click)="adminActionsInit($event, 'changePrice', null)">Price</a>
+                <a class="dropdown-item" href="#" (click)="adminActionsInit($event, 'changeDeliveryType&Date', null)">Delivery Type & Date</a>
                 </div>
                 </div>
 
@@ -817,7 +817,7 @@
                 Log
                 </div>
 
-                <div class="btn btn-primary actions-button text-bold" (click)="adminActionsInit($event, 'cancelRefund')">
+                <div class="btn btn-primary actions-button text-bold" (click)="adminActionsInit($event, 'cancelRefund', null)">
                 Cancel & Refund
                 </div>
                 </div>

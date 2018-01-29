@@ -40,6 +40,7 @@ export class UploadExcelComponent implements OnInit {
 
  uploadExcel(event){
      var _this = this;
+     var fileInput=event.target.querySelector('#excelFile') || {};
      var fileOverSizeFlag= false;
      let fileList: FileList = event.target.querySelector('#excelFile').files;
      if(fileList.length > 0) {
@@ -115,7 +116,12 @@ export class UploadExcelComponent implements OnInit {
              }
 
              console.log('upload excel Response --->', response.data);
-             _this._data.uploadFileName=document.querySelector('#excelFile').value.slice(document.querySelector('#excelFile').value.lastIndexOf('\\')+1);
+             if(fileInput && 'value' in fileInput){
+                 _this._data.uploadFileName=fileInput.value.slice(fileInput.value.lastIndexOf('\\')+1)
+             }else{
+                 _this._data.uploadFileName="";
+             }
+
              if(response.data.error.length){
                  _this._data.uploadErrorList=response.data.error;
                  _this._data.uploadErrorCount=response.data.count;
@@ -123,7 +129,8 @@ export class UploadExcelComponent implements OnInit {
                  _this._data.uploadErrorList=[];
                  _this._flags.uploadSuccessFlag=true;
              }
-             document.querySelector('#excelFile').value="";
+
+             if(fileInput && 'value' in fileInput) fileInput.value="";
          });
 
      }else{

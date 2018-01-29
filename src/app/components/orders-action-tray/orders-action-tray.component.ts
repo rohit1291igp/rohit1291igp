@@ -69,7 +69,7 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
   adminActions={
       adminActionsFlag:false,
       adminActionsName:"",
-      adminActionsModel:{}
+      adminActionsModel:{},
   };
   @Output() onStatusUpdate: EventEmitter<any> = new EventEmitter();
   @Output() onOfdView: EventEmitter<any> = new EventEmitter();
@@ -1033,7 +1033,7 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
 
   }
 
-  adminActionsInit(e, name){
+  adminActionsInit(e, name, args){
       e.stopPropagation();
       var _this=this;
       if(name === "call"){
@@ -1043,7 +1043,6 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
       }else{
           _this.adminActions.adminActionsModel={};
           _this.adminActions.adminActionsName=name;
-          _this.adminActions.adminActionsModel.adminActionsName=name;
           _this.adminActions.adminActionsFlag=true;
       }
   }
@@ -1051,6 +1050,7 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
   adminActionsSubmit(e){
       e.stopPropagation();
       var _this=this;
+      console.log('Action Name --->', _this.adminActions.adminActionsName);
       console.log('Action Model --->', _this.adminActions.adminActionsModel);
       _this.adminActions.adminActionsFlag=false;
   }
