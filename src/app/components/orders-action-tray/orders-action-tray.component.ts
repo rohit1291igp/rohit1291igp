@@ -1043,6 +1043,7 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
       }else{
           _this.adminActions.adminActionsModel={};
           _this.adminActions.adminActionsName=name;
+          _this.adminActions.adminActionsModel.adminActionsName=name;
           _this.adminActions.adminActionsFlag=true;
       }
   }
