@@ -70,7 +70,8 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
       adminActionsFlag:false,
       adminActionsName:"",
       adminActionsModel:null,
-      adminActionDepData:null
+      adminActionDepData:null,
+      adminActionResponse:null
   };
   activeOrderLogIndexes={};
   @Output() onStatusUpdate: EventEmitter<any> = new EventEmitter();
@@ -413,7 +414,7 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
     this.activeDashBoardDataType = dashBoardDataType;
     this.apierror = null;
     this.sidePanelData = null;
-    if(typeof(orderByStatus) === "object" && 'cat' in orderByStatus && 'subCat' in orderByStatus){
+    if(orderByStatus && typeof(orderByStatus) === "object" && 'cat' in orderByStatus && 'subCat' in orderByStatus){
         this.orderByStatus = orderByStatus.status;
     }else{
         this.orderByStatus = orderByStatus;
@@ -885,9 +886,9 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
       return orderUpdateByStatus;
   }
 
-  sidePanelDataOnStatusUpdate(orderIndex, orderId, deliveryDate, deliveryTime){
+  sidePanelDataOnStatusUpdate(orderIndex?, orderId?, deliveryDate?, deliveryTime?){
       var _this = this;
-      if(orderIndex){
+      if(orderId && deliveryDate && deliveryTime){
           for(var i in _this.sidePanelData){
               if(parseInt(orderId) === parseInt(_this.sidePanelData[i].orderId) &&
                   deliveryDate === _this.sidePanelData[i].orderProducts[0].orderProductExtraInfo.deliveryDate &&
@@ -932,7 +933,6 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
 
   print(e, print_type, orderId, deliveryDate, deliveryTime, all){
       e.stopPropagation();
-
       let printContents="", popupWin;
       //let targetId = print_type === "order" ? ("order_"+orderId) : ("order_message_"+orderId);
       if(all){
@@ -1033,6 +1033,12 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
           delete this.activeOrderLogIndexes[orderIndex];
       }
       this.sidePanelData[orderIndex].orderLogFlag=val;
+      this.adminActions.adminActionsName="orderLog";
+
+      if(!this.adminActions.adminActionDepData)  this.adminActions.adminActionDepData={};
+      this.adminActions.adminActionDepData.orderIndex=orderIndex;
+      //if(this.adminActions.adminActionResponse && 'orderLogData' in this.adminActions.adminActionResponse) delete this.adminActions.adminActionResponse.orderLogData;
+      this.adminActionsSubmit(e);
   }
 
   changeDd(e, val, orderIndex){
@@ -1045,11 +1051,11 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
 
   }
 
-  adminActionsInit(e, name, args){
+  adminActionsInit(e, name, orderIndex){
       e.stopPropagation();
       var _this=this;
 
-      _this.getAdminActionDepData(e, name, args, function(err, result){
+      _this.getAdminActionDepData(e, name, orderIndex, function(err, result){
           if(err){
               console.log(err); return;
           }
@@ -1060,6 +1066,8 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
               alert('Canotncel & Refund not implemented!');
           }else{
               _this.adminActions.adminActionsModel={};
+              _this.adminActions.adminActionsModel.orderProductId="";
+              _this.adminActions.adminActionsModel.componentId="";
               _this.adminActions.adminActionsModel.orderProduct="";
               _this.adminActions.adminActionsModel.assignChangeVendor="";
               _this.adminActions.adminActionsModel.deliveryTime="";
@@ -1071,14 +1079,27 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
       });
   }
 
-  getAdminActionDepData(e, name, args, cb){
+  getAdminActionDepData(e, name, orderIndex, cb){
       e.stopPropagation();
       var _this=this;
-      _this.adminActions.adminActionDepData = JSON.parse(JSON.stringify(args));
+      _this.adminActions.adminActionDepData={};
+      _this.adminActions.adminActionDepData.orderIndex=orderIndex;
+
+      let orderProdsCollection=function(){
+          let orderProducts=JSON.parse(JSON.stringify(_this.sidePanelData[orderIndex].orderProducts));
+          _this.adminActions.adminActionDepData.orderProducts=orderProducts;
+          _this.adminActions.adminActionDepData.orderProducts.unshift({"orderId" : "", "productId": "", "productName": "Select Order Product"});
+      }
+
       if(name === "assignChangeVendor"){
+          let orderProducts=JSON.parse(JSON.stringify(_this.sidePanelData[orderIndex].orderProducts)),
+              pincode=_this.sidePanelData[orderIndex].deliveryPostcode,
+              deliveryType=_this.sidePanelData[orderIndex].orderProducts[0].orderProductExtraInfo.deliveryType;
+
+          _this.adminActions.adminActionDepData.orderProducts=orderProducts;
           _this.adminActions.adminActionDepData.orderProducts.unshift({"orderId" : "", "productId": "", "productName": "Select Order Product"});
           let reqObj =  {
-              url : 'getVendorList?pincode='+_this.adminActions.adminActionDepData.pincode+'&shippingType='+_this.adminActions.adminActionDepData.deliveryType,
+              url : 'getVendorList?pincode='+pincode+'&shippingType='+deliveryType,
               method : 'get'
           };
 
@@ -1092,6 +1113,8 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
               return cb(null);
           });
       }else if(name === "changeDeliveryType&Date"){
+          orderProdsCollection();
+          let deliveryType=_this.sidePanelData[orderIndex].orderProducts[0].orderProductExtraInfo.deliveryType;
           _this.adminActions.adminActionDepData.deliveryTimes = [
               {"name" : "Select Delivery Time", "value":""},
               {"name" : "10:00 hrs - 12:00 hrs", "value":"10:00 hrs - 12:00 hrs"},
@@ -1111,15 +1134,34 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
           ];
 
           for(var i in _this.adminActions.adminActionDepData.deliveryTypes){
-            if(_this.adminActions.adminActionDepData.deliveryTypes[i].value === (_this.adminActions.adminActionDepData.deliveryType).toString() ){
+            if(_this.adminActions.adminActionDepData.deliveryTypes[i].value === deliveryType.toString() ){
                 _this.adminActions.adminActionDepData.deliveryTypes.splice(i,1);
                 break;
             }
           }
 
+      }else if( name === "changePrice"){
+          orderProdsCollection();
+          _this.orderProductChange(e, "0:");
       }
 
       return cb(null);
+  }
+
+  orderProductChange(e, _orderProductIndex){
+      var _this=this;
+      let orderProductId=_orderProductIndex.split(':')[1] ? _orderProductIndex.split(':')[1].trim() : "";
+      let orderProductIndex=_orderProductIndex.split(':')[0] - 1;
+      if(!orderProductId) {
+          _this.adminActions.adminActionDepData.orderProductComponents=[{"componentName" : "Select Component", "componentId": ""}];
+          return;
+      }
+      let orderIndex=_this.adminActions.adminActionDepData.orderIndex;
+      let orderProductComponents=JSON.parse(JSON.stringify(_this.sidePanelData[orderIndex].orderProducts[orderProductIndex].componentList));
+      _this.adminActions.adminActionDepData.orderProductComponents=orderProductComponents;
+      _this.adminActions.adminActionDepData.orderProductComponents.unshift({"componentName" : "Select Component", "componentId": ""});
+      _this.adminActions.adminActionsModel.componentId="";
+
   }
 
   adminActionsSubmit(e){
@@ -1127,7 +1169,106 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
       var _this=this;
       console.log('Action Name --->', _this.adminActions.adminActionsName);
       console.log('Action Model --->', _this.adminActions.adminActionsModel);
-      _this.adminActions.adminActionsFlag=false;
+      let orderIndex=_this.adminActions.adminActionDepData.orderIndex;
+      let paramsObj={};
+      let url="";
+      let method;
+      let apiSuccessHandler=function(apiResponse){};
+      switch(_this.adminActions.adminActionsName){
+          case 'email' : url = "sendEmailToVendor";
+              paramsObj={
+                  subject:_this.adminActions.adminActionsModel.emailSubject,
+                  body:_this.adminActions.adminActionsModel.emailBody
+                };
+              apiSuccessHandler=function(apiResponse){
+                  alert("Email Sent successfully!");
+              };
+              break;
+
+          case 'sms' : url = "sendSmsToVendor";
+              paramsObj={
+                  body:_this.adminActions.adminActionsModel.sms
+              };
+              apiSuccessHandler=function(apiResponse){
+                  alert("SMS Sent successfully!");
+              };
+              break;
+
+          case 'assignChangeVendor' : url = "assignReassignOrder";
+              paramsObj={
+                  action:_this.orderByStatus == 'notAlloted' ? 'assign' : 'ressign',
+                  orderId:_this.sidePanelData[orderIndex].orderId,
+                  orderProductId:_this.adminActions.adminActionsModel.orderProduct,
+                  fkAssociateId:_this.adminActions.adminActionsModel.assignChangeVendor
+              };
+              apiSuccessHandler=function(apiResponse){
+                  _this.sidePanelDataOnStatusUpdate(orderIndex);
+              };
+              break;
+
+          case 'changePrice' : url = "orderPriceChanges";
+              paramsObj={
+                  orderId:_this.sidePanelData[orderIndex].orderId,
+                  orderProductId:_this.adminActions.adminActionsModel.orderProductId,
+                  componentId:_this.adminActions.adminActionsModel.componentId,
+                  shippingCharge:_this.adminActions.adminActionsModel.shippingCharge,
+                  componentPrice:_this.adminActions.adminActionsModel.componentPrice
+              };
+              break;
+
+          case 'changeDeliveryType&Date' : url = "deliveryDetailChanges";
+              var _date=_this.adminActions.adminActionsModel.deliveryDate.date;
+              paramsObj={
+                  orderId:_this.sidePanelData[orderIndex].orderId,,
+                  orderProductId:_this.adminActions.adminActionsModel.orderProductId,
+                  deliveryDate:_date.year+'-'+_date.month+'-'+_date.day,
+                  deliveryType:_this.adminActions.adminActionsModel.deliveryType,
+                  deliveryTime:_this.adminActions.adminActionsModel.deliveryTime
+              };
+              break;
+
+          case 'orderLog' : url = "getOrderLog"; method="get";
+              if(_this.sidePanelData[orderIndex].orderLogData) return;
+              paramsObj={
+                  orderId:_this.sidePanelData[orderIndex].orderId
+              };
+              apiSuccessHandler=function(apiResponse){
+                  _this.sidePanelData[orderIndex].orderLogData=apiResponse.logs;
+                  //_this.adminActions.adminActionResponse.orderLogData=apiResponse.logs;
+                  //_this.adminActions.adminActionResponse.orderLogData="The order has been PROCESSED<br>Occasion: General GiftingThe vendor of product Bunch of 12 Red Roses with Teddy & 5 Dairy Milk Chocolates (HD1021148) has been changed from  Intermesh Shopping Network Pvt. Ltd. (Handels) to RDC Mumbai by Bulk assignment<BR>The product Bunch of 12 Red Roses with Teddy & 5 Dairy Milk Chocolates (HD1021148) has been Confirmed by RDC MumbaiThe following Products have been Shipped<BR>Hand Delivery<BR>Received By: Ms. Rashmi (Security Counter)<BR>Date: 2017-01-25<BR>Time: 6 pm<BR><BR>Products Details: <BR>1&nbsp;&nbsp;X&nbsp;&nbsp;Bunch of 12 Red Roses with Teddy & 5 Dairy Milk ChocolatesThe order has been Dispatched by  on 2017-01-25 06:05:45pm using through individual panelThe vendor of product Bunch of 12 Red Roses with Teddy & 5 Dairy Milk Chocolates has been changed from RDC Mumbai To RDC Mumbai By New Handels Panel<Br>";
+              };
+              break;
+
+          case 'cancelRefund' : url = "";
+              paramsObj={
+                  orderId:_this.sidePanelData[orderIndex].orderId
+              };
+              apiSuccessHandler=function(apiResponse){
+                  _this.sidePanelDataOnStatusUpdate(orderIndex);
+              };
+              break;
+      }
+
+
+      let paramsStr = _this.UtilityService.formatParams(paramsObj);
+      console.log('Action API url --->', url);
+      console.log('Action API Params string --->', paramsStr);
+
+      let reqObj =  {
+          url : url+paramsStr,
+          method : (method || 'post')
+      };
+
+      _this.BackendService.makeAjax(reqObj, function(err, response, headers){
+          if(!response) response={result:[]};
+          if(err || response.error) {
+              console.log('Error=============>', err);
+          }
+          console.log('admin action Response --->', response.result);
+          _this.adminActions.adminActionResponse={};
+          apiSuccessHandler(response.result);
+          _this.adminActions.adminActionsFlag=false;
+      });
   }
 
 

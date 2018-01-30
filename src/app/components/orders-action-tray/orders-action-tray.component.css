@@ -395,8 +395,9 @@
     right: 0em;
     width: 105%;
     bottom: -1.7em;
-   /* background: #eee;
-    height: 110% ! important;*/
+    overflow-y: scroll;
+    background: #eee;
+    /*height: 110% ! important;*/
 }
 
 .mob .orderLogContInner{
@@ -409,20 +410,9 @@
 .orderLogContInner .orderLogContInner2{
     background: #eee;
     padding: 0.5em 1em;
-}
-
-.orderLogContInner.slideropen .orderLogContInner1{
-    height: 7% ! important;
-    max-height: 7% ! important;
-    background: transparent;
-    padding: 0.5em 1em;
-}
-
-.mob .orderLogContInner.slideropen .orderLogContInner1{
-    height: 7% ! important;
-    max-height: 7% ! important;
-    background: transparent;
-    padding: 0.5em 1em;
+    /*overflow-x: hidden;*/
+    /*overflow-y: scroll;*/
+    /*width: 100%;*/
 }
 
 .orderLogContInner.slideropen .orderLogContInner2{
@@ -434,12 +424,11 @@
 .mob .orderLogContInner.slideropen .orderLogContInner2{
     height: 150% ! important;
     max-height: 150% ! important;
-
 }
 
 .orderLogContInner.slideropen{
-    height: 110% ! important;
-    max-height: 110% ! important;
+    height: 103% ! important;
+    max-height: 103% ! important;
     -moz-transition-duration: 0.5s ! important;
     -webkit-transition-duration: 0.5s ! important;
     -o-transition-duration: 0.5s ! important;
@@ -476,7 +465,7 @@
 
 .logClosebtn {
     font-weight: 600;
-    margin-top: 1.5em;
+    /*margin-top: 1.5em;*/
     font-size: 1.7em;
     margin-right: 0.5em;
     z-index:9;
@@ -489,4 +478,44 @@
     right:2em;
 }
 
+.orderLogContInner2 .caption{
+    font-size:1.2em;
+    font-weight:600;
+    text-decoration:underline;
+    margin-bottom: 0.5em;
+}
+
+.orderLogContInner2 .content{
+
+}
+
+.vendorCall{
+    letter-spacing: 1px;
+    box-shadow: 0 1px 3px #888;
+    padding: 0.2em 0.5em;
+    color: #000;
+    background: #fff;
+    top: 0em;
+    font-size: 0.8em;
+    position: absolute;
+    left: -6.4em;
+    display:none;
+}
+
+.vendorCall::after{
+    content: '';
+    position: absolute;
+    right: -0.9em;
+    top: 0;
+    width: 0;
+    height: 0;
+    border-top: 15px solid transparent ! important;
+    border-bottom: 15px solid transparent;
+    border-left: 15px solid #e8e8e8 ! important;
+    clear: both;
+}
+
+.actions-button:hover .vendorCall{
+    display:block;
+}
 
