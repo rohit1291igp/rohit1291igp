@@ -69,9 +69,10 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
   adminActions={
       adminActionsFlag:false,
       adminActionsName:"",
-      adminActionsModel:{},
-      adminActionDepData:{}
+      adminActionsModel:null,
+      adminActionDepData:null
   };
+  activeOrderLogIndexes={};
   @Output() onStatusUpdate: EventEmitter<any> = new EventEmitter();
   @Output() onOfdView: EventEmitter<any> = new EventEmitter();
   rejectReasons=[
@@ -185,6 +186,11 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
                 this.confirmFlag=false;
             }else if(this.adminActions.adminActionsFlag){
                 this.adminActions.adminActionsFlag=false;
+            }else if(Object.keys(this.activeOrderLogIndexes).length){
+                for(var prop in this.activeOrderLogIndexes){
+                    this.sidePanelData[Number(prop)].orderLogFlag=false;
+                    delete this.activeOrderLogIndexes[prop];
+                }
             }else{
                 this.onStatusUpdate.emit("closed");
                 this.trayOpen = false;
@@ -513,7 +519,7 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
           }
 
           if(cat && subCat){
-              reqURL = reqURL+"&categories="+cat+"&subCategories="+subCat;
+              reqURL = reqURL+"&category="+cat+"&subcategory="+subCat;
           }
       }
 
@@ -1021,6 +1027,11 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
 
   orderLog(e, val, orderIndex){
       e.stopPropagation();
+      if(val){
+          this.activeOrderLogIndexes[orderIndex]=true;
+      }else{
+          delete this.activeOrderLogIndexes[orderIndex];
+      }
       this.sidePanelData[orderIndex].orderLogFlag=val;
   }
 
@@ -1067,7 +1078,7 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
       if(name === "assignChangeVendor"){
           _this.adminActions.adminActionDepData.orderProducts.unshift({"orderId" : "", "productId": "", "productName": "Select Order Product"});
           let reqObj =  {
-              url : '/getVendorList?pincode='+_this.adminActions.adminActionDepData.pincode+'&shippingType='+_this.adminActions.adminActionDepData.deliveryType,
+              url : 'getVendorList?pincode='+_this.adminActions.adminActionDepData.pincode+'&shippingType='+_this.adminActions.adminActionDepData.deliveryType,
               method : 'get'
           };
 
