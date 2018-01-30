@@ -1065,7 +1065,7 @@ export class DashboardService {
         if(dbData.new && dbData.new.length) dbData.new = dbData.new.sort(this.UtilityService.dynamicSort("position", null));
 
         if(dbData.notAssigned && dbData.notAssigned.length) dbData.notAssigned = dbData.notAssigned.sort(this.UtilityService.dynamicSort("position", null));
-        if(dbData.notConfirmed && dbData.notConfirmed.lebgth) dbData.notConfirmed = dbData.notConfirmed.sort(this.UtilityService.dynamicSort("position", null));
+        if(dbData.notConfirmed && dbData.notConfirmed.length) dbData.notConfirmed = dbData.notConfirmed.sort(this.UtilityService.dynamicSort("position", null));
 
         if(dbData.shipped && dbData.shipped.length) dbData.shipped = dbData.shipped.sort(this.UtilityService.dynamicSort("position", null));
         if(dbData.delivered && dbData.delivered.length) dbData.delivered = dbData.delivered.sort(this.UtilityService.dynamicSort("position", null));
