@@ -337,7 +337,7 @@
                      </span>
 
                      <span class="" *ngIf="orderByStatus == 'Shipped'">
-                        Orders delivered today
+                        All orders for today
                      </span>
 
                 </span>
@@ -590,8 +590,8 @@
             </div>
         </div>
         <div *ngIf="sidePanelData">
-            <div  id="order-{{order.orderId}}" class="col-md-12 order-row" *ngFor="let order of sidePanelData; let orderIndex='index'" style="margin-bottom: 0;" [@anim]="order.state" (click)="changeDd($event, false, orderIndex)" [ngClass]="{'mob' : isMobile}">
-                <div class=" triangle-topright" [ngClass]="{'mob' : isMobile, 'redBorder' : order.orderProducts[0].alertFlag, 'greenBorder' : order.orderProducts[0].slaFlag}">
+            <div  id="order-{{order.orderId}}" class="col-md-12 order-row" *ngFor="let order of sidePanelData; let orderIndex='index'" style="margin-bottom: 0;" [@anim]="order.state" (click)="changeDd($event, false, orderIndex)" [ngClass]="{'mob' : isMobile, 'slaAlert' : (order.orderProducts[0].alertFlag || order.orderProducts[0].slaFlag)}">
+                <div class="triangle-topright" [ngClass]="{'mob' : isMobile, 'redBorder' : order.orderProducts[0].alertFlag, 'greenBorder' : order.orderProducts[0].slaFlag}">
                     <div class="slaAlert-flag abs" *ngIf="order.orderProducts[0].alertFlag">High Alert</div>
                     <div class="slaAlert-flag abs" *ngIf="order.orderProducts[0].slaFlag">Action Required</div>
                 </div>
