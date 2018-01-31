@@ -90,7 +90,7 @@ export class LoginComponent implements OnInit {
                     if(_this.model.username === "iipsroot"){
                         localStorage.setItem('userType', 'upload');
                         environment.userType='upload';
-                    }else if(_this.model.username === "Handels"){
+                    }else if(_this.model.username === "Handels" || _this.model.username === "handels"){
                         localStorage.setItem('userType', 'admin');
                         environment.userType='admin';
                     }
