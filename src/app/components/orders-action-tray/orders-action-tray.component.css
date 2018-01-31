@@ -44,10 +44,10 @@
 
 .actions-button {
     border: none;
-    font-size: 0.80vw;
+    font-size: 0.75vw;
     margin-bottom: 5px;
     display: inline-block;
-    padding:0.8em 0;
+    padding:0.5em 0.1em;
 }
 
 .slaAlert .actions-button{

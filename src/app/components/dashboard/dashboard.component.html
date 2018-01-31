@@ -201,7 +201,7 @@
             </ng-container>
         </div>
 
-        <ng-container *ngIf="(dashboardData.delivered.today || dashboardData.delivered.total) && isAdmin">
+        <ng-container *ngIf="(dashboardData.delivered.today || dashboardData.delivered.total) && !isAdmin">
             <div class="container bottomSection">
                 <div class="row">
                     <div class="col-sm-12 allOrderRow">
