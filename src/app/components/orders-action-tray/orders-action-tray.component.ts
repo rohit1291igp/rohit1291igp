@@ -1219,7 +1219,7 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
           case 'changeDeliveryType&Date' : url = "deliveryDetailChanges";
               var _date=_this.adminActions.adminActionsModel.deliveryDate.date;
               paramsObj={
-                  orderId:_this.sidePanelData[orderIndex].orderId,,
+                  orderId:_this.sidePanelData[orderIndex].orderId,
                   orderProductId:_this.adminActions.adminActionsModel.orderProductId,
                   deliveryDate:_date.year+'-'+_date.month+'-'+_date.day,
                   deliveryType:_this.adminActions.adminActionsModel.deliveryType,

@@ -59,15 +59,15 @@ export class DashboardComponent implements OnInit {
     this.dashboardData = this.dashboardService.getCustomData();
     this.loadDbData();
 
-    /*this.dashboardObservable=Observable.interval(1000 * 60 * 1.5)
+    this.dashboardObservable=Observable.interval(1000 * 60 * 1.5)
         .subscribe(() => {
             console.log('Dasboard IntervalObservable working !!!')
             this.loadDbData();
-        });*/
+        });
   }
 
   ngOnDestroy(){
-   // this.dashboardObservable.unsubscribe();
+    this.dashboardObservable.unsubscribe();
   }
 
   loadDbData(){
