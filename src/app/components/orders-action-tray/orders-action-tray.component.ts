@@ -60,8 +60,8 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
   printDropDwonData={
       title:"Print All",
       dDOptions : [
-                    {"title":"Orders", "anchor" : false, "event": "order"},
-                    {"title":"Messages", "anchor" : false, "event": "message"}
+                    {"title":"Orders", "anchor" : false, "event": "order", "pageLength":1},
+                    {"title":"Messages", "anchor" : false, "event": "message", "pageLength":1}
                    ]
   };
   public trayOpen: Boolean = false;
@@ -548,6 +548,9 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
               _this.sidePanelData = response.result ? Array.isArray(response.result) ? response.result : [response.result] : [];
               //_this.getNxtOrderStatus(_this.sidePanelData[0].ordersStatus);
               _this.scrollTo(document.getElementById("mainOrderSection"), 0, 0); // scroll to top
+              setTimeout(function(){
+                  _this.printDropDwonData.dDOptions[1].pageLength=document.getElementsByClassName('messagePage').length;
+              },1000);
           }
 
       });
@@ -936,7 +939,7 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
       let printContents="", popupWin;
       //let targetId = print_type === "order" ? ("order_"+orderId) : ("order_message_"+orderId);
       if(all){
-          let targetClass= print_type === 'order' ? 'orderPage' : 'messagePage';
+          let targetClass= print_type === 'order' ? 'orderPage' : '  ';
           let printTargetCont = document.getElementsByClassName(targetClass);
           for(var i in printTargetCont){
               if(printTargetCont[i] && printTargetCont[i].innerHTML){

@@ -1,4 +1,5 @@
 <app-widgets (onConfirmClicked)="confirmYesNo($event)" [wOptions]="{type : 'confirm', data:confirmData}" *ngIf="confirmFlag" [@enterAnimation]></app-widgets>
+<app-widgets [wOptions]="{type : 'scrollTop'}"></app-widgets>
 
 <div class="pdfSection" id="pdf-section" *ngIf="pdfDwldFlag && pdfData">
     <div class="pdfHead">

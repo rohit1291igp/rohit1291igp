@@ -32,16 +32,24 @@ export class WidgetsComponent implements OnInit {
         }
  }
 
-  scrollTop(e){
+  scrollUp(e){
       e.preventDefault();
       e.stopPropagation();
+      let scrollDuration=1000;
+      var scrollStep = -window.scrollY / (scrollDuration / 15),
+          scrollInterval = setInterval(function(){
+              if ( window.scrollY != 0 ) {
+                  window.scrollBy( 0, scrollStep );
+              }
+              else clearInterval(scrollInterval);
+          },15);
 
-      if(this.wOptions.scrollContainer){
+      /*if(this.wOptions.scrollContainer){
           let _scrollContainer = document.querySelector(this.wOptions.scrollContainer);
           _scrollContainer.scrollTop= 0
       }else{
           window.scrollTo(0,0);
-      }
+      }*/
 
   }
 

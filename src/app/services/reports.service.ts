@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import {Http} from "@angular/http";
 import { BackendService } from './backend.service';
 import { UtilityService } from './utility.service';
+import {environment} from "../../environments/environment";
 
 @Injectable()
 export class ReportsService {
@@ -53,7 +54,10 @@ export class ReportsService {
 
               let fkAssociateId = localStorage.getItem('fkAssociateId');
               var queryParmas= queryString;
-              queryParmas += queryParmas ? '&fkAssociateId='+fkAssociateId : 'fkAssociateId='+fkAssociateId;
+
+              if(!environment.userType){
+                  queryParmas += queryParmas ? '&fkAssociateId='+fkAssociateId : 'fkAssociateId='+fkAssociateId;
+              }
               /*if(!/deliveryDateFrom/.test(queryString)){
                   queryParmas += '&deliveryDateFrom='+_this.UtilityService.getDateString(-2, null);
               }*/

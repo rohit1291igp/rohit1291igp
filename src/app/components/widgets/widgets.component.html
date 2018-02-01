@@ -1,5 +1,5 @@
 <div class="scrollTop" *ngIf="wOptions.type === 'scrollTop'">
-    <span class="glyphicon glyphicon-chevron-up" aria-hidden="true" (click)="scrollTop($event)"></span>
+    <span class="glyphicon glyphicon-chevron-up" aria-hidden="true" (click)="scrollUp($event)"></span>
 </div>
 
 
@@ -29,13 +29,16 @@
         </button>
         <ul class="dropdown-menu ddleft no-padding" style="display:block;" *ngIf="widgetDdFlag">
             <ng-container *ngFor="let option of wOptions.data.dDOptions">
-                <ng-container *ngIf="option.anchor">
-                    <a href="{{option.anchor}}"><li>{{option.title}}</li></a>
-                </ng-container>
-                <ng-container *ngIf="option.event">
-                    <li (click)="widgetClkEvent($event, option.event)">{{option.title}}</li>
-                </ng-container>
+                <!--<ng-container *ngIf="option.pageLength">-->
+                    <ng-container *ngIf="option.anchor">
+                        <a href="{{option.anchor}}" [ngClass]="{'disableBtn' : !option.pageLength}"><li>{{option.title}}</li></a>
+                    </ng-container>
+                    <ng-container *ngIf="option.event">
+                        <li (click)="widgetClkEvent($event, option.event)" [ngClass]="{'disableBtn' : !option.pageLength}">{{option.title}}</li>
+                    </ng-container>
+                <!--</ng-container>-->
             </ng-container>
+
         </ul>
     </div>
 </ng-container>

@@ -1,6 +1,6 @@
 .scrollTop{
     box-shadow: 1px 1px 1px #f2f2f2;
-    background: #f2f2f2;
+    background: #C3404E;
     border-radius: 50%;
     padding: 0.5em;
     border: 1px solid #f2f2f2;
@@ -8,6 +8,7 @@
     position: fixed;
     right: 1.5em;
     bottom: 1em;
+    color:#fff;
 }
 
 .ddleft{
