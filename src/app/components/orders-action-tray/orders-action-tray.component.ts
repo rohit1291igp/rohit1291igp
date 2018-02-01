@@ -1061,9 +1061,7 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
           }
 
           if(name === "call"){
-              alert('Call not implemented!');
-          }else if(name === "cancelRefund"){
-              alert('Canotncel & Refund not implemented!');
+              return; //alert('Call not implemented!');
           }else{
               _this.adminActions.adminActionsModel={};
               _this.adminActions.adminActionsModel.orderProductId="";
@@ -1143,6 +1141,8 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
       }else if( name === "changePrice"){
           orderProdsCollection();
           _this.orderProductChange(e, "0:");
+      }else if(name === "cancelRefund"){
+          orderProdsCollection();
       }
 
       return cb(null);
@@ -1234,14 +1234,14 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
               };
               apiSuccessHandler=function(apiResponse){
                   _this.sidePanelData[orderIndex].orderLogData=apiResponse.logs;
-                  //_this.adminActions.adminActionResponse.orderLogData=apiResponse.logs;
-                  //_this.adminActions.adminActionResponse.orderLogData="The order has been PROCESSED<br>Occasion: General GiftingThe vendor of product Bunch of 12 Red Roses with Teddy & 5 Dairy Milk Chocolates (HD1021148) has been changed from  Intermesh Shopping Network Pvt. Ltd. (Handels) to RDC Mumbai by Bulk assignment<BR>The product Bunch of 12 Red Roses with Teddy & 5 Dairy Milk Chocolates (HD1021148) has been Confirmed by RDC MumbaiThe following Products have been Shipped<BR>Hand Delivery<BR>Received By: Ms. Rashmi (Security Counter)<BR>Date: 2017-01-25<BR>Time: 6 pm<BR><BR>Products Details: <BR>1&nbsp;&nbsp;X&nbsp;&nbsp;Bunch of 12 Red Roses with Teddy & 5 Dairy Milk ChocolatesThe order has been Dispatched by  on 2017-01-25 06:05:45pm using through individual panelThe vendor of product Bunch of 12 Red Roses with Teddy & 5 Dairy Milk Chocolates has been changed from RDC Mumbai To RDC Mumbai By New Handels Panel<Br>";
               };
               break;
 
-          case 'cancelRefund' : url = "";
+          case 'cancelRefund' : url = "cancelOrder";
               paramsObj={
-                  orderId:_this.sidePanelData[orderIndex].orderId
+                  orderId:_this.sidePanelData[orderIndex].orderId,
+                  orderProductId:_this.adminActions.adminActionsModel.orderProductId,
+                  comment:_this.adminActions.adminActionsModel.cancelComment
               };
               apiSuccessHandler=function(apiResponse){
                   _this.sidePanelDataOnStatusUpdate(orderIndex);

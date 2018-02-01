@@ -201,6 +201,7 @@
                     </h4>
                     <h4 class="modal-title" id="myModalLabel" *ngIf="adminActions.adminActionsName === 'changePrice'">Change Price</h4>
                     <h4 class="modal-title" id="myModalLabel" *ngIf="adminActions.adminActionsName === 'changeDeliveryType&Date'">Chage Delivery Type & Date</h4>
+                    <h4 class="modal-title" id="myModalLabel" *ngIf="adminActions.adminActionsName === 'cancelRefund'">Cancel Order</h4>
                 </div>
 
                 <div class="modal-body center-align" *ngIf="adminActions.adminActionsName === 'email'">
@@ -297,6 +298,24 @@
                         </form>
                     </div>
                 </div>
+
+                <div class="modal-body center-align" *ngIf="adminActions.adminActionsName === 'cancelRefund'">
+                    <div class="form-group">
+                        <form (ngSubmit)="f.form.valid && adminActionsSubmit($event)" #f="ngForm" nonvalidate>
+
+                            <select name="orderProductId" class="form-control" [(ngModel)]="adminActions.adminActionsModel.orderProductId" #orderProductId="ngModel" (change)="orderProductChange($event,$event.target.value)" required>
+                                <option *ngFor="let orderProduct of adminActions.adminActionDepData.orderProducts" [ngValue]="orderProduct.productId">{{orderProduct.productName}}</option>
+                            </select>
+
+                            <textarea name="cancelComment" class="form-control custom-control m-top-1" rows="3" style="resize:none" [(ngModel)]="adminActions.adminActionsModel.cancelComment" #cancelComment="ngModel" placeholder="Comment" required></textarea>
+
+                            <div *ngIf="f.submitted && !orderProductId.valid" class="help-block theme-red">Please select order product!</div>
+                            <div *ngIf="f.submitted && !cancelComment.valid" class="help-block theme-red">Please provide comment!</div>
+                            <button class="btn btn-primary m-top-1">Submit</button>
+                        </form>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
