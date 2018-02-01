@@ -19,14 +19,14 @@
         </ul>
     </div>
 
-    <div class="col-md-3 searchbox dt" style="" *ngIf="!isMobile">
+    <div class="col-md-3 searchbox dt searchboxpt" style="" *ngIf="!isMobile">
           <form name="form" (ngSubmit)="f.form.valid && search($event)" #f="ngForm" novalidate>
                <div class="relative">
-                  <input  type="submit" class="btn btn-primary pull-right" style="" value="Search" />
-                  <div class="glyphicon glyphicon-remove abs searchCross" aria-hidden="true" *ngIf="searchModel.searchkey" (click)="clearSearch($event)" ></div>
+                  <input  type="submit" class="btn btn-primary pull-right" style="" value="Search"/>
+                  <div class="glyphicon glyphicon-remove abs searchCross" aria-hidden="true"  *ngIf="searchModel.searchkey" (click)="clearSearch($event)" ></div>
                </div>
-               <input name="searchkey" type="text" class="input-right form-control pull-right" placeholder="Order Number" [(ngModel)]="searchModel.searchkey" #searchkey="ngModel" style="width:60%;" required>
-               <div *ngIf="f.submitted && !searchkey.valid" class="help-block"></div>
+               <input name="searchkey" type="text" class="input-right form-control pull-right" placeholder="Order Number" [(ngModel)]="searchModel.searchkey" #searchkey="ngModel" style="width:60%;" [ngClass]="{'inputError':(f.submitted && !searchkey.valid)}" required>
+               <!--<div *ngIf="f.submitted && !searchkey.valid" class="help-block"></div>-->
           </form>
     </div>
 

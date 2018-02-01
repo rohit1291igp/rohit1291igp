@@ -462,7 +462,7 @@
                         </div>
             </div>
             <div class="row">
-                <p>Product Name: <span class="uppercase text-igp"><app-loader></app-loader></span></p>
+                <p><span class="text-bold">Product Name:</span> <span class="uppercase text-igp"><app-loader></app-loader></span></p>
 
                 <div class="col-md-12 product-holder noBtBorder no-padding no-margin">
                     <div class="row">
@@ -733,7 +733,7 @@
                 <div class="orderLogCont">
                   <div class="row" *ngFor="let orderProduct of order.orderProducts; let z='index'">
                     <p class="">
-                        Product Name:
+                        <span class="text-bold">Product Name:</span>
                         <!--<a target="_new" href="https://www.igp.com/{{orderProduct.productNameForUrl}}">-->
                             <span class="uppercase text-igp">{{orderProduct.productName}}</span>
                             <span class="" *ngIf="orderProduct.products_code">({{orderProduct.products_code}})  </span>

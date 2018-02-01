@@ -4,6 +4,10 @@ body{
     -webkit-overflow-scrolling: touch; /* for iPhone*/
 }
 /* Utility css start */
+.notVisible{
+    visibility: hidden;
+}
+
 .caption{
     font-weight:600;
     font-size:1.1em;
@@ -151,7 +155,6 @@ body{
 
 
 /* Utility css end */
-
 
 .apierror{
     font-weight: 500;
@@ -833,3 +836,8 @@ body .dashboard-content, body .orders-button{
     color:#C3404E;
 }
 
+/* input error - start*/
+.inputError{
+    border:1px solid red;
+}
+/* input error - end*/
