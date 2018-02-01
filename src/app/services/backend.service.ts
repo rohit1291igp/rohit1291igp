@@ -17,6 +17,10 @@ export class BackendService {
   lastHttpCall:any;
   makeAjax(reqObj : any, cb){
       var _this=this;
+      if(environment.userType === "undefined") {
+          localStorage.removeItem('userType');
+          delete environment.userType;
+      }
       if(document.getElementById("cLoader")) document.getElementById("cLoader").classList.remove("hide");
       if(document.getElementById("cLoader2")) document.getElementById("cLoader2").classList.remove("hide");
       //changing base URL

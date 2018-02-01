@@ -61,17 +61,6 @@ export class MainHeaderComponent implements OnInit {
   logout(e){
       let _this = this;
 
-      if(localStorage.getItem('currentUserToken') === "test"){
-          localStorage.removeItem('currentUserToken');
-          localStorage.removeItem('fkAssociateId');
-          localStorage.removeItem('vendorName');
-          localStorage.removeItem('associateName');
-          localStorage.removeItem('userType');
-          sessionStorage.removeItem('mockAPI');
-          environment.mockAPI="";
-          environment.userType="";
-          _this.router.navigate(['/login']);
-      }else{
           let reqObj = {
               //url : "?responseType=json&scopeId=1&token="+localStorage.getItem('currentUserToken')+"&method=igp.auth.doLogOut",
               url : "doLogOut?responseType=json&scopeId=1&token="+localStorage.getItem('currentUserToken'),
@@ -85,17 +74,13 @@ export class MainHeaderComponent implements OnInit {
                   return;
               }
 
-              localStorage.removeItem('currentUserToken');
-              localStorage.removeItem('fkAssociateId');
-              localStorage.removeItem('vendorName');
-              localStorage.removeItem('associateName');
-              localStorage.removeItem('userType');
-              sessionStorage.removeItem('mockAPI');
+              localStorage.clear();
+              sessionStorage.clear();
               environment.mockAPI="";
               environment.userType="";
               _this.router.navigate(['/login']);
           })
-      }
+
 
       for (var i in _this.router.config) {
           if (_this.router.config[i].path == "dashboard") {
