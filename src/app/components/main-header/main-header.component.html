@@ -2,7 +2,7 @@
   <div class="container-fluid">
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
-      <span class="navbar-brand">IGP - Handels <ng-container *ngIf="vendorName">- {{vendorName}}</ng-container></span>
+      <span class="navbar-brand">IGP <ng-container *ngIf="!environment.userType && vendorName">- Handels</ng-container> <ng-container *ngIf="vendorName">- {{vendorName}}</ng-container></span>
         <span  class="logout pull-right" (click)="logout($event)" *ngIf="isMobile && vendorName" style="margin-right: 0.5em;">
             <i class="icon glyphicon glyphicon-off"></i>
         </span>
@@ -11,7 +11,7 @@
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse navRight" id="bs-example-navbar-collapse-1" *ngIf="!isMobile && vendorName">
       <ul class="nav navbar-nav navbar-right">
-        <ng-container *ngIf="(userType !== 'upload') && (userType !== admin)">
+        <ng-container *ngIf="(environment.userType !== 'upload')">
             <li class="fullHeightLi" [ngClass]="{'selected' : selectedTopTab === 'dashboard'}">
               <p><a ng-href="#/dashboard" routerLink="/dashboard">Dashboard</a></p>
             </li>
@@ -35,7 +35,6 @@
             <div  class="logout" (click)="logout($event)">Logout
               <i class="icon glyphicon glyphicon-off"></i>
             </div>
-
         </li>
       </ul>
     </div>

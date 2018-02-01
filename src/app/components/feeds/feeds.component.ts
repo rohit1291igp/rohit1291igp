@@ -68,16 +68,23 @@ export class FeedsComponent implements OnInit {
 
   ngOnInit() {
      //var _this=this;
-     this.getFeeds();
-     this.feedObservable=Observable.interval(1000 * 60)
-          .subscribe(() => {
-               console.log('IntervalObservable working !!!')
-               this.getFeeds();
-          });
+      if(!environment.userType){
+          this.getFeeds();
+          this.feedObservable=Observable.interval(1000 * 60)
+              .subscribe(() => {
+                  console.log('IntervalObservable working !!!')
+                  this.getFeeds();
+              });
+      }else{
+          this.feedData=[];
+      }
+
   }
 
   ngOnDestroy(){
-      this.feedObservable.unsubscribe();
+      if(this.feedObservable){
+          this.feedObservable.unsubscribe();
+      }
   }
 
   getFeeds(){
@@ -88,11 +95,11 @@ export class FeedsComponent implements OnInit {
       };
 
       _this.BackendService.makeAjax(reqObj, function(err, response, headers){
-          if(err || JSON.parse(response).error) {
-              console.log('Error=============>', err, JSON.parse(response).errorCode);
+          if(err || response.error) {
+              console.log('Error=============>', err, response.errorCode);
           }
-          console.log('feeds Response --->', JSON.parse(response).result);
-          _this.feedData=JSON.parse(response).result;
+          console.log('feeds Response --->', response.result);
+          _this.feedData=response.result;
       });
   }
 

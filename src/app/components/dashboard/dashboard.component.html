@@ -13,7 +13,10 @@
 
         <div class="tableSection">
             <div class="leftLabel" (click)="toggleTableColumn($event, 'new', !displayStatusToggle.new)" [ngClass]="{'alert-action': isRowAlert['new'].isAlert, 'alertg-action': (!isRowAlert['new'].isAlert && isRowAlert['new'].sla), 'no-action': (!isRowAlert['new'].isAlert && !isRowAlert['new'].sla)}">
-                {{masterData.displayStatus[0]}} ({{dashboardData.counts.newOrders}})
+                {{masterData.displayStatus[0]}}
+                <ng-container *ngIf="ifExist(dashboardData.counts, 'notAssigned')">({{dashboardData.counts.notAssigned}})</ng-container>
+                <ng-container *ngIf="!ifExist(dashboardData.counts, 'notAssigned')">({{dashboardData.counts.newOrders}})</ng-container>
+
                 <div class="icon s pull-right" aria-hidden="true" *ngIf="!displayStatusToggle.new">
                     <img src="assets/images/icons/arrowDBlack.svg" >
                 </div>
@@ -25,24 +28,46 @@
             </div>
 
             <div class="labelContent" [ngClass]="{'slideropen' : displayStatusToggle.new, 'sliderclosed' : !displayStatusToggle.new}">
-                <div *ngFor="let dashBoardCount of dashboardData.new; let i='index'" [attr.data-index]="i">
+                <div *ngFor="let dashBoardCount of (dashboardData.new || dashboardData.notAssigned); let i='index'" [attr.data-index]="i">
                     <div class="labelContentCell" *ngIf="i>0 && i<4">
-                        <div class="topLabel text-bold">{{dashboardData.topLabels[i]['labelName']}} <span *ngIf="!dashBoardCount.ordersCount" >- 0</span></div>
-                        <div class="col-md-2 mobileOrderIdBlockCont" *ngIf="dashBoardCount.ordersCount" [ngClass]="{'a' : dashBoardCount.deliveryTimes !='bydate', 'b' : dashBoardCount.deliveryTimes =='bydate', 'custom-btn-parent': dashBoardCount.ordersCount, 'center-align': !dashBoardCount.ordersCount, 'inactive' : dashBoardCount.inactive}">
-
-                            <div class="mobileOrderIdBlock" *ngFor="let order of dashBoardCount.orderIds;" style="">
-                                <!--<button class="btn">{{order.orderId}}</button>-->
-                                <app-orders-button [orderId]="order.orderId" [displayData]="order" [orderStatus]="dashBoardCount.status" [OrderDay]="" [deliveryTime]="" (onViewOrders)="searchWithProdIds($event, order.orderId, order.orderProductId, dashBoardCount.status)">
-                                    <div>{{order.orderId}}</div>
-                                </app-orders-button>
+                        <ng-container *ngIf="dashBoardCount.notAlloted">
+                            <div class="topLabel text-bold">{{dashboardData.topLabels[i]['labelName']}}</div>
+                            <div [attr.data-index]="i" class="cell col-md-2 adminDB">
+                                <div class="firstBtn" [ngClass]="{'a' : dashBoardCount.processing.deliveryTimes !='bydate', 'b' : dashBoardCount.processing.deliveryTimes =='bydate', 'custom-btn-parent': dashBoardCount.processing.ordersCount, 'center-align': !dashBoardCount.processing.ordersCount, 'inactive' : dashBoardCount.processing.inactive}">
+                                    <app-orders-button [displayData]="dashBoardCount.processing" [orderStatus]="dashBoardCount.processing.status" [OrderDay]="dashBoardCount.processing.day" [deliveryTime]="dashBoardCount.processing.deliveryTimes" *ngIf="dashBoardCount.processing.ordersCount" (onViewOrders)="viewOrders($event)">
+                                        <app-button-view [viewData]="dashBoardCount.processing.ordersCount"></app-button-view>
+                                    </app-orders-button>
+                                    <app-no-orders [viewData]="dashBoardCount.processing.ordersCount" [orderStatus]="'new'"></app-no-orders>
+                                </div>
+                                <div class="secBtn" [ngClass]="{'a' : dashBoardCount.notAlloted.deliveryTimes !='bydate', 'b' : dashBoardCount.notAlloted.deliveryTimes =='bydate', 'custom-btn-parent': dashBoardCount.notAlloted.ordersCount, 'center-align': !dashBoardCount.notAlloted.ordersCount, 'inactive' : dashBoardCount.notAlloted.inactive}">
+                                    <app-orders-button [displayData]="dashBoardCount.notAlloted" [orderStatus]="dashBoardCount.notAlloted.status" [OrderDay]="dashBoardCount.notAlloted.day" [deliveryTime]="dashBoardCount.notAlloted.deliveryTimes" *ngIf="dashBoardCount.notAlloted.ordersCount" (onViewOrders)="viewOrders($event)">
+                                        <app-button-view [viewData]="dashBoardCount.notAlloted.ordersCount"></app-button-view>
+                                    </app-orders-button>
+                                    <app-no-orders [viewData]="dashBoardCount.notAlloted.ordersCount" [orderStatus]="'new'"></app-no-orders>
+                                </div>
                             </div>
-                        </div>
+                        </ng-container>
+
+                        <ng-container *ngIf="!dashBoardCount.notAlloted">
+                            <div class="topLabel text-bold">{{dashboardData.topLabels[i]['labelName']}} <span *ngIf="!dashBoardCount.ordersCount" >- 0</span></div>
+                            <div class="col-md-2 mobileOrderIdBlockCont" *ngIf="dashBoardCount.ordersCount" [ngClass]="{'a' : dashBoardCount.deliveryTimes !='bydate', 'b' : dashBoardCount.deliveryTimes =='bydate', 'custom-btn-parent': dashBoardCount.ordersCount, 'center-align': !dashBoardCount.ordersCount, 'inactive' : dashBoardCount.inactive}">
+                                <div class="mobileOrderIdBlock" *ngFor="let order of dashBoardCount.orderIds;" style="">
+                                    <!--<button class="btn">{{order.orderId}}</button>-->
+                                    <app-orders-button [noLabel]="true" [orderId]="order.orderId" [displayData]="order" [orderStatus]="dashBoardCount.status" [OrderDay]="" [deliveryTime]="" (onViewOrders)="searchWithProdIds($event, order.orderId, order.orderProductId, dashBoardCount.status)">
+                                        <div>{{order.orderId}}</div>
+                                    </app-orders-button>
+                                </div>
+                            </div>
+                        </ng-container>
                     </div>
                 </div>
             </div>
 
             <div class="leftLabel" (click)="toggleTableColumn($event, 'confirmed', !displayStatusToggle.confirmed)" [ngClass]="{'alert-action': isRowAlert['confirmed'].isAlert, 'alertg-action': (!isRowAlert['confirmed'].isAlert && isRowAlert['confirmed'].sla), 'no-action': (!isRowAlert['confirmed'].isAlert && !isRowAlert['confirmed'].sla)}">
-                {{masterData.displayStatus[1]}} ({{dashboardData.counts.confirmedOrders}})
+                {{masterData.displayStatus[1]}}
+                <ng-container *ngIf="ifExist(dashboardData.counts, 'notConfirmed')">({{dashboardData.counts.notConfirmed}})</ng-container>
+                <ng-container *ngIf="!ifExist(dashboardData.counts, 'notConfirmed')">({{dashboardData.counts.confirmedOrders}})</ng-container>
+
                 <div class="icon s pull-right" aria-hidden="true" *ngIf="!displayStatusToggle.confirmed">
                     <img src="assets/images/icons/arrowDBlack.svg" >
                 </div>
@@ -53,23 +78,46 @@
                 <span class="glyphicon glyphicon-chevron-up pull-right" *ngIf="displayStatusToggle.confirmed"></span>-->
             </div>
             <div class="labelContent" [ngClass]="{'slideropen' : displayStatusToggle.confirmed, 'sliderclosed' : !displayStatusToggle.confirmed}">
-                <div *ngFor="let dashBoardCount of dashboardData.confirmed; let i='index'" [attr.data-index]="i">
+                <div *ngFor="let dashBoardCount of (dashboardData.confirmed || dashboardData.notConfirmed); let i='index'" [attr.data-index]="i">
                     <div class="labelContentCell" *ngIf="i>0 && i<4">
+                        <ng-container *ngIf="dashBoardCount.pending">
+                            <div class="topLabel text-bold">{{dashboardData.topLabels[i]['labelName']}}</div>
+                            <div [attr.data-index]="i" class="cell col-md-2 adminDB">
+                                <div class="firstBtn" [ngClass]="{'a' : dashBoardCount.pending.deliveryTimes !='bydate', 'b' : dashBoardCount.pending.deliveryTimes =='bydate', 'custom-btn-parent': dashBoardCount.pending.ordersCount, 'center-align': !dashBoardCount.pending.ordersCount, 'inactive' : dashBoardCount.pending.inactive}">
+                                    <app-orders-button [displayData]="dashBoardCount.pending" [orderStatus]="dashBoardCount.pending.status" [OrderDay]="dashBoardCount.pending.day" [deliveryTime]="dashBoardCount.pending.deliveryTimes" *ngIf="dashBoardCount.pending.ordersCount" (onViewOrders)="viewOrders($event)">
+                                        <app-button-view [viewData]="dashBoardCount.pending.ordersCount"></app-button-view>
+                                    </app-orders-button>
+                                    <app-no-orders [viewData]="dashBoardCount.pending.ordersCount" [orderStatus]="'confirmed'"></app-no-orders>
+                                 </div>
+
+                                <div class="secBtn" [ngClass]="{'a' : dashBoardCount.processing.deliveryTimes !='bydate', 'b' : dashBoardCount.processing.deliveryTimes =='bydate', 'custom-btn-parent': dashBoardCount.processing.ordersCount, 'center-align': !dashBoardCount.processing.ordersCount, 'inactive' : dashBoardCount.processing.inactive}">
+                                    <app-orders-button [displayData]="dashBoardCount.processing" [orderStatus]="dashBoardCount.processing.status" [OrderDay]="dashBoardCount.processing.day" [deliveryTime]="dashBoardCount.processing.deliveryTimes" *ngIf="dashBoardCount.processing.ordersCount" (onViewOrders)="viewOrders($event)">
+                                        <app-button-view [viewData]="dashBoardCount.processing.ordersCount"></app-button-view>
+                                    </app-orders-button>
+                                    <app-no-orders [viewData]="dashBoardCount.processing.ordersCount" [orderStatus]="'confirmed'"></app-no-orders>
+                                </div>
+                            </div>
+                        </ng-container>
+
+                        <ng-container *ngIf="!dashBoardCount.pending">
                             <div class="topLabel text-bold">{{dashboardData.topLabels[i]['labelName']}} <span *ngIf="!dashBoardCount.ordersCount" >- 0</span></div>
                             <div class="col-md-2 mobileOrderIdBlockCont" *ngIf="dashBoardCount.ordersCount"  [ngClass]="{'a' : dashBoardCount.deliveryTimes !='bydate', 'b' : dashBoardCount.deliveryTimes =='bydate', 'custom-btn-parent': dashBoardCount.ordersCount, 'center-align': !dashBoardCount.ordersCount, 'inactive' : dashBoardCount.inactive}">
                                 <div class="mobileOrderIdBlock" *ngFor="let order of dashBoardCount.orderIds;" style="">
                                     <!--<button class="btn">{{order.orderId}}</button>-->
-                                    <app-orders-button [orderId]="order.orderId" [displayData]="order" [orderStatus]="dashBoardCount.status" [OrderDay]="" [deliveryTime]="" (onViewOrders)="searchWithProdIds($event, order.orderId, order.orderProductId, dashBoardCount.status)">
+                                    <app-orders-button [noLabel]="true" [orderId]="order.orderId" [displayData]="order" [orderStatus]="dashBoardCount.status" [OrderDay]="" [deliveryTime]="" (onViewOrders)="searchWithProdIds($event, order.orderId, order.orderProductId, dashBoardCount.status)">
                                         <div style="">{{order.orderId}}</div>
                                     </app-orders-button>
                                 </div>
                             </div>
+                        </ng-container>
                     </div>
                 </div>
             </div>
 
             <div class="leftLabel" (click)="toggleTableColumn($event, 'ofd', !displayStatusToggle.ofd)" [ngClass]="{'alert-action': isRowAlert['future'].isAlert, 'alertg-action': (!isRowAlert['future'].isAlert && isRowAlert['future'].sla), 'no-action': (!isRowAlert['future'].isAlert && !isRowAlert['future'].sla)}">
-                {{masterData.displayStatus[2]}} ({{dashboardData.counts.ofdOrders}})
+                {{masterData.displayStatus[2]}}
+                <ng-container *ngIf="!dashboardData.ofd">({{dashboardData.shipped[0].ordersCount + dashboardData.shipped[1].ordersCount}})</ng-container>
+                <ng-container *ngIf="dashboardData.ofd">({{dashboardData.counts.ofdOrders}})</ng-container>
                 <div class="icon s pull-right" aria-hidden="true" *ngIf="!displayStatusToggle.ofd">
                     <img src="assets/images/icons/arrowDBlack.svg" >
                 </div>
@@ -79,51 +127,106 @@
                 <!--<span class="glyphicon glyphicon-chevron-down pull-right" *ngIf="!displayStatusToggle.ofd"></span>
                 <span class="glyphicon glyphicon-chevron-up pull-right" *ngIf="displayStatusToggle.ofd"></span>-->
             </div>
+
             <div class="labelContent" style="box-shadow: none;" [ngClass]="{'slideropen' : displayStatusToggle.ofd, 'sliderclosed' : !displayStatusToggle.ofd}">
-                <div class="mobileOrderIdBlockCont" style="padding: 0.5em 0.5em 0.8em 1.5em;" *ngIf="dashboardData.ofd.length">
-                    <div class="col-md-3 custom-btn-parent"  style="display: inline-block;" *ngFor="let order of dashboardData.ofd; let i='index'" [attr.data-index]="i" [ngClass]="{'inactive' : order.inactive}">
-                        <app-orders-button [orderId]="order.orderNumber" [displayData]="order" [orderStatus]="order.status" [OrderDay]="" [deliveryTime]="masterData.deliveryTimes[5]" (onViewOrders)="viewOrders($event)">
-                             <div style="display: inline-block;">{{order.orderNumber}}</div> <!--<span *ngIf="isMobile"> - {{order.displayStr}}</span>-->
-                            <!--<div class="icon m" aria-hidden="true">
-                                <img src="assets/images/icons/ofd.svg" >
-                            </div>-->
-                        </app-orders-button>
+                <ng-container *ngIf="!dashboardData.ofd">
+                    <div class="row">
+                        <div class="col-md-12 relative" style="padding-bottom:1em;">
+                            <div class="col-md-2 no-padding" style="" *ngFor="let nso of dashboardData.shipped; let ii='index'">
+                                <div class="col-md-12 no-padding" style="margin-top:0.75em; width:100%;" [attr.data-index]="ii">
+                                     <!--<span>Pending</span> - <span>{{dashboardData.shipped.pending.ordersCount}}</span>-->
+                                    <div class="" [ngClass]="{'a' : nso.deliveryTimes !='bydate', 'b' : nso.deliveryTimes =='bydate', 'custom-btn-parent': nso.ordersCount, 'center-align': !nso.ordersCount, 'inactive' : nso.inactive}">
+                                        <app-orders-button [noLabel]="true" [displayData]="nso" [orderStatus]="nso.status" [OrderDay]="nso.day" [deliveryTime]="nso.deliveryTimes" *ngIf="nso.ordersCount" (onViewOrders)="viewOrders($event)">
+                                            <app-button-view [inlineLable]="'pre'" [displayData]="nso" [viewData]="nso.ordersCount"></app-button-view>
+                                        </app-orders-button>
+                                         <app-no-orders [viewData]="nso.ordersCount" [orderStatus]="nso.status"></app-no-orders>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </ng-container>
+
+                <ng-container *ngIf="dashboardData.ofd">
+                    <div class="mobileOrderIdBlockCont" style="padding: 0.5em 0.5em 0.8em 1.5em;" *ngIf="dashboardData.ofd.length">
+                        <div class="col-md-3 custom-btn-parent"  style="display: inline-block;" *ngFor="let order of dashboardData.ofd; let i='index'" [attr.data-index]="i" [ngClass]="{'inactive' : order.inactive}">
+                            <app-orders-button [noLabel]="true" [orderId]="order.orderNumber" [displayData]="order" [orderStatus]="order.status" [OrderDay]="" [deliveryTime]="masterData.deliveryTimes[5]" (onViewOrders)="viewOrders($event)">
+                                <div style="display: inline-block;">{{order.orderNumber}}</div> <!--<span *ngIf="isMobile"> - {{order.displayStr}}</span>-->
+                                <!--<div class="icon m" aria-hidden="true">
+                                    <img src="assets/images/icons/ofd.svg" >
+                                </div>-->
+                            </app-orders-button>
+                        </div>
+                    </div>
+
+                    <!--<div class="col-md-3 underline center-align" *ngIf="dashboardData.ofd.length" style="padding: 1.5em 0 1em;">
+                        <a href="#" (click)="openPanel($event, masterData.status[2])"> View all out for delivery orders</a>
+                    </div>-->
+
+                    <div class="col-md-12" *ngIf="!dashboardData.ofd.length" style="padding:1em;">
+                        <div class="no-ofd-label">Currently there are no orders out for delivery</div>
+                    </div>
+                </ng-container>
+            </div>
+
+            <ng-container *ngIf="!dashboardData.delivered.today && isAdmin">
+                <div class="leftLabel" (click)="toggleTableColumn($event, 'delivered', !displayStatusToggle.delivered)" [ngClass]="{'alert-action': isRowAlert['future'].isAlert, 'alertg-action': (!isRowAlert['future'].isAlert && isRowAlert['future'].sla), 'no-action': (!isRowAlert['future'].isAlert && !isRowAlert['future'].sla)}">
+                    {{masterData.displayStatus[3]}} ({{dashboardData.delivered[0].ordersCount+dashboardData.delivered[1].ordersCount}})
+
+                    <div class="icon s pull-right" aria-hidden="true" *ngIf="!displayStatusToggle.delivered">
+                        <img src="assets/images/icons/arrowDBlack.svg" >
+                    </div>
+                    <div class="icon s pull-right" aria-hidden="true" *ngIf="displayStatusToggle.delivered">
+                        <img class="arrowU" src="assets/images/icons/arrowDBlack.svg" >
                     </div>
                 </div>
 
-                <!--<div class="col-md-3 underline center-align" *ngIf="dashboardData.ofd.length" style="padding: 1.5em 0 1em;">
-                    <a href="#" (click)="openPanel($event, masterData.status[2])"> View all out for delivery orders</a>
-                </div>-->
-
-                <div class="col-md-12" *ngIf="!dashboardData.ofd.length" style="padding:1em;">
-                    <div class="no-ofd-label">Currently there are no orders out for delivery</div>
+                <div class="labelContent" style="box-shadow: none;" [ngClass]="{'slideropen' : displayStatusToggle.delivered, 'sliderclosed' : !displayStatusToggle.delivered}">
+                    <div class="row">
+                        <div class="col-md-12 relative" style="padding-bottom:1em;">
+                                <div class="col-md-2 no-padding" style="" *ngFor="let ndo of dashboardData.delivered; let jj='index'">
+                                        <div class="col-md-12 no-padding" style="margin-top:0.75em; width:100%;" [attr.data-index]="jj">
+                                            <!--<span>Pending</span> - <span>{{dashboardData.shipped.pending.ordersCount}}</span>-->
+                                            <div class="" [ngClass]="{'a' : ndo.deliveryTimes !='bydate', 'b' : ndo.deliveryTimes =='bydate', 'custom-btn-parent': ndo.ordersCount, 'center-align': !ndo.ordersCount, 'inactive' : ndo.inactive}">
+                                                <app-orders-button [noLabel]="true" [displayData]="ndo" [orderStatus]="ndo.status" [OrderDay]="ndo.day" [deliveryTime]="ndo.deliveryTimes" *ngIf="ndo.ordersCount" (onViewOrders)="viewOrders($event)">
+                                                    <app-button-view [inlineLable]="'pre'" [displayData]="ndo" [viewData]="ndo.ordersCount"></app-button-view>
+                                                </app-orders-button>
+                                                <app-no-orders [viewData]="ndo.ordersCount" [orderStatus]="ndo.status"></app-no-orders>
+                                            </div>
+                                        </div>
+                                </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
+            </ng-container>
         </div>
 
-        <div class="container bottomSection">
-            <div class="row">
-                <div class="col-sm-12 allOrderRow">
-                    <div class="col-sm-6 page center-align">
-                        <div class="text-bold">{{dashboardData.delivered.total+dashboardData.delivered.today}}</div>
-                        <div>Orders for today's deliveries</div>
+        <ng-container *ngIf="(dashboardData.delivered.today || dashboardData.delivered.total) && !isAdmin">
+            <div class="container bottomSection">
+                <div class="row">
+                    <div class="col-sm-12 allOrderRow">
+                        <div class="col-sm-6 page center-align">
+                            <div class="text-bold">{{dashboardData.delivered.total+dashboardData.delivered.today}}</div>
+                            <div>Orders for today's deliveries</div>
+                        </div>
+                        <div class="col-sm-6 page center-align">
+                            <div class="text-bold">{{dashboardData.delivered.today}}</div>
+                            <div>Orders yet to be delivered</div>
+                        </div>
+                        <div class="clearfix"></div>
                     </div>
-                    <div class="col-sm-6 page center-align">
-                        <div class="text-bold">{{dashboardData.delivered.today}}</div>
-                        <div>Orders yet to be delivered</div>
-                    </div>
+
                     <div class="clearfix"></div>
-                </div>
-
-                <div class="clearfix"></div>
-                <div class="col-md-12 no-padding">
-                    <button class="btn btn-primary allOrderBtn bg-igp" (click)="openPanel($event, masterData.status[3])">
-                    <!--View all delivered orders-->
-                    All orders for today
-                    </button>
+                    <div class="col-md-12 no-padding">
+                        <button class="btn btn-primary allOrderBtn bg-igp" (click)="openPanel($event, masterData.status[3])">
+                        <!--View all delivered orders-->
+                        All orders for today
+                        </button>
+                    </div>
                 </div>
             </div>
-        </div>
+        </ng-container>
+
 </section>
 
 <section *ngIf="!isMobile">
@@ -142,104 +245,223 @@
                         <div class="table-cell-display v-align-middle"> Order Type</div>
                     </div>
 
-
                     <div class="cell center-align table-display col-md-2" [ngClass]="{'a' : dashBoardlabel.deliveryTimes != 'bydate', 'bydateWidth' : dashBoardlabel.deliveryTimes == 'bydate'}" *ngFor="let dashBoardlabel of dashboardData.topLabels">
-
-                    <div class="table-cell-display v-align-middle" *ngIf="dashBoardlabel.deliveryTimes =='tomorrow'">{{dashBoardlabel.labelName}}</div>
-                <div class="table-cell-display v-align-middle" *ngIf="dashBoardlabel.deliveryTimes !='bydate' && dashBoardlabel.deliveryTimes !='tomorrow'">{{dashBoardlabel.labelName}}</div>
-            <div class="table-cell-display v-align-middle" *ngIf="dashBoardlabel.deliveryTimes =='bydate'">
-            <div class="col-md-4 no-padding" style="margin-top: 8px;">{{dashBoardlabel.labelName}} </div>
-            <div class="col-md-8 no-padding custom-date-picker">
-                <my-date-picker name="mydate" [options]="myDatePickerOptions" [(ngModel)]="dateRange" (ngModelChange)="onDateChanged($event)"></my-date-picker>
-            </div>
-        </div>
-    </div>
-
-
-</div>
+                        <div class="table-cell-display v-align-middle" *ngIf="dashBoardlabel.deliveryTimes =='tomorrow'">{{dashBoardlabel.labelName}}</div>
+                        <div class="table-cell-display v-align-middle" *ngIf="dashBoardlabel.deliveryTimes !='bydate' && dashBoardlabel.deliveryTimes !='tomorrow'">{{dashBoardlabel.labelName}}</div>
+                        <div class="table-cell-display v-align-middle" *ngIf="dashBoardlabel.deliveryTimes =='bydate'">
+                            <div class="col-md-4 no-padding" style="margin-top: 8px;">{{dashBoardlabel.labelName}} </div>
+                            <div class="col-md-8 no-padding custom-date-picker">
+                                <my-date-picker name="mydate" [options]="myDatePickerOptions" [(ngModel)]="dateRange" (ngModelChange)="onDateChanged($event)"></my-date-picker>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
 <!--Table content-->
 <div class="row">
     <div class="cell col-md-2 table-display" [ngClass]="{'alert-action': isRowAlert['new'].isAlert, 'alertg-action': (!isRowAlert['new'].isAlert && isRowAlert['new'].sla), 'no-action': (!isRowAlert['new'].isAlert && !isRowAlert['new'].sla)}">
-    <div class="table-cell-display v-align-middle">{{masterData.displayStatus[0]}} ({{dashboardData.counts.newOrders}})</div>
-    <!--<div class="DbCount" *ngIf="dashboardData.counts.newOrders">{{dashboardData.counts.newOrders}}</div>-->
-</div>
+        <div class="table-cell-display v-align-middle">
+            {{masterData.displayStatus[0]}}
+            <ng-container *ngIf="ifExist(dashboardData.counts, 'notAssigned')">({{dashboardData.counts.notAssigned}})</ng-container>
+            <ng-container *ngIf="!ifExist(dashboardData.counts, 'notAssigned')">({{dashboardData.counts.newOrders}})</ng-container>
+        </div>
+    </div>
 
-<div *ngFor="let dashBoardCount of dashboardData.new; let i='index'" [attr.data-index]="i" >
-<div class="cell col-md-2" [ngClass]="{'a' : dashBoardCount.deliveryTimes !='bydate', 'b' : dashBoardCount.deliveryTimes =='bydate', 'custom-btn-parent': dashBoardCount.ordersCount, 'center-align': !dashBoardCount.ordersCount, 'inactive' : dashBoardCount.inactive}">
-<app-orders-button [displayData]="dashBoardCount" [orderStatus]="dashBoardCount.status" [OrderDay]="dashBoardCount.day" [deliveryTime]="dashBoardCount.deliveryTimes" *ngIf="dashBoardCount.ordersCount" (onViewOrders)="viewOrders($event)">
-<app-button-view [viewData]="dashBoardCount.ordersCount"></app-button-view>
-</app-orders-button>
-<app-no-orders [viewData]="dashBoardCount.ordersCount" [orderStatus]="'new'"></app-no-orders>
-</div>
-</div>
+    <div *ngFor="let dashBoardCount of (dashboardData.new || dashboardData.notAssigned); let i='index'" [attr.data-index]="i" >
+        <ng-container *ngIf="dashBoardCount.notAlloted">
+            <div [attr.data-index]="i" class="cell col-md-2 adminDB">
+                <div class="firstBtn" [ngClass]="{'both' : (dashBoardCount.processing.ordersCount && dashBoardCount.notAlloted.ordersCount),  'a' : dashBoardCount.processing.deliveryTimes !='bydate', 'b' : dashBoardCount.processing.deliveryTimes =='bydate', 'custom-btn-parent': dashBoardCount.processing.ordersCount, 'center-align': !dashBoardCount.processing.ordersCount, 'inactive' : dashBoardCount.processing.inactive}">
+                    <app-orders-button [displayData]="dashBoardCount.processing" [orderStatus]="dashBoardCount.processing.status" [OrderDay]="dashBoardCount.processing.day" [deliveryTime]="dashBoardCount.processing.deliveryTimes" *ngIf="dashBoardCount.processing.ordersCount" (onViewOrders)="viewOrders($event)">
+                        <app-button-view [viewData]="dashBoardCount.processing.ordersCount"></app-button-view>
+                    </app-orders-button>
+                    <app-no-orders [viewData]="dashBoardCount.processing.ordersCount" [orderStatus]="'new'"></app-no-orders>
+                </div>
+                <div class="secBtn" [ngClass]="{'both' : (dashBoardCount.processing.ordersCount && dashBoardCount.notAlloted.ordersCount), 'a' : dashBoardCount.notAlloted.deliveryTimes !='bydate', 'b' : dashBoardCount.notAlloted.deliveryTimes =='bydate', 'custom-btn-parent': dashBoardCount.notAlloted.ordersCount, 'center-align': !dashBoardCount.notAlloted.ordersCount, 'inactive' : dashBoardCount.notAlloted.inactive}">
+                    <app-orders-button [displayData]="dashBoardCount.notAlloted" [orderStatus]="dashBoardCount.notAlloted.status" [OrderDay]="dashBoardCount.notAlloted.day" [deliveryTime]="dashBoardCount.notAlloted.deliveryTimes" *ngIf="dashBoardCount.notAlloted.ordersCount" (onViewOrders)="viewOrders($event)">
+                        <app-button-view [viewData]="dashBoardCount.notAlloted.ordersCount"></app-button-view>
+                    </app-orders-button>
+                    <app-no-orders [viewData]="dashBoardCount.notAlloted.ordersCount" [orderStatus]="'new'"></app-no-orders>
+                </div>
+            </div>
+        </ng-container>
 
+        <ng-container *ngIf="!dashBoardCount.notAlloted">
+            <div class="cell col-md-2" [ngClass]="{'a' : dashBoardCount.deliveryTimes !='bydate', 'b' : dashBoardCount.deliveryTimes =='bydate', 'custom-btn-parent': dashBoardCount.ordersCount, 'center-align': !dashBoardCount.ordersCount, 'inactive' : dashBoardCount.inactive}">
+            <app-orders-button [displayData]="dashBoardCount" [orderStatus]="dashBoardCount.status" [OrderDay]="dashBoardCount.day" [deliveryTime]="dashBoardCount.deliveryTimes" *ngIf="dashBoardCount.ordersCount" (onViewOrders)="viewOrders($event)">
+            <app-button-view [viewData]="dashBoardCount.ordersCount"></app-button-view>
+            </app-orders-button>
+            <app-no-orders [viewData]="dashBoardCount.ordersCount" [orderStatus]="'new'"></app-no-orders>
+            </div>
+        </ng-container>
+    </div>
 </div>
 
 <div class="row">
     <div class="cell col-md-2 table-display" [ngClass]="{'alert-action': isRowAlert['confirmed'].isAlert, 'alertg-action': (!isRowAlert['confirmed'].isAlert && isRowAlert['confirmed'].sla), 'no-action': (!isRowAlert['confirmed'].isAlert && !isRowAlert['confirmed'].sla)}">
-    <div class="table-cell-display v-align-middle">{{masterData.displayStatus[1]}} ({{dashboardData.counts.confirmedOrders}})</div>
-    <!--<div class="DbCount" *ngIf="dashboardData.counts.confirmedOrders">{{dashboardData.counts.confirmedOrders}}</div>-->
-</div>
+        <div class="table-cell-display v-align-middle">
+            {{masterData.displayStatus[1]}}
+            <ng-container *ngIf="ifExist(dashboardData.counts, 'notConfirmed')">({{dashboardData.counts.notConfirmed}})</ng-container>
+            <ng-container *ngIf="!ifExist(dashboardData.counts, 'notConfirmed')">({{dashboardData.counts.confirmedOrders}})</ng-container>
+        </div>
+    </div>
 
 
-<div *ngFor="let dashBoardCount of dashboardData.confirmed; let i='index'" [attr.data-index]="i">
-<div class="cell col-md-2" [ngClass]="{'a' : dashBoardCount.deliveryTimes !='bydate', 'b' : dashBoardCount.deliveryTimes =='bydate', 'custom-btn-parent': dashBoardCount.ordersCount, 'center-align': !dashBoardCount.ordersCount, 'inactive' : dashBoardCount.inactive}">
-<app-orders-button [displayData]="dashBoardCount" [orderStatus]="dashBoardCount.status" [OrderDay]="dashBoardCount.day" [deliveryTime]="dashBoardCount.deliveryTimes" *ngIf="dashBoardCount.ordersCount" (onViewOrders)="viewOrders($event)">
-<app-button-view [viewData]="dashBoardCount.ordersCount"></app-button-view>
-</app-orders-button>
-<app-no-orders [viewData]="dashBoardCount.ordersCount" [orderStatus]="'confirmed'"></app-no-orders>
-</div>
-</div>
+    <div *ngFor="let dashBoardCount of (dashboardData.confirmed || dashboardData.notConfirmed); let i='index'" [attr.data-index]="i">
+        <ng-container *ngIf="dashBoardCount.pending">
+            <div [attr.data-index]="i" class="cell col-md-2 adminDB">
+                <div class="firstBtn" [ngClass]="{'both' : (dashBoardCount.pending.ordersCount && dashBoardCount.processing.ordersCount), 'a' : dashBoardCount.pending.deliveryTimes !='bydate', 'b' : dashBoardCount.pending.deliveryTimes =='bydate', 'custom-btn-parent': dashBoardCount.pending.ordersCount, 'center-align': !dashBoardCount.pending.ordersCount, 'inactive' : dashBoardCount.pending.inactive}">
+                    <app-orders-button [displayData]="dashBoardCount.pending" [orderStatus]="dashBoardCount.pending.status" [OrderDay]="dashBoardCount.pending.day" [deliveryTime]="dashBoardCount.pending.deliveryTimes" *ngIf="dashBoardCount.pending.ordersCount" (onViewOrders)="viewOrders($event)">
+                        <app-button-view [viewData]="dashBoardCount.pending.ordersCount"></app-button-view>
+                    </app-orders-button>
+                    <app-no-orders [viewData]="dashBoardCount.pending.ordersCount" [orderStatus]="'confirmed'"></app-no-orders>
+                </div>
+
+                <div class="secBtn" [ngClass]="{ 'both' : (dashBoardCount.pending.ordersCount && dashBoardCount.processing.ordersCount), 'a' : dashBoardCount.processing.deliveryTimes !='bydate', 'b' : dashBoardCount.processing.deliveryTimes =='bydate', 'custom-btn-parent': dashBoardCount.processing.ordersCount, 'center-align': !dashBoardCount.processing.ordersCount, 'inactive' : dashBoardCount.processing.inactive}">
+                    <app-orders-button [displayData]="dashBoardCount.processing" [orderStatus]="dashBoardCount.processing.status" [OrderDay]="dashBoardCount.processing.day" [deliveryTime]="dashBoardCount.processing.deliveryTimes" *ngIf="dashBoardCount.processing.ordersCount" (onViewOrders)="viewOrders($event)">
+                        <app-button-view [viewData]="dashBoardCount.processing.ordersCount"></app-button-view>
+                    </app-orders-button>
+                    <app-no-orders [viewData]="dashBoardCount.processing.ordersCount" [orderStatus]="'confirmed'"></app-no-orders>
+                </div>
+            </div>
+        </ng-container>
+
+        <ng-container *ngIf="!dashBoardCount.pending">
+            <div class="cell col-md-2" [ngClass]="{'a' : dashBoardCount.deliveryTimes !='bydate', 'b' : dashBoardCount.deliveryTimes =='bydate', 'custom-btn-parent': dashBoardCount.ordersCount, 'center-align': !dashBoardCount.ordersCount, 'inactive' : dashBoardCount.inactive}">
+                <app-orders-button [displayData]="dashBoardCount" [orderStatus]="dashBoardCount.status" [OrderDay]="dashBoardCount.day" [deliveryTime]="dashBoardCount.deliveryTimes" *ngIf="dashBoardCount.ordersCount" (onViewOrders)="viewOrders($event)">
+                    <app-button-view [viewData]="dashBoardCount.ordersCount"></app-button-view>
+                </app-orders-button>
+                <app-no-orders [viewData]="dashBoardCount.ordersCount" [orderStatus]="'confirmed'"></app-no-orders>
+            </div>
+        </ng-container>
+    </div>
 
 </div>
 
 <div class="row">
     <div class="cell col-md-2 table-display" [ngClass]="{'alert-action': isRowAlert['future'].isAlert, 'alertg-action': (!isRowAlert['future'].isAlert && isRowAlert['future'].sla), 'no-action': (!isRowAlert['future'].isAlert && !isRowAlert['future'].sla)}">
-    <div class="table-cell-display v-align-middle">{{masterData.displayStatus[2]}} ({{dashboardData.counts.ofdOrders}})</div>
-    <!--<div class="DbCount" *ngIf="dashboardData.counts.ofdOrders">{{dashboardData.counts.ofdOrders}}</div>-->
-</div>
+        <div class="table-cell-display v-align-middle">
+            {{masterData.displayStatus[2]}}
+            <ng-container *ngIf="!dashboardData.ofd">({{dashboardData.shipped[0].ordersCount + dashboardData.shipped[1].ordersCount}})</ng-container>
+            <ng-container *ngIf="dashboardData.ofd">({{dashboardData.counts.ofdOrders}})</ng-container>
+        </div>
+    </div>
 
-<div class="cellNoHeight cell col-md-10 no-padding">
-    <div class="col-md-9 no-padding">
-        <div class="col-md-3 custom-btn-parent" *ngFor="let order of dashboardData.ofd; let i='index'" [attr.data-index]="i" [ngClass]="{'inactive' : order.inactive}">
-        <app-orders-button [orderId]="order.orderNumber" [displayData]="order" [orderStatus]="order.status" [OrderDay]="" [deliveryTime]="masterData.deliveryTimes[5]" (onViewOrders)="viewOrders($event)" *ngIf="i<4">
-        <div>{{order.orderNumber}}</div>
-        </app-orders-button>
+    <div class="cellNoHeight cell col-md-10 no-padding">
+        <ng-container *ngIf="!dashboardData.ofd">
+            <div class="row">
+                <div class="col-md-12 relative" >
+
+                    <div class="col-md-2 no-padding" style="width:20%;" *ngFor="let nso of dashboardData.shipped; let ii='index'">
+                        <div class="col-md-12 no-padding" style="margin-top:0.75em; width:100%;" [attr.data-index]="ii">
+                            <!--<span>Pending</span> - <span>{{dashboardData.shipped.pending.ordersCount}}</span>-->
+                            <div class="" [ngClass]="{'a' : nso.deliveryTimes !='bydate', 'b' : nso.deliveryTimes =='bydate', 'custom-btn-parent': nso.ordersCount, 'center-align': !nso.ordersCount, 'inactive' : nso.inactive}">
+                                <app-orders-button [noLabel]="true" [displayData]="nso" [orderStatus]="nso.status" [OrderDay]="nso.day" [deliveryTime]="nso.deliveryTimes" *ngIf="nso.ordersCount" (onViewOrders)="viewOrders($event)">
+                                    <app-button-view [inlineLable]="'pre'" [displayData]="nso" [viewData]="nso.ordersCount"></app-button-view>
+                                </app-orders-button>
+                                <app-no-orders [viewData]="nso.ordersCount" [orderStatus]="nso.status"></app-no-orders>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--<div class="col-md-2 no-padding" style="width:20%;">
+                        <div class="col-md-12 no-padding" style="margin-top:0.75em; width:100%;">
+                            &lt;!&ndash;<span>Total</span> - <span>{{dashboardData.shipped.total.ordersCount}}</span>&ndash;&gt;
+                            <div class="" [ngClass]="{'a' : dashboardData.shipped.total.deliveryTimes !='bydate', 'b' : dashboardData.shipped.total.deliveryTimes =='bydate', 'custom-btn-parent': dashboardData.shipped.total.ordersCount, 'center-align': !dashboardData.shipped.total.ordersCount, 'inactive' : dashboardData.shipped.total.inactive}">
+                                <app-orders-button [noLabel]="true" [displayData]="dashboardData.shipped.total" [orderStatus]="dashboardData.shipped.total.status" [OrderDay]="dashboardData.shipped.total.day" [deliveryTime]="dashboardData.shipped.total.deliveryTimes" *ngIf="dashboardData.shipped.total.ordersCount" (onViewOrders)="viewOrders($event)">
+                                    <app-button-view [inlineLable]="'pre'" [displayData]="dashboardData.shipped.total" [viewData]="dashboardData.shipped.total.ordersCount"></app-button-view>
+                                </app-orders-button>
+                                <app-no-orders [viewData]="dashboardData.shipped.total.ordersCount" [orderStatus]="dashboardData.shipped.total.status"></app-no-orders>
+                            </div>
+                        </div>
+                    </div>-->
+                </div>
+            </div>
+        </ng-container>
+
+        <ng-container *ngIf="dashboardData.ofd">
+            <div class="col-md-9 no-padding">
+                <div class="col-md-3 custom-btn-parent" *ngFor="let order of dashboardData.ofd; let i='index'" [attr.data-index]="i" [ngClass]="{'inactive' : order.inactive}">
+                    <app-orders-button [orderId]="order.orderNumber" [displayData]="order" [orderStatus]="order.status" [OrderDay]="" [deliveryTime]="masterData.deliveryTimes[5]" (onViewOrders)="viewOrders($event)" *ngIf="i<4">
+                        <div>{{order.orderNumber}}</div>
+                    </app-orders-button>
+                </div>
+            </div>
+
+            <div class="col-md-3 underline center-align" *ngIf="dashboardData.ofd.length" style="padding: 1.5em 0 0;">
+                <a href="#" (click)="openPanel($event, masterData.status[2])"> View all out for delivery orders</a>
+            </div>
+
+            <div class="col-md-12 no-padding no-ofd-label-cont" *ngIf="!dashboardData.ofd.length">
+                <div class="no-ofd-label">Currently there are no orders out for delivery</div>
+            </div>
+        </ng-container>
+
     </div>
 </div>
 
-<div class="col-md-3 underline center-align" *ngIf="dashboardData.ofd.length" style="padding: 1.5em 0 0;">
-<a href="#" (click)="openPanel($event, masterData.status[2])"> View all out for delivery orders</a>
-</div>
-
-<div class="col-md-12 no-padding no-ofd-label-cont" *ngIf="!dashboardData.ofd.length">
-<div class="no-ofd-label">Currently there are no orders out for delivery</div>
-</div>
-</div>
-</div>
 <div class="row">
     <div class="cell col-md-2 table-display" [ngClass]="{'alert-action': isRowAlert['bydate'].isAlert, 'alertg-action': (!isRowAlert['bydate'].isAlert && isRowAlert['bydate'].sla), 'no-action': (!isRowAlert['bydate'].isAlert && !isRowAlert['bydate'].sla)}">
-    <div class="table-cell-display v-align-middle">{{masterData.displayStatus[3]}} ({{dashboardData.delivered.total+dashboardData.delivered.today}})</div>
+        <div class="table-cell-display v-align-middle">
+            {{masterData.displayStatus[3]}}
+            <ng-container *ngIf="!dashboardData.delivered.today && isAdmin">({{dashboardData.delivered[0].ordersCount+dashboardData.delivered[1].ordersCount}})</ng-container>
+            <ng-container *ngIf="dashboardData.delivered.today && !isAdmin">({{dashboardData.delivered.total+dashboardData.delivered.today}})</ng-container>
+        </div>
+    </div>
+
+
+        <ng-container *ngIf="!dashboardData.delivered.today && isAdmin">
+            <div class="cellNoHeight cell col-md-10 no-padding">
+                <div class="row">
+                    <div class="col-md-12 relative" >
+                        <div class="col-md-2 no-padding" style="width:20%;" *ngFor="let ndo of dashboardData.delivered; let jj='index'">
+                            <div class="col-md-12 no-padding" style="margin-top:0.75em; width:100%;" [attr.data-index]="jj">
+                                <div class="" [ngClass]="{'a' : ndo.deliveryTimes !='bydate', 'b' : ndo.deliveryTimes =='bydate', 'custom-btn-parent': ndo.ordersCount, 'center-align': !ndo.ordersCount, 'inactive' : ndo.inactive}">
+                                    <app-orders-button [noLabel]="true" [displayData]="ndo" [orderStatus]="ndo.status" [OrderDay]="ndo.day" [deliveryTime]="ndo.deliveryTimes" *ngIf="ndo.ordersCount" (onViewOrders)="viewOrders($event)">
+                                        <app-button-view [inlineLable]="'pre'" [displayData]="ndo" [viewData]="ndo.ordersCount"></app-button-view>
+                                    </app-orders-button>
+                                    <app-no-orders [viewData]="ndo.ordersCount" [orderStatus]="ndo.status"></app-no-orders>
+                                </div>
+                            </div>
+                        </div>
+
+                       <!-- <div class="col-md-2 no-padding" style="width:20%;">
+                            <div class="col-md-12 no-padding" style="margin-top:0.75em; width:100%;">
+                                &lt;!&ndash;<span>Total</span> - <span>{{dashboardData.delivered.total.ordersCount}}</span>&ndash;&gt;
+                                <div class="" [ngClass]="{'a' : dashboardData.delivered.total.deliveryTimes !='bydate', 'b' : dashboardData.delivered.total.deliveryTimes =='bydate', 'custom-btn-parent': dashboardData.delivered.total.ordersCount, 'center-align': !dashboardData.delivered.total.ordersCount, 'inactive' : dashboardData.delivered.total.inactive}">
+                                    <app-orders-button [noLabel]="true" [displayData]="dashboardData.delivered.total" [orderStatus]="dashboardData.delivered.total.status" [OrderDay]="dashboardData.delivered.total.day" [deliveryTime]="dashboardData.delivered.total.deliveryTimes" *ngIf="dashboardData.delivered.total.ordersCount" (onViewOrders)="viewOrders($event)">
+                                        <app-button-view [inlineLable]="'pre'" [displayData]="dashboardData.delivered.total" [viewData]="dashboardData.delivered.total.ordersCount"></app-button-view>
+                                    </app-orders-button>
+                                    <app-no-orders [viewData]="dashboardData.delivered.total.ordersCount" [orderStatus]="dashboardData.delivered.total.status"></app-no-orders>
+                                </div>
+                            </div>
+                        </div>-->
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+
+        <ng-container *ngIf="(dashboardData.delivered.today || dashboardData.delivered.total) && !isAdmin">
+             <div class="cellNoHeight cell col-md-10">
+                <div class="row">
+                    <div class="col-md-7 relative" style="font-size: 1.1em;">
+                        <div class="deliverOrdered1" style="">Orders already delivered : <span class="text-bold">{{dashboardData.delivered.total}}</span></div>
+                        <div class="deliverOrdered2" style="">
+                            <div class="line-height">Orders yet to be delivered : <span class="text-bold">{{dashboardData.delivered.today}}</span></div>
+                        </div>
+                    </div>
+                    <div class="col-md-5" style="padding: 1.5em 0 0;">
+                        <div class="btn btn-primary custom-button underline" (click)="openPanel($event, masterData.status[3])">
+                            <!--View all delivered orders -->
+                            All orders for today
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+
+
 </div>
 
-<div class="cellNoHeight cell col-md-10">
-    <div class="row">
-        <div class="col-md-7 relative" style="font-size: 1.1em;">
-            <div class="deliverOrdered1" style="">Orders already delivered : <span class="text-bold">{{dashboardData.delivered.total}}</span></div>
-            <div class="deliverOrdered2" style="">
-                <div class="line-height">Orders yet to be delivered : <span class="text-bold">{{dashboardData.delivered.today}}</span></div>
-            </div>
-        </div>
-        <div class="col-md-5" style="padding: 1.5em 0 0;">
-        <div class="btn btn-primary custom-button underline" (click)="openPanel($event, masterData.status[3])">
-        <!--View all delivered orders -->
-        All orders for today
-    </div>
-</div>
-</div>
-</div>
-</div>
 </div>
 </div>
 </div>

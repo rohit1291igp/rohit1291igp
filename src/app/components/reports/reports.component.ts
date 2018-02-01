@@ -219,6 +219,10 @@ export class ReportsComponent implements OnInit{
       });
   }
 
+  ngOnDestroy(){
+      this.BackendService.abortLastHttpCall();
+  }
+
   @HostListener('document:click', ['$event.target'])
     public onClick(targetElement) {
         console.log('inside clicked ------->');
@@ -448,9 +452,9 @@ export class ReportsComponent implements OnInit{
         };
 
         _this.BackendService.makeAjax(reqObj, function(err, response, headers){
-            if(err || JSON.parse(response).error) {
+            if(err || response.error) {
                 if(response){
-                    console.log('Error=============>', err, JSON.parse(response).errorCode);
+                    console.log('Error=============>', err, response.errorCode);
                 }else{
                     _this.pdfData=dummyPdfData;
 
@@ -461,8 +465,8 @@ export class ReportsComponent implements OnInit{
                 }
                 return;
             }
-            console.log('sidePanel Response --->', JSON.parse(response).result);
-            _this.pdfData=JSON.parse(response).result.billingAddress ? JSON.parse(response).result : dummyPdfData;
+            console.log('sidePanel Response --->', response.result);
+            _this.pdfData=response.result.billingAddress ? response.result : dummyPdfData;
 
             var fileName="invoice_"+_this.pdfData.billingAddress.name.replace(/[^a-zA-Z0-9]/g,'_')+"_"+(invNo || orderId_);
             setTimeout(function(){
@@ -821,11 +825,11 @@ export class ReportsComponent implements OnInit{
         },2000);*/
 
         _this.BackendService.makeAjax(reqObj, function(err, response, headers){
-            if(err || JSON.parse(response).error) {
-                console.log('Error=============>', err, JSON.parse(response).errorCode);
+            if(err || response.error) {
+                console.log('Error=============>', err, response.errorCode);
                 return;
             }
-            response = JSON.parse(response);
+            //response = JSON.parse(response);
             console.log('sidePanel Response --->', response.result);
             if(response.result){
                   console.log('Following operation is successful !!!');

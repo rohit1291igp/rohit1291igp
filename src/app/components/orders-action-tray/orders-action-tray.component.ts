@@ -45,7 +45,9 @@ import {environment} from "../../../environments/environment";
     ]
 })
 export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
+  env=environment;
   isMobile=environment.isMobile;
+  isAdmin=(environment.userType && environment.userType === "admin");
   confirmFlag=false;
   confirmModel:any={};
   confirmData={
@@ -64,6 +66,14 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
   };
   public trayOpen: Boolean = false;
   prodListArgs;
+  adminActions={
+      adminActionsFlag:false,
+      adminActionsName:"",
+      adminActionsModel:null,
+      adminActionDepData:null,
+      adminActionResponse:null
+  };
+  activeOrderLogIndexes={};
   @Output() onStatusUpdate: EventEmitter<any> = new EventEmitter();
   @Output() onOfdView: EventEmitter<any> = new EventEmitter();
   rejectReasons=[
@@ -175,6 +185,13 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
                 this.vendorIssueFlag=false;
             }else if(this.confirmFlag){
                 this.confirmFlag=false;
+            }else if(this.adminActions.adminActionsFlag){
+                this.adminActions.adminActionsFlag=false;
+            }else if(Object.keys(this.activeOrderLogIndexes).length){
+                for(var prop in this.activeOrderLogIndexes){
+                    this.sidePanelData[Number(prop)].orderLogFlag=false;
+                    delete this.activeOrderLogIndexes[prop];
+                }
             }else{
                 this.onStatusUpdate.emit("closed");
                 this.trayOpen = false;
@@ -211,8 +228,8 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
      };
 
      _this.BackendService.makeAjax(reqObj, function(err, response, headers){
-         if(err || JSON.parse(response).error) {
-             console.log('Error=============>', err, JSON.parse(response).errorCode);
+         if(err || response.error) {
+             console.log('Error=============>', err, response.errorCode);
          }
          console.log('sidePanel Response --->', response.result);
          _this.vendorIssueFlag=false;
@@ -259,7 +276,7 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
       var orderDeliveryTime = this.statusReasonModel.deliveryTime;
       //this.statusReasonModel = {}
 
-      this.updateOrderStatus(orderStatusEvent, orderStatus, orderId, orderProducts, orderDeliveryDate, orderDeliveryTime);
+      this.updateOrderStatus(orderStatusEvent, null, orderStatus, orderId, orderProducts, orderDeliveryDate, orderDeliveryTime);
   }
 
   clearPopupData(){
@@ -313,11 +330,11 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
                 };
 
                 _this.BackendService.makeAjax(reqObj, function(err, response, headers){
-                    if(err || JSON.parse(response).error) {
-                        console.log('Error=============>', err, JSON.parse(response).errorCode);
+                    if(err || response.error) {
+                        console.log('Error=============>', err, response.errorCode);
                     }
                     console.log('sidePanel Response --->', response.result);
-                    var uploadedFileList = JSON.parse(response).result.uploadedFilePath[_this.statusReasonModel.status];
+                    var uploadedFileList = response.result.uploadedFilePath[_this.statusReasonModel.status];
                     _this.uploadedFiles = uploadedFileList;
                 });
 
@@ -342,13 +359,13 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
             };
 
             _this.BackendService.makeAjax(reqObj, function(err, response, headers){
-                if(err || JSON.parse(response).error) {
-                    console.log('Error=============>', err, JSON.parse(response).errorCode);
+                if(err || response.error) {
+                    console.log('Error=============>', err, response.errorCode);
                 }
                 console.log('dltFile Response --->', response.result);
 
                 //var uploadedFileList = JSON.parse(response).result;
-                if(JSON.parse(response).result){
+                if(response.result){
                     for(var i=0; i<_this.uploadedFiles.length; i++){
                         if(_this.uploadedFiles[i] === fileName){
                             _this.uploadedFiles.splice(i, 1);
@@ -397,12 +414,16 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
     this.activeDashBoardDataType = dashBoardDataType;
     this.apierror = null;
     this.sidePanelData = null;
-    this.orderByStatus = orderByStatus;
+    if(orderByStatus && typeof(orderByStatus) === "object" && 'cat' in orderByStatus && 'subCat' in orderByStatus){
+        this.orderByStatus = orderByStatus.status;
+    }else{
+        this.orderByStatus = orderByStatus;
+    }
     this.orderUpdateByTime = e.currentTarget.dataset.deliverytime;
     this.orderId = orderId;
 
     if(this.orderByStatus === "OutForDelivery" && e.currentTarget.dataset.deliverytime === "unknown"){
-        this.updateOrderStatus(e, "Delivered", orderId, null, null, null);
+        this.updateOrderStatus(e, null, "Delivered", orderId, null, null, null);
         /*this.loadTrayData(e, orderByStatus, orderId, dashBoardDataType, function(err, result){
             if(err){
                 console.log('Error----->', err);
@@ -421,7 +442,7 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
         }else{
             document.querySelector('body').classList.add('removeScroll');
             console.log('close not clicked ----->', this.trayOpen, dashBoardDataType);
-            if(orderByStatus === "OutForDeliveryView"){
+            if(this.orderByStatus === "OutForDeliveryView"){
                this.onOfdView.emit("OutForDeliveryView");
             }
             this.trayOpen = true;
@@ -429,7 +450,7 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
 
         //this.trayOpen = !this.trayOpen;
         console.log('trayOpen: and loading data', this.trayOpen);
-        if(orderByStatus || orderId) this.loadTrayData(e, orderByStatus, orderId, dashBoardDataType, null);
+        if(this.orderByStatus || orderId) this.loadTrayData(e, orderByStatus, orderId, dashBoardDataType, null);
     }
   }
 
@@ -438,40 +459,14 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
       let fkAssociateId = localStorage.getItem('fkAssociateId');
       var _this = this;
       var reqURL:string;
-
-      if(localStorage.getItem('dRandom')){
-          setTimeout(function(){
-              if(orderId){
-                  var orderData = Object.assign({}, _this.getDummyOrderData().result[0]);
-                  orderData.orderId = orderId;
-                  orderData.orderProducts[0].ordersProductStatus = orderByStatus || "Shipped";
-                  if(cb){
-                      return cb(null, [orderData]);
-                  }else{
-                      _this.sidePanelData = [orderData];
-                  }
-              }else{
-                  var orderDataList = _this.getDummyOrderData().result.slice();
-                  for(let i in orderDataList){
-                      orderDataList[i].orderProducts[0].ordersProductStatus = orderByStatus;
-                  }
-
-                  if(cb){
-                      return cb(null, orderDataList);
-                  }else{
-                      _this.sidePanelData = orderDataList;
-                  }
-
-              }
-              _this.scrollTo(document.getElementById("mainOrderSection"), 0, 0); // scroll to top
-
-          }, 1000);
-          return;
+      if(orderByStatus && typeof(orderByStatus) === "object" && 'cat' in orderByStatus && 'subCat' in orderByStatus){
+          var cat=orderByStatus.cat;
+          var subCat=orderByStatus.subCat;
+          orderByStatus = orderByStatus.status;
       }
-
       if(orderId){
           //reqURL ="?responseType=json&scopeId=1&fkassociateId="+fkAssociateId+"&orderId="+orderId+"&method=igp.order.getOrder";
-          if(typeof(orderId) === "object" && 'orderId' in orderId){
+          if(orderId && typeof(orderId) === "object" && 'orderId' in orderId){
               var orderProductIds= ('orderProductIds' in orderId && orderId.orderProductIds) ? "&orderProductIds="+orderId.orderProductIds : "";
               reqURL ="getOrder?responseType=json&scopeId=1&fkassociateId="+fkAssociateId+"&orderId="+orderId.orderId+orderProductIds;
           }else{
@@ -485,7 +480,10 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
           let section;
           let statusList = this.dashboardService.statuslist;
           switch(orderStatus){
-              case statusList['n'] :
+              case statusList['n']:
+              case statusList['c']:
+              case statusList['p']:
+              case statusList['na']:
                                         switch(orderDeliveryTime){
                                             case "past" : section = "past";
                                                 break;
@@ -504,30 +502,11 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
                                         }
                   break;
 
-              case statusList['c'] :
-                                      switch(orderDeliveryTime){
-                                          case "past" : section = "past";
-                                              break;
-
-                                          case "today" : section = "today";
-                                              break;
-
-                                          case "tomorrow" : section = "tomorrow";
-                                              break;
-
-                                          case "future" : section = "future";
-                                              break;
-
-                                          case "bydate" : section = "specific";
-                                              break;
-                                     }
+              case statusList['o'] :
+              case statusList['d'] :
+                  section = "today";
                   break;
 
-              case statusList['o'] : section = "today";
-                  break;
-
-              case statusList['d'] : section = "today";
-                  break;
           }
 
           if(orderStatus === "Shipped"){
@@ -539,6 +518,10 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
           }else{
               reqURL ="getOrderByStatusDate?responseType=json&scopeId=1&orderAction="+dashBoardDataType+"&section="+section+"&status="+orderStatus+"&fkassociateId="+fkAssociateId+"&date="+spDate;
           }
+
+          if(cat && subCat){
+              reqURL = reqURL+"&category="+cat+"&subcategory="+subCat;
+          }
       }
 
       let reqObj =  {
@@ -548,16 +531,16 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
       };
 
       this.BackendService.makeAjax(reqObj, function(err, response, headers){
-          if(err || JSON.parse(response).error) {
-              console.log('Error=============>', err, JSON.parse(response).errorCode);
+          if(err || response.error) {
+              console.log('Error=============>', err, response.errorCode);
               if(cb){
-                  return cb(err || JSON.parse(response).errorCode);
+                  return cb(err || response.errorCode);
               }else{
-                  _this.apierror = err || JSON.parse(response).errorCode;
+                  _this.apierror = err || response.errorCode;
               }
               return;
           }
-          response = JSON.parse(response);
+          response = response;
           //console.log('sidePanel Response --->', response.result);
           if(cb){
               return cb(null, response.result ? Array.isArray(response.result) ? response.result : [response.result] : []);
@@ -662,7 +645,7 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
 
   }
 
-  updateOrderStatus(e, status, orderId, orderProducts, deliveryDate, deliveryTime){
+  updateOrderStatus(e, orderIndex, status, orderId, orderProducts, deliveryDate, deliveryTime){
       e.stopPropagation();
       /* confirm popup - start */
         if(this.isMobile){
@@ -773,7 +756,7 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
                       //In case of search order layer - don't remove product, update status on layer
                       _this.loadTrayData(e, _this.orderByStatus, _this.orderId, _this.activeDashBoardDataType, null);
                   }else{
-                      let dataLength = _this.sidePanelDataOnStatusUpdate(orderId, deliveryDate, deliveryTime);
+                      let dataLength = _this.sidePanelDataOnStatusUpdate(orderIndex, orderId, deliveryDate, deliveryTime);
                       if(!dataLength){
                           _this.onStatusUpdate.emit("closed");
                           _this.trayOpen = false;
@@ -794,12 +777,12 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
           console.log('Update status API =============>', reqObj);
 
           _this.BackendService.makeAjax(reqObj, function(err, response, headers){
-              if(err || JSON.parse(response).error) {
-                  console.log('Error=============>', err, JSON.parse(response).errorCode);
-                  _this.apierror = err || JSON.parse(response).errorCode;
+              if(err || response.error) {
+                  console.log('Error=============>', err, response.errorCode);
+                  _this.apierror = err || response.errorCode;
                   return;
               }
-              response = JSON.parse(response);
+              //response = JSON.parse(response);
               console.log('sidePanel Response --->', response.result);
               //_this.router.navigate(['/dashboard-dfghj']);
               _this.onStatusUpdate.emit(currentTab);
@@ -809,7 +792,7 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
                   //In case of search order layer - don't remove product, update status on layer
                   _this.loadTrayData(e, _this.orderByStatus, _this.orderId, _this.activeDashBoardDataType, null);
               }else{
-                  let dataLength = _this.sidePanelDataOnStatusUpdate(orderId, deliveryDate, deliveryTime);
+                  let dataLength = _this.sidePanelDataOnStatusUpdate(orderIndex, orderId, deliveryDate, deliveryTime);
                   if(!dataLength){
                       _this.onStatusUpdate.emit("closed"); // 'closed parameter is sent to rearrange dashboard columns'
                       _this.trayOpen = false;
@@ -903,17 +886,21 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
       return orderUpdateByStatus;
   }
 
-  sidePanelDataOnStatusUpdate(orderId, deliveryDate, deliveryTime){
+  sidePanelDataOnStatusUpdate(orderIndex?, orderId?, deliveryDate?, deliveryTime?){
       var _this = this;
-
-      for(var i in _this.sidePanelData){
-          if(parseInt(orderId) === parseInt(_this.sidePanelData[i].orderId) &&
-              deliveryDate === _this.sidePanelData[i].orderProducts[0].orderProductExtraInfo.deliveryDate &&
-              deliveryTime === _this.sidePanelData[i].orderProducts[0].orderProductExtraInfo.deliveryTime){
-              if(Array.isArray(_this.sidePanelData)) console.log('splice objData----------------');
-              _this.sidePanelData.splice(i, 1);
-              return _this.sidePanelData.length;
+      if(orderId && deliveryDate && deliveryTime){
+          for(var i in _this.sidePanelData){
+              if(parseInt(orderId) === parseInt(_this.sidePanelData[i].orderId) &&
+                  deliveryDate === _this.sidePanelData[i].orderProducts[0].orderProductExtraInfo.deliveryDate &&
+                  deliveryTime === _this.sidePanelData[i].orderProducts[0].orderProductExtraInfo.deliveryTime){
+                  if(Array.isArray(_this.sidePanelData)) console.log('splice objData----------------');
+                  _this.sidePanelData.splice(i, 1);
+                  return _this.sidePanelData.length;
+              }
           }
+      }else{
+          _this.sidePanelData.splice(orderIndex, 1);
+          return _this.sidePanelData.length;
       }
   }
 
@@ -946,7 +933,6 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
 
   print(e, print_type, orderId, deliveryDate, deliveryTime, all){
       e.stopPropagation();
-
       let printContents="", popupWin;
       //let targetId = print_type === "order" ? ("order_"+orderId) : ("order_message_"+orderId);
       if(all){
@@ -1004,6 +990,7 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
       if(ignore) return;
       this.statusMessageFlag = false;
       this.vendorIssueFlag = false;
+      this.adminActions.adminActionsFlag=false;
   }
 
   confirmYesNo(args){
@@ -1021,7 +1008,7 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
             var orderProducts = this.confirmModel.orderProducts;
             var orderDeliveryDate = this.confirmModel.deliveryDate;
             var orderDeliveryTime = this.confirmModel.deliveryTime;
-            this.updateOrderStatus(orderStatusEvent, orderStatus, orderId, orderProducts, orderDeliveryDate, orderDeliveryTime);
+            this.updateOrderStatus(orderStatusEvent, null, orderStatus, orderId, orderProducts, orderDeliveryDate, orderDeliveryTime);
             this.confirmFlag=false;
         }else{
             this.confirmFlag=false;
@@ -1037,6 +1024,253 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
           "result": []
       };
   }
+
+  orderLog(e, val, orderIndex){
+      e.stopPropagation();
+      if(val){
+          this.activeOrderLogIndexes[orderIndex]=true;
+      }else{
+          delete this.activeOrderLogIndexes[orderIndex];
+      }
+      this.sidePanelData[orderIndex].orderLogFlag=val;
+      this.adminActions.adminActionsName="orderLog";
+
+      if(!this.adminActions.adminActionDepData)  this.adminActions.adminActionDepData={};
+      this.adminActions.adminActionDepData.orderIndex=orderIndex;
+      //if(this.adminActions.adminActionResponse && 'orderLogData' in this.adminActions.adminActionResponse) delete this.adminActions.adminActionResponse.orderLogData;
+      this.adminActionsSubmit(e);
+  }
+
+  changeDd(e, val, orderIndex){
+      e.stopPropagation();
+      var _this=this;
+      if(val !== null && val.toString())
+        this.sidePanelData[orderIndex].changeActionsFlag=val;
+      else
+        this.sidePanelData[orderIndex].changeActionsFlag=!this.sidePanelData[orderIndex].changeActionsFlag;
+
+  }
+
+  adminActionsInit(e, name, orderIndex){
+      e.stopPropagation();
+      var _this=this;
+
+      _this.getAdminActionDepData(e, name, orderIndex, function(err, result){
+          if(err){
+              console.log(err); return;
+          }
+
+          if(name === "call"){
+              alert('Call not implemented!');
+          }else if(name === "cancelRefund"){
+              alert('Canotncel & Refund not implemented!');
+          }else{
+              _this.adminActions.adminActionsModel={};
+              _this.adminActions.adminActionsModel.orderProductId="";
+              _this.adminActions.adminActionsModel.componentId="";
+              _this.adminActions.adminActionsModel.orderProduct="";
+              _this.adminActions.adminActionsModel.assignChangeVendor="";
+              _this.adminActions.adminActionsModel.deliveryTime="";
+              _this.adminActions.adminActionsModel.deliveryType="";
+
+              _this.adminActions.adminActionsName=name;
+              _this.adminActions.adminActionsFlag=true;
+          }
+      });
+  }
+
+  getAdminActionDepData(e, name, orderIndex, cb){
+      e.stopPropagation();
+      var _this=this;
+      _this.adminActions.adminActionDepData={};
+      _this.adminActions.adminActionDepData.orderIndex=orderIndex;
+
+      let orderProdsCollection=function(){
+          let orderProducts=JSON.parse(JSON.stringify(_this.sidePanelData[orderIndex].orderProducts));
+          _this.adminActions.adminActionDepData.orderProducts=orderProducts;
+          _this.adminActions.adminActionDepData.orderProducts.unshift({"orderId" : "", "productId": "", "productName": "Select Order Product"});
+      }
+
+      if(name === "assignChangeVendor"){
+          let orderProducts=JSON.parse(JSON.stringify(_this.sidePanelData[orderIndex].orderProducts)),
+              pincode=_this.sidePanelData[orderIndex].deliveryPostcode,
+              deliveryType=_this.sidePanelData[orderIndex].orderProducts[0].orderProductExtraInfo.deliveryType;
+
+          _this.adminActions.adminActionDepData.orderProducts=orderProducts;
+          _this.adminActions.adminActionDepData.orderProducts.unshift({"orderId" : "", "productId": "", "productName": "Select Order Product"});
+          let reqObj =  {
+              url : 'getVendorList?pincode='+pincode+'&shippingType='+deliveryType,
+              method : 'get'
+          };
+
+          _this.BackendService.makeAjax(reqObj, function(err, response, headers){
+              if(err || response.error) {
+                  console.log('Error=============>', err);
+              }
+              console.log('vendorList Response --->', response.result);
+              _this.adminActions.adminActionDepData.vendorList=response.result;
+              _this.adminActions.adminActionDepData.vendorList.unshift({"vendorId" : "", "associateName": "Select Vendor"});
+              return cb(null);
+          });
+      }else if(name === "changeDeliveryType&Date"){
+          orderProdsCollection();
+          let deliveryType=_this.sidePanelData[orderIndex].orderProducts[0].orderProductExtraInfo.deliveryType;
+          _this.adminActions.adminActionDepData.deliveryTimes = [
+              {"name" : "Select Delivery Time", "value":""},
+              {"name" : "10:00 hrs - 12:00 hrs", "value":"10:00 hrs - 12:00 hrs"},
+              {"name" : "12:00 hrs - 14:00 hrs", "value":"12:00 hrs - 14:00 hrs"},
+              {"name" : "14:00 hrs - 16:00 hrs", "value":"14:00 hrs - 16:00 hrs"},
+              {"name" : "16:00 hrs - 18:00 hrs", "value":"16:00 hrs - 18:00 hrs"},
+              {"name" : "18:00 hrs - 20:00 hrs", "value":"18:00 hrs - 20:00 hrs"},
+              {"name" : "20:00 hrs - 22:00 hrs", "value":"20:00 hrs - 22:00 hrs"}
+          ];
+
+          _this.adminActions.adminActionDepData.deliveryTypes = [
+              {"name" : "Select Delivery Type", "value":""},
+              {"name" : "Standard Delivery", "value":"1"},
+              {"name" : "Fixed Time Delivery", "value":"2"},
+              {"name" : "Midnight Delivery", "value":"3"},
+              {"name" : "Fixed Date Delivery", "value":"4"},
+          ];
+
+          for(var i in _this.adminActions.adminActionDepData.deliveryTypes){
+            if(_this.adminActions.adminActionDepData.deliveryTypes[i].value === deliveryType.toString() ){
+                _this.adminActions.adminActionDepData.deliveryTypes.splice(i,1);
+                break;
+            }
+          }
+
+      }else if( name === "changePrice"){
+          orderProdsCollection();
+          _this.orderProductChange(e, "0:");
+      }
+
+      return cb(null);
+  }
+
+  orderProductChange(e, _orderProductIndex){
+      var _this=this;
+      let orderProductId=_orderProductIndex.split(':')[1] ? _orderProductIndex.split(':')[1].trim() : "";
+      let orderProductIndex=_orderProductIndex.split(':')[0] - 1;
+      if(!orderProductId) {
+          _this.adminActions.adminActionDepData.orderProductComponents=[{"componentName" : "Select Component", "componentId": ""}];
+          return;
+      }
+      let orderIndex=_this.adminActions.adminActionDepData.orderIndex;
+      let orderProductComponents=JSON.parse(JSON.stringify(_this.sidePanelData[orderIndex].orderProducts[orderProductIndex].componentList));
+      _this.adminActions.adminActionDepData.orderProductComponents=orderProductComponents;
+      _this.adminActions.adminActionDepData.orderProductComponents.unshift({"componentName" : "Select Component", "componentId": ""});
+      _this.adminActions.adminActionsModel.componentId="";
+
+  }
+
+  adminActionsSubmit(e){
+      e.stopPropagation();
+      var _this=this;
+      console.log('Action Name --->', _this.adminActions.adminActionsName);
+      console.log('Action Model --->', _this.adminActions.adminActionsModel);
+      let orderIndex=_this.adminActions.adminActionDepData.orderIndex;
+      let paramsObj={};
+      let url="";
+      let method;
+      let apiSuccessHandler=function(apiResponse){};
+      switch(_this.adminActions.adminActionsName){
+          case 'email' : url = "sendEmailToVendor";
+              paramsObj={
+                  subject:_this.adminActions.adminActionsModel.emailSubject,
+                  body:_this.adminActions.adminActionsModel.emailBody
+                };
+              apiSuccessHandler=function(apiResponse){
+                  alert("Email Sent successfully!");
+              };
+              break;
+
+          case 'sms' : url = "sendSmsToVendor";
+              paramsObj={
+                  body:_this.adminActions.adminActionsModel.sms
+              };
+              apiSuccessHandler=function(apiResponse){
+                  alert("SMS Sent successfully!");
+              };
+              break;
+
+          case 'assignChangeVendor' : url = "assignReassignOrder";
+              paramsObj={
+                  action:_this.orderByStatus == 'notAlloted' ? 'assign' : 'ressign',
+                  orderId:_this.sidePanelData[orderIndex].orderId,
+                  orderProductId:_this.adminActions.adminActionsModel.orderProduct,
+                  fkAssociateId:_this.adminActions.adminActionsModel.assignChangeVendor
+              };
+              apiSuccessHandler=function(apiResponse){
+                  _this.sidePanelDataOnStatusUpdate(orderIndex);
+              };
+              break;
+
+          case 'changePrice' : url = "orderPriceChanges";
+              paramsObj={
+                  orderId:_this.sidePanelData[orderIndex].orderId,
+                  orderProductId:_this.adminActions.adminActionsModel.orderProductId,
+                  componentId:_this.adminActions.adminActionsModel.componentId,
+                  shippingCharge:_this.adminActions.adminActionsModel.shippingCharge,
+                  componentPrice:_this.adminActions.adminActionsModel.componentPrice
+              };
+              break;
+
+          case 'changeDeliveryType&Date' : url = "deliveryDetailChanges";
+              var _date=_this.adminActions.adminActionsModel.deliveryDate.date;
+              paramsObj={
+                  orderId:_this.sidePanelData[orderIndex].orderId,
+                  orderProductId:_this.adminActions.adminActionsModel.orderProductId,
+                  deliveryDate:_date.year+'-'+_date.month+'-'+_date.day,
+                  deliveryType:_this.adminActions.adminActionsModel.deliveryType,
+                  deliveryTime:_this.adminActions.adminActionsModel.deliveryTime
+              };
+              break;
+
+          case 'orderLog' : url = "getOrderLog"; method="get";
+              if(_this.sidePanelData[orderIndex].orderLogData) return;
+              paramsObj={
+                  orderId:_this.sidePanelData[orderIndex].orderId
+              };
+              apiSuccessHandler=function(apiResponse){
+                  _this.sidePanelData[orderIndex].orderLogData=apiResponse.logs;
+                  //_this.adminActions.adminActionResponse.orderLogData=apiResponse.logs;
+                  //_this.adminActions.adminActionResponse.orderLogData="The order has been PROCESSED<br>Occasion: General GiftingThe vendor of product Bunch of 12 Red Roses with Teddy & 5 Dairy Milk Chocolates (HD1021148) has been changed from  Intermesh Shopping Network Pvt. Ltd. (Handels) to RDC Mumbai by Bulk assignment<BR>The product Bunch of 12 Red Roses with Teddy & 5 Dairy Milk Chocolates (HD1021148) has been Confirmed by RDC MumbaiThe following Products have been Shipped<BR>Hand Delivery<BR>Received By: Ms. Rashmi (Security Counter)<BR>Date: 2017-01-25<BR>Time: 6 pm<BR><BR>Products Details: <BR>1&nbsp;&nbsp;X&nbsp;&nbsp;Bunch of 12 Red Roses with Teddy & 5 Dairy Milk ChocolatesThe order has been Dispatched by  on 2017-01-25 06:05:45pm using through individual panelThe vendor of product Bunch of 12 Red Roses with Teddy & 5 Dairy Milk Chocolates has been changed from RDC Mumbai To RDC Mumbai By New Handels Panel<Br>";
+              };
+              break;
+
+          case 'cancelRefund' : url = "";
+              paramsObj={
+                  orderId:_this.sidePanelData[orderIndex].orderId
+              };
+              apiSuccessHandler=function(apiResponse){
+                  _this.sidePanelDataOnStatusUpdate(orderIndex);
+              };
+              break;
+      }
+
+
+      let paramsStr = _this.UtilityService.formatParams(paramsObj);
+      console.log('Action API url --->', url);
+      console.log('Action API Params string --->', paramsStr);
+
+      let reqObj =  {
+          url : url+paramsStr,
+          method : (method || 'post')
+      };
+
+      _this.BackendService.makeAjax(reqObj, function(err, response, headers){
+          if(!response) response={result:[]};
+          if(err || response.error) {
+              console.log('Error=============>', err);
+          }
+          console.log('admin action Response --->', response.result);
+          _this.adminActions.adminActionResponse={};
+          apiSuccessHandler(response.result);
+          _this.adminActions.adminActionsFlag=false;
+      });
+  }
+
 
   printDropDown(args){
       var _this=this, _e=args.e,

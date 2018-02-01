@@ -8,7 +8,7 @@
     background-color: #F2F2F2;
     border-left: 6px solid rgba(224, 224, 224, .5);
     transition: all 0.7s ease;
-    padding:0.5em 1em;
+    padding: 0.5em 1em;
 }
 
 .show-error-section {
@@ -28,4 +28,9 @@
 
 .count{
     font-size:1.5em;
+    padding: 0.2em 0.5em;
+    border: 1px solid #eee;
+    background: #fff;
+    text-align:center;
 }
+

@@ -11,7 +11,7 @@ import { ConnectionBackend, RequestOptions, Request, RequestOptionsArgs, Respons
 })
 export class UploadExcelComponent implements OnInit {
     isMobile=environment.isMobile;
-
+    environment=environment;
     _flags={
         fileOversizeValidation:false,
         emptyFileValidation:false,
@@ -19,6 +19,7 @@ export class UploadExcelComponent implements OnInit {
     };
 
     _data={
+        uploadFileName:"",
         uploadErrorList:[],
         uploadErrorCount:{
             correct:"",
@@ -39,6 +40,7 @@ export class UploadExcelComponent implements OnInit {
 
  uploadExcel(event){
      var _this = this;
+     var fileInput=event.target.querySelector('#excelFile') || {};
      var fileOverSizeFlag= false;
      let fileList: FileList = event.target.querySelector('#excelFile').files;
      if(fileList.length > 0) {
@@ -67,7 +69,7 @@ export class UploadExcelComponent implements OnInit {
          console.log('Upload File - formData =============>', formData, options);
 
          let reqObj =  {
-             url : 'marketplaceorder?fkAssociateId='+localStorage.getItem('fkAssociateId'),
+             url : 'marketplaceorder?user='+localStorage.getItem('vendorName')+'&fkasid='+localStorage.getItem('fkAssociateId'),
              method : "post",
              payload : formData,
              options : options
@@ -102,19 +104,24 @@ export class UploadExcelComponent implements OnInit {
                              }
                          ],
                          "count": {
-                                 "correct": 0,
+                                 "correct": 2,
                                  "fail": 5
                              }
                      }
                  };
-                 response=JSON.stringify(response);
-             }
-             if(err || JSON.parse(response).error) {
-                 console.log('Error=============>', err, JSON.parse(response).errorCode);
              }
 
-             response=JSON.parse(response);
+             if(err || response.error) {
+                 console.log('Error=============>', err, response.errorCode);
+             }
+
              console.log('upload excel Response --->', response.data);
+             if(fileInput && 'value' in fileInput){
+                 _this._data.uploadFileName=fileInput.value.slice(fileInput.value.lastIndexOf('\\')+1)
+             }else{
+                 _this._data.uploadFileName="";
+             }
+
              if(response.data.error.length){
                  _this._data.uploadErrorList=response.data.error;
                  _this._data.uploadErrorCount=response.data.count;
@@ -122,6 +129,8 @@ export class UploadExcelComponent implements OnInit {
                  _this._data.uploadErrorList=[];
                  _this._flags.uploadSuccessFlag=true;
              }
+
+             if(fileInput && 'value' in fileInput) fileInput.value="";
          });
 
      }else{

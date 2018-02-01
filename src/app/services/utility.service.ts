@@ -3,6 +3,7 @@ import * as jsPDF from 'jspdf';
 import { UploadExcelComponent } from '../components/upload-excel/upload-excel.component';
 import { DashboardComponent } from '../components/dashboard/dashboard.component';
 import { Router} from '@angular/router';
+import {environment} from "../../environments/environment";
 
 @Injectable()
 export class UtilityService {
@@ -151,39 +152,31 @@ export class UtilityService {
     }
 
     changeRouteComponent(){
-        var _this=this, userType = localStorage.getItem('userType');
+        var _this=this, userType = environment.userType;
         for (var i in _this.router.config) {
             if (userType ==='upload' && _this.router.config[i].path == "dashboard") {
                 _this.router.config[i].component = UploadExcelComponent;
                 break;
             }
         }
-
     }
 
     createCSV(tableSelector, fileName){
         function downloadCSV(csv, filename) {
             var csvFile;
             var downloadLink;
-
             // CSV file
             csvFile = new Blob([csv], {type: "text/csv"});
-
             // Download link
             downloadLink = document.createElement("a");
-
             // File name
             downloadLink.download = filename;
-
             // Create a link to the file
             downloadLink.href = window.URL.createObjectURL(csvFile);
-
             // Hide download link
             downloadLink.style.display = "none";
-
             // Add the link to DOM
             document.body.appendChild(downloadLink);
-
             // Click download link
             downloadLink.click();
         }

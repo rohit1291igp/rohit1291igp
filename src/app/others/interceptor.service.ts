@@ -34,7 +34,12 @@ export class InterceptedHttp extends Http {
         if(/\/fakeapi/.test(req)){
             return  'http://localhost:1337'+req
         }
-        return  environment.origin2 +'v1/handels/'+ req;
+
+        if(sessionStorage.getItem('mockAPI')){
+            return  environment.originMock+req;
+        }else{
+            return  environment.origin2 +'v1/handels/'+ req;
+        }
         /*
         if((/login/g).test(req)){
             return  environment.origin + req;
@@ -52,12 +57,16 @@ export class InterceptedHttp extends Http {
             options.headers = new Headers();
         }
 
-        //options.headers.append('Content-Type', 'text/plain');
-        //options.headers.append('Accept', 'application/json');
-        //options.headers.append('Content-Type', 'application/json');
-        //options.headers.append('token', localStorage.getItem('currentUserToken'));
-        options.headers.append('X-IGP-UISK', 'igpBangaloreHungerForBlood');
-        //options.headers.append('fkAssociateId', localStorage.getItem('currentUserToken'));
+        if(sessionStorage.getItem('mockAPI')){
+            options.headers.append('Content-Type', 'text/plain');
+        }else{
+            //options.headers.append('Content-Type', 'text/plain');
+            //options.headers.append('Accept', 'application/json');
+            //options.headers.append('Content-Type', 'application/json');
+            //options.headers.append('token', localStorage.getItem('currentUserToken'));
+            options.headers.append('X-IGP-UISK', 'igpBangaloreHungerForBlood');
+            //options.headers.append('fkAssociateId', localStorage.getItem('currentUserToken'));
+        }
 
         return options;
     }

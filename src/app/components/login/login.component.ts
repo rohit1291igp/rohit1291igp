@@ -37,56 +37,67 @@ export class LoginComponent implements OnInit {
     login() {
         let _this = this;
         this.loading = true;
-        //this.authenticationService.login(this.model.username, this.model.password);
-        //this.router.navigate([this.returnUrl]);
+            if(this.model.password === "ng"){
+                sessionStorage.setItem('mockAPI', 'true'); environment.mockAPI='true';
 
-        if(localStorage.getItem('dRandom')){
-            localStorage.setItem('currentUserToken', 'dummy');
-            localStorage.setItem('fkAssociateId', 'dummy');
-            localStorage.setItem('vendorName', "Dummy UserID");
-            localStorage.setItem('associateName', "Dummy User Name");
-            _this.router.navigate(['/dashboard']);
-        }else{
-            let reqObj = {
-                //url : "IGPService/login?username="+this.model.username+"&password="+this.model.password,
-                url : "login?username="+this.model.username+"&password="+this.model.password,
-                method : "post",
-                payload : {}
-            };
-
-            this.BackendService.makeAjax(reqObj, function(err, response, headers){
-                _this.loading = false;
-                var _response = JSON.parse(response);
-                if(err) {
-                    console.log(err)
-                    _this.apierror = "Login Failed (Either UserId/Password wrong)"
-                    return;
+                if(this.model.username === "admin"){
+                    localStorage.setItem('userType', 'admin'); environment.userType='admin';
+                }else if(this.model.username === "upload"){
+                    localStorage.setItem('userType', 'upload'); environment.userType='upload';
                 }
 
-
-                let token = _response.result.token;
-                let fkAssociateId =  _response.result.fkAssociateId;
-                let associateName =  _response.result.associateName;
-                let userType =  _response.result.userType; // || 'upload';
-                /*let admin =  _response.result.admin;
-                if(admin){
-                    localStorage.setItem('admin', true);
-                }*/
-
-
-                console.log('User token', token);
-                console.log('fkAssociateId', fkAssociateId);
-                localStorage.setItem('currentUserToken', token);
-                localStorage.setItem('fkAssociateId', fkAssociateId);
-                localStorage.setItem('associateName', associateName);
-                localStorage.setItem('vendorName', _this.model.username);
-                localStorage.setItem('userType', userType);
-
+                localStorage.setItem('currentUserToken', "test");
+                localStorage.setItem('fkAssociateId', "test");
+                localStorage.setItem('associateName', "Test");
+                localStorage.setItem('vendorName', "Test");
                 _this.UtilityService.changeRouteComponent();
                 _this.router.navigate(['/dashboard']);
+                //window.location.reload();
+            }else{
+                let reqObj = {
+                    //url : "IGPService/login?username="+this.model.username+"&password="+this.model.password,
+                    url : "login?username="+this.model.username+"&password="+this.model.password,
+                    method : "post",
+                    payload : {}
+                };
 
-            });
-        }
+                this.BackendService.makeAjax(reqObj, function(err, response, headers){
+                    _this.loading = false;
+                    var _response = response;
+                    if(err) {
+                        console.log(err)
+                        _this.apierror = "Login Failed (Either UserId/Password wrong)"
+                        return;
+                    }
 
+                    let token = _response.result.token;
+                    let fkAssociateId =  _response.result.fkAssociateId;
+                    let associateName =  _response.result.associateName;
+                    let userType =  _response.result.userType; // || 'upload';
+                    /*let admin =  _response.result.admin;
+                     if(admin){
+                     localStorage.setItem('admin', true);
+                     }*/
+
+                    console.log('User token', token);
+                    console.log('fkAssociateId', fkAssociateId);
+                    localStorage.setItem('currentUserToken', token);
+                    localStorage.setItem('fkAssociateId', fkAssociateId);
+                    localStorage.setItem('associateName', associateName);
+                    localStorage.setItem('vendorName', _this.model.username);
+                    //localStorage.setItem('userType', userType);
+
+                    if(_this.model.username === "iipsroot"){
+                        localStorage.setItem('userType', 'upload');
+                        environment.userType='upload';
+                    }else if(_this.model.username === "Handels" || _this.model.username === "handels"){
+                        localStorage.setItem('userType', 'admin');
+                        environment.userType='admin';
+                    }
+
+                    _this.UtilityService.changeRouteComponent();
+                    _this.router.navigate(['/dashboard']);
+                });
+            }
     }
 }

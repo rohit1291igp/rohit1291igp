@@ -8,6 +8,7 @@ import { MainHeaderComponent } from '../main-header/main-header.component';
 import { UtilityService } from '../../services/utility.service';
 import {environment} from "../../../environments/environment";
 import { Observable } from "rxjs";
+import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard',
@@ -17,6 +18,7 @@ import { Observable } from "rxjs";
 export class DashboardComponent implements OnInit {
   @ViewChild(OrdersActionTrayComponent) child: OrdersActionTrayComponent;
   isMobile=environment.isMobile;
+  isAdmin=(environment.userType && environment.userType === "admin");
   prodOrderstatus : any;
   dashBoardDataType;
   vendorName = localStorage.getItem('associateName');
@@ -26,7 +28,8 @@ export class DashboardComponent implements OnInit {
   public displayStatusToggle:any={
         "new" : true,
         "confirmed" : false,
-        "Ofd":false
+        "Ofd":false,
+        "delivered":false
   };
   public isRowAlert: Object;
 
@@ -43,6 +46,7 @@ export class DashboardComponent implements OnInit {
   public dateRange: Object = {};
   public dashboardObservable;
   constructor(
+    public router: Router,
     public dashboardService: DashboardService,
     public BackendService: BackendService,
     public UtilityService: UtilityService
@@ -50,7 +54,8 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit() {
     //var _this = this;
-    this.isRowAlert = this.dashboardService.getAlertRow();0
+
+    this.isRowAlert = this.dashboardService.getAlertRow();
     this.dashboardData = this.dashboardService.getCustomData();
     this.loadDbData();
 
@@ -76,6 +81,7 @@ export class DashboardComponent implements OnInit {
            }*/
           _this.dashboardData = result;
           _this.dateRange = _this.setFestivalDate(result.festivalDate || new Date());
+          _this.isRowAlert = _this.dashboardService.getAlertRow();
       },_this.dashBoardDataType, null);
       this.masterData = this.dashboardService.getMasterData();
       //this.getDashboardData();
@@ -93,17 +99,24 @@ export class DashboardComponent implements OnInit {
   viewOrders(e) {
     e.preventDefault();
     e.stopPropagation();
+    let cat = e.currentTarget.dataset.cat;
+    let subCat = e.currentTarget.dataset.subcat;
+
+    let _status = e.currentTarget.dataset.status;
     let status = e.currentTarget.dataset.status;
     let orderId = e.currentTarget.dataset.orderid;
 
+    if(cat && subCat){
+        status = {"cat":cat, "subCat":subCat, "status":status};
+    }
     console.log('viewOrders called>>>>>>>>>>status', status);
     this.child.toggleTray(e, status, orderId, this.dashBoardDataType);
 
     //changing clicked element position if its index greater than 0
-    if(status === "Processed" || status === "Confirmed" || status === "OutForDelivery"){
+    if(_status === "processing" || _status === "notAlloted" || _status === "Processed" || _status === "Confirmed" || _status === "OutForDelivery"){
         let _this = this;
-        let clickEleIndex =  status === "OutForDelivery" ? e.currentTarget.parentElement.parentElement.dataset.index : e.currentTarget.parentElement.parentElement.parentElement.dataset.index;
-        _this.dashboardData = _this.dashboardService.changeDashboardDataOrder(_this.dashboardData, clickEleIndex, status);
+        let clickEleIndex =  (_status === "OutForDelivery" && !this.isAdmin) ? e.currentTarget.parentElement.parentElement.dataset.index : e.currentTarget.parentElement.parentElement.parentElement.dataset.index;
+        _this.dashboardData = _this.dashboardService.changeDashboardDataOrder(_this.dashboardData, clickEleIndex, _status);
     }
   }
 
@@ -125,9 +138,9 @@ export class DashboardComponent implements OnInit {
     console.log('Side-panel opened for status: ', status);
   }
 
-    onDateChanged1(event) {
-        console.log('onDateChanged1 called ----------');
-    }
+  onDateChanged1(event) {
+    console.log('onDateChanged1 called ----------');
+  }
 
   onDateChanged(event: IMyDateModel) {
     console.log('Date changed');
@@ -178,6 +191,10 @@ export class DashboardComponent implements OnInit {
         _this.displayStatusToggle[prop]=false;
       }
       _this.displayStatusToggle[_prop]=value;
+  }
+
+  ifExist(obj, prop){
+     return prop in obj;
   }
 
 }

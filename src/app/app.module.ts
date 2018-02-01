@@ -3,6 +3,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, APP_INITIALIZER } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule, Http, XHRBackend, RequestOptions } from '@angular/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { MyHttpInterceptor } from './others/my-http-interceptor';
 //import { BsDropdownModule } from 'ng2-bootstrap';
 import { SelectModule } from 'ng2-select';
 import { MyDatePickerModule } from 'mydatepicker';
@@ -82,6 +84,7 @@ export function ConfigLoader(envConfig: envConfig) {
     BrowserModule,
     FormsModule,
     HttpModule,
+    HttpClientModule,
     routing,
     //BsDropdownModule.forRoot(),
     SelectModule,
@@ -91,10 +94,13 @@ export function ConfigLoader(envConfig: envConfig) {
   ],
   providers: [
     {
-      provide: Http,
-      useFactory: httpFactory,
-      deps: [XHRBackend, RequestOptions]
-    },
+//      provide: Http,
+//      useFactory: httpFactory,
+//      deps: [XHRBackend, RequestOptions]
+          provide: HTTP_INTERCEPTORS,
+          useClass: MyHttpInterceptor,
+          multi: true
+      },
     /*  envConfig,
     {
       provide: APP_INITIALIZER,

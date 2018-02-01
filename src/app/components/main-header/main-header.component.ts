@@ -2,6 +2,8 @@ import { Component, OnInit, HostListener, ElementRef } from '@angular/core';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { BackendService } from '../../services/backend.service';
 import {environment} from "../../../environments/environment";
+import { DashboardComponent } from '../dashboard/dashboard.component';
+import { DashboardService } from '../../services/dashboard.service';
 
 @Component({
   selector: 'app-main-header',
@@ -9,7 +11,9 @@ import {environment} from "../../../environments/environment";
   styleUrls: ['./main-header.component.css']
 })
 export class MainHeaderComponent implements OnInit {
+    environment=environment;
     isMobile=environment.isMobile;
+    isAdmin=(environment.userType && environment.userType === "admin");
     vendorName:any = localStorage.getItem('associateName');
     userType:any = localStorage.getItem('userType');
     reportDropdownOpen=false;
@@ -18,7 +22,8 @@ export class MainHeaderComponent implements OnInit {
     constructor(
       public router: Router,
       public BackendService : BackendService,
-      private _elementRef: ElementRef
+      private _elementRef: ElementRef,
+      public dashboardService: DashboardService
         ) { }
 
   @HostListener('document:click', ['$event.target'])
@@ -47,6 +52,8 @@ export class MainHeaderComponent implements OnInit {
               console.log('Url changed');
               _this.vendorName = localStorage.getItem('associateName');
               _this.activeTabHighlight();
+              environment.userType= localStorage.getItem('userType');
+              _this.dashboardService.isAdmin=(environment.userType && environment.userType === "admin");
           }
       });
   }
@@ -54,13 +61,6 @@ export class MainHeaderComponent implements OnInit {
   logout(e){
       let _this = this;
 
-      if(localStorage.getItem('dRandom')){
-          localStorage.removeItem('currentUserToken');
-          localStorage.removeItem('fkAssociateId');
-          localStorage.removeItem('vendorName');
-          localStorage.removeItem('associateName');
-          _this.router.navigate(['/login']);
-      }else{
           let reqObj = {
               //url : "?responseType=json&scopeId=1&token="+localStorage.getItem('currentUserToken')+"&method=igp.auth.doLogOut",
               url : "doLogOut?responseType=json&scopeId=1&token="+localStorage.getItem('currentUserToken'),
@@ -74,14 +74,19 @@ export class MainHeaderComponent implements OnInit {
                   return;
               }
 
-              localStorage.removeItem('currentUserToken');
-              localStorage.removeItem('fkAssociateId');
-              localStorage.removeItem('vendorName');
-              localStorage.removeItem('associateName');
-              localStorage.removeItem('admin');
-              localStorage.removeItem('userType');
+              localStorage.clear();
+              sessionStorage.clear();
+              environment.mockAPI="";
+              environment.userType="";
               _this.router.navigate(['/login']);
           })
+
+
+      for (var i in _this.router.config) {
+          if (_this.router.config[i].path == "dashboard") {
+              _this.router.config[i].component = DashboardComponent;
+              break;
+          }
       }
   }
 
