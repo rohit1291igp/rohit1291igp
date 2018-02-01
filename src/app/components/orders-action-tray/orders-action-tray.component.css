@@ -469,7 +469,8 @@
 }
 
 .order-actions-cont.comm .actions-button{
-    width:32%;
+    width:32% ! important;
+    padding:inherit ! important;
 }
 
 .logClosebtn {
