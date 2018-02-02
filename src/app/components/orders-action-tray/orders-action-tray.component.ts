@@ -118,9 +118,10 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
   imagePreviewFlag = false;
   imagePreviewSrc = "";
   public myDatePickerOptions: IMyOptions = {
-        dateFormat: 'ddth mmm. yyyy',
+      dateFormat: 'ddth mmm. yyyy',
       editableDateField:false,
-      openSelectorOnInputClick:true
+      openSelectorOnInputClick:true,
+      disableUntil:this.UtilityService.getDateObj(-1)
   };
   public dateRange: Object = {};
   loadTrayDataEvent;
@@ -1110,18 +1111,18 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
 
           _this.adminActions.adminActionDepData.deliveryTypes = [
               {"name" : "Select Delivery Type", "value":""},
-              {"name" : "Standard Delivery", "value":"1"},
+              //{"name" : "Standard Delivery", "value":"1"},
               {"name" : "Fixed Time Delivery", "value":"2"},
               {"name" : "Midnight Delivery", "value":"3"},
-              {"name" : "Fixed Date Delivery", "value":"4"},
+              {"name" : "Fixed Date Delivery", "value":"4"}
           ];
 
-          for(var i in _this.adminActions.adminActionDepData.deliveryTypes){
+          /*for(var i in _this.adminActions.adminActionDepData.deliveryTypes){
             if(_this.adminActions.adminActionDepData.deliveryTypes[i].value === deliveryType.toString() ){
                 _this.adminActions.adminActionDepData.deliveryTypes.splice(i,1);
                 break;
             }
-          }
+          }*/
 
       }else if( name === "changePrice"){
           orderProdsCollection();
@@ -1146,10 +1147,9 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
       _this.adminActions.adminActionDepData.orderProductComponents=orderProductComponents;
       _this.adminActions.adminActionDepData.orderProductComponents.unshift({"componentName" : "Select Component", "componentId": ""});
       _this.adminActions.adminActionsModel.componentId="";
-
   }
 
-  adminActionsSubmit(e){
+  adminActionsSubmit(e, inputArgs?){
       e.stopPropagation();
       var _this=this;
       console.log('Action Name --->', _this.adminActions.adminActionsName);
@@ -1202,6 +1202,12 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
               break;
 
           case 'changeDeliveryType&Date' : url = "deliveryDetailChanges";
+              if(Number(_this.adminActions.adminActionsModel.deliveryType) == 2){
+                  if(!inputArgs.orderProductId || !inputArgs.deliveryType || !inputArgs.deliveryDate || !inputArgs.deliveryTime) return;
+              }else{
+                  if(!inputArgs.orderProductId || !inputArgs.deliveryType || !inputArgs.deliveryDate ) return;
+              }
+              //_this.myDatePickerOptions.disableUntil={year: 2018, month: 02, day: 02};
               var _date=_this.adminActions.adminActionsModel.deliveryDate.date;
               paramsObj={
                   orderId:_this.sidePanelData[orderIndex].orderId,

@@ -272,7 +272,7 @@
 
                 <div class="modal-body center-align" *ngIf="adminActions.adminActionsName === 'changeDeliveryType&Date'">
                     <div class="form-group">
-                        <form (ngSubmit)="f.form.valid && adminActionsSubmit($event)" #f="ngForm" nonvalidate>
+                        <form (ngSubmit)="adminActionsSubmit($event, {orderProductId : orderProductId.valid, deliveryType: deliveryType.valid, deliveryDate: deliveryDate.valid, deliveryTime: deliveryTime.valid})" #f="ngForm" nonvalidate>
                             <!--<input name="deliveryType" class="form-control custom-control m-top-1" [(ngModel)]="adminActions.adminActionsModel.deliveryType" #deliveryType="ngModel" placeholder="Delivery Type" required>-->
 
                             <select name="orderProductId" class="form-control" [(ngModel)]="adminActions.adminActionsModel.orderProductId" #orderProductId="ngModel" (change)="orderProductChange($event,$event.target.value)" required>
@@ -283,17 +283,19 @@
                                 <option *ngFor="let deliveryType of adminActions.adminActionDepData.deliveryTypes" [ngValue]="deliveryType.value">{{deliveryType.name}}</option>
                             </select>
 
-                            <div class="m-top-1"></div>
-                            <my-date-picker name="deliveryDate" [options]="myDatePickerOptions" [(ngModel)]="adminActions.adminActionsModel.deliveryDate" #deliveryDate="ngModel" placeholder="Delivery Date" required></my-date-picker>
+                            <div [ngClass]="{'hide' : !adminActions.adminActionsModel.deliveryType}">
+                                <div class="m-top-1"></div>
+                                <my-date-picker name="deliveryDate" [options]="myDatePickerOptions" [(ngModel)]="adminActions.adminActionsModel.deliveryDate" #deliveryDate="ngModel" placeholder="Delivery Date" required></my-date-picker>
+                            </div>
 
-                            <select name="deliveryTime" class="form-control m-top-1" [(ngModel)]="adminActions.adminActionsModel.deliveryTime" #deliveryTime="ngModel" required>
+                            <select name="deliveryTime" class="form-control m-top-1" [(ngModel)]="adminActions.adminActionsModel.deliveryTime" #deliveryTime="ngModel" [ngClass]="{'hide' : (!adminActions.adminActionsModel.deliveryType || adminActions.adminActionsModel.deliveryType != 2 || !adminActions.adminActionsModel.deliveryDate)}" required>
                                 <option *ngFor="let deliveryTime of adminActions.adminActionDepData.deliveryTimes" [ngValue]="deliveryTime.value">{{deliveryTime.name}}</option>
                             </select>
 
                             <div *ngIf="f.submitted && !orderProductId.valid" class="help-block theme-red">Please select order product!</div>
                             <div *ngIf="f.submitted && !deliveryType.valid" class="help-block theme-red">Please select delivery type!</div>
-                            <div *ngIf="f.submitted && !deliveryDate.valid" class="help-block theme-red">Please select delivery date!</div>
-                            <div *ngIf="f.submitted && !deliveryTime.valid" class="help-block theme-red">Please select delivery time!</div>
+                            <div *ngIf="f.submitted && adminActions.adminActionsModel.deliveryType && !deliveryDate.valid" class="help-block theme-red">Please select delivery date!</div>
+                            <div *ngIf="adminActions.adminActionsModel.deliveryType && adminActions.adminActionsModel.deliveryType == 2 && adminActions.adminActionsModel.deliveryDate && f.submitted && !deliveryTime.valid" class="help-block theme-red">Please select delivery time!</div>
                             <button class="btn btn-primary m-top-1">Submit</button>
                         </form>
                     </div>
@@ -442,7 +444,7 @@
                                     </div>
 
                                     <div class="btn btn-primary actions-button text-bold disableBtn">
-                                        Cancel
+                                        Cancel Order
                                     </div>
                                 </div>
 
@@ -596,7 +598,7 @@
                     </div>
 
                     <div class="btn btn-primary actions-button text-bold disableBtn">
-                    Cancel & Refund
+                    Cancel Order
                     </div>
                     </div>
                     </ng-container>
@@ -722,7 +724,7 @@
                         </div>
 
                         <div class="btn btn-primary actions-button text-bold" (click)="adminActionsInit($event, 'cancelRefund', orderIndex)">
-                            Cancel
+                            Cancel Order
                         </div>
                     </div>
 
@@ -739,6 +741,10 @@
                             <span class="" *ngIf="orderProduct.products_code">({{orderProduct.products_code}})  </span>
                         <!--</a>-->
                         <span class="" style="" *ngIf="orderProduct.personalized"> | <a target="_new" href="http://admin.indiangiftsportal.com/myshop/persInfo.php?pid={{orderProduct.productId}}&oid={{order.orderId}}">Download Photo</a></span>
+                    </p>
+                    <p class="">
+                        <span class="text-bold">Vendor Name:</span>
+                        <span class="uppercase text-igp">{{orderProduct.vendorName}}</span>
                     </p>
                     <div class="col-md-12 product-holder" [ngClass]="{'no-margin' : isMobile, 'noBtBorder' : (z+1 === order.orderProducts.length)}">
                       <div class="row">
@@ -883,7 +889,7 @@
                 </div>
 
                 <div class="btn btn-primary actions-button text-bold" (click)="adminActionsInit($event, 'cancelRefund', orderIndex)">
-                Cancel
+                Cancel Order
                 </div>
                 </div>
             </ng-container>
