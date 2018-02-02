@@ -742,7 +742,7 @@
                         <!--</a>-->
                         <span class="" style="" *ngIf="orderProduct.personalized"> | <a target="_new" href="http://admin.indiangiftsportal.com/myshop/persInfo.php?pid={{orderProduct.productId}}&oid={{order.orderId}}">Download Photo</a></span>
                     </p>
-                    <p class="">
+                    <p class="" *ngIf="orderProduct.vendorName && isAdmin">
                         <span class="text-bold">Vendor Name:</span>
                         <span class="uppercase text-igp">{{orderProduct.vendorName}}</span>
                     </p>
