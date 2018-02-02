@@ -123,7 +123,7 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
       openSelectorOnInputClick:true
   };
   public dateRange: Object = {};
-
+  loadTrayDataEvent;
   constructor(
       private _elementRef: ElementRef,
       public BackendService : BackendService,
@@ -269,6 +269,7 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
       var statusMessgae = this.statusReasonModel.message ? this.statusReasonModel.message : this.statusReasonModel.rejectOption;
       var orderStatusEvent = _e;
       orderStatusEvent.customCurrentTarget =  _this.statusReasonModel.e[0];
+      var orderIndex = this.statusReasonModel.orderIndex;
       var orderStatus = this.statusReasonModel.status;
       var orderId = this.statusReasonModel.orderId;
       var orderProducts = this.statusReasonModel.orderProducts;
@@ -276,7 +277,7 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
       var orderDeliveryTime = this.statusReasonModel.deliveryTime;
       //this.statusReasonModel = {}
 
-      this.updateOrderStatus(orderStatusEvent, null, orderStatus, orderId, orderProducts, orderDeliveryDate, orderDeliveryTime);
+      this.updateOrderStatus(orderStatusEvent, orderIndex, orderStatus, orderId, orderProducts, orderDeliveryDate, orderDeliveryTime);
   }
 
   clearPopupData(){
@@ -424,15 +425,10 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
 
     if(this.orderByStatus === "OutForDelivery" && e.currentTarget.dataset.deliverytime === "unknown"){
         this.updateOrderStatus(e, null, "Delivered", orderId, null, null, null);
-        /*this.loadTrayData(e, orderByStatus, orderId, dashBoardDataType, function(err, result){
-            if(err){
-                console.log('Error----->', err);
-            }
-            var orderProductList = result[0].orderProducts;
-            console.log('Mark as delivered ---- orderProduct', orderProductList);
-            _this.updateOrderStatus(e, "Delivered", orderId, orderProductList);
-        });*/
     }else{
+        this.loadTrayDataEvent= [];
+        this.loadTrayDataEvent.push(e.currentTarget);
+
         if(e.currentTarget.dataset.trayopen){
             document.querySelector('body').classList.remove('removeScroll');
             this.onStatusUpdate.emit("closed");
@@ -672,6 +668,7 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
                 }
                 this.confirmFlag=true;
 
+                this.confirmModel.orderIndex = orderIndex;
                 this.confirmModel.status = status;
                 this.getMinProdId(orderId, null, e);
                 this.confirmModel.e = [];
@@ -696,6 +693,7 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
               this.statusReasonModel = {};
               this.setRejectInitialValue();
           }
+          this.statusReasonModel.orderIndex = orderIndex;
           this.statusReasonModel.status = status;
           this.getMinProdId(orderId, null, e);
           this.statusReasonModel.e = [];
@@ -751,24 +749,6 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
           var reqURL = "doUpdateOrderStatus?responseType=json&scopeId=1&rejectionType="+_this.getRejectionType(_rejectOption)+"&rejectionMessage="+rejectionMessage+"&recipientInfo="+recipientInfo+"&recipientName="+recipientName+"&comments="+recipientComments+"&orderProductIds="+orderProductIds+"&status="+status+"&fkAssociateId="+fkAssociateId+"&orderId="+orderId;
 
           console.log('reqURL==============>', reqURL);
-          if(localStorage.getItem('dRandom')){
-              setTimeout(function(){
-                  _this.onStatusUpdate.emit(currentTab);
-                  //_this.trayOpen = false;
-                  if(!(_this.orderByStatus)){
-                      //In case of search order layer - don't remove product, update status on layer
-                      _this.loadTrayData(e, _this.orderByStatus, _this.orderId, _this.activeDashBoardDataType, null);
-                  }else{
-                      let dataLength = _this.sidePanelDataOnStatusUpdate(orderIndex, orderId, deliveryDate, deliveryTime);
-                      if(!dataLength){
-                          _this.onStatusUpdate.emit("closed");
-                          _this.trayOpen = false;
-                      }
-                  }
-
-              }, 1000);
-              return;
-          }
 
           let reqObj =  {
               url : reqURL,
@@ -776,7 +756,6 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
               //payload : fileData ? fileData : {}
           };
           //if(fileDataOptions) reqObj['options'] = fileDataOptions;
-
           console.log('Update status API =============>', reqObj);
 
           _this.BackendService.makeAjax(reqObj, function(err, response, headers){
@@ -791,9 +770,13 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
               _this.onStatusUpdate.emit(currentTab);
               //_this.trayOpen = false;
 
-              if(!(_this.orderByStatus)){
+              if(!(_this.orderByStatus) || (_this.orderByStatus === "Shipped" && status !== "Rejected") ){
                   //In case of search order layer - don't remove product, update status on layer
-                  _this.loadTrayData(e, _this.orderByStatus, _this.orderId, _this.activeDashBoardDataType, null);
+                  let __e={
+                      currentTarget:_this.loadTrayDataEvent[0],
+                      stopPropagation:function(){}
+                  };
+                  _this.loadTrayData(__e, _this.orderByStatus, _this.orderId, _this.activeDashBoardDataType, null);
               }else{
                   let dataLength = _this.sidePanelDataOnStatusUpdate(orderIndex, orderId, deliveryDate, deliveryTime);
                   if(!dataLength){
@@ -801,7 +784,6 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
                       _this.trayOpen = false;
                   }
               }
-
               _this.setRejectInitialValue();
 
           });
