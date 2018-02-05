@@ -234,7 +234,7 @@
                                 <option *ngFor="let orderProduct of adminActions.adminActionDepData.orderProducts" [ngValue]="orderProduct.productId" [attr.data-orderid]="orderProduct.orderId">{{orderProduct.productName}}</option>
                             </select>
 
-                            <select name="assignChangeVendor" class="form-control m-top-1" [(ngModel)]="adminActions.adminActionsModel.assignChangeVendor" #assignChangeVendor="ngModel">
+                            <select name="assignChangeVendor" class="form-control m-top-1" [(ngModel)]="adminActions.adminActionsModel.assignChangeVendor" #assignChangeVendor="ngModel" required>
                                 <option *ngFor="let vendor of adminActions.adminActionDepData.vendorList" [ngValue]="vendor.vendorId">{{vendor.associateName}}</option>
                             </select>
 
@@ -742,9 +742,9 @@
                         <!--</a>-->
                         <span class="" style="" *ngIf="orderProduct.personalized"> | <a target="_new" href="http://admin.indiangiftsportal.com/myshop/persInfo.php?pid={{orderProduct.productId}}&oid={{order.orderId}}">Download Photo</a></span>
                     </p>
-                    <p class="" *ngIf="orderProduct.vendorName && isAdmin">
+                    <p class="" *ngIf="orderProduct.vendorName && isAdmin" style="margin-top: -0.5em;">
                         <span class="text-bold">Vendor Name:</span>
-                        <span class="uppercase text-igp">{{orderProduct.vendorName}}</span>
+                        <span class="uppercase text-igp">{{orderProduct.vendorName}} <span style="color:#333;" *ngIf="orderProduct.fkAssociateId">({{orderProduct.fkAssociateId}})</span> </span>
                     </p>
                     <div class="col-md-12 product-holder" [ngClass]="{'no-margin' : isMobile, 'noBtBorder' : (z+1 === order.orderProducts.length)}">
                       <div class="row">
