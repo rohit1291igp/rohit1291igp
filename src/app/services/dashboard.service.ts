@@ -425,8 +425,14 @@ export class DashboardService {
 
         _this.newRow=_this.notAssignedRow;
         _this.confirmedRow=_this.notConfirmeddRow;
-        _this.ofdRow={"isAlert" : (getDashboardDataResponse.shipped[0].isAlert && getDashboardDataResponse.shipped[1].isAlert == "true") ? true : false, "sla" : (getDashboardDataResponse.shipped[0].sla && getDashboardDataResponse.shipped[1].sla =="true") ? true : false};
-        _this.bydatedRow={"isAlert" : (getDashboardDataResponse.delivered[0].isAlert && getDashboardDataResponse.delivered[1].isAlert == "true") ? true : false, "sla" : (getDashboardDataResponse.delivered[0].sla && getDashboardDataResponse.delivered[1].sla == "true") ? true : false };
+        _this.ofdRow={
+            "isAlert" : (getDashboardDataResponse.shipped[0].isAlert=="true" || getDashboardDataResponse.shipped[1].isAlert == "true") ? true : false,
+            "sla" : (getDashboardDataResponse.shipped[0].sla=="true" || getDashboardDataResponse.shipped[1].sla =="true") ? true : false
+        };
+        _this.bydatedRow={
+            "isAlert" : (getDashboardDataResponse.delivered[0].isAlert == "true" || getDashboardDataResponse.delivered[1].isAlert == "true") ? true : false,
+            "sla" : (getDashboardDataResponse.delivered[0].sla == "true" || getDashboardDataResponse.delivered[1].sla == "true") ? true : false
+        };
 
         /* row color code logic - end */
 
