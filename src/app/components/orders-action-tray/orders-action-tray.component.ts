@@ -74,6 +74,7 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
       adminActionResponse:null
   };
   activeOrderLogIndexes={};
+  emailSMSTemplate="Orders pending. Awaiting action from your end. Please <click here> to open the IGP dashboard";
   @Output() onStatusUpdate: EventEmitter<any> = new EventEmitter();
   @Output() onOfdView: EventEmitter<any> = new EventEmitter();
   rejectReasons=[
@@ -1050,6 +1051,12 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
               return; //alert('Call not implemented!');
           }else{
               _this.adminActions.adminActionsModel={};
+
+              if(name === "email" || name === "sms"){
+                  _this.adminActions.adminActionsModel.emailBody=_this.emailSMSTemplate;
+                  _this.adminActions.adminActionsModel.sms=_this.emailSMSTemplate;
+              }
+
               _this.adminActions.adminActionsModel.orderProductId="";
               _this.adminActions.adminActionsModel.componentId="";
               _this.adminActions.adminActionsModel.orderProduct="";
@@ -1163,8 +1170,9 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
           case 'email' : url = "sendEmailToVendor";
               paramsObj={
                   subject:_this.adminActions.adminActionsModel.emailSubject,
-                  body:_this.adminActions.adminActionsModel.emailBody
-                };
+                  body:_this.adminActions.adminActionsModel.emailBody,
+                  fkAssociateId:_this.sidePanelData[orderIndex].orderProducts[0].fkAssociateId
+              };
               apiSuccessHandler=function(apiResponse){
                   alert("Email Sent successfully!");
               };
@@ -1172,7 +1180,8 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
 
           case 'sms' : url = "sendSmsToVendor";
               paramsObj={
-                  body:_this.adminActions.adminActionsModel.sms
+                  body:_this.adminActions.adminActionsModel.sms,
+                  fkAssociateId:_this.sidePanelData[orderIndex].orderProducts[0].fkAssociateId
               };
               apiSuccessHandler=function(apiResponse){
                   alert("SMS Sent successfully!");

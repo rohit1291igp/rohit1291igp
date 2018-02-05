@@ -640,6 +640,15 @@
                               <span class="uppercase delivery-time text-bold" attr.data-dt="{{order.orderProducts[0].orderProductExtraInfo.deliveryDate}}" attr.data-pd="{{order.datePurchased}}" >{{getDeliveryDetail(order.orderProducts[0].orderProductExtraInfo, order.datePurchased)}}</span>
                           </span>
                       </p>
+
+                     <p class=""  *ngIf="order && order.orderProducts[0] && order.orderProducts[0].vendorName" style="margin-top: -0.5em;">
+                        <span class="text-bold">Vendor Name:</span>
+                        <span class="uppercase text-igp">
+                            {{order.orderProducts[0].vendorName}}
+                            <span style="color:#333;" *ngIf="order && order.orderProducts[0] && order.orderProducts[0].fkAssociateId" >({{order.orderProducts[0].fkAssociateId}})</span>
+                        </span>
+                     </p>
+
                       <div class="text-bold">Deliver to: {{order.deliveryName}}</div>
                       <div class="address">{{order.addressType}} Address - {{order.deliveryStreetAddress}}, <span *ngIf="order.deliveryStreetAddress2">{{order.deliveryStreetAddress2}},</span>{{order.deliveryCity}}-{{order.deliveryPostcode}}, {{order.deliveryState}}</div>
                       <div class="contact">CONTACT NUMBER - {{order.deliveryMobile}}</div>
@@ -742,10 +751,7 @@
                         <!--</a>-->
                         <span class="" style="" *ngIf="orderProduct.personalized"> | <a target="_new" href="http://admin.indiangiftsportal.com/myshop/persInfo.php?pid={{orderProduct.productId}}&oid={{order.orderId}}">Download Photo</a></span>
                     </p>
-                    <p class="" *ngIf="orderProduct.vendorName && isAdmin" style="margin-top: -0.5em;">
-                        <span class="text-bold">Vendor Name:</span>
-                        <span class="uppercase text-igp">{{orderProduct.vendorName}} <span style="color:#333;" *ngIf="orderProduct.fkAssociateId">({{orderProduct.fkAssociateId}})</span> </span>
-                    </p>
+
                     <div class="col-md-12 product-holder" [ngClass]="{'no-margin' : isMobile, 'noBtBorder' : (z+1 === order.orderProducts.length)}">
                       <div class="row">
                           <div class="col-md-12 no-padding comp1">
