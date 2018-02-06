@@ -148,10 +148,10 @@ export class DashboardComponent implements OnInit {
       let selectedDate = event.date.year+'-'+event.date.month+'-'+event.date.day; //new Date(event.jsdate).toLocaleDateString(); //event.jsdate;
         var _this = this;
         this.dashboardService.getDashboardData(selectedDate, function(result){
-            if(!result.new[0] && (result.new[0] && result.new[0].deliveryTimes !== "today")) {
+            /*if(!result.new[0] && (result.new[0] && result.new[0].deliveryTimes !== "today")) {
                 _this.dashboardData = _this.dashboardService.getCustomData();
                 return;
-            }
+            }*/
             _this.dashboardData = result;
             _this.dateRange = _this.setFestivalDate(result.festivalDate || new Date());
             //save dateRange in cookie
