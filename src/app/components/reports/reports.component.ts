@@ -204,7 +204,7 @@ export class ReportsComponent implements OnInit{
                       searchValue : "",
                       filterBy:"=",
                       filterValue:"",
-                      colDataType:_this.determineDataType(_reportData.tableData[0][reportLabels[i]])
+                      colDataType:_reportData.tableData.length ? _this.determineDataType(_reportData.tableData[0][reportLabels[i]]) : ""
                   };
               }
 
