@@ -711,6 +711,9 @@ export class ReportsComponent implements OnInit{
             case "getPincodeReport" : apiURLPath = "handlePincodeChange";
                 break;
 
+            case "getVendorDetails" : apiURLPath = "modifyVendorDetails";
+                break;
+
             default : apiURLPath ="";
         }
 
@@ -780,19 +783,28 @@ export class ReportsComponent implements OnInit{
                 return;
             }else{
                 _this.editTableCell=false;
-                if(header === "Price"){
+                if(_this.reportType === "getVendorDetails"){
+                    var fkAssId=_this.editTableCellObj.rowData['fkAssociateId'] || _this.editTableCellObj.rowData['fkAssociate Id'] || _this.editTableCellObj.rowData['fkAssociate_Id'];
+                    var changedField= _this.editTableCellObj.header ? _this.editTableCellObj.header : "";
                     paramsObj={
-                        componentId:rowData['component_Id_Hide'],
-                        updatePrice: _this.editTableCellObj.value
+                        fkAssociateId: fkAssId
                     };
-                }else if(/Delivery/gi.test(header)){
-                    paramsObj={
-                        pincode:rowData["Pincode"],
-                        shipCharge: _this.editTableCellObj.value,
-                        shipType : _this.UtilityService.getDeliveryType(header)
-                    };
+                    paramsObj[changedField]=_this.editTableCellObj.rowData[_this.editTableCellObj.header];
                 }else{
-                    paramsObj={};
+                    if(header === "Price"){
+                        paramsObj={
+                            componentId:rowData['component_Id_Hide'],
+                            updatePrice: _this.editTableCellObj.value
+                        };
+                    }else if(/Delivery/gi.test(header)){
+                        paramsObj={
+                            pincode:rowData["Pincode"],
+                            shipCharge: _this.editTableCellObj.value,
+                            shipType : _this.UtilityService.getDeliveryType(header)
+                        };
+                    }else{
+                        paramsObj={};
+                    }
                 }
             }
 
@@ -800,7 +812,12 @@ export class ReportsComponent implements OnInit{
            console.log('Not a valid action');
         }
 
-        paramsObj.fkAssociateId = localStorage.getItem('fkAssociateId');
+        if(environment.userType && environment.userType === "admin"){
+
+        }else{
+            paramsObj.fkAssociateId =  localStorage.getItem('fkAssociateId');
+        }
+
         var paramsStr = _this.UtilityService.formatParams(paramsObj);
 
         let reqObj= {
