@@ -873,21 +873,31 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
       return orderUpdateByStatus;
   }
 
-  sidePanelDataOnStatusUpdate(orderIndex?, orderId?, deliveryDate?, deliveryTime?){
+  sidePanelDataOnStatusUpdate(orderIndex?, orderId?, deliveryDate?, deliveryTime?, _data?){
       var _this = this;
-      if(orderId && deliveryDate && deliveryTime){
-          for(var i in _this.sidePanelData){
-              if(parseInt(orderId) === parseInt(_this.sidePanelData[i].orderId) &&
-                  deliveryDate === _this.sidePanelData[i].orderProducts[0].orderProductExtraInfo.deliveryDate &&
-                  deliveryTime === _this.sidePanelData[i].orderProducts[0].orderProductExtraInfo.deliveryTime){
-                  if(Array.isArray(_this.sidePanelData)) console.log('splice objData----------------');
-                  _this.sidePanelData.splice(i, 1);
-                  return _this.sidePanelData.length;
-              }
+
+      if(_data && _data.length){
+          let firstOrderObj = _data.slice(0,1);
+          let otherOrderObj = _data.slice(1);
+          _this.sidePanelData[orderIndex] = firstOrderObj;
+          for(var i in otherOrderObj){
+              _this.sidePanelData.push(otherOrderObj[i]);
           }
       }else{
-          _this.sidePanelData.splice(orderIndex, 1);
-          return _this.sidePanelData.length;
+          if(orderId && deliveryDate && deliveryTime){
+              for(var i in _this.sidePanelData){
+                  if(parseInt(orderId) === parseInt(_this.sidePanelData[i].orderId) &&
+                      deliveryDate === _this.sidePanelData[i].orderProducts[0].orderProductExtraInfo.deliveryDate &&
+                      deliveryTime === _this.sidePanelData[i].orderProducts[0].orderProductExtraInfo.deliveryTime){
+                      if(Array.isArray(_this.sidePanelData)) console.log('splice objData----------------');
+                      _this.sidePanelData.splice(i, 1);
+                      return _this.sidePanelData.length;
+                  }
+              }
+          }else{
+              _this.sidePanelData.splice(orderIndex, 1);
+              return _this.sidePanelData.length;
+          }
       }
   }
 
@@ -1163,6 +1173,14 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
       let url="";
       let method;
       let apiSuccessHandler=function(apiResponse){};
+      let getOrderProductIds=function(){
+          let orderProductIds=[];
+          let orderProducts=JSON.parse(JSON.stringify(_this.sidePanelData[orderIndex].orderProducts));
+          for(var i in orderProducts){
+              orderProductIds.push(orderProducts[i].orderProductId);
+          }
+          return orderProductIds.join(",");
+      }
       switch(_this.adminActions.adminActionsName){
           case 'email' : url = "sendEmailToVendor";
               paramsObj={
@@ -1190,10 +1208,17 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
                   action:_this.orderByStatus == 'notAlloted' ? 'assign' : 'ressign',
                   orderId:_this.sidePanelData[orderIndex].orderId,
                   orderProductId:_this.adminActions.adminActionsModel.orderProductId,
-                  fkAssociateId:_this.adminActions.adminActionsModel.assignChangeVendor
+                  fkAssociateId:_this.adminActions.adminActionsModel.assignChangeVendor,
+                  orderProductIds:getOrderProductIds()
               };
               apiSuccessHandler=function(apiResponse){
-                  _this.sidePanelDataOnStatusUpdate(orderIndex);
+                  let currentTab = _this.activeDashBoardDataType;
+                  _this.onStatusUpdate.emit(currentTab);
+                  let dataLength = _this.sidePanelDataOnStatusUpdate(orderIndex, _this.sidePanelData[orderIndex].orderId, null, null, apiResponse.result);
+                  if(!dataLength){
+                      _this.onStatusUpdate.emit("closed");
+                      _this.trayOpen = false;
+                  }
               };
               break;
 
@@ -1203,7 +1228,11 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
                   orderProductId:_this.adminActions.adminActionsModel.orderProductId,
                   componentId:_this.adminActions.adminActionsModel.componentId,
                   shippingCharge:_this.adminActions.adminActionsModel.shippingCharge,
-                  componentPrice:_this.adminActions.adminActionsModel.componentPrice
+                  componentPrice:_this.adminActions.adminActionsModel.componentPrice,
+                  orderProductIds:getOrderProductIds()
+              };
+              apiSuccessHandler=function(apiResponse){
+                  _this.sidePanelDataOnStatusUpdate(orderIndex, _this.sidePanelData[orderIndex].orderId, null, null, apiResponse.result);
               };
               break;
 
@@ -1220,7 +1249,11 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
                   orderProductId:_this.adminActions.adminActionsModel.orderProductId,
                   deliveryDate:_date.year+'-'+_date.month+'-'+_date.day,
                   deliveryType:_this.adminActions.adminActionsModel.deliveryType,
-                  deliveryTime:_this.adminActions.adminActionsModel.deliveryTime
+                  deliveryTime:_this.adminActions.adminActionsModel.deliveryTime,
+                  orderProductIds:getOrderProductIds()
+              };
+              apiSuccessHandler=function(apiResponse){
+                  _this.sidePanelDataOnStatusUpdate(orderIndex, _this.sidePanelData[orderIndex].orderId, null, null, apiResponse.result);
               };
               break;
 
@@ -1241,7 +1274,13 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
                   comment:_this.adminActions.adminActionsModel.cancelComment
               };
               apiSuccessHandler=function(apiResponse){
-                  _this.sidePanelDataOnStatusUpdate(orderIndex);
+                  let currentTab = _this.activeDashBoardDataType;
+                  _this.onStatusUpdate.emit(currentTab);
+                  let dataLength = _this.sidePanelDataOnStatusUpdate(orderIndex);
+                  if(!dataLength){
+                      _this.onStatusUpdate.emit("closed");
+                      _this.trayOpen = false;
+                  }
               };
               break;
       }
