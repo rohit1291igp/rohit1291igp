@@ -759,7 +759,7 @@
                            <span>
                                 <div class="product-main relative">
                                     <div class="component-eggless prod-img abs" *ngIf="orderProduct.productQuantity>1">X {{orderProduct.productQuantity}}</div>
-                                    <img class="product-image clk" src="{{productsURL}}th/{{orderProduct.productImage}}" alt="product_img" (click)="imagePreview($event, productsURL+'l/'+(orderProduct.productImage))">
+                                    <img class="product-image clk" src="{{productsURL}}th/{{orderProduct.productImage}}?th={{orderProduct.productUpdateDateTime}}" alt="product_img" (click)="imagePreview($event, productsURL+'l/'+(orderProduct.productImage)+'?th='+orderProduct.productUpdateDateTime)">
                                     <div class="price-display">Rs. {{orderProduct.vendorPrice}}</div>
                                 </div>
                                 <div class="equal-sign table-inline-display" *ngIf="orderProduct && orderProduct.componentList && orderProduct.componentList.length">
