@@ -230,17 +230,17 @@
                     <div class="form-group">
                         <form (ngSubmit)="f.form.valid && adminActionsSubmit($event)" #f="ngForm" nonvalidate>
 
-                            <select name="orderProduct" class="form-control" [(ngModel)]="adminActions.adminActionsModel.orderProduct" #orderProduct="ngModel" required>
-                                <option *ngFor="let orderProduct of adminActions.adminActionDepData.orderProducts" [ngValue]="orderProduct.productId" [attr.data-orderid]="orderProduct.orderId">{{orderProduct.productName}}</option>
+                            <select name="orderProductId" class="form-control" [(ngModel)]="adminActions.adminActionsModel.orderProductId" #orderProductId="ngModel" required>
+                                <option *ngFor="let orderProduct of adminActions.adminActionDepData.orderProducts" [ngValue]="orderProduct.orderProductId" [attr.data-orderid]="orderProduct.orderId">{{orderProduct.productName}}</option>
                             </select>
 
                             <select name="assignChangeVendor" class="form-control m-top-1" [(ngModel)]="adminActions.adminActionsModel.assignChangeVendor" #assignChangeVendor="ngModel" required>
-                                <option *ngFor="let vendor of adminActions.adminActionDepData.vendorList" [ngValue]="vendor.vendorId">{{vendor.associateName}}</option>
+                                <option *ngFor="let vendor of adminActions.adminActionDepData.vendorList" [ngValue]="vendor.fkAssociateId">{{vendor.associateName}}</option>
                             </select>
 
                             <!--<input name="assignChangeVendor" class="form-control custom-control m-top-1" [(ngModel)]="adminActions.adminActionsModel.assignChangeVendor" #assignChangeVendor="ngModel" placeholder="Vendor" required>-->
 
-                            <div *ngIf="f.submitted && !orderProduct.valid" class="help-block theme-red">Please Select Order Product!</div>
+                            <div *ngIf="f.submitted && !orderProductId.valid" class="help-block theme-red">Please Select Order Product!</div>
                             <div *ngIf="f.submitted && !assignChangeVendor.valid" class="help-block theme-red">Please Select vendor name!</div>
                             <button class="btn btn-primary m-top-1">Submit</button>
                         </form>
@@ -252,7 +252,7 @@
                         <form (ngSubmit)="f.form.valid && adminActionsSubmit($event)" #f="ngForm" nonvalidate>
 
                             <select name="orderProductId" class="form-control" [(ngModel)]="adminActions.adminActionsModel.orderProductId" #orderProductId="ngModel" (change)="orderProductChange($event,$event.target.value)" required>
-                                <option *ngFor="let orderProduct of adminActions.adminActionDepData.orderProducts" [ngValue]="orderProduct.productId">{{orderProduct.productName}}</option>
+                                <option *ngFor="let orderProduct of adminActions.adminActionDepData.orderProducts" [ngValue]="orderProduct.orderProductId">{{orderProduct.productName}}</option>
                             </select>
 
                             <select name="componentId" class="form-control m-top-1" [(ngModel)]="adminActions.adminActionsModel.componentId" #componentId="ngModel" required>
@@ -276,7 +276,7 @@
                             <!--<input name="deliveryType" class="form-control custom-control m-top-1" [(ngModel)]="adminActions.adminActionsModel.deliveryType" #deliveryType="ngModel" placeholder="Delivery Type" required>-->
 
                             <select name="orderProductId" class="form-control" [(ngModel)]="adminActions.adminActionsModel.orderProductId" #orderProductId="ngModel" (change)="orderProductChange($event,$event.target.value)" required>
-                                <option *ngFor="let orderProduct of adminActions.adminActionDepData.orderProducts" [ngValue]="orderProduct.productId">{{orderProduct.productName}}</option>
+                                <option *ngFor="let orderProduct of adminActions.adminActionDepData.orderProducts" [ngValue]="orderProduct.orderProductId">{{orderProduct.productName}}</option>
                             </select>
 
                             <select name="deliveryType" class="form-control m-top-1" [(ngModel)]="adminActions.adminActionsModel.deliveryType" #deliveryType="ngModel" required>
@@ -306,7 +306,7 @@
                         <form (ngSubmit)="f.form.valid && adminActionsSubmit($event)" #f="ngForm" nonvalidate>
 
                             <select name="orderProductId" class="form-control" [(ngModel)]="adminActions.adminActionsModel.orderProductId" #orderProductId="ngModel" (change)="orderProductChange($event,$event.target.value)" required>
-                                <option *ngFor="let orderProduct of adminActions.adminActionDepData.orderProducts" [ngValue]="orderProduct.productId">{{orderProduct.productName}}</option>
+                                <option *ngFor="let orderProduct of adminActions.adminActionDepData.orderProducts" [ngValue]="orderProduct.orderProductId">{{orderProduct.productName}}</option>
                             </select>
 
                             <textarea name="cancelComment" class="form-control custom-control m-top-1" rows="3" style="resize:none" [(ngModel)]="adminActions.adminActionsModel.cancelComment" #cancelComment="ngModel" placeholder="Comment" required></textarea>

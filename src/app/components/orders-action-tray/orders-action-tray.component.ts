@@ -1059,7 +1059,6 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
 
               _this.adminActions.adminActionsModel.orderProductId="";
               _this.adminActions.adminActionsModel.componentId="";
-              _this.adminActions.adminActionsModel.orderProduct="";
               _this.adminActions.adminActionsModel.assignChangeVendor="";
               _this.adminActions.adminActionsModel.deliveryTime="";
               _this.adminActions.adminActionsModel.deliveryType="";
@@ -1079,16 +1078,14 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
       let orderProdsCollection=function(){
           let orderProducts=JSON.parse(JSON.stringify(_this.sidePanelData[orderIndex].orderProducts));
           _this.adminActions.adminActionDepData.orderProducts=orderProducts;
-          _this.adminActions.adminActionDepData.orderProducts.unshift({"orderId" : "", "productId": "", "productName": "Select Order Product"});
+          _this.adminActions.adminActionDepData.orderProducts.unshift({"orderId" : "", "orderProductId": "", "productName": "Select Order Product"});
       }
 
       if(name === "assignChangeVendor"){
-          let orderProducts=JSON.parse(JSON.stringify(_this.sidePanelData[orderIndex].orderProducts)),
-              pincode=_this.sidePanelData[orderIndex].deliveryPostcode,
+          orderProdsCollection();
+          let pincode=_this.sidePanelData[orderIndex].deliveryPostcode,
               deliveryType=_this.sidePanelData[orderIndex].orderProducts[0].orderProductExtraInfo.deliveryType;
 
-          _this.adminActions.adminActionDepData.orderProducts=orderProducts;
-          _this.adminActions.adminActionDepData.orderProducts.unshift({"orderId" : "", "productId": "", "productName": "Select Order Product"});
           let reqObj =  {
               url : 'getVendorList?pincode='+pincode+'&shippingType='+deliveryType,
               method : 'get'
@@ -1100,7 +1097,7 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
               }
               console.log('vendorList Response --->', response.result);
               _this.adminActions.adminActionDepData.vendorList=response.result;
-              _this.adminActions.adminActionDepData.vendorList.unshift({"vendorId" : "", "associateName": "Select Vendor"});
+              _this.adminActions.adminActionDepData.vendorList.unshift({"fkAssociateId" : "", "associateName": "Select Vendor"});
               return cb(null);
           });
       }else if(name === "changeDeliveryType&Date"){
@@ -1192,7 +1189,7 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
               paramsObj={
                   action:_this.orderByStatus == 'notAlloted' ? 'assign' : 'ressign',
                   orderId:_this.sidePanelData[orderIndex].orderId,
-                  orderProductId:_this.adminActions.adminActionsModel.orderProduct,
+                  orderProductId:_this.adminActions.adminActionsModel.orderProductId,
                   fkAssociateId:_this.adminActions.adminActionsModel.assignChangeVendor
               };
               apiSuccessHandler=function(apiResponse){
@@ -1260,9 +1257,10 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
       };
 
       _this.BackendService.makeAjax(reqObj, function(err, response, headers){
-          if(!response) response={result:[]};
+          //if(!response) response={result:[]};
           if(err || response.error) {
               console.log('Error=============>', err);
+              return;
           }
           console.log('admin action Response --->', response.result);
           _this.adminActions.adminActionResponse={};
