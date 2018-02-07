@@ -329,14 +329,17 @@
                         </tr>
 
                         <tr class="reporTableRow" *ngFor="let tableRowValue of reportData.tableData; let dataIndex='index'" >
-                            <td class="reportTableCell" *ngFor="let tableCol of reportData.tableHeaders; let i='index'" [ngClass]="{'hide' : isHiddenCell(tableCol)}">
+                            <td class="reportTableCell" style="word-break: break-word;" *ngFor="let tableCol of reportData.tableHeaders; let i='index'" [ngClass]="{'hide' : isHiddenCell(tableCol)}" [style.width]="tableCol === 'email'? 'auto' : 'auto' ">
                                 <div class="tdTxt">
                                     <span *ngIf="tableCol == 'Component Image' || tableCol == 'Component_Image'" >
                                     <img class="clk" style="width: 5em;" src="{{productsCompURL}}th/{{tableRowValue[tableCol]}}" alt="{{tableRowValue[tableCol]}}" (click)="imagePreview($event, productsCompURL+'full/'+(tableRowValue[tableCol]))">
                                     </span>
                                     <span *ngIf="tableCol == 'Ship_Type'" >{{getDeliveryName(tableRowValue[tableCol]) | replace : '`updated'}}</span>
                                     <span *ngIf="ifDate(tableCol) == 'date'" >{{tableRowValue[tableCol] | date : 'dd/MM/yy'}}</span>
-                                    <span *ngIf="ifDate(tableCol) != 'date' && tableCol != 'Ship_Type' && tableCol != 'Component_Image' && tableCol != 'Component Image'" > <span *ngIf="tableRowValue[tableCol] === 0">{{tableRowValue[tableCol]}}</span> <span *ngIf="tableRowValue[tableCol] !== 0" [innerHTML]="tableRowValue[tableCol]  | replace : '`,['"></span></span>
+                                    <span *ngIf="ifDate(tableCol) != 'date' && tableCol != 'Ship_Type' && tableCol != 'Component_Image' && tableCol != 'Component Image'" >
+                                        <span *ngIf="tableRowValue[tableCol] === 0">{{tableRowValue[tableCol]}}</span>
+                                        <span *ngIf="tableRowValue[tableCol] !== 0" [innerHTML]="tableRowValue[tableCol]  | replace : '`,[' "></span>
+                                    </span>
                                     &nbsp; &nbsp; &nbsp;
                                     <span class="icon m" aria-hidden="true" *ngIf="tableCol === 'Order_No'" (click)="viewOrderDetail($event, tableRowValue[tableCol])">
                                         <img src="assets/images/icons/view.svg" alt="inr">

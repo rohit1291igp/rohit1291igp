@@ -29,7 +29,10 @@ export class ReplacePipe implements PipeTransform {
           }
       }
       //console.log('value after======>', value);
-
+      //value = value.replace(/\//g, '<br/>$&');
+      //value = value.replace(/,/g, '<br/>$&')
+      //value = value.replace(/;/g, '<br/>$&')
+      value=value.trim();
       return value;
   }
 
