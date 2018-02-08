@@ -520,6 +520,7 @@ export class ReportsComponent implements OnInit{
 
     columnFilterSubmit(e){
         var _this=this;
+        if(document.getElementById("cLoader")) document.getElementById("cLoader").classList.remove("hide");
 
         for(var key in _this.reportLabelState){
             _this.reportLabelState[key].filterdd = false;
@@ -541,13 +542,17 @@ export class ReportsComponent implements OnInit{
             _this.reportData.summary = JSON.parse(JSON.stringify(_this.orginalReportData.summary));
         }
 
-        //update current table data
-        _this.reportData.tableData = __tableData;
-        /*if(!_this.reportData.tableData.length){
-            _this.showMoreBtn=false;
-        }else{
-            _this.showMoreBtn=true;
-        }*/
+        setTimeout(function(){
+            //update current table data
+            _this.reportData.tableData = __tableData;
+            /*if(!_this.reportData.tableData.length){
+             _this.showMoreBtn=false;
+             }else{
+             _this.showMoreBtn=true;
+             }*/
+            if(document.getElementById("cLoader")) document.getElementById("cLoader").classList.add("hide");
+        },0);
+
     }
 
     ifDate(colName){
@@ -580,7 +585,7 @@ export class ReportsComponent implements OnInit{
                 for(var i in originalDataSource){//for start
                     var currentRow = originalDataSource[i];
                     if(colDataType === "date"){
-                        var currentDate=new Date(currentRow[colName]);
+                        var currentDate=new Date(_this.getCellValue(currentRow[colName]));
                         var cDYear=currentDate.getFullYear(),
                             cDMonth= currentDate.getMonth()+1, //currentDate.getMonth()+1 > 9 ? currentDate.getMonth()+1 : '0'+(currentDate.getMonth()+1).toString(),
                             cDDate= currentDate.getDate(); //currentDate.getDate() > 9 ? currentDate.getDate() : '0'+(currentDate.getDate()).toString();
@@ -607,35 +612,35 @@ export class ReportsComponent implements OnInit{
 
                     }else if(colDataType === "number"){
                         if(filterBy == "="){
-                            if(Number(currentRow[colName]) == Number(filterValue)){
+                            if(Number(_this.getCellValue(currentRow[colName])) == Number(filterValue)){
                                 _tableData.push(currentRow);
                             }
                         }else if(filterBy == ">="){
-                            if(Number(currentRow[colName]) >= Number(filterValue)){
+                            if(Number(_this.getCellValue(currentRow[colName])) >= Number(filterValue)){
                                 _tableData.push(currentRow);
                             }
                         }else if(filterBy == "<="){
-                            if(Number(currentRow[colName]) <= Number(filterValue)){
+                            if(Number(_this.getCellValue(currentRow[colName])) <= Number(filterValue)){
                                 _tableData.push(currentRow);
                             }
                         }else{
-                            if(Number(currentRow[colName]) == Number(filterValue)){
+                            if(Number(_this.getCellValue(currentRow[colName])) == Number(filterValue)){
                                 _tableData.push(currentRow);
                             }
                         }
 
                     }else if(colDataType === "string"){
                         if(filterBy == "="){
-                            if((currentRow[colName]).toString().toLowerCase() == (filterValue).toString().toLowerCase()){
+                            if((_this.getCellValue(currentRow[colName])).toString().toLowerCase() == (filterValue).toString().toLowerCase()){
                                 _tableData.push(currentRow);
                             }
                         }else if(filterBy == "contains"){
                             var colregex= new RegExp((filterValue).toString().toLowerCase(), 'g')
-                            if(colregex.test((currentRow[colName]).toString().toLowerCase())){
+                            if(colregex.test((_this.getCellValue(currentRow[colName])).toString().toLowerCase())){
                                 _tableData.push(currentRow);
                             }
                         }else{
-                            if((currentRow[colName]).toString().toLowerCase() == (filterValue).toString().toLowerCase()){
+                            if((_this.getCellValue(currentRow[colName])).toString().toLowerCase() == (filterValue).toString().toLowerCase()){
                                 _tableData.push(currentRow);
                             }
                         }
@@ -919,6 +924,12 @@ export class ReportsComponent implements OnInit{
       this.UtilityService.createCSV('table tr', (fileName || 'report'));
     }
 
-
+    getCellValue(cellValue){
+       if(cellValue && cellValue.constructor === Object){
+            return cellValue.value;
+       }else{
+            return cellValue;
+       }
+    }
 
 }

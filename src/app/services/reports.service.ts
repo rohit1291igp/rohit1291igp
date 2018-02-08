@@ -29,7 +29,7 @@ export class ReportsService {
             [115000, 115835, "23/07/17", "25/07/17", ["Edit", "Delete"], "Processed"],
         ]
     };
-    endLimit=400;
+    endLimit=100;
     //https://jsonblob.com/9fb80aee-9a1c-11e7-aa97-275b22669468
     //http://www.mocky.io/v2/59bbdd060f0000c202ff878b
 
@@ -93,8 +93,6 @@ export class ReportsService {
                 url : reportAPIEndpoint+"?"+queryParmas,
                 method:"get"
               };
-
-
 
               _this.BackendService.makeAjax(reqObj, function(err, response, headers){
                   if(err || response.error) {

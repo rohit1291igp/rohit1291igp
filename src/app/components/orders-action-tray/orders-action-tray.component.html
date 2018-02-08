@@ -235,7 +235,7 @@
                             </select>
 
                             <select name="assignChangeVendor" class="form-control m-top-1" [(ngModel)]="adminActions.adminActionsModel.assignChangeVendor" #assignChangeVendor="ngModel" required>
-                                <option *ngFor="let vendor of adminActions.adminActionDepData.vendorList" [ngValue]="vendor.fkAssociateId">{{vendor.associateName}}</option>
+                                <option *ngFor="let vendor of adminActions.adminActionDepData.vendorList" [ngValue]="vendor.Vendor_Id">{{vendor.Vendor_Name}}</option>
                             </select>
 
                             <!--<input name="assignChangeVendor" class="form-control custom-control m-top-1" [(ngModel)]="adminActions.adminActionsModel.assignChangeVendor" #assignChangeVendor="ngModel" placeholder="Vendor" required>-->
