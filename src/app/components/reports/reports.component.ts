@@ -515,12 +515,11 @@ export class ReportsComponent implements OnInit{
     removeColumnFilter(e, columnName){
         var _this=this;
         _this.reportLabelState[columnName]['filterValue']="";
-        _this.columnFilterSubmit(e);
+        _this.columnFilterSubmit(e, true);
     }
 
-    columnFilterSubmit(e){
+    columnFilterSubmit(e, lightLoading?){
         var _this=this;
-        if(document.getElementById("cLoader")) document.getElementById("cLoader").classList.remove("hide");
 
         for(var key in _this.reportLabelState){
             _this.reportLabelState[key].filterdd = false;
@@ -542,17 +541,17 @@ export class ReportsComponent implements OnInit{
             _this.reportData.summary = JSON.parse(JSON.stringify(_this.orginalReportData.summary));
         }
 
-        setTimeout(function(){
-            //update current table data
+        //update current table data
+        if(lightLoading){
+            _this.lightRendering(__tableData);
+        }else{
             _this.reportData.tableData = __tableData;
-            /*if(!_this.reportData.tableData.length){
-             _this.showMoreBtn=false;
-             }else{
-             _this.showMoreBtn=true;
-             }*/
-            if(document.getElementById("cLoader")) document.getElementById("cLoader").classList.add("hide");
-        },0);
-
+        }
+        /*if(!_this.reportData.tableData.length){
+         _this.showMoreBtn=false;
+         }else{
+         _this.showMoreBtn=true;
+         }*/
     }
 
     ifDate(colName){
@@ -931,5 +930,28 @@ export class ReportsComponent implements OnInit{
             return cellValue;
        }
     }
+
+    lightRendering(provider){
+        let _this=this;
+        let collCount=50;
+        _this.reportData.tableData=provider.slice(0, collCount);
+
+        /*setTimeout(function(){
+            _this.reportData.tableData=_this.reportData.tableData.concat(provider.slice(collCount));
+        },0);*/
+
+        let n=Math.ceil(provider.length/collCount);
+        for(let i=1; i<n; i++{
+            //(function(i){ //use closer if 'i' is needed to use
+                setTimeout(function(){
+                     let sliceStart=(i*collCount),
+                         sliceEnd=(sliceStart+collCount);
+                        _this.reportData.tableData=
+                            _this.reportData.tableData.concat(provider.slice(sliceStart, sliceEnd));
+                },0);
+            //})(i)
+        }
+    }
+
 
 }
