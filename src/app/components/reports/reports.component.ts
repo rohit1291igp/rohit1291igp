@@ -941,7 +941,7 @@ export class ReportsComponent implements OnInit{
         },0);*/
 
         let n=Math.ceil(provider.length/collCount);
-        for(let i=1; i<n; i++{
+        for(let i=1; i<n; i++){
             //(function(i){ //use closer if 'i' is needed to use
                 setTimeout(function(){
                      let sliceStart=(i*collCount),
