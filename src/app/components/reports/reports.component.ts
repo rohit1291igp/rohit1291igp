@@ -58,7 +58,7 @@ export class ReportsComponent implements OnInit{
   showMoreBtn=false;
   searchReportFieldsValidation=false;
   statusList=[
-        {"type" : "0", "name" : "All Order status", "value" : "" },
+        {"type" : "0", "name" : "All Orders status", "value" : "" },
         {"type" : "1", "name" : "Processed", "value" : "Processed" },
         {"type" : "1", "name" : "Confirmed", "value" : "Confirmed" },
         {"type" : "1", "name" : "Out For Delivery", "value" : "OutForDelivery" },
@@ -179,7 +179,7 @@ export class ReportsComponent implements OnInit{
 
           /* byDefault set deliveryDateFrom 2 days back - start */
           if(_this.reportType === 'getOrderReport'){
-              var delDateFromObj = _this.UtilityService.getDateObj(-2);
+              var delDateFromObj = _this.UtilityService.getDateObj(0);
               _this.searchResultModel["deliveryDateFrom"]= { date: { year: delDateFromObj.year, month: delDateFromObj.month, day: delDateFromObj.day } };
               _this.queryString = _this.generateQueryString(_this.searchResultModel);
               console.log('oninit =====> queryString ====>', _this.queryString);
