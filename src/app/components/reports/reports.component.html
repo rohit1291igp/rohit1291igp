@@ -147,7 +147,7 @@
                             <my-date-picker id="{{searchField.name}}" name="{{searchField.name}}" placeholder="{{searchField.placeholder}}" [options]="myDatePickerOptions" [(ngModel)]="searchResultModel[searchField.name]"  *ngIf="searchField.type === 'date' && searchField.name != 'status'"></my-date-picker>
                         </div>
                     </div>
-                    <div class="searchFieldsSubmit relative inline">
+                    <div class="searchFieldsSubmit">
                         <input  type="submit" class="btn btn-primary pull-right bg-igp searchSubmitBtn"  value="Search All Parameters" />
                     </div>
                 </form>

@@ -58,7 +58,7 @@ export class ReportsComponent implements OnInit{
   showMoreBtn=false;
   searchReportFieldsValidation=false;
   statusList=[
-        {"type" : "0", "name" : "Order status", "value" : "" },
+        {"type" : "0", "name" : "All Order status", "value" : "" },
         {"type" : "1", "name" : "Processed", "value" : "Processed" },
         {"type" : "1", "name" : "Confirmed", "value" : "Confirmed" },
         {"type" : "1", "name" : "Out For Delivery", "value" : "OutForDelivery" },

@@ -27,7 +27,7 @@
 }
 
 .searchFields{
-    width:75%;
+    width:100%;
 }
 
 .searchFieldsSubmit{
@@ -43,12 +43,14 @@
 }
 
 .searchFiled {
-    margin: 0.5em;
+    margin: 0.1em 0.5em;
     width: 23% ! important;
 }
 
 .searchFieldsSubmit{
-
+    bottom: 0.5em;
+    position: absolute;
+    right: 1em;
 }
 
 .report-table{
@@ -98,9 +100,9 @@
 
 .searchSubmitBtn{
     border-radius: 0 ! important;
-    padding: 0.5em 2em ! important;
+    padding: 0.5em 8em ! important;
     border-color: transparent ! important;
-    font-size: 1.2em ! important;
+    font-size: 14px ! important;
 }
 
 .searchFiled .mydp .selector {
