@@ -28,16 +28,20 @@ export class BackendService {
           reqObj.url=  'http://localhost:1337'+reqObj.url
       }else{
           if(environment.mockAPI){
-              reqObj.url= environment.originMock + reqObj.url;
+              if(reqObj.url.includes('getPincodeReport')){
+                  reqObj.url= environment.originMock +'admin'+reqObj.url;
+              }else{
+                  reqObj.url= environment.originMock + reqObj.url;
+              }
           }else{
               if(environment.userType && !(reqObj.url.includes('login')) && !(reqObj.url.includes('doLogOut')) ){
                   if(environment.userType === "upload"){
-                      reqObj.url= environment.origin2 +'v1/admin/'+ reqObj.url;
+                      reqObj.url= environment.origin +'v1/admin/'+ reqObj.url;
                   }else{
-                      reqObj.url= environment.origin2 +'v1/admin/handels/'+ reqObj.url;
+                      reqObj.url= environment.origin +'v1/admin/handels/'+ reqObj.url;
                   }
               }else{
-                  reqObj.url= environment.origin2 +'v1/handels/'+ reqObj.url;
+                  reqObj.url= environment.origin +'v1/handels/'+ reqObj.url;
               }
           }
       }

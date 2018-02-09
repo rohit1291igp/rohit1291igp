@@ -38,7 +38,7 @@ export class InterceptedHttp extends Http {
         if(sessionStorage.getItem('mockAPI')){
             return  environment.originMock+req;
         }else{
-            return  environment.origin2 +'v1/handels/'+ req;
+            return  environment.origin +'v1/handels/'+ req;
         }
         /*
         if((/login/g).test(req)){

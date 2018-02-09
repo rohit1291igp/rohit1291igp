@@ -44,6 +44,7 @@ import { OrdersActionTrayComponent } from '../orders-action-tray/orders-action-t
     ]
 })
 export class ReportsComponent implements OnInit{
+ environment=environment;
  @ViewChild(OrdersActionTrayComponent) child: OrdersActionTrayComponent;
  /*@Input()
  set ready(isReady: boolean) {
@@ -788,7 +789,7 @@ export class ReportsComponent implements OnInit{
             }else{
                 _this.editTableCell=false;
                 if(_this.reportType === "getVendorDetails"){
-                    var fkAssId=_this.editTableCellObj.rowData['fkAssociateId'] || _this.editTableCellObj.rowData['fkAssociate Id'] || _this.editTableCellObj.rowData['fkAssociate_Id'];
+                    var fkAssId=_this.editTableCellObj.rowData['Vendor Id'] || _this.editTableCellObj.rowData['fkAssociate Id'] || _this.editTableCellObj.rowData['fkAssociate_Id'];
                     var changedField= _this.editTableCellObj.header ? _this.editTableCellObj.header : "";
                     paramsObj={
                         fkAssociateId: fkAssId
@@ -829,22 +830,37 @@ export class ReportsComponent implements OnInit{
             method:"put"
         };
 
-        _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header] = _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header]+'`updating';
+        if(_this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header]['value']){
+            _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header]['value'] = _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header]['value']+'`updating';
+        }else{
+            _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header] = _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header]+'`updating';
+        }
         console.log("actionBtnInvoke===================>", reqObj); //return;
 
-        /*setTimeout(function(){
-            _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header] = _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header].replace(/`updating/g , " ")+'`updated';
-            setTimeout(function(){
-                *//*if(/edit/gi.test(actBtnTxt)){
-                    _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header] = _this.editTableCellObj.value;
-                }else{
+        setTimeout(function(){
+            console.log('Following operation is successful !!!');
+            if(_this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header]['value']){
+                _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header]['value'] = _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header]['value'].replace(/`updating/g , " ")+'`updated';
+                setTimeout(function(){
+                    _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header]['value'] = _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header]['value'].replace(/`updated/g , " ");
+                },1000);
+            }else{
+                _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header] = _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header].replace(/`updating/g , " ")+'`updated';
+                setTimeout(function(){
                     _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header] = _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header].replace(/`updated/g , " ");
-                }*//*
-                _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header] = _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header].replace(/`updated/g , " ");
+                },1000);
+            }
 
-            },1000);
-        },2000);*/
+            if(environment.userType && environment.userType === 'admin'){
+                if(_this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header]['value']){
+                    //_this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header]['value'] = "";
+                }else{
+                    //_this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header] = "";
+                }
+            }
+        },2000);
 
+        /*
         _this.BackendService.makeAjax(reqObj, function(err, response, headers){
             if(err || response.error) {
                 console.log('Error=============>', err, response.errorCode);
@@ -854,15 +870,22 @@ export class ReportsComponent implements OnInit{
             console.log('sidePanel Response --->', response.result);
             if(response.result){
                   console.log('Following operation is successful !!!');
-                 _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header] = _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header].replace(/`updating/g , " ")+'`updated';
-                 setTimeout(function(){
-                    _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header] = _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header].replace(/`updated/g , " ");
-                 },1000);
-                }else{
-                    console.error('Following operation is not fullfilled !!!');
-                }
-
+                 if(_this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header]['value']){
+                     _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header]['value'] = _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header]['value'].replace(/`updating/g , " ")+'`updated';
+                     setTimeout(function(){
+                        _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header]['value'] = _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header]['value'].replace(/`updated/g , " ");
+                     },1000);
+                 }else{
+                    _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header] = _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header].replace(/`updating/g , " ")+'`updated';
+                     setTimeout(function(){
+                        _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header] = _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header].replace(/`updated/g , " ");
+                     },1000);
+                 }
+            }else{
+                 console.error('Following operation is not fullfilled !!!');
+            }
         });
+        */
 
     }
 
