@@ -30,6 +30,10 @@
     width:100%;
 }
 
+.searchFields2 .searchFields{
+    width:75%;
+}
+
 .searchFieldsSubmit{
     width: 24%;
 }
@@ -51,6 +55,12 @@
     bottom: 0.5em;
     position: absolute;
     right: 1em;
+}
+
+.searchFields2 .searchFieldsSubmit{
+    bottom: auto;
+    position: static;
+    right: auto;
 }
 
 .report-table{
@@ -400,3 +410,10 @@ table thead th{
     
     white-space: nowrap;
 }
+
+.searchFields2 .addActionBtn{
+    position:absolute;
+    right:0.7em;
+    top:0.5em;
+}
+

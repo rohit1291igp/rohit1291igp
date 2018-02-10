@@ -281,7 +281,7 @@ export class ReportsComponent implements OnInit{
     this.reportLabelState[header][prop]=value ;
   }
 
-  searchReportSubmit(e){
+  searchReportSubmit(e, searchFields2?){
         var _this=this;
         _this.BackendService.abortLastHttpCall();//abort  other  api calls
         console.log('Search report form submitted ---->', _this.searchResultModel);
@@ -976,5 +976,16 @@ export class ReportsComponent implements OnInit{
         }
     }
 
+    approveReject(){
+
+    }
+
+    addActionInit(e, reportType){
+
+    }
+
+    addActionSubmit(e,reportType){
+
+    }
 
 }
