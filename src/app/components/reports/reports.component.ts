@@ -50,6 +50,11 @@ export class ReportsComponent implements OnInit{
  set ready(isReady: boolean) {
         if (isReady) this.resetColumnFilterPosition();
   }*/
+  reportAddAction={
+      reportAddActionFlag:false,
+      reportAddActionModel:null,
+      reportAddActionDepData:null
+  };
   defaultVendor=565; //565
   pdfDwldFlag=true;
   pdfData:any;
@@ -254,6 +259,8 @@ export class ReportsComponent implements OnInit{
                 this.imagePreviewFlag = false;
             }else if(this.editTableCell){
                 this.editTableCell = false;
+            }else if(this.reportAddAction.reportAddActionFlag){
+                this.reportAddAction.reportAddActionFlag=false;
             }else{
                 for(var key in this.reportLabelState){
                     if(this.reportLabelState[key].filterdd){
@@ -687,6 +694,7 @@ export class ReportsComponent implements OnInit{
         e.stopPropagation();
         if(ignore) return;
         this.editTableCell = false;
+        this.reportAddAction.reportAddActionFlag=false;
     }
 
     getActBtnTxt(actBtnTxt, cellValue){
@@ -987,12 +995,77 @@ export class ReportsComponent implements OnInit{
 
     }
 
-    addActionInit(e, reportType){
+    addActionInit(e){
+        let _this=this;
+        _this.reportAddAction.reportAddActionModel={};
+        if(_this.reportType === 'getPincodeReport'){
+            if(!_this.reportAddAction.reportAddActionDepData) _this.reportAddAction.reportAddActionDepData={};
+            _this.reportAddAction.reportAddActionDepData.deliveryTypes = _this.UtilityService.getDeliveryTypeList();
 
+            _this.reportAddAction.reportAddActionModel.shipType="";
+        }
+        _this.reportAddAction.reportAddActionFlag=true;
     }
 
-    addActionSubmit(e,reportType){
+    addActionSubmit(e){
+        let _this=this;
+        let paramsObj={};
+        let url="";
+        let method;
+        //let apiSuccessHandler=function(apiResponse){};
+        switch(_this.reportType){
+            case 'getVendorReport': url = "addNewVendor";
+                paramsObj={
+                    associateName:_this.reportAddAction.reportAddActionModel.associateName,
+                    contactPerson:_this.reportAddAction.reportAddActionModel.contactPerson,
+                    email:_this.reportAddAction.reportAddActionModel.email,
+                    address:_this.reportAddAction.reportAddActionModel.address,
+                    user:_this.reportAddAction.reportAddActionModel.user,
+                    password:_this.reportAddAction.reportAddActionModel.password,
+                    phone:_this.reportAddAction.reportAddActionModel.phone
+                };
+                break;
 
+            case 'getPincodeReport':  url = "addVendorPincode";
+                paramsObj={
+                    fkAssociateId:_this.searchResultModel["fkAssociateId"],
+                    pincode:_this.reportAddAction.reportAddActionModel.pincode,
+                    cityId:_this.reportAddAction.reportAddActionModel.cityId,
+                    shipType:_this.reportAddAction.reportAddActionModel.shipType,
+                    shipCharge:_this.reportAddAction.reportAddActionModel.shipCharge
+                };
+                break;
+
+            case 'getVendorDetails':  url = "addVendorComponent";
+                paramsObj={
+                    fkAssociateId:_this.searchResultModel["fkAssociateId"],
+                    componentCode:_this.reportAddAction.reportAddActionModel.componentCode,
+                    componentName:_this.reportAddAction.reportAddActionModel.componentName
+                };
+                break;
+        }
+
+        let paramsStr = _this.UtilityService.formatParams(paramsObj);
+        console.log('add API url --->', url);
+        console.log('add API Params string --->', paramsStr);
+
+        let reqObj =  {
+            url : url+paramsStr,
+            method : (method || 'post')
+        };
+
+        _this.BackendService.makeAjax(reqObj, function(err, response, headers){
+            //if(!response) response={result:[]};
+            if(err || response.error) {
+                console.log('Error=============>', err);
+                return;
+            }
+            console.log('admin action Response --->', response.result);
+            if(response.result){
+                alert('Successfully added!');
+                _this.reportAddAction.reportAddActionFlag=false;
+            }
+        });
     }
 
 }

@@ -1123,13 +1123,7 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
               {"name" : "20:00 hrs - 22:00 hrs", "value":"20:00 hrs - 22:00 hrs"}
           ];
 
-          _this.adminActions.adminActionDepData.deliveryTypes = [
-              {"name" : "Select Delivery Type", "value":""},
-              //{"name" : "Standard Delivery", "value":"1"},
-              {"name" : "Fixed Time Delivery", "value":"2"},
-              {"name" : "Midnight Delivery", "value":"3"},
-              {"name" : "Fixed Date Delivery", "value":"4"}
-          ];
+          _this.adminActions.adminActionDepData.deliveryTypes = _this.UtilityService.getDeliveryTypeList();
 
           /*for(var i in _this.adminActions.adminActionDepData.deliveryTypes){
             if(_this.adminActions.adminActionDepData.deliveryTypes[i].value === deliveryType.toString() ){

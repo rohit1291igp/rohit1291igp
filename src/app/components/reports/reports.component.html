@@ -79,53 +79,130 @@
 </div>
 
 <div class="image-preview" *ngIf="imagePreviewFlag">
-<div class="modal fade in" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: block; overflow:scroll; background: rgba(0, 0, 0, 0.77); z-index:9999999;" (click)="imagePreview($event)">
-<div class="modal-dialog modal-lg">
-    <div class="modal-content" (click)="imagePreview($event, 'ignore')" [ngClass]="{'mHeight' : isMobile, 'cHeight' : !isMobile}">
-    <div class="modal-header" style="border-bottom:none;">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="imagePreview($event)"><span aria-hidden="true">×</span></button>
-        <!--<h4 class="modal-title" id="myModalLabel">Modal Header</h4>-->
+    <div class="modal fade in" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: block; overflow:scroll; background: rgba(0, 0, 0, 0.77); z-index:9999999;" (click)="imagePreview($event)">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content" (click)="imagePreview($event, 'ignore')" [ngClass]="{'mHeight' : isMobile, 'cHeight' : !isMobile}">
+                <div class="modal-header" style="border-bottom:none;">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="imagePreview($event)"><span aria-hidden="true">×</span></button>
+                    <!--<h4 class="modal-title" id="myModalLabel">Modal Header</h4>-->
+                </div>
+                <div class="modal-body center-align">
+                    <img class="img-responsive" src="{{imagePreviewSrc}}" alt="product_img_preview">
+                    <!--<p>Some text in the modal.</p>-->
+                </div>
+                <!--<div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>-->
+            </div>
+        </div>
     </div>
-    <div class="modal-body center-align">
-        <img class="img-responsive" src="{{imagePreviewSrc}}" alt="product_img_preview">
-
-        <!--<p>Some text in the modal.</p>-->
-    </div>
-    <!--<div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-    </div>-->
-</div>
-</div>
-</div>
-<!--<div class="modal-backdrop fade in" (click)="imagePreview($event)"></div>-->
+    <!--<div class="modal-backdrop fade in" (click)="imagePreview($event)"></div>-->
 </div>
 
 
 <div class="image-preview" *ngIf="editTableCell">
-<div class="modal fade in" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: block; overflow:scroll; background: rgba(0, 0, 0, 0.77); z-index:9999999;" (click)="closePopup($event)">
-<div class="modal-dialog modal-lg popupSize1">
-    <div class="modal-content" (click)="closePopup($event, 'ignore')" [ngClass]="{'mHeight' : isMobile, 'cHeight' : !isMobile}">
-    <div class="modal-header" style="border-bottom:none;">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="closePopup($event)"><span aria-hidden="true">×</span></button>
-        <h4 class="modal-title" id="myModalLabel">Edit {{editTableCellObj.caption}} <ng-container *ngIf="reportType === 'getPincodeReport'">Price</ng-container></h4>
+    <div class="modal fade in" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: block; overflow:scroll; background: rgba(0, 0, 0, 0.77); z-index:9999999;" (click)="closePopup($event)">
+        <div class="modal-dialog modal-lg popupSize1">
+            <div class="modal-content" (click)="closePopup($event, 'ignore')" [ngClass]="{'mHeight' : isMobile, 'cHeight' : !isMobile}">
+                <div class="modal-header" style="border-bottom:none;">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="closePopup($event)"><span aria-hidden="true">×</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Edit {{editTableCellObj.caption}} <ng-container *ngIf="reportType === 'getPincodeReport'">Price</ng-container></h4>
+                </div>
+                <div class="modal-body center-align">
+                    <!--<label>{{editTableCellObj.caption}}:</label>-->
+                    <form (ngSubmit)="f.form.valid && submitEditCell($event, editTableCellObj.actBtnTxt, editTableCellObj.cellValue, editTableCellObj.rowData, editTableCellObj.header, editTableCellObj.dataIndex)" #f="ngForm" nonvalidate>
+                        <input class="form-control custom-control" type="text" name="editTableCell" placeholder="{{editTableCellObj.caption}}" [(ngModel)]="editTableCellObj.value" #editTableCell="ngModel" required>
+                        <div *ngIf="f.submitted && !editTableCell.valid" class="help-block theme-red">Please provide {{editTableCellObj.caption}} value</div>
+                        <button class="btn btn-primary m-top-1">Save</button>
+                    </form>
+                </div>
+                <!--<div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>-->
+            </div>
+        </div>
     </div>
-    <div class="modal-body center-align">
-        <!--<label>{{editTableCellObj.caption}}:</label>-->
-        <form (ngSubmit)="f.form.valid && submitEditCell($event, editTableCellObj.actBtnTxt, editTableCellObj.cellValue, editTableCellObj.rowData, editTableCellObj.header, editTableCellObj.dataIndex)" #f="ngForm" nonvalidate>
-            <input class="form-control custom-control" type="text" name="editTableCell" placeholder="{{editTableCellObj.caption}}" [(ngModel)]="editTableCellObj.value" #editTableCell="ngModel" required>
-            <div *ngIf="f.submitted && !editTableCell.valid" class="help-block theme-red">Please provide {{editTableCellObj.caption}} value</div>
-            <button class="btn btn-primary m-top-1">Save</button>
-        </form>
-    </div>
-    <!--<div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-    </div>-->
-</div>
-</div>
-</div>
-<!--<div class="modal-backdrop fade in" (click)="imagePreview($event)"></div>-->
+    <!--<div class="modal-backdrop fade in" (click)="imagePreview($event)"></div>-->
 </div>
 
+<div class="" *ngIf="reportAddAction.reportAddActionFlag">
+    <div class="modal fade in" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: block; overflow:scroll; background: rgba(0, 0, 0, 0.77);" (click)="closePopup($event)">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content" (click)="closePopup($event, 'ignore')">
+                <div class="modal-header" style="border-bottom:none;">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="closePopup($event)"><span aria-hidden="true">×</span></button>
+                    <h4 class="modal-title" id="myModalLabel">
+                        Add
+                        <ng-container *ngIf="reportType === 'getVendorReport'">Component</ng-container>
+                        <ng-container *ngIf="reportType === 'getPincodeReport'">Pincode</ng-container>
+                        <ng-container *ngIf="reportType === 'getVendorDetails'">Vendor</ng-container>
+                    </h4>
+                </div>
+
+                <div class="modal-body center-align" *ngIf="reportType === 'getVendorDetails'">
+                    <div class="form-group">
+                        <form (ngSubmit)="f.form.valid && addActionSubmit($event)" #f="ngForm" nonvalidate>
+                            <input name="associateName" class="form-control custom-control m-top-1" [(ngModel)]="reportAddAction.reportAddActionModel.associateName" #associateName="ngModel" placeholder="Vendor Name" required>
+                            <input name="contactPerson" class="form-control custom-control m-top-1" [(ngModel)]="reportAddAction.reportAddActionModel.contactPerson" #contactPerson="ngModel" placeholder="Contact Person" required>
+                            <input name="email" class="form-control custom-control m-top-1" [(ngModel)]="reportAddAction.reportAddActionModel.email" #email="ngModel" placeholder="Email" required>
+                            <textarea name="address" class="form-control custom-control m-top-1" rows="3" style="resize:none" [(ngModel)]="reportAddAction.reportAddActionModel.address" #address="ngModel" placeholder="Address" required></textarea>
+                            <input name="user" class="form-control custom-control m-top-1" [(ngModel)]="reportAddAction.reportAddActionModel.user" #user="ngModel" placeholder="User Name" required>
+                            <input name="password" type="password" class="form-control custom-control m-top-1" [(ngModel)]="reportAddAction.reportAddActionModel.password" #password="ngModel" placeholder="Password" required>
+                            <input name="phone" class="form-control custom-control m-top-1" [(ngModel)]="reportAddAction.reportAddActionModel.phone" #phone="ngModel" placeholder="Phone" required>
+
+
+                            <div *ngIf="f.submitted && !associateName.valid" class="help-block theme-red">Please provide associate Name!</div>
+                            <div *ngIf="f.submitted && !contactPerson.valid" class="help-block theme-red">Please provide contact Person!</div>
+                            <div *ngIf="f.submitted && !email.valid" class="help-block theme-red">Please provide email!</div>
+                            <div *ngIf="f.submitted && !address.valid" class="help-block theme-red">Please provide address!</div>
+                            <div *ngIf="f.submitted && !user.valid" class="help-block theme-red">Please provide user!</div>
+                            <div *ngIf="f.submitted && !password.valid" class="help-block theme-red">Please provide password!</div>
+                            <div *ngIf="f.submitted && !phone.valid" class="help-block theme-red">Please provide phone!</div>
+                            <button class="btn btn-primary m-top-1">Submit</button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="modal-body center-align" *ngIf="reportType === 'getPincodeReport'">
+                    <div class="form-group">
+                        <form (ngSubmit)="f.form.valid && addActionSubmit($event)" #f="ngForm" nonvalidate>
+                            <!--<input type="hidden" name="fkAssociateId" [(ngModel)]="reportAddAction.reportAddActionModel.fkAssociateId" #fkAssociateId="ngModel" >-->
+
+                            <input name="pincode" class="form-control custom-control m-top-1" [(ngModel)]="reportAddAction.reportAddActionModel.pincode" #pincode="ngModel" placeholder="Pincode" required>
+                            <input name="cityId" class="form-control custom-control m-top-1" [(ngModel)]="reportAddAction.reportAddActionModel.cityId" #cityId="ngModel" placeholder="cityId" required>
+                            <select name="shipType" class="form-control m-top-1" [(ngModel)]="reportAddAction.reportAddActionModel.shipType" #shipType="ngModel" required>
+                                <option *ngFor="let deliveryType of reportAddAction.reportAddActionDepData.deliveryTypes" [ngValue]="deliveryType.value">{{deliveryType.name}}</option>
+                            </select>
+                            <input name="shipCharge" class="form-control custom-control m-top-1" [(ngModel)]="reportAddAction.reportAddActionModel.shipCharge" #shipCharge="ngModel" placeholder="shipCharge" required>
+
+
+                            <div *ngIf="f.submitted && !pincode.valid" class="help-block theme-red">Please pincode!</div>
+                            <div *ngIf="f.submitted && !cityId.valid" class="help-block theme-red">Please provide cityId!</div>
+                            <div *ngIf="f.submitted && !shipType.valid" class="help-block theme-red">Please provide delivery type!</div>
+                            <div *ngIf="f.submitted && !shipCharge.valid" class="help-block theme-red">Please provide shipCharge!</div>
+                            <button class="btn btn-primary m-top-1">Submit</button>
+                        </form>
+                    </div>
+                </div>
+
+
+                <div class="modal-body center-align" *ngIf="reportType === 'getVendorReport'">
+                    <div class="form-group">
+                        <form (ngSubmit)="f.form.valid && addActionSubmit($event)" #f="ngForm" nonvalidate>
+                            <!--<input type="hidden" name="fkAssociateId" [(ngModel)]="reportAddAction.reportAddActionModel.fkAssociateId" #fkAssociateId="ngModel" >-->
+                            <input name="componentCode" class="form-control custom-control m-top-1" [(ngModel)]="reportAddAction.reportAddActionModel.componentCode" #componentCode="ngModel" placeholder="component Code" required>
+                            <input name="componentName" class="form-control custom-control m-top-1" [(ngModel)]="reportAddAction.reportAddActionModel.componentName" #componentName="ngModel" placeholder="component Name" required>
+
+                            <div *ngIf="f.submitted && !componentCode.valid" class="help-block theme-red">Please provide component code!</div>
+                            <div *ngIf="f.submitted && !componentName.valid" class="help-block theme-red">Please provide component name!</div>
+                            <button class="btn btn-primary m-top-1">Submit</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <div class="row padding-extra dbTableHeader">
     <p style="font-weight: bold; padding: 0.5em 2.5em 0;">Hi {{vendorName}} !</p>
@@ -133,64 +210,62 @@
 
 <div class="container-fluid reports-cont" *ngIf="!reportData">
     <div class="row">
-        <div class="col-sm-12 col-md-12 m-top-1" *ngIf="reportType === 'getOrderReport' || reportType === 'getPayoutAndTaxesReport' " style="width:100%;">
-
-         <div class="col-sm-9 col-md-9 reprts-search-fields bg-white padding1" style="width:74.5%; margin-right:0.5%;">
-                <div class="underLine paddingHalf text-bold">Search Parameters</div>
-                <form name="searchReport" (ngSubmit)="f.form.valid && searchReportSubmit($event)" #f="ngForm" nonvalidate>
-                    <div class="searchFields m-top-1 inline">
-                        <div class="searchFiled inline" *ngFor="let searchField of reportDataLoader.searchFields;">
-                            <select class="form-control" name="{{searchField.name}}"  [(ngModel)]="searchResultModel[searchField.name]" *ngIf="searchField.name === 'status'">
-                                <option *ngFor="let statusName of statusList" [ngValue]="statusName.value" [attr.data-trayOpen]="statusName.type">{{statusName.name}}</option>
-                            </select>
-                            <input class="form-control" type="text" name="{{searchField.name}}" placeholder="{{searchField.placeholder}}" [(ngModel)]="searchResultModel[searchField.name]" *ngIf="(searchField.type === 'text' || searchField.type === 'number') && searchField.name != 'status'">
-                            <my-date-picker id="{{searchField.name}}" name="{{searchField.name}}" placeholder="{{searchField.placeholder}}" [options]="myDatePickerOptions" [(ngModel)]="searchResultModel[searchField.name]"  *ngIf="searchField.type === 'date' && searchField.name != 'status'"></my-date-picker>
+       <div class="col-sm-12 col-md-12 m-top-1" *ngIf="reportType === 'getOrderReport' || reportType === 'getPayoutAndTaxesReport' " style="width:100%;">
+           <div class="col-sm-9 col-md-9 reprts-search-fields bg-white padding1" style="width:74.5%; margin-right:0.5%;">
+                    <div class="underLine paddingHalf text-bold">Search Parameters</div>
+                    <form name="searchReport" (ngSubmit)="f.form.valid && searchReportSubmit($event)" #f="ngForm" nonvalidate>
+                        <div class="searchFields m-top-1 inline">
+                            <div class="searchFiled inline" *ngFor="let searchField of reportDataLoader.searchFields;">
+                                <select class="form-control" name="{{searchField.name}}"  [(ngModel)]="searchResultModel[searchField.name]" *ngIf="searchField.name === 'status'">
+                                    <option *ngFor="let statusName of statusList" [ngValue]="statusName.value" [attr.data-trayOpen]="statusName.type">{{statusName.name}}</option>
+                                </select>
+                                <input class="form-control" type="text" name="{{searchField.name}}" placeholder="{{searchField.placeholder}}" [(ngModel)]="searchResultModel[searchField.name]" *ngIf="(searchField.type === 'text' || searchField.type === 'number') && searchField.name != 'status'">
+                                <my-date-picker id="{{searchField.name}}" name="{{searchField.name}}" placeholder="{{searchField.placeholder}}" [options]="myDatePickerOptions" [(ngModel)]="searchResultModel[searchField.name]"  *ngIf="searchField.type === 'date' && searchField.name != 'status'"></my-date-picker>
+                            </div>
                         </div>
-                    </div>
-                    <div class="searchFieldsSubmit">
-                        <input  type="submit" class="btn btn-primary pull-right bg-igp searchSubmitBtn"  value="Search All Parameters" />
-                    </div>
-                </form>
-         </div>
+                        <div class="searchFieldsSubmit">
+                            <input  type="submit" class="btn btn-primary pull-right bg-igp searchSubmitBtn"  value="Search All Parameters" />
+                        </div>
+                    </form>
+            </div>
 
-        <div class="col-sm-3 col-md-3 reprts-summary bg-white padding1" style="width:25%;">
-            <div class="underLine paddingHalf text-bold">Summary</div>
-            <div class="summaryBlockCont">
-                <div class="summaryBlock inline m-top-1" *ngFor="let summ of reportDataLoader.summary; index as i;">
-                    <div class="icon l" aria-hidden="true">
-                        <img src="assets/images/icons/gift.svg" alt="orders" *ngIf="i === 0">
-                        <img src="assets/images/icons/inr.svg" alt="inr" *ngIf="i === 1">
-                        <img src="assets/images/icons/inr.svg" alt="inr" *ngIf="i === 2">
+            <div class="col-sm-3 col-md-3 reprts-summary bg-white padding1" style="width:25%;">
+                <div class="underLine paddingHalf text-bold">Summary</div>
+                <div class="summaryBlockCont">
+                    <div class="summaryBlock inline m-top-1" *ngFor="let summ of reportDataLoader.summary; index as i;">
+                        <div class="icon l" aria-hidden="true">
+                            <img src="assets/images/icons/gift.svg" alt="orders" *ngIf="i === 0">
+                            <img src="assets/images/icons/inr.svg" alt="inr" *ngIf="i === 1">
+                            <img src="assets/images/icons/inr.svg" alt="inr" *ngIf="i === 2">
+                        </div>
+                        <div class="text-igp">{{summ.label}}</div>
+                        <div class="text-bold">{{summ.value}}</div>
                     </div>
-                    <div class="text-igp">{{summ.label}}</div>
-                    <div class="text-bold">{{summ.value}}</div>
                 </div>
             </div>
-    </div>
+        </div>
 
-    </div>
-    <div class="col-sm-12 col-md-12 table-cont m-top-2 table-fixed">
-        <table class="report-table table table-striped table-bordered table-curved table-fixed">
-            <thead class="bg-igp text-white">
-            <tr>
-                <th *ngFor="let tableLabel of reportDataLoader.tableHeaders">
-                {{tableLabel}} <span>&nbsp;&nbsp;</span>
-                <!--<span class="glyphicon glyphicon-chevron-down"></span>-->
-                </th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr *ngFor="let tableRowValue of reportDataLoader.tableData">
-            <td  class="bg-loader" *ngFor="let tableCol of tableRowValue; let i='index'">
-            <span>&nbsp;&nbsp;</span>
-            <!--<span class="glyphicon glyphicon-eye-open" *ngIf="i === 0"></span>-->
-            </td>
-            </tr>
+        <div class="col-sm-12 col-md-12 table-cont m-top-2 table-fixed">
+            <table class="report-table table table-striped table-bordered table-curved table-fixed">
+                <thead class="bg-igp text-white">
+                <tr>
+                    <th *ngFor="let tableLabel of reportDataLoader.tableHeaders">
+                    {{tableLabel}} <span>&nbsp;&nbsp;</span>
+                    <!--<span class="glyphicon glyphicon-chevron-down"></span>-->
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let tableRowValue of reportDataLoader.tableData">
+                <td  class="bg-loader" *ngFor="let tableCol of tableRowValue; let i='index'">
+                <span>&nbsp;&nbsp;</span>
+                <!--<span class="glyphicon glyphicon-eye-open" *ngIf="i === 0"></span>-->
+                </td>
+                </tr>
 
-            </tbody>
-        </table>
-    </div>
-
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 
@@ -244,7 +319,7 @@
         <div class="col-sm-12 col-md-12 m-top-1 searchFields2" *ngIf="(reportType === 'getVendorReport' || reportType === 'getPincodeReport' || reportType === 'getVendorDetails') && (environment.userType && environment.userType === 'admin') " style="width:100%;">
             <div class="col-sm-9 col-md-9 reprts-search-fields bg-white padding1" style="padding-right:0; width:100%;">
                 <div class="underLine paddingHalf text-bold">Search Vendor</div>
-                <div class="btn btn-primary addActionBtn" (click)="addActionInit($event, reportType)">
+                <div class="btn btn-primary addActionBtn" (click)="addActionInit($event)">
                     Add
                     <ng-container *ngIf="reportType === 'getVendorReport'">Component</ng-container>
                     <ng-container *ngIf="reportType === 'getPincodeReport'">Pincode</ng-container>

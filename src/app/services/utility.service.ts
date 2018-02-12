@@ -130,6 +130,16 @@ export class UtilityService {
         return delType;
     }
 
+    getDeliveryTypeList(){
+        var list=[
+            {"name" : "Select Delivery Type", "value":""},
+            {"name" : "Fixed Time Delivery", "value":"2"},
+            {"name" : "Midnight Delivery", "value":"3"},
+            {"name" : "Fixed Date Delivery", "value":"4"}
+        ];
+        return list;
+    }
+
     formatParams(params){
         return "?" + Object.keys(params)
                     .map(function(key){
@@ -202,5 +212,7 @@ export class UtilityService {
         }
         downloadCSV(tableCSV.join("\n"), fileName.replace('get', '')+'.csv');
     }
+
+
 
 }
