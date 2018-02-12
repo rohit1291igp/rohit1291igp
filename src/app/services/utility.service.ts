@@ -11,7 +11,9 @@ export class UtilityService {
   constructor(
       public router: Router
       ) { }
-
+    sharedData={
+        "dropdownData":null
+    };
     getDateString(incrementBy, date) {
         let d = date ? new Date(date) : new Date();
          if(incrementBy === 0){

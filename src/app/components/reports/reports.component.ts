@@ -50,6 +50,7 @@ export class ReportsComponent implements OnInit{
  set ready(isReady: boolean) {
         if (isReady) this.resetColumnFilterPosition();
   }*/
+  defaultVendor=565; //565
   pdfDwldFlag=true;
   pdfData:any;
   vendorName = localStorage.getItem('associateName');
@@ -180,13 +181,19 @@ export class ReportsComponent implements OnInit{
 
           /* byDefault set deliveryDateFrom 2 days back - start */
           if(_this.reportType === 'getOrderReport'){
-              var delDateFromObj = _this.UtilityService.getDateObj(0);
+              var delDateFromObj = _this.UtilityService.getDateObj(0); //changed from 2 day back - today
               _this.searchResultModel["deliveryDateFrom"]= { date: { year: delDateFromObj.year, month: delDateFromObj.month, day: delDateFromObj.day } };
-              _this.queryString = _this.generateQueryString(_this.searchResultModel);
               console.log('oninit =====> queryString ====>', _this.queryString);
           }
           /* byDefault set deliveryDateFrom 2 days back - end */
 
+          /* set default vendor - start */
+          if(_this.defaultVendor && ( _this.reportType === 'getVendorReport' || _this.reportType === 'getPincodeReport' || _this.reportType === 'getVendorDetails') && (_this.environment.userType && _this.environment.userType === 'admin')){
+              _this.searchResultModel["fkAssociateId"]=_this.defaultVendor;
+          }
+          /* set default vendor - end */
+
+          _this.queryString = _this.generateQueryString(_this.searchResultModel);
           _this.reportsService.getReportData(_this.reportType, _this.queryString, function(error, _reportData){
               if(error){
                   console.log('_reportData Error=============>', error);

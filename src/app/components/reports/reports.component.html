@@ -251,12 +251,12 @@
                     <ng-container *ngIf="reportType === 'getVendorDetails'">Vendor</ng-container>
                 </div>
                 <form name="searchReport" (ngSubmit)="f.form.valid && searchReportSubmit($event,true)" #f="ngForm" nonvalidate>
-                    <div class="searchFields m-top-1 inline">
-                        <div class="searchFiled pull-left">
-                            <input class="form-control" type="text" name="vendorId" placeholder="Vendor Id">
+                    <div class="searchFields m-top-1 inline" >
+                        <div class="pull-left" style="width:70%;">
+                            <app-vendor-dropdown [configData]="{'modelData' :searchResultModel, 'defaultVendor' : defaultVendor}"></app-vendor-dropdown>
                         </div>
                     </div>
-                    <div class="searchFieldsSubmit relative inline">
+                    <div class="searchFieldsSubmit relative inline" >
                         <input  type="submit" class="btn btn-primary pull-right bg-igp searchSubmitBtn"  value="Search Vendor"/>
                     </div>
                 </form>

@@ -1,0 +1,3 @@
+<select name="fkAssociateId" class="form-control" [(ngModel)]="configData.modelData.fkAssociateId" #fkAssociateId="ngModel" required>
+    <option *ngFor="let vendor of dropdownData" [ngValue]="vendor.Vendor_Id">{{vendor.Vendor_Name}}</option>
+</select>
