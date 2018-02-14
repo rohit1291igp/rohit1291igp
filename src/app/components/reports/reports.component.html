@@ -433,7 +433,7 @@
                             <td class="reportTableCell" style="word-break: break-word;" *ngFor="let tableCol of reportData.tableHeaders; let i='index'" [ngClass]="{'hide' : isHiddenCell(tableCol)}" [style.width]="tableCol === 'email'? 'auto' : 'auto' ">
                                 <div class="tdTxt">
                                     <span *ngIf="tableCol == 'Component Image' || tableCol == 'Component_Image'" >
-                                    <img class="clk" style="width: 5em;" src="{{productsCompURL}}th/{{getCellValue(tableRowValue[tableCol])}}" alt="{{getCellValue(tableRowValue[tableCol])}}" (click)="imagePreview($event, productsCompURL+'full/'+(getCellValue(tableRowValue[tableCol])))">
+                                        <img class="clk" style="width: 5em;" src="{{productsCompURL}}th/{{getCellValue(tableRowValue[tableCol])}}" alt="{{getCellValue(tableRowValue[tableCol])}}" (click)="imagePreview($event, productsCompURL+'full/'+(getCellValue(tableRowValue[tableCol])))">
                                     </span>
                                     <span *ngIf="tableCol == 'Ship_Type'" >{{getDeliveryName(getCellValue(tableRowValue[tableCol])) | replace : '`updated'}}</span>
                                     <span *ngIf="ifDate(tableCol) == 'date'" >{{getCellValue(tableRowValue[tableCol]) | date : 'dd/MM/yy'}}</span>
@@ -460,13 +460,29 @@
 
                                 <!--<h6>{{reportData.tableDataAction | json}}</h6>-->
                                 <div *ngIf="reportData.tableDataAction && reportData.tableDataAction.length" class="tableDataAction">
-                                    <div class="tableDataActionBtn" *ngFor="let tableAction of reportData.tableDataAction">
-                                        <!--{{tableAction[tableCol] | json}}-->
-                                        <div class="tableactBtn" *ngFor="let actBtn of tableAction[tableCol]; let z='index'" (click)="actionBtnInvoke(actBtn, getCellValue(tableRowValue[tableCol]), tableRowValue, tableCol, dataIndex)">
-                                            <span class="tableactBtntxt">{{getActBtnTxt(actBtn, getCellValue(tableRowValue[tableCol]))}}</span>
-                                            <ng-container *ngIf="(z+1) < tableAction[tableCol].length"> &nbsp; |</ng-container>
-                                        </div>
-                                    </div>
+                                    <ng-container *ngIf="!checkApproveBtn(tableRowValue[tableCol])">
+                                        <ng-container *ngFor="let tableAction of reportData.tableDataAction">
+                                            <div class="tableDataActionBtn" *ngIf="tableAction[tableCol] && tableAction[tableCol].length">
+                                                <!--{{tableAction[tableCol] | json}}-->
+                                                <div class="tableactBtn" *ngFor="let actBtn of tableAction[tableCol]; let z='index'" (click)="actionBtnInvoke(actBtn, getCellValue(tableRowValue[tableCol]), tableRowValue, tableCol, dataIndex)">
+                                                    <span class="tableactBtntxt">{{getActBtnTxt(actBtn, getCellValue(tableRowValue[tableCol]))}}</span>
+                                                    <ng-container *ngIf="(z+1) < tableAction[tableCol].length"> &nbsp; |</ng-container>
+                                                </div>
+                                            </div>
+                                        </ng-container>
+                                    </ng-container>
+
+                                    <ng-container *ngIf="checkApproveBtn(tableRowValue[tableCol])">
+                                            <div class="tableDataActionBtn">
+                                                <div class="tableactBtn" (click)="approveReject($event, true, tableCol, tableRowValue)">
+                                                    <span class="tableactBtntxt">Approve</span>  &nbsp; |
+                                                </div>
+
+                                                <div class="tableactBtn" (click)="approveReject($event, false, tableCol, tableRowValue)">
+                                                    <span class="tableactBtntxt">Reject</span>
+                                                </div>
+                                            </div>
+                                    </ng-container>
                                 </div>
                             </td>
                         </tr>

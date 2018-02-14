@@ -969,6 +969,18 @@ export class ReportsComponent implements OnInit{
        }
     }
 
+    checkApproveBtn(cellValue){
+        if(cellValue && cellValue.constructor === Object){
+            if(cellValue['requestType']){
+                return true;
+            }else{
+                return false;
+            }
+        }else{
+            return false;
+        }
+    }
+
     lightRendering(provider){
         let _this=this;
         let collCount=50;
@@ -991,12 +1003,45 @@ export class ReportsComponent implements OnInit{
         }
     }
 
-    approveReject(){
+    approveReject(e, approveReject, colName, rowData){
+        let _this=this;
+        if(!_this.searchResultModel["fkAssociateId"]){
+            alert('Select vendor!'); return;
+        }
+        let rowData=rowData || {};
+        let url="approveAndReject";
+        let paramsObj={
+            approveReject:approveReject,
+            reportType:_this.reportType,
+            colName:colName,
+            fkAssociateId:_this.searchResultModel["fkAssociateId"],
+            object:JSON.stringify(rowData)
+        };
+        let paramsStr = _this.UtilityService.formatParams(paramsObj);
+        let reqObj =  {
+            url : url+paramsStr,
+            method : (method || 'post')
+        };
 
+        _this.BackendService.makeAjax(reqObj, function(err, response, headers){
+            //if(!response) response={result:[]};
+            if(err || response.error) {
+                console.log('Error=============>', err);
+                return;
+            }
+            console.log('admin action Response --->', response.result);
+            if(response.result){
+                alert('Successfully added!');
+                _this.reportAddAction.reportAddActionFlag=false;
+            }
+        });
     }
 
     addActionInit(e){
         let _this=this;
+        if(!_this.searchResultModel["fkAssociateId"] && _this.reportType !== "getVendorDetails"){
+            alert('Select vendor!'); return;
+        }
         _this.reportAddAction.reportAddActionModel={};
         if(_this.reportType === 'getPincodeReport'){
             if(!_this.reportAddAction.reportAddActionDepData) _this.reportAddAction.reportAddActionDepData={};
