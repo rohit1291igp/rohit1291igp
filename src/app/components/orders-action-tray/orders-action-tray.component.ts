@@ -1199,7 +1199,7 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
 
           case 'assignChangeVendor' : url = "assignReassignOrder";
               paramsObj={
-                  action:_this.orderByStatus == 'notAlloted' ? 'assign' : 'ressign',
+                  action:_this.orderByStatus == 'notAlloted' ? 'assign' : 'reassign',
                   orderId:_this.sidePanelData[orderIndex].orderId,
                   orderProductId:_this.adminActions.adminActionsModel.orderProductId,
                   fkAssociateId:_this.adminActions.adminActionsModel.assignChangeVendor,
