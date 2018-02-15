@@ -435,9 +435,12 @@
                                     <span *ngIf="tableCol == 'Component Image' || tableCol == 'Component_Image'" >
                                         <img class="clk" style="width: 5em;" src="{{productsCompURL}}th/{{getCellValue(tableRowValue[tableCol])}}" alt="{{getCellValue(tableRowValue[tableCol])}}" (click)="imagePreview($event, productsCompURL+'full/'+(getCellValue(tableRowValue[tableCol])))">
                                     </span>
+                                    <span *ngIf="tableCol == 'Product Image' || tableCol == 'Product_Image'" >
+                                        <img class="clk" style="width: 5em;" src="{{productsURL}}th/{{getCellValue(tableRowValue[tableCol])}}" alt="{{getCellValue(tableRowValue[tableCol])}}" (click)="imagePreview($event, productsURL+'full/'+(getCellValue(tableRowValue[tableCol])))">
+                                    </span>
                                     <span *ngIf="tableCol == 'Ship_Type'" >{{getDeliveryName(getCellValue(tableRowValue[tableCol])) | replace : '`updated'}}</span>
                                     <span *ngIf="ifDate(tableCol) == 'date'" >{{getCellValue(tableRowValue[tableCol]) | date : 'dd/MM/yy'}}</span>
-                                    <span *ngIf="ifDate(tableCol) != 'date' && tableCol != 'Ship_Type' && tableCol != 'Component_Image' && tableCol != 'Component Image'" >
+                                    <span *ngIf="ifDate(tableCol) != 'date' && tableCol != 'Ship_Type' && tableCol != 'Component_Image' && tableCol != 'Component Image' && tableCol != 'Product Image' && tableCol != 'Product_Image'" >
                                         <span *ngIf="getCellValue(tableRowValue[tableCol]) === 0">{{getCellValue(tableRowValue[tableCol])}}</span>
                                         <span *ngIf="getCellValue(tableRowValue[tableCol]) !== 0" [innerHTML]="getCellValue(tableRowValue[tableCol])  | replace : '`,[' "></span>
                                     </span>

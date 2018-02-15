@@ -720,6 +720,7 @@ export class ReportsComponent implements OnInit{
         console.log(actBtnTxt+'=========='+cellValue+'========='+JSON.stringify(rowData));
         var actBtnTxtModified=_this.getActBtnTxt(actBtnTxt, cellValue);
         var apiURLPath="";
+        var apiMethod;
         var paramsObj;
         switch(_this.reportType){
             case "getOrderReport" : apiURLPath = "";
@@ -810,6 +811,13 @@ export class ReportsComponent implements OnInit{
                         fkAssociateId: fkAssId
                     };
                     paramsObj[changedField]=_this.editTableCellObj.rowData[_this.editTableCellObj.header];
+                }else if(_this.reportType === "getBarcodeToComponentReport"){
+                    apiURLPath="changeBarcodeComponent";
+                    paramsObj={
+                        product_Code: rowData['Product_Code'],
+                        component_Code: rowData['Component_Code'],
+                        quantity:_this.editTableCellObj.value
+                    };
                 }else{
                     if(header === "Price"){
                         paramsObj={
@@ -828,6 +836,31 @@ export class ReportsComponent implements OnInit{
                 }
             }
 
+        }else if(/delete/gi.test(actBtnTxt)){
+            if(!_this.confirmFlag){
+                _this.editTableCellObj["actBtnTxt"]=actBtnTxt;
+                _this.editTableCellObj["cellValue"]=cellValue;
+                _this.editTableCellObj["rowData"]=rowData;
+                _this.editTableCellObj["header"]=header;
+                _this.editTableCellObj["dataIndex"]=dataIndex;
+
+                _this.confirmData={
+                    "confirm": {
+                        "message": "Are you sure you want to delete?",
+                        "yesBtn": "Delete",
+                        "noBtn": "Cancel"
+                    }
+                }
+                _this.confirmFlag=true;
+                return;
+            }else{
+                if(_this.reportType === "getBarcodeToComponentReport"){
+                    apiURLPath="deleteBarcode";
+                    paramsObj={
+                        product_Code: rowData['Product_Code'],
+                    };
+                }
+            }
         }else{
            console.log('Not a valid action');
         }
@@ -842,7 +875,7 @@ export class ReportsComponent implements OnInit{
 
         let reqObj= {
             url : apiURLPath+paramsStr,
-            method:"put"
+            method: apiMethod || "put"
         };
 
         if(_this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header]['value']){
@@ -852,7 +885,7 @@ export class ReportsComponent implements OnInit{
         }
         console.log("actionBtnInvoke===================>", reqObj); //return;
 
-        setTimeout(function(){
+        /*setTimeout(function(){
             console.log('Following operation is successful !!!');
             if(_this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header]['value']){
                 _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header]['value'] = _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header]['value'].replace(/`updating/g , " ")+'`updated';
@@ -873,9 +906,8 @@ export class ReportsComponent implements OnInit{
                     //_this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header] = "";
                 }
             }
-        },2000);
+        },2000);*/
 
-        /*
         _this.BackendService.makeAjax(reqObj, function(err, response, headers){
             if(err || response.error) {
                 console.log('Error=============>', err, response.errorCode);
@@ -884,23 +916,30 @@ export class ReportsComponent implements OnInit{
             //response = JSON.parse(response);
             console.log('sidePanel Response --->', response.result);
             if(response.result){
-                  console.log('Following operation is successful !!!');
+                 console.log('Following operation is successful !!!');
                  if(_this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header]['value']){
                      _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header]['value'] = _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header]['value'].replace(/`updating/g , " ")+'`updated';
                      setTimeout(function(){
                         _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header]['value'] = _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header]['value'].replace(/`updated/g , " ");
                      },1000);
                  }else{
-                    _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header] = _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header].replace(/`updating/g , " ")+'`updated';
+                     _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header] = _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header].replace(/`updating/g , " ")+'`updated';
                      setTimeout(function(){
                         _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header] = _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header].replace(/`updated/g , " ");
                      },1000);
+                 }
+
+                 if(environment.userType && environment.userType === 'admin'){
+                     if(_this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header]['value']){
+                        //_this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header]['value'] = "";
+                     }else{
+                        //_this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header] = "";
+                     }
                  }
             }else{
                  console.error('Following operation is not fullfilled !!!');
             }
         });
-        */
 
     }
 
