@@ -1008,7 +1008,7 @@ export class ReportsComponent implements OnInit{
         if(!_this.searchResultModel["fkAssociateId"]){
             alert('Select vendor!'); return;
         }
-        let rowData=rowData || {};
+        rowData=rowData || {};
         let url="approveAndReject";
         let paramsObj={
             approveReject:approveReject,
@@ -1017,10 +1017,11 @@ export class ReportsComponent implements OnInit{
             fkAssociateId:_this.searchResultModel["fkAssociateId"],
             object:JSON.stringify(rowData)
         };
+        let method='post';
         let paramsStr = _this.UtilityService.formatParams(paramsObj);
         let reqObj =  {
             url : url+paramsStr,
-            method : (method || 'post')
+            method : method
         };
 
         _this.BackendService.makeAjax(reqObj, function(err, response, headers){
