@@ -641,7 +641,7 @@
                           </span>
                       </p>
 
-                     <p class=""  *ngIf="order && order.orderProducts[0] && order.orderProducts[0].vendorName" style="margin-top: -0.5em;">
+                     <p class=""  *ngIf="isAdmin && order && order.orderProducts[0] && order.orderProducts[0].vendorName" style="margin-top: -0.5em;">
                         <span class="text-bold">Vendor Name:</span>
                         <span class="uppercase text-igp">
                             {{order.orderProducts[0].vendorName}}
