@@ -814,9 +814,9 @@ export class ReportsComponent implements OnInit{
                 }else if(_this.reportType === "getBarcodeToComponentReport"){
                     apiURLPath="changeBarcodeComponent";
                     paramsObj={
-                        product_Code: rowData['Product_Code'],
-                        component_Code: rowData['Component_Code'],
-                        quantity:_this.editTableCellObj.value
+                        Product_Code: rowData['Product_Code'],
+                        Component_Code: rowData['Component_Code'],
+                        Quantity:_this.editTableCellObj.value
                     };
                 }else{
                     if(header === "Price"){
@@ -857,7 +857,7 @@ export class ReportsComponent implements OnInit{
                 if(_this.reportType === "getBarcodeToComponentReport"){
                     apiURLPath="deleteBarcode";
                     paramsObj={
-                        product_Code: rowData['Product_Code'],
+                        Product_Code: rowData['Product_Code'],
                     };
                 }
             }
