@@ -1265,7 +1265,8 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
               paramsObj={
                   orderId:_this.sidePanelData[orderIndex].orderId,
                   orderProductId:_this.adminActions.adminActionsModel.orderProductId,
-                  comment:_this.adminActions.adminActionsModel.cancelComment
+                  comment:_this.adminActions.adminActionsModel.cancelComment,
+                  orderProductIds:getOrderProductIds()
               };
               apiSuccessHandler=function(apiResponse){
                   let currentTab = _this.activeDashBoardDataType;
