@@ -157,7 +157,7 @@ handleKeyboardEvent(event: KeyboardEvent){
      }
  }
 
- closeErrorSection(e){
+ closeErrorSection(e?){
      let _this=this;
      _this._data.uploadErrorList=[];
  }
