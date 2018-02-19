@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnChanges, DoCheck, Input, Output, EventEmitter, HostListener, ElementRef, trigger, sequence, transition, animate, style, state } from '@angular/core';
 //import { UtilityService } from '../../services/utility.service';
 import {environment} from "../../../environments/environment";
 import { BackendService } from '../../services/backend.service';
@@ -27,12 +27,31 @@ export class UploadExcelComponent implements OnInit {
         }
     };
     constructor(
-      public BackendService: BackendService
+        private _elementRef: ElementRef,
+        public BackendService: BackendService
       //public UtilityService: UtilityService
       ) { }
 
   ngOnInit() {
   }
+
+/*@HostListener('document:click', ['$event.target'])
+public onClick(targetElement) {
+    console.log('inside clicked ------->');
+    const isClickedInside = this._elementRef.nativeElement.contains(targetElement);
+    if (!isClickedInside) {
+        this.closeErrorSection();
+    }
+}*/
+
+@HostListener('document:keydown', ['$event'])
+handleKeyboardEvent(event: KeyboardEvent){
+    //console.log(event);
+    let x = event.keyCode;
+    if (x === 27) {
+        this.closeErrorSection();
+    }
+}
 
  fileChange(e){
       console.log('file changed');
@@ -137,5 +156,11 @@ export class UploadExcelComponent implements OnInit {
          _this._flags.emptyFileValidation=true;
      }
  }
+
+ closeErrorSection(e){
+     let _this=this;
+     _this._data.uploadErrorList=[];
+ }
+
 
 }
