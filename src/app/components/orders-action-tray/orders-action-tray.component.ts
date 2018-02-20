@@ -1221,10 +1221,12 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
                   orderId:_this.sidePanelData[orderIndex].orderId,
                   orderProductId:_this.adminActions.adminActionsModel.orderProductId,
                   componentId:_this.adminActions.adminActionsModel.componentId,
-                  shippingCharge:_this.adminActions.adminActionsModel.shippingCharge,
+                  //shippingCharge:_this.adminActions.adminActionsModel.shippingCharge,
                   componentPrice:_this.adminActions.adminActionsModel.componentPrice,
                   orderProductIds:getOrderProductIds()
               };
+
+              if(_this.adminActions.adminActionsModel.shippingCharge) paramsObj['shippingCharge']=_this.adminActions.adminActionsModel.shippingCharge;
               apiSuccessHandler=function(apiResponse){
                   _this.sidePanelDataOnStatusUpdate(orderIndex, _this.sidePanelData[orderIndex].orderId, null, null, apiResponse.result);
               };
