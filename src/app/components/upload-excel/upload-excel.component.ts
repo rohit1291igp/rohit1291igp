@@ -24,7 +24,28 @@ export class UploadExcelComponent implements OnInit {
         uploadErrorCount:{
             correct:"",
             fail:""
-        }
+        },
+        vendorlist:[
+            {user:"Select Vendor", value:""},
+            {user:"Rewardz", value:"RL"},
+            {user:"Rediff", value:"Rediff"},
+            {user:"Talash", value:"TL"},
+            {user:"ShopClues", value:"SC"},
+            {user:"SnapDeal", value:"SD"},
+            {user:"Amazon", value:"AD"},
+            {user:"Gift A Love", value:"GLA"},
+            {user:"Awesomeji", value:"AWS"},
+            {user:"Kavya(Aus)", value:"KAV"},
+            {user:"UKGiftsPortal", value:"UKG"},
+            {user:"Oyo", value:"oyo"},
+            {user:"Corporate orders", value:"corp"},
+            {user:"Artisan Gilt", value:"artisanG"},
+            {user:"Inductus", value:"Inductus"},
+            {user:"Fnp International", value:"FNP"},
+            {user:"Johnsons and Johnsons", value:"JnJ"},
+            {user:"Interflora International", value:"INFUK"},
+        ],
+        selectedVendor:""
     };
     constructor(
         private _elementRef: ElementRef,
@@ -33,6 +54,7 @@ export class UploadExcelComponent implements OnInit {
       ) { }
 
   ngOnInit() {
+      this._data.selectedVendor="";
   }
 
 /*@HostListener('document:click', ['$event.target'])
@@ -86,9 +108,11 @@ handleKeyboardEvent(event: KeyboardEvent){
          //headers.append('Accept', 'application/json');
          let options = new RequestOptions({ headers: headers });
          console.log('Upload File - formData =============>', formData, options);
-
+         let elObj=_this._elementRef.nativeElement.querySelector('#selectedVendor');
+         let vendorName=elObj.options[elObj.selectedIndex].innerText.trim();
+         let fkAssociateId=_this._data.selectedVendor;
          let reqObj =  {
-             url : 'marketplaceorder?user='+localStorage.getItem('vendorName')+'&fkasid='+localStorage.getItem('fkAssociateId'),
+             url : 'marketplaceorder?user='+vendorName+'&fkasid='+fkAssociateId,
              method : "post",
              payload : formData,
              options : options
