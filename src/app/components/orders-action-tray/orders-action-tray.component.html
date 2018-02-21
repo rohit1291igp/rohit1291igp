@@ -199,7 +199,12 @@
                         <ng-container *ngIf="orderByStatus !== 'notAlloted'">Reassign</ng-container>
                         vendor
                     </h4>
-                    <h4 class="modal-title" id="myModalLabel" *ngIf="adminActions.adminActionsName === 'changePrice'">Change Price</h4>
+                    <h4 class="modal-title" id="myModalLabel" *ngIf="adminActions.adminActionsName === 'changePrice'">
+                        Change
+                        <ng-container *ngIf="adminActions.adminActionsSubName ==='comp'">Component</ng-container>
+                        <ng-container *ngIf="adminActions.adminActionsSubName ==='shipping'">Shipping</ng-container>
+                        Price
+                    </h4>
                     <h4 class="modal-title" id="myModalLabel" *ngIf="adminActions.adminActionsName === 'changeDeliveryType&Date'">Chage Delivery Type & Date</h4>
                     <h4 class="modal-title" id="myModalLabel" *ngIf="adminActions.adminActionsName === 'cancelRefund'">Cancel Order</h4>
                 </div>
@@ -249,7 +254,7 @@
 
                 <div class="modal-body center-align" *ngIf="adminActions.adminActionsName === 'changePrice'">
                     <div class="form-group">
-                        <form (ngSubmit)="f.form.valid && adminActionsSubmit($event)" #f="ngForm" nonvalidate>
+                        <form (ngSubmit)="adminActionsSubmit($event, {orderProductId : orderProductId.valid, componentId: componentId.valid, componentPrice : componentPrice.valid, shippingCharge : shippingCharge.valid})" #f="ngForm" nonvalidate>
 
                             <select name="orderProductId" class="form-control" [(ngModel)]="adminActions.adminActionsModel.orderProductId" #orderProductId="ngModel" (change)="orderProductChange($event,$event.target.value)" required>
                                 <option *ngFor="let orderProduct of adminActions.adminActionDepData.orderProducts" [ngValue]="orderProduct.orderProductId">{{orderProduct.productName}}</option>
@@ -259,12 +264,13 @@
                                 <option *ngFor="let orderProductComponent of adminActions.adminActionDepData.orderProductComponents" [ngValue]="orderProductComponent.componentId">{{orderProductComponent.componentName}}</option>
                             </select>
 
-                            <input name="componentPrice" class="form-control custom-control m-top-1" [(ngModel)]="adminActions.adminActionsModel.componentPrice" #componentPrice="ngModel" placeholder="Component Price" required>
-                            <input name="shippingCharge" class="form-control custom-control m-top-1" [(ngModel)]="adminActions.adminActionsModel.shippingCharge" #shippingCharge="ngModel" placeholder="Shipping Charge">
+                            <input [ngClass]="{'hide' : !(adminActions.adminActionsSubName === 'comp' || adminActions.adminActionsSubName === 'both')}" name="componentPrice" class="form-control custom-control m-top-1" [(ngModel)]="adminActions.adminActionsModel.componentPrice" #componentPrice="ngModel" placeholder="Component Price" required>
+                            <input [ngClass]="{'hide' : !(adminActions.adminActionsSubName === 'shipping' || adminActions.adminActionsSubName === 'both')}" name="shippingCharge" class="form-control custom-control m-top-1" [(ngModel)]="adminActions.adminActionsModel.shippingCharge" #shippingCharge="ngModel" placeholder="Shipping Charge" required>
 
-                            <div *ngIf="f.submitted && !orderProductId.valid" class="help-block theme-red">Please select order product!</div>
+                            <div *ngIf="f.submitted && !orderProductId.valid " class="help-block theme-red">Please select order product!</div>
                             <div *ngIf="f.submitted && !componentId.valid" class="help-block theme-red">Please select order product component!</div>
-                            <div *ngIf="f.submitted && !componentPrice.valid" class="help-block theme-red">Please provide new component price!</div>
+                            <div *ngIf="(adminActions.adminActionsSubName === 'comp' || adminActions.adminActionsSubName === 'both') && f.submitted && !componentPrice.valid" class="help-block theme-red">Please provide new component price!</div>
+                            <div *ngIf="(adminActions.adminActionsSubName === 'shipping' || adminActions.adminActionsSubName === 'both') && f.submitted && !shippingCharge.valid" class="help-block theme-red">Please provide new shipping price!</div>
                             <button class="btn btn-primary m-top-1">Submit</button>
                         </form>
                     </div>
@@ -719,11 +725,21 @@
                         </div>
 
                         <div class="changeActions dropdown actions-button no-padding no-margin" style="">
-                            <div class="btn btn-primary actions-button text-bold dropdown-toggle" style="width:100%;" (click)="changeDd($event, null, orderIndex)" id="dropdownMenuButton">
+                            <div class="btn btn-primary actions-button text-bold" style="width:100%;" (click)="changeDd($event, null, orderIndex)" id="dropdownMenuButton">
                                 Change <i class="glyphicon glyphicon-triangle-bottom"></i>
                             </div>
                             <div class="dropdown-menu"  style="display:block; margin-top:-0.3em;"  *ngIf="order.changeActionsFlag">
-                                <a class="dropdown-item" href="#" (click)="adminActionsInit($event, 'changePrice', orderIndex)">Price</a>
+
+                                <div class="text-bold" style="width:100%; padding:0.5em 1em; cursor: pointer;" (click)="changePriceDd($event, null, orderIndex)">
+                                    Price <i class="glyphicon glyphicon-triangle-bottom"></i>
+                                </div>
+
+                                <div class="dropdown-menu"  style="display:block; top:2em; left:-11.5em;"  *ngIf="order.changePriceActionsFlag">
+                                    <a class="dropdown-item" href="#" (click)="adminActionsInit($event, 'changePrice', orderIndex, 'comp')">Component Price</a>
+                                    <a class="dropdown-item" href="#" (click)="adminActionsInit($event, 'changePrice', orderIndex, 'shipping')">Shipping Price</a>
+                                    <a class="dropdown-item" href="#" (click)="adminActionsInit($event, 'changePrice', orderIndex, 'both')">Both</a>
+                                </div>
+
                                 <a class="dropdown-item" href="#" (click)="adminActionsInit($event, 'changeDeliveryType&Date', orderIndex)">Delivery Type & Date</a>
                             </div>
                         </div>

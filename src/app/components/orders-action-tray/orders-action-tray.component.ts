@@ -69,6 +69,7 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
   adminActions={
       adminActionsFlag:false,
       adminActionsName:"",
+      adminActionsSubName:"",
       adminActionsModel:null,
       adminActionDepData:null,
       adminActionResponse:null
@@ -1047,9 +1048,20 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
       else
         this.sidePanelData[orderIndex].changeActionsFlag=!this.sidePanelData[orderIndex].changeActionsFlag;
 
+     _this.changePriceDd(e, false, orderIndex);
   }
 
-  adminActionsInit(e, name, orderIndex){
+  changePriceDd(e, val, orderIndex){
+        e.stopPropagation();
+        var _this=this;
+        if(val !== null && val.toString())
+            this.sidePanelData[orderIndex].changePriceActionsFlag=val;
+        else
+            this.sidePanelData[orderIndex].changePriceActionsFlag=!this.sidePanelData[orderIndex].changePriceActionsFlag;
+
+   }
+
+  adminActionsInit(e, name, orderIndex, subName?){
       e.stopPropagation();
       var _this=this;
 
@@ -1075,12 +1087,13 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
               _this.adminActions.adminActionsModel.deliveryType="";
 
               _this.adminActions.adminActionsName=name;
+              _this.adminActions.adminActionsSubName=subName;
               _this.adminActions.adminActionsFlag=true;
           }
-      });
+      }, subName);
   }
 
-  getAdminActionDepData(e, name, orderIndex, cb){
+  getAdminActionDepData(e, name, orderIndex, cb, subName?){
       e.stopPropagation();
       var _this=this;
       _this.adminActions.adminActionDepData={};
@@ -1223,16 +1236,24 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
               break;
 
           case 'changePrice' : url = "orderPriceChanges";
+              if(_this.adminActions.adminActionsSubName === "comp"){
+                  if(!inputArgs.orderProductId || !inputArgs.componentId || !inputArgs.componentPrice) return;
+              }else if(_this.adminActions.adminActionsSubName === "shipping"){
+                  if(!inputArgs.orderProductId || !inputArgs.componentId || !inputArgs.shippingCharge) return;
+              }else if(_this.adminActions.adminActionsSubName === "both"){
+                  if(!inputArgs.orderProductId || !inputArgs.componentId || !inputArgs.componentPrice || !inputArgs.shippingCharge) return;
+              }
               paramsObj={
                   orderId:_this.sidePanelData[orderIndex].orderId,
                   orderProductId:_this.adminActions.adminActionsModel.orderProductId,
                   componentId:_this.adminActions.adminActionsModel.componentId,
                   //shippingCharge:_this.adminActions.adminActionsModel.shippingCharge,
-                  componentPrice:_this.adminActions.adminActionsModel.componentPrice,
+                  //componentPrice:_this.adminActions.adminActionsModel.componentPrice,
                   orderProductIds:getOrderProductIds()
               };
 
               if(_this.adminActions.adminActionsModel.shippingCharge) paramsObj['shippingCharge']=_this.adminActions.adminActionsModel.shippingCharge;
+              if(_this.adminActions.adminActionsModel.componentPrice) paramsObj['componentPrice']=_this.adminActions.adminActionsModel.componentPrice;
               apiSuccessHandler=function(apiResponse){
                   _this.sidePanelDataOnStatusUpdate(orderIndex, _this.sidePanelData[orderIndex].orderId, null, null, apiResponse.result);
               };
