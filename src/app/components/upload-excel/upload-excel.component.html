@@ -42,7 +42,7 @@
             <div class="count text-igp" *ngIf="_data.uploadErrorCount && _data.uploadErrorCount.fail">Failed - {{_data.uploadErrorCount.fail}}</div>
             <div class="caption m-top-1">Error list:-</div>
             <div class="errorCont" *ngFor="let err of _data.uploadErrorList">
-                <div> Row - {{err.row}} - {{err.msg}}</div>
+                <div> <ng-container *ngIf="err.row">Row - {{err.row}} -</ng-container> {{err.msg}}</div>
             </div>
         </div>
 </div>
