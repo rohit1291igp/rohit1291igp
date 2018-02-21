@@ -879,10 +879,11 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
       if(_data && _data.length){
           let firstOrderObj = _data.slice(0,1);
           let otherOrderObj = _data.slice(1);
-          _this.sidePanelData[orderIndex] = firstOrderObj;
+          _this.sidePanelData[orderIndex] = firstOrderObj[0];
           for(var i in otherOrderObj){
               _this.sidePanelData.push(otherOrderObj[i]);
           }
+          return _this.sidePanelData.length;
       }else{
           if(orderId && deliveryDate && deliveryTime){
               for(var i in _this.sidePanelData){
@@ -1106,6 +1107,11 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
                   console.log('Error=============>', err);
               }
               console.log('vendorList Response --->', response.result);
+              for(let i in response.result){
+                  if(Number(response.result[i].Vendor_Id) === Number(_this.sidePanelData[orderIndex].orderProducts[0].fkAssociateId)){
+                      response.result.splice(i, 1);
+                  }
+              }
               _this.adminActions.adminActionDepData.vendorList=response.result;
               _this.adminActions.adminActionDepData.vendorList.unshift({"Vendor_Id" : "", "Vendor_Name": "Select Vendor"});
               return cb(null);
@@ -1259,7 +1265,7 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
                   orderId:_this.sidePanelData[orderIndex].orderId
               };
               apiSuccessHandler=function(apiResponse){
-                  _this.sidePanelData[orderIndex].orderLogData=apiResponse.logs;
+                  _this.sidePanelData[orderIndex].orderLogData=apiResponse.result.logs;
               };
               break;
 
@@ -1300,7 +1306,7 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
           }
           console.log('admin action Response --->', response.result);
           _this.adminActions.adminActionResponse={};
-          apiSuccessHandler(response.result);
+          apiSuccessHandler(response);
           _this.adminActions.adminActionsFlag=false;
       });
   }
