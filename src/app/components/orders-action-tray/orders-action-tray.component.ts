@@ -347,6 +347,9 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
                     }
                     _this.sidePanelData[_this.statusReasonModel.orderIndex].uploadedFilePath[_this.statusReasonModel.status]=uploadedFileList;
                     /* updateing layer data with uploaded images - end*/
+
+                    //clear file input
+                    _this._elementRef.nativeElement.querySelector('input[name="deliveredStatusFile"]').value="";
                 });
 
             }, event);
