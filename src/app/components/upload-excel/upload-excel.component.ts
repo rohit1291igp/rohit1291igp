@@ -110,9 +110,10 @@ handleKeyboardEvent(event: KeyboardEvent){
          console.log('Upload File - formData =============>', formData, options);
          let elObj=_this._elementRef.nativeElement.querySelector('#selectedVendor');
          let vendorName=elObj.options[elObj.selectedIndex].innerText.trim();
-         let fkAssociateId=_this._data.selectedVendor;
+         let vendorCode=_this._data.selectedVendor;
+         let fkAssociateId=localStorage.getItem('fkAssociateId');
          let reqObj =  {
-             url : 'marketplaceorder?user='+vendorName+'&fkasid='+fkAssociateId,
+             url : 'marketplaceorder?user='+vendorName+'&value='+vendorCode+'&fkasid='+fkAssociateId,
              method : "post",
              payload : formData,
              options : options
