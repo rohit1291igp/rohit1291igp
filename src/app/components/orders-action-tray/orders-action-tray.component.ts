@@ -340,6 +340,13 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
                     console.log('sidePanel Response --->', response.result);
                     var uploadedFileList = response.result.uploadedFilePath[_this.statusReasonModel.status];
                     _this.uploadedFiles = uploadedFileList;
+
+                    /* updateing layer data with uploaded images - start*/
+                    if(!('uploadedFilePath' in _this.sidePanelData[_this.statusReasonModel.orderIndex])){
+                        _this.sidePanelData[_this.statusReasonModel.orderIndex].uploadedFilePath={};
+                    }
+                    _this.sidePanelData[_this.statusReasonModel.orderIndex].uploadedFilePath[_this.statusReasonModel.status]=uploadedFileList;
+                    /* updateing layer data with uploaded images - end*/
                 });
 
             }, event);

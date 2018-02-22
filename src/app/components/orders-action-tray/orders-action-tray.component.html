@@ -165,7 +165,7 @@
                         </div>-->
 
 
-                        <input name="deliveredStatusFile" class="" type="file"  [(ngModel)]="statusReasonModel.deliveredStatusFile" #deliveredStatusFile="ngModel" (change)="fileChange($event)" placeholder="Upload file" accept=".jpeg, .jpg, .png" multiple />
+                        <input name="deliveredStatusFile" class="" type="file" (change)="fileChange($event)" placeholder="Upload file" accept=".jpeg, .jpg, .png" multiple />
                         <div class="clearfix"></div>
                     </div>
 
