@@ -704,7 +704,7 @@
 
                     </div>
 
-                    <div class="row order-actions-cont comm" *ngIf="isAdmin && orderByStatus !== 'processing' ">
+                    <div class="row order-actions-cont comm" *ngIf="isAdmin && order.orderProducts[0].getOrderProductSubCategory !== 'processing' ">
                         <div class="actions-button text-bold text-center" (click)="adminActionsInit($event, 'email', orderIndex)">
                             <i class="glyphicon glyphicon-envelope" title="Send Email"></i>
                         </div>
@@ -717,11 +717,11 @@
                         </div>
                     </div>
 
-                    <div class="row order-actions-cont" *ngIf="isAdmin && orderByStatus !== 'processing'">
+                    <div class="row order-actions-cont" *ngIf="isAdmin && order.orderProducts[0].getOrderProductSubCategory !== 'processing'">
 
                         <div class="btn btn-primary actions-button text-bold" (click)="adminActionsInit($event, 'assignChangeVendor', orderIndex)">
-                            <ng-container *ngIf="orderByStatus == 'notAlloted'">Assign</ng-container>
-                            <ng-container *ngIf="orderByStatus !== 'notAlloted'">Reassign</ng-container>
+                            <ng-container *ngIf="order.orderProducts[0].getOrderProductSubCategory == 'notAlloted'">Assign</ng-container>
+                            <ng-container *ngIf="order.orderProducts[0].getOrderProductSubCategory !== 'notAlloted'">Reassign</ng-container>
                         </div>
 
                         <div class="changeActions dropdown actions-button no-padding no-margin" style="">
