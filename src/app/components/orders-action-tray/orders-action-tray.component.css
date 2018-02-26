@@ -393,7 +393,7 @@
     position:relative;
 }
 
-.orderLogContInner{
+.orderLogContInner, .uIContInner{
     position: absolute;
 
     left: -1.6em;
@@ -405,14 +405,14 @@
     /*height: 110% ! important;*/
 }
 
-.mob .orderLogContInner{
+.mob .orderLogContInner, .mob .uIContInner{
     left: -2em;
     width: 114%;
     bottom: -9em;
     z-index:2;
 }
 
-.orderLogContInner .orderLogContInner2{
+.orderLogContInner .orderLogContInner2, .uIContInner .uIContInner2{
     background: #eee;
     padding: 0.5em 1em;
     /*overflow-x: hidden;*/
@@ -420,18 +420,18 @@
     /*width: 100%;*/
 }
 
-.orderLogContInner.slideropen .orderLogContInner2{
+.orderLogContInner.slideropen .orderLogContInner2, .uIContInner.slideropen .uIContInner2{
     height: 103% ! important;
     max-height: 103% ! important;
 
 }
 
-.mob .orderLogContInner.slideropen .orderLogContInner2{
+.mob .orderLogContInner.slideropen .orderLogContInner2, .mob .uIContInner.slideropen .uIContInner2{
     height: 150% ! important;
     max-height: 150% ! important;
 }
 
-.orderLogContInner.slideropen{
+.orderLogContInner.slideropen, .uIContInner.slideropen{
     height: 103% ! important;
     max-height: 103% ! important;
     -moz-transition-duration: 0.5s ! important;
@@ -441,9 +441,9 @@
     bottom: -0.5em ! important;
 }
 
-.mob .orderLogContInner.slideropen{
-    height: 150% ! important;
-    max-height: 150% ! important;
+.mob .orderLogContInner.slideropen, .mob .uIContInner.slideropen{
+    height: 125% ! important;
+    max-height: 125% ! important;
     -moz-transition-duration: 0.5s ! important;
     -webkit-transition-duration: 0.5s ! important;
     -o-transition-duration: 0.5s ! important;
@@ -451,7 +451,7 @@
     bottom: -9em ! important;
 }
 
-.orderLogContInner.sliderclosed{
+.orderLogContInner.sliderclosed, .uIContInner.sliderclosed{
     height: 0% ! important;
     max-height: 0% ! important;
     -moz-transition-duration: 1s ! important;
@@ -473,7 +473,7 @@
     padding:inherit ! important;
 }
 
-.logClosebtn {
+.logClosebtn, .uICloseBtn {
     font-weight: 600;
     /*margin-top: 1.5em;*/
     font-size: 1.7em;
@@ -488,14 +488,14 @@
     right:2em;
 }
 
-.orderLogContInner2 .caption{
+.orderLogContInner2 .caption, .uIContInner2 .caption{
     font-size:1.2em;
     font-weight:600;
     text-decoration:underline;
     margin-bottom: 0.5em;
 }
 
-.orderLogContInner2 .content{
+.orderLogContInner2 .content, .uIContInner2 .caption{
 
 }
 
@@ -529,3 +529,17 @@
     display:block;
 }
 
+.imageListCont{
+    width:30%;
+    float:left;
+    text-align:center;
+}
+
+.imageListCont .imageList .uploadedFile{
+    margin-top:1em;
+}
+
+.imageListCont .imageList img{
+    width:7em;
+    box-shadow: 0 1px 3px #888888;
+}

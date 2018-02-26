@@ -452,6 +452,8 @@
                                     <div class="btn btn-primary actions-button text-bold disableBtn">
                                         Cancel Order
                                     </div>
+
+
                                 </div>
 
                                <!-- <div class="row">
@@ -751,6 +753,10 @@
                         <div class="btn btn-primary actions-button text-bold" (click)="adminActionsInit($event, 'cancelRefund', orderIndex)">
                             Cancel Order
                         </div>
+
+                        <div class="btn btn-primary actions-button text-bold" (click)="viewUploadImage($event, true, orderIndex)" *ngIf="chkUploadedImage(orderIndex)">
+                            Uploaded Image
+                        </div>
                     </div>
 
                   </div>
@@ -823,6 +829,39 @@
                                  *ngIf="order.orderLogData">
                                     <div [outerHTML]="order.orderLogData"></div>
                             </div>
+                        </div>
+                    </div>
+
+                    <div class="uIContInner"  [ngClass]="{'slideropen': order.uIFlag, 'sliderclosed' : !order.uIFlag}"  *ngIf="isAdmin">
+                        <div class="pull-right uICloseBtn" (click)="viewUploadImage($event, false, orderIndex)"> × </div>
+                        <div class="uIContInner2">
+                            <div class="productImages imageListCont">
+                                <div class="caption">Product Images</div>
+                                <div class="imageList">
+                                    <div class="uploadedFile relative" *ngFor="let orderProduct of order.orderProducts;">
+                                        <img  src="{{productsURL}}th/{{orderProduct.productImage}}?th={{orderProduct.productUpdateDateTime}}" alt="productImages" (click)="imagePreview($event, productsURL+'l/'+(orderProduct.productImage)+'?th='+orderProduct.productUpdateDateTime)" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="ofdImages imageListCont" *ngIf="order.uploadedFilePath.OutForDelivery.length">
+                                <div class="caption">Delivered Images</div>
+                                <div class="imageList">
+                                    <div class="uploadedFile relative" *ngFor="let uploadedFile of order.uploadedFilePath.OutForDelivery;">
+                                        <img src="{{uploadedFile}}" alt="uploadedImages" (click)="imagePreview($event, uploadedFile)" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="deliveredImages imageListCont" *ngIf="order.uploadedFilePath.Delivered.length">
+                                <div class="caption">Delivery Proof</div>
+                                <div class="imageList">
+                                    <div class="uploadedFile relative" *ngFor="let uploadedFile of order.uploadedFilePath.Delivered;">
+                                        <img src="{{uploadedFile}}" alt="uploadedImages" (click)="imagePreview($event, uploadedFile)" />
+                                     </div>
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
                         </div>
                     </div>
 
@@ -913,6 +952,11 @@
                 <div class="btn btn-primary actions-button text-bold" (click)="adminActionsInit($event, 'cancelRefund', orderIndex)">
                 Cancel Order
                 </div>
+
+                <div class="btn btn-primary actions-button text-bold" (click)="viewUploadImage($event, true, orderIndex)" *ngIf="chkUploadedImage(orderIndex)">
+                    Uploaded Image
+                </div>
+
                 </div>
             </ng-container>
 

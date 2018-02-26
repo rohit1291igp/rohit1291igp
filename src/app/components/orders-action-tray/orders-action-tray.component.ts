@@ -75,6 +75,7 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
       adminActionResponse:null
   };
   activeOrderLogIndexes={};
+  activeUIIndexes={};
   emailSMSTemplate="Orders pending. Awaiting action from your end. Please <click here> to open the IGP dashboard";
   @Output() onStatusUpdate: EventEmitter<any> = new EventEmitter();
   @Output() onOfdView: EventEmitter<any> = new EventEmitter();
@@ -194,6 +195,12 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
                 for(var prop in this.activeOrderLogIndexes){
                     this.sidePanelData[Number(prop)].orderLogFlag=false;
                     delete this.activeOrderLogIndexes[prop];
+                }
+            }else if(Object.keys(this.activeUIIndexes).length){
+                //activeUIIndexes
+                for(var prop in this.activeUIIndexes){
+                    this.sidePanelData[Number(prop)].uIFlag=false;
+                    delete this.activeUIIndexes[prop];
                 }
             }else{
                 this.onStatusUpdate.emit("closed");
@@ -356,6 +363,18 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
 
         }
   }
+    chkUploadedImage(orderIndex){
+        let _this=this;
+        let uploadedFilePath= 'uploadedFilePath' in _this.sidePanelData[orderIndex];
+        if(uploadedFilePath){
+           let OutForDeliveryImages= 'OutForDelivery' in  _this.sidePanelData[orderIndex].uploadedFilePath && _this.sidePanelData[orderIndex].uploadedFilePath.OutForDelivery.length;
+           let DeliveredImages= 'Delivered' in  _this.sidePanelData[orderIndex].uploadedFilePath && _this.sidePanelData[orderIndex].uploadedFilePath.Delivered.length;
+           if(OutForDeliveryImages || DeliveredImages){
+               return true;
+           }
+        }
+        return false;
+    }
 
     dltUploadedImage(event, fileName) {
         var _this = this;
@@ -1048,6 +1067,17 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
       this.adminActions.adminActionDepData.orderIndex=orderIndex;
       //if(this.adminActions.adminActionResponse && 'orderLogData' in this.adminActions.adminActionResponse) delete this.adminActions.adminActionResponse.orderLogData;
       this.adminActionsSubmit(e);
+  }
+
+  viewUploadImage(e, val, orderIndex){
+      //uIFlag
+      e.stopPropagation();
+      if(val){
+          this.activeUIIndexes[orderIndex]=true;
+      }else{
+          delete this.activeUIIndexes[orderIndex];
+      }
+      this.sidePanelData[orderIndex].uIFlag=val;
   }
 
   changeDd(e, val, orderIndex){
