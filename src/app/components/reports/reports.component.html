@@ -271,7 +271,7 @@
 
 <div class="container-fluid reports-cont" *ngIf="reportData">
     <div class="row">
-        <div class="col-sm-12 col-md-12 m-top-1" *ngIf="reportType === 'getOrderReport' || reportType === 'getPayoutAndTaxesReport' " style="width:100%; height:14em;">
+        <div class="col-sm-12 col-md-12 m-top-1" *ngIf="reportType === 'getOrderReport' || reportType === 'getPayoutAndTaxesReport' || reportType === 'getOrderFileUploadReport' " style="width:100%; height:14em;">
 
             <div class="col-sm-9 col-md-9 reprts-search-fields bg-white padding1" style="margin-right:0.5%; height:100%;" [style.width]="(getTopBlockWidth()).left">
                 <div class="underLine paddingHalf text-bold">Search Parameters</div>
@@ -437,14 +437,23 @@
                             <td class="reportTableCell" style="word-break: break-word;" *ngFor="let tableCol of reportData.tableHeaders; let i='index'" [ngClass]="{'hide' : isHiddenCell(tableCol)}" [style.width]="tableCol === 'email'? 'auto' : 'auto' ">
                                 <div class="tdTxt">
                                     <span *ngIf="tableCol == 'Component Image' || tableCol == 'Component_Image'" >
-                                        <img class="clk" style="width: 5em;" src="{{productsCompURL}}th/{{getCellValue(tableRowValue[tableCol])}}" alt="{{getCellValue(tableRowValue[tableCol])}}" (click)="imagePreview($event, productsCompURL+'full/'+(getCellValue(tableRowValue[tableCol])))">
+                                        <img class="clk" style="width: 4em; box-shadow: 0 1px 3px #888888;" src="{{productsCompURL}}th/{{getCellValue(tableRowValue[tableCol])}}" alt="{{getCellValue(tableRowValue[tableCol])}}" (click)="imagePreview($event, productsCompURL+'full/'+(getCellValue(tableRowValue[tableCol])))">
                                     </span>
                                     <span *ngIf="tableCol == 'Product Image' || tableCol == 'Product_Image'" >
-                                        <img class="clk" style="width: 5em;" src="{{productsURL}}th/{{getCellValue(tableRowValue[tableCol])}}" alt="{{getCellValue(tableRowValue[tableCol])}}" (click)="imagePreview($event, productsURL+'full/'+(getCellValue(tableRowValue[tableCol])))">
+                                        <img class="clk" style="width: 4em; box-shadow: 0 1px 3px #888888;" src="{{productsURL}}th/{{getCellValue(tableRowValue[tableCol])}}" alt="{{getCellValue(tableRowValue[tableCol])}}" (click)="imagePreview($event, productsURL+'l/'+(getCellValue(tableRowValue[tableCol])))">
                                     </span>
+
+                                    <span *ngIf="tableCol == 'Out Of Delivery' || tableCol == 'Out_Of_Delivery' " >
+                                        <img class="clk inline" style="width: 4em; box-shadow: 0 1px 3px #888888; margin-left:0.5em;" src="{{imgsrc}}" alt="{{getCellValue(tableRowValue[tableCol])}}" (click)="imagePreview($event, imgsrc)" *ngFor="let imgsrc of getCellValue(tableRowValue[tableCol])">
+                                    </span>
+
+                                    <span *ngIf="tableCol == 'Proof Of Delivery' || tableCol == 'Proof_Of_Delivery' " >
+                                        <img class="clk inline" style="width: 4em; box-shadow: 0 1px 3px #888888; margin-left:0.5em;" src="{{imgsrc}}" alt="{{getCellValue(tableRowValue[tableCol])}}" (click)="imagePreview($event, imgsrc)" *ngFor="let imgsrc of getCellValue(tableRowValue[tableCol])">
+                                    </span>
+
                                     <span *ngIf="tableCol == 'Ship_Type'" >{{getDeliveryName(getCellValue(tableRowValue[tableCol])) | replace : '`updated'}}</span>
                                     <span *ngIf="ifDate(tableCol) == 'date'" >{{getCellValue(tableRowValue[tableCol]) | date : 'dd/MM/yy'}}</span>
-                                    <span *ngIf="ifDate(tableCol) != 'date' && tableCol != 'Ship_Type' && tableCol != 'Component_Image' && tableCol != 'Component Image' && tableCol != 'Product Image' && tableCol != 'Product_Image'" >
+                                    <span *ngIf="ifDate(tableCol) != 'date' && tableCol != 'Ship_Type' && tableCol != 'Component_Image' && tableCol != 'Component Image' && tableCol != 'Product Image' && tableCol != 'Product_Image' && tableCol != 'Out Of Delivery' && tableCol != 'Out_Of_Delivery' && tableCol != 'Proof Of Delivery' && tableCol != 'Proof_Of_Delivery'" >
                                         <span *ngIf="getCellValue(tableRowValue[tableCol]) === 0">{{getCellValue(tableRowValue[tableCol])}}</span>
                                         <span *ngIf="getCellValue(tableRowValue[tableCol]) !== 0" [innerHTML]="getCellValue(tableRowValue[tableCol])  | replace : '`,[' "></span>
                                     </span>
