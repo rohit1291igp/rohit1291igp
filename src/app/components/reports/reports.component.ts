@@ -986,13 +986,16 @@ export class ReportsComponent implements OnInit{
 
     getTopBlockWidth(){
         var widthObj={"left" : "74.5%", "right" : "24.5%"};
-        if(this.reportData.summary.length > 0 && this.reportData.summary.length <3){
-            widthObj={"left" : "75%", "right" : "24.5%"};
-        }else if(this.reportData.summary.length > 2 && this.reportData.summary.length <4){
-            widthObj={"left" : "64%", "right" : "35.5%"};
-        }else{
-            widthObj={"left" : "55%", "right" : "44.5%"};
+        if(this.reportData.summary){
+            if(this.reportData.summary.length > 0 && this.reportData.summary.length <3){
+                widthObj={"left" : "75%", "right" : "24.5%"};
+            }else if(this.reportData.summary.length > 2 && this.reportData.summary.length <4){
+                widthObj={"left" : "64%", "right" : "35.5%"};
+            }else{
+                widthObj={"left" : "55%", "right" : "44.5%"};
+            }
         }
+
         return widthObj;
     }
 
