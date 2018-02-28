@@ -291,7 +291,7 @@
                             </select>
                         </div>
 
-                        <div class="searchFiled pull-left" *ngIf="reportType === 'getOrderReport' && (environment.userType && environment.userType === 'admin')" >
+                        <div class="searchFiled pull-left" *ngIf="(environment.userType && environment.userType === 'admin')" >
                             <app-vendor-dropdown [configData]="{'modelData' :searchResultModel, 'defaultVendor' : ''}"></app-vendor-dropdown>
                         </div>
                     </div>
