@@ -292,7 +292,7 @@
                         </div>
 
                         <div class="searchFiled pull-left" *ngIf="reportType === 'getOrderReport' && (environment.userType && environment.userType === 'admin')" >
-                            <app-vendor-dropdown [configData]="{'modelData' :searchResultModel, 'defaultVendor' : defaultVendor}"></app-vendor-dropdown>
+                            <app-vendor-dropdown [configData]="{'modelData' :searchResultModel, 'defaultVendor' : ''}"></app-vendor-dropdown>
                         </div>
                     </div>
                     <div class="searchFieldsSubmit relative inline">
