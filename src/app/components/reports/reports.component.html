@@ -391,7 +391,7 @@
 
                                     <div class="clearfix"></div>
 
-                                    <form (ngSubmit)="f.form.valid && columnFilterSubmit($event)" #f="ngForm" attr.data-colname="{{tableLabel}}" attr.data-coldt="{{determineDataType(orginalReportData.tableData[0][tableLabel])}}" nonvalidate>
+                                    <form (ngSubmit)="f.form.valid && columnFilterSubmit($event, false, true, tableLabel)" #f="ngForm" attr.data-colname="{{tableLabel}}" attr.data-coldt="{{determineDataType(orginalReportData.tableData[0][tableLabel])}}" nonvalidate>
                                         <div class="col-sm-12 col-md-12 m-top-1 bg-grey colSearchPadding filter no-margin">
                                             <div class="col-sm-6 col-md-6 no-padding left-align">Filter By :  </div>
                                             <div class="col-sm-6 col-md-6 no-padding">

@@ -519,6 +519,8 @@ export class ReportsComponent implements OnInit{
         var dataType="";
         if(!isNaN(Date.parse(value))){
             dataType="number";
+        }else if(value === ""){
+            dataType="string";
         }else if(!isNaN(Number(value))){
             dataType="number";
         }else{
@@ -533,14 +535,14 @@ export class ReportsComponent implements OnInit{
         _this.columnFilterSubmit(e, true);
     }
 
-    columnFilterSubmit(e, lightLoading?){
+    columnFilterSubmit(e, lightLoading?, emptySearch?, tableLabel?){
         var _this=this;
 
         for(var key in _this.reportLabelState){
             _this.reportLabelState[key].filterdd = false;
         }
 
-        var __tableData= _this.filterOperation();
+        var __tableData= _this.filterOperation(emptySearch, tableLabel);
 
         //updating table summary
         if(_this.filterValueFlag){
@@ -577,7 +579,7 @@ export class ReportsComponent implements OnInit{
         return (/Hide/g.test(colName) || /hide/g.test(colName));
     }
 
-    filterOperation(){
+    filterOperation(emptySearch, tableLabel){
         var _this=this;
         var _tableData=[];
         _this.filterValueFlag=false;
@@ -659,9 +661,30 @@ export class ReportsComponent implements OnInit{
                             }
                         }
                     }else{
-
+                        if(Array.isArray(_this.getCellValue(currentRow[colName]))){
+                            if((_this.getCellValue(currentRow[colName]).toString() == "")){
+                                _tableData.push(currentRow);
+                            }
+                        }else{
+                            if((_this.getCellValue(currentRow[colName]) == "")){
+                                _tableData.push(currentRow);
+                            }
+                        }
                     }
                 }//for end
+            }
+
+            if(!filterValue && emptySearch && colName === tableLabel){
+                _this.filterValueFlag=true;
+                var originalDataSource = _tableData.length ? _tableData : _this.orginalReportData.tableData;
+                _tableData=[];
+                for(var i in originalDataSource){
+                    var currentRow = originalDataSource[i];
+                    if((_this.getCellValue(currentRow[colName])).toString() == ""){
+                        _tableData.push(currentRow);
+                    }
+                }
+                _this.reportLabelState[colName].filterValue="emptySearch";
             }
         }
 
@@ -1102,7 +1125,7 @@ export class ReportsComponent implements OnInit{
         let method;
         //let apiSuccessHandler=function(apiResponse){};
         switch(_this.reportType){
-            case 'getVendorReport': url = "addNewVendor";
+            case 'getVendorDetails': url = "addNewVendor";
                 paramsObj={
                     associateName:_this.reportAddAction.reportAddActionModel.associateName,
                     contactPerson:_this.reportAddAction.reportAddActionModel.contactPerson,
@@ -1124,7 +1147,7 @@ export class ReportsComponent implements OnInit{
                 };
                 break;
 
-            case 'getVendorDetails':  url = "addVendorComponent";
+            case 'getVendorReport':  url = "addVendorComponent";
                 paramsObj={
                     fkAssociateId:_this.searchResultModel["fkAssociateId"],
                     componentCode:_this.reportAddAction.reportAddActionModel.componentCode,
