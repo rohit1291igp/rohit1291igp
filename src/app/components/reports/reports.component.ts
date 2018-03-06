@@ -1152,6 +1152,8 @@ export class ReportsComponent implements OnInit{
                     fkAssociateId:_this.searchResultModel["fkAssociateId"],
                     componentCode:_this.reportAddAction.reportAddActionModel.componentCode,
                     componentName:_this.reportAddAction.reportAddActionModel.componentName
+                    type:_this.reportAddAction.reportAddActionModel.componentType
+                    price:_this.reportAddAction.reportAddActionModel.componentPrice
                 };
                 break;
         }

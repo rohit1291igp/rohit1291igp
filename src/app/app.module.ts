@@ -102,7 +102,7 @@ export function ConfigLoader(envConfig: envConfig) {
           provide: HTTP_INTERCEPTORS,
           useClass: MyHttpInterceptor,
           multi: true
-      },
+     },
     /*  envConfig,
     {
       provide: APP_INITIALIZER,
@@ -123,7 +123,7 @@ export function ConfigLoader(envConfig: envConfig) {
     ObjectKeyValuePipe
 
   ],
-    entryComponents:[UploadExcelComponent],
+  entryComponents:[UploadExcelComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
