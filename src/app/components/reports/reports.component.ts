@@ -1028,9 +1028,9 @@ export class ReportsComponent implements OnInit{
 
     getCellValue(cellValue){
        if(cellValue && cellValue.constructor === Object){
-            return cellValue.value;
+            return cellValue.value || "";
        }else{
-            return cellValue;
+            return cellValue || "";
        }
     }
 
