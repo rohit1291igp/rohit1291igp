@@ -75,20 +75,7 @@ export class ReportsService {
 
               //var queryParmas = "fkAssociateId=fkAssociateId&startLimit=0&endLimit=20";
               //report url
-              let reportAPIEndpoint;
-              switch(reportType){
-                  case "getOrderReport" : reportAPIEndpoint = "getOrderReport";
-                      break;
-
-                  case "getVendorReport" : reportAPIEndpoint = "getVendorReport";
-                      break;
-
-                  case "getPincodeReport" : reportAPIEndpoint = "getPincodeReport";
-                      break;
-
-                  default : reportAPIEndpoint =reportType;
-              }
-
+              let reportAPIEndpoint=reportType;
               let reqObj= {
                 url : reportAPIEndpoint+"?"+queryParmas,
                 method:"get"
