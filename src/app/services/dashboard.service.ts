@@ -47,7 +47,7 @@ export class DashboardService {
         "d" : "Shipped",
         "p" : "processing",
         "na" : "notAlloted",
-        "ad":"AttemptedDelivery"
+        "ad":"AttemptedDelivery",
         "aad":"ApprovedAttemptedDelivery"
     };
 
