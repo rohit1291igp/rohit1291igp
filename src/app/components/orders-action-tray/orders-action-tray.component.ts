@@ -891,13 +891,11 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
           case "Partially Dispatched" : orderUpdateByStatus = "OutForDelivery";
               break;
 
-          case "OutForDelivery" : orderUpdateByStatus = "Delivered";
-              break;
-
-          case "Shipped" :  orderUpdateByStatus = "Delivered";
-              break;
-
-          case "Dispatched" :   orderUpdateByStatus = "Delivered";
+          case "OutForDelivery" :
+          case "Shipped" :
+          case "Dispatched" :
+          case "ApprovedAttemptedDelivery" :
+              orderUpdateByStatus = "Delivered";
               break;
 
       }
