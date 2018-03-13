@@ -532,6 +532,8 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
 
               case statusList['o'] :
               case statusList['d'] :
+              case statusList['ad'] :
+              case statusList['aad'] :
                   section = "today";
                   break;
 
@@ -906,7 +908,7 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
   sidePanelDataOnStatusUpdate(orderIndex?, orderId?, deliveryDate?, deliveryTime?, _data?){
       var _this = this;
 
-      if(_data && _data.length){
+      if(_data && Array.isArray(_data) && _data.length){
           let firstOrderObj = _data.slice(0,1);
           let otherOrderObj = _data.slice(1);
           _this.sidePanelData[orderIndex] = firstOrderObj[0];
@@ -1347,6 +1349,22 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
                   }
               };
               break;
+
+          case 'attemptedDelivery' : url="approveDeliveryAttempt";
+              paramsObj={
+                  orderId:_this.sidePanelData[orderIndex].orderId,
+                  orderProductIds:getOrderProductIds()
+              };
+              apiSuccessHandler=function(apiResponse){
+                  let currentTab = _this.activeDashBoardDataType;
+                  _this.onStatusUpdate.emit(currentTab);
+                  let dataLength=_this.sidePanelDataOnStatusUpdate(orderIndex, _this.sidePanelData[orderIndex].orderId, null, null, apiResponse.result);
+                  if(!dataLength){
+                      _this.onStatusUpdate.emit("closed");
+                      _this.trayOpen = false;
+                  }
+              };
+              break;
       }
 
 
@@ -1381,6 +1399,14 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
       }else{
           _this.print(_e, 'message', null, null, null, 'all');
       }
+  }
+
+  approveAttemptOrder(e, orderIndex){
+      let _this=this;
+      _this.adminActions.adminActionsName="attemptedDelivery";
+      if(!_this.adminActions.adminActionDepData) _this.adminActions.adminActionDepData={};
+      _this.adminActions.adminActionDepData.orderIndex=orderIndex;
+      _this.adminActionsSubmit(e);
   }
 
 }

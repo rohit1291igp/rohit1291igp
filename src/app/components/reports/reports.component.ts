@@ -889,7 +889,7 @@ export class ReportsComponent implements OnInit{
         }
 
         if(environment.userType && environment.userType === "admin"){
-
+            paramsObj.fkAssociateId = _this.searchResultModel["fkAssociateId"];
         }else{
             paramsObj.fkAssociateId =  localStorage.getItem('fkAssociateId');
         }

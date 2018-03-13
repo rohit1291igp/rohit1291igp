@@ -311,7 +311,7 @@
                     <div class="form-group">
                         <form (ngSubmit)="f.form.valid && adminActionsSubmit($event)" #f="ngForm" nonvalidate>
 
-                            <select name="orderProductId" class="form-control" [(ngModel)]="adminActions.adminActionsModel.orderProductId" #orderProductId="ngModel" (change)="orderProductChange($event,$event.target.value)" required>
+                            <select multiple name="orderProductId" class="form-control" [(ngModel)]="adminActions.adminActionsModel.orderProductId" #orderProductId="ngModel" (change)="orderProductChange($event,$event.target.value)" required>
                                 <option *ngFor="let orderProduct of adminActions.adminActionDepData.orderProducts" [ngValue]="orderProduct.orderProductId">{{orderProduct.productName}}</option>
                             </select>
 
@@ -366,6 +366,14 @@
                      <span class="" *ngIf="orderByStatus == 'Shipped'">
                         All orders for today
                      </span>
+
+                    <span class="" *ngIf="orderByStatus == 'AttemptedDelivery'">
+                        Not Delivered(Attempted orders)
+                    </span>
+
+                    <span class="" *ngIf="orderByStatus == 'ApprovedAttemptedDelivery'">
+                        Attempted orders
+                    </span>
 
                 </span>
             </p>
@@ -676,8 +684,14 @@
                         (click)="updateOrderStatus($event, orderIndex, getNxtOrderStatus(order.orderProducts[0].ordersProductStatus), order.orderId, order.orderProducts, order.orderProducts[0].orderProductExtraInfo.deliveryDate, order.orderProducts[0].orderProductExtraInfo.deliveryTime)">
                               <span *ngIf="order.orderProducts[0].ordersProductStatus =='Processed'">Confirm</span>
                               <span *ngIf="order.orderProducts[0].ordersProductStatus =='Confirmed'">Out For Delivery</span>
-                              <span *ngIf="(order.orderProducts[0].ordersProductStatus =='Shipped' && order.orderProducts[0].deliveryStatus === 0) || order.orderProducts[0].ordersProductStatus =='OutForDelivery' || order.orderProducts[0].ordersProductStatus == 'Partially Dispatched'">Mark as Delivered</span>
+                              <span *ngIf="(order.orderProducts[0].ordersProductStatus =='Shipped' && order.orderProducts[0].deliveryStatus === 0) || order.orderProducts[0].ordersProductStatus =='OutForDelivery' || order.orderProducts[0].ordersProductStatus =='ApprovedAttemptedDelivery' || order.orderProducts[0].ordersProductStatus == 'Partially Dispatched' ">Mark as Delivered</span>
                               <span *ngIf="(order.orderProducts[0].ordersProductStatus =='Shipped' && order.orderProducts[0].deliveryStatus === 1)  || (order.orderProducts[0].ordersProductStatus =='Dispatched' && order.orderProducts[0].deliveryStatus === 1)">Mark as Delivered</span>
+                        </button>
+
+                        <button class="btn btn-primary actions-button uppercase text-bold text-white bg-green"
+                        *ngIf="(order.orderProducts[0].ordersProductStatus =='Shipped' && order.orderProducts[0].deliveryStatus === 0) || order.orderProducts[0].ordersProductStatus =='OutForDelivery' || order.orderProducts[0].ordersProductStatus == 'Partially Dispatched'"
+                        (click)="updateOrderStatus($event, orderIndex, 'AttemptedDelivery', order.orderId, order.orderProducts, order.orderProducts[0].orderProductExtraInfo.deliveryDate, order.orderProducts[0].orderProductExtraInfo.deliveryTime)">
+                            Not Delivered
                         </button>
                       </div>
 
@@ -756,6 +770,10 @@
 
                         <div class="btn btn-primary actions-button text-bold" (click)="viewUploadImage($event, true, orderIndex)" *ngIf="chkUploadedImage(orderIndex)">
                             Uploaded Image
+                        </div>
+
+                        <div class="btn btn-primary actions-button text-bold" (click)="approveAttemptOrder($event, orderIndex)" *ngIf="orderByStatus == 'AttemptedDelivery'">
+                            Reattempt
                         </div>
                     </div>
 
@@ -881,8 +899,14 @@
                     (click)="updateOrderStatus($event, orderIndex, getNxtOrderStatus(order.orderProducts[0].ordersProductStatus), order.orderId, order.orderProducts, order.orderProducts[0].orderProductExtraInfo.deliveryDate, order.orderProducts[0].orderProductExtraInfo.deliveryTime)">
                     <span *ngIf="order.orderProducts[0].ordersProductStatus =='Processed'">Confirm</span>
                     <span *ngIf="order.orderProducts[0].ordersProductStatus =='Confirmed'">Out For Delivery</span>
-                    <span *ngIf="(order.orderProducts[0].ordersProductStatus =='Shipped' && order.orderProducts[0].deliveryStatus === 0) || order.orderProducts[0].ordersProductStatus =='OutForDelivery' || order.orderProducts[0].ordersProductStatus == 'Partially Dispatched'">Mark as Delivered</span>
+                    <span *ngIf="(order.orderProducts[0].ordersProductStatus =='Shipped' && order.orderProducts[0].deliveryStatus === 0) || order.orderProducts[0].ordersProductStatus =='OutForDelivery' || order.orderProducts[0].ordersProductStatus =='ApprovedAttemptedDelivery' || order.orderProducts[0].ordersProductStatus == 'Partially Dispatched'">Mark as Delivered</span>
                     <span *ngIf="(order.orderProducts[0].ordersProductStatus =='Shipped' && order.orderProducts[0].deliveryStatus === 1)  || (order.orderProducts[0].ordersProductStatus =='Dispatched' && order.orderProducts[0].deliveryStatus === 1)">Mark as Delivered</span>
+                    </button>
+
+                    <button class="btn btn-primary actions-button uppercase text-bold text-white bg-green"
+                        *ngIf="(order.orderProducts[0].ordersProductStatus =='Shipped' && order.orderProducts[0].deliveryStatus === 0) || order.orderProducts[0].ordersProductStatus =='OutForDelivery' || order.orderProducts[0].ordersProductStatus == 'Partially Dispatched'"
+                        (click)="updateOrderStatus($event, orderIndex, 'AttemptedDelivery', order.orderId, order.orderProducts, order.orderProducts[0].orderProductExtraInfo.deliveryDate, order.orderProducts[0].orderProductExtraInfo.deliveryTime)">
+                        Not Delivered
                     </button>
                 </div>
 
@@ -955,6 +979,10 @@
 
                 <div class="btn btn-primary actions-button text-bold" (click)="viewUploadImage($event, true, orderIndex)" *ngIf="chkUploadedImage(orderIndex)">
                     Uploaded Image
+                </div>
+
+                <div class="btn btn-primary actions-button text-bold" (click)="approveAttemptOrder($event, orderIndex)" *ngIf="orderByStatus == 'AttemptedDelivery'">
+                    Reattempt
                 </div>
 
                 </div>

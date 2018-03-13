@@ -46,7 +46,9 @@ export class DashboardService {
         "o" : "OutForDelivery",
         "d" : "Shipped",
         "p" : "processing",
-        "na" : "notAlloted"
+        "na" : "notAlloted",
+        "ad":"AttemptedDelivery"
+        "aad":"ApprovedAttemptedDelivery"
     };
 
     newRow = {"isAlert" : false, "sla" : false};
@@ -361,7 +363,20 @@ export class DashboardService {
                 position:1,
                 cat:"notDelivered",
                 subCat:"total"
-            }
+            },
+            {
+                day : "",
+                deliveryTimes : "",
+                status : _this.statuslist['ad'],
+                ordersCount: parseInt(apiResponse.result['attemptedDeliveryOrders'].count),
+                displayStr: "Attempted",
+                isAlert: apiResponse.result['attemptedDeliveryOrders'].alert,
+                sla : apiResponse.result['attemptedDeliveryOrders'].sla,
+                position:2,
+                cat:"notDelivered",
+                subCat:"attemptedDelivery"
+            },
+
         ];
 
         getDashboardDataResponse["festivalDate"] = apiResponse.result.festivalDate; //fesDate;
@@ -717,8 +732,7 @@ export class DashboardService {
         getDashboardDataResponse.delivered.today = todayOrderTobeDelivered + (outOfDeliveryOrderIds.length) //apiResponse.result.deliveredTodayOrderCount*2;
         getDashboardDataResponse.delivered.total = apiResponse.result.deliveredTodayOrderCount;
         /* Delivered orders - end */
-
-
+        getDashboardDataResponse.deliveryAttemptApproveCount = apiResponse.result.deliveryAttemptApproveCount;
 
         console.log('getDashboardDataResponse==============>', getDashboardDataResponse);
         getDashboardDataResponse["festivalDate"] = apiResponse.result.festivalDate; //fesDate;

@@ -494,11 +494,11 @@
 
                                     <ng-container *ngIf="checkApproveBtn(tableRowValue[tableCol])">
                                             <div class="tableDataActionBtn">
-                                                <div class="tableactBtn" (click)="approveReject($event, true, tableCol, tableRowValue)">
+                                                <div class="tableactBtn" (click)="approveReject($event, 1, tableCol, tableRowValue)">
                                                     <span class="tableactBtntxt">Approve</span>  &nbsp; |
                                                 </div>
 
-                                                <div class="tableactBtn" (click)="approveReject($event, false, tableCol, tableRowValue)">
+                                                <div class="tableactBtn" (click)="approveReject($event, 0, tableCol, tableRowValue)">
                                                     <span class="tableactBtntxt">Reject</span>
                                                 </div>
                                             </div>
