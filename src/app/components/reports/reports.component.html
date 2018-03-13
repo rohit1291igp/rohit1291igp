@@ -474,7 +474,7 @@
                                     <div class="updateTxt" *ngIf="isUpdated(getCellValue(tableRowValue[tableCol])) === 'updating' || isUpdated(getCellValue(tableRowValue[tableCol])) === 'updated'">
                                         <div class="updateTxtMain" *ngIf="isUpdated(getCellValue(tableRowValue[tableCol])) === 'updating'"><app-loader></app-loader></div>
                                         <div class="updateTxtMain" *ngIf="isUpdated(getCellValue(tableRowValue[tableCol])) === 'updated' && !(environment.userType)">Request sent!</div>
-                                        <div class="updateTxtMain" *ngIf="isUpdated(getCellValue(tableRowValue[tableCol])) === 'updated' && (environment.userType && environment.userType === 'admin')">Done!!</div>
+                                        <div class="updateTxtMain" *ngIf="isUpdated(getCellValue(tableRowValue[tableCol])) === 'updated' && (environment.userType && environment.userType === 'admin')">Done!</div>
                                     </div>
                                 <!--update messgae end-->
 
