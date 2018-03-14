@@ -379,21 +379,21 @@
         </ng-container>
 
         <ng-container *ngIf="dashboardData.ofd">
-            <div class="col-md-9 no-padding">
-                <div class="col-md-3 custom-btn-parent" *ngFor="let order of dashboardData.ofd; let i='index'" [attr.data-index]="i" [ngClass]="{'inactive' : order.inactive}">
-                    <app-orders-button [orderId]="order.orderNumber" [displayData]="order" [orderStatus]="order.status" [OrderDay]="" [deliveryTime]="masterData.deliveryTimes[5]" (onViewOrders)="viewOrders($event)" *ngIf="i<4">
+            <div class="col-md-7 no-padding">
+                <div class="col-md-4 custom-btn-parent" *ngFor="let order of dashboardData.ofd; let i='index'" [attr.data-index]="i" [ngClass]="{'inactive' : order.inactive}">
+                    <app-orders-button [orderId]="order.orderNumber" [displayData]="order" [orderStatus]="order.status" [OrderDay]="" [deliveryTime]="masterData.deliveryTimes[5]" (onViewOrders)="viewOrders($event)" *ngIf="i<3">
                         <div>{{order.orderNumber}}</div>
                     </app-orders-button>
                 </div>
             </div>
 
-            <div class="col-md-3 underline center-align" *ngIf="dashboardData.ofd.length || dashboardData.deliveryAttemptApproveCount" style="display:flex; align-items:center; justify-content: center; height:100%; flex-direction:column;">
-                <a *ngIf="dashboardData.ofd.length" href="#" (click)="openPanel($event, masterData.status[2])"> View all out for delivery orders</a>
-                <a *ngIf="dashboardData.deliveryAttemptApproveCount" href="#" (click)="openPanel($event, 'ApprovedAttemptedDelivery')"> View all attempted orders</a>
+            <div class="col-md-5 underline center-align"  *ngIf="dashboardData.ofd.length || dashboardData.deliveryAttemptApproveCount" style="display:flex; align-items:center; justify-content: center; height:100%; justify-content: space-between; padding-left:0.5em; padding-right:0.5em;">
+                <a class="btn btn-primary custom-button underline" *ngIf="dashboardData.ofd.length" href="#" (click)="openPanel($event, masterData.status[2])">  All out for delivery orders</a>
+                <a  class="btn btn-primary custom-button underline" *ngIf="dashboardData.deliveryAttemptApproveCount" [ngClass]="{'leftSperator' : dashboardData.ofd.length && dashboardData.deliveryAttemptApproveCount}" href="#" (click)="openPanel($event, 'ApprovedAttemptedDelivery')"> All attempted orders</a>
             </div>
 
 
-            <div class="col-md-9 no-padding no-ofd-label-cont" *ngIf="!dashboardData.ofd.length">
+            <div class="col-md-7 no-padding no-ofd-label-cont" *ngIf="!dashboardData.ofd.length">
                 <div class="no-ofd-label">Currently there are no orders out for delivery</div>
             </div>
         </ng-container>
@@ -451,7 +451,7 @@
                             <div class="line-height">Orders yet to be delivered : <span class="text-bold">{{dashboardData.delivered.today}}</span></div>
                         </div>
                     </div>
-                    <div class="col-md-5" style="padding: 1.5em 0 0;">
+                    <div class="col-md-5" style="padding: 1.5em 0.5em 0;">
                         <div class="btn btn-primary custom-button underline" (click)="openPanel($event, masterData.status[3])">
                             <!--View all delivered orders -->
                             All orders for today
