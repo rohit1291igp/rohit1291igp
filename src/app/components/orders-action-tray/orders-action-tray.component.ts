@@ -852,8 +852,7 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
               for(var i in result){
                   if(status === "Delivered"){
                       if(parseInt(orderId) === parseInt(result[i].orderId) &&
-                          result[i].orderProducts[0].ordersProductStatus =='Shipped' &&
-                          result[i].orderProducts[0].deliveryStatus === 0){
+                          result[i].orderProducts[0].ordersProductStatus =='OutForDelivery'){
                               orderProducts = result[i].orderProducts;
                               deliveryDate = result[i].orderProducts[0].orderProductExtraInfo.deliveryDate;
                               deliveryTime = result[i].orderProducts[0].orderProductExtraInfo.deliveryTime;
