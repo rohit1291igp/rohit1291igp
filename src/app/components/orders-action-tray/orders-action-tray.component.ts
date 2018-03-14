@@ -792,7 +792,7 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
           //if(fileDataOptions) reqObj['options'] = fileDataOptions;
           console.log('Update status API =============>', reqObj);
 
-          _this.BackendService.makeAjax(reqObj, function(err, response, headers){
+          /*_this.BackendService.makeAjax(reqObj, function(err, response, headers){
               if(err || response.error) {
                   console.log('Error=============>', err, response.errorCode);
                   _this.apierror = err || response.errorCode;
@@ -820,7 +820,7 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
               }
               _this.setRejectInitialValue();
 
-          });
+          });*/
       }
       /* variable and methods decleration - start */
 
@@ -1225,9 +1225,9 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
       let url="";
       let method;
       let apiSuccessHandler=function(apiResponse){};
-      let getOrderProductIds=function(){
+      let getOrderProductIds=function(orderProductList?){
           let orderProductIds=[];
-          let orderProducts=JSON.parse(JSON.stringify(_this.sidePanelData[orderIndex].orderProducts));
+          let orderProducts=orderProductList || JSON.parse(JSON.stringify(_this.sidePanelData[orderIndex].orderProducts));
           for(var i in orderProducts){
               orderProductIds.push(orderProducts[i].orderProductId);
           }
@@ -1349,8 +1349,8 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
 
           case 'attemptedDelivery' : url="approveDeliveryAttempt";
               paramsObj={
-                  orderId:_this.sidePanelData[orderIndex].orderId,
-                  orderProductIds:getOrderProductIds()
+                  orderId:_this.sidePanelData ? _this.sidePanelData[orderIndex].orderId : this.statusReasonModel.orderId,
+                  orderProductIds:getOrderProductIds(_this.statusReasonModel.orderProducts)
               };
               apiSuccessHandler=function(apiResponse){
                   let currentTab = _this.activeDashBoardDataType;
@@ -1398,12 +1398,24 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
       }
   }
 
-  approveAttemptOrder(e, orderIndex){
+  approveAttemptOrder(e, orderIndex?){
       let _this=this;
+      _this.statusMessageFlag=false;
       _this.adminActions.adminActionsName="attemptedDelivery";
       if(!_this.adminActions.adminActionDepData) _this.adminActions.adminActionDepData={};
-      _this.adminActions.adminActionDepData.orderIndex=orderIndex;
-      _this.adminActionsSubmit(e);
+      if(orderIndex)_this.adminActions.adminActionDepData.orderIndex=orderIndex;
+      if(_this.sidePanelData && _this.sidePanelData.length){
+          _this.adminActionsSubmit(e);
+      }else{
+          _this.loadTrayData(e, this.statusReasonModel.status, this.statusReasonModel.orderId, _this.activeDashBoardDataType, function(err, result){
+              if(err){
+                  console.log('Error----->', err);
+                  return;
+              }
+              _this.statusReasonModel.orderProducts = result[0].orderProducts;
+              _this.adminActionsSubmit(e);
+          });
+      }
   }
 
 }

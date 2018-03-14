@@ -100,7 +100,7 @@
                     </div>
                 </div>
 
-                <div class="modal-body center-align" *ngIf="statusReasonModel.status === 'Delivered'">
+                <div class="modal-body center-align" *ngIf="statusReasonModel.status === 'Delivered'" style="padding-bottom: 3em;">
                     <div class="form-group">
                         <form (ngSubmit)="f.form.valid && statusReasonSubmit($event)" #f="ngForm" nonvalidate>
                             <input name="recipientName" class="form-control custom-control" [(ngModel)]="statusReasonModel.recipientName" #recipientName="ngModel" placeholder="Recipient's Name" required>
@@ -135,11 +135,24 @@
                         <div *ngIf="fileUploadValidationError" class="help-block theme-red">Please upload files!</div>
                         <div *ngIf="fileOversizeValidation" class="help-block theme-red">Maximum file size should be 5MB</div>
 
-                        <button class="btn btn-primary m-top-1" [ngClass]="{'markdlvBtn' : !trayOpen}">Mark as Delivered</button>
+                        <button class="btn btn-primary m-top-1">Mark as Delivered</button>
                             <div *ngIf="f.submitted && !message.valid" class="help-block"></div>
                         </form>
-                        <button class="btn btn-primary m-top-1 viewDetailPopupBtn" *ngIf="!trayOpen && !isMobile" (click)="toggleTray($event, 'OutForDeliveryView', statusReasonModel.orderId, null)">View Detail</button>
-                        <button class="btn btn-primary m-top-1" style="margin-top: -3.3em; margin-left: 10em;" *ngIf="!trayOpen && isMobile" (click)="toggleTray($event, 'OutForDeliveryView', statusReasonModel.orderId, null)">View Detail</button>
+
+                        <button class="btn btn-primary m-top-1"
+                        (click)="approveAttemptOrder($event)" style="left: 24em; bottom: 1em; position: absolute;" *ngIf="!trayOpen && !isMobile">
+                        Not Delivered
+                        </button>
+
+                        <button class="btn btn-primary m-top-1"
+                        (click)="approveAttemptOrder($event)" style="margin-top: 0.7em;" *ngIf="!trayOpen && isMobile">
+                        Not Delivered
+                        </button>
+
+                        <button class="btn btn-primary m-top-1 viewDetailPopupBtn" style="left:32.5em; bottom:1em;" *ngIf="!trayOpen && !isMobile" (click)="toggleTray($event, 'OutForDeliveryView', statusReasonModel.orderId, null)">View Detail</button>
+                        <button class="btn btn-primary m-top-1" style="margin-top: 0.7em;" *ngIf="!trayOpen && isMobile" (click)="toggleTray($event, 'OutForDeliveryView', statusReasonModel.orderId, null)">View Detail</button>
+
+
 
                         </div>
                 </div>
