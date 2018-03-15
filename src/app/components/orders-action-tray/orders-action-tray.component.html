@@ -225,7 +225,7 @@
                 <div class="modal-body center-align" *ngIf="adminActions.adminActionsName === 'email'">
                     <div class="form-group">
                         <form (ngSubmit)="f.form.valid && adminActionsSubmit($event)" #f="ngForm" nonvalidate>
-                            <input name="emailSubject" class="form-control custom-control m-top-1" [(ngModel)]="adminActions.adminActionsModel.emailSubject" #emailSubject="ngModel" placeholder="Subject" required>
+                            <input name="emailSubject" class="form-control custom-control m-top-1 hide" [(ngModel)]="adminActions.adminActionsModel.emailSubject" #emailSubject="ngModel" placeholder="Subject">
                             <textarea name="emailBody" class="form-control custom-control m-top-1" rows="3" style="resize:none" [(ngModel)]="adminActions.adminActionsModel.emailBody" #emailBody="ngModel" placeholder="Email message..." required></textarea>
                             <div *ngIf="f.submitted && !emailBody.valid" class="help-block theme-red">Please provide email content!</div>
                             <div *ngIf="f.submitted && !emailSubject.valid" class="help-block theme-red">Please provide email subject!</div>
