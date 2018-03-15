@@ -389,7 +389,7 @@
 
             <div class="col-md-5 underline center-align"  *ngIf="dashboardData.ofd.length || dashboardData.deliveryAttemptApproveCount" style="display:flex; align-items:center; justify-content: center; height:100%; justify-content: space-between; padding-left:0.5em; padding-right:0.5em;">
                 <a class="btn btn-primary custom-button underline" *ngIf="dashboardData.ofd.length" href="#" (click)="openPanel($event, masterData.status[2])">  All out for delivery orders</a>
-                <a  class="btn btn-primary custom-button underline" *ngIf="dashboardData.deliveryAttemptApproveCount" [ngClass]="{'leftSperator' : dashboardData.ofd.length && dashboardData.deliveryAttemptApproveCount}" href="#" (click)="openPanel($event, 'ApprovedAttemptedDelivery')"> All attempted orders</a>
+                <a  class="btn btn-primary custom-button underline" *ngIf="dashboardData.deliveryAttemptApproveCount" [ngClass]="{'leftSperator' : dashboardData.ofd.length && dashboardData.deliveryAttemptApproveCount}" href="#" (click)="openPanel($event, 'ApprovedAttemptedDelivery')"> All attempted orders ({{dashboardData.deliveryAttemptApproveCount}})</a>
             </div>
 
 
