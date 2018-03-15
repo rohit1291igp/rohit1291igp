@@ -185,7 +185,7 @@ export class ReportsComponent implements OnInit{
           _this.reportType = params['type'];
 
           /* byDefault set deliveryDateFrom 2 days back - start */
-          if(_this.reportType === 'getOrderReport' || _this.reportType === 'getOrderFileUploadReport'){
+          if(_this.reportType === 'getOrderReport' || _this.reportType === 'getOrderFileUploadReport' || _this.reportType === 'getPayoutAndTaxesReport'){
               var delDateFromObj = _this.UtilityService.getDateObj(0); //changed from 2 day back - today
               _this.searchResultModel["deliveryDateFrom"]= { date: { year: delDateFromObj.year, month: delDateFromObj.month, day: delDateFromObj.day } };
               console.log('oninit =====> queryString ====>', _this.queryString);
