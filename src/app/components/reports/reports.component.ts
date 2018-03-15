@@ -369,7 +369,7 @@ export class ReportsComponent implements OnInit{
 
 
             _this.reportsService.getReportData(_this.reportType, _this.queryString, function(error, _reportData){
-                if(error){
+                if(error || !_reportData.tableData.length){
                     console.log('searchReportSubmit _reportData Error=============>', error);
                     return;
                 }
