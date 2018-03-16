@@ -781,7 +781,7 @@ export class ReportsComponent implements OnInit{
             }else{
                 paramsObj={
                     componentId:rowData['component_Id_Hide'],
-                    inStock: (actBtnTxtModified === "InStock")
+                    inStock: (actBtnTxtModified === "InStock" ? 1 : 0)
                 };
                 _this.confirmFlag=false;
             }
