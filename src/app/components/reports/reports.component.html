@@ -192,7 +192,12 @@
                             <!--<input type="hidden" name="fkAssociateId" [(ngModel)]="reportAddAction.reportAddActionModel.fkAssociateId" #fkAssociateId="ngModel" >-->
                             <input name="componentCode" class="form-control custom-control m-top-1" [(ngModel)]="reportAddAction.reportAddActionModel.componentCode" #componentCode="ngModel" placeholder="component Code" required>
                             <input name="componentName" class="form-control custom-control m-top-1" [(ngModel)]="reportAddAction.reportAddActionModel.componentName" #componentName="ngModel" placeholder="component Name" required>
-                            <input name="componentType" class="form-control custom-control m-top-1" [(ngModel)]="reportAddAction.reportAddActionModel.componentType" #componentType="ngModel" placeholder="component Type" required>
+
+                            <select name="componentType" class="form-control m-top-1" [(ngModel)]="reportAddAction.reportAddActionModel.componentType" #componentType="ngModel" required>
+                                <option *ngFor="let componentType of componentTypes" [ngValue]="componentType.value">{{componentType.name}}</option>
+                            </select>
+
+
                             <input name="componentPrice" class="form-control custom-control m-top-1" [(ngModel)]="reportAddAction.reportAddActionModel.componentPrice" #componentPrice="ngModel" placeholder="component Price" required>
 
                             <div *ngIf="f.submitted && !componentCode.valid" class="help-block theme-red">Please provide component code!</div>
