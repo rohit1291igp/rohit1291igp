@@ -734,7 +734,7 @@ export class ReportsComponent implements OnInit{
             else
                 _actBtnTxt = "Out of Stock";
         }else if(/enable/gi.test(actBtnTxt)){
-            if(cellValue === 'Not Servicable')
+            if(cellValue === 'Not Serviceable')
                 _actBtnTxt = "Enable";
             else
                 _actBtnTxt = "Disable";
