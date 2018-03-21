@@ -400,7 +400,6 @@
     right: 0em;
     width: 105%;
     bottom: -1.7em;
-    overflow-y: scroll;
     background: #eee;
     /*height: 110% ! important;*/
 }
@@ -420,10 +419,63 @@
     /*width: 100%;*/
 }
 
+.orderLogContInner .orderLogContInner2{
+  padding: 0;
+}
+
+.orderLogHeader{
+  background: #d4d4d4;
+}
+
+.orderLogHeader .caption{
+  padding: 0 1em;
+}
+
+.orderLogHeader .tab-title{
+  padding: 1em;
+  font-weight: bold;
+  letter-spacing: 1px;
+  margin: 0;
+  cursor: pointer;
+}
+
+.log-list-item{
+  padding: 1em;
+  background: #e2e2e2;
+  margin: 1em;
+  border-radius: 6px;
+}
+
+.text-area-block{
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  padding: 1em;
+  background-color: #ffffff;
+
+}
+
+.text-area-block textarea{
+  width: 100%;
+  border-radius: 3px;
+  border: none;
+  padding: 1em;
+  height: 50px;
+  background-color: #F2F2F2;
+}
+
+.text-area-block .message-send-btn{
+  height: 50px;
+  width: 120px;
+}
+
+.orderLogHeader .tab-title.active-tab{
+    border-bottom: 2px solid #000;
+}
+
 .orderLogContInner.slideropen .orderLogContInner2, .uIContInner.slideropen .uIContInner2{
     height: 103% ! important;
     max-height: 103% ! important;
-
 }
 
 .mob .orderLogContInner.slideropen .orderLogContInner2, .mob .uIContInner.slideropen .uIContInner2{
@@ -482,6 +534,14 @@
     cursor:pointer;
 }
 
+.logClosebtn{
+  position: absolute;
+  right: 0;
+  padding: 0 0.5em;
+  margin: 0;
+  z-index: 1;
+}
+
 .pullAll{
     position:absolute;
     top:0;
@@ -497,6 +557,15 @@
 
 .orderLogContInner2 .content, .uIContInner2 .caption{
 
+}
+
+.orderLogContInner2 .content{
+  height: 272px;
+  overflow: auto;
+}
+
+.orderLogContInner2 .content.message-content {
+  padding-bottom: 75px;
 }
 
 .vendorCall{

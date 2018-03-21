@@ -50,6 +50,7 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
   isAdmin=(environment.userType && environment.userType === "admin");
   confirmFlag=false;
   confirmModel:any={};
+  activeTab = 'log';
   confirmData={
       "confirm": {
           "message": "Are you sure you want to reject this order?",
@@ -143,6 +144,11 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
      this.setlDatePicker(null);
      this.setRejectInitialValue();
      //this.statusReasonModel.OrderProductsList = [];
+  }
+
+  //change active tab
+  onTabClick(name : string){
+      this.activeTab = name;
   }
 
   ngOnChanges(changes){

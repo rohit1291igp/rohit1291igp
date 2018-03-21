@@ -854,12 +854,51 @@
                     <div class="orderLogContInner"  [ngClass]="{'slideropen': order.orderLogFlag, 'sliderclosed' : !order.orderLogFlag}"  *ngIf="isAdmin">
                         <div class="pull-right logClosebtn" (click)="orderLog($event, false, orderIndex)"> × </div>
                         <div class="orderLogContInner2">
-                            <div class="caption">Order Log</div>
-                            <div class="" style="margin-left:48%; margin-top:10%;" *ngIf="!order.orderLogData"><app-loader></app-loader></div>
-                            <div class="content"
-                                 *ngIf="order.orderLogData">
-                                    <div [outerHTML]="order.orderLogData"></div>
+                            <div class="orderLogHeader">
+                              <div class="row">
+                                <div class="col-md-6" style="padding: 0 0 0 15px;">
+                                  <p class="tab-title" [ngClass]="{'active-tab': activeTab == 'log'}" (click)="onTabClick('log')">Logs</p>
+                                </div>
+                                <div class="col-md-6" style="padding: 0 15px 0 0;">
+                                  <p class="tab-title" [ngClass]="{'active-tab': activeTab == 'comms'}" (click)="onTabClick('comms')">Communications / Instructions</p>
+                                </div>
+                              </div>
                             </div>
+
+                            <div class="" style="margin-left:48%; margin-top:10%;" *ngIf="!order.orderLogData"><app-loader></app-loader></div>
+                          <div *ngIf="(activeTab == 'log')">
+                            <div class="content "
+                                 *ngIf="order.orderLogData">
+                              <div *ngFor="let log of order.orderLogData">
+                                <div class="log-list-item">
+                                  {{log.message}}
+                                  <p style="text-align: right; font-size: 0.8em; margin: 0">by <span style="font-weight: bold; font-style: italic;">{{log.user}}</span> on <span style="font-weight: bold; font-style: italic;">{{log.date}}</span> at <span style="font-weight: bold; font-style: italic;">{{log.time}}</span></p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div *ngIf="(activeTab == 'comms')">
+                            <div class="content message-content"
+                                 *ngIf="order.orderLogData && activeTab == 'comms'">
+                              <div  *ngFor="let log of order.orderLogData">
+                                <div class="log-list-item" >
+                                  {{log.message}}
+                                  <p style="text-align: right; font-size: 0.8em; margin: 0">by <span style="font-weight: bold; font-style: italic;">{{log.user}}</span> on <span style="font-weight: bold; font-style: italic;">{{log.date}}</span> at <span style="font-weight: bold; font-style: italic;">{{log.time}}</span></p>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="text-area-block">
+                              <div class="row">
+                                <div class="col-md-10">
+                                  <textarea placeholder="enter instruction/message here"></textarea>
+                                </div>
+                                <div class="col-md-2 no-padding">
+                                  <button class="btn btn-primary message-send-btn">Send</button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
                         </div>
                     </div>
 
