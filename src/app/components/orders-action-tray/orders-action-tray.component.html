@@ -722,8 +722,8 @@
                         <div class="btn btn-primary actions-button text-bold OIB" *ngIf="order.orderInstruction">
                             Order Instruction
                         </div>
-                        <div class="btn btn-primary actions-button text-bold needHelp" (click)="vendorIssueOpen($svent, order.orderId, order.orderProducts)">
-                         Need Help?
+                        <div class="btn btn-primary actions-button text-bold needHelp" (click)="orderLog($event, true, orderIndex)">
+                         Help / Instructions
                         </div>
 
                         <div class="order-instruction-detail" *ngIf="order.orderInstruction">
@@ -774,7 +774,7 @@
                         </div>
 
                         <div class="btn btn-primary actions-button text-bold oLog" (click)="orderLog($event, true, orderIndex)">
-                            Log
+                            Instructions
                         </div>
 
                         <div class="btn btn-primary actions-button text-bold" (click)="adminActionsInit($event, 'cancelRefund', orderIndex)">
@@ -851,22 +851,26 @@
                         </div>
                     </div>
 
-                    <div class="orderLogContInner"  [ngClass]="{'slideropen': order.orderLogFlag, 'sliderclosed' : !order.orderLogFlag}"  *ngIf="isAdmin">
+                    <div class="orderLogContInner"  [ngClass]="{'slideropen': order.orderLogFlag, 'sliderclosed' : !order.orderLogFlag}" >
                         <div class="pull-right logClosebtn" (click)="orderLog($event, false, orderIndex)"> × </div>
                         <div class="orderLogContInner2">
                             <div class="orderLogHeader">
                               <div class="row">
-                                <div class="col-md-6" style="padding: 0 0 0 15px;">
+                                <div class="col-md-6" style="padding: 0 0 0 15px;"  *ngIf="isAdmin">
                                   <p class="tab-title" [ngClass]="{'active-tab': activeTab == 'log'}" (click)="onTabClick('log')">Logs</p>
                                 </div>
-                                <div class="col-md-6" style="padding: 0 15px 0 0;">
+                                <div class="col-md-6" style="padding: 0 15px 0 0;"  *ngIf="isAdmin">
+                                  <p class="tab-title" [ngClass]="{'active-tab': activeTab == 'comms'}" (click)="onTabClick('comms')">Communications / Instructions</p>
+                                </div>
+
+                                <div class="col-md-6"  *ngIf="!isAdmin">
                                   <p class="tab-title" [ngClass]="{'active-tab': activeTab == 'comms'}" (click)="onTabClick('comms')">Communications / Instructions</p>
                                 </div>
                               </div>
                             </div>
 
                             <div class="" style="margin-left:48%; margin-top:10%;" *ngIf="!order.orderLogData"><app-loader></app-loader></div>
-                          <div *ngIf="(activeTab == 'log')">
+                          <div *ngIf="(activeTab == 'log') && isAdmin" >
                             <div class="content "
                                  *ngIf="order.orderLogData">
                               <div *ngFor="let log of order.orderLogData">
@@ -883,20 +887,24 @@
                                  *ngIf="order.orderLogData && activeTab == 'comms'">
                               <div  *ngFor="let log of order.orderLogData">
                                 <div class="log-list-item" >
+                                  <p style="font-size: 0.8em; margin: 0"><span style="font-weight: bold; font-style: italic;">{{log.user}} : </span></p>
                                   {{log.message}}
-                                  <p style="text-align: right; font-size: 0.8em; margin: 0">by <span style="font-weight: bold; font-style: italic;">{{log.user}}</span> on <span style="font-weight: bold; font-style: italic;">{{log.date}}</span> at <span style="font-weight: bold; font-style: italic;">{{log.time}}</span></p>
+                                  <p style="text-align: right; font-size: 0.8em; margin: 0">on <span style="font-weight: bold; font-style: italic;">{{log.date}}</span> at <span style="font-weight: bold; font-style: italic;">{{log.time}}</span></p>
                                 </div>
                               </div>
                             </div>
                             <div class="text-area-block">
-                              <div class="row">
-                                <div class="col-md-10">
-                                  <textarea placeholder="enter instruction/message here"></textarea>
+                              <form (ngSubmit)="commForm.form.valid && sendCommunicationMessage($event, order, orderIndex)" #commForm="ngForm" novalidate>
+                                <div class="row">
+                                  <div class="col-md-10">
+                                    <textarea required name="vendorIssue" placeholder="enter instruction/message here" [(ngModel)]="vendorIssueValue.reason" #vendorIssue="ngModel"></textarea>
+                                    <div *ngIf="commForm.submitted && !vendorIssue.valid" class="help-block theme-red">Please provide vendor issue!</div>
+                                  </div>
+                                  <div class="col-md-2 no-padding">
+                                    <button type="submit" class="btn btn-primary message-send-btn">Send</button>
+                                  </div>
                                 </div>
-                                <div class="col-md-2 no-padding">
-                                  <button class="btn btn-primary message-send-btn">Send</button>
-                                </div>
-                              </div>
+                              </form>
                             </div>
                           </div>
                         </div>

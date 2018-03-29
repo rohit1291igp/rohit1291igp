@@ -50,7 +50,7 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
   isAdmin=(environment.userType && environment.userType === "admin");
   confirmFlag=false;
   confirmModel:any={};
-  activeTab = 'log';
+  activeTab = (this.isAdmin) ? 'log' : 'comms';
   confirmData={
       "confirm": {
           "message": "Are you sure you want to reject this order?",
@@ -250,6 +250,38 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
          console.log('sidePanel Response --->', response.result);
          _this.vendorIssueFlag=false;
      });
+ }
+
+ sendCommunicationMessage($event, order, orderIndex){
+   var _this =this;
+   var fkAssociateId = localStorage.getItem('fkAssociateId');
+   var orderId = order.orderId;
+   var orderProducts = order.orderProducts;
+   var orderProductIds = "";
+   if(orderProducts && orderProducts.length){
+     for(var i in orderProducts){
+       if(!orderProductIds){
+         orderProductIds = orderProductIds + (orderProducts[i].orderProductId).toString();
+       }else{
+         orderProductIds = orderProductIds +","+(orderProducts[i].orderProductId).toString();
+       }
+     }
+   }
+
+   var message = _this.vendorIssueValue.reason;
+   let reqObj = {
+     url : 'addVendorInstruction?orderId='+orderId+'&orderProductId='+orderProductIds+'&fkAssociateId='+fkAssociateId+'&message='+message,
+     method : 'post'
+   };
+
+   _this.BackendService.makeAjax(reqObj, function(err, response, headers){
+     if(err || response.error) {
+       console.log('Error=============>', err, response.errorCode);
+     }else{
+       _this.sidePanelData[orderIndex].orderLogData=response.result.logs;
+       _this.vendorIssueValue.reason = " ";
+     }
+   });
  }
 
  getRejectionType(rejectionMessage){
