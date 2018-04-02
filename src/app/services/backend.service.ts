@@ -10,7 +10,7 @@ export class BackendService {
               private httpClient: HttpClient) {}
 
   private handleError(error: any): Promise<any> {
-    console.log('Error occurred', error);    
+    console.log('Error occurred', error);
     return Promise.reject(error.message || error);
   }
 
@@ -34,7 +34,7 @@ export class BackendService {
                   reqObj.url= environment.originMock + reqObj.url;
               }
           }else{
-              if(environment.userType && !(reqObj.url.includes('login')) && !(reqObj.url.includes('doLogOut')) ){
+              if(environment.userType && environment.userType != 'vendor' && !(reqObj.url.includes('login')) && !(reqObj.url.includes('doLogOut')) ){
                   if(environment.userType === "upload"){
                       reqObj.url= environment.origin +'v1/admin/'+ reqObj.url;
                   }else{

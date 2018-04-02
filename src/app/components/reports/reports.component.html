@@ -295,8 +295,10 @@
                         </div>
 
                         <div class="searchFiled pull-left" *ngIf="reportType === 'getOrderReport' " >
-                            <select class="form-control" name="status"  [(ngModel)]="searchResultModel['status']">
-                                <option *ngFor="let statusName of statusList" [ngValue]="statusName.value" [attr.data-trayOpen]="statusName.type">{{statusName.name}}</option>
+                            <select multiple class="custom-select multi-select" size="4" name="status"  [(ngModel)]="searchResultModel['status']">
+                              <ng-container *ngFor="let statusName of statusList">
+                                <option *ngIf="statusName[environment.userType]" [ngValue]="statusName.value" [attr.data-trayOpen]="statusName.type">{{statusName.name}}</option>
+                              </ng-container>
                             </select>
                         </div>
 
