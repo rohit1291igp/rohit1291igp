@@ -65,12 +65,13 @@ export class ReportsComponent implements OnInit{
   showMoreBtn=false;
   searchReportFieldsValidation=false;
   statusList=[
-        {"type" : "0", "name" : "All Orders status", "value" : "" },
-        {"type" : "1", "name" : "Processed", "value" : "Processed" },
-        {"type" : "1", "name" : "Confirmed", "value" : "Confirmed" },
-        {"type" : "1", "name" : "Out For Delivery", "value" : "OutForDelivery" },
-        {"type" : "1", "name" : "Delivered", "value" : "Delivered" },
-        {"type" : "1", "name" : "Rejected", "value" : "Rejected" }
+        {"type" : "0", "name" : "All Orders status", "value" : "", "admin" : 1, "vendor" : 1 },
+    {"type" : "1", "name" : "Processing", "value" : "Processing", "admin" : 1, "vendor" : 0 },
+        {"type" : "1", "name" : "Processed", "value" : "Processed", "admin" : 1, "vendor" : 1 },
+        {"type" : "1", "name" : "Confirmed", "value" : "Confirmed", "admin" : 1, "vendor" : 1 },
+        {"type" : "1", "name" : "Out For Delivery", "value" : "OutForDelivery", "admin" : 1, "vendor" : 1 },
+        {"type" : "1", "name" : "Delivered", "value" : "Delivered", "admin" : 1, "vendor" : 1 },
+        {"type" : "1", "name" : "Rejected", "value" : "Rejected", "admin" : 1, "vendor" : 1 }
   ];
   reportDataLoader:any={
       "searchFields" : [
@@ -355,7 +356,7 @@ export class ReportsComponent implements OnInit{
     //pagination
     showMoreTableData(e){
         var _this=this;
-        if(_this.reportType === "getPincodeReport"){return;} // pagination issue 
+        if(_this.reportType === "getPincodeReport"){return;} // pagination issue
         var totalOrders= (_this.orginalReportData.summary && _this.orginalReportData.summary[0]) ? Number(_this.orginalReportData.summary[0].value) : 0;
         console.log('show more clicked');
 

@@ -407,7 +407,7 @@ table.fixed-header th {
 }
 
 table thead th{
-    
+
     white-space: nowrap;
 }
 
@@ -417,3 +417,8 @@ table thead th{
     top:0.5em;
 }
 
+.custom-select.multi-select{
+  width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
