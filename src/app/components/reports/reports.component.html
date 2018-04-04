@@ -350,6 +350,15 @@
             </div>
         </div>
 
+        <div class="col-sm-12 col-md-12 m-top-1 searchFields2" *ngIf="(reportType === 'getPincodeReport') && (environment.userType && environment.userType === 'vendor') " style="width:100%;">
+          <div class="col-sm-9 col-md-9 reprts-search-fields bg-white padding1" style="padding-right:0; width:100%;">
+            <div attr.data-associate-id={{associateId}} id="vendor-add-pincode" class="btn btn-primary addActionBtn add-pincode-vendor" (click)="addActionInit($event)">
+              Add
+              <ng-container *ngIf="reportType === 'getPincodeReport'">Pincode</ng-container>
+            </div>
+          </div>
+        </div>
+
 
         <div class="col-sm-12 col-md-12 table-area table-cont m-top-1" id="table-section">
                 <div class="reportDwld pull-right btn btn-primary" (click)="downLoadCSV($event, reportType)" [ngClass]="{'disableBtn' : !reportData.tableData.length}">
@@ -475,7 +484,7 @@
                                 <!--update messgae start-->
                                     <div class="updateTxt" *ngIf="isUpdated(getCellValue(tableRowValue[tableCol])) === 'updating' || isUpdated(getCellValue(tableRowValue[tableCol])) === 'updated'">
                                         <div class="updateTxtMain" *ngIf="isUpdated(getCellValue(tableRowValue[tableCol])) === 'updating'"><app-loader></app-loader></div>
-                                        <div class="updateTxtMain" *ngIf="isUpdated(getCellValue(tableRowValue[tableCol])) === 'updated' && !(environment.userType)">Request sent!</div>
+                                        <div class="updateTxtMain" *ngIf="isUpdated(getCellValue(tableRowValue[tableCol])) === 'updated' && (environment.userType == 'vendor')">Request sent!</div>
                                         <div class="updateTxtMain" *ngIf="isUpdated(getCellValue(tableRowValue[tableCol])) === 'updated' && (environment.userType && environment.userType === 'admin')">Done!</div>
                                     </div>
                                 <!--update messgae end-->
