@@ -160,6 +160,7 @@ export class ReportsComponent implements OnInit{
   public orginalReportData:any=null;
   searchResultModel:any={};
   confirmFlag=false;
+  associateId = localStorage.getItem('fkAssociateId');
   confirmModel:any={};
   confirmData={
     "confirm": {
@@ -730,7 +731,7 @@ export class ReportsComponent implements OnInit{
     getActBtnTxt(actBtnTxt, cellValue){
         var _actBtnTxt="";
         if(/stock/gi.test(actBtnTxt)){
-            if(cellValue === '')
+            if(cellValue === 'Out Of Stock')
                 _actBtnTxt = "InStock";
             else
                 _actBtnTxt = "Out of Stock";
@@ -1119,10 +1120,16 @@ export class ReportsComponent implements OnInit{
     }
 
     addActionInit(e){
+      console.log(e);
         let _this=this;
-        if(!_this.searchResultModel["fkAssociateId"] && _this.reportType !== "getVendorDetails"){
+        if(!(e.target.id == 'vendor-add-pincode')){
+          if(!_this.searchResultModel["fkAssociateId"] && _this.reportType !== "getVendorDetails"){
             alert('Select vendor!'); return;
+          }
+        }else{
+          _this.searchResultModel["fkAssociateId"] = e.target.getAttribute('data-associate-id');
         }
+
         _this.reportAddAction.reportAddActionModel={};
         if(_this.reportType === 'getPincodeReport'){
             if(!_this.reportAddAction.reportAddActionDepData) _this.reportAddAction.reportAddActionDepData={};
