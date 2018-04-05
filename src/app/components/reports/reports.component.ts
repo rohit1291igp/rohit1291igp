@@ -856,11 +856,13 @@ export class ReportsComponent implements OnInit{
                             updatePrice: _this.editTableCellObj.value
                         };
                     }else if(/Delivery/gi.test(header)){
-                        paramsObj={
+                      paramsObj={
                             pincode:rowData["Pincode"],
-                            shipCharge: _this.editTableCellObj.value,
-                            shipType : _this.UtilityService.getDeliveryType(header)
+                            reqPrice: _this.editTableCellObj.value,
+                            shipType : _this.UtilityService.getDeliveryType(header),
+                            shipCharge : (_this.editTableCellObj["cellValue"] == 'Not Serviceable') ? 0 : _this.editTableCellObj["cellValue"]
                         };
+
                     }else{
                         paramsObj={};
                     }
@@ -1044,7 +1046,16 @@ export class ReportsComponent implements OnInit{
 
     getCellValue(cellValue){
        if(cellValue && cellValue.constructor === Object){
+          if(cellValue.requestValue === '-1'){
             return cellValue.value || "";
+          }else{
+            if(cellValue.value === cellValue.requestValue){
+              return (cellValue.value || "") + '<br/>(enable request)';
+            }else{
+              return 'Old Price : ' + (cellValue.value || "") + ' / New Price: ' + (cellValue.requestValue || "");
+            }
+          }
+
        }else{
             return cellValue || "";
        }
