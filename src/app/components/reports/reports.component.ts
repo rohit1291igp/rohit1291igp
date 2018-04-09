@@ -737,6 +737,10 @@ export class ReportsComponent implements OnInit{
         }else{
             _actBtnTxt = actBtnTxt;
         }
+
+        if(cellValue == 'Not Serviceable' && actBtnTxt == 'Edit'){
+          return '';
+        }
         return _actBtnTxt;
     }
 
@@ -847,14 +851,15 @@ export class ReportsComponent implements OnInit{
                     if(header === "Price"){
                         paramsObj={
                             componentId:rowData['component_Id_Hide'],
-                            updatePrice: _this.editTableCellObj.value
+                            reqPrice: _this.editTableCellObj.value,
+                            oldPrice: _this.editTableCellObj["cellValue"]
                         };
                     }else if(/Delivery/gi.test(header)){
                       paramsObj={
                             pincode:rowData["Pincode"],
                             reqPrice: _this.editTableCellObj.value,
                             shipType : _this.UtilityService.getDeliveryType(header),
-                            shipCharge : (_this.editTableCellObj["cellValue"] == 'Not Serviceable') ? 0 : _this.editTableCellObj["cellValue"]
+                            shipCharge : (_this.editTableCellObj["cellValue"] == 'Not Serviceable') ? 0 : _this.editTableCellObj["cellValue"].trim()
                         };
 
                     }else{
@@ -1044,9 +1049,17 @@ export class ReportsComponent implements OnInit{
             return cellValue.value || "";
           }else{
             if(cellValue.value === cellValue.requestValue){
-              return (cellValue.value || "") + '<br/>(enable request)';
+              if(/stock/gi.test(cellValue.value)){
+                return cellValue.value ;
+              }else{
+                return (cellValue.value || "") + '<br/>(enable request)';
+              }
             }else{
-              return 'Old Price : ' + (cellValue.value || "") + ' / New Price: ' + (cellValue.requestValue || "");
+              if(/stock/gi.test(cellValue.value)){
+                return 'Status : ' + (cellValue.value || "") + ' / Requested : ' + (cellValue.requestValue || "");
+              }else{
+                return 'Old Price : ' + (cellValue.value || "") + ' / New Price: ' + (cellValue.requestValue || "");
+              }
             }
           }
 
