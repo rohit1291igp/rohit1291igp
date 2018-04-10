@@ -64,6 +64,12 @@ export class ReportsComponent implements OnInit{
   queryString="";
   showMoreBtn=false;
   searchReportFieldsValidation=false;
+  componentTypes=[
+      {"name" : "Select component type", "value" : "" },
+      {"name" : "General Products", "value" : "0" },
+      {"name" : "Cakes", "value" : "1" }
+
+  ];
   statusList=[
         {"type" : "0", "name" : "All Orders status", "value" : "", "admin" : 1, "vendor" : 1 },
     {"type" : "1", "name" : "Processing", "value" : "Processing", "admin" : 1, "vendor" : 0 },
@@ -1177,6 +1183,10 @@ export class ReportsComponent implements OnInit{
 
             _this.reportAddAction.reportAddActionModel.shipType="";
         }
+        /* componentType default value - start*/
+        if(!_this.reportAddAction.reportAddActionModel) _this.reportAddAction.reportAddActionModel={};
+        _this.reportAddAction.reportAddActionModel.componentType="";
+        /* componentType default value - end*/
         _this.reportAddAction.reportAddActionFlag=true;
     }
 
