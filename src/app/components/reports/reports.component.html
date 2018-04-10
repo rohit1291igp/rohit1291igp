@@ -369,6 +369,9 @@
                 <div class="reportDwld pull-right btn btn-primary" (click)="downLoadCSV($event, reportType)" [ngClass]="{'disableBtn' : !reportData.tableData.length}">
                   Download <span class="glyphicon glyphicon-download-alt" title="Download Report"></span>
                 </div>
+                <div class="reportDwld pull-right btn btn-primary" [ngClass]="{'disableBtn' : !reportData.tableData.length}">
+                  Bulk Assign <span class="glyphicon glyphicon-check" title="Bulk Assign"></span>
+                </div>
                 <table class="report-table table table-striped table-bordered table-curved fixed-headerx">
                     <thead class="bg-igp text-white" (click)="stopEventPropgation($event)">
                         <tr>
@@ -473,7 +476,7 @@
 
                                     <span *ngIf="tableCol == 'Ship_Type'" >{{getDeliveryName(getCellValue(tableRowValue[tableCol])) | replace : '`updated'}}</span>
                                     <span *ngIf="ifDate(tableCol) == 'date'" >{{getCellValue(tableRowValue[tableCol]) | date : 'dd/MM/yy'}}</span>
-                                    <span *ngIf="ifDate(tableCol) != 'date' && tableCol != 'Ship_Type' && tableCol != 'Component_Image' && tableCol != 'Component Image' && tableCol != 'Product Image' && tableCol != 'Product_Image' && tableCol != 'Out Of Delivery' && tableCol != 'Out_Of_Delivery' && tableCol != 'Proof Of Delivery' && tableCol != 'Proof_Of_Delivery'" >
+                                    <span *ngIf="ifDate(tableCol) != 'date' && tableCol != 'Ship_Type' && tableCol != 'Component_Image' && tableCol != 'Component Image' && tableCol != 'Product Image' && tableCol != 'Product_Image' && tableCol != 'Out Of Delivery' && tableCol != 'Out_Of_Delivery' && tableCol != 'Proof Of Delivery' && tableCol != 'Proof_Of_Delivery' && tableCol != 'Vendor_List'" >
                                         <span *ngIf="getCellValue(tableRowValue[tableCol]) === 0">{{getCellValue(tableRowValue[tableCol])}}</span>
                                         <span *ngIf="getCellValue(tableRowValue[tableCol]) !== 0" [innerHTML]="getCellValue(tableRowValue[tableCol])  | replace : '`,[' "></span>
                                     </span>
@@ -484,6 +487,11 @@
                                     <span class="icon" aria-hidden="true" *ngIf="tableCol === 'invoice number'" (click)="dwldInv($event, tableRowValue['orderId'], getCellValue(tableRowValue[tableCol]))">
                                         <span class="glyphicon glyphicon-download-alt" title="Download Invoice"></span>
                                     </span>
+                                    <div *ngIf="tableCol === 'Vendor_List'">
+                                        <select (change)="addVendorToOrderMap($event, tableRowValue['Order_No'], tableRowValue['Order_Product_Id'])">
+                                            <option  *ngFor="let vendor of tableRowValue[tableCol]; let i='index'" value="{{vendor.Vendor_Id}}">{{vendor.Vendor_Name}}</option>
+                                        </select>
+                                    </div>
                                 </div>
 
                                 <!--update messgae start-->
@@ -501,13 +509,13 @@
                                             <div class="tableDataActionBtn" *ngIf="tableAction[tableCol] && tableAction[tableCol].length">
                                                 <!--{{tableAction[tableCol] | json}}-->
                                                 <ng-container *ngIf="(tableRowValue[tableCol]['requestValue'] == -1)">
-                                                    <div class="tableactBtn" *ngFor="let actBtn of tableAction[tableCol]; let z='index'" (click)="actionBtnInvoke(actBtn, getCellValue(tableRowValue[tableCol]), tableRowValue, tableCol, dataIndex)">
+                                                    <div class="tableactBtn" *ngFor="let actBtn of tableAction[tableCol]; let z='index'" (click)="actionBtnInvoke(actBtn, getCellValue(tableRowValue[tableCol]), tableRowValue, tableCol, dataIndex, 1)">
                                                         <span class="tableactBtntxt">{{getActBtnTxt(actBtn, getCellValue(tableRowValue[tableCol]))}}</span>
                                                         <ng-container *ngIf="(z+1) < tableAction[tableCol].length"> &nbsp; |</ng-container>
                                                     </div>
                                                 </ng-container>
                                                 <ng-container *ngIf="!(tableRowValue[tableCol]['requestValue'] == -1)">
-                                                    <div class="tableactBtn" (click)="actionBtnInvoke(tableRowValue[tableCol]['requestType'], getCellValue(tableRowValue[tableCol]), tableRowValue, tableCol, dataIndex)">
+                                                    <div class="tableactBtn" (click)="actionBtnInvoke(tableRowValue[tableCol]['requestType'], getCellValue(tableRowValue[tableCol]), tableRowValue, tableCol, dataIndex, 0)">
                                                         <span class="tableactBtntxt">{{tableRowValue[tableCol]['requestType']}}</span>
                                                     </div>
                                                 </ng-container>
