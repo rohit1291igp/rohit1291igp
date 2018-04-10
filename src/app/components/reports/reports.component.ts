@@ -73,6 +73,7 @@ export class ReportsComponent implements OnInit{
         {"type" : "1", "name" : "Delivered", "value" : "Delivered", "admin" : 1, "vendor" : 1 },
         {"type" : "1", "name" : "Rejected", "value" : "Rejected", "admin" : 1, "vendor" : 1 }
   ];
+  assignedVendors = {};
   reportDataLoader:any={
       "searchFields" : [
           {
@@ -295,6 +296,16 @@ export class ReportsComponent implements OnInit{
         }
     }
     this.reportLabelState[header][prop]=value ;
+  }
+
+  //method for maintaining products whose vendor has been changed
+  addVendorToOrderMap(e, orderId, orderProductId){
+      console.log(e);
+      console.log(orderId);
+      console.log(orderProductId);
+      if(!this.assignedVendors[orderId]) this.assignedVendors[orderId] = {};
+      this.assignedVendors[orderId][orderProductId] = e.target.value;
+    console.log(JSON.stringify(this.assignedVendors));
   }
 
   searchReportSubmit(e, searchFields2?){
@@ -744,10 +755,18 @@ export class ReportsComponent implements OnInit{
         return _actBtnTxt;
     }
 
-    actionBtnInvoke(actBtnTxt, cellValue, rowData, header, dataIndex){
+    actionBtnInvoke(actBtnTxt, cellValue, rowData, header, dataIndex, source){
         var _this=this;
         console.log(actBtnTxt+'=========='+cellValue+'========='+JSON.stringify(rowData));
         var actBtnTxtModified=actBtnTxt;
+
+        if(source == 1){
+          console.log(actBtnTxt);
+          console.log(actBtnTxtModified);
+          actBtnTxtModified = _this.getActBtnTxt(actBtnTxt, cellValue);
+          console.log(actBtnTxtModified);
+        }
+        console.log(actBtnTxtModified);
         var apiURLPath="";
         var apiMethod;
         var paramsObj;
@@ -787,11 +806,12 @@ export class ReportsComponent implements OnInit{
             }else{
                 paramsObj={
                     componentId:rowData['component_Id_Hide'],
-                    inStock: (actBtnTxtModified === "InStock")
+                    inStock: (actBtnTxtModified === "InStock") ? 1 : 0
                 };
                 _this.confirmFlag=false;
             }
         }else if(/enable/gi.test(actBtnTxt)){
+          console.log(actBtnTxtModified);
             if(!_this.confirmFlag){
                 _this.editTableCellObj["actBtnTxt"]=actBtnTxt;
                 _this.editTableCellObj["cellValue"]=cellValue;
@@ -955,15 +975,17 @@ export class ReportsComponent implements OnInit{
                          if(environment.userType && environment.userType === 'admin' && /edit/gi.test(actBtnTxt)){
                              _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header]['value'] = _this.editTableCellObj.value || paramsObj[changedField];
                          }else{
-                             _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header]['value'] = _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header]['value'].replace(/`updated/g , " ");
+                             //_this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header]['value'] = _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header]['value'].replace(/`updated/g , " ");
                          }
                      },1000);
                  }else{
                      _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header] = _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header].replace(/`updating/g , " ")+'`updated';
                      setTimeout(function(){
                          if(environment.userType && environment.userType === 'admin' && /edit/gi.test(actBtnTxt)){
+                           console.log(5);
                              _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header] = _this.editTableCellObj.value || paramsObj[changedField];
                          }else{
+                           console.log(6);
                              _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header] = _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header].replace(/`updated/g , " ");
                          }
                      },1000);
@@ -985,7 +1007,7 @@ export class ReportsComponent implements OnInit{
 
     submitEditCell(e, actBtnTxt, cellValue, rowData, header, dataIndex){
         var _this=this;
-        _this.actionBtnInvoke(actBtnTxt, cellValue, rowData, header, dataIndex);
+        _this.actionBtnInvoke(actBtnTxt, cellValue, rowData, header, dataIndex, 1);
     }
 
     confirmYesNo(args){
@@ -995,7 +1017,7 @@ export class ReportsComponent implements OnInit{
             _e.preventDefault();
             _e.stopPropagation();
             var _this= this;
-            _this.actionBtnInvoke(_this.editTableCellObj.actBtnTxt, _this.editTableCellObj.cellValue, _this.editTableCellObj.rowData, _this.editTableCellObj.header, _this.editTableCellObj.dataIndex);
+            _this.actionBtnInvoke(_this.editTableCellObj.actBtnTxt, _this.editTableCellObj.cellValue, _this.editTableCellObj.rowData, _this.editTableCellObj.header, _this.editTableCellObj.dataIndex, 1);
         }else{
             this.confirmFlag=false;
         }
