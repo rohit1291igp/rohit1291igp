@@ -1153,7 +1153,7 @@ export class ReportsComponent implements OnInit{
             }
             console.log('admin action Response --->', response.result);
             if(response.result){
-                alert('Successfully added!');
+                alert('The request was successful.');
                 _this.reportAddAction.reportAddActionFlag=false;
             }
         });
@@ -1237,7 +1237,7 @@ export class ReportsComponent implements OnInit{
             }
             console.log('admin action Response --->', response.result);
             if(response.result){
-                alert('Successfully added!');
+              alert('The request was successful.');
                 _this.reportAddAction.reportAddActionFlag=false;
             }
         });
