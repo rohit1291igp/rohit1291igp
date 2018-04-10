@@ -495,10 +495,17 @@
                                         <ng-container *ngFor="let tableAction of reportData.tableDataAction">
                                             <div class="tableDataActionBtn" *ngIf="tableAction[tableCol] && tableAction[tableCol].length">
                                                 <!--{{tableAction[tableCol] | json}}-->
-                                                <div class="tableactBtn" *ngFor="let actBtn of tableAction[tableCol]; let z='index'" (click)="actionBtnInvoke(actBtn, getCellValue(tableRowValue[tableCol]), tableRowValue, tableCol, dataIndex)">
-                                                    <span class="tableactBtntxt">{{getActBtnTxt(actBtn, getCellValue(tableRowValue[tableCol]))}}</span>
-                                                    <ng-container *ngIf="(z+1) < tableAction[tableCol].length"> &nbsp; |</ng-container>
-                                                </div>
+                                                <ng-container *ngIf="(tableRowValue[tableCol]['requestValue'] == -1)">
+                                                    <div class="tableactBtn" *ngFor="let actBtn of tableAction[tableCol]; let z='index'" (click)="actionBtnInvoke(actBtn, getCellValue(tableRowValue[tableCol]), tableRowValue, tableCol, dataIndex)">
+                                                        <span class="tableactBtntxt">{{getActBtnTxt(actBtn, getCellValue(tableRowValue[tableCol]))}}</span>
+                                                        <ng-container *ngIf="(z+1) < tableAction[tableCol].length"> &nbsp; |</ng-container>
+                                                    </div>
+                                                </ng-container>
+                                                <ng-container *ngIf="!(tableRowValue[tableCol]['requestValue'] == -1)">
+                                                    <div class="tableactBtn" (click)="actionBtnInvoke(tableRowValue[tableCol]['requestType'], getCellValue(tableRowValue[tableCol]), tableRowValue, tableCol, dataIndex)">
+                                                        <span class="tableactBtntxt">{{tableRowValue[tableCol]['requestType']}}</span>
+                                                    </div>
+                                                </ng-container>
                                             </div>
                                         </ng-container>
                                     </ng-container>

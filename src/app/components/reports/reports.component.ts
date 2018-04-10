@@ -725,7 +725,7 @@ export class ReportsComponent implements OnInit{
     getActBtnTxt(actBtnTxt, cellValue){
         var _actBtnTxt="";
         if(/stock/gi.test(actBtnTxt)){
-            if(cellValue === 'Out Of Stock')
+            if(cellValue === 'Out of Stock')
                 _actBtnTxt = "InStock";
             else
                 _actBtnTxt = "Out of Stock";
@@ -747,7 +747,7 @@ export class ReportsComponent implements OnInit{
     actionBtnInvoke(actBtnTxt, cellValue, rowData, header, dataIndex){
         var _this=this;
         console.log(actBtnTxt+'=========='+cellValue+'========='+JSON.stringify(rowData));
-        var actBtnTxtModified=_this.getActBtnTxt(actBtnTxt, cellValue);
+        var actBtnTxtModified=actBtnTxt;
         var apiURLPath="";
         var apiMethod;
         var paramsObj;
@@ -1052,7 +1052,7 @@ export class ReportsComponent implements OnInit{
               if(/stock/gi.test(cellValue.value)){
                 return cellValue.value ;
               }else{
-                return (cellValue.value || "") + '<br/>(enable request)';
+                return (cellValue.value || "") + '<br/>( enable requested )';
               }
             }else{
               if(/stock/gi.test(cellValue.value)){
@@ -1070,7 +1070,7 @@ export class ReportsComponent implements OnInit{
 
     checkApproveBtn(cellValue){
         if(cellValue && cellValue.constructor === Object){
-            if(cellValue['requestType']){
+            if(cellValue['requestType'] == 'approve'){
                 return true;
             }else{
                 return false;
