@@ -315,6 +315,7 @@ export class ReportsComponent implements OnInit{
 
   bulkAssignAction(){
       var _this = this;
+    
       console.log(_this.assignedVendors);
       if(Object.keys(_this.assignedVendors).length > 0){
         let reqObj =  {
