@@ -369,7 +369,7 @@
                 <div class="reportDwld pull-right btn btn-primary" (click)="downLoadCSV($event, reportType)" [ngClass]="{'disableBtn' : !reportData.tableData.length}">
                   Download <span class="glyphicon glyphicon-download-alt" title="Download Report"></span>
                 </div>
-                <div class="reportDwld pull-right btn btn-primary" [ngClass]="{'disableBtn' : !reportData.tableData.length}">
+                <div class="reportDwld pull-right btn btn-primary" (click)="bulkAssignAction()" *ngIf="(environment.userType && environment.userType === 'admin')" [ngClass]="{'disableBtn' : !reportData.tableData.length}">
                   Bulk Assign <span class="glyphicon glyphicon-check" title="Bulk Assign"></span>
                 </div>
                 <table class="report-table table table-striped table-bordered table-curved fixed-headerx">
@@ -489,6 +489,7 @@
                                     </span>
                                     <div *ngIf="tableCol === 'Vendor_List'">
                                         <select (change)="addVendorToOrderMap($event, tableRowValue['Order_No'], tableRowValue['Order_Product_Id'])">
+                                          <option selected value="">Select Vendor</option>
                                             <option  *ngFor="let vendor of tableRowValue[tableCol]; let i='index'" value="{{vendor.Vendor_Id}}">{{vendor.Vendor_Name}}</option>
                                         </select>
                                     </div>

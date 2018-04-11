@@ -306,12 +306,33 @@ export class ReportsComponent implements OnInit{
 
   //method for maintaining products whose vendor has been changed
   addVendorToOrderMap(e, orderId, orderProductId){
-      console.log(e);
-      console.log(orderId);
-      console.log(orderProductId);
-      if(!this.assignedVendors[orderId]) this.assignedVendors[orderId] = {};
-      this.assignedVendors[orderId][orderProductId] = e.target.value;
-    console.log(JSON.stringify(this.assignedVendors));
+      if(e.target.value){
+        if(!this.assignedVendors[orderId]) this.assignedVendors[orderId] = {};
+        this.assignedVendors[orderId][orderProductId] = e.target.value;
+        console.log(JSON.stringify(this.assignedVendors));
+      }
+  }
+
+  bulkAssignAction(){
+      var _this = this;
+    
+      console.log(_this.assignedVendors);
+      if(Object.keys(_this.assignedVendors).length > 0){
+        let reqObj =  {
+          url : 'bulkassign',
+          method : "post",
+          payload : _this.assignedVendors
+        };
+        _this.BackendService.makeAjax(reqObj, function(err, response, headers){
+          if(response.result){
+            window.location.reload();
+          }else{
+            alert("Error Occurred while trying to bulk assign.");
+          }
+        });
+      }else{
+        alert("Select vendors for orders before bulk assigning.");
+      }
   }
 
   searchReportSubmit(e, searchFields2?){
