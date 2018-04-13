@@ -267,13 +267,13 @@
 
                 <div class="modal-body center-align" *ngIf="adminActions.adminActionsName === 'changePrice'">
                     <div class="form-group">
-                        <form (ngSubmit)="adminActionsSubmit($event, {orderProductId : orderProductId.valid, componentId: componentId.valid, componentPrice : componentPrice.valid, shippingCharge : shippingCharge.valid})" #f="ngForm" nonvalidate>
+                        <form (ngSubmit)="adminActionsSubmit($event, {orderProductId : orderProductId.valid, componentId: true, componentPrice : componentPrice.valid, shippingCharge : shippingCharge.valid})" #f="ngForm" nonvalidate>
 
                             <select name="orderProductId" class="form-control" [(ngModel)]="adminActions.adminActionsModel.orderProductId" #orderProductId="ngModel" (change)="orderProductChange($event,$event.target.value)" required>
                                 <option *ngFor="let orderProduct of adminActions.adminActionDepData.orderProducts" [ngValue]="orderProduct.orderProductId">{{orderProduct.productName}}</option>
                             </select>
 
-                            <select name="componentId" class="form-control m-top-1" [(ngModel)]="adminActions.adminActionsModel.componentId" #componentId="ngModel" required>
+                            <select *ngIf="adminActions.adminActionsSubName !='shipping'" name="componentId" class="form-control m-top-1" [(ngModel)]="adminActions.adminActionsModel.componentId" #componentId="ngModel" required>
                                 <option *ngFor="let orderProductComponent of adminActions.adminActionDepData.orderProductComponents" [ngValue]="orderProductComponent.componentId">{{orderProductComponent.componentName}}</option>
                             </select>
 
@@ -768,7 +768,6 @@
                                 <div class="dropdown-menu"  style="display:block; top:2em; left:-11.5em;"  *ngIf="order.changePriceActionsFlag">
                                     <a class="dropdown-item" href="#" (click)="adminActionsInit($event, 'changePrice', orderIndex, 'comp')">Component Price</a>
                                     <a class="dropdown-item" href="#" (click)="adminActionsInit($event, 'changePrice', orderIndex, 'shipping')">Shipping Price</a>
-                                    <a class="dropdown-item" href="#" (click)="adminActionsInit($event, 'changePrice', orderIndex, 'both')">Both</a>
                                 </div>
 
                                 <a class="dropdown-item" href="#" (click)="adminActionsInit($event, 'changeDeliveryType&Date', orderIndex)">Delivery Type & Date</a>
