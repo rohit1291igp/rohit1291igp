@@ -15,7 +15,11 @@
                         <div class="m-top-1 left-align">
                             <input id="excelFile" class="form-control custom-control m-top-1" type="file" name="file" (change)="fileChange($event)" accept=".xls, .xlsx, .csv" required>
                         </div>
-                        <button class="btn btn-primary m-top-1">Upload</button>
+                        <div class="m-top-1 left-align" *ngIf="isUploading">
+                          <h3 style="text-align: center;">Uploading File...</h3>
+                        </div>
+
+                        <button class="btn btn-primary m-top-1" *ngIf="!isUploading">Upload</button>
                         <div class="help-block theme-red" *ngIf="f.submitted && !selectedVendor.valid">Please select a user.</div>
                         <div class="help-block theme-red" *ngIf="_flags.emptyFileValidation">Please choose a excel file.</div>
                         <div class="m-top-1 text-bold text-green" *ngIf="_flags.uploadSuccessFlag">All orders are uploaded successfully from {{_data.uploadFileName}}!</div>
