@@ -294,7 +294,7 @@
                             <my-date-picker id="{{searchField.name}}" name="{{searchField.name}}" placeholder="{{searchField.placeholder}}" [options]="myDatePickerOptions" [(ngModel)]="searchResultModel[searchField.name]"  *ngIf="searchField.type === 'date' && searchField.name != 'status'"></my-date-picker>
                         </div>
 
-                        <div class="searchFiled pull-left" *ngIf="reportType === 'getOrderReport' " >
+                        <div class="searchFiled pull-left" *ngIf="reportType === 'getOrderReport' || reportType=== 'getSlaReport' " >
                             <select multiple class="custom-select multi-select" size="4" name="status"  [(ngModel)]="searchResultModel['status']">
                               <ng-container *ngFor="let statusName of statusList">
                                 <option *ngIf="statusName[environment.userType]" [ngValue]="statusName.value" [attr.data-trayOpen]="statusName.type">{{statusName.name}}</option>
