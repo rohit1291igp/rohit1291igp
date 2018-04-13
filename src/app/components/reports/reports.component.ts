@@ -193,8 +193,40 @@ export class ReportsComponent implements OnInit{
           console.log('params===>', params);
           _this.reportType = params['type'];
 
+          if(_this.reportType === 'getSlaReport'){
+            _this.reportDataLoader['searchFields'] = [
+              {
+                "name" : "deliveryDateFrom",
+                "type" : "date",
+                "placeholder" : "Delivery date from"
+              },
+              {
+                "name" : "deliveryDateTo",
+                "type" : "date",
+                "placeholder" : "Delivery date to"
+              },
+              {
+                "name" : "assignDateFrom",
+                "type" : "date",
+                "placeholder" : "Assinged date from"
+              },
+              {
+                "name" : "assignDateTo",
+                "type" : "date",
+                "placeholder" : "Assigned date to"
+              },
+              {
+                "name" : "orderNumber",
+                "type" : "number",
+                "placeholder" : "order Number"
+              }
+            ]
+          }
+
+
+
           /* byDefault set deliveryDateFrom 2 days back - start */
-          if(_this.reportType === 'getOrderReport' || _this.reportType === 'getOrderFileUploadReport' || _this.reportType === 'getPayoutAndTaxesReport'){
+          if(_this.reportType === 'getOrderReport' || _this.reportType === 'getOrderFileUploadReport' || _this.reportType === 'getPayoutAndTaxesReport' || _this.reportType === 'getSlaReport'){
               var delDateFromObj = _this.UtilityService.getDateObj(0); //changed from 2 day back - today
               _this.searchResultModel["deliveryDateFrom"]= { date: { year: delDateFromObj.year, month: delDateFromObj.month, day: delDateFromObj.day } };
               console.log('oninit =====> queryString ====>', _this.queryString);
@@ -666,23 +698,49 @@ export class ReportsComponent implements OnInit{
                         }
 
                     }else if(colDataType === "number"){
-                        if(filterBy == "="){
-                            if(Number(_this.getCellValue(currentRow[colName])) == Number(filterValue)){
-                                _tableData.push(currentRow);
+
+                      if(_this.getCellValue(currentRow[colName].split(':').length - 1 == 2)){
+                        console.log("adsfdsf");
+                        if(_this.getCellValue(currentRow[colName][0]) == filterValue[0]){
+                          if(filterBy == "="){
+                            if((_this.getCellValue(currentRow[colName])) == (filterValue)){
+                              _tableData.push(currentRow);
                             }
-                        }else if(filterBy == ">="){
-                            if(Number(_this.getCellValue(currentRow[colName])) >= Number(filterValue)){
-                                _tableData.push(currentRow);
+                          }else if(filterBy == ">="){
+                            if((_this.getCellValue(currentRow[colName])) >= (filterValue)){
+                              _tableData.push(currentRow);
                             }
-                        }else if(filterBy == "<="){
-                            if(Number(_this.getCellValue(currentRow[colName])) <= Number(filterValue)){
-                                _tableData.push(currentRow);
+                          }else if(filterBy == "<="){
+                            if((_this.getCellValue(currentRow[colName])) <= (filterValue)){
+                              _tableData.push(currentRow);
                             }
-                        }else{
-                            if(Number(_this.getCellValue(currentRow[colName])) == Number(filterValue)){
-                                _tableData.push(currentRow);
+                          }else{
+                            if((_this.getCellValue(currentRow[colName])) == (filterValue)){
+                              _tableData.push(currentRow);
                             }
+                          }
                         }
+                      }else{
+                        console.log("cvbvb");
+                        if(filterBy == "="){
+                          if(Number(_this.getCellValue(currentRow[colName])) == Number(filterValue)){
+                            _tableData.push(currentRow);
+                          }
+                        }else if(filterBy == ">="){
+                          if(Number(_this.getCellValue(currentRow[colName])) >= Number(filterValue)){
+                            _tableData.push(currentRow);
+                          }
+                        }else if(filterBy == "<="){
+                          if(Number(_this.getCellValue(currentRow[colName])) <= Number(filterValue)){
+                            _tableData.push(currentRow);
+                          }
+                        }else{
+                          if(Number(_this.getCellValue(currentRow[colName])) == Number(filterValue)){
+                            _tableData.push(currentRow);
+                          }
+                        }
+                      }
+
 
                     }else if(colDataType === "string"){
                         if(filterBy == "="){
