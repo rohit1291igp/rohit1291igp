@@ -331,6 +331,57 @@
 
         </div>
 
+      <div class="col-sm-12 col-md-12 m-top-1" *ngIf="reportType === 'getSlaReport'" style="width:100%; height:14em;">
+
+        <div class="col-sm-9 col-md-9 reprts-search-fields bg-white padding1" style="margin-right:0.5%; height:100%;" [style.width]="(getTopBlockWidth()).left">
+          <div class="underLine paddingHalf text-bold">Search Parameters</div>
+          <form name="searchReport" (ngSubmit)="f.form.valid && searchReportSubmit($event)" #f="ngForm" nonvalidate>
+            <div class="searchFields m-top-1 inline">
+              <div class="searchFiled pull-left" *ngFor="let searchField of reportData.searchFields;" >
+                <select class="form-control" name="{{searchField.name}}"  [(ngModel)]="searchResultModel[searchField.name]" *ngIf="searchField.name === 'status'">
+                  <option *ngFor="let statusName of statusList" [ngValue]="statusName.value" [attr.data-trayOpen]="statusName.type">{{statusName.name}}</option>
+                </select>
+                <input class="form-control" type="text" name="{{searchField.name}}" placeholder="{{searchField.placeholder}}" [(ngModel)]="searchResultModel[searchField.name]" *ngIf="(searchField.type === 'text' || searchField.type === 'number') && searchField.name != 'status'">
+                <my-date-picker id="{{searchField.name}}" name="{{searchField.name}}" placeholder="{{searchField.placeholder}}" [options]="myDatePickerOptions" [(ngModel)]="searchResultModel[searchField.name]"  *ngIf="searchField.type === 'date' && searchField.name != 'status'"></my-date-picker>
+              </div>
+
+              <div class="searchFiled pull-left" *ngIf="reportType === 'getOrderReport' " >
+                <select multiple class="custom-select multi-select" size="4" name="status"  [(ngModel)]="searchResultModel['status']">
+                  <ng-container *ngFor="let statusName of statusList">
+                    <option *ngIf="statusName[environment.userType]" [ngValue]="statusName.value" [attr.data-trayOpen]="statusName.type">{{statusName.name}}</option>
+                  </ng-container>
+                </select>
+              </div>
+
+              <div class="searchFiled pull-left" *ngIf="(environment.userType && environment.userType === 'admin')" >
+                <app-vendor-dropdown [configData]="{'modelData' :searchResultModel, 'defaultVendor' : ''}"></app-vendor-dropdown>
+              </div>
+            </div>
+            <div class="searchFieldsSubmit relative inline">
+              <input  type="submit" class="btn btn-primary pull-right bg-igp searchSubmitBtn"  value="Search All Parameters"/>
+            </div>
+          </form>
+
+          <div class="text-center searchValidationError theme-red text-bold" *ngIf="searchReportFieldsValidation">One of the search parameters must be filled!</div>
+        </div>
+
+        <div class="col-sm-3 col-md-3 reprts-summary bg-white padding1" style="height:100%;" [style.width]="(getTopBlockWidth()).right">
+          <div class="underLine paddingHalf text-bold">Summary</div>
+          <div class="summaryBlockCont">
+            <div class="summaryBlock inline m-top-1" *ngFor="let summ of reportData.summary; index as i;" [style.width.%]="100/reportData.summary.length">
+              <div class="icon l" aria-hidden="true">
+                <img src="assets/images/icons/gift.svg" alt="orders" *ngIf="i === 0">
+                <img src="assets/images/icons/inr.svg" alt="inr" *ngIf="i === 1">
+                <img src="assets/images/icons/inr.svg" alt="inr" *ngIf="i === 2">
+              </div>
+              <div class="text-igp summaryLabel">{{summ.label}}</div>
+              <div class="text-bold">{{summ.value | number}}</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
         <div class="col-sm-12 col-md-12 m-top-1 searchFields2" *ngIf="(reportType === 'getVendorReport' || reportType === 'getPincodeReport' || reportType === 'getVendorDetails') && (environment.userType && environment.userType === 'admin') " style="width:100%;">
             <div class="col-sm-9 col-md-9 reprts-search-fields bg-white padding1" style="padding-right:0; width:100%;">
                 <div class="underLine paddingHalf text-bold">Search Vendor</div>

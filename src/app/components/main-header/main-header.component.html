@@ -28,8 +28,10 @@
                         <a routerLink="/reports/getVendorReport"><li [ngClass]="{'selected' : selectedReportTab === 'getVendorReport'}">Product Report</li></a>
                         <a routerLink="/reports/getPincodeReport"><li [ngClass]="{'selected' : selectedReportTab === 'getPincodeReport'}">Pincode Report</li></a>
                         <a class="" routerLink="/reports/getPayoutAndTaxesReport"><li [ngClass]="{'selected' : selectedReportTab === 'getPayoutAndTaxesReport'}">Payout & Taxes</li></a>
+
                         <ng-container *ngIf="(environment.userType === 'admin')">
                             <a class="" routerLink="/reports/getVendorDetails" ><li [ngClass]="{'selected' : selectedReportTab === 'getVendorDetails'}">Vendor Details</li></a>
+                            <a class="" routerLink="/reports/getSlaReport" ><li [ngClass]="{'selected' : selectedReportTab === 'getSlaReport'}">SLA Report</li></a>
                             <!--<a class="" routerLink="/reports/getBarcodeToComponentReport" ><li [ngClass]="{'selected' : selectedReportTab === 'getBarcodeToComponentReport'}">Barcode</li></a>-->
                             <a class="" routerLink="/reports/getOrderFileUploadReport"><li [ngClass]="{'selected' : selectedReportTab === 'getOrderFileUploadReport'}">Uploaded Image</li></a>
                         </ng-container>
