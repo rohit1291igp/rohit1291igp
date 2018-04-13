@@ -1326,7 +1326,6 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
               paramsObj={
                   orderId:_this.sidePanelData[orderIndex].orderId,
                   orderProductId:_this.adminActions.adminActionsModel.orderProductId,
-                  componentId:_this.adminActions.adminActionsModel.componentId,
                   //shippingCharge:_this.adminActions.adminActionsModel.shippingCharge,
                   //componentPrice:_this.adminActions.adminActionsModel.componentPrice,
                   orderProductIds:getOrderProductIds()
@@ -1334,6 +1333,9 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
 
               if(_this.adminActions.adminActionsModel.shippingCharge) paramsObj['shippingCharge']=_this.adminActions.adminActionsModel.shippingCharge;
               if(_this.adminActions.adminActionsModel.componentPrice) paramsObj['componentPrice']=_this.adminActions.adminActionsModel.componentPrice;
+              if(_this.adminActions.adminActionsSubName !== "shipping"){
+                paramsObj['componentId'] = _this.adminActions.adminActionsModel.componentId;
+              }
               apiSuccessHandler=function(apiResponse){
                   _this.sidePanelDataOnStatusUpdate(orderIndex, _this.sidePanelData[orderIndex].orderId, null, null, apiResponse.result);
               };
