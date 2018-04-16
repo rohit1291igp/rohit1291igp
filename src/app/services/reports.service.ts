@@ -56,7 +56,7 @@ export class ReportsService {
               let fkAssociateId = localStorage.getItem('fkAssociateId');
               var queryParmas= queryString;
 
-              if(!environment.userType){
+              if(environment.userType == 'vendor'){
                   queryParmas += queryParmas ? '&fkAssociateId='+fkAssociateId : 'fkAssociateId='+fkAssociateId;
               }
               /*if(!/deliveryDateFrom/.test(queryString)){
@@ -80,6 +80,8 @@ export class ReportsService {
                 url : reportAPIEndpoint+"?"+queryParmas,
                 method:"get"
               };
+
+              console.log(reqObj)
 
               _this.BackendService.makeAjax(reqObj, function(err, response, headers){
                   if(err || response.error) {

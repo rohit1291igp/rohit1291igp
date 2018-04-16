@@ -71,13 +71,15 @@ export class ReportsComponent implements OnInit{
 
   ];
   statusList=[
-        {"type" : "0", "name" : "All Orders status", "value" : "" },
-        {"type" : "1", "name" : "Processed", "value" : "Processed" },
-        {"type" : "1", "name" : "Confirmed", "value" : "Confirmed" },
-        {"type" : "1", "name" : "Out For Delivery", "value" : "OutForDelivery" },
-        {"type" : "1", "name" : "Delivered", "value" : "Delivered" },
-        {"type" : "1", "name" : "Rejected", "value" : "Rejected" }
+        {"type" : "0", "name" : "All Orders status", "value" : "", "admin" : 1, "vendor" : 1 },
+    {"type" : "1", "name" : "Processing", "value" : "Processing", "admin" : 1, "vendor" : 0 },
+        {"type" : "1", "name" : "Processed", "value" : "Processed", "admin" : 1, "vendor" : 1 },
+        {"type" : "1", "name" : "Confirmed", "value" : "Confirmed", "admin" : 1, "vendor" : 1 },
+        {"type" : "1", "name" : "Out For Delivery", "value" : "OutForDelivery", "admin" : 1, "vendor" : 1 },
+        {"type" : "1", "name" : "Delivered", "value" : "Delivered", "admin" : 1, "vendor" : 1 },
+        {"type" : "1", "name" : "Rejected", "value" : "Rejected", "admin" : 1, "vendor" : 1 }
   ];
+  assignedVendors = {};
   reportDataLoader:any={
       "searchFields" : [
           {
@@ -159,6 +161,7 @@ export class ReportsComponent implements OnInit{
   public orginalReportData:any=null;
   searchResultModel:any={};
   confirmFlag=false;
+  associateId = localStorage.getItem('fkAssociateId');
   confirmModel:any={};
   confirmData={
     "confirm": {
@@ -190,8 +193,40 @@ export class ReportsComponent implements OnInit{
           console.log('params===>', params);
           _this.reportType = params['type'];
 
+          if(_this.reportType === 'getSlaReport'){
+            _this.reportDataLoader['searchFields'] = [
+              {
+                "name" : "deliveryDateFrom",
+                "type" : "date",
+                "placeholder" : "Delivery date from"
+              },
+              {
+                "name" : "deliveryDateTo",
+                "type" : "date",
+                "placeholder" : "Delivery date to"
+              },
+              {
+                "name" : "assignDateFrom",
+                "type" : "date",
+                "placeholder" : "Assinged date from"
+              },
+              {
+                "name" : "assignDateTo",
+                "type" : "date",
+                "placeholder" : "Assigned date to"
+              },
+              {
+                "name" : "orderNumber",
+                "type" : "number",
+                "placeholder" : "order Number"
+              }
+            ]
+          }
+
+
+
           /* byDefault set deliveryDateFrom 2 days back - start */
-          if(_this.reportType === 'getOrderReport' || _this.reportType === 'getOrderFileUploadReport' || _this.reportType === 'getPayoutAndTaxesReport'){
+          if(_this.reportType === 'getOrderReport' || _this.reportType === 'getOrderFileUploadReport' || _this.reportType === 'getPayoutAndTaxesReport' || _this.reportType === 'getSlaReport'){
               var delDateFromObj = _this.UtilityService.getDateObj(0); //changed from 2 day back - today
               _this.searchResultModel["deliveryDateFrom"]= { date: { year: delDateFromObj.year, month: delDateFromObj.month, day: delDateFromObj.day } };
               console.log('oninit =====> queryString ====>', _this.queryString);
@@ -301,6 +336,36 @@ export class ReportsComponent implements OnInit{
     this.reportLabelState[header][prop]=value ;
   }
 
+  //method for maintaining products whose vendor has been changed
+  addVendorToOrderMap(e, orderId, orderProductId){
+      if(e.target.value){
+        if(!this.assignedVendors[orderId]) this.assignedVendors[orderId] = {};
+        this.assignedVendors[orderId][orderProductId] = e.target.value;
+        console.log(JSON.stringify(this.assignedVendors));
+      }
+  }
+
+  bulkAssignAction(){
+      var _this = this;
+      console.log(_this.assignedVendors);
+      if(Object.keys(_this.assignedVendors).length > 0){
+        let reqObj =  {
+          url : 'bulkassign',
+          method : "post",
+          payload : _this.assignedVendors
+        };
+        _this.BackendService.makeAjax(reqObj, function(err, response, headers){
+          if(response.result){
+            window.location.reload();
+          }else{
+            alert("Error Occurred while trying to bulk assign.");
+          }
+        });
+      }else{
+        alert("Select vendors for orders before bulk assigning.");
+      }
+  }
+
   searchReportSubmit(e, searchFields2?){
         var _this=this;
         _this.BackendService.abortLastHttpCall();//abort  other  api calls
@@ -361,7 +426,7 @@ export class ReportsComponent implements OnInit{
     //pagination
     showMoreTableData(e){
         var _this=this;
-        if(_this.reportType === "getPincodeReport"){return;} // pagination issue 
+        if(_this.reportType === "getPincodeReport"){return;} // pagination issue
         var totalOrders= (_this.orginalReportData.summary && _this.orginalReportData.summary[0]) ? Number(_this.orginalReportData.summary[0].value) : 0;
         console.log('show more clicked');
 
@@ -633,23 +698,49 @@ export class ReportsComponent implements OnInit{
                         }
 
                     }else if(colDataType === "number"){
-                        if(filterBy == "="){
-                            if(Number(_this.getCellValue(currentRow[colName])) == Number(filterValue)){
-                                _tableData.push(currentRow);
+
+                      if(_this.getCellValue(currentRow[colName].split(':').length - 1 == 2)){
+                        console.log("adsfdsf");
+                        if(_this.getCellValue(currentRow[colName][0]) == filterValue[0]){
+                          if(filterBy == "="){
+                            if((_this.getCellValue(currentRow[colName])) == (filterValue)){
+                              _tableData.push(currentRow);
                             }
-                        }else if(filterBy == ">="){
-                            if(Number(_this.getCellValue(currentRow[colName])) >= Number(filterValue)){
-                                _tableData.push(currentRow);
+                          }else if(filterBy == ">="){
+                            if((_this.getCellValue(currentRow[colName])) >= (filterValue)){
+                              _tableData.push(currentRow);
                             }
-                        }else if(filterBy == "<="){
-                            if(Number(_this.getCellValue(currentRow[colName])) <= Number(filterValue)){
-                                _tableData.push(currentRow);
+                          }else if(filterBy == "<="){
+                            if((_this.getCellValue(currentRow[colName])) <= (filterValue)){
+                              _tableData.push(currentRow);
                             }
-                        }else{
-                            if(Number(_this.getCellValue(currentRow[colName])) == Number(filterValue)){
-                                _tableData.push(currentRow);
+                          }else{
+                            if((_this.getCellValue(currentRow[colName])) == (filterValue)){
+                              _tableData.push(currentRow);
                             }
+                          }
                         }
+                      }else{
+                        console.log("cvbvb");
+                        if(filterBy == "="){
+                          if(Number(_this.getCellValue(currentRow[colName])) == Number(filterValue)){
+                            _tableData.push(currentRow);
+                          }
+                        }else if(filterBy == ">="){
+                          if(Number(_this.getCellValue(currentRow[colName])) >= Number(filterValue)){
+                            _tableData.push(currentRow);
+                          }
+                        }else if(filterBy == "<="){
+                          if(Number(_this.getCellValue(currentRow[colName])) <= Number(filterValue)){
+                            _tableData.push(currentRow);
+                          }
+                        }else{
+                          if(Number(_this.getCellValue(currentRow[colName])) == Number(filterValue)){
+                            _tableData.push(currentRow);
+                          }
+                        }
+                      }
+
 
                     }else if(colDataType === "string"){
                         if(filterBy == "="){
@@ -729,7 +820,7 @@ export class ReportsComponent implements OnInit{
     getActBtnTxt(actBtnTxt, cellValue){
         var _actBtnTxt="";
         if(/stock/gi.test(actBtnTxt)){
-            if(cellValue === '')
+            if(cellValue === 'Out of Stock')
                 _actBtnTxt = "InStock";
             else
                 _actBtnTxt = "Out of Stock";
@@ -741,13 +832,25 @@ export class ReportsComponent implements OnInit{
         }else{
             _actBtnTxt = actBtnTxt;
         }
+
+        if(cellValue == 'Not Serviceable' && actBtnTxt == 'Edit'){
+          return '';
+        }
         return _actBtnTxt;
     }
 
-    actionBtnInvoke(actBtnTxt, cellValue, rowData, header, dataIndex){
+    actionBtnInvoke(actBtnTxt, cellValue, rowData, header, dataIndex, source){
         var _this=this;
         console.log(actBtnTxt+'=========='+cellValue+'========='+JSON.stringify(rowData));
-        var actBtnTxtModified=_this.getActBtnTxt(actBtnTxt, cellValue);
+        var actBtnTxtModified=actBtnTxt;
+
+        if(source == 1){
+          console.log(actBtnTxt);
+          console.log(actBtnTxtModified);
+          actBtnTxtModified = _this.getActBtnTxt(actBtnTxt, cellValue);
+          console.log(actBtnTxtModified);
+        }
+        console.log(actBtnTxtModified);
         var apiURLPath="";
         var apiMethod;
         var paramsObj;
@@ -787,11 +890,12 @@ export class ReportsComponent implements OnInit{
             }else{
                 paramsObj={
                     componentId:rowData['component_Id_Hide'],
-                    inStock: (actBtnTxtModified === "InStock" ? 1 : 0)
+                    inStock: (actBtnTxtModified === "InStock") ? 1 : 0
                 };
                 _this.confirmFlag=false;
             }
         }else if(/enable/gi.test(actBtnTxt)){
+          console.log(actBtnTxtModified);
             if(!_this.confirmFlag){
                 _this.editTableCellObj["actBtnTxt"]=actBtnTxt;
                 _this.editTableCellObj["cellValue"]=cellValue;
@@ -851,14 +955,17 @@ export class ReportsComponent implements OnInit{
                     if(header === "Price"){
                         paramsObj={
                             componentId:rowData['component_Id_Hide'],
-                            updatePrice: _this.editTableCellObj.value
+                            reqPrice: _this.editTableCellObj.value,
+                            oldPrice: _this.editTableCellObj["cellValue"]
                         };
                     }else if(/Delivery/gi.test(header)){
-                        paramsObj={
+                      paramsObj={
                             pincode:rowData["Pincode"],
-                            shipCharge: _this.editTableCellObj.value,
-                            shipType : _this.UtilityService.getDeliveryType(header)
+                            reqPrice: _this.editTableCellObj.value,
+                            shipType : _this.UtilityService.getDeliveryType(header),
+                            shipCharge : (_this.editTableCellObj["cellValue"] == 'Not Serviceable') ? 0 : _this.editTableCellObj["cellValue"].trim()
                         };
+
                     }else{
                         paramsObj={};
                     }
@@ -952,15 +1059,17 @@ export class ReportsComponent implements OnInit{
                          if(environment.userType && environment.userType === 'admin' && /edit/gi.test(actBtnTxt)){
                              _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header]['value'] = _this.editTableCellObj.value || paramsObj[changedField];
                          }else{
-                             _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header]['value'] = _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header]['value'].replace(/`updated/g , " ");
+                             //_this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header]['value'] = _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header]['value'].replace(/`updated/g , " ");
                          }
                      },1000);
                  }else{
                      _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header] = _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header].replace(/`updating/g , " ")+'`updated';
                      setTimeout(function(){
                          if(environment.userType && environment.userType === 'admin' && /edit/gi.test(actBtnTxt)){
+                           console.log(5);
                              _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header] = _this.editTableCellObj.value || paramsObj[changedField];
                          }else{
+                           console.log(6);
                              _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header] = _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header].replace(/`updated/g , " ");
                          }
                      },1000);
@@ -982,7 +1091,7 @@ export class ReportsComponent implements OnInit{
 
     submitEditCell(e, actBtnTxt, cellValue, rowData, header, dataIndex){
         var _this=this;
-        _this.actionBtnInvoke(actBtnTxt, cellValue, rowData, header, dataIndex);
+        _this.actionBtnInvoke(actBtnTxt, cellValue, rowData, header, dataIndex, 1);
     }
 
     confirmYesNo(args){
@@ -992,7 +1101,7 @@ export class ReportsComponent implements OnInit{
             _e.preventDefault();
             _e.stopPropagation();
             var _this= this;
-            _this.actionBtnInvoke(_this.editTableCellObj.actBtnTxt, _this.editTableCellObj.cellValue, _this.editTableCellObj.rowData, _this.editTableCellObj.header, _this.editTableCellObj.dataIndex);
+            _this.actionBtnInvoke(_this.editTableCellObj.actBtnTxt, _this.editTableCellObj.cellValue, _this.editTableCellObj.rowData, _this.editTableCellObj.header, _this.editTableCellObj.dataIndex, 1);
         }else{
             this.confirmFlag=false;
         }
@@ -1042,7 +1151,24 @@ export class ReportsComponent implements OnInit{
 
     getCellValue(cellValue){
        if(cellValue && cellValue.constructor === Object){
+          if(cellValue.requestValue === '-1'){
             return cellValue.value || "";
+          }else{
+            if(cellValue.value === cellValue.requestValue){
+              if(/stock/gi.test(cellValue.value)){
+                return cellValue.value ;
+              }else{
+                return (cellValue.value || "") + '<br/>( enable requested )';
+              }
+            }else{
+              if(/stock/gi.test(cellValue.value)){
+                return 'Status : ' + (cellValue.value || "") + ' / Requested : ' + (cellValue.requestValue || "");
+              }else{
+                return 'Old Price : ' + (cellValue.value || "") + ' / New Price: ' + (cellValue.requestValue || "");
+              }
+            }
+          }
+
        }else{
             return cellValue || "";
        }
@@ -1050,7 +1176,7 @@ export class ReportsComponent implements OnInit{
 
     checkApproveBtn(cellValue){
         if(cellValue && cellValue.constructor === Object){
-            if(cellValue['requestType']){
+            if(cellValue['requestType'] == 'approve'){
                 return true;
             }else{
                 return false;
@@ -1111,17 +1237,23 @@ export class ReportsComponent implements OnInit{
             }
             console.log('admin action Response --->', response.result);
             if(response.result){
-                alert('Successfully added!');
+                alert('The request was successful.');
                 _this.reportAddAction.reportAddActionFlag=false;
             }
         });
     }
 
     addActionInit(e){
+      console.log(e);
         let _this=this;
-        if(!_this.searchResultModel["fkAssociateId"] && _this.reportType !== "getVendorDetails"){
+        if(!(e.target.id == 'vendor-add-pincode')){
+          if(!_this.searchResultModel["fkAssociateId"] && _this.reportType !== "getVendorDetails"){
             alert('Select vendor!'); return;
+          }
+        }else{
+          _this.searchResultModel["fkAssociateId"] = e.target.getAttribute('data-associate-id');
         }
+
         _this.reportAddAction.reportAddActionModel={};
         if(_this.reportType === 'getPincodeReport'){
             if(!_this.reportAddAction.reportAddActionDepData) _this.reportAddAction.reportAddActionDepData={};
@@ -1193,7 +1325,7 @@ export class ReportsComponent implements OnInit{
             }
             console.log('admin action Response --->', response.result);
             if(response.result){
-                alert('Successfully added!');
+              alert('The request was successful.');
                 _this.reportAddAction.reportAddActionFlag=false;
             }
         });

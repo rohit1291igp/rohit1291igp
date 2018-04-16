@@ -44,6 +44,8 @@ export class LoginComponent implements OnInit {
                     localStorage.setItem('userType', 'admin'); environment.userType='admin';
                 }else if(this.model.username === "upload"){
                     localStorage.setItem('userType', 'upload'); environment.userType='upload';
+                }else{
+                    localStorage.setItem('userType', 'vendor'); environment.userType='vendor';
                 }
 
                 localStorage.setItem('currentUserToken', "test");
@@ -86,13 +88,17 @@ export class LoginComponent implements OnInit {
                     localStorage.setItem('associateName', associateName);
                     localStorage.setItem('vendorName', _this.model.username);
                     //localStorage.setItem('userType', userType);
-
+                    console.log("detecting user type!");
                     if(_this.model.username === "iipsroot"){
                         localStorage.setItem('userType', 'upload');
                         environment.userType='upload';
                     }else if(_this.model.username === "Handels" || _this.model.username === "handels"){
                         localStorage.setItem('userType', 'admin');
                         environment.userType='admin';
+                    }else{
+                      console.log("vendor type detected!!");
+                      localStorage.setItem('userType', 'vendor');
+                      environment.userType='vendor';
                     }
 
                     _this.UtilityService.changeRouteComponent();

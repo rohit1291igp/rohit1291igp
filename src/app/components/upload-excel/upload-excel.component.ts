@@ -12,6 +12,7 @@ import { ConnectionBackend, RequestOptions, Request, RequestOptionsArgs, Respons
 export class UploadExcelComponent implements OnInit {
     isMobile=environment.isMobile;
     environment=environment;
+    isUploading = false;
     _flags={
         fileOversizeValidation:false,
         emptyFileValidation:false,
@@ -84,6 +85,7 @@ handleKeyboardEvent(event: KeyboardEvent){
      var fileInput=event.target.querySelector('#excelFile') || {};
      var fileOverSizeFlag= false;
      let fileList: FileList = event.target.querySelector('#excelFile').files;
+   _this.isUploading = true;
      if(fileList.length > 0) {
          let file: File = fileList[0];
          let formData = new FormData();
@@ -158,7 +160,7 @@ handleKeyboardEvent(event: KeyboardEvent){
              if(err || response.error) {
                  console.log('Error=============>', err, response.errorCode);
              }
-
+              _this.isUploading = false;
              console.log('upload excel Response --->', response.data);
              if(fileInput && 'value' in fileInput){
                  _this._data.uploadFileName=fileInput.value.slice(fileInput.value.lastIndexOf('\\')+1)
@@ -179,6 +181,7 @@ handleKeyboardEvent(event: KeyboardEvent){
 
      }else{
          _this._flags.emptyFileValidation=true;
+       _this.isUploading = false;
      }
  }
 

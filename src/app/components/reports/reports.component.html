@@ -294,9 +294,11 @@
                             <my-date-picker id="{{searchField.name}}" name="{{searchField.name}}" placeholder="{{searchField.placeholder}}" [options]="myDatePickerOptions" [(ngModel)]="searchResultModel[searchField.name]"  *ngIf="searchField.type === 'date' && searchField.name != 'status'"></my-date-picker>
                         </div>
 
-                        <div class="searchFiled pull-left" *ngIf="reportType === 'getOrderReport' " >
-                            <select class="form-control" name="status"  [(ngModel)]="searchResultModel['status']">
-                                <option *ngFor="let statusName of statusList" [ngValue]="statusName.value" [attr.data-trayOpen]="statusName.type">{{statusName.name}}</option>
+                        <div class="searchFiled pull-left" *ngIf="reportType === 'getOrderReport'">
+                            <select multiple class="custom-select multi-select" size="4" name="status"  [(ngModel)]="searchResultModel['status']">
+                              <ng-container *ngFor="let statusName of statusList">
+                                <option *ngIf="statusName[environment.userType]" [ngValue]="statusName.value" [attr.data-trayOpen]="statusName.type">{{statusName.name}}</option>
+                              </ng-container>
                             </select>
                         </div>
 
@@ -329,6 +331,57 @@
 
         </div>
 
+      <div class="col-sm-12 col-md-12 m-top-1" *ngIf="reportType === 'getSlaReport'" style="width:100%; height:14em;">
+
+        <div class="col-sm-9 col-md-9 reprts-search-fields bg-white padding1" style="margin-right:0.5%; height:100%;" [style.width]="(getTopBlockWidth()).left">
+          <div class="underLine paddingHalf text-bold">Search Parameters</div>
+          <form name="searchReport" (ngSubmit)="f.form.valid && searchReportSubmit($event)" #f="ngForm" nonvalidate>
+            <div class="searchFields m-top-1 inline">
+              <div class="searchFiled pull-left" *ngFor="let searchField of reportData.searchFields;" >
+                <select class="form-control" name="{{searchField.name}}"  [(ngModel)]="searchResultModel[searchField.name]" *ngIf="searchField.name === 'status'">
+                  <option *ngFor="let statusName of statusList" [ngValue]="statusName.value" [attr.data-trayOpen]="statusName.type">{{statusName.name}}</option>
+                </select>
+                <input class="form-control" type="text" name="{{searchField.name}}" placeholder="{{searchField.placeholder}}" [(ngModel)]="searchResultModel[searchField.name]" *ngIf="(searchField.type === 'text' || searchField.type === 'number') && searchField.name != 'status'">
+                <my-date-picker id="{{searchField.name}}" name="{{searchField.name}}" placeholder="{{searchField.placeholder}}" [options]="myDatePickerOptions" [(ngModel)]="searchResultModel[searchField.name]"  *ngIf="searchField.type === 'date' && searchField.name != 'status'"></my-date-picker>
+              </div>
+
+              <div class="searchFiled pull-left" *ngIf="reportType === 'getOrderReport' || reportType === 'getSlaReport' " >
+                <select multiple class="custom-select multi-select" size="4" name="status"  [(ngModel)]="searchResultModel['status']">
+                  <ng-container *ngFor="let statusName of statusList">
+                    <option *ngIf="statusName[environment.userType]" [ngValue]="statusName.value" [attr.data-trayOpen]="statusName.type">{{statusName.name}}</option>
+                  </ng-container>
+                </select>
+              </div>
+
+              <div class="searchFiled pull-left" *ngIf="(environment.userType && environment.userType === 'admin')" >
+                <app-vendor-dropdown [configData]="{'modelData' :searchResultModel, 'defaultVendor' : ''}"></app-vendor-dropdown>
+              </div>
+            </div>
+            <div class="searchFieldsSubmit relative inline">
+              <input  type="submit" class="btn btn-primary pull-right bg-igp searchSubmitBtn"  value="Search All Parameters"/>
+            </div>
+          </form>
+
+          <div class="text-center searchValidationError theme-red text-bold" *ngIf="searchReportFieldsValidation">One of the search parameters must be filled!</div>
+        </div>
+
+        <div class="col-sm-3 col-md-3 reprts-summary bg-white padding1" style="height:100%;" [style.width]="(getTopBlockWidth()).right">
+          <div class="underLine paddingHalf text-bold">Summary</div>
+          <div class="summaryBlockCont">
+            <div class="summaryBlock inline m-top-1" *ngFor="let summ of reportData.summary; index as i;" [style.width.%]="100/reportData.summary.length">
+              <div class="icon l" aria-hidden="true">
+                <img src="assets/images/icons/gift.svg" alt="orders" *ngIf="i === 0">
+                <img src="assets/images/icons/inr.svg" alt="inr" *ngIf="i === 1">
+                <img src="assets/images/icons/inr.svg" alt="inr" *ngIf="i === 2">
+              </div>
+              <div class="text-igp summaryLabel">{{summ.label}}</div>
+              <div class="text-bold">{{summ.value | number}}</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
         <div class="col-sm-12 col-md-12 m-top-1 searchFields2" *ngIf="(reportType === 'getVendorReport' || reportType === 'getPincodeReport' || reportType === 'getVendorDetails') && (environment.userType && environment.userType === 'admin') " style="width:100%;">
             <div class="col-sm-9 col-md-9 reprts-search-fields bg-white padding1" style="padding-right:0; width:100%;">
                 <div class="underLine paddingHalf text-bold">Search Vendor</div>
@@ -353,10 +406,22 @@
             </div>
         </div>
 
+        <div class="col-sm-12 col-md-12 m-top-1 searchFields2" *ngIf="(reportType === 'getPincodeReport') && (environment.userType && environment.userType === 'vendor') " style="width:100%;">
+          <div class="col-sm-9 col-md-9 reprts-search-fields bg-white padding1" style="padding-right:0; width:100%;">
+            <div attr.data-associate-id={{associateId}} id="vendor-add-pincode" class="btn btn-primary addActionBtn add-pincode-vendor" (click)="addActionInit($event)">
+              Add
+              <ng-container *ngIf="reportType === 'getPincodeReport'">Pincode</ng-container>
+            </div>
+          </div>
+        </div>
+
 
         <div class="col-sm-12 col-md-12 table-area table-cont m-top-1" id="table-section">
                 <div class="reportDwld pull-right btn btn-primary" (click)="downLoadCSV($event, reportType)" [ngClass]="{'disableBtn' : !reportData.tableData.length}">
                   Download <span class="glyphicon glyphicon-download-alt" title="Download Report"></span>
+                </div>
+                <div  class="reportDwld pull-right btn btn-primary" (click)="bulkAssignAction()" *ngIf="(environment.userType && environment.userType === 'admin') && (reportType === 'getOrderReport')" [ngClass]="{'disableBtn' : !reportData.tableData.length}">
+                  Bulk Assign <span class="glyphicon glyphicon-check" title="Bulk Assign"></span>
                 </div>
                 <table class="report-table table table-striped table-bordered table-curved fixed-headerx">
                     <thead class="bg-igp text-white" (click)="stopEventPropgation($event)">
@@ -462,7 +527,7 @@
 
                                     <span *ngIf="tableCol == 'Ship_Type'" >{{getDeliveryName(getCellValue(tableRowValue[tableCol])) | replace : '`updated'}}</span>
                                     <span *ngIf="ifDate(tableCol) == 'date'" >{{getCellValue(tableRowValue[tableCol]) | date : 'dd/MM/yy'}}</span>
-                                    <span *ngIf="ifDate(tableCol) != 'date' && tableCol != 'Ship_Type' && tableCol != 'Component_Image' && tableCol != 'Component Image' && tableCol != 'Product Image' && tableCol != 'Product_Image' && tableCol != 'Out Of Delivery' && tableCol != 'Out_Of_Delivery' && tableCol != 'Proof Of Delivery' && tableCol != 'Proof_Of_Delivery'" >
+                                    <span *ngIf="ifDate(tableCol) != 'date' && tableCol != 'Ship_Type' && tableCol != 'Component_Image' && tableCol != 'Component Image' && tableCol != 'Product Image' && tableCol != 'Product_Image' && tableCol != 'Out Of Delivery' && tableCol != 'Out_Of_Delivery' && tableCol != 'Proof Of Delivery' && tableCol != 'Proof_Of_Delivery' && tableCol != 'Vendor_List'" >
                                         <span *ngIf="getCellValue(tableRowValue[tableCol]) === 0">{{getCellValue(tableRowValue[tableCol])}}</span>
                                         <span *ngIf="getCellValue(tableRowValue[tableCol]) !== 0" [innerHTML]="getCellValue(tableRowValue[tableCol])  | replace : '`,[' "></span>
                                     </span>
@@ -473,12 +538,18 @@
                                     <span class="icon" aria-hidden="true" *ngIf="tableCol === 'invoice number'" (click)="dwldInv($event, tableRowValue['orderId'], getCellValue(tableRowValue[tableCol]))">
                                         <span class="glyphicon glyphicon-download-alt" title="Download Invoice"></span>
                                     </span>
+                                    <div *ngIf="tableCol === 'Vendor_List'">
+                                        <select (change)="addVendorToOrderMap($event, tableRowValue['Order_No'], tableRowValue['Order_Product_Id'])">
+                                          <option selected value="">Select Vendor</option>
+                                            <option  *ngFor="let vendor of tableRowValue[tableCol]; let i='index'" value="{{vendor.Vendor_Id}}">{{vendor.Vendor_Name}}</option>
+                                        </select>
+                                    </div>
                                 </div>
 
                                 <!--update messgae start-->
                                     <div class="updateTxt" *ngIf="isUpdated(getCellValue(tableRowValue[tableCol])) === 'updating' || isUpdated(getCellValue(tableRowValue[tableCol])) === 'updated'">
                                         <div class="updateTxtMain" *ngIf="isUpdated(getCellValue(tableRowValue[tableCol])) === 'updating'"><app-loader></app-loader></div>
-                                        <div class="updateTxtMain" *ngIf="isUpdated(getCellValue(tableRowValue[tableCol])) === 'updated' && !(environment.userType)">Request sent!</div>
+                                        <div class="updateTxtMain" *ngIf="isUpdated(getCellValue(tableRowValue[tableCol])) === 'updated' && (environment.userType == 'vendor')">Request sent!</div>
                                         <div class="updateTxtMain" *ngIf="isUpdated(getCellValue(tableRowValue[tableCol])) === 'updated' && (environment.userType && environment.userType === 'admin')">Done!</div>
                                     </div>
                                 <!--update messgae end-->
@@ -489,10 +560,17 @@
                                         <ng-container *ngFor="let tableAction of reportData.tableDataAction">
                                             <div class="tableDataActionBtn" *ngIf="tableAction[tableCol] && tableAction[tableCol].length">
                                                 <!--{{tableAction[tableCol] | json}}-->
-                                                <div class="tableactBtn" *ngFor="let actBtn of tableAction[tableCol]; let z='index'" (click)="actionBtnInvoke(actBtn, getCellValue(tableRowValue[tableCol]), tableRowValue, tableCol, dataIndex)">
-                                                    <span class="tableactBtntxt">{{getActBtnTxt(actBtn, getCellValue(tableRowValue[tableCol]))}}</span>
-                                                    <ng-container *ngIf="(z+1) < tableAction[tableCol].length"> &nbsp; |</ng-container>
-                                                </div>
+                                                <ng-container *ngIf="(tableRowValue[tableCol]['requestValue'] == -1)">
+                                                    <div class="tableactBtn" *ngFor="let actBtn of tableAction[tableCol]; let z='index'" (click)="actionBtnInvoke(actBtn, getCellValue(tableRowValue[tableCol]), tableRowValue, tableCol, dataIndex, 1)">
+                                                        <span class="tableactBtntxt">{{getActBtnTxt(actBtn, getCellValue(tableRowValue[tableCol]))}}</span>
+                                                        <ng-container *ngIf="(z+1) < tableAction[tableCol].length"> &nbsp; |</ng-container>
+                                                    </div>
+                                                </ng-container>
+                                                <ng-container *ngIf="!(tableRowValue[tableCol]['requestValue'] == -1)">
+                                                    <div class="tableactBtn" (click)="actionBtnInvoke(tableRowValue[tableCol]['requestType'], getCellValue(tableRowValue[tableCol]), tableRowValue, tableCol, dataIndex, 0)">
+                                                        <span class="tableactBtntxt">{{tableRowValue[tableCol]['requestType']}}</span>
+                                                    </div>
+                                                </ng-container>
                                             </div>
                                         </ng-container>
                                     </ng-container>

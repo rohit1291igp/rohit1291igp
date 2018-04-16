@@ -267,13 +267,13 @@
 
                 <div class="modal-body center-align" *ngIf="adminActions.adminActionsName === 'changePrice'">
                     <div class="form-group">
-                        <form (ngSubmit)="adminActionsSubmit($event, {orderProductId : orderProductId.valid, componentId: componentId.valid, componentPrice : componentPrice.valid, shippingCharge : shippingCharge.valid})" #f="ngForm" nonvalidate>
+                        <form (ngSubmit)="adminActionsSubmit($event, {orderProductId : orderProductId.valid, componentId: true, componentPrice : componentPrice.valid, shippingCharge : shippingCharge.valid})" #f="ngForm" nonvalidate>
 
                             <select name="orderProductId" class="form-control" [(ngModel)]="adminActions.adminActionsModel.orderProductId" #orderProductId="ngModel" (change)="orderProductChange($event,$event.target.value)" required>
                                 <option *ngFor="let orderProduct of adminActions.adminActionDepData.orderProducts" [ngValue]="orderProduct.orderProductId">{{orderProduct.productName}}</option>
                             </select>
 
-                            <select name="componentId" class="form-control m-top-1" [(ngModel)]="adminActions.adminActionsModel.componentId" #componentId="ngModel" required>
+                            <select *ngIf="adminActions.adminActionsSubName !='shipping'" name="componentId" class="form-control m-top-1" [(ngModel)]="adminActions.adminActionsModel.componentId" #componentId="ngModel" required>
                                 <option *ngFor="let orderProductComponent of adminActions.adminActionDepData.orderProductComponents" [ngValue]="orderProductComponent.componentId">{{orderProductComponent.componentName}}</option>
                             </select>
 
@@ -667,8 +667,10 @@
                         <!--<span class="delivery-time">Same Day Delivery 12/4/17 2:00 PM</span>-->
                           <span class="dtm" *ngIf="order && order.orderProducts[0] && order.orderProducts[0].orderProductExtraInfo">
                               <span class="uppercase delivery-time text-bold" attr.data-dt="{{order.orderProducts[0].orderProductExtraInfo.deliveryDate}}" attr.data-pd="{{order.datePurchased}}" >{{getDeliveryDetail(order.orderProducts[0].orderProductExtraInfo, order.datePurchased)}}</span>
+                            <br/><span class="uppercase delivery-time text-bold" >{{order.orderOccasion}}</span>
                           </span>
                       </p>
+                      <p *ngIf="isAdmin">Ordered through : {{order.orderSource}}</p>
 
                      <p class=""  *ngIf="isAdmin && order && order.orderProducts[0] && order.orderProducts[0].vendorName" style="margin-top: -0.5em;">
                         <span class="text-bold">Vendor Name:</span>
@@ -722,8 +724,8 @@
                         <div class="btn btn-primary actions-button text-bold OIB" *ngIf="order.orderInstruction">
                             Order Instruction
                         </div>
-                        <div class="btn btn-primary actions-button text-bold needHelp" (click)="vendorIssueOpen($svent, order.orderId, order.orderProducts)">
-                         Need Help?
+                        <div class="btn btn-primary actions-button text-bold needHelp" (click)="orderLog($event, true, orderIndex)">
+                         Help / Instructions
                         </div>
 
                         <div class="order-instruction-detail" *ngIf="order.orderInstruction">
@@ -766,7 +768,6 @@
                                 <div class="dropdown-menu"  style="display:block; top:2em; left:-11.5em;"  *ngIf="order.changePriceActionsFlag">
                                     <a class="dropdown-item" href="#" (click)="adminActionsInit($event, 'changePrice', orderIndex, 'comp')">Component Price</a>
                                     <a class="dropdown-item" href="#" (click)="adminActionsInit($event, 'changePrice', orderIndex, 'shipping')">Shipping Price</a>
-                                    <a class="dropdown-item" href="#" (click)="adminActionsInit($event, 'changePrice', orderIndex, 'both')">Both</a>
                                 </div>
 
                                 <a class="dropdown-item" href="#" (click)="adminActionsInit($event, 'changeDeliveryType&Date', orderIndex)">Delivery Type & Date</a>
@@ -774,7 +775,7 @@
                         </div>
 
                         <div class="btn btn-primary actions-button text-bold oLog" (click)="orderLog($event, true, orderIndex)">
-                            Log
+                            Instructions
                         </div>
 
                         <div class="btn btn-primary actions-button text-bold" (click)="adminActionsInit($event, 'cancelRefund', orderIndex)">
@@ -851,15 +852,62 @@
                         </div>
                     </div>
 
-                    <div class="orderLogContInner"  [ngClass]="{'slideropen': order.orderLogFlag, 'sliderclosed' : !order.orderLogFlag}"  *ngIf="isAdmin">
+                    <div class="orderLogContInner"  [ngClass]="{'slideropen': order.orderLogFlag, 'sliderclosed' : !order.orderLogFlag}" >
                         <div class="pull-right logClosebtn" (click)="orderLog($event, false, orderIndex)"> × </div>
                         <div class="orderLogContInner2">
-                            <div class="caption">Order Log</div>
-                            <div class="" style="margin-left:48%; margin-top:10%;" *ngIf="!order.orderLogData"><app-loader></app-loader></div>
-                            <div class="content"
-                                 *ngIf="order.orderLogData">
-                                    <div [outerHTML]="order.orderLogData"></div>
+                            <div class="orderLogHeader">
+                              <div class="row">
+                                <div class="col-md-6" style="padding: 0 0 0 15px;"  *ngIf="isAdmin">
+                                  <p class="tab-title" [ngClass]="{'active-tab': activeTab == 'log'}" (click)="onTabClick('log')">Logs</p>
+                                </div>
+                                <div class="col-md-6" style="padding: 0 15px 0 0;"  *ngIf="isAdmin">
+                                  <p class="tab-title" [ngClass]="{'active-tab': activeTab == 'comms'}" (click)="onTabClick('comms')">Communications / Instructions</p>
+                                </div>
+
+                                <div class="col-md-6"  *ngIf="!isAdmin">
+                                  <p class="tab-title" [ngClass]="{'active-tab': activeTab == 'comms'}" (click)="onTabClick('comms')">Communications / Instructions</p>
+                                </div>
+                              </div>
                             </div>
+
+                            <div class="" style="margin-left:48%; margin-top:10%;" *ngIf="!order.orderLogData"><app-loader></app-loader></div>
+                          <div *ngIf="(activeTab == 'log') && isAdmin" >
+                            <div class="content "
+                                 *ngIf="order.orderLogData">
+                              <div *ngFor="let log of order.orderLogData">
+                                <div class="log-list-item">
+                                  {{log.message}}
+                                  <p style="text-align: right; font-size: 0.8em; margin: 0">by <span style="font-weight: bold; font-style: italic;">{{log.user}}</span> on <span style="font-weight: bold; font-style: italic;">{{log.date}}</span> at <span style="font-weight: bold; font-style: italic;">{{log.time}}</span></p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div *ngIf="(activeTab == 'comms')">
+                            <div class="content message-content"
+                                 *ngIf="order.orderLogData && activeTab == 'comms'">
+                              <div  *ngFor="let log of order.orderLogData">
+                                <div class="log-list-item" >
+                                  <p style="font-size: 0.8em; margin: 0"><span style="font-weight: bold; font-style: italic;">{{log.user}} : </span></p>
+                                  {{log.message}}
+                                  <p style="text-align: right; font-size: 0.8em; margin: 0">on <span style="font-weight: bold; font-style: italic;">{{log.date}}</span> at <span style="font-weight: bold; font-style: italic;">{{log.time}}</span></p>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="text-area-block">
+                              <form (ngSubmit)="commForm.form.valid && sendCommunicationMessage($event, order, orderIndex)" #commForm="ngForm" novalidate>
+                                <div class="row">
+                                  <div class="col-md-10">
+                                    <textarea required name="vendorIssue" placeholder="enter instruction/message here" [(ngModel)]="vendorIssueValue.reason" #vendorIssue="ngModel"></textarea>
+                                    <div *ngIf="commForm.submitted && !vendorIssue.valid" class="help-block theme-red">Please provide vendor issue!</div>
+                                  </div>
+                                  <div class="col-md-2 no-padding">
+                                    <button type="submit" class="btn btn-primary message-send-btn">Send</button>
+                                  </div>
+                                </div>
+                              </form>
+                            </div>
+                          </div>
                         </div>
                     </div>
 
