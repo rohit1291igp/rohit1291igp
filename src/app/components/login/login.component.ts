@@ -72,10 +72,10 @@ export class LoginComponent implements OnInit {
                         return;
                     }
 
-                    let token = _response.result.token;
-                    let fkAssociateId =  _response.result.fkAssociateId;
-                    let associateName =  _response.result.associateName;
-                    let userType =  _response.result.userType; // || 'upload';
+                    const token = _response.result.token;
+                    const fkAssociateId =  _response.result.fkAssociateId;
+                    const associateName = _response.result.associateName;
+                    const userType =  _response.result.userType; // || 'upload';
                     /*let admin =  _response.result.admin;
                      if(admin){
                      localStorage.setItem('admin', true);
@@ -95,7 +95,9 @@ export class LoginComponent implements OnInit {
                     }else if(_this.model.username === "Handels" || _this.model.username === "handels"){
                         localStorage.setItem('userType', 'admin');
                         environment.userType='admin';
-                    }else{
+                    } else if(_this.model.username === 'blogger') {
+                        localStorage.setItem('userType', 'blogger');
+                    } else {
                       console.log("vendor type detected!!");
                       localStorage.setItem('userType', 'vendor');
                       environment.userType='vendor';

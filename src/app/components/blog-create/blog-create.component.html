@@ -1,0 +1,191 @@
+<section class="create-blog-container">
+    <br/>
+    <div class="container-fluid">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <form #createBlog="ngForm" (ngSubmit)="createBlog.form.valid && createBlogPost(createBlog)" novalidate>
+                    <!-- Store and Categories selection panel -->
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">
+                                Store and Categories
+                            </h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="form-group" [ngClass]="{ 'has-error': createBlog.submitted && !webstore.valid }">
+                                        <label for="">Webstore</label>
+                                        <select class="form-control" name="webstore" #webstore="ngModel" [(ngModel)]="model.webstore" required (change)="resetCategoriesOnStoreChange()">
+                                            <option value="">Select Webstore</option>
+                                            <option value="5">IGP</option>
+                                            <option value="830">Interflora</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="">Categories</label>
+                                        <button (click)="showCategoryModal()" class="btn btn-default btn-block" type="button">
+                                            Select Categories
+                                        </button>
+                                    </div>
+                                    
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="form-group" [ngClass]="{ 'has-error' : createBlog.submitted && !status.valid }">
+                                        <label for="">Status</label>
+                                        <select class="form-control" name="status" #status="ngModel" [(ngModel)]="model.status" required>
+                                            <option value="">Select Status</option>
+                                            <option value="1">Visible</option>
+                                            <option value="0">Hidden</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="form-group" [ngClass]="{ 'has-error': createBlog.submitted && !sortOrder.valid }">
+                                        <label for="">Sort Order</label>
+                                        <input type="text" class="form-control" name="sortOrder" [(ngModel)]="model.sortOrder" #sortOrder="ngModel" value="-1" placeholder="Sort Order" required />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Meta Information Panel -->
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Meta Information</h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="col-md-4">
+                                        <div class="checkbox">
+                                            <label>
+                                                <input type="checkbox" name="isFeatured" [(ngModel)]="model.isFeatured" #isFeatured="ngModel" /> Make this Featured
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group" [ngClass]="{ 'has-error': createBlog.submitted && !url.valid }">
+                                        <label for="">URL</label>
+                                        <input type="text" class="form-control" onkeypress='return (event.charCode > 96 && event.charCode < 123) || (event.charCode > 64 && event.charCode < 91) || (event.charCode >= 48 && event.charCode <= 57) || event.charCode <= 31 || event.charCode == 45' name="url" [(ngModel)]="model.url" #url="ngModel" placeholder="URL" required  (focusout)="checkUniqueUrlValue()" maxlength="170"/>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group" [ngClass]="{ 'has-error': createBlog.submitted && !featuredImage.valid }">
+                                        <label for="">Featured Image</label>
+                                        <input type="text" class="form-control" name="featuredImage" [(ngModel)]="model.featuredImage" #featuredImage="ngModel" placeholder="Featured Image URL" required  />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group" [ngClass]="{ 'has-error' : createBlog.submitted && !title.valid}">
+                                        <label for="">Title</label>
+                                        <input type="text" class="form-control" placeholder="Title" name="title" #title="ngModel" [(ngModel)]="model.title" required maxlength="150"/>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group" [ngClass]="{ 'has-error' : createBlog.submitted && !metaTitle.valid}">
+                                        <label for="">Meta Title</label>
+                                        <input type="text" class="form-control" placeholder="Meta Title" name="metaTitle" #metaTitle="ngModel" [(ngModel)]="model.metaTitle" required maxlength="72"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group" [ngClass]="{ 'has-error' : createBlog.submitted && !desc.valid}">
+                                        <label for="">Short Description</label>
+                                        <textarea class="form-control" rows="3" placeholder="Description" name="desc" #desc="ngModel" [(ngModel)]="model.desc" required maxlength="300"></textarea>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group" [ngClass]="{ 'has-error' : createBlog.submitted && !metaDesc.valid}">
+                                        <label for="">Meta Description</label>
+                                        <textarea class="form-control" rows="3" placeholder="Meta Description" name="metaDesc" #metaDesc="ngModel" [(ngModel)]="model.metaDesc" required maxlength="300"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group" [ngClass]="{ 'has-error' : createBlog.submitted && !keywords.valid}">
+                                        <label for="">Meta Keywords</label>
+                                        <textarea class="form-control" rows="3" placeholder="Meta Keywords" name="keywords" #keywords="ngModel" [(ngModel)]="model.keywords" required maxlength="300"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- WYSIWYG Panel -->
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Content Editor</h3>
+                        </div>
+                        <div class="panel-body">
+                            <div [froalaEditor]="options" [(froalaModel)]="model.description"></div>
+                        </div>
+                    </div>
+
+                    <!-- Submit and Reset Panel -->
+                    <div class="row">
+                        <div class="col-md-12 text-right">
+                            <input class="btn btn-primary" type="submit" value="Create" />
+                            <input class="btn btn-danger" type="reset" value="Reset" />
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="category-modal" *ngIf="showCategoryModalFlag">
+    <div (click)="closeCategoryModal()" class="close-category-modal">
+        &times;
+    </div>
+
+    <div class="category-list" *ngIf="categories.length">
+        <div class="row">
+            <div class="col-md-12">
+                <h4>Select Category</h4>
+                <ul>
+                    <li *ngFor='let category of categories'>
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" name="category" value="{{category.id}}" [id]="category.id" [(ngModel)]="model.category[category.id]" (change)="updateSelectedCategories('cat', category.id, null, $event)" /> {{category.title}}
+                            </label>
+                        </div>
+                        <ul>
+                            <li *ngFor='let sc of category.subcategory'>
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" name="subcategory" value="{{sc.id}}" [id]="sc.id" [(ngModel)]="model.subcategory[sc.id]" (change)="updateSelectedCategories('sc', category.id, sc.id, $event)" /> {{sc.title}}
+                                    </label>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>    
+
+                </ul>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="col-md-12 text-right">
+                        <input class="btn btn-primary" type="button" value="Close" (click)="closeCategoryModal()" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="category-overlay" *ngIf="showCategoryModalFlag"></div>

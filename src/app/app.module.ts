@@ -12,6 +12,7 @@ import { MyDatePickerModule } from 'mydatepicker';
 import { TrimValueAccessorModule } from 'ng-trim-value-accessor';
 import { DatePipe } from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
 
 
 // Router and Services
@@ -38,6 +39,7 @@ import { ButtonViewComponent } from './components/button-view/button-view.compon
 import { NoOrdersComponent } from './components/no-orders/no-orders.component';
 import { OrdersActionTrayComponent } from './components/orders-action-tray/orders-action-tray.component';
 import { LoaderComponent } from './components/loader/loader.component';
+import { BlogCreateComponent } from './components/blog-create/blog-create.component';
 
 //factories
 import {httpFactory} from "./others/http.factory";
@@ -80,7 +82,8 @@ export function ConfigLoader(envConfig: envConfig) {
     //  InputTrimDirective,
       FeedsComponent,
     UploadExcelComponent,
-    VendorDropdownComponent
+    VendorDropdownComponent,
+    BlogCreateComponent
   ],
   imports: [
     BrowserModule,
@@ -92,7 +95,9 @@ export function ConfigLoader(envConfig: envConfig) {
     SelectModule,
     MyDatePickerModule,
     BrowserAnimationsModule,
-    TrimValueAccessorModule
+    TrimValueAccessorModule,
+    FroalaEditorModule.forRoot(),
+    FroalaViewModule.forRoot()
   ],
   providers: [
     {
