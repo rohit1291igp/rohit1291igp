@@ -35,13 +35,15 @@ export class BackendService {
               }
           }else{
               if(environment.userType && environment.userType != 'vendor' && !(reqObj.url.includes('login')) && !(reqObj.url.includes('doLogOut')) ){
-                  if(environment.userType === "upload"){
-                      reqObj.url= environment.origin +'v1/admin/'+ reqObj.url;
-                  }else{
-                      reqObj.url= environment.origin +'v1/admin/handels/'+ reqObj.url;
+                  if(environment.userType === 'upload') {
+                    reqObj.url = environment.origin + 'v1/admin/' + reqObj.url;
+                  }else if (environment.userType === 'blogger') {
+                    reqObj.url = environment.origin + 'v1/' + reqObj.url;
+                  } else {
+                      reqObj.url = environment.origin + 'v1/admin/handels/' + reqObj.url;
                   }
               }else{
-                  reqObj.url= environment.origin +'v1/handels/'+ reqObj.url;
+                  reqObj.url = environment.origin + 'v1/handels/' + reqObj.url;
               }
           }
       }
