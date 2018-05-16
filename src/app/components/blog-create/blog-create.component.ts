@@ -10,7 +10,7 @@ import { UtilityService } from '../../services/utility.service';
     styleUrls: ['./blog-create.component.css']
   })
 
-export class BlogCreateComponent implements OnInit{
+export class BlogCreateComponent implements OnInit {
     model: any = {};
     showCategoryModalFlag: Boolean = false;
     public options: Object = {
@@ -67,7 +67,7 @@ export class BlogCreateComponent implements OnInit{
         }
     }
 
-    replaceNonAscii(value){
+    replaceNonAscii(value) {
         return value.replace(/[^\x00-\x7F]/g, '');
     }
 
@@ -124,7 +124,7 @@ export class BlogCreateComponent implements OnInit{
         }
     }
 
-    validateModel(){
+    validateModel() {
         if (!(Object.keys(this.model.category).length) && !(Object.keys(this.model.subcategory).length)) {
             alert('Please select the Category and Subcategory for the article.');
             return false;
@@ -186,7 +186,7 @@ export class BlogCreateComponent implements OnInit{
         });
     }
 
-    saveBlogData(data){
+    saveBlogData(data) {
         const _this = this;
         const reqObj = {
             url: 'blogs/createblog',
