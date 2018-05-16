@@ -13,10 +13,6 @@ import { UtilityService } from '../../services/utility.service';
 export class BlogCreateComponent implements OnInit {
     model: any = {};
     showCategoryModalFlag: Boolean = false;
-    public options: Object = {
-        placeholderText : 'Blog Content',
-        heightMin : 250
-    };
 
     // sample data for category list
     public categories = [];
@@ -54,7 +50,7 @@ export class BlogCreateComponent implements OnInit {
         data['status'] = this.model.status;
         data['url'] = this.model.url;
         data['imageurl'] = this.model.featuredImage;
-        data['flagfeatured'] = this.model.isFeatured;
+        data['flagfeatured'] = this.model.isFeatured ? 1 : 0;
         data['seo']['seotitle'] = this.model.metaTitle;
         data['seo']['seodescription'] = this.model.metaDesc;
         data['seo']['seokeywords'] = this.model.keywords;

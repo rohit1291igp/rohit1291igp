@@ -12,7 +12,7 @@ import { MyDatePickerModule } from 'mydatepicker';
 import { TrimValueAccessorModule } from 'ng-trim-value-accessor';
 import { DatePipe } from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
+import { NgxEditorModule } from 'ngx-editor';
 
 
 // Router and Services
@@ -96,8 +96,7 @@ export function ConfigLoader(envConfig: envConfig) {
     MyDatePickerModule,
     BrowserAnimationsModule,
     TrimValueAccessorModule,
-    FroalaEditorModule.forRoot(),
-    FroalaViewModule.forRoot()
+    NgxEditorModule
   ],
   providers: [
     {
