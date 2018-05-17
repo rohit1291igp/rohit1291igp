@@ -1,4 +1,5 @@
-<!--<div class="headerVendor navbar-brand" *ngIf="vendorName">- {{vendorName}}</div>-->
+<ng-container *ngIf="environment.userType !== 'blogger'">
+    <!--<div class="headerVendor navbar-brand" *ngIf="vendorName">- {{vendorName}}</div>-->
 <app-header-tabs (onTabChanged)="loadDashboardCount($event)" (onOrderSearch)="search($event)" [dashboardCounts]="dashboardData.counts"></app-header-tabs>
 
 <section class="dbMobile" *ngIf="isMobile">
@@ -484,3 +485,14 @@
 
 
 <app-feeds></app-feeds>
+</ng-container>
+
+<ng-container *ngIf="environment.userType === 'blogger'">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <h4><a ng-href="#/blog-create" routerLink="/blog-create">Click here to create blog</a></h4>
+            </div>
+        </div>
+    </div>
+</ng-container>

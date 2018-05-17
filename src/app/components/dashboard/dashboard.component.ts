@@ -17,6 +17,7 @@ import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 })
 export class DashboardComponent implements OnInit {
   @ViewChild(OrdersActionTrayComponent) child: OrdersActionTrayComponent;
+  environment=environment;
   isMobile=environment.isMobile;
   isAdmin=(environment.userType && environment.userType === "admin");
   prodOrderstatus : any;

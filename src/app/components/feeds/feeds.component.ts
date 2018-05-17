@@ -68,7 +68,8 @@ export class FeedsComponent implements OnInit {
 
   ngOnInit() {
      //var _this=this;
-      if(!environment.userType){
+    console.log("sdfsdf");
+      if(environment.userType == "vendor"){
           this.getFeeds();
           this.feedObservable=Observable.interval(1000 * 60)
               .subscribe(() => {
