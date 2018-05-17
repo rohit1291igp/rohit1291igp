@@ -27,11 +27,11 @@
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="">Categories</label>
-                                        <button (click)="showCategoryModal()" class="btn btn-default btn-block" type="button">
-                                            Select Categories
+                                        <button (click)="showCategoryModal()" [ngClass]="{ 'btn-default' : isCategoryEmpty(), 'btn-primary' : !isCategoryEmpty()}" class="btn btn-block" type="button">
+                                            <span *ngIf="isCategoryEmpty()">Select Categories</span>
+                                            <span *ngIf="!isCategoryEmpty()">Edit Categories</span>
                                         </button>
-                                    </div>
-                                    
+                                    </div>  
                                 </div>
 
                                 <div class="col-md-3">

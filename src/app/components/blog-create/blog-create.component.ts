@@ -107,6 +107,14 @@ export class BlogCreateComponent implements OnInit {
         }
     };
 
+    isCategoryEmpty() {
+        if (Object.keys(this.selectedCategories).length > 0) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
     setOrResetCheckboxes(subCatArray, catId) {
         const that = this;
         if (subCatArray && subCatArray.length) {
