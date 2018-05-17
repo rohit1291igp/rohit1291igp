@@ -40,6 +40,7 @@ import { NoOrdersComponent } from './components/no-orders/no-orders.component';
 import { OrdersActionTrayComponent } from './components/orders-action-tray/orders-action-tray.component';
 import { LoaderComponent } from './components/loader/loader.component';
 import { BlogCreateComponent } from './components/blog-create/blog-create.component';
+import { BlogListComponent } from './components/blog-list/blog-list.component';
 
 //factories
 import {httpFactory} from "./others/http.factory";
@@ -83,7 +84,8 @@ export function ConfigLoader(envConfig: envConfig) {
       FeedsComponent,
     UploadExcelComponent,
     VendorDropdownComponent,
-    BlogCreateComponent
+    BlogCreateComponent,
+    BlogListComponent
   ],
   imports: [
     BrowserModule,
