@@ -4,7 +4,6 @@ import { NgForm } from '@angular/forms';
 import { BackendService } from '../../services/backend.service';
 import { UtilityService } from '../../services/utility.service';
 
-
 @Component({
     selector: 'app-blog-list',
     templateUrl: './blog-list.component.html',
@@ -14,6 +13,9 @@ import { UtilityService } from '../../services/utility.service';
 export class BlogListComponent implements OnInit {
     public blogList = [];
     public showGrid = false;
+    public editBlogDetails = {};
+    public viewBlogDeatils = {};
+    public saveBlogDetails = {};
     
     constructor(
         public BackendService: BackendService,
@@ -29,7 +31,7 @@ export class BlogListComponent implements OnInit {
     getBlogList() {
         const _this = this;
         const reqObj = {
-            url: 'blogs/getbloglist', // replace this with the endpoint for fetching blog list
+            url: 'blogs/getblogs', // replace this with the endpoint for fetching blog list
             method: 'get',
         };
 
@@ -46,14 +48,13 @@ export class BlogListComponent implements OnInit {
        
     }
 
-    deletePost(list){
+    deleteBlog(list){
         const _this = this;
-
         const reqObj = {
-            url: `blogs/deletebloglist?${list.id}`, // replace this with the endpoint for fetching blog list
-            method: 'delete',
+            url: `blogs/deleteblog?id=${list.id}`, 
+            method: 'delete'
         };
-        confirm(`Are you sure you want to delete post <b>${list.title}</b>  it?`);
+        confirm(`Are you sure do you want to delete post ${list.title}?`);
         
         _this.BackendService.makeAjax(reqObj, function(err, response, headers){
             if (err || response.error) {
@@ -61,10 +62,67 @@ export class BlogListComponent implements OnInit {
                 return false;
             }
             alert(`The article has been deleted`);
-            window.location.reload();       
-
+            window.location.reload();            
         });
 
     }
+    getCategories(list){
+        list.forEach(element => {
+            return element.title;
+        });
+    }
+    editBlog(list){
+        const _this = this;
+        _this.editBlogDetails = {
+            title:list.title,
+            id:list.id,
+            store:'IGP',
+            category:{
+                title:_this.getCategories(list.category)
+            }
+        }
+
+       // alert('Inside Edit Blog');
+        
+    }
+    saveBlog(list){
+        const _this = this;
+        _this.saveBlogDetails = {
+            title:list.title,
+            id:list.id,
+            store:'IGP',
+            category:{
+                title:_this.getCategories(list.category)
+            }
+        }
+        const reqObj = {
+            url: 'blogs/updateblog', // replace this with the endpoint for fetching blog list
+            method: 'put',
+        };
+
+        _this.BackendService.makeAjax(reqObj, function(err, response, headers){
+            if (err || response.error) {
+                console.log('Error=============>', err, response.errorCode);
+            }
+
+            // assign value from the response to the blogList property
+           _this.blogList = response;
+           _this.showGrid = true;
+           //console.log(this.blogList);
+        });
+    }
+    viewBlog(list){
+        const _this = this;
+        _this.viewBlogDeatils = {
+            title:list.title,
+            id:list.id,
+            store:'IGP',
+            category:{
+                title:_this.getCategories(list.category)
+            }
+        }
+        
+    }
+    
     
 }
