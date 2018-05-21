@@ -16,7 +16,7 @@ const route: Routes = [
     { path: 'reports/:type', component: ReportsComponent, canActivate: [AuthGuard] },
     { path: 'blog-create', component: BlogCreateComponent, canActivate: [AuthGuard]},
     { path: 'blog-list', component: BlogListComponent, canActivate: [AuthGuard]},
-    { path: 'blog-view/:id', component: BlogViewComponent, canActivate: [AuthGuard]},    
+    { path: 'blog-view/:id/:type', component: BlogViewComponent, canActivate: [AuthGuard]},    
     // otherwise redirect to home
     { path: '**', redirectTo: 'dashboard' }
 ]

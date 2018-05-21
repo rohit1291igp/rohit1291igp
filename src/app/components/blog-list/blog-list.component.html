@@ -30,8 +30,8 @@
                                     </td>
                                     <!-- <td *ngFor="let category of list.parentcategory">{{category.title}}</td> -->
                                     <td>
-                                            <button class="btn" (click)="editBlog(list)" title="Edit" data-toggle="modal" data-target="#exampleModal"><a ng-href="#/blog-view" routerLink="/blog-view/{{list.id}}"><i class="fa fa-pencil"></i></a></button>
-                                            <button class="btn" (click)="viewBlog(list)" title="View" data-toggle="modal" data-target="#viewModal"><i class="fa fa-eye"></i></button>                                        
+                                            <button class="btn" (click)="editBlog(list)" title="Edit"><a ng-href="#/blog-view" routerLink="/blog-view/{{list.id}}/edit"><i class="fa fa-pencil"></i></a></button>
+                                            <button class="btn" (click)="viewBlog(list)" title="View"><a ng-href="#/blog-view" routerLink="/blog-view/{{list.id}}/view"><i class="fa fa-eye"></i></a></button>                                        
                                             <button class="btn" (click)="deleteBlog(list)" title="Delete"><i class="fa fa-trash"></i></button>
                                     </td>                                 
                             </tr>

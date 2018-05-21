@@ -54,7 +54,7 @@ export class BlogListComponent implements OnInit {
             url: `blogs/deleteblog?id=${list.id}`, 
             method: 'delete'
         };
-        confirm(`Are you sure do you want to delete post ${list.title}?`);
+        if(confirm(`Are you sure do you want to delete post ${list.title}?`)){
         
         _this.BackendService.makeAjax(reqObj, function(err, response, headers){
             if (err || response.error) {
@@ -64,6 +64,10 @@ export class BlogListComponent implements OnInit {
             alert(`The article has been deleted`);
             window.location.reload();            
         });
+    }
+    else{
+        return false;
+    }
 
     }
     getCategories(list){
@@ -73,15 +77,6 @@ export class BlogListComponent implements OnInit {
     }
     editBlog(list){
         const _this = this;
-        _this.editBlogDetails = {
-            title:list.title,
-            id:list.id,
-            store:'IGP',
-            category:{
-                title:_this.getCategories(list.category)
-            }
-        }
-
        // alert('Inside Edit Blog');
         
     }
