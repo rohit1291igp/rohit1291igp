@@ -53,3 +53,55 @@
 h4{
     display: inline-block;
 }
+
+.image-responsive{
+    width: 100%;
+    height: auto;
+}
+
+.image-container{
+    padding: 10px;
+    background-color: #e2e2e2;
+    box-shadow: 0px 1px 4px #999;
+    overflow: hidden;
+}
+
+.selected-images{
+    margin: 1em 0;
+}
+
+.blog-image-upload{
+    position: relative;
+    margin-bottom: 1.5em;
+    width: 0;
+}
+
+.blog-image-upload:after{
+    position: absolute;
+    width: auto;
+    min-height: 100%;
+    background: #c3404e;
+    color: #ffffff;
+    content: 'Add Images +';
+    left: 0;
+    top: 0;
+    padding: 10px;
+    white-space: nowrap;
+    border-radius: 5px;
+}
+
+.manage-media{
+    position: relative;
+}
+
+.media-loading-screen{
+    position: absolute;
+    left: -15px;
+    right: -15px;
+    top: -15px;
+    bottom: -15px;
+    background: #ffffffc4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
