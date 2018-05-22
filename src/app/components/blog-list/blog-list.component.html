@@ -4,13 +4,13 @@
     <div class="container-fluid">
         <div class="panel panel-default">
                 <div class="panel-heading">
-                        <h2>
+                        <h2 style="margin: 0px;">
                                 Blog Posts
                         </h2><br/>
                         <h3 class="panel-title">You can view blogs here...</h3>
                     </div>
             <div *ngIf="showGrid;else other_content" class="panel-body">
-                    <button type="submit"  class="btn btn-primary pull-right">Create</button><br/>
+                    <button type="submit"  class="btn btn-primary pull-right"><a style="color: white;text-decoration: none;" ng-href="#/blog-create" routerLink="/blog-create">Create</a></button><br/>
                     <!-- <button type="submit" id="filter" class="btn btn-primary pull-right">Filter</button><br>  -->
                     <table class="table table-hover">
                         <thead>
@@ -24,14 +24,14 @@
                             <tr *ngFor="let list of blogList.data.bloglist">
                                     <td>{{list.id}}</td>
                                     <td>{{list.title}}</td>
-                                    <td>IGP</td>                                   
+                                    <td>{{list.fkasidname}}</td>                                   
                                     <td>
                                                 <span *ngFor="let category of list.category">{{category.title}}<br/></span>
                                     </td>
                                     <!-- <td *ngFor="let category of list.parentcategory">{{category.title}}</td> -->
                                     <td>
-                                            <button class="btn" (click)="editBlog(list)" title="Edit"><a ng-href="#/blog-view" routerLink="/blog-view/{{list.id}}/edit"><i class="fa fa-pencil"></i></a></button>
-                                            <button class="btn" (click)="viewBlog(list)" title="View"><a ng-href="#/blog-view" routerLink="/blog-view/{{list.id}}/view"><i class="fa fa-eye"></i></a></button>                                        
+                                            <button class="btn" (click)="editBlog(list)" title="Edit"><a class="edtview" ng-href="#/blog-view" routerLink="/blog-view/{{list.id}}/edit"><i class="fa fa-pencil"></i></a></button>
+                                            <button class="btn" (click)="viewBlog(list)" title="View"><a class="edtview" ng-href="#/blog-view" routerLink="/blog-view/{{list.id}}/view"><i class="fa fa-eye"></i></a></button>                                        
                                             <button class="btn" (click)="deleteBlog(list)" title="Delete"><i class="fa fa-trash"></i></button>
                                     </td>                                 
                             </tr>
