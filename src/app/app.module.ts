@@ -15,7 +15,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgxEditorModule } from 'ngx-editor';
 import { CKEditorModule } from 'ng2-ckeditor';
 
-
 // Router and Services
 import { routing } from "./app.routing";
 import { BackendService } from './services/backend.service';
@@ -42,6 +41,7 @@ import { OrdersActionTrayComponent } from './components/orders-action-tray/order
 import { LoaderComponent } from './components/loader/loader.component';
 import { BlogCreateComponent } from './components/blog-create/blog-create.component';
 import { BlogListComponent } from './components/blog-list/blog-list.component';
+import { BlogViewComponent } from './components/blog-view/blog-view.component';
 
 //factories
 import {httpFactory} from "./others/http.factory";
@@ -86,7 +86,8 @@ export function ConfigLoader(envConfig: envConfig) {
     UploadExcelComponent,
     VendorDropdownComponent,
     BlogCreateComponent,
-    BlogListComponent
+    BlogListComponent,
+    BlogViewComponent
   ],
   imports: [
     BrowserModule,
