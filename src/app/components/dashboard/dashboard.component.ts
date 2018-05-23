@@ -54,21 +54,24 @@ export class DashboardComponent implements OnInit {
       ) { }
 
   ngOnInit() {
-    //var _this = this;
+    // var _this = this;
 
-    this.isRowAlert = this.dashboardService.getAlertRow();
-    this.dashboardData = this.dashboardService.getCustomData();
-    this.loadDbData();
-
-    this.dashboardObservable=Observable.interval(1000 * 60 * 1.5)
-        .subscribe(() => {
-            console.log('Dasboard IntervalObservable working !!!')
-            this.loadDbData();
-        });
+    if (environment.userType !== 'blogger') {
+        this.isRowAlert = this.dashboardService.getAlertRow();
+        this.dashboardData = this.dashboardService.getCustomData();
+        this.loadDbData();
+        this.dashboardObservable = Observable.interval(1000 * 60 * 1.5)
+            .subscribe(() => {
+                console.log('Dasboard IntervalObservable working !!!');
+                this.loadDbData();
+            });
+    }
   }
 
-  ngOnDestroy(){
-    this.dashboardObservable.unsubscribe();
+  ngOnDestroy() {
+    if (environment.userType !== 'blogger') {
+        this.dashboardObservable.unsubscribe();
+    }
   }
 
   loadDbData(){

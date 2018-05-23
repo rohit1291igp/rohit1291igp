@@ -3,9 +3,10 @@ import { HomeComponent } from './components/home/home.component';
 import { LoginComponent } from './components/login/login.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { ReportsComponent } from './components/reports/reports.component';
-import {BlogCreateComponent} from './components/blog-create/blog-create.component';
-import {BlogListComponent} from './components/blog-list/blog-list.component';
-import {BlogViewComponent} from './components/blog-view/blog-view.component';
+import { BlogCreateComponent } from './components/blog-create/blog-create.component';
+import { BlogListComponent } from './components/blog-list/blog-list.component';
+import { BlogViewComponent } from './components/blog-view/blog-view.component';
+import { SeoHomeComponent } from './components/seo-home/seo-home.component';
 
 import { AuthGuard } from './services/auth-guard.service';
 
@@ -16,7 +17,8 @@ const route: Routes = [
     { path: 'reports/:type', component: ReportsComponent, canActivate: [AuthGuard] },
     { path: 'blog-create', component: BlogCreateComponent, canActivate: [AuthGuard]},
     { path: 'blog-list', component: BlogListComponent, canActivate: [AuthGuard]},
-    { path: 'blog-view/:id/:type', component: BlogViewComponent, canActivate: [AuthGuard]},    
+    { path: 'blog-view/:id/:type', component: BlogViewComponent, canActivate: [AuthGuard]},
+    { path: 'seo', component: SeoHomeComponent, canActivate: [AuthGuard]},
     // otherwise redirect to home
     { path: '**', redirectTo: 'dashboard' }
 ]
