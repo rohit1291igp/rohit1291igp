@@ -13,5 +13,6 @@ export const environment = {
   s3SecretKey : '7Zd9PVgm8oadxUsY/WB7s4GuYf8rntFIXOnSPcn5',
   blogBucketName : 'blogcreatives',
   igpBlogCDN : 'https://cdn.igp.com/f_auto,q_auto,t_blogimage/blogs/',
-  interfloraBlogCDN : 'https://res.cloudinary.com/interflora/f_auto,q_auto,t_blogimage/blogs/'
+  interfloraBlogCDN : 'https://res.cloudinary.com/interflora/f_auto,q_auto,t_blogimage/blogs/',
+  blogsAcl : 'public-read'
 };
