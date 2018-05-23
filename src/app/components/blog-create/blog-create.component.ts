@@ -104,7 +104,7 @@ export class BlogCreateComponent implements OnInit {
     updateSelectedCategories(type, catData, subCatData, event) {
         catData = catData.toString();
         if (type === 'cat') {
-            if (this.model.category[catData]){
+            if (this.model.category[catData]) {
                 this.selectedCategories[catData] = [];
             } else {
                 this.setOrResetCheckboxes(this.selectedCategories[catData], null);
@@ -153,7 +153,6 @@ export class BlogCreateComponent implements OnInit {
                 imageList.push(element.Key);
             });
         }
-
         return imageList;
     }
 
@@ -254,15 +253,15 @@ export class BlogCreateComponent implements OnInit {
         }
     }
 
-    makeFeaturedImage(imageName){
+    makeFeaturedImage(imageName) {
         this.model.featuredImage = imageName;
     }
 
-    isFeaturedImage(imageName){
+    isFeaturedImage(imageName) {
         return (this.model.featuredImage === imageName) ? true : false;
     }
 
-    renameFile(file){
+    renameFile(file) {
         const name = file.name;
         const nameArray = name.split('.');
         let result = '';

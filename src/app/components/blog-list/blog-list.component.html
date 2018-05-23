@@ -18,6 +18,7 @@
                             <th>Title</th>
                             <th>Store</th>
                             <th>Category</th>
+                            <th>Status</th>
                             <th>Action</th>
                         </thead>
                         <tbody>
@@ -28,11 +29,15 @@
                                     <td>
                                                 <span *ngFor="let category of list.category">{{category.title}}<br/></span>
                                     </td>
+                                    <td *ngIf="list.status == 0">UnPublished</td>
+                                    <td *ngIf="list.status == 1">Published</td>
                                     <!-- <td *ngFor="let category of list.parentcategory">{{category.title}}</td> -->
                                     <td>
                                             <button class="btn" (click)="editBlog(list)" title="Edit"><a class="edtview" ng-href="#/blog-view" routerLink="/blog-view/{{list.id}}/edit"><i class="fa fa-pencil"></i></a></button>
                                             <button class="btn" (click)="viewBlog(list)" title="View"><a class="edtview" ng-href="#/blog-view" routerLink="/blog-view/{{list.id}}/view"><i class="fa fa-eye"></i></a></button>                                        
                                             <button class="btn" (click)="deleteBlog(list)" title="Delete"><i class="fa fa-trash"></i></button>
+                                            <button class="btn" *ngIf="list.status == 0" (click)="publishUnpublishBlog(list)" title="Publish Blog">Publish</button>
+                                            <button class="btn" *ngIf="list.status == 1" (click)="publishUnpublishBlog(list)" title="UnPublish Blog">Unpublish</button>
                                     </td>                                 
                             </tr>
                         </tbody>
