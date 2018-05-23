@@ -31,9 +31,9 @@
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="">Categories</label>
-                                        <button (click)="showCategoryModal(blogList.data)" [ngClass]="{ 'btn-default' : isCategoryEmpty(blogList.data.bloglist[0]), 'btn-primary' : !isCategoryEmpty(blogList.data.bloglist[0])}"  class="btn btn-block" type="button"> <!---->
-                                            <span *ngIf="isCategoryEmpty(blogList.data.bloglist[0])">Select Categories</span>
-                                            <span *ngIf="!isCategoryEmpty(blogList.data.bloglist[0])">Edit Categories</span>
+                                        <button (click)="showCategoryModal(blogList.data)" [ngClass]="{ 'btn-default' : isCategoryEmpty(), 'btn-primary' : !isCategoryEmpty()}"  class="btn btn-block" type="button"> <!---->
+                                            <span *ngIf="isCategoryEmpty()">Select Categories</span>
+                                            <span *ngIf="!isCategoryEmpty()">Edit Categories</span>
                                         </button>
                                     </div>  
                                 </div>
@@ -135,7 +135,11 @@
                             <h3 class="panel-title">Content Editor</h3>
                         </div>
                         <div class="panel-body">
-                                <app-ngx-editor [placeholder]="'Blog Content'" [minHeight]="'250px'" [height]="'auto'" [spellcheck]="true" [(ngModel)]="blogList.data.bloglist[0].description" [ngModelOptions]="{standalone: true}" ></app-ngx-editor>
+                            <ckeditor
+                            [(ngModel)]="blogList.data.bloglist[0].description"
+                            [readonly]="false"
+                            [ngModelOptions]="{standalone: true}"    
+                        ></ckeditor>
                         </div>
                     </div>
 
