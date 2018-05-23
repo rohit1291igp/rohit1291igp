@@ -13,6 +13,7 @@ import { TrimValueAccessorModule } from 'ng-trim-value-accessor';
 import { DatePipe } from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgxEditorModule } from 'ngx-editor';
+import { CKEditorModule } from 'ng2-ckeditor';
 
 // Router and Services
 import { routing } from "./app.routing";
@@ -99,7 +100,8 @@ export function ConfigLoader(envConfig: envConfig) {
     MyDatePickerModule,
     BrowserAnimationsModule,
     TrimValueAccessorModule,
-    NgxEditorModule
+    NgxEditorModule,
+    CKEditorModule
   ],
   providers: [
     {

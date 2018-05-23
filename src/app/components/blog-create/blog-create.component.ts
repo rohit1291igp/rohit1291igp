@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import {environment} from '../../../environments/environment';
+import { environment } from '../../../environments/environment';
 import { NgForm } from '@angular/forms';
 import { BackendService } from '../../services/backend.service';
 import { UtilityService } from '../../services/utility.service';
+import * as AWS from 'aws-sdk/global';
+import * as S3 from 'aws-sdk/clients/s3';
+import { FileUploader } from 'ng2-file-upload';
 
 @Component({
     selector: 'app-blog-create',
@@ -18,6 +21,17 @@ export class BlogCreateComponent implements OnInit {
     public categories = [];
     public selectedCategories: Object = {};
     public uniqueUrl = true;
+    public files = [];
+    public staticImages = [];
+    public env = environment;
+    public isUploading = false;
+
+    public bucket = new S3(
+        {
+            accessKeyId : environment.s3AccessKey,
+            secretAccessKey : environment.s3SecretKey
+        }
+    );
 
     constructor(
         public BackendService: BackendService,
@@ -38,6 +52,7 @@ export class BlogCreateComponent implements OnInit {
         this.model.subcategory = {};
         this.model.featuredImage = '';
         this.model.sortOrder = '';
+        this.model.files = [];
     }
 
     createBlogPost() {
@@ -189,6 +204,74 @@ export class BlogCreateComponent implements OnInit {
             _this.categories = response.data;
         });
     }
+
+    showSelectedImages(event) {
+        if (event.target.files && event.target.files.length > 0) {
+            for (let i = 0; i < event.target.files.length; i++) {
+                const reader = new FileReader();
+                reader.onload = (e: any) => {
+                    const file = {
+                        name : event.target.files[i].name,
+                        image : e.target.result
+                    };
+                    // this.model.files.push(file);
+                };
+                reader.readAsDataURL(event.target.files[i]);
+            }
+        }
+    };
+
+    uploadFiles(event) {
+        const that = this;
+        if (event.target.files.length > 0) {
+            this.isUploading = true;
+            let j = 0;
+            for (let i = 0; i < event.target.files.length; i++) {
+                const file = event.target.files[i];
+                const params: any = {
+                    Bucket : 'blogcreatives',
+                    Key : this.renameFile(file),
+                    ContentType : file.type,
+                    Body : file,
+                    ACL : 'public-read'
+                };
+
+                this.bucket.upload(params, (err, data) => {
+                    j++;
+                    if (err) {
+                        console.log('There was an error uploading your file: ', err);
+                        return false;
+                    } else {
+
+                        if (j === event.target.files.length - 1) {
+                            that.isUploading = false;
+                        }
+                        this.model.files.push(data);
+                    }
+                    console.log(j);
+                });
+            }
+        }
+    }
+
+    makeFeaturedImage(imageName){
+        this.model.featuredImage = imageName;
+    }
+
+    isFeaturedImage(imageName){
+        return (this.model.featuredImage === imageName) ? true : false;
+    }
+
+    renameFile(file){
+        const name = file.name;
+        const nameArray = name.split('.');
+        let result = '';
+        nameArray.splice(nameArray.length - 1, 0, Date.now() + '.');
+        nameArray.map((element) => {
+            result = result + element;
+        });
+        return result;
+    };
 
     saveBlogData(data) {
         console.log(JSON.stringify(data));
