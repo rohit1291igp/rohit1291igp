@@ -129,6 +129,52 @@
                         </div>
                     </div>
 
+                     <!-- WYSIWYG Panel -->
+                     <div class="panel panel-default">
+                        
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Upload and Manage Images</h3>
+                        </div>
+                        
+                        <div class="panel-body">
+                            
+                            <div class="manage-media">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <input class="blog-image-upload" type="file" multiple name="blogImages" (change)="uploadFiles($event)" />
+                                    </div>
+                                </div>
+    
+                                <div class="selected-images" *ngIf="blogList.data.bloglist[0].files.length">
+                                    <div class="row">
+                                        <div class="col-md-12" *ngFor="let image of blogList.data.bloglist[0].files">
+                                            <div class="image-container">
+                                                <div class="row">
+                                                    <div class="col-md-2">
+                                                        <img src="{{image.Location}}" class="image-responsive" />
+                                                    </div>
+                                                    <div class="col-md-10">
+                                                        <p><strong>Name</strong> : {{image.key}}</p>
+                                                        <p><strong>IGP Link</strong> : {{env.igpBlogCDN}}{{image.key}}</p>
+                                                        <p><strong>Interflora Link</strong> : {{env.interfloraBlogCDN}}{{image.key}}</p>
+                                                        <button (click)="makeFeaturedImage(image.key)" [ngClass]="{ 'btn-success' : isFeaturedImage(image.key), 'btn-default' : !isFeaturedImage(image.key)}"  class="btn btn-default" type="button">
+                                                            <span *ngIf="!isFeaturedImage(image.key)">Make Featured Image</span>
+                                                            <span *ngIf="isFeaturedImage(image.key)">Featured</span>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <br/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="media-loading-screen" *ngIf="isUploading">
+                                    <h3>Uploading Images..</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- WYSIWYG Panel -->
                     <div class="panel panel-default">
                         <div class="panel-heading">

@@ -48,15 +48,15 @@ export class BlogListComponent implements OnInit {
 
     }
 
-    deleteBlog(list){
+    deleteBlog(list) {
         const _this = this;
         const reqObj = {
             url: `blogs/deleteblog?id=${list.id}`,
             method: 'delete'
         };
-        if(confirm(`Are you sure do you want to delete post ${list.title}?`)){
+        if (confirm(`Are you sure do you want to delete post ${list.title}?`)) {
 
-        _this.BackendService.makeAjax(reqObj, function(err, response, headers){
+        _this.BackendService.makeAjax(reqObj, function(err, response, headers) {
             if (err || response.error) {
                 console.log('Error=============>', err, response.errorCode);
                 return false;
@@ -68,22 +68,22 @@ export class BlogListComponent implements OnInit {
             return false;
         }
     }
-    getCategories(list){
+    getCategories(list) {
         list.forEach(element => {
             return element.title;
         });
     }
-    editBlog(list){
+    editBlog(list) {
         const _this = this;
        // alert('Inside Edit Blog');
 
     }
-    saveBlog(list){
+    saveBlog(list) {
         const _this = this;
         _this.saveBlogDetails = {
-            title:list.title,
-            id:list.id,
-            store:'IGP',
+            title: list.title,
+            id: list.id,
+            store: 'IGP',
             category: {
                 title: _this.getCategories(list.category)
             }
@@ -115,5 +115,29 @@ export class BlogListComponent implements OnInit {
                 title: _this.getCategories(list.category)
             }
         };
-    }
+    };
+
+    // Publish and Unpublish Blog
+    publishUnpublishBlog(list) {
+        const _this = this;
+        let status = 1;
+        if (list.status === 1) {
+            status = 0;
+        } else {
+            status = 0;
+        }
+        const reqObj = {
+            url: `blogs/updateblogstatus?id=${list.id}&status=${status}`, // replace this with the endpoint for fetching blog list
+            method: 'put',
+        };
+
+        _this.BackendService.makeAjax(reqObj, function(err, response, headers){
+            if (err || response.error) {
+                console.log('Error=============>', err, response.errorCode);
+            }
+            alert(`The article has been Published`);
+            window.location.reload();
+        });
+
+    };
 }

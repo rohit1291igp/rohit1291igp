@@ -1,6 +1,10 @@
 import { Component, OnInit, AfterViewInit, Input, ViewChild } from '@angular/core';
+import { environment } from '../../../environments/environment';
 import { BackendService } from '../../services/backend.service';
 import { UtilityService } from '../../services/utility.service';
+import * as AWS from 'aws-sdk/global';
+import * as S3 from 'aws-sdk/clients/s3';
+import { FileUploader } from 'ng2-file-upload';
 
 @Component({
   selector: 'app-blog-view',
@@ -20,6 +24,17 @@ export class BlogViewComponent implements OnInit, AfterViewInit {
     public cat = {};
     public subcat = {};
     public selectedCategories: Object = {};
+    public files = [];
+    public staticImages = [];
+    public env = environment;
+    public isUploading = false;
+
+    public bucket = new S3(
+      {
+          accessKeyId : environment.s3AccessKey,
+          secretAccessKey : environment.s3SecretKey
+      }
+    );
 
     constructor(
       public BackendService: BackendService,
@@ -32,7 +47,7 @@ export class BlogViewComponent implements OnInit, AfterViewInit {
 
     // After View Initialized
     ngAfterViewInit() {
-    if (this.type === 'view'){
+    if (this.type === 'view') {
         setTimeout(() => {
           $('#target :input').prop('disabled', true);
         }, 1000);
@@ -64,11 +79,13 @@ export class BlogViewComponent implements OnInit, AfterViewInit {
             _this.showGrid = true;
             _this.blogList.data.bloglist[0].cat = {};
             _this.blogList.data.bloglist[0].subcat = {};
-            if (_this.blogList.data.bloglist[0].category){
+            _this.blogList.data.bloglist[0].files = [];
+            _this.blogList.data.bloglist[0].featuredImage = '';
+            if (_this.blogList.data.bloglist[0].category) {
               _this.blogList.data.bloglist[0].category.forEach(element => {
                 _this.blogList.data.bloglist[0].cat[element.id] = true;
                 _this.selectedCategories[element.id] = [];
-                  if (element.subcategory){
+                  if (element.subcategory) {
                   element.subcategory.forEach(el => {
                     _this.blogList.data.bloglist[0].subcat[el.id] = true;
                     _this.selectedCategories[element.id] = [].push(el.id);
@@ -147,7 +164,7 @@ export class BlogViewComponent implements OnInit, AfterViewInit {
     updateSelectedCategories(type, catData, subCatData, event) {
       catData = catData.toString();
       if (type === 'cat') {
-          if (this.blogList.data.bloglist[0].cat[catData]){
+          if (this.blogList.data.bloglist[0].cat[catData]) {
             this.selectedCategories[catData] = [];
           } else {
               this.setOrResetCheckboxes(this.selectedCategories[catData], null);
@@ -210,7 +227,7 @@ export class BlogViewComponent implements OnInit, AfterViewInit {
     };
 
     // Delete blog Btn
-    deleteBlog(){
+    deleteBlog() {
       const _this = this;
       const splitURL = window.location.href.split('/');
       const id = splitURL[splitURL.length - 2];
@@ -218,7 +235,7 @@ export class BlogViewComponent implements OnInit, AfterViewInit {
           url: `blogs/deleteblog?id=${id}`,
           method: 'delete'
       };
-        if (confirm(`Are you sure do you want to delete post?`)){
+        if (confirm(`Are you sure do you want to delete post?`)) {
           _this.BackendService.makeAjax(reqObj, function(err, response, headers){
               if (err || response.error) {
                   console.log('Error=============>', err, response.errorCode);
@@ -298,4 +315,57 @@ export class BlogViewComponent implements OnInit, AfterViewInit {
           window.location.reload();
       });
     };
+
+    // Upload Images
+    uploadFiles(event) {
+      const that = this;
+      if (event.target.files.length > 0) {
+          this.isUploading = true;
+          let j = 0;
+          for (let i = 0; i < event.target.files.length; i++) {
+              const file = event.target.files[i];
+              const params: any = {
+                  Bucket : 'blogcreatives',
+                  Key : this.renameFile(file),
+                  ContentType : file.type,
+                  Body : file,
+                  ACL : 'public-read'
+              };
+
+              this.bucket.upload(params, (err, data) => {
+                  j++;
+                  if (err) {
+                      console.log('There was an error uploading your file: ', err);
+                      return false;
+                  } else {
+
+                      if (j === event.target.files.length - 1) {
+                          that.isUploading = false;
+                      }
+                      this.blogList.data.bloglist[0].files.push(data);
+                  }
+                  console.log(j);
+              });
+          }
+      }
+  }
+
+  makeFeaturedImage(imageName) {
+    this.blogList.data.bloglist[0].featuredImage = imageName;
+  }
+
+  isFeaturedImage(imageName) {
+      return (this.blogList.data.bloglist[0].featuredImage === imageName) ? true : false;
+  }
+
+  renameFile(file) {
+    const name = file.name;
+    const nameArray = name.split('.');
+    let result = '';
+    nameArray.splice(nameArray.length - 1, 0, Date.now() + '.');
+    nameArray.map((element) => {
+        result = result + element;
+    });
+    return result;
+  };
 }
