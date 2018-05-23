@@ -185,3 +185,11 @@
 .leftSperator{
     border-left:3px solid #fff;
 }
+
+.container-fluid p.well-icon{
+    font-size: 2.5rem;
+}
+
+.title-well{
+    letter-spacing: 1px;
+}

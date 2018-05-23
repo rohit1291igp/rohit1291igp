@@ -53,7 +53,7 @@ export class BlogCreateComponent implements OnInit {
         this.model.category = {};
         this.model.subcategory = {};
         this.model.featuredImage = '';
-        this.model.sortOrder = '';
+        this.model.sortOrder = 10000;
         this.model.files = [];
     }
 

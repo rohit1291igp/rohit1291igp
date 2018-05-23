@@ -43,6 +43,7 @@ import { LoaderComponent } from './components/loader/loader.component';
 import { BlogCreateComponent } from './components/blog-create/blog-create.component';
 import { BlogListComponent } from './components/blog-list/blog-list.component';
 import { BlogViewComponent } from './components/blog-view/blog-view.component';
+import { SeoHomeComponent } from './components/seo-home/seo-home.component';
 
 //factories
 import {httpFactory} from "./others/http.factory";
@@ -88,7 +89,8 @@ export function ConfigLoader(envConfig: envConfig) {
     VendorDropdownComponent,
     BlogCreateComponent,
     BlogListComponent,
-    BlogViewComponent
+    BlogViewComponent,
+    SeoHomeComponent
   ],
   imports: [
     BrowserModule,

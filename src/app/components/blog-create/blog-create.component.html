@@ -48,7 +48,7 @@
                                 <div class="col-md-3">
                                     <div class="form-group" [ngClass]="{ 'has-error': createBlog.submitted && !sortOrder.valid }">
                                         <label for="">Sort Order</label>
-                                        <input type="text" class="form-control" name="sortOrder" [(ngModel)]="model.sortOrder" #sortOrder="ngModel" value="-1" placeholder="Sort Order" required />
+                                        <input type="text" class="form-control" name="sortOrder" [(ngModel)]="model.sortOrder" #sortOrder="ngModel" placeholder="Sort Order" required  />
                                     </div>
                                 </div>
                             </div>
@@ -82,7 +82,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group" [ngClass]="{ 'has-error': createBlog.submitted && !featuredImage.valid }">
                                         <label for="">Featured Image</label>
-                                        <input type="text" class="form-control" name="featuredImage" [(ngModel)]="model.featuredImage" #featuredImage="ngModel" placeholder="Featured Image URL" required  />
+                                        <input type="text" class="form-control" name="featuredImage" [(ngModel)]="model.featuredImage" #featuredImage="ngModel" placeholder="Featured Image URL" required readonly="readonly" disabled="disabled" />
                                     </div>
                                 </div>
                             </div>
