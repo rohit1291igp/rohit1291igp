@@ -140,12 +140,12 @@
                             
                             <div class="manage-media">
                                 <div class="row">
-                                    <div class="col-md-12">
+                                    <div *ngIf="type == 'edit'" class="col-md-12">
                                         <input class="blog-image-upload" type="file" multiple name="blogImages" (change)="uploadFiles($event)" />
                                     </div>
                                 </div>
     
-                                <div class="selected-images" *ngIf="blogList.data.bloglist[0].files.length">
+                                <div class="selected-images" *ngIf="blogList.data.bloglist[0].files.length;else no_images">
                                     <div class="row">
                                         <div class="col-md-12" *ngFor="let image of blogList.data.bloglist[0].files">
                                             <div class="image-container">
@@ -167,6 +167,9 @@
                                             <br/>
                                         </div>
                                     </div>
+                                </div>
+                                <div>
+                                    <ng-template #no_images style="text-align: center;">No Images is uploaded...</ng-template>
                                 </div>
                                 <div class="media-loading-screen" *ngIf="isUploading">
                                     <h3>Uploading Images..</h3>

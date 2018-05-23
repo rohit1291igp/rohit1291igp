@@ -37,7 +37,7 @@
                                             <button class="btn" (click)="viewBlog(list)" title="View"><a class="edtview" ng-href="#/blog-view" routerLink="/blog-view/{{list.id}}/view"><i class="fa fa-eye"></i></a></button>                                        
                                             <button class="btn" (click)="deleteBlog(list)" title="Delete"><i class="fa fa-trash"></i></button>
                                             <button class="btn" *ngIf="list.status == 0" (click)="publishUnpublishBlog(list)" title="Publish Blog">Publish</button>
-                                            <button class="btn" *ngIf="list.status == 1" (click)="publishUnpublishBlog(list)" title="UnPublish Blog">UnPublish</button>
+                                            <button class="btn" *ngIf="list.status == 1" (click)="publishUnpublishBlog(list)" title="UnPublish Blog">Unpublish</button>
                                     </td>                                 
                             </tr>
                         </tbody>

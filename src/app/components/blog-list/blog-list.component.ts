@@ -123,8 +123,8 @@ export class BlogListComponent implements OnInit {
         let status = 1;
         if (list.status === 1) {
             status = 0;
-        } else {
-            status = 0;
+        } else if (list.status === 0) {
+            status = 1;
         }
         const reqObj = {
             url: `blogs/updateblogstatus?id=${list.id}&status=${status}`, // replace this with the endpoint for fetching blog list

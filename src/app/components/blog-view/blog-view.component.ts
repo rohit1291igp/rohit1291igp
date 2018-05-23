@@ -5,6 +5,7 @@ import { UtilityService } from '../../services/utility.service';
 import * as AWS from 'aws-sdk/global';
 import * as S3 from 'aws-sdk/clients/s3';
 import { FileUploader } from 'ng2-file-upload';
+import { S3UploadService } from '../../services/s3Upload.service';
 
 @Component({
   selector: 'app-blog-view',
@@ -28,7 +29,8 @@ export class BlogViewComponent implements OnInit, AfterViewInit {
     public staticImages = [];
     public env = environment;
     public isUploading = false;
-
+    public path = 'https://blogcreatives.s3.amazonaws.com/Aloevera2.jpeg';
+    public priviousvURL;
     public bucket = new S3(
       {
           accessKeyId : environment.s3AccessKey,
@@ -38,7 +40,8 @@ export class BlogViewComponent implements OnInit, AfterViewInit {
 
     constructor(
       public BackendService: BackendService,
-      public UtilityService: UtilityService
+      public UtilityService: UtilityService,
+      public S3UploadService: S3UploadService
     ) { }
 
     ngOnInit() {
@@ -77,25 +80,37 @@ export class BlogViewComponent implements OnInit, AfterViewInit {
               // assign value from the response to the blogList property
             _this.blogList = response;
             _this.showGrid = true;
-            _this.blogList.data.bloglist[0].cat = {};
-            _this.blogList.data.bloglist[0].subcat = {};
-            _this.blogList.data.bloglist[0].files = [];
-            _this.blogList.data.bloglist[0].featuredImage = '';
-            if (_this.blogList.data.bloglist[0].category) {
-              _this.blogList.data.bloglist[0].category.forEach(element => {
-                _this.blogList.data.bloglist[0].cat[element.id] = true;
+            const modal = _this.blogList.data.bloglist[0];
+            modal.cat = {};
+            modal.subcat = {};
+            modal.files = [];
+            modal.featuredImage = '';
+            _this.priviousvURL = modal.url;
+            if (modal.category) {
+              modal.category.forEach(element => {
+                modal.cat[element.id] = true;
                 _this.selectedCategories[element.id] = [];
                   if (element.subcategory) {
                   element.subcategory.forEach(el => {
-                    _this.blogList.data.bloglist[0].subcat[el.id] = true;
+                    modal.subcat[el.id] = true;
                     _this.selectedCategories[element.id] = [].push(el.id);
                   });
                 }
               });
             }
-            console.log(_this.blogList.data.bloglist[0].cat);
+            if (modal.imageurllist) {
+              modal.imageurllist.forEach(element => {
+                const temp = {
+                  'Location': _this.path + element,
+                  'Key' : element,
+                  'key': element
+                };
+                modal.files.push(temp);
+              });
+            }
+            console.log(modal.cat);
             const reqObj = {
-              url: 'categories/categorylist?fkAssociateId=' + _this.blogList.data.bloglist[0].fkasid,
+              url: 'categories/categorylist?fkAssociateId=' + modal.fkasid,
               method: 'get'
               };
             _this.BackendService.makeAjax(reqObj, function(err, response, headers){
@@ -113,6 +128,7 @@ export class BlogViewComponent implements OnInit, AfterViewInit {
       const _this = this;
       _this.disableEditButton = 'hidden';
       _this.cnlBtnVisibility = 'visible';
+      _this.type = 'edit';
       $('#target :input').prop('disabled', false);
     };
 
@@ -121,6 +137,7 @@ export class BlogViewComponent implements OnInit, AfterViewInit {
       const _this = this;
       _this.disableEditButton = 'visible';
       _this.cnlBtnVisibility = 'hidden';
+      _this.type = 'view';
       $('#target :input').prop('disabled', true);
     };
 
@@ -210,6 +227,7 @@ export class BlogViewComponent implements OnInit, AfterViewInit {
     };
 
     checkUniqueUrlValue(data) {
+      if (this.priviousvURL !== data.url) {
       const _this = this;
       const reqObj = {
           url: 'blogs/validateblogurl?url=' + data.url + '&fkAssociateId=' + data.fkasid,
@@ -224,6 +242,7 @@ export class BlogViewComponent implements OnInit, AfterViewInit {
               _this.uniqueUrl = true;
           }
       });
+    }
     };
 
     // Delete blog Btn
@@ -268,6 +287,7 @@ export class BlogViewComponent implements OnInit, AfterViewInit {
         data['sortorder'] = detail.bloglist[0].sortorder;
         data['user'] = localStorage.getItem('associateName');
         data['categories'] =   this.selectedCategories;
+        data['imageurllist'] = this.getImageUrlList();
         if (this.validateModel(data)) {
             this.saveBlogData(data);
         }
@@ -276,6 +296,17 @@ export class BlogViewComponent implements OnInit, AfterViewInit {
     replaceNonAscii(value) {
       return value.replace(/[^\x00-\x7F]/g, '');
     };
+
+    getImageUrlList() {
+      const imageList = [];
+      if (this.blogList.data.bloglist[0].files.length > 0) {
+          this.blogList.data.bloglist[0].files.forEach(element => {
+              imageList.push(element.Key);
+          });
+      }
+      console.log(imageList);
+      return imageList;
+   }
 
     validateModel(data) {
       if (!(Object.keys(data['categories']).length) && !(Object.keys(this.blogList.data.bloglist[0].subcat).length)) {  //
@@ -297,7 +328,6 @@ export class BlogViewComponent implements OnInit, AfterViewInit {
     };
 
     saveBlogData(data) {
-      console.log(JSON.stringify(data));
       const _this = this;
       const reqObj = {
           url: 'blogs/updateblog',
@@ -324,27 +354,17 @@ export class BlogViewComponent implements OnInit, AfterViewInit {
           let j = 0;
           for (let i = 0; i < event.target.files.length; i++) {
               const file = event.target.files[i];
-              const params: any = {
-                  Bucket : 'blogcreatives',
-                  Key : this.renameFile(file),
-                  ContentType : file.type,
-                  Body : file,
-                  ACL : 'public-read'
-              };
-
-              this.bucket.upload(params, (err, data) => {
+              this.S3UploadService.uploadImageToS3(file, environment.blogBucketName, environment.blogsAcl, true, (err, data) => {
                   j++;
+                  if (j === event.target.files.length) {
+                      that.isUploading = false;
+                  }
                   if (err) {
                       console.log('There was an error uploading your file: ', err);
                       return false;
                   } else {
-
-                      if (j === event.target.files.length - 1) {
-                          that.isUploading = false;
-                      }
                       this.blogList.data.bloglist[0].files.push(data);
                   }
-                  console.log(j);
               });
           }
       }
