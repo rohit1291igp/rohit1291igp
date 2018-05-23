@@ -274,6 +274,7 @@ export class BlogCreateComponent implements OnInit {
     };
 
     saveBlogData(data) {
+        console.log(JSON.stringify(data));
         const _this = this;
         const reqObj = {
             url: 'blogs/createblog',
