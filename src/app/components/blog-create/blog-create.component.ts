@@ -6,6 +6,7 @@ import { UtilityService } from '../../services/utility.service';
 import * as AWS from 'aws-sdk/global';
 import * as S3 from 'aws-sdk/clients/s3';
 import { FileUploader } from 'ng2-file-upload';
+import { S3UploadService } from '../../services/s3Upload.service';
 
 @Component({
     selector: 'app-blog-create',
@@ -35,7 +36,8 @@ export class BlogCreateComponent implements OnInit {
 
     constructor(
         public BackendService: BackendService,
-        public UtilityService: UtilityService
+        public UtilityService: UtilityService,
+        public S3UploadService: S3UploadService
     ) {}
 
     ngOnInit() {
@@ -72,6 +74,7 @@ export class BlogCreateComponent implements OnInit {
         data['sortorder'] = this.model.sortOrder;
         data['user'] = localStorage.getItem('associateName');
         data['categories'] = this.selectedCategories;
+        data['imageurllist'] = this.getImageUrlList();
         console.log(data);
         if (this.validateModel()) {
             this.saveBlogData(data);
@@ -143,14 +146,22 @@ export class BlogCreateComponent implements OnInit {
         }
     }
 
+    getImageUrlList() {
+        const imageList = [];
+        if (this.model.files.length > 0) {
+            this.model.files.forEach(element => {
+                imageList.push(element.Key);
+            });
+        }
+
+        return imageList;
+    }
+
     validateModel() {
         if (!(Object.keys(this.model.category).length) && !(Object.keys(this.model.subcategory).length)) {
             alert('Please select the Category and Subcategory for the article.');
             return false;
         }
-
-        console.log(this.model.description);
-        console.log(typeof(this.model.description));
 
         if (this.model.description === '' || typeof(this.model.description) === 'undefined') {
             alert('Please enter the main content for the article.');
@@ -214,7 +225,6 @@ export class BlogCreateComponent implements OnInit {
                         name : event.target.files[i].name,
                         image : e.target.result
                     };
-                    // this.model.files.push(file);
                 };
                 reader.readAsDataURL(event.target.files[i]);
             }
@@ -228,27 +238,17 @@ export class BlogCreateComponent implements OnInit {
             let j = 0;
             for (let i = 0; i < event.target.files.length; i++) {
                 const file = event.target.files[i];
-                const params: any = {
-                    Bucket : 'blogcreatives',
-                    Key : this.renameFile(file),
-                    ContentType : file.type,
-                    Body : file,
-                    ACL : 'public-read'
-                };
-
-                this.bucket.upload(params, (err, data) => {
+                this.S3UploadService.uploadImageToS3(file, environment.blogBucketName, environment.blogsAcl, true, (err, data) => {
                     j++;
+                    if (j === event.target.files.length) {
+                        that.isUploading = false;
+                    }
                     if (err) {
                         console.log('There was an error uploading your file: ', err);
                         return false;
                     } else {
-
-                        if (j === event.target.files.length - 1) {
-                            that.isUploading = false;
-                        }
                         this.model.files.push(data);
                     }
-                    console.log(j);
                 });
             }
         }
@@ -274,7 +274,6 @@ export class BlogCreateComponent implements OnInit {
     };
 
     saveBlogData(data) {
-        console.log(JSON.stringify(data));
         const _this = this;
         const reqObj = {
             url: 'blogs/createblog',

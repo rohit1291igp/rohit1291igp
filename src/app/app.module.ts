@@ -25,6 +25,7 @@ import { AuthGuard } from './services/auth-guard.service';
 import { UserService } from './services/user.service';
 import { DashboardService } from './services/dashboard.service';
 import { ReportsService } from './services/reports.service';
+import { S3UploadService } from './services/s3Upload.service';
 
 // Components
 import { AppComponent } from './components/app.component';
@@ -129,8 +130,8 @@ export function ConfigLoader(envConfig: envConfig) {
     DatePipe,
     Time12Pipe,
     ReplacePipe,
-    ObjectKeyValuePipe
-
+    ObjectKeyValuePipe,
+    S3UploadService
   ],
   entryComponents:[UploadExcelComponent],
   bootstrap: [AppComponent]
