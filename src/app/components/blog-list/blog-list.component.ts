@@ -16,7 +16,7 @@ export class BlogListComponent implements OnInit {
     public editBlogDetails = {};
     public viewBlogDeatils = {};
     public saveBlogDetails = {};
-    
+
     constructor(
         public BackendService: BackendService,
         public UtilityService: UtilityService
@@ -43,32 +43,30 @@ export class BlogListComponent implements OnInit {
             // assign value from the response to the blogList property
            _this.blogList = response;
            _this.showGrid = true;
-           //console.log(this.blogList);
+           // console.log(this.blogList);
         });
-       
+
     }
 
     deleteBlog(list){
         const _this = this;
         const reqObj = {
-            url: `blogs/deleteblog?id=${list.id}`, 
+            url: `blogs/deleteblog?id=${list.id}`,
             method: 'delete'
         };
         if(confirm(`Are you sure do you want to delete post ${list.title}?`)){
-        
+
         _this.BackendService.makeAjax(reqObj, function(err, response, headers){
             if (err || response.error) {
                 console.log('Error=============>', err, response.errorCode);
                 return false;
             }
             alert(`The article has been deleted`);
-            window.location.reload();            
+            window.location.reload();
         });
-    }
-    else{
-        return false;
-    }
-
+        }else {
+            return false;
+        }
     }
     getCategories(list){
         list.forEach(element => {
@@ -78,7 +76,7 @@ export class BlogListComponent implements OnInit {
     editBlog(list){
         const _this = this;
        // alert('Inside Edit Blog');
-        
+
     }
     saveBlog(list){
         const _this = this;
@@ -86,10 +84,10 @@ export class BlogListComponent implements OnInit {
             title:list.title,
             id:list.id,
             store:'IGP',
-            category:{
-                title:_this.getCategories(list.category)
+            category: {
+                title: _this.getCategories(list.category)
             }
-        }
+        };
         const reqObj = {
             url: 'blogs/updateblog', // replace this with the endpoint for fetching blog list
             method: 'put',
@@ -103,21 +101,19 @@ export class BlogListComponent implements OnInit {
             // assign value from the response to the blogList property
            _this.blogList = response;
            _this.showGrid = true;
-           //console.log(this.blogList);
+           // console.log(this.blogList);
         });
     }
-    viewBlog(list){
+
+    viewBlog(list) {
         const _this = this;
         _this.viewBlogDeatils = {
-            title:list.title,
-            id:list.id,
-            store:'IGP',
-            category:{
-                title:_this.getCategories(list.category)
+            title: list.title,
+            id: list.id,
+            store: 'IGP',
+            category: {
+                title: _this.getCategories(list.category)
             }
-        }
-        
+        };
     }
-    
-    
 }
