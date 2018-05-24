@@ -15,12 +15,13 @@ export class SeoHomeComponent implements OnInit {
     ) {}
 
     ngOnInit() {
-        // logic for getting the initial data. If data is available, then bind it to the model
         this.model.webstore = '';
         this.model.title = '';
         this.model.metaTitle = '';
         this.model.metaDesc = '';
         this.model.keywords = '';
+        this.model.status = '';
+        this.model.id = '';
     }
 
     saveSeoData() {
@@ -29,10 +30,9 @@ export class SeoHomeComponent implements OnInit {
         data['seotitle'] = this.model.title;
         data['seodescription'] = this.model.metaDesc;
         data['seokeywords'] = this.model.metaKeywords;
+        data['status'] = this.model.status;
+        data['id'] = this.model.id;
 
-        console.log(data);
-
-        // get the endpoint from API team, code the logic for saving data and refreshing the page
         const _this = this;
         const reqObj = {
             url: 'blogs/updatemetahome',
@@ -56,11 +56,12 @@ export class SeoHomeComponent implements OnInit {
             this.model.metaTitle = data.seotitle;
             this.model.metaKeywords = data.seokeywords;
             this.model.metaDesc = data.seodescription;
+            this.model.id = data.id;
+            this.model.status = data.status;
         });
     }
 
     getSeoData(cb) {
-        // get the endpoint from API team, code the logic for fetching data
         const _this = this;
         const fkasid = this.model.webstore;
         const reqObj = {
