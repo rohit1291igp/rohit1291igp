@@ -14,16 +14,27 @@
                 <div class="panel-body">
                     <form #seoDataForm="ngForm" (ngSubmit)="seoDataForm.form.valid" novalidate="novalidate">
                         <div class="row">
-                            <div class="col-md-4">
+                            <div class="col-md-6">
                                 <div class="form-group" [ngClass]="{ 'has-error': seoDataForm.submitted && !webstore.valid }">
                                     <label for="">Webstore</label>
-                                    <select class="form-control" name="webstore" #webstore="ngModel" [(ngModel)]="model.webstore" required>
+                                    <select class="form-control" name="webstore" #webstore="ngModel" [(ngModel)]="model.webstore" (change)="getMetaDataOnStoreChange()" required>
                                         <option value="">Select Webstore</option>
                                         <option value="5">IGP</option>
                                         <option value="830">Interflora</option>
                                     </select>
                                 </div>
                             </div>
+                            <div class="col-md-6">
+                                <div class="form-group" [ngClass]="{ 'has-error': seoDataForm.submitted && !status.valid }">
+                                    <label for="">Webstore</label>
+                                    <select class="form-control" name="status" #status="ngModel" [(ngModel)]="model.status" required>
+                                        <option value="">Select Store Status</option>
+                                        <option value="0">Disabled</option>
+                                        <option value="1">Enabled</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <input type="hidden" [(ngModel)]="model.id" #id="ngModel" name="id" />
                         </div>
 
                         <div class="row">
