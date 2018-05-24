@@ -56,6 +56,7 @@ import { WidgetsComponent } from './components/widgets/widgets.component';
 import { FeedsComponent } from './components/feeds/feeds.component';
 import { UploadExcelComponent } from './components/upload-excel/upload-excel.component';
 import { VendorDropdownComponent } from './components/vendor-dropdown/vendor-dropdown.component';
+import { CategoryComponent } from './components/category/category.component';
 
 //env config
 /*import {envConfig} from "./others/env.config";
@@ -90,7 +91,8 @@ export function ConfigLoader(envConfig: envConfig) {
     BlogCreateComponent,
     BlogListComponent,
     BlogViewComponent,
-    SeoHomeComponent
+    SeoHomeComponent,
+    CategoryComponent
   ],
   imports: [
     BrowserModule,

@@ -29,7 +29,7 @@ export class BlogViewComponent implements OnInit, AfterViewInit {
     public staticImages = [];
     public env = environment;
     public isUploading = false;
-    public path = 'https://blogcreatives.s3.amazonaws.com/Aloevera2.jpeg';
+    public path = 'https://blogcreatives.s3.amazonaws.com/';
     public priviousvURL;
     public bucket = new S3(
       {
@@ -86,6 +86,7 @@ export class BlogViewComponent implements OnInit, AfterViewInit {
             modal.files = [];
             modal.featuredImage = '';
             _this.priviousvURL = modal.url;
+            // Setting Cat and Sub cat values to TRUE
             if (modal.category) {
               modal.category.forEach(element => {
                 modal.cat[element.id] = true;
@@ -93,12 +94,13 @@ export class BlogViewComponent implements OnInit, AfterViewInit {
                   if (element.subcategory) {
                   element.subcategory.forEach(el => {
                     modal.subcat[el.id] = true;
-                    _this.selectedCategories[element.id] = [].push(el.id);
+                    _this.selectedCategories[element.id].push(el.id);
                   });
                 }
               });
             }
-            if (modal.imageurllist) {
+            // Getting Saved Images
+            if (modal.imageurllist && modal.imageurllist.length > 0) {
               modal.imageurllist.forEach(element => {
                 const temp = {
                   'Location': _this.path + element,
@@ -108,7 +110,7 @@ export class BlogViewComponent implements OnInit, AfterViewInit {
                 modal.files.push(temp);
               });
             }
-            console.log(modal.cat);
+
             const reqObj = {
               url: 'categories/categorylist?fkAssociateId=' + modal.fkasid,
               method: 'get'
@@ -145,6 +147,7 @@ export class BlogViewComponent implements OnInit, AfterViewInit {
     showCategoryModal(data) {
       if (data.bloglist[0].fkasid) {
           this.showCategoryModalFlag = true;
+          console.log(this.categories);
           if (!this.categories.length) {
               this.getCategoryData(data);
           }
@@ -328,6 +331,7 @@ export class BlogViewComponent implements OnInit, AfterViewInit {
     };
 
     saveBlogData(data) {
+      // console.log(JSON.stringify(data));
       const _this = this;
       const reqObj = {
           url: 'blogs/updateblog',

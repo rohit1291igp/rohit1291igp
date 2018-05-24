@@ -7,6 +7,7 @@ import { BlogCreateComponent } from './components/blog-create/blog-create.compon
 import { BlogListComponent } from './components/blog-list/blog-list.component';
 import { BlogViewComponent } from './components/blog-view/blog-view.component';
 import { SeoHomeComponent } from './components/seo-home/seo-home.component';
+import { CategoryComponent } from './components/category/category.component';
 
 import { AuthGuard } from './services/auth-guard.service';
 
@@ -19,8 +20,9 @@ const route: Routes = [
     { path: 'blog-list', component: BlogListComponent, canActivate: [AuthGuard]},
     { path: 'blog-view/:id/:type', component: BlogViewComponent, canActivate: [AuthGuard]},
     { path: 'seo', component: SeoHomeComponent, canActivate: [AuthGuard]},
+    { path: 'categories', component: CategoryComponent, canActivate: [AuthGuard]},
     // otherwise redirect to home
     { path: '**', redirectTo: 'dashboard' }
-]
+];
 
 export const routing = RouterModule.forRoot(route, { useHash: true });

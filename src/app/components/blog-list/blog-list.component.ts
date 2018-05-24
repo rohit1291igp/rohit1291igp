@@ -135,7 +135,11 @@ export class BlogListComponent implements OnInit {
             if (err || response.error) {
                 console.log('Error=============>', err, response.errorCode);
             }
+            if (list.status === 0) {
             alert(`The article has been Published`);
+            } else if (list.status === 1) {
+                alert(`The article has been Unpublished`);
+            }
             window.location.reload();
         });
 
