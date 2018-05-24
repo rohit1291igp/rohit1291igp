@@ -28,18 +28,27 @@
                       <div class="row">
                         <div class="col-md-6">
                             <div class="form-group" [ngClass]="{ 'has-error': catDataForm.submitted }">
-                                <label for="">Categories</label>
-                                <div  *ngFor="let cat of categories" class="accordion" id="accordionEx" role="tablist" aria-multiselectable="true">
-                                    <div class="card">
-                                      {{cat.title}}
+                                <!-- <label for="">Categories</label> -->
+                                <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                                    <div *ngFor="let cat of categories" class="panel panel-default">
+                                      <div class="panel-heading" role="tab" id="headingOne" data-toggle="collapseOne" data-parent="#accordion" data-target="#collapseOne">
+                                        <h4 class="panel-title" >
+                                          <a role="button" aria-expanded="true" aria-controls="collapseOne" class="accordion-toggle">
+                                              {{cat.title}}
+                                          </a>
+                                        </h4>
+                                      </div>
+                                      <div *ngFor="let sc of cat.subcategory" id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                                        <div class="panel-body">
+                                            {{sc.title}}
+                                        </div>
                                     </div>
-                                    <div *ngFor="let sc of cat.subcategory" >
-                                          {{sc.title}}
                                     </div>
                                 </div>
                             </div>
                         </div>
                       </div>
+                      
                   </form>
               </div>
           </div>
