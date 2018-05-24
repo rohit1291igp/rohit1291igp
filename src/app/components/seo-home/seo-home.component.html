@@ -17,7 +17,7 @@
                             <div class="col-md-4">
                                 <div class="form-group" [ngClass]="{ 'has-error': seoDataForm.submitted && !webstore.valid }">
                                     <label for="">Webstore</label>
-                                    <select class="form-control" name="webstore" #webstore="ngModel" [(ngModel)]="model.webstore" required>
+                                    <select class="form-control" name="webstore" #webstore="ngModel" [(ngModel)]="model.webstore" (change)="getMetaDataOnStoreChange()" required>
                                         <option value="">Select Webstore</option>
                                         <option value="5">IGP</option>
                                         <option value="830">Interflora</option>
