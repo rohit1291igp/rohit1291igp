@@ -1,0 +1,48 @@
+<div class="container-fluid">
+  <div class="row">
+      <div class="col-md-12">
+          <h3>Categories Content</h3>
+      </div>
+  </div>
+  
+  <div class="row">
+      <div class="col-md-12">
+          <div class="panel panel-default">
+              <div class="panel-heading">
+                  <h3 class="panel-title">Categories for Blogs Home Page</h3>
+              </div>
+              <div class="panel-body">
+                  <form #catDataForm="ngForm" (ngSubmit)="catDataForm.form.valid" novalidate="novalidate">
+                      <div class="row">
+                          <div class="col-md-6">
+                              <div class="form-group" [ngClass]="{ 'has-error': catDataForm.submitted && !webstore.valid }">
+                                  <label for="">Webstore</label>
+                                  <select class="form-control" name="webstore" #webstore="ngModel" [(ngModel)]="model.webstore" (change)="getCategories()" required>
+                                      <option value="">Select Webstore</option>
+                                      <option value="5">IGP</option>
+                                      <option value="830">Interflora</option>
+                                  </select>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group" [ngClass]="{ 'has-error': catDataForm.submitted }">
+                                <label for="">Categories</label>
+                                <div  *ngFor="let cat of categories" class="accordion" id="accordionEx" role="tablist" aria-multiselectable="true">
+                                    <div class="card">
+                                      {{cat.title}}
+                                    </div>
+                                    <div *ngFor="let sc of cat.subcategory" >
+                                          {{sc.title}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                      </div>
+                  </form>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
