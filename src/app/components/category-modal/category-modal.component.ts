@@ -19,5 +19,7 @@ export class CategoryModalComponent implements OnInit {
         console.log('wow');
         this.catClick.emit();
     }
-
+    saveCategory(model) {
+        console.log(model);
+    }
 }

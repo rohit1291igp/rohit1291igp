@@ -13,6 +13,7 @@
               </div>
               <div class="panel-body">
                   <form #catDataForm="ngForm">
+                        <button type="submit"  class="btn btn-primary pull-right"  (click)="saveCategory(model)" >Add Category</button>                      
                       <div class="row">
                           <div class="col-md-6">
                               <div class="form-group" [ngClass]="{ 'has-error': catDataForm.submitted && !webstore.valid }">
@@ -33,14 +34,14 @@
                                     <div *ngFor="let cat of categories" class="panel panel-default">
                                       <div class="panel-heading" role="tab" id="headingOne" data-toggle="collapse" data-parent="#accordion" data-target="#collapse">
                                         <h4 class="panel-title" >
-                                          <a role="button" aria-expanded="true" aria-controls="collapse" href="#collapse" (click)="handleClick($event)" class="accordion-toggle">
-                                              {{cat.title}}
+                                          <a style="text-decoration: none" role="button" aria-expanded="true" aria-controls="collapse" (click)="handleClick($event)" class="accordion-toggle">
+                                              {{cat.title}} <input class="btn btn-primary btn-sm" type="submit" (click)="editCategory(cat,'cat')" value="Edit" /> <input class="btn btn-primary btn-sm" type="submit" (click)="deleteCategory(cat)" value="Delete" />
                                           </a>
                                         </h4>
                                       </div>
                                         <div *ngFor="let sc of cat.subcategory" id="collapse" class="panel-collapse collapse in" style="margin-left: 40px;" role="tabpanel" aria-labelledby="headingOne">
                                         <div class="panel-body">
-                                            {{sc.title}}
+                                            {{sc.title}} <input class="btn btn-primary btn-sm" type="submit" (click)="editCategory(cat,'sc')" value="Edit" /> <input class="btn btn-primary btn-sm" type="submit" (click)="deleteCategory(cat)" value="Delete" />
                                         </div>
                                         </div>
                                     </div>
@@ -56,4 +57,4 @@
   </div>
 </div>
 
-<app-category-modal [model]="'sdfadsf'" (catClick)="clickDetect()"></app-category-modal>
+<app-category-modal *ngIf="showSideBar" [model]="cat" (catClick)="clickDetect()"></app-category-modal>
