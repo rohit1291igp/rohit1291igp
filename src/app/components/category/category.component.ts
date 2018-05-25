@@ -34,4 +34,8 @@ export class CategoryComponent implements OnInit {
     });
   }
 
+  clickDetect() {
+    console.log('123');
+  }
+
 }

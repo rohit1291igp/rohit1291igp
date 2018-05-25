@@ -44,6 +44,7 @@ import { BlogCreateComponent } from './components/blog-create/blog-create.compon
 import { BlogListComponent } from './components/blog-list/blog-list.component';
 import { BlogViewComponent } from './components/blog-view/blog-view.component';
 import { SeoHomeComponent } from './components/seo-home/seo-home.component';
+import { CategoryModalComponent } from './components/category-modal/category-modal.component';
 
 //factories
 import {httpFactory} from "./others/http.factory";
@@ -92,7 +93,8 @@ export function ConfigLoader(envConfig: envConfig) {
     BlogListComponent,
     BlogViewComponent,
     SeoHomeComponent,
-    CategoryComponent
+    CategoryComponent,
+    CategoryModalComponent
   ],
   imports: [
     BrowserModule,
