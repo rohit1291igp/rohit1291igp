@@ -1,3 +1,116 @@
 <div class="side-container">
-    <h1 (click)="detect()">{{model}}</h1>
+    <!-- <h1 (click)="detect()">{{model}}</h1> -->
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <h3>Categories Edit Content</h3>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Categories for Blogs Home Page</h3>
+                </div>
+                <div class="panel-body">
+                    <form #catDataForm="ngForm">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group" [ngClass]="{ 'has-error': catDataForm.submitted }">
+                                    <label for="">Webstore: </label>
+                                    <span>{{model.fkasname}}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group" [ngClass]="{ 'has-error': catDataForm.submitted && !title.valid }">
+                                    <label for="">Name</label>
+                                    <input type="text" class="form-control" placeholder="Name" name="title" [(ngModel)]="model.title" #title="ngModel" required  maxlength="50"/>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div *ngIf="model.showcatDD == true;else other_content" class="form-group" [ngClass]="{ 'has-error': catDataForm.submitted }">
+                                    <label for="">Parent Category</label>
+                                    <select class="form-control" name="category"  required> <!--#category="ngModel" [(ngModel)]="cat.fkasid" -->
+                                        <option *ngFor="let cat of model.category" selected='{{cat.selected}}'>{{cat.title}}
+                                        </option>
+                                    </select>
+                                </div>
+                                <ng-template #other_content style="text-align: center;">
+                                        <label for="">Parent Category</label>
+                                        <select class="form-control"  required>
+                                                <option>None</option>
+                                            </select>
+                                </ng-template>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group" [ngClass]="{ 'has-error': catDataForm.submitted}">
+                                    <label for="">URL</label>
+                                    <input type="text" class="form-control" placeholder="URL" name="url" [(ngModel)]="model.url" #url="ngModel" required  maxlength="150"/>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group" [ngClass]="{ 'has-error' : catDataForm.submitted && !status.valid }">
+                                    <label for="">Status</label>
+                                    <select class="form-control" name="status" #status="ngModel" [(ngModel)]="model.status" required>
+                                        <option value="">Select Status</option>
+                                        <option value="1">Visible</option>
+                                        <option value="0">Hidden</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="form-group" [ngClass]="{ 'has-error': catDataForm.submitted && !sortorder.valid }">
+                                    <label for="">Sort Order</label>
+                                    <input type="text" class="form-control" name="sortOrder" value="-1" placeholder="Sort Order" name="sortorder" #sortorder="ngModel" [(ngModel)]="model.sortorder"  required />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group" [ngClass]="{ 'has-error' : catDataForm.submitted && !metaTitle.valid}">
+                                    <label for="">Meta Title</label>
+                                    <input type="text" class="form-control" placeholder="Meta Title"  name="metaTitle" [(ngModel)]="model.seo.seotitle" #metaTitle="ngModel" required maxlength="72"/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group" [ngClass]="{ 'has-error' : catDataForm.submitted && !metaDesc.valid}">
+                                    <label for="">Meta Description</label>
+                                    <textarea class="form-control" rows="3" placeholder="Meta Description" name="metaDesc" [(ngModel)]="model.seo.seodescription" #metaDesc="ngModel" required maxlength="300"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group" [ngClass]="{ 'has-error' : catDataForm.submitted && !keywords.valid}">
+                                    <label for="">Meta Keywords</label>
+                                    <textarea class="form-control" rows="3" placeholder="Meta Keywords" name="keywords" [(ngModel)]="model.seo.seokeywords" #keywords="ngModel" required maxlength="300"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12 text-right">
+                                    <button type="submit"  class="btn btn-primary pull-right"  (click)="saveCategory(model)" >Save</button>
+                                <!-- <input class="btn btn-primary pull-right" type="submit" (click)="saveCategory(model)" value="Save" /> -->
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+  </div>
 </div>

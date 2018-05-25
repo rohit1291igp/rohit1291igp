@@ -1,7 +1,7 @@
 .side-container{
     position: fixed;
     top: 51px;
-    right: 0;
+    right: 0px;
     background: #f2f2f2;
     width: 50%;
     min-width: 600px;
@@ -9,4 +9,13 @@
     padding: 1em;
     box-shadow: 1px 1px 8px #999;
     z-index: 10;
+    overflow: auto;
+    animation-timing-function: ease-out;
+    /* animation-name: mymove; */
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
 }
+/* @keyframes mymove {
+    from {right: 0%;}
+    to {right: 0%;}
+} */

@@ -10,6 +10,8 @@ import { BackendService } from '../../services/backend.service';
 export class CategoryComponent implements OnInit {
   model: any = {};
   public categories;
+  public cat;
+  public showSideBar = false;
   constructor(
     public BackendService: BackendService
   ) { }
@@ -41,8 +43,18 @@ export class CategoryComponent implements OnInit {
     event.preventDefault();
   };
 
-  clickDetect() {
-    console.log('123');
+  editCategory(cat, type) {
+    this.showSideBar = true;
+    this.cat = cat;
+    this.cat.category = this.categories;
+    if (type === 'cat') {
+      this.cat.selected = '';
+      this.cat.showcatDD = false;
+    }else {
+      this.cat.selected = 'selected';
+      this.cat.showcatDD = true;
+    }
+    console.log(this.cat);
   }
 
 }
