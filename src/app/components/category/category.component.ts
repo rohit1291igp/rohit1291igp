@@ -20,8 +20,10 @@ export class CategoryComponent implements OnInit {
 
   getCategories() {
     const _this = this;
+    console.log(_this.model.webstore);
+    if (_this.model.webstore !== '') {
     const reqObj = {
-      url: 'categories/categorylist?fkAssociateId=' + this.model.webstore,
+      url: 'categories/categorylist?fkAssociateId=' + _this.model.webstore,
       method: 'get'
       };
     this.BackendService.makeAjax(reqObj, function(err, response, headers){
@@ -33,6 +35,11 @@ export class CategoryComponent implements OnInit {
       console.log(_this.categories);
     });
   }
+  };
+
+  handleClick(event: Event) {
+    event.preventDefault();
+  };
 
   clickDetect() {
     console.log('123');
