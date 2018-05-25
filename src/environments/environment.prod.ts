@@ -4,9 +4,15 @@ export const environment = {
   origin: 'http://34.204.124.92:8081/',
   originMock: 'https://5a43a511342c490012f3fca2.mockapi.io/',
   apiInitial : 'IGPService/web/services/rest',
-  productsURL : "https://d1xs5fw35mbn8b.cloudfront.net/p/",
-  productsCompURL : "http://admin.indiangiftsportal.com/handelscomponents/",
-  isMobile:window.screen.width < 1000,
-  userType:localStorage.getItem('userType'),
-  mockAPI:sessionStorage.getItem('mockAPI')
+  productsURL : 'https://d1xs5fw35mbn8b.cloudfront.net/p/',
+  productsCompURL : 'http://admin.indiangiftsportal.com/handelscomponents/',
+  isMobile: window.screen.width < 1000,
+  userType: localStorage.getItem('userType'),
+  mockAPI: sessionStorage.getItem('mockAPI'),
+  s3AccessKey : 'AKIAIYVR3IZCNZG4TU4Q',
+  s3SecretKey : '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',
+  blogBucketName : 'blogcreatives',
+  igpBlogCDN : 'https://cdn.igp.com/f_auto,q_auto,t_blogimage/blogs/',
+  interfloraBlogCDN : 'https://res.cloudinary.com/interflora/f_auto,q_auto,t_blogimage/blogs/',
+  blogsAcl : 'public-read'
 };

@@ -1,0 +1,12 @@
+.side-container{
+    position: fixed;
+    top: 51px;
+    right: 0;
+    background: #f2f2f2;
+    width: 50%;
+    min-width: 600px;
+    height: 100%;
+    padding: 1em;
+    box-shadow: 1px 1px 8px #999;
+    z-index: 10;
+}

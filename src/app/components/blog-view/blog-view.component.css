@@ -1,3 +1,14 @@
+.disabled {
+    cursor: not-allowed;
+}
+
+#edtBtn{
+    margin-right: 5px;
+}
+
+#cnlBtn{
+    margin-right: 5px;
+}
 .create-blog-container{
     min-height: 100vh;
 }

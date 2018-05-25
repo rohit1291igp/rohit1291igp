@@ -1,0 +1,84 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <h3>SEO Content</h3>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">SEO for Blogs Home Page</h3>
+                </div>
+                <div class="panel-body">
+                    <form #seoDataForm="ngForm" (ngSubmit)="seoDataForm.form.valid" novalidate="novalidate">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group" [ngClass]="{ 'has-error': seoDataForm.submitted && !webstore.valid }">
+                                    <label for="">Webstore</label>
+                                    <select class="form-control" name="webstore" #webstore="ngModel" [(ngModel)]="model.webstore" (change)="getMetaDataOnStoreChange()" required>
+                                        <option value="">Select Webstore</option>
+                                        <option value="5">IGP</option>
+                                        <option value="830">Interflora</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group" [ngClass]="{ 'has-error': seoDataForm.submitted && !status.valid }">
+                                    <label for="">Webstore</label>
+                                    <select class="form-control" name="status" #status="ngModel" [(ngModel)]="model.status" required>
+                                        <option value="">Select Store Status</option>
+                                        <option value="0">Disabled</option>
+                                        <option value="1">Enabled</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <input type="hidden" [(ngModel)]="model.id" #id="ngModel" name="id" />
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group" [ngClass]="{ 'has-error': seoDataForm.submitted && !title.valid }">
+                                    <label for="">Title</label>
+                                    <input type="text" class="form-control" placeholder="Title" name="title" #title="ngModel" [(ngModel)]="model.title" required maxlength="30"/>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group" [ngClass]="{ 'has-error': seoDataForm.submitted && !metaTitle.valid }">
+                                    <label for="">Meta Title</label>
+                                    <input type="text" class="form-control" placeholder="Meta Title" name="metaTitle" #metaTitle="ngModel" [(ngModel)]="model.metaTitle" required maxlength="72"/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group" [ngClass]="{ 'has-error': seoDataForm.submitted && !metaDesc.valid }">
+                                    <label for="">Short Description</label>
+                                    <textarea class="form-control" rows="3" placeholder="Description" name="metaDesc" #metaDesc="ngModel" [(ngModel)]="model.metaDesc" required maxlength="300"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group" [ngClass]="{ 'has-error': seoDataForm.submitted && !metaKeywords.valid }">
+                                    <label for="">Meta Keywords</label>
+                                    <textarea class="form-control" rows="3" placeholder="Meta Keywords" name="metaKeywords" #metaKeywords="ngModel" [(ngModel)]="model.metaKeywords" required maxlength="300"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Submit and Reset Panel -->
+                        <div class="row">
+                            <div class="col-md-12 text-right">
+                                <input class="btn btn-primary" type="submit" (click)="saveSeoData()" value="Save" />
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

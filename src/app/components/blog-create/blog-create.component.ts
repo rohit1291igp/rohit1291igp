@@ -1,8 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import {environment} from '../../../environments/environment';
+import { environment } from '../../../environments/environment';
 import { NgForm } from '@angular/forms';
 import { BackendService } from '../../services/backend.service';
 import { UtilityService } from '../../services/utility.service';
+import * as AWS from 'aws-sdk/global';
+import * as S3 from 'aws-sdk/clients/s3';
+import { FileUploader } from 'ng2-file-upload';
+import { S3UploadService } from '../../services/s3Upload.service';
 
 @Component({
     selector: 'app-blog-create',
@@ -18,10 +22,22 @@ export class BlogCreateComponent implements OnInit {
     public categories = [];
     public selectedCategories: Object = {};
     public uniqueUrl = true;
+    public files = [];
+    public staticImages = [];
+    public env = environment;
+    public isUploading = false;
+
+    public bucket = new S3(
+        {
+            accessKeyId : environment.s3AccessKey,
+            secretAccessKey : environment.s3SecretKey
+        }
+    );
 
     constructor(
         public BackendService: BackendService,
-        public UtilityService: UtilityService
+        public UtilityService: UtilityService,
+        public S3UploadService: S3UploadService
     ) {}
 
     ngOnInit() {
@@ -37,7 +53,8 @@ export class BlogCreateComponent implements OnInit {
         this.model.category = {};
         this.model.subcategory = {};
         this.model.featuredImage = '';
-        this.model.sortOrder = '';
+        this.model.sortOrder = 10000;
+        this.model.files = [];
     }
 
     createBlogPost() {
@@ -57,6 +74,7 @@ export class BlogCreateComponent implements OnInit {
         data['sortorder'] = this.model.sortOrder;
         data['user'] = localStorage.getItem('associateName');
         data['categories'] = this.selectedCategories;
+        data['imageurllist'] = this.getImageUrlList();
         console.log(data);
         if (this.validateModel()) {
             this.saveBlogData(data);
@@ -86,7 +104,7 @@ export class BlogCreateComponent implements OnInit {
     updateSelectedCategories(type, catData, subCatData, event) {
         catData = catData.toString();
         if (type === 'cat') {
-            if (this.model.category[catData]){
+            if (this.model.category[catData]) {
                 this.selectedCategories[catData] = [];
             } else {
                 this.setOrResetCheckboxes(this.selectedCategories[catData], null);
@@ -128,14 +146,21 @@ export class BlogCreateComponent implements OnInit {
         }
     }
 
+    getImageUrlList() {
+        const imageList = [];
+        if (this.model.files.length > 0) {
+            this.model.files.forEach(element => {
+                imageList.push(element.Key);
+            });
+        }
+        return imageList;
+    }
+
     validateModel() {
         if (!(Object.keys(this.model.category).length) && !(Object.keys(this.model.subcategory).length)) {
             alert('Please select the Category and Subcategory for the article.');
             return false;
         }
-
-        console.log(this.model.description);
-        console.log(typeof(this.model.description));
 
         if (this.model.description === '' || typeof(this.model.description) === 'undefined') {
             alert('Please enter the main content for the article.');
@@ -189,6 +214,63 @@ export class BlogCreateComponent implements OnInit {
             _this.categories = response.data;
         });
     }
+
+    showSelectedImages(event) {
+        if (event.target.files && event.target.files.length > 0) {
+            for (let i = 0; i < event.target.files.length; i++) {
+                const reader = new FileReader();
+                reader.onload = (e: any) => {
+                    const file = {
+                        name : event.target.files[i].name,
+                        image : e.target.result
+                    };
+                };
+                reader.readAsDataURL(event.target.files[i]);
+            }
+        }
+    };
+
+    uploadFiles(event) {
+        const that = this;
+        if (event.target.files.length > 0) {
+            this.isUploading = true;
+            let j = 0;
+            for (let i = 0; i < event.target.files.length; i++) {
+                const file = event.target.files[i];
+                this.S3UploadService.uploadImageToS3(file, environment.blogBucketName, environment.blogsAcl, true, (err, data) => {
+                    j++;
+                    if (j === event.target.files.length) {
+                        that.isUploading = false;
+                    }
+                    if (err) {
+                        console.log('There was an error uploading your file: ', err);
+                        return false;
+                    } else {
+                        this.model.files.push(data);
+                    }
+                });
+            }
+        }
+    }
+
+    makeFeaturedImage(imageName) {
+        this.model.featuredImage = imageName;
+    }
+
+    isFeaturedImage(imageName) {
+        return (this.model.featuredImage === imageName) ? true : false;
+    }
+
+    renameFile(file) {
+        const name = file.name;
+        const nameArray = name.split('.');
+        let result = '';
+        nameArray.splice(nameArray.length - 1, 0, Date.now() + '.');
+        nameArray.map((element) => {
+            result = result + element;
+        });
+        return result;
+    };
 
     saveBlogData(data) {
         const _this = this;

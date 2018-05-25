@@ -7,11 +7,17 @@ export const environment = {
   production: false,
   log : true,
   origin: 'http://35.171.85.169:8081/',
-  //origin: 'http://192.168.0.156:8083/',
+  // origin: 'http://192.168.0.156:8083/',
   originMock: 'https://5a43a511342c490012f3fca2.mockapi.io/',
-  productsURL : "https://d1xs5fw35mbn8b.cloudfront.net/p/",
-  productsCompURL : "http://admin.indiangiftsportal.com/handelscomponents/",
-  isMobile:window.screen.width < 1000,
-  userType:localStorage.getItem('userType'),
-  mockAPI:sessionStorage.getItem('mockAPI')
+  productsURL : 'https://d1xs5fw35mbn8b.cloudfront.net/p/',
+  productsCompURL : 'http://admin.indiangiftsportal.com/handelscomponents/',
+  isMobile: window.screen.width < 1000,
+  userType: localStorage.getItem('userType'),
+  mockAPI: sessionStorage.getItem('mockAPI'),
+  s3AccessKey : 'AKIAIYVR3IZCNZG4TU4Q',
+  s3SecretKey : '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',
+  blogBucketName : 'blogcreatives',
+  igpBlogCDN : 'https://cdn.igp.com/f_auto,q_auto,t_blogimage/blogs/',
+  interfloraBlogCDN : 'https://res.cloudinary.com/interflora/f_auto,q_auto,t_blogimage/blogs/',
+  blogsAcl : 'public-read'
 };

@@ -491,9 +491,36 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-12">
-                <h4><a ng-href="#/blog-create" routerLink="/blog-create">Click here to create blog</a></h4>
+                <h3>Blogger Dashboard</h3>
+            </div>
+        </div>
+        <br/>
+        <div class="row">
+            <div class="col-md-4">
+                <a routerLink="/blog-list">
+                    <div class="well text-center">
+                        <p class="well-icon"><i class="icon glyphicon glyphicon-text-background"></i></p>
+                        <h4 class="uppercase title-well">Articles</h4>
+                    </div>
+                </a>
+            </div>
 
-                <app-blog-list></app-blog-list>
+            <div class="col-md-4">
+                <a routerLink="/categories">
+                    <div class="well text-center">
+                        <p class="well-icon"><i class="icon glyphicon glyphicon-list-alt"></i></p>
+                        <h4 class="uppercase title-well">Categories</h4>
+                    </div>
+                </a>
+            </div>
+
+            <div class="col-md-4">
+                <a routerLink="/seo">
+                    <div class="well text-center">
+                        <p class="well-icon"><i class="icon glyphicon glyphicon-equalizer"></i></p>
+                        <h4 class="uppercase title-well">SEO</h4>
+                    </div>
+                </a>
             </div>
         </div>
     </div>

@@ -13,7 +13,7 @@ import { TrimValueAccessorModule } from 'ng-trim-value-accessor';
 import { DatePipe } from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgxEditorModule } from 'ngx-editor';
-
+import { CKEditorModule } from 'ng2-ckeditor';
 
 // Router and Services
 import { routing } from "./app.routing";
@@ -25,6 +25,7 @@ import { AuthGuard } from './services/auth-guard.service';
 import { UserService } from './services/user.service';
 import { DashboardService } from './services/dashboard.service';
 import { ReportsService } from './services/reports.service';
+import { S3UploadService } from './services/s3Upload.service';
 
 // Components
 import { AppComponent } from './components/app.component';
@@ -41,6 +42,9 @@ import { OrdersActionTrayComponent } from './components/orders-action-tray/order
 import { LoaderComponent } from './components/loader/loader.component';
 import { BlogCreateComponent } from './components/blog-create/blog-create.component';
 import { BlogListComponent } from './components/blog-list/blog-list.component';
+import { BlogViewComponent } from './components/blog-view/blog-view.component';
+import { SeoHomeComponent } from './components/seo-home/seo-home.component';
+import { CategoryModalComponent } from './components/category-modal/category-modal.component';
 
 //factories
 import {httpFactory} from "./others/http.factory";
@@ -53,6 +57,7 @@ import { WidgetsComponent } from './components/widgets/widgets.component';
 import { FeedsComponent } from './components/feeds/feeds.component';
 import { UploadExcelComponent } from './components/upload-excel/upload-excel.component';
 import { VendorDropdownComponent } from './components/vendor-dropdown/vendor-dropdown.component';
+import { CategoryComponent } from './components/category/category.component';
 
 //env config
 /*import {envConfig} from "./others/env.config";
@@ -85,7 +90,11 @@ export function ConfigLoader(envConfig: envConfig) {
     UploadExcelComponent,
     VendorDropdownComponent,
     BlogCreateComponent,
-    BlogListComponent
+    BlogListComponent,
+    BlogViewComponent,
+    SeoHomeComponent,
+    CategoryComponent,
+    CategoryModalComponent
   ],
   imports: [
     BrowserModule,
@@ -98,7 +107,8 @@ export function ConfigLoader(envConfig: envConfig) {
     MyDatePickerModule,
     BrowserAnimationsModule,
     TrimValueAccessorModule,
-    NgxEditorModule
+    NgxEditorModule,
+    CKEditorModule
   ],
   providers: [
     {
@@ -126,8 +136,8 @@ export function ConfigLoader(envConfig: envConfig) {
     DatePipe,
     Time12Pipe,
     ReplacePipe,
-    ObjectKeyValuePipe
-
+    ObjectKeyValuePipe,
+    S3UploadService
   ],
   entryComponents:[UploadExcelComponent],
   bootstrap: [AppComponent]
