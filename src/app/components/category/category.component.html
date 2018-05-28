@@ -59,4 +59,4 @@
   </div>
 </div>
 
-<app-category-modal *ngIf="showSideBar" [model]="cat" (catClick)="clickDetect()"></app-category-modal>
+<app-category-modal *ngIf="showSideBar" [model]="cat" (catClick)="clickDetect($event)"></app-category-modal>

@@ -92,4 +92,11 @@ export class CategoryComponent implements OnInit {
         }
   }
 
+  clickDetect(event) {
+    console.log('Parent');
+    console.log(event);
+    this.showSideBar = false;
+    $('#target :input').prop('disabled', false);
+  }
+
 }
