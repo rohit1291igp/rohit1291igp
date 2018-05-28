@@ -55,10 +55,10 @@ export class CategoryModalComponent implements OnInit {
         console.log('wow');
         this.catClick.emit();
     }
-    // cancelCategory() {
-    //     console.log('Child');
-    //     this.catClick.emit();
-    // };
+    cancelCategory() {
+        console.log('Child');
+        this.catClick.emit({cancel: 'Cancel'});
+    };
     saveCategory(model) {
         const data = {};
         console.log(model);
