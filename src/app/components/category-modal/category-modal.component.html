@@ -3,6 +3,7 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-12">
+                <!-- <input class="btn btn-primary btn-sm" type="button" (click)="cancelCategory()" value="Cancel" /> -->
             <h3>Categories Edit Content</h3>
         </div>
     </div>
@@ -19,8 +20,16 @@
                             <div class="col-md-6">
                                 <div class="form-group" [ngClass]="{ 'has-error': catDataForm.submitted }">
                                     <label for="">Webstore: </label>
-                                    <span>{{model.fkasname}}</span>
+                                    <span *ngIf="model.add != 'add';else input_content">{{model.fkasname}}</span>
+                                    <ng-template #input_content style="text-align: center;">
+                                            <select class="form-control" name="webstore" #webstore="ngModel" [(ngModel)]="model.webstore" (change)="getCategories()"  required > <!--(change)="resetCategoriesOnStoreChange()" -->
+                                                    <option value="">Select Webstore</option>
+                                                    <option value="5">IGP</option>
+                                                    <option value="830">Interflora</option>
+                                            </select>
+                                    </ng-template>
                                 </div>
+                                
                             </div>
                         </div>
 
@@ -34,8 +43,8 @@
                             <div class="col-md-6">
                                 <div *ngIf="model.showcatDD == true;else other_content" class="form-group" [ngClass]="{ 'has-error': catDataForm.submitted }">
                                     <label for="">Parent Category</label>
-                                    <select class="form-control" name="category"  required> <!--#category="ngModel" [(ngModel)]="cat.fkasid" -->
-                                        <option *ngFor="let cat of model.category" selected='{{cat.selected}}'>{{cat.title}}
+                                    <select class="form-control" name="category" #category="ngModel" [(ngModel)]="model.parentid"  required> <!--#category="ngModel" [(ngModel)]="cat.fkasid" -->
+                                        <option *ngFor="let cat of model.category" value='{{cat.id}}' selected='{{cat.selected}}'>{{cat.title}}
                                         </option>
                                     </select>
                                 </div>
@@ -50,7 +59,7 @@
 
                         <div class="row">
                             <div class="col-md-6">
-                                <div class="form-group" [ngClass]="{ 'has-error': catDataForm.submitted}">
+                                <div class="form-group" [ngClass]="{ 'has-error': catDataForm.submitted && !url.valid }">
                                     <label for="">URL</label>
                                     <input type="text" class="form-control" placeholder="URL" name="url" [(ngModel)]="model.url" #url="ngModel" required  maxlength="150"/>
                                 </div>
@@ -76,36 +85,51 @@
 
                         <div class="row">
                             <div class="col-md-12">
-                                <div class="form-group" [ngClass]="{ 'has-error' : catDataForm.submitted && !metaTitle.valid}">
+                                <div *ngIf="model.add != 'add';else metatitle_content" class="form-group" [ngClass]="{ 'has-error' : catDataForm.submitted && !metaTitle.valid}">
                                     <label for="">Meta Title</label>
                                     <input type="text" class="form-control" placeholder="Meta Title"  name="metaTitle" [(ngModel)]="model.seo.seotitle" #metaTitle="ngModel" required maxlength="72"/>
                                 </div>
+                                <ng-template #metatitle_content style="text-align: center;">
+                                        <label for="">Meta Title</label>
+                                        <input type="text" class="form-control" placeholder="Meta Title"  name="metaTitle" [(ngModel)]="model.metaTitle" #metaTitle="ngModel" required maxlength="72"/>
+                                </ng-template>
                             </div>
                         </div>
 
                         <div class="row">
                             <div class="col-md-12">
-                                <div class="form-group" [ngClass]="{ 'has-error' : catDataForm.submitted && !metaDesc.valid}">
+                                <div *ngIf="model.add != 'add';else metadesc_content" class="form-group" [ngClass]="{ 'has-error' : catDataForm.submitted && !metaDesc.valid}">
                                     <label for="">Meta Description</label>
                                     <textarea class="form-control" rows="3" placeholder="Meta Description" name="metaDesc" [(ngModel)]="model.seo.seodescription" #metaDesc="ngModel" required maxlength="300"></textarea>
                                 </div>
+                                <ng-template #metadesc_content style="text-align: center;">
+                                        <label for="">Meta Description</label>
+                                        <textarea class="form-control" rows="3" placeholder="Meta Description" name="metaDesc" [(ngModel)]="model.metadesc" #metaDesc="ngModel" required maxlength="300"></textarea>
+                                </ng-template>
                             </div>
                         </div>
 
                         <div class="row">
                             <div class="col-md-12">
-                                <div class="form-group" [ngClass]="{ 'has-error' : catDataForm.submitted && !keywords.valid}">
+                                <div *ngIf="model.add != 'add';else metakeyword_content" class="form-group" [ngClass]="{ 'has-error' : catDataForm.submitted && !keywords.valid}">
                                     <label for="">Meta Keywords</label>
                                     <textarea class="form-control" rows="3" placeholder="Meta Keywords" name="keywords" [(ngModel)]="model.seo.seokeywords" #keywords="ngModel" required maxlength="300"></textarea>
                                 </div>
+                                <ng-template #metakeyword_content style="text-align: center;">
+                                        <label for="">Meta Keywords</label>
+                                        <textarea class="form-control" rows="3" placeholder="Meta Keywords" name="keywords" [(ngModel)]="model.metakeywords" #keywords="ngModel" required maxlength="300"></textarea>
+                                </ng-template>
                             </div>
                         </div>
 
                         <div class="row">
-                            <div class="col-md-12 text-right">
+                            <div *ngIf="model.add != 'add';else addCat_content" class="col-md-12 text-right">
                                     <button type="submit"  class="btn btn-primary pull-right"  (click)="saveCategory(model)" >Save</button>
                                 <!-- <input class="btn btn-primary pull-right" type="submit" (click)="saveCategory(model)" value="Save" /> -->
                             </div>
+                            <ng-template #addCat_content style="text-align: center;">
+                                    <br/><button type="submit" style="margin-right: 10px;" class="btn btn-primary pull-right"  (click)="addCategory(model)" >Add</button>
+                            </ng-template>
                         </div>
                     </form>
                 </div>

@@ -18,6 +18,17 @@ export class CategoryComponent implements OnInit {
 
   ngOnInit() {
     this.model.webstore = '';
+    this.model.disabled = false;
+  }
+
+  addCategory() {
+    // alert('Add');
+    // this.model = {};
+    console.log('Inside Add');
+    this.cat = {};
+    this.cat.add = 'add';
+    this.showSideBar = true;
+    $('#target :input').prop('disabled', true);
   }
 
   getCategories() {
@@ -47,6 +58,8 @@ export class CategoryComponent implements OnInit {
     this.showSideBar = true;
     this.cat = cat;
     this.cat.category = this.categories;
+    this.cat.add = '';
+    $('#target :input').prop('disabled', true);
     if (type === 'cat') {
       this.cat.selected = '';
       this.cat.showcatDD = false;
@@ -54,7 +67,29 @@ export class CategoryComponent implements OnInit {
       this.cat.selected = 'selected';
       this.cat.showcatDD = true;
     }
+    this.cat.add = '';
     console.log(this.cat);
+  };
+
+  deleteCategory(id) {
+    console.log(id);
+    const _this = this;
+      const reqObj = {
+          url: `categories/deletecategory?id=${id}`,
+          method: 'delete'
+      };
+        if (confirm(`Are you sure do you want to delete Category?`)) {
+          _this.BackendService.makeAjax(reqObj, function(err, response, headers){
+              if (err || response.error) {
+                  console.log('Error=============>', err, response.errorCode);
+                  return false;
+              }
+              alert(`The article has been deleted`);
+              window.location.reload();
+          });
+        }else {
+          return false;
+        }
   }
 
 }
