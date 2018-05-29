@@ -62,27 +62,17 @@
                         </div>
                         <div class="panel-body">
                             <div class="row">
-                                <div class="col-md-12">
-                                    <div class="col-md-4">
-                                        <div class="checkbox">
-                                            <label>
-                                                <input type="checkbox" name="isFeatured" [(ngModel)]="model.isFeatured" #isFeatured="ngModel" /> Make this Featured
-                                            </label>
-                                        </div>
+                                <div class="col-md-6">
+                                    <div class="checkbox">
+                                        <label>
+                                            <input type="checkbox" name="isFeatured" [(ngModel)]="model.isFeatured" #isFeatured="ngModel" /> Make this Featured
+                                        </label>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group" [ngClass]="{ 'has-error': createBlog.submitted && !url.valid }">
                                         <label for="">URL</label>
                                         <input type="text" class="form-control" onkeypress='return (event.charCode > 96 && event.charCode < 123) || (event.charCode > 64 && event.charCode < 91) || (event.charCode >= 48 && event.charCode <= 57) || event.charCode <= 31 || event.charCode == 45' name="url" [(ngModel)]="model.url" #url="ngModel" placeholder="URL" required  (focusout)="checkUniqueUrlValue()" maxlength="170"/>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group" [ngClass]="{ 'has-error': createBlog.submitted && !featuredImage.valid }">
-                                        <label for="">Featured Image</label>
-                                        <input type="text" class="form-control" name="featuredImage" [(ngModel)]="model.featuredImage" #featuredImage="ngModel" placeholder="Featured Image URL" required readonly="readonly" disabled="disabled" />
                                     </div>
                                 </div>
                             </div>
