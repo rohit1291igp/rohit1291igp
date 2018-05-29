@@ -99,6 +99,16 @@ export class BlogViewComponent implements OnInit, AfterViewInit {
                 }
               });
             }
+
+            // Add featured image to the saved image list
+            if (modal.imageurl) {
+              modal.files.push({
+                'Location' : _this.path + modal.imageurl,
+                'Key' : modal.imageurl,
+                'key' : modal.imageurl
+              });
+            }
+
             // Getting Saved Images
             if (modal.imageurllist && modal.imageurllist.length > 0) {
               modal.imageurllist.forEach(element => {
@@ -345,8 +355,12 @@ export class BlogViewComponent implements OnInit, AfterViewInit {
               alert('There was an error while saving the article');
               return false;
           }
-          alert('The Article has been saved.');
-          window.location.reload();
+          if (response.status === 'Success') {
+            alert('The Article has been Saved.');
+            window.location.reload();
+          } else {
+              alert('There was an error saving the article.');
+          }
       });
     };
 
