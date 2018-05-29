@@ -39,6 +39,28 @@
                 </div>
             </li>
         </ng-container>
+        <ng-container *ngIf="environment.userType === 'blogger'">
+          <li>
+            <a routerLink="/dashboard">
+              Dashboard
+            </a>
+          </li>
+          <li>
+            <a routerLink="/blog-list">
+              Articles
+            </a>
+          </li>
+          <li>
+            <a routerLink="/categories">
+              Categories
+            </a>
+          </li>
+          <li>
+              <a routerLink="/seo">
+                SEO
+              </a>
+            </li>
+        </ng-container>
         <li>
             <!--<a href="#" class="logout" [routerLink]="['/login']">Logout
               <i class="icon glyphicon glyphicon-off"></i>
