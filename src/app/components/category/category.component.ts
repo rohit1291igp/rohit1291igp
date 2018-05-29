@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { BackendService } from '../../services/backend.service';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @Component({
   selector: 'app-category',
@@ -21,6 +22,7 @@ export class CategoryComponent implements OnInit {
     this.model.disabled = false;
   }
 
+  // On Click on Add Btn
   addCategory() {
     // alert('Add');
     // this.model = {};
@@ -29,8 +31,9 @@ export class CategoryComponent implements OnInit {
     this.cat.add = 'add';
     this.showSideBar = true;
     $('#target :input').prop('disabled', true);
-  }
+  };
 
+  // Get Categories
   getCategories() {
     const _this = this;
     console.log(_this.model.webstore);
@@ -54,6 +57,7 @@ export class CategoryComponent implements OnInit {
     event.preventDefault();
   };
 
+  // Edit Category
   editCategory(cat, type) {
     this.showSideBar = true;
     this.cat = cat;
@@ -67,10 +71,10 @@ export class CategoryComponent implements OnInit {
       this.cat.selected = 'selected';
       this.cat.showcatDD = true;
     }
-    this.cat.add = '';
     console.log(this.cat);
   };
 
+  // Delete Category
   deleteCategory(id) {
     console.log(id);
     const _this = this;
@@ -90,13 +94,13 @@ export class CategoryComponent implements OnInit {
         }else {
           return false;
         }
-  }
+  };
 
+  // Parent Child Relationship!!!
   clickDetect(event) {
     console.log('Parent');
     console.log(event);
     this.showSideBar = false;
     $('#target :input').prop('disabled', false);
-  }
-
+  };
 }
