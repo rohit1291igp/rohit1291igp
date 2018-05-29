@@ -4,16 +4,21 @@
     <div class="row">
         <div class="col-md-12">
                 <input class="btn btn-primary btn-sm" type="button" (click)="cancelCategory()" value="Cancel" />
-            <h3>Categories Edit Content</h3>
+            <h3>{{model.title}}</h3>
         </div>
     </div>
     
     <div class="row">
         <div class="col-md-12">
             <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title">Categories for Blogs Home Page</h3>
+                <div *ngIf="model.add != 'add';else header_content" class="panel-heading">
+                    <h3 class="panel-title">Edit Information</h3>
                 </div>
+                <ng-template #header_content style="text-align: center;">
+                        <div class="panel-heading">
+                                <h3 class="panel-title">Add Information</h3>
+                            </div>
+                </ng-template>
                 <div class="panel-body">
                     <form #catDataForm="ngForm">
                         <div class="row">
@@ -40,7 +45,7 @@
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <div *ngIf="model.showcatDD == true;else other_content" class="form-group" [ngClass]="{ 'has-error': catDataForm.submitted }">
+                                <div *ngIf="model.showcatDD == true;else other_content" class="form-group" [ngClass]="{ 'has-error': catDataForm.submitted && !category.valid }">
                                     <label for="">Parent Category</label>
                                     <select class="form-control" name="category" #category="ngModel" [(ngModel)]="model.parentid"  required> <!--#category="ngModel" [(ngModel)]="cat.fkasid" -->
                                         <option *ngFor="let cat of model.category" value='{{cat.id}}' selected='{{cat.selected}}'>{{cat.title}}
@@ -58,7 +63,7 @@
 
                         <div class="row">
                             <div class="col-md-6">
-                                <div class="form-group" [ngClass]="{ 'has-error': catDataForm.submitted && !url.valid }">
+                                <div class="form-group" [ngClass]="{ 'has-error': catDataForm.submitted && !url.valid }"><br/>
                                     <label for="">URL</label>
                                     <input type="text" class="form-control" placeholder="URL" name="url" [(ngModel)]="model.url" #url="ngModel" required  maxlength="150"/>
                                 </div>
