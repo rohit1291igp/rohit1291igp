@@ -11,6 +11,8 @@ import { BackendService } from '../../services/backend.service';
 export class CategoryModalComponent implements OnInit {
     @Output() catClick = new EventEmitter();
     @Input() model: any;
+    public uniqueUrl = true;
+    public priviousvURL = '';
     constructor(
         public BackendService: BackendService
       ) { };
@@ -52,6 +54,24 @@ export class CategoryModalComponent implements OnInit {
       }
       };
 
+    // checkUniqueUrlValue(data) {
+    //     if (this.priviousvURL !== data.url) {
+    //     const _this = this;
+    //     const reqObj = {
+    //         url: 'blogs/validateblogurl?url=' + data.url + '&fkAssociateId=' + data.fkasid,
+    //         method: 'get'
+    //     };
+
+    //     _this.BackendService.makeAjax(reqObj, function(err, response, headers){
+    //         if (response.data.unique === 'false') {
+    //             alert('The selected URL already exists. Please enter a new URL');
+    //             _this.uniqueUrl = false;
+    //         } else {
+    //             _this.uniqueUrl = true;
+    //         }
+    //     });
+    //   }
+    // };
     // detect() {
     //     console.log('wow');
     //     this.catClick.emit();
@@ -93,7 +113,7 @@ export class CategoryModalComponent implements OnInit {
           if (err || response.error || response.status === 'Error') {
               console.log('Error=============>', err, response.errorCode);
               alert(`There was an error while saving the Category.
-                     Error: ${response.message}`);
+                     Error: ${response.data.error}`);
               return false;
           }
           alert('The Category has been saved.');

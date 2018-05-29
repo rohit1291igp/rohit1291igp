@@ -12,14 +12,14 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
         transition('* => void', [
             style({ height: '*', opacity: '1', width: '0%'}),
             sequence([
-                animate('.4s ease', style({ height: '*', width: '0%', opacity: '.7',  })),
+                // animate('.4s ease', style({ height: '*', width: '0%', opacity: '.7',  })),
                 animate('0.9s ease', style({ height: '0', width: '0%', opacity: 0  }))
             ])
         ]),
         transition('void => active', [
-            style({ height: '*', opacity: '0', background: '#f2f2f2',  position: 'fixed', top: '51px', right: '0px','animation-fill-mode': 'forwards' }),
+            style({ height: '*', opacity: '0', background: '#f2f2f2',  position: 'fixed', top: '51px', right: '0px'}),
             sequence([
-                animate('.4s ease', style({ height: '*', width: '0%', position: 'fixed', opacity: '.2'})),
+                // animate('.4s ease', style({ height: '*', width: '0%', position: 'fixed', opacity: '.2'})),
                 animate('.9s ease', style({ height: '*', width: '50%', position: 'fixed', opacity: 1, 'animation-fill-mode': 'forwards'}))
             ])
         ])
@@ -51,7 +51,7 @@ export class CategoryComponent implements OnInit {
     this.showSideBar = true;
     this.testAnimate = 'active';
     $('#target :input').prop('disabled', true);
-    $('body').addClass('hideSB'); // To Hide scroll bar
+    $('body')[0].style.overflow = 'hidden';
   };
 
   // Get Categories
@@ -81,8 +81,8 @@ export class CategoryComponent implements OnInit {
   // Edit Category
   editCategory(cat, type) {
     this.showSideBar = true;
+    $('body')[0].style.overflow = 'hidden';
     this.testAnimate = 'active';
-    $('body').addClass('hideSB'); // To Hide scroll bar
     this.cat = cat;
     this.cat.category = this.categories;
     this.cat.add = '';
@@ -111,6 +111,7 @@ export class CategoryComponent implements OnInit {
             console.log(response);
               if (err || response.error || response.status === 'Error') {
                   console.log('Error=============>', err, response.errorCode);
+                  alert('There was an error while deleting categories');
                   return false;
               }
               alert(`The Category has been deleted`);
@@ -121,14 +122,50 @@ export class CategoryComponent implements OnInit {
         }
   };
 
+  enableCategory(model) {
+    const data = {};
+        console.log(model);
+        data['seo'] = {};
+        data['id'] = model.id;
+        data['fkasid'] = model.fkasid;
+        data['status'] = 1;
+        data['title'] = model.title;
+        data['url'] = model.url;
+        data['sortorder'] = model.sortorder;
+        data['parentid'] = model.parentid;
+        data['seo']['seotitle'] = model.seo.seotitle;
+        data['seo']['seodescription'] = model.seo.seodescription;
+        data['seo']['seokeywords'] = model.seo.seokeywords;
+        console.log(data);
+
+      const _this = this;
+      const reqObj = {
+          url: 'categories/updatecategory',
+          method: 'put',
+          payload: data
+      };
+
+      _this.BackendService.makeAjax(reqObj, function(err, response, headers){
+        console.log(err);
+        console.log(response);
+          if (err || response.error || response.status === 'Error') {
+              console.log('Error=============>', err, response.errorCode);
+              alert(`There was an error while saving the Category.
+                     Error: ${response.data.error}`);
+              return false;
+          }
+          alert('The Category has been Enabled.');
+          window.location.reload();
+      });
+  }
+
   // Parent Child Relationship!!!
   clickDetect(event) {
     console.log('Parent');
     console.log(event);
     this.showSideBar = false;
+    $('body')[0].style.overflow = 'auto';
     this.testAnimate = 'void';
     $('#target :input').prop('disabled', false);
-    $('body').removeClass('hideSB');
-    $('body').addClass('showSB'); // To show scroll bar
   };
 }
