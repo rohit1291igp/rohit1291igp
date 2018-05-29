@@ -5,9 +5,9 @@
     padding: 1px 10px !important;
 };
 
-.hideSB{
-    overflow: hidden !important;
+/* .hideSB{
+    overflow: hidden;
 }
 .showSB{
-    overflow: auto !important;
-}
+    overflow: auto;
+} */
