@@ -150,7 +150,9 @@ export class BlogCreateComponent implements OnInit {
         const imageList = [];
         if (this.model.files.length > 0) {
             this.model.files.forEach(element => {
-                imageList.push(element.Key);
+                if (element.Key !== this.model.featuredImage) {
+                    imageList.push(element.Key);
+                }
             });
         }
         return imageList;
@@ -254,6 +256,7 @@ export class BlogCreateComponent implements OnInit {
     }
 
     makeFeaturedImage(imageName) {
+
         this.model.featuredImage = imageName;
     }
 
@@ -285,8 +288,13 @@ export class BlogCreateComponent implements OnInit {
                 console.log('Error=============>', err, response.errorCode);
                 alert('There was an error while creating the article');
             }
-            alert('The Article has been created.');
-            window.location.reload();
+
+            if (response.status === 'Success') {
+                alert('The Article has been created.');
+                // window.location.reload();
+            } else {
+                alert('There was an error creating the article.');
+            }
         });
     }
 }

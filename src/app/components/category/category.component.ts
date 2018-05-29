@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { BackendService } from '../../services/backend.service';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @Component({
   selector: 'app-category',
@@ -10,14 +11,29 @@ import { BackendService } from '../../services/backend.service';
 export class CategoryComponent implements OnInit {
   model: any = {};
   public categories;
+  public cat;
+  public showSideBar = false;
   constructor(
     public BackendService: BackendService
   ) { }
 
   ngOnInit() {
     this.model.webstore = '';
+    this.model.disabled = false;
   }
 
+  // On Click on Add Btn
+  addCategory() {
+    // alert('Add');
+    // this.model = {};
+    console.log('Inside Add');
+    this.cat = {};
+    this.cat.add = 'add';
+    this.showSideBar = true;
+    $('#target :input').prop('disabled', true);
+  };
+
+  // Get Categories
   getCategories() {
     const _this = this;
     console.log(_this.model.webstore);
@@ -41,8 +57,50 @@ export class CategoryComponent implements OnInit {
     event.preventDefault();
   };
 
-  clickDetect() {
-    console.log('123');
-  }
+  // Edit Category
+  editCategory(cat, type) {
+    this.showSideBar = true;
+    this.cat = cat;
+    this.cat.category = this.categories;
+    this.cat.add = '';
+    $('#target :input').prop('disabled', true);
+    if (type === 'cat') {
+      this.cat.selected = '';
+      this.cat.showcatDD = false;
+    }else {
+      this.cat.selected = 'selected';
+      this.cat.showcatDD = true;
+    }
+    console.log(this.cat);
+  };
 
+  // Delete Category
+  deleteCategory(id) {
+    console.log(id);
+    const _this = this;
+      const reqObj = {
+          url: `categories/deletecategory?id=${id}`,
+          method: 'delete'
+      };
+        if (confirm(`Are you sure do you want to delete Category?`)) {
+          _this.BackendService.makeAjax(reqObj, function(err, response, headers){
+              if (err || response.error) {
+                  console.log('Error=============>', err, response.errorCode);
+                  return false;
+              }
+              alert(`The article has been deleted`);
+              window.location.reload();
+          });
+        }else {
+          return false;
+        }
+  };
+
+  // Parent Child Relationship!!!
+  clickDetect(event) {
+    console.log('Parent');
+    console.log(event);
+    this.showSideBar = false;
+    $('#target :input').prop('disabled', false);
+  };
 }
