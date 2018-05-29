@@ -31,6 +31,7 @@ export class CategoryModalComponent implements OnInit {
         }
     }
 
+    // To get Categories
     getCategories() {
         const _this = this;
         console.log(_this.model.webstore);
@@ -51,14 +52,18 @@ export class CategoryModalComponent implements OnInit {
       }
       };
 
-    detect() {
-        console.log('wow');
-        this.catClick.emit();
-    }
+    // detect() {
+    //     console.log('wow');
+    //     this.catClick.emit();
+    // }
+
+    // On Click of Canccel Btn
     cancelCategory() {
         console.log('Child');
         this.catClick.emit({cancel: 'Cancel'});
     };
+
+    // Save Category
     saveCategory(model) {
         const data = {};
         console.log(model);
@@ -98,6 +103,7 @@ export class CategoryModalComponent implements OnInit {
         console.log(model);
     };
 
+    // Add new Category
     addCategory(model) {
         const data = {};
         data['seo'] = {};
@@ -129,6 +135,4 @@ export class CategoryModalComponent implements OnInit {
           window.location.reload();
         });
     };
-
-    
 }
