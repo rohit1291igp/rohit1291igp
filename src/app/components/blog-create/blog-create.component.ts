@@ -291,9 +291,7 @@ export class BlogCreateComponent implements OnInit {
 
             if (response.status === 'Success') {
                 alert('The Article has been created.');
-                setTimeout(() => {
-                    window.location.reload();
-                }, 2000);
+                // window.location.reload();
             } else {
                 alert('There was an error creating the article.');
             }

@@ -22,7 +22,7 @@ export class CategoryModalComponent implements OnInit {
         this.model.title = '';
         this.model.url = '';
         this.model.status = '';
-        this.model.sortorder = 10000;
+        this.model.sortorder = '';
         this.model.metaTitle = '';
         this.model.metadesc = '';
         this.model.metakeywords = '';
@@ -41,7 +41,7 @@ export class CategoryModalComponent implements OnInit {
           method: 'get'
           };
         this.BackendService.makeAjax(reqObj, function(err, response, headers){
-          if (err || response.error || response.status === 'Error') {
+          if (err || response.error) {
               console.log('Error=============>', err, response.errorCode);
               alert('There was an error while fetching categories');
           }
@@ -88,12 +88,9 @@ export class CategoryModalComponent implements OnInit {
       };
 
       _this.BackendService.makeAjax(reqObj, function(err, response, headers){
-        console.log(err);
-        console.log(response);
-          if (err || response.error || response.status === 'Error') {
+          if (err || response.error) {
               console.log('Error=============>', err, response.errorCode);
-              alert(`There was an error while saving the Category.
-                     Error: ${response.message}`);
+              alert('There was an error while saving the article');
               return false;
           }
           alert('The Category has been saved.');
@@ -129,7 +126,7 @@ export class CategoryModalComponent implements OnInit {
         };
 
         _this.BackendService.makeAjax(reqObj, function(err, response, headers){
-          if (err || response.error || response.status === 'Error') {
+          if (err || response.error) {
               console.log('Error=============>', err, response.errorCode);
               alert('There was an error while saving the article');
               return false;

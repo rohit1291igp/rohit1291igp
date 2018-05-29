@@ -1,4 +1,4 @@
-import { Component, OnInit, trigger, sequence, transition, animate, style, state  } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { BackendService } from '../../services/backend.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -6,32 +6,13 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 @Component({
   selector: 'app-category',
   templateUrl: './category.component.html',
-  styleUrls: ['./category.component.css'],
-  animations: [
-    trigger('anim', [
-        transition('* => void', [
-            style({ height: '*', opacity: '1', width: '0%'}),
-            sequence([
-                animate('.4s ease', style({ height: '*', width: '0%', opacity: '.7',  })),
-                animate('0.9s ease', style({ height: '0', width: '0%', opacity: 0  }))
-            ])
-        ]),
-        transition('void => active', [
-            style({ height: '*', opacity: '0', background: '#f2f2f2',  position: 'fixed', top: '51px', right: '0px','animation-fill-mode': 'forwards' }),
-            sequence([
-                animate('.4s ease', style({ height: '*', width: '0%', position: 'fixed', opacity: '.2'})),
-                animate('.9s ease', style({ height: '*', width: '50%', position: 'fixed', opacity: 1, 'animation-fill-mode': 'forwards'}))
-            ])
-        ])
-    ])
-  ]
+  styleUrls: ['./category.component.css']
 })
 export class CategoryComponent implements OnInit {
   model: any = {};
   public categories;
   public cat;
   public showSideBar = false;
-  public testAnimate = 'void';
   constructor(
     public BackendService: BackendService
   ) { }
@@ -49,9 +30,7 @@ export class CategoryComponent implements OnInit {
     this.cat = {};
     this.cat.add = 'add';
     this.showSideBar = true;
-    this.testAnimate = 'active';
     $('#target :input').prop('disabled', true);
-    $('body').addClass('hideSB'); // To Hide scroll bar
   };
 
   // Get Categories
@@ -81,8 +60,6 @@ export class CategoryComponent implements OnInit {
   // Edit Category
   editCategory(cat, type) {
     this.showSideBar = true;
-    this.testAnimate = 'active';
-    $('body').addClass('hideSB'); // To Hide scroll bar
     this.cat = cat;
     this.cat.category = this.categories;
     this.cat.add = '';
@@ -107,13 +84,11 @@ export class CategoryComponent implements OnInit {
       };
         if (confirm(`Are you sure do you want to delete Category?`)) {
           _this.BackendService.makeAjax(reqObj, function(err, response, headers){
-            console.log(err);
-            console.log(response);
-              if (err || response.error || response.status === 'Error') {
+              if (err || response.error) {
                   console.log('Error=============>', err, response.errorCode);
                   return false;
               }
-              alert(`The Category has been deleted`);
+              alert(`The article has been deleted`);
               window.location.reload();
           });
         }else {
@@ -126,9 +101,6 @@ export class CategoryComponent implements OnInit {
     console.log('Parent');
     console.log(event);
     this.showSideBar = false;
-    this.testAnimate = 'void';
     $('#target :input').prop('disabled', false);
-    $('body').removeClass('hideSB');
-    $('body').addClass('showSB'); // To show scroll bar
   };
 }
