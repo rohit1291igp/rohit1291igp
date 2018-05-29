@@ -41,7 +41,7 @@
                             <div class="col-md-6">
                                 <div class="form-group" [ngClass]="{ 'has-error': catDataForm.submitted && !title.valid }">
                                     <label for="">Name</label>
-                                    <input type="text" class="form-control" placeholder="Name" name="title" [(ngModel)]="model.title" #title="ngModel" required  maxlength="50"/>
+                                    <input type="text" class="form-control" placeholder="Name" name="title" [(ngModel)]="model1.title" #title="ngModel" required  maxlength="50"/>
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -75,7 +75,7 @@
                             <div class="col-md-6">
                                 <div class="form-group" [ngClass]="{ 'has-error' : catDataForm.submitted && !status.valid }">
                                     <label for="">Status</label>
-                                    <select class="form-control" name="status" #status="ngModel" [(ngModel)]="model.status" required>
+                                    <select class="form-control" name="status" #status="ngModel" [(ngModel)]="model1.status" required>
                                         <option value="">Select Status</option>
                                         <option value="1">Visible</option>
                                         <option value="0">Hidden</option>

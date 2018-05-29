@@ -11,6 +11,7 @@ import { BackendService } from '../../services/backend.service';
 export class CategoryModalComponent implements OnInit {
     @Output() catClick = new EventEmitter();
     @Input() model: any;
+    public model1 = this.model;
     public uniqueUrl = true;
     public priviousvURL = '';
     constructor(
@@ -18,6 +19,7 @@ export class CategoryModalComponent implements OnInit {
       ) { };
 
     ngOnInit() {
+        this.model1 = this.model;
         console.log('initiated');
         this.model.webstore = '';
         if (this.model.add === 'add') { // Just to check if request from new cat OR from Edit button
@@ -78,9 +80,9 @@ export class CategoryModalComponent implements OnInit {
     // }
 
     // On Click of Canccel Btn
-    cancelCategory() {
+    cancelCategory(data) {
         console.log('Child');
-        this.catClick.emit({cancel: 'Cancel'});
+        this.catClick.emit({data: data});
     };
 
     // Save Category
@@ -109,7 +111,7 @@ export class CategoryModalComponent implements OnInit {
 
       _this.BackendService.makeAjax(reqObj, function(err, response, headers){
         console.log(err);
-        console.log(response);
+        console.log(response.data);
           if (err || response.error || response.status === 'Error') {
               console.log('Error=============>', err, response.errorCode);
               alert(`There was an error while saving the Category.
@@ -117,7 +119,7 @@ export class CategoryModalComponent implements OnInit {
               return false;
           }
           alert('The Category has been saved.');
-          window.location.reload();
+           _this.cancelCategory(response.data);
       });
     }
 
@@ -155,7 +157,8 @@ export class CategoryModalComponent implements OnInit {
               return false;
           }
           alert('The Category has been Created.');
-          window.location.reload();
+          _this.cancelCategory(response.data);
+         // window.location.reload();
         });
     };
 }
