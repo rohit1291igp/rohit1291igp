@@ -98,11 +98,11 @@ export class CategoryComponent implements OnInit {
   };
 
   // Delete Category
-  deleteCategory(id) {
+  deleteCategory(id, fkasid) {
     console.log(id);
     const _this = this;
       const reqObj = {
-          url: `categories/deletecategory?id=${id}`,
+          url: `categories/deletecategory?id=${id}&fkAssociateId=${fkasid}`,
           method: 'delete'
       };
         if (confirm(`Are you sure do you want to delete Category?`)) {
@@ -115,7 +115,9 @@ export class CategoryComponent implements OnInit {
                   return false;
               }
               alert(`The Category has been deleted`);
-              window.location.reload();
+              _this.categories = response.data;
+              console.log(_this.categories);
+              // window.location.reload();
           });
         }else {
           return false;
@@ -155,7 +157,9 @@ export class CategoryComponent implements OnInit {
               return false;
           }
           alert('The Category has been Enabled.');
-          window.location.reload();
+          _this.categories = response.data;
+          console.log(_this.categories);
+         //  window.location.reload();
       });
   }
 
@@ -167,5 +171,8 @@ export class CategoryComponent implements OnInit {
     $('body')[0].style.overflow = 'auto';
     this.testAnimate = 'void';
     $('#target :input').prop('disabled', false);
+    if (event.data !== undefined) {
+    this.categories = event.data;
+    }
   };
 }
