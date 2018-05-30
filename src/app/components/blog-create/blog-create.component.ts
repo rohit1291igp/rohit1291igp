@@ -183,20 +183,27 @@ export class BlogCreateComponent implements OnInit {
     }
 
     checkUniqueUrlValue() {
-        const _this = this;
-        const reqObj = {
-            url: 'blogs/validateblogurl?url=' + this.model.url + '&fkAssociateId=' + this.model.webstore,
-            method: 'get'
-        };
-
-        _this.BackendService.makeAjax(reqObj, function(err, response, headers){
-            if (response.data.unique === 'false') {
-                alert('The selected URL already exists. Please enter a new URL');
-                _this.uniqueUrl = false;
-            } else {
-                _this.uniqueUrl = true;
-            }
-        });
+        const format = /[ !@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/;
+        const value = format.test(this.model.url);
+        if (value) {
+            alert('Please remove special characters from URL!!!');
+            this.model.url = '';
+            return false;
+        } else if (!value) {
+            const _this = this;
+            const reqObj = {
+                url: 'blogs/validateblogurl?url=' + this.model.url + '&fkAssociateId=' + this.model.webstore,
+                method: 'get'
+            };
+            _this.BackendService.makeAjax(reqObj, function(err, response, headers){
+                if (response.data.unique === 'false') {
+                    alert('The selected URL already exists. Please enter a new URL');
+                    _this.uniqueUrl = false;
+                } else {
+                    _this.uniqueUrl = true;
+                }
+            });
+        }
     }
 
     getCategoryData() {
