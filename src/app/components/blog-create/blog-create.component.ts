@@ -185,7 +185,7 @@ export class BlogCreateComponent implements OnInit {
     }
 
     checkUniqueUrlValue() {
-        const format = /[ !@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/;
+        const format = /[ !@#$%^&*()_+\=\[\]{};':"\\|,.<>\/?]/;
         const value = format.test(this.model.url);
         if (value) {
             alert('Please remove special characters from URL!!!');

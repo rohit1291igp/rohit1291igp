@@ -58,7 +58,7 @@ export class CategoryModalComponent implements OnInit {
       };
 
     checkUniqueUrlValue(data) {
-        const format = /[ !@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/;
+        const format = /[ !@#$%^&*()_+\=\[\]{};':"\\|,.<>\/?]/;
         const value = format.test(data.url);
         console.log(value);
         if (value) {
