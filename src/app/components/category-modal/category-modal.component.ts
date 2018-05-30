@@ -58,7 +58,15 @@ export class CategoryModalComponent implements OnInit {
       };
 
     checkUniqueUrlValue(data) {
-        if (this.previousURL !== data.url) {
+        const format = /[ !@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/;
+        const value = format.test(data.url);
+        console.log(value);
+        if (value) {
+            alert('Please remove special characters from URL!!!');
+            data.url = this.previousURL;
+            return false;
+        } else
+        if (!value && this.previousURL !== data.url) {
         const _this = this;
         const reqObj = {
             url: 'categories/validatecategoryurl?url=' + data.url + '&fkAssociateId=' + data.fkasid,

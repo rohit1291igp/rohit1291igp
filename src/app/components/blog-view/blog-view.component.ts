@@ -240,12 +240,19 @@ export class BlogViewComponent implements OnInit, AfterViewInit {
     };
 
     checkUniqueUrlValue(data) {
-      if (this.priviousvURL !== data.url) {
-      const _this = this;
-      const reqObj = {
-          url: 'blogs/validateblogurl?url=' + data.url + '&fkAssociateId=' + data.fkasid,
-          method: 'get'
-      };
+      const format = /[ !@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/;
+        const value = format.test(data.url);
+        if (value) {
+            alert('Please remove special characters from URL!!!');
+            data.url = this.priviousvURL;
+            return false;
+        } else
+        if (!value && this.priviousvURL !== data.url) {
+          const _this = this;
+          const reqObj = {
+              url: 'blogs/validateblogurl?url=' + data.url + '&fkAssociateId=' + data.fkasid,
+              method: 'get'
+        };
 
       _this.BackendService.makeAjax(reqObj, function(err, response, headers){
           if (response.data.unique === 'false') {
