@@ -47,7 +47,7 @@
                             <div class="col-md-6">
                                 <div *ngIf="model1.showcatDD == true;else other_content" class="form-group" [ngClass]="{ 'has-error': catDataForm.submitted && !category.valid }">
                                     <label for="">Parent Category</label>
-                                    <select class="form-control" name="category" #category="ngModel" [(ngModel)]="model1.parentid"  required> <!--#category="ngModel" [(ngModel)]="cat.fkasid" -->
+                                    <select class="form-control" name="category" #category="ngModel" [(ngModel)]="model1.parentid"  required>   
                                         <option *ngFor="let cat of model1.category" value='{{cat.id}}' selected='{{cat.selected}}'>{{cat.title}}
                                         </option>
                                     </select>
