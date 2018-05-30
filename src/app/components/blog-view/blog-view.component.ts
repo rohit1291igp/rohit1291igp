@@ -230,7 +230,7 @@ export class BlogViewComponent implements OnInit, AfterViewInit {
     };
 
     checkUniqueUrlValue(data) {
-      const format = /[ !@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/;
+      const format = /[ !@#$%^&*()_+\=\[\]{};':"\\|,.<>\/?]/;
         const value = format.test(data.url);
         if (value) {
             alert('Please remove special characters from URL!!!');
