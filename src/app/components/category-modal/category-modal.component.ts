@@ -42,7 +42,7 @@ export class CategoryModalComponent implements OnInit {
     getCategories() {
         const _this = this;
         console.log(_this.model1.fkasid);
-        if (_this.model1.fkasid !== '' || _this.model1.fkasid !== undefined) {
+        if (_this.model1.fkasid !== '' && _this.model1.fkasid !== undefined) {
         const reqObj = {
           url: 'categories/categorylist?fkAssociateId=' + _this.model1.fkasid,
           method: 'get'
