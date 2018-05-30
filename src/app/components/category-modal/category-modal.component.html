@@ -27,7 +27,7 @@
                                     <label for="">Webstore: </label>
                                     <span *ngIf="model1.add != 'add';else input_content">{{model1.fkasname}}</span>
                                     <ng-template #input_content style="text-align: center;">
-                                            <select class="form-control" name="webstore" #webstore="ngModel" [(ngModel)]="model1.webstore" (change)="getCategories()"  required > <!--(change)="resetCategoriesOnStoreChange()" -->
+                                            <select class="form-control" name="fkasid" #fkasid="ngModel" [(ngModel)]="model1.fkasid" (change)="getCategories()"  required > <!--(change)="resetCategoriesOnStoreChange()" -->
                                                     <option value="">Select Webstore</option>
                                                     <option value="5">IGP</option>
                                                     <option value="830">Interflora</option>
