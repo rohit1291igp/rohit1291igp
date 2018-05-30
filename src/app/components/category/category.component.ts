@@ -20,7 +20,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
             style({ height: '*', opacity: '0', background: '#f2f2f2',  position: 'fixed', top: '51px', right: '0px', width: '50%'}),
             sequence([
                 // animate('.4s ease', style({ height: '*', width: '0%', position: 'fixed', opacity: '.2'})),
-                animate('.9s ease', style({ height: '*', width: '50%', position: 'fixed', opacity: 1, 'animation-fill-mode': 'forwards'}))
+                animate('.3s ease', style({ height: '*', width: '50%', position: 'fixed', opacity: 0.3, 'animation-fill-mode': 'forwards'}))
             ])
         ])
     ])

@@ -22,6 +22,7 @@ export class BlogCreateComponent implements OnInit {
     public categories = [];
     public selectedCategories: Object = {};
     public uniqueUrl = true;
+    public specCharUrl = false;
     public files = [];
     public staticImages = [];
     public env = environment;
@@ -174,6 +175,11 @@ export class BlogCreateComponent implements OnInit {
             return false;
         }
 
+        if (this.specCharUrl) {
+            alert('Please remove special character from URL');
+            return false;
+        }
+
         return true;
     }
 
@@ -189,9 +195,11 @@ export class BlogCreateComponent implements OnInit {
         const value = format.test(this.model.url);
         if (value) {
             alert('Please remove special characters from URL!!!');
-            this.model.url = '';
+            // this.model.url = '';
+            this.specCharUrl = true;
             return false;
         } else if (!value) {
+            this.specCharUrl = false;
             const _this = this;
             const reqObj = {
                 url: 'blogs/validateblogurl?url=' + this.model.url + '&fkAssociateId=' + this.model.webstore,
