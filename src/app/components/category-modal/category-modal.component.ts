@@ -21,10 +21,11 @@ export class CategoryModalComponent implements OnInit {
 
     ngOnInit() {
         this.model1 = {...this.model};
+        console.log(this.model1);
         this.previousURL = this.model1.url;
         console.log('initiated');
-        this.model1.webstore = '';
-        if (this.model1.add === 'add') { // Just to check if request from new cat OR from Edit button
+        if (this.model1.add === 'add') { // Just to check if request for new cat OR from Edit button
+        this.model1.fkasid = '';
         this.model1.title = '';
         this.model1.url = '';
         this.model1.status = '';
@@ -40,10 +41,10 @@ export class CategoryModalComponent implements OnInit {
     // To get Categories
     getCategories() {
         const _this = this;
-        console.log(_this.model1.webstore);
-        if (_this.model1.webstore !== '') {
+        console.log(_this.model1.fkasid);
+        if (_this.model1.fkasid !== '' || _this.model1.fkasid !== undefined) {
         const reqObj = {
-          url: 'categories/categorylist?fkAssociateId=' + _this.model1.webstore,
+          url: 'categories/categorylist?fkAssociateId=' + _this.model1.fkasid,
           method: 'get'
           };
         this.BackendService.makeAjax(reqObj, function(err, response, headers){
@@ -59,32 +60,37 @@ export class CategoryModalComponent implements OnInit {
       };
 
     checkUniqueUrlValue(data) {
-        const format = /[ !@#$%^&*()_+\=\[\]{};':"\\|,.<>\/?]/;
-        const value = format.test(data.url);
-        console.log(value);
-        if (value) {
-            alert('Please remove special characters from URL!!!');
-           // data.url = this.previousURL;
-            this.specCharUrl = true;
-            return true;
-        } else
-        if (!value && this.previousURL !== data.url) {
-        this.specCharUrl = false;
-        const _this = this;
-        const reqObj = {
-            url: 'categories/validatecategoryurl?url=' + data.url + '&fkAssociateId=' + data.fkasid,
-            method: 'get'
-        };
+        if (data.fkasid !== '' && data.fkasid !== undefined) {
+            console.log(data);
+            const format = /[ !@#$%^&*()_+\=\[\]{};':"\\|,.<>\/?]/;
+            const value = format.test(data.url);
+            console.log(value);
+            if (value) {
+                alert('Please remove special characters from URL!!!');
+            // data.url = this.previousURL;
+                this.specCharUrl = true;
+                return true;
+            } else
+            if (!value && this.previousURL !== data.url) {
+            this.specCharUrl = false;
+            const _this = this;
+            const reqObj = {
+                url: 'categories/validatecategoryurl?url=' + data.url + '&fkAssociateId=' + data.fkasid,
+                method: 'get'
+            };
 
-        _this.BackendService.makeAjax(reqObj, function(err, response, headers){
-            if (response.data.unique === 'false') {
-                alert('The selected URL already exists. Please enter a new URL');
-                _this.uniqueUrl = false;
-            } else {
-                _this.uniqueUrl = true;
+            _this.BackendService.makeAjax(reqObj, function(err, response, headers){
+                if (response.data.unique === 'false') {
+                    alert('The selected URL already exists. Please enter a new URL');
+                    _this.uniqueUrl = false;
+                } else {
+                    _this.uniqueUrl = true;
+                }
+            });
             }
-        });
-      }
+        } else {
+            alert('Please select Webstore!!!');
+        }
     };
     // detect() {
     //     console.log('wow');
@@ -145,7 +151,7 @@ export class CategoryModalComponent implements OnInit {
     addCategory() {
         const data = {};
         data['seo'] = {};
-        data['fkasid'] = this.model1.webstore;
+        data['fkasid'] = this.model1.fkasid;
         data['title'] = this.model1.title;
         data['status'] = this.model1.status;
         data['url'] = this.model1.url;
@@ -177,7 +183,13 @@ export class CategoryModalComponent implements OnInit {
          }
     };
 
+    // Validate model before saving/creating
     validateModel() {
+
+        if (this.model1.fkasid === '' && typeof(this.model1.fkasid) === 'undefined') {
+            alert('Please enter the main content for the category.');
+            return false;
+        }
 
         if (this.model1.title === '' || typeof(this.model1.title) === 'undefined') {
             alert('Please enter the main content for the category.');

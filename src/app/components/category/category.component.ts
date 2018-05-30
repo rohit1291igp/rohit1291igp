@@ -28,7 +28,7 @@ export class CategoryComponent implements OnInit {
   model: any = {};
   public categories;
   public cat;
-  public showSideBar = false;
+  public showSideBar: Boolean = false;
   public testAnimate = 'void';
   constructor(
     public BackendService: BackendService
@@ -41,8 +41,6 @@ export class CategoryComponent implements OnInit {
 
   // On Click on Add Btn
   addCategory() {
-    // alert('Add');
-    // this.model = {};
     console.log('Inside Add');
     this.cat = {};
     this.cat.add = 'add';
