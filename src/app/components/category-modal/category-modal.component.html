@@ -67,7 +67,7 @@
                             <div class="col-md-12">
                                 <div class="form-group" [ngClass]="{ 'has-error': catDataForm.submitted && !url.valid }">
                                     <label for="">URL</label>
-                                    <input type="text" class="form-control" placeholder="URL" onkeypress='return (event.charCode > 96 && event.charCode < 123) || (event.charCode > 64 && event.charCode < 91) || (event.charCode >= 48 && event.charCode <= 57) || event.charCode <= 31 || event.charCode == 45' name="url" [(ngModel)]="model1.url" #url="ngModel"  required  maxlength="150"/>
+                                    <input type="text" class="form-control" placeholder="URL" onkeypress='return (event.charCode > 96 && event.charCode < 123) || (event.charCode > 64 && event.charCode < 91) || (event.charCode >= 48 && event.charCode <= 57) || event.charCode <= 31 || event.charCode == 45' name="url" (focusout)="checkUniqueUrlValue(model1)" [(ngModel)]="model1.url" #url="ngModel"  required  maxlength="150"/>
                                 </div>
                             </div>
                         </div>
@@ -132,11 +132,11 @@
 
                         <div class="row">
                             <div *ngIf="model1.add != 'add';else addCat_content" class="col-md-12 text-right">
-                                    <button type="submit"  class="btn btn-primary pull-right"  (click)="saveCategory(model)" >Save</button>
+                                    <button type="submit"  class="btn btn-primary pull-right"  (click)="saveCategory()" >Save</button>
                                 <!-- <input class="btn btn-primary pull-right" type="submit" (click)="saveCategory(model)" value="Save" /> -->
                             </div>
                             <ng-template #addCat_content style="text-align: center;">
-                                    <br/><button type="submit" style="margin-right: 10px;" class="btn btn-primary pull-right"  (click)="addCategory(model)" >Add</button>
+                                    <br/><button type="submit" style="margin-right: 10px;" class="btn btn-primary pull-right"  (click)="addCategory()" >Add</button>
                             </ng-template>
                         </div>
                     </form>

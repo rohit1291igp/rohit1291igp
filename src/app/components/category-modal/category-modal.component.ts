@@ -13,13 +13,14 @@ export class CategoryModalComponent implements OnInit {
     @Input() model: any;
     public model1 = this.model;
     public uniqueUrl = true;
-    public priviousvURL = '';
+    public previousURL = '';
     constructor(
         public BackendService: BackendService
       ) { };
 
     ngOnInit() {
         this.model1 = {...this.model};
+        this.previousURL = this.model1.url;
         console.log('initiated');
         this.model1.webstore = '';
         if (this.model1.add === 'add') { // Just to check if request from new cat OR from Edit button
@@ -56,24 +57,24 @@ export class CategoryModalComponent implements OnInit {
       }
       };
 
-    // checkUniqueUrlValue(data) {
-    //     if (this.priviousvURL !== data.url) {
-    //     const _this = this;
-    //     const reqObj = {
-    //         url: 'blogs/validateblogurl?url=' + data.url + '&fkAssociateId=' + data.fkasid,
-    //         method: 'get'
-    //     };
+    checkUniqueUrlValue(data) {
+        if (this.previousURL !== data.url) {
+        const _this = this;
+        const reqObj = {
+            url: 'categories/validatecategoryurl?url=' + data.url + '&fkAssociateId=' + data.fkasid,
+            method: 'get'
+        };
 
-    //     _this.BackendService.makeAjax(reqObj, function(err, response, headers){
-    //         if (response.data.unique === 'false') {
-    //             alert('The selected URL already exists. Please enter a new URL');
-    //             _this.uniqueUrl = false;
-    //         } else {
-    //             _this.uniqueUrl = true;
-    //         }
-    //     });
-    //   }
-    // };
+        _this.BackendService.makeAjax(reqObj, function(err, response, headers){
+            if (response.data.unique === 'false') {
+                alert('The selected URL already exists. Please enter a new URL');
+                _this.uniqueUrl = false;
+            } else {
+                _this.uniqueUrl = true;
+            }
+        });
+      }
+    };
     // detect() {
     //     console.log('wow');
     //     this.catClick.emit();
@@ -86,9 +87,8 @@ export class CategoryModalComponent implements OnInit {
     };
 
     // Save Category
-    saveCategory(model) {
+    saveCategory() {
         const data = {};
-        console.log(model);
         data['seo'] = {};
         data['id'] = this.model1.id;
         data['fkasid'] = this.model1.fkasid;
@@ -129,7 +129,7 @@ export class CategoryModalComponent implements OnInit {
     };
 
     // Add new Category
-    addCategory(model) {
+    addCategory() {
         const data = {};
         data['seo'] = {};
         data['fkasid'] = this.model1.webstore;
