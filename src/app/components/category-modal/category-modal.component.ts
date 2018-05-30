@@ -13,6 +13,7 @@ export class CategoryModalComponent implements OnInit {
     @Input() model: any;
     public model1 = this.model;
     public uniqueUrl = true;
+    public specCharUrl = false;
     public previousURL = '';
     constructor(
         public BackendService: BackendService
@@ -63,10 +64,12 @@ export class CategoryModalComponent implements OnInit {
         console.log(value);
         if (value) {
             alert('Please remove special characters from URL!!!');
-            data.url = this.previousURL;
-            return false;
+           // data.url = this.previousURL;
+            this.specCharUrl = true;
+            return true;
         } else
         if (!value && this.previousURL !== data.url) {
+        this.specCharUrl = false;
         const _this = this;
         const reqObj = {
             url: 'categories/validatecategoryurl?url=' + data.url + '&fkAssociateId=' + data.fkasid,
@@ -110,25 +113,27 @@ export class CategoryModalComponent implements OnInit {
         data['seo']['seokeywords'] = this.model1.seo.seokeywords;
         console.log(data);
 
-      const _this = this;
-      const reqObj = {
-          url: 'categories/updatecategory',
-          method: 'put',
-          payload: data
-      };
+        if (this.validateModel()) {
+            const _this = this;
+        const reqObj = {
+            url: 'categories/updatecategory',
+            method: 'put',
+            payload: data
+        };
 
-      _this.BackendService.makeAjax(reqObj, function(err, response, headers){
-        console.log(err);
-        console.log(response.data);
-          if (err || response.error || response.status === 'Error') {
-              console.log('Error=============>', err, response.errorCode);
-              alert(`There was an error while saving the Category.
-                     Error: ${response.data.error}`);
-              return false;
-          }
-          alert('The Category has been saved.');
-           _this.cancelCategory(response.data);
-      });
+        _this.BackendService.makeAjax(reqObj, function(err, response, headers){
+            console.log(err);
+            console.log(response.data);
+            if (err || response.error || response.status === 'Error') {
+                console.log('Error=============>', err, response.errorCode);
+                alert(`There was an error while saving the Category.
+                        Error: ${response.data.error}`);
+                return false;
+            }
+            alert('The Category has been saved.');
+            _this.cancelCategory(response.data);
+        });
+        }
     }
 
     setParentId(model) {
@@ -151,6 +156,7 @@ export class CategoryModalComponent implements OnInit {
         data['seo']['seokeywords'] = this.model1.metakeywords;
         console.log(data);
 
+        if (this.validateModel()) {
         const _this = this;
         const reqObj = {
           url: 'categories/createcategory',
@@ -161,12 +167,38 @@ export class CategoryModalComponent implements OnInit {
         _this.BackendService.makeAjax(reqObj, function(err, response, headers){
           if (err || response.error || response.status === 'Error') {
               console.log('Error=============>', err, response.errorCode);
-              alert('There was an error while saving the article');
+              alert('There was an error while saving the category');
               return false;
           }
           alert('The Category has been Created.');
           _this.cancelCategory(response.data);
          // window.location.reload();
         });
+         }
     };
+
+    validateModel() {
+
+        if (this.model1.title === '' || typeof(this.model1.title) === 'undefined') {
+            alert('Please enter the main content for the category.');
+            return false;
+        }
+
+        if (this.model1.url === '' || typeof(this.model1.url) === 'undefined') {
+            alert('Please enter the main content for the category.');
+            return false;
+        }
+
+        if (!this.uniqueUrl) {
+            alert('The selected URL already exists. Please enter a new URL');
+            return false;
+        }
+
+        if (this.specCharUrl) {
+            alert('Please remove special character from URL');
+            return false;
+        }
+
+        return true;
+    }
 }
