@@ -33,6 +33,7 @@ export class SeoHomeComponent implements OnInit {
         data['status'] = this.model.status;
         data['id'] = this.model.id;
 
+        if (this.validateModel()) {
         const _this = this;
         const reqObj = {
             url: 'blogs/updatemetahome',
@@ -47,7 +48,7 @@ export class SeoHomeComponent implements OnInit {
             }
             alert('The meta information has been updated successfully.');
         });
-
+        }
     }
 
     getMetaDataOnStoreChange() {
@@ -76,6 +77,21 @@ export class SeoHomeComponent implements OnInit {
             }
             cb(response.data);
         });
+    }
+
+    validateModel() {
+
+        if (this.model.title === '' || typeof(this.model.title) === 'undefined') {
+            alert('Please enter the main content for the Meta.');
+            return false;
+        }
+
+        if (this.model.metaDesc === '' || typeof(this.model.metaDesc) === 'undefined') {
+            alert('Please enter the main content for the Meta.');
+            return false;
+        }
+
+        return true;
     }
 
 }
