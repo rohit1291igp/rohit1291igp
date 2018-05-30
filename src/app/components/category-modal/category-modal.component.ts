@@ -19,29 +19,29 @@ export class CategoryModalComponent implements OnInit {
       ) { };
 
     ngOnInit() {
-        this.model1 = this.model;
+        this.model1 = {...this.model};
         console.log('initiated');
-        this.model.webstore = '';
-        if (this.model.add === 'add') { // Just to check if request from new cat OR from Edit button
-        this.model.title = '';
-        this.model.url = '';
-        this.model.status = '';
-        this.model.sortorder = 10000;
-        this.model.metaTitle = '';
-        this.model.metadesc = '';
-        this.model.metakeywords = '';
-        this.model.showcatDD = false;
-        this.model.category = {};
+        this.model1.webstore = '';
+        if (this.model1.add === 'add') { // Just to check if request from new cat OR from Edit button
+        this.model1.title = '';
+        this.model1.url = '';
+        this.model1.status = '';
+        this.model1.sortorder = 10000;
+        this.model1.metaTitle = '';
+        this.model1.metadesc = '';
+        this.model1.metakeywords = '';
+        this.model1.showcatDD = false;
+        this.model1.category = {};
         }
     }
 
     // To get Categories
     getCategories() {
         const _this = this;
-        console.log(_this.model.webstore);
-        if (_this.model.webstore !== '') {
+        console.log(_this.model1.webstore);
+        if (_this.model1.webstore !== '') {
         const reqObj = {
-          url: 'categories/categorylist?fkAssociateId=' + _this.model.webstore,
+          url: 'categories/categorylist?fkAssociateId=' + _this.model1.webstore,
           method: 'get'
           };
         this.BackendService.makeAjax(reqObj, function(err, response, headers){
@@ -49,9 +49,9 @@ export class CategoryModalComponent implements OnInit {
               console.log('Error=============>', err, response.errorCode);
               alert('There was an error while fetching categories');
           }
-          _this.model.category = response.data;
-          _this.model.showcatDD = true;
-          console.log(_this.model.category);
+          _this.model1.category = response.data;
+          _this.model1.showcatDD = true;
+          console.log(_this.model1.category);
         });
       }
       };
@@ -90,16 +90,16 @@ export class CategoryModalComponent implements OnInit {
         const data = {};
         console.log(model);
         data['seo'] = {};
-        data['id'] = this.model.id;
-        data['fkasid'] = this.model.fkasid;
-        data['title'] = this.model.title;
-        data['status'] = this.model.status;
-        data['url'] = this.model.url;
-        data['sortorder'] = this.model.sortorder;
-        data['parentid'] = this.model.parentid;
-        data['seo']['seotitle'] = this.model.seo.seotitle;
-        data['seo']['seodescription'] = this.model.seo.seodescription;
-        data['seo']['seokeywords'] = this.model.seo.seokeywords;
+        data['id'] = this.model1.id;
+        data['fkasid'] = this.model1.fkasid;
+        data['title'] = this.model1.title;
+        data['status'] = this.model1.status;
+        data['url'] = this.model1.url;
+        data['sortorder'] = this.model1.sortorder;
+        data['parentid'] = this.model1.parentid;
+        data['seo']['seotitle'] = this.model1.seo.seotitle;
+        data['seo']['seodescription'] = this.model1.seo.seodescription;
+        data['seo']['seokeywords'] = this.model1.seo.seokeywords;
         console.log(data);
 
       const _this = this;
@@ -132,15 +132,15 @@ export class CategoryModalComponent implements OnInit {
     addCategory(model) {
         const data = {};
         data['seo'] = {};
-        data['fkasid'] = this.model.webstore;
-        data['title'] = this.model.title;
-        data['status'] = this.model.status;
-        data['url'] = this.model.url;
-        data['sortorder'] = this.model.sortorder;
-        data['parentid'] = this.model.parentid;
-        data['seo']['seotitle'] = this.model.metaTitle;
-        data['seo']['seodescription'] = this.model.metadesc;
-        data['seo']['seokeywords'] = this.model.metakeywords;
+        data['fkasid'] = this.model1.webstore;
+        data['title'] = this.model1.title;
+        data['status'] = this.model1.status;
+        data['url'] = this.model1.url;
+        data['sortorder'] = this.model1.sortorder;
+        data['parentid'] = this.model1.parentid;
+        data['seo']['seotitle'] = this.model1.metaTitle;
+        data['seo']['seodescription'] = this.model1.metadesc;
+        data['seo']['seokeywords'] = this.model1.metakeywords;
         console.log(data);
 
         const _this = this;
