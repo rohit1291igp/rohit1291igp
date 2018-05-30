@@ -12,14 +12,12 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
         transition('* => void', [
             style({ height: '*', opacity: '1', width: '0%'}),
             sequence([
-                // animate('.4s ease', style({ height: '*', width: '0%', opacity: '.7',  })),
                 animate('0.9s ease', style({ height: '0', width: '0%', opacity: 0  }))
             ])
         ]),
         transition('void => active', [
             style({ height: '*', opacity: '0', background: '#f2f2f2',  position: 'fixed', top: '51px', right: '0px', width: '50%'}),
             sequence([
-                // animate('.4s ease', style({ height: '*', width: '0%', position: 'fixed', opacity: '.2'})),
                 animate('.3s ease', style({ height: '*', width: '50%', position: 'fixed', opacity: 0.3, 'animation-fill-mode': 'forwards'}))
             ])
         ])
