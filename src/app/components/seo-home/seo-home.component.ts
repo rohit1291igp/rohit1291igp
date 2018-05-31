@@ -24,6 +24,7 @@ export class SeoHomeComponent implements OnInit {
         this.model.id = '';
     }
 
+    // Save Seo Data to DB
     saveSeoData() {
         const data = {};
         data['fkasid'] = this.model.webstore;
@@ -51,6 +52,7 @@ export class SeoHomeComponent implements OnInit {
         }
     }
 
+    // Get meta data info on webstore change request
     getMetaDataOnStoreChange() {
         this.getSeoData((data) => {
             this.model.title = data.seotitle;
@@ -62,6 +64,7 @@ export class SeoHomeComponent implements OnInit {
         });
     }
 
+    // Get Seo data from DB
     getSeoData(cb) {
         const _this = this;
         const fkasid = this.model.webstore;
@@ -79,6 +82,7 @@ export class SeoHomeComponent implements OnInit {
         });
     }
 
+    // Validating model before creating/saving seo info
     validateModel() {
 
         if (this.model.title === '' || typeof(this.model.title) === 'undefined') {

@@ -21,7 +21,6 @@ export class CategoryModalComponent implements OnInit {
 
     ngOnInit() {
         this.model1 = {...this.model};
-        console.log(this.model1);
         this.previousURL = this.model1.url;
         console.log('initiated');
         if (this.model1.add === 'add') { // Just to check if request for new cat OR from Edit button
@@ -43,28 +42,26 @@ export class CategoryModalComponent implements OnInit {
         const _this = this;
         console.log(_this.model1.fkasid);
         if (_this.model1.fkasid !== '' && _this.model1.fkasid !== undefined) {
-        const reqObj = {
-          url: 'categories/categorylist?fkAssociateId=' + _this.model1.fkasid,
-          method: 'get'
-          };
-        this.BackendService.makeAjax(reqObj, function(err, response, headers){
-          if (err || response.error || response.status === 'Error') {
-              console.log('Error=============>', err, response.errorCode);
-              alert('There was an error while fetching categories');
-          }
-          _this.model1.category = response.data;
-          _this.model1.showcatDD = true;
-          console.log(_this.model1.category);
-        });
-      }
-      };
+            const reqObj = {
+            url: 'categories/categorylist?fkAssociateId=' + _this.model1.fkasid,
+            method: 'get'
+            };
+            this.BackendService.makeAjax(reqObj, function(err, response, headers){
+                if (err || response.error || response.status === 'Error') {
+                    console.log('Error=============>', err, response.errorCode);
+                    alert('There was an error while fetching categories');
+                }
+                _this.model1.category = response.data;
+                _this.model1.showcatDD = true;
+            });
+        }
+    };
 
+    // Check URL has any special character and Unique WRT webstore
     checkUniqueUrlValue(data) {
         if (data.fkasid !== '' && data.fkasid !== undefined) {
-            console.log(data);
             const format = /[ !@#$%^&*()_+\=\[\]{};':"\\|,.<>\/?]/;
             const value = format.test(data.url);
-            console.log(value);
             if (value) {
                 alert('Please remove special characters from URL!!!');
             // data.url = this.previousURL;
@@ -92,10 +89,6 @@ export class CategoryModalComponent implements OnInit {
             alert('Please select Webstore!!!');
         }
     };
-    // detect() {
-    //     console.log('wow');
-    //     this.catClick.emit();
-    // }
 
     // On Click of Canccel Btn
     cancelCategory(data) {
@@ -128,8 +121,6 @@ export class CategoryModalComponent implements OnInit {
         };
 
         _this.BackendService.makeAjax(reqObj, function(err, response, headers){
-            console.log(err);
-            console.log(response.data);
             if (err || response.error || response.status === 'Error') {
                 console.log('Error=============>', err, response.errorCode);
                 alert(`There was an error while saving the Category.
@@ -141,11 +132,6 @@ export class CategoryModalComponent implements OnInit {
         });
         }
     }
-
-    setParentId(model) {
-        alert('Inside Set ParentId');
-        console.log(model);
-    };
 
     // Add new Category
     addCategory() {
@@ -178,9 +164,8 @@ export class CategoryModalComponent implements OnInit {
           }
           alert('The Category has been Created.');
           _this.cancelCategory(response.data);
-         // window.location.reload();
         });
-         }
+        }
     };
 
     // Validate model before saving/creating
@@ -212,5 +197,5 @@ export class CategoryModalComponent implements OnInit {
         }
 
         return true;
-    }
+    };
 }

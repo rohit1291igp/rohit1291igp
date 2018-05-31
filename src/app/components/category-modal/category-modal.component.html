@@ -93,11 +93,11 @@
 
                         <div class="row">
                             <div class="col-md-12">
-                                <div *ngIf="model1.add != 'add';else metatitle_content" class="form-group" [ngClass]="{ 'has-error' : catDataForm.submitted && !metaTitle.valid}">
+                                <div class="form-group" *ngIf="model1.add != 'add';else metatitle_content" [ngClass]="{ 'has-error' : catDataForm.submitted && !metaTitle.valid}">
                                     <label for="">Meta Title</label>
                                     <input type="text" class="form-control" placeholder="Meta Title"  name="metaTitle" [(ngModel)]="model1.seo.seotitle" #metaTitle="ngModel" required maxlength="72"/>
                                 </div>
-                                <ng-template #metatitle_content style="text-align: center;">
+                                <ng-template class="form-group" #metatitle_content style="text-align: center;">
                                         <label for="">Meta Title</label>
                                         <input type="text" class="form-control" placeholder="Meta Title"  name="metaTitle" [(ngModel)]="model1.metaTitle" #metaTitle="ngModel" required maxlength="72"/>
                                 </ng-template>
@@ -106,11 +106,11 @@
 
                         <div class="row">
                             <div class="col-md-12">
-                                <div *ngIf="model1.add != 'add';else metadesc_content" class="form-group" [ngClass]="{ 'has-error' : catDataForm.submitted && !metaDesc.valid}">
+                                <div class="form-group" *ngIf="model1.add != 'add';else metadesc_content"  [ngClass]="{ 'has-error' : catDataForm.submitted && !metaDesc.valid}">
                                     <label for="">Meta Description</label>
                                     <textarea class="form-control" rows="3" placeholder="Meta Description" name="metaDesc" [(ngModel)]="model1.seo.seodescription" #metaDesc="ngModel" required maxlength="300"></textarea>
                                 </div>
-                                <ng-template #metadesc_content style="text-align: center;">
+                                <ng-template class="form-group" #metadesc_content style="text-align: center;">
                                         <label for="">Meta Description</label>
                                         <textarea class="form-control" rows="3" placeholder="Meta Description" name="metaDesc" [(ngModel)]="model1.metadesc" #metaDesc="ngModel" required maxlength="300"></textarea>
                                 </ng-template>
@@ -119,11 +119,11 @@
 
                         <div class="row">
                             <div class="col-md-12">
-                                <div *ngIf="model1.add != 'add';else metakeyword_content" class="form-group" [ngClass]="{ 'has-error' : catDataForm.submitted && !keywords.valid}">
+                                <div class="form-group" *ngIf="model1.add != 'add';else metakeyword_content"  [ngClass]="{ 'has-error' : catDataForm.submitted && !keywords.valid}">
                                     <label for="">Meta Keywords</label>
                                     <textarea class="form-control" rows="3" placeholder="Meta Keywords" name="keywords" [(ngModel)]="model1.seo.seokeywords" #keywords="ngModel" required maxlength="300"></textarea>
                                 </div>
-                                <ng-template #metakeyword_content style="text-align: center;">
+                                <ng-template class="form-group" #metakeyword_content style="text-align: center;">
                                         <label for="">Meta Keywords</label>
                                         <textarea class="form-control" rows="3" placeholder="Meta Keywords" name="keywords" [(ngModel)]="model1.metakeywords" #keywords="ngModel" required maxlength="300"></textarea>
                                 </ng-template>
