@@ -16,9 +16,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
             ])
         ]),
         transition('void => active', [
-            style({ height: '*', opacity: '0', background: '#f2f2f2',  position: 'fixed', top: '51px', right: '0px', width: '50%'}),
+            style({ height: '*', opacity: '0', background: '#f2f2f2'}),
             sequence([
-                animate('.3s ease', style({ height: '*', width: '50%', position: 'fixed', opacity: 0.3, 'animation-fill-mode': 'forwards'}))
+                animate('.3s ease', style({ height: '*', width: '50%',  opacity: 0.3, 'animation-fill-mode': 'forwards'}))
             ])
         ])
     ])
@@ -65,7 +65,6 @@ export class CategoryComponent implements OnInit {
           alert('There was an error while fetching categories');
       }
       _this.categories = response.data;
-      console.log(_this.categories);
     });
   }
   };
@@ -103,8 +102,6 @@ export class CategoryComponent implements OnInit {
       };
         if (confirm(`Are you sure do you want to delete Category?`)) {
           _this.BackendService.makeAjax(reqObj, function(err, response, headers){
-            console.log(err);
-            console.log(response);
               if (err || response.error || response.status === 'Error') {
                   console.log('Error=============>', err, response.errorCode);
                   alert('There was an error while deleting categories');
@@ -112,8 +109,6 @@ export class CategoryComponent implements OnInit {
               }
               alert(`The Category has been deleted`);
               _this.categories = response.data;
-              console.log(_this.categories);
-              // window.location.reload();
           });
         }else {
           return false;
@@ -144,8 +139,6 @@ export class CategoryComponent implements OnInit {
       };
 
       _this.BackendService.makeAjax(reqObj, function(err, response, headers){
-        console.log(err);
-        console.log(response);
           if (err || response.error || response.status === 'Error') {
               console.log('Error=============>', err, response.errorCode);
               alert(`There was an error while saving the Category.
@@ -154,8 +147,6 @@ export class CategoryComponent implements OnInit {
           }
           alert('The Category has been Enabled.');
           _this.categories = response.data;
-          console.log(_this.categories);
-         //  window.location.reload();
       });
   }
 
