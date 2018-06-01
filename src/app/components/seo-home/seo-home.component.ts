@@ -24,6 +24,7 @@ export class SeoHomeComponent implements OnInit {
         this.model.id = '';
     }
 
+    // Save Seo Data to DB
     saveSeoData() {
         const data = {};
         data['fkasid'] = this.model.webstore;
@@ -33,6 +34,7 @@ export class SeoHomeComponent implements OnInit {
         data['status'] = this.model.status;
         data['id'] = this.model.id;
 
+        if (this.validateModel()) {
         const _this = this;
         const reqObj = {
             url: 'blogs/updatemetahome',
@@ -47,9 +49,10 @@ export class SeoHomeComponent implements OnInit {
             }
             alert('The meta information has been updated successfully.');
         });
-
+        }
     }
 
+    // Get meta data info on webstore change request
     getMetaDataOnStoreChange() {
         this.getSeoData((data) => {
             this.model.title = data.seotitle;
@@ -61,6 +64,7 @@ export class SeoHomeComponent implements OnInit {
         });
     }
 
+    // Get Seo data from DB
     getSeoData(cb) {
         const _this = this;
         const fkasid = this.model.webstore;
@@ -76,6 +80,22 @@ export class SeoHomeComponent implements OnInit {
             }
             cb(response.data);
         });
+    }
+
+    // Validating model before creating/saving seo info
+    validateModel() {
+
+        if (this.model.title === '' || typeof(this.model.title) === 'undefined') {
+            alert('Please enter the main content for the Meta.');
+            return false;
+        }
+
+        if (this.model.metaDesc === '' || typeof(this.model.metaDesc) === 'undefined') {
+            alert('Please enter the main content for the Meta.');
+            return false;
+        }
+
+        return true;
     }
 
 }

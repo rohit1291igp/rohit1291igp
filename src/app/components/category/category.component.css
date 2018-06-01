@@ -1,3 +1,14 @@
 .panel-heading {
     cursor: pointer;
 }
+
+.btn-group-sm>.btn, .btn-sm {
+    padding: 1px 10px !important;
+};
+
+/* .hideSB{
+    overflow: hidden;
+}
+.showSB{
+    overflow: auto;
+} */

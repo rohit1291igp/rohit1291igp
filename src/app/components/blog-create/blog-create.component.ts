@@ -22,6 +22,7 @@ export class BlogCreateComponent implements OnInit {
     public categories = [];
     public selectedCategories: Object = {};
     public uniqueUrl = true;
+    public specCharUrl = false;
     public files = [];
     public staticImages = [];
     public env = environment;
@@ -174,6 +175,11 @@ export class BlogCreateComponent implements OnInit {
             return false;
         }
 
+        if (this.specCharUrl) {
+            alert('Please remove special character from URL');
+            return false;
+        }
+
         return true;
     }
 
@@ -185,20 +191,29 @@ export class BlogCreateComponent implements OnInit {
     }
 
     checkUniqueUrlValue() {
-        const _this = this;
-        const reqObj = {
-            url: 'blogs/validateblogurl?url=' + this.model.url + '&fkAssociateId=' + this.model.webstore,
-            method: 'get'
-        };
-
-        _this.BackendService.makeAjax(reqObj, function(err, response, headers){
-            if (response.data.unique === 'false') {
-                alert('The selected URL already exists. Please enter a new URL');
-                _this.uniqueUrl = false;
-            } else {
-                _this.uniqueUrl = true;
-            }
-        });
+        const format = /[ !@#$%^&*()_+\=\[\]{};':"\\|,.<>\/?]/;
+        const value = format.test(this.model.url);
+        if (value) {
+            alert('Please remove special characters from URL!!!');
+            // this.model.url = '';
+            this.specCharUrl = true;
+            return false;
+        } else if (!value) {
+            this.specCharUrl = false;
+            const _this = this;
+            const reqObj = {
+                url: 'blogs/validateblogurl?url=' + this.model.url + '&fkAssociateId=' + this.model.webstore,
+                method: 'get'
+            };
+            _this.BackendService.makeAjax(reqObj, function(err, response, headers){
+                if (response.data.unique === 'false') {
+                    alert('The selected URL already exists. Please enter a new URL');
+                    _this.uniqueUrl = false;
+                } else {
+                    _this.uniqueUrl = true;
+                }
+            });
+        }
     }
 
     getCategoryData() {

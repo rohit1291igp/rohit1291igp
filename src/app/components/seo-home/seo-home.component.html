@@ -26,7 +26,7 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group" [ngClass]="{ 'has-error': seoDataForm.submitted && !status.valid }">
-                                    <label for="">Webstore</label>
+                                    <label for="">Status</label>
                                     <select class="form-control" name="status" #status="ngModel" [(ngModel)]="model.status" required>
                                         <option value="">Select Store Status</option>
                                         <option value="0">Disabled</option>

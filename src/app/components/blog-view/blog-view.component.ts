@@ -22,6 +22,7 @@ export class BlogViewComponent implements OnInit, AfterViewInit {
     public type;
     public cnlBtnVisibility = 'hidden';
     public uniqueUrl = true;
+    public specCharURL = false;
     public cat = {};
     public subcat = {};
     public selectedCategories: Object = {};
@@ -240,12 +241,21 @@ export class BlogViewComponent implements OnInit, AfterViewInit {
     };
 
     checkUniqueUrlValue(data) {
-      if (this.priviousvURL !== data.url) {
-      const _this = this;
-      const reqObj = {
-          url: 'blogs/validateblogurl?url=' + data.url + '&fkAssociateId=' + data.fkasid,
-          method: 'get'
-      };
+      const format = /[ !@#$%^&*()_+\=\[\]{};':"\\|,.<>\/?]/;
+        const value = format.test(data.url);
+        if (value) {
+            alert('Please remove special characters from URL!!!');
+           // data.url = this.priviousvURL;
+           this.specCharURL = true;
+            return false;
+        } else
+        if (!value && this.priviousvURL !== data.url) {
+          this.specCharURL = false;
+          const _this = this;
+          const reqObj = {
+              url: 'blogs/validateblogurl?url=' + data.url + '&fkAssociateId=' + data.fkasid,
+              method: 'get'
+        };
 
       _this.BackendService.makeAjax(reqObj, function(err, response, headers){
           if (response.data.unique === 'false') {
@@ -335,6 +345,11 @@ export class BlogViewComponent implements OnInit, AfterViewInit {
       if (!this.uniqueUrl) {
           alert('The selected URL already exists. Please enter a new URL');
           return false;
+      }
+
+      if (this.specCharURL) {
+        alert('Please remove special character from URL');
+        return false;
       }
 
       return true;
