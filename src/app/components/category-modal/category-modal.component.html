@@ -3,8 +3,8 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-12">
-                <input class="btn btn-primary btn-sm" type="button" (click)="cancelCategory()" value="Cancel" />
-            <h3>Categories Edit Content</h3>
+            <input class="btn btn-primary btn-sm" type="button" (click)="cancelCategory('Not')" value="Cancel" />
+            <h3>{{model.title}}</h3>
         </div>
     </div>
     
@@ -14,6 +14,11 @@
                 <div *ngIf="model1.add != 'add';else header_content" class="panel-heading">
                     <h3 class="panel-title">Edit Information</h3>
                 </div>
+                <ng-template #header_content style="text-align: center;">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Add Information</h3>
+                    </div>
+                </ng-template>
                 <div class="panel-body">
                     <form #catDataForm="ngForm">
                         <div class="row">
@@ -36,7 +41,7 @@
                             <div class="col-md-6">
                                 <div class="form-group" [ngClass]="{ 'has-error': catDataForm.submitted && !title.valid }">
                                     <label for="">Name</label>
-                                    <input type="text" class="form-control" placeholder="Name" name="title" [(ngModel)]="model1.title" #title="ngModel" required  maxlength="50"/>
+                                    <input type="text" class="form-control"  name="title" placeholder="Name" [(ngModel)]="model1.title" #title="ngModel" required  maxlength="50"/>
                                 </div>
                             </div>
                             <div class="col-md-6">

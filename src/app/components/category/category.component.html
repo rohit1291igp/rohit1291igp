@@ -14,11 +14,10 @@
               <div class="panel-body">
                     
                   <form id="target" #catDataForm="ngForm">
-                        <!-- <button type="submit" (click)="addCategory()"  class="btn btn-primary pull-right">Add</button>  -->
-                        <input class="btn btn-primary btn-sm" type="button" (click)="addCategory()" value="Add" />
                       <div class="row">
                           <div class="col-md-6">
                               <div class="form-group" [ngClass]="{ 'has-error': catDataForm.submitted && !webstore.valid }">
+                                    <input class="btn btn-primary pull-right" type="button" (click)="addCategory()" value="Add" /><br/>
                                   <label for="">Webstore</label>
                                   <select class="form-control" name="webstore" #webstore="ngModel" [(ngModel)]="model.webstore" (change)="getCategories()" required>
                                       <option value="">Select Webstore</option>
@@ -61,4 +60,4 @@
   </div>
 </div>
 
-<app-category-modal id='sidebar' *ngIf="showSideBar" [model]="cat" (catClick)="clickDetect($event)"></app-category-modal>
+<app-category-modal id='sidebar' *ngIf="showSideBar"  [@anim]="testAnimate" [model]="cat" (catClick)="clickDetect($event)"></app-category-modal>
