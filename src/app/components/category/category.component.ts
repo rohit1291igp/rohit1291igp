@@ -1,4 +1,4 @@
-import { Component, OnInit, trigger, sequence, transition, animate, style, state  } from '@angular/core';
+import { Component, OnInit, trigger, sequence, animate, transition, style, state  } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { BackendService } from '../../services/backend.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
