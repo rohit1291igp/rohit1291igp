@@ -157,7 +157,7 @@ export class CategoryModalComponent implements OnInit {
         };
 
         _this.BackendService.makeAjax(reqObj, function(err, response, headers){
-          if (err || response.error || response.status === 'Error') {
+          if (err || response.error) {
               console.log('Error=============>', err, response.errorCode);
               alert('There was an error while saving the category');
               return false;
