@@ -3,6 +3,7 @@ import { environment } from '../../../environments/environment';
 import { BackendService } from '../../services/backend.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
+
 @Component({
   selector: 'app-category',
   templateUrl: './category.component.html',
