@@ -46,6 +46,7 @@ export class CategoryComponent implements OnInit {
     this.cat = {};
     this.cat.add = 'add';
     this.showSideBar = true;
+    this.testAnimate = 'active';
     $('#target :input').prop('disabled', true);
     $('body')[0].style.overflow = 'hidden';
   };
