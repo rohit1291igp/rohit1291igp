@@ -392,7 +392,7 @@
             </p>
             <p class="text-grey no-margin">Total - <span *ngIf="!sidePanelData">0</span><span *ngIf="sidePanelData">{{sidePanelData.length}}</span> Orders</p>
 
-            <div class="pullAll" *ngIf="!isMobile && !env.userType" [ngClass]="{'disableBtn' : !sidePanelData}">
+            <div class="pullAll" *ngIf="!isMobile && env.userType == 'vendor'" [ngClass]="{'disableBtn' : !sidePanelData}">
                 <app-widgets (onWidgetClickEvent)="printDropDown($event)" [wOptions]="{type : 'dropDown', data:printDropDwonData}"></app-widgets>
                 <!--<button type="button" class="btn btn-secondary" (click)="print($event, 'order', null, null, null, 'all')">Print All</button>-->
             </div>
