@@ -158,7 +158,7 @@ export class CategoryComponent implements OnInit {
     $('body')[0].style.overflow = 'auto';
     this.testAnimate = 'void';
     $('#target :input').prop('disabled', false);
-    if (event.data !== undefined && event.data !== 'Not') {
+    if (event.data !== undefined) {
     this.categories = event.data;
     }
   };
