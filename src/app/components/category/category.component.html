@@ -15,11 +15,10 @@
                     
                   <form id="target" #catDataForm="ngForm">
                         <!-- <button type="submit" (click)="addCategory()"  class="btn btn-primary pull-right">Add</button>  -->
-                        
+                        <input class="btn btn-primary btn-sm" type="button" (click)="addCategory()" value="Add" />
                       <div class="row">
                           <div class="col-md-6">
                               <div class="form-group" [ngClass]="{ 'has-error': catDataForm.submitted && !webstore.valid }">
-                                    <input class="btn btn-primary pull-right" type="button" (click)="addCategory()" value="Add" /><br/>
                                   <label for="">Webstore</label>
                                   <select class="form-control" name="webstore" #webstore="ngModel" [(ngModel)]="model.webstore" (change)="getCategories()" required>
                                       <option value="">Select Webstore</option>
@@ -38,6 +37,7 @@
                                       <div class="panel-heading" role="tab" id="headingOne" data-toggle="collapse" data-parent="#accordion" data-target="#collapse">
                                         <h4 class="panel-title" >
                                           <a style="text-decoration: none" role="button" aria-expanded="true" aria-controls="collapse" (click)="handleClick($event)" class="accordion-toggle">
+
                                                 <i *ngIf="cat.status" class="fa fa-eye" aria-hidden="true"></i> <i *ngIf="!cat.status" class="fa fa-eye-slash" aria-hidden="true"></i>  {{cat.title}} <button class="btn btn-primary btn-sm" type="submit" (click)="editCategory(cat,'cat')" value="Edit">Edit <i class="fa fa-pencil"></i></button> <button *ngIf="!cat.status" class="btn btn-primary btn-sm" type="submit" (click)="enableCategory(cat)" value="Delete" >Enable</button> <button *ngIf="cat.status" class="btn btn-danger btn-sm" type="submit" (click)="deleteCategory(cat.id,cat.fkasid)" value="Delete" >Disable</button>
                                                 
                                           </a>
@@ -53,6 +53,7 @@
                             </div>
                         </div>
                       </div>
+                      
                   </form>
               </div>
           </div>
@@ -60,4 +61,4 @@
   </div>
 </div>
 
-<app-category-modal id='sidebar' *ngIf="showSideBar"  [@anim]="testAnimate" [model]="cat" (catClick)="clickDetect($event)"></app-category-modal>
+<app-category-modal id='sidebar' *ngIf="showSideBar" [model]="cat" (catClick)="clickDetect($event)"></app-category-modal>

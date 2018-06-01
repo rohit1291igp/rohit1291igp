@@ -1,4 +1,4 @@
-import { Component, OnInit, trigger, sequence, transition, animate, style, state  } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { BackendService } from '../../services/backend.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -45,7 +45,6 @@ export class CategoryComponent implements OnInit {
     this.cat = {};
     this.cat.add = 'add';
     this.showSideBar = true;
-    this.testAnimate = 'active';
     $('#target :input').prop('disabled', true);
     $('body')[0].style.overflow = 'hidden';
   };
