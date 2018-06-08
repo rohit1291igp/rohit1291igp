@@ -1,0 +1,94 @@
+<div class="side-container">
+    <!-- <h1 (click)="detect()">{{model}}</h1> -->
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <input class="btn btn-primary btn-sm" type="button" (click)="cancelVoucher('Not')" value="Cancel" />
+            <h3>{{model.title}}</h3>
+        </div>
+    </div>
+    <form id="target" novalidate>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div *ngIf="model1.add != 'add';else header_content" class="panel-heading">
+                    <h3 class="panel-title">Edit Information</h3>
+                </div>
+                <ng-template #header_content style="text-align: center;">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Add Information</h3>
+                    </div>
+                </ng-template>
+                <div class="panel-body">
+                    <form #catDataForm="ngForm">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group" [ngClass]="{ 'has-error': catDataForm.submitted }">
+                                    <label for="">Webstore: </label>
+                                    <span *ngIf="model1.add != 'add';else input_content">{{model1.fkasname}}</span>
+                                    <ng-template #input_content style="text-align: center;">
+                                            <select class="form-control" name="fkasid" #fkasid="ngModel" [(ngModel)]="model1.fkasid" (change)="getCategories()"  required > <!--(change)="resetCategoriesOnStoreChange()" -->
+                                                    <option value="">Select Webstore</option>
+                                                    <option value="5">IGP</option>
+                                                    <option value="830">Interflora</option>
+                                            </select>
+                                    </ng-template>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group" [ngClass]="{ 'has-error': catDataForm.submitted && !code.valid }">
+                                    <label for="">Code</label>
+                                    <input type="text" class="form-control"  name="code" placeholder="Code" [(ngModel)]="model1.code" #code="ngModel" required  maxlength="50"/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group" [ngClass]="{ 'has-error': catDataForm.submitted && !desc.valid }">
+                                    <label for="">Description</label>
+                                    <input type="text" class="form-control" placeholder="Description"  name="desc" (focusout)="checkUniqueUrlValue(model1)" [(ngModel)]="model1.desc" #desc="ngModel"  required  maxlength="150"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">                        
+                            <div class="col-md-6">
+                                <div class="form-group" [ngClass]="{ 'has-error': catDataForm.submitted && !validity.valid }">
+                                    <label for="">Validity</label>
+                                    <input type="text" class="form-control" value="-1" placeholder="Validity" name="validity" #validity="ngModel" [(ngModel)]="model1.validity"  required />
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group" *ngIf="model1.add != 'add';else metatitle_content" [ngClass]="{ 'has-error' : catDataForm.submitted && !metaTitle.valid}">
+                                    <label for="">Meta Title</label>
+                                    <input type="text" class="form-control" placeholder="Meta Title"  name="metaTitle" [(ngModel)]="model1.seo.seotitle" #metaTitle="ngModel" required maxlength="72"/>
+                                </div>
+                                <ng-template class="form-group" #metatitle_content style="text-align: center;">
+                                        <label for="">Meta Title</label>
+                                        <input type="text" class="form-control" placeholder="Meta Title"  name="metaTitle" [(ngModel)]="model1.metaTitle" #metaTitle="ngModel" required maxlength="72"/>
+                                </ng-template>
+                            </div>
+                        </div> -->
+                        <div class="row">
+                            <div *ngIf="model1.add != 'add';else addCat_content" class="col-md-12 text-right">
+                                    <button type="submit"  class="btn btn-primary pull-right"  (click)="saveCategory()" >Save</button>
+                                <!-- <input class="btn btn-primary pull-right" type="submit" (click)="saveCategory(model)" value="Save" /> -->
+                            </div>
+                            <ng-template #addCat_content style="text-align: center;">
+                                    <br/><button type="submit" style="margin-right: 10px;" class="btn btn-primary pull-right"  (click)="addCategory()" >Add</button>
+                            </ng-template>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+  </form>
+  </div>
+</div>

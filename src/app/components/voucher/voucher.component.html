@@ -1,0 +1,77 @@
+<div class="container-fluid">
+  <div class="row">
+      <div class="col-md-12">
+          <h3>Voucher Content</h3>
+      </div>
+  </div>
+  
+  <div class="row">
+      <div class="col-md-12">
+          <div class="panel panel-default">
+              <div class="panel-heading">
+                  <h3 class="panel-title">Vouchers</h3>
+              </div>
+              <div class="panel-body">
+                    
+                  <form id="target" #catDataForm="ngForm">
+                      <div class="row">
+                          <div class="col-md-6">
+                              <div class="form-group" [ngClass]="{ 'has-error': catDataForm.submitted && !webstore.valid }">
+                                    <input class="btn btn-primary pull-right" type="button" (click)="createVoucher()" value="Create" /><br/>
+                                  <label for="">Webstore</label>
+                                  <select class="form-control" name="webstore" #webstore="ngModel" [(ngModel)]="model.webstore" (change)="getVouchers()" required>
+                                      <option value="">Select Webstore</option>
+                                      <option value="5">IGP</option>
+                                      <option value="830">Interflora</option>
+                                  </select>
+                              </div>
+                          </div>
+                      </div>
+                      
+                      
+                  </form>
+              </div>
+          </div>
+      </div>
+  </div>
+
+
+<section class="voucher-list-container">
+    <br/>
+            <div *ngIf="showGrid;else other_content" class="panel-body">
+                    <table class="table table-hover">
+                        <thead>
+                            <!-- <th>Id</th> -->
+                            <th>Id</th>
+                            <th>Code</th>
+                            <th>Description</th>
+                            <th>Validity</th>
+                            <th>Action</th>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let list of vouchers">
+                                    <!-- <td>{{list.id}}</td> -->
+                                    <td>{{list.id}}</td>
+                                    <td>{{list.code}}</td>                                   
+                                    <td>{{list.desc}}</td>
+                                    <td>{{list.validity}}</td>
+                                    <td>
+                                            <button class="btn" (click)="editVoucher(list)" title="Edit"><i class="fa fa-pencil"></i></button>
+                                            <!-- <button class="btn" (click)="viewVoucher(list)" title="View"><i class="fa fa-eye"></i></button>                                         -->
+                                            <button class="btn" (click)="deleteVoucher(list)" title="Delete"><i class="fa fa-trash"></i></button>
+                                    </td>                                 
+                            </tr>
+                        </tbody>        
+                    </table>
+            </div>
+            
+            <div class="panel-body">
+                    <ng-template #other_content style="text-align: center;">Loading...</ng-template>
+            </div>
+
+</section>
+
+
+</div>
+
+<app-voucher-model id='sidebar' *ngIf="showSideBar"  [@anim]="animate" [model]="voucherModel" (voucherModelClick)="clickDetect($event)"></app-voucher-model>
