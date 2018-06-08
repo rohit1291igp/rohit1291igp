@@ -66,6 +66,8 @@ export class VoucherComponent implements OnInit {
       {id: 7, code: 'IGP07', desc: '70 % Discount coupon', validity: '23 days' },
       {id: 8, code: 'IGP08', desc: '80 % Discount coupon', validity: '35 days' }
     ];
+  } else {
+    this.showGrid = false;
   }
   };
 
@@ -86,6 +88,7 @@ export class VoucherComponent implements OnInit {
     this.showSideBar = true;
     this.animate = 'active';
     this.voucherModel = model;
+    this.voucherModel.fkasid = this.model.webstore;
   };
 
   viewVoucher(model) {

@@ -25,9 +25,9 @@
                             <div class="col-md-6">
                                 <div class="form-group" [ngClass]="{ 'has-error': catDataForm.submitted }">
                                     <label for="">Webstore: </label>
-                                    <span *ngIf="model1.add != 'add';else input_content">{{model1.fkasname}}</span>
+                                    <span *ngIf="model1.add != 'add';else input_content">{{model1.fkasid}}</span>
                                     <ng-template #input_content style="text-align: center;">
-                                            <select class="form-control" name="fkasid" #fkasid="ngModel" [(ngModel)]="model1.fkasid" (change)="getCategories()"  required > <!--(change)="resetCategoriesOnStoreChange()" -->
+                                            <select class="form-control" name="fkasid" #fkasid="ngModel" [(ngModel)]="model1.fkasid" required > <!--(change)="resetCategoriesOnStoreChange()" -->
                                                     <option value="">Select Webstore</option>
                                                     <option value="5">IGP</option>
                                                     <option value="830">Interflora</option>
@@ -50,7 +50,7 @@
                             <div class="col-md-12">
                                 <div class="form-group" [ngClass]="{ 'has-error': catDataForm.submitted && !desc.valid }">
                                     <label for="">Description</label>
-                                    <input type="text" class="form-control" placeholder="Description"  name="desc" (focusout)="checkUniqueUrlValue(model1)" [(ngModel)]="model1.desc" #desc="ngModel"  required  maxlength="150"/>
+                                    <input type="text" class="form-control" placeholder="Description"  name="desc" [(ngModel)]="model1.desc" #desc="ngModel"  required  maxlength="150"/>
                                 </div>
                             </div>
                         </div>
@@ -77,11 +77,11 @@
                         </div> -->
                         <div class="row">
                             <div *ngIf="model1.add != 'add';else addCat_content" class="col-md-12 text-right">
-                                    <button type="submit"  class="btn btn-primary pull-right"  (click)="saveCategory()" >Save</button>
+                                    <button type="submit"  class="btn btn-primary pull-right"  (click)="saveVoucher()" >Save</button>
                                 <!-- <input class="btn btn-primary pull-right" type="submit" (click)="saveCategory(model)" value="Save" /> -->
                             </div>
                             <ng-template #addCat_content style="text-align: center;">
-                                    <br/><button type="submit" style="margin-right: 10px;" class="btn btn-primary pull-right"  (click)="addCategory()" >Add</button>
+                                    <br/><button type="submit" style="margin-right: 10px;" class="btn btn-primary pull-right"  (click)="addVoucher()" >Add</button>
                             </ng-template>
                         </div>
                     </form>

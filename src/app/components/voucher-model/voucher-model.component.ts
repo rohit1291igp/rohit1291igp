@@ -22,6 +22,6 @@ export class VoucherModelComponent implements OnInit {
   cancelVoucher(data) {
     console.log('Child');
     this.voucherModelClick.emit({data: data});
-};
+  };
 
 }
