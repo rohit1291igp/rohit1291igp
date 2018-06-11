@@ -83,7 +83,6 @@ export class VoucherComponent implements OnInit {
     };
   };
 
-
   editVoucher(model) {
     this.showSideBar = true;
     this.animate = 'active';
@@ -97,6 +96,7 @@ export class VoucherComponent implements OnInit {
     this.voucherModel = model;
     this.voucherModel.view = 'view';
   }
+
   // Parent Child Relationship!!!
   clickDetect(event) {
     console.log('Parent');
