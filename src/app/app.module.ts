@@ -61,6 +61,9 @@ import { CategoryComponent } from './components/category/category.component';
 import { VoucherComponent } from './components/voucher/voucher.component';
 import { VoucherModelComponent } from './components/voucher-model/voucher-model.component';
 
+//Custom Pipe
+import { FilterPipe} from './customPipes/filter.pipe';
+
 //env config
 /*import {envConfig} from "./others/env.config";
 export function ConfigLoader(envConfig: envConfig) {
@@ -98,7 +101,8 @@ export function ConfigLoader(envConfig: envConfig) {
     CategoryComponent,
     CategoryModalComponent,
     VoucherComponent,
-    VoucherModelComponent
+    VoucherModelComponent,
+    FilterPipe
   ],
   imports: [
     BrowserModule,

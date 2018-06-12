@@ -43,44 +43,34 @@ export class VoucherComponent implements OnInit {
     const _this = this;
     console.log(_this.model.webstore);
     if (_this.model.webstore !== '') {
-    // const reqObj = {
-    //   url: 'categories/categorylist?fkAssociateId=' + _this.model.webstore,
-    //   method: 'get'
-    //   };
-    // this.BackendService.makeAjax(reqObj, function(err, response, headers){
-    //   if (err || response.error) {
-    //       console.log('Error=============>', err, response.errorCode);
-    //       alert('There was an error while fetching categories');
-    //   }
-    //   _this.vouchers = response.data;
-    // });
-
-    this.showGrid = true;
-    this.vouchers = [
-      {id: 1, code: 'IGP01', desc: '10 % Discount coupon', validity: '5 days' },
-      {id: 2, code: 'IGP02', desc: '20 % Discount coupon', validity: '15 days' },
-      {id: 3, code: 'IGP03', desc: '30 % Discount coupon', validity: '25 days' },
-      {id: 4, code: 'IGP04', desc: '40 % Discount coupon', validity: '54 days' },
-      {id: 5, code: 'IGP05', desc: '50 % Discount coupon', validity: '52 days' },
-      {id: 6, code: 'IGP06', desc: '60 % Discount coupon', validity: '13 days' },
-      {id: 7, code: 'IGP07', desc: '70 % Discount coupon', validity: '23 days' },
-      {id: 8, code: 'IGP08', desc: '80 % Discount coupon', validity: '35 days' }
-    ];
-  } else {
+    const reqObj = {
+      url: 'vouchers/getvoucher?fkAssociateId=' + _this.model.webstore,
+      method: 'get'
+      };
+      this.BackendService.makeAjax(reqObj, function(err, response, headers){
+        if (err || response.error) {
+            console.log('Error=============>', err, response.errorCode);
+            alert('There was an error while fetching vouchers');
+        }
+        _this.vouchers = response.data.vouchermodellist;
+        _this.showGrid = true;
+        $('html, body').animate({
+          'scrollTop' : $('.voucher-list-container').position().top
+        }, 2000);
+      console.log(response.data.vouchermodellist);
+      });
+    } else {
     this.showGrid = false;
-  }
+    }
   };
 
   createVoucher() {
     this.showSideBar = true;
     this.animate = 'active';
     this.voucherModel = {
-      add: 'add',
-      code: '',
-      desc: '',
-      validity: '',
-      fkasid : ''
+      add: 'add'
     };
+    $('body')[0].style.overflow = 'hidden';
   };
 
   editVoucher(model) {
@@ -88,6 +78,9 @@ export class VoucherComponent implements OnInit {
     this.animate = 'active';
     this.voucherModel = model;
     this.voucherModel.fkasid = this.model.webstore;
+    this.voucherModel.enablefields = true;
+    $('body')[0].style.overflow = 'hidden';
+    $('#target :input').prop('disabled', true);
   };
 
   viewVoucher(model) {
@@ -95,6 +88,28 @@ export class VoucherComponent implements OnInit {
     this.animate = 'active';
     this.voucherModel = model;
     this.voucherModel.view = 'view';
+  }
+
+  deleteVoucher(id, fkasid) {
+    console.log(id);
+    const _this = this;
+      const reqObj = {
+          url: `voucher/deletevoucher?id=${id}&modifiedby=Cheta`,
+          method: 'delete'
+      };
+        if (confirm(`Are you sure do you want to delete Voucher?`)) {
+          _this.BackendService.makeAjax(reqObj, function(err, response, headers){
+              if (err || response.error || response.status === 'Error') {
+                  console.log('Error=============>', err, response.errorCode);
+                  alert('There was an error while deleting voucher');
+                  return false;
+              }
+              alert(`The Voucher has been deleted`);
+            //  _this.vouchers = response.data;
+          });
+        }else {
+          return false;
+        }
   }
 
   // Parent Child Relationship!!!
@@ -105,9 +120,9 @@ export class VoucherComponent implements OnInit {
     $('body')[0].style.overflow = 'auto';
     this.animate = 'void';
     $('#target :input').prop('disabled', false);
-    // if (event.data !== undefined && event.data !== 'Not') {
-    // this.categories = event.data;
-    // }
+    if (event.data !== undefined && event.data !== 'Not') {
+    this.vouchers = event.data;
+    }
   };
 
 }
