@@ -1,4 +1,4 @@
-import { Component, OnInit,  Input, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, AfterViewInit,  Input, EventEmitter, Output } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { BackendService } from '../../services/backend.service';
 
@@ -7,11 +7,12 @@ import { BackendService } from '../../services/backend.service';
   templateUrl: './voucher-model.component.html',
   styleUrls: ['./voucher-model.component.css']
 })
-export class VoucherModelComponent implements OnInit {
+export class VoucherModelComponent implements OnInit, AfterViewInit {
     @Output() voucherModelClick = new EventEmitter();
     @Input() model: any;
     public model1 = this.model;
     public enablefields = false;
+    public validVoucherCode = false;
 
   constructor(
     public BackendService: BackendService
@@ -20,15 +21,14 @@ export class VoucherModelComponent implements OnInit {
   ngOnInit() {
     this.model1 = {...this.model};
     this.model1.applicablecategory = '';
-    // if (this.model1.view && this.model1.view === 'view') {
-    //   $('#target :input').prop('disabled', true);
-    // };
+    this.model1.blackListPts = [];
     if (this.model1.add === 'add') {
+      $('.vouchertype').val('-1');
       this.model1.fkasid = '';
       this.model1.vouchertype = 0;
       this.model1.vouchercode = '';
       this.model1.vouchervalue = 0;
-      this.model1.exDate = '';
+      this.model1.expirydate = '';
       this.model1.comment = '';
       this.model1.enabled = 1;
       this.model1.multipleusage = 0;
@@ -39,6 +39,33 @@ export class VoucherModelComponent implements OnInit {
       this.model1.productQuant = 0;
       this.model1.applicablepid = 0;
       }
+      const _this = this;
+      const reqObj = {
+          url: `voucher/getTemporaryBlackListProdCats`,
+          method: 'get'
+      };
+
+      _this.BackendService.makeAjax(reqObj, function(err, response, headers){
+          if (err || response.error || response.status === 'Error') {
+              console.log('Error=============>', err, response.errorCode);
+              alert(`There is an error while getting BlackList product types`);
+              return false;
+          } else {
+              response.data.forEach(element => {
+                _this.model1.blackListPts.push(element);
+              });
+              console.log(_this.model1.blackListPts);
+          }
+      });
+  }
+
+  ngAfterViewInit() {
+    setTimeout(() => {
+      if ($('.webstore').val() === '') {
+        $('.vouchertype').val('-1');
+        $('.vouchertype').prop('disabled', 'disabled');
+      };
+    }, 300);
   }
 
   cancelVoucher(data) {
@@ -52,7 +79,7 @@ export class VoucherModelComponent implements OnInit {
       data['vouchertype'] = this.model1.vouchertype;
       data['vouchercode'] = this.model1.vouchercode;
       data['vouchervalue'] = this.model1.vouchervalue;
-      data['expirydate'] = this.model1.exDate;
+      data['expirydate'] = this.model1.expirydate;
       data['comment'] = this.model1.comment;
       data['enabled'] = this.model1.enabled;
       data['multipleusage'] = this.model1.multipleusage;
@@ -62,6 +89,7 @@ export class VoucherModelComponent implements OnInit {
       data['shippingwaivertype'] = this.model1.shippingwaivertype;
       data['productQuant'] = this.model1.productQuant;
       data['applicablePid'] = this.model1.applicablepid;
+      data['createdby'] = 'Cheta';
       console.log(JSON.stringify(data));
 
       // if (this.validateModel()) {
@@ -79,8 +107,8 @@ export class VoucherModelComponent implements OnInit {
           return false;
       }
         alert('The Voucher has been Created.');
-        console.log(response.data);
-        // _this.cancelVoucher(response.data.vouchermodellist);
+        console.log(response.data.vouchermodellist);
+         _this.cancelVoucher(response.data.vouchermodellist);
       });
       // }
   };
@@ -123,6 +151,29 @@ export class VoucherModelComponent implements OnInit {
     this.enablefields = true;
   }
 
+  enableType() {
+    $('.vouchertype').prop('disabled', false);
+  }
+
+  validatevouchercode() {
+    const _this = this;
+      const reqObj = {
+          url: `voucher/validatevoucher?fkAssociateId=${this.model1.fkasid}&vouchercode=${this.model1.vouchercode}`,
+          method: 'get'
+      };
+
+      _this.BackendService.makeAjax(reqObj, function(err, response, headers){
+          if (err || response.error || response.status === 'Error') {
+              console.log('Error=============>', err, response.errorCode);
+              alert(`Voucher code already exists. Please enter new voucher code!`);
+              _this.validVoucherCode = false;
+              return false;
+          } else {
+              _this.validVoucherCode = true;
+          }
+      });
+  }
+
   saveVoucher() {
     const data = {};
       data['id'] = this.model1.id;
@@ -130,7 +181,7 @@ export class VoucherModelComponent implements OnInit {
       data['vouchertype'] = this.model1.vouchertype;
       data['vouchercode'] = this.model1.vouchercode;
       data['vouchervalue'] = this.model1.vouchervalue;
-      data['expirydate'] = this.model1.exDate;
+      data['expirydate'] = this.model1.expirydate;
       data['comment'] = this.model1.comment;
       data['enabled'] = this.model1.enabled;
       data['multipleusage'] = this.model1.multipleusage;
@@ -141,6 +192,7 @@ export class VoucherModelComponent implements OnInit {
       data['productQuant'] = this.model1.productQuant;
       data['applicablePid'] = this.model1.applicablepid;
       data['applicablecategory'] = this.model1.applicablecategory;
+      data['modifiedby'] = 'Cheta';
       console.log(JSON.stringify(data));
 
     // if (this.validateModel()) {
@@ -159,7 +211,7 @@ export class VoucherModelComponent implements OnInit {
               return false;
           }
           alert('The Voucher has been saved.');
-          // _this.cancelVoucher(response.data);
+          _this.cancelVoucher(response.data.vouchermodellist);
       });
     // }
   }

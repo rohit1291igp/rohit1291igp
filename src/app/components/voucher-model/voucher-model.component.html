@@ -7,7 +7,7 @@
             <h3>{{model.title}}</h3>
         </div>
     </div>
-    <form id="target" novalidate>
+    <form id="target" #catDataForm="ngForm" novalidate>
     <div class="row">
         <div class="col-md-12">
             <div class="panel panel-default">
@@ -20,14 +20,13 @@
                     </div>
                 </ng-template>
                 <div class="panel-body">
-                    <form #catDataForm="ngForm">
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group" [ngClass]="{ 'has-error': catDataForm.submitted }">
                                     <label for="">Webstore: </label>
-                                    <span *ngIf="model1.add != 'add';else input_content">{{model1.fkasid}}</span>
+                                    <span *ngIf="model1.add != 'add';else input_content">{{model1.fkasname}}</span>
                                     <ng-template #input_content style="text-align: center;">
-                                            <select class="form-control" name="fkasid" #fkasid="ngModel" [(ngModel)]="model1.fkasid" required > <!--(change)="resetCategoriesOnStoreChange()" -->
+                                            <select class="form-control webstore" name="fkasid" #fkasid="ngModel" [(ngModel)]="model1.fkasid" (change)="enableType()" required > <!--(change)="resetCategoriesOnStoreChange()" -->
                                                     <option value="">Select Webstore</option>
                                                     <option value="5">IGP</option>
                                                     <option value="830">Interflora</option>
@@ -41,8 +40,8 @@
                             <div class="col-md-6">
                                 <div class="form-group" [ngClass]="{ 'has-error': catDataForm.submitted && !vouchertype.valid }">
                                     <label for="">Type</label>
-                                    <select class="form-control" name="vouchertype" #vouchertype="ngModel" [(ngModel)]="model1.vouchertype" (change)="enableFields()" required > <!--(change)="resetCategoriesOnStoreChange()" -->
-                                        <option value="">Select Type</option>
+                                    <select class="form-control vouchertype" name="vouchertype" #vouchertype="ngModel" [(ngModel)]="model1.vouchertype" (change)="enableFields()" required > <!--(change)="resetCategoriesOnStoreChange()" -->
+                                        <option value="-1">Select Type</option>
                                         <option value="0">% Based</option>
                                         <option value="1">Value Based</option>
                                     </select>
@@ -55,7 +54,7 @@
                             <div class="col-md-6">
                                 <div class="form-group" [ngClass]="{ 'has-error': catDataForm.submitted && !vouchercode.valid }">
                                     <label for="">Voucher Code</label>
-                                    <input type="text" class="form-control"  name="vouchercode" placeholder="Voucher Code" [(ngModel)]="model1.vouchercode" #vouchercode="ngModel" required  maxlength="50"/>
+                                    <input type="text" class="form-control"  name="vouchercode" placeholder="Voucher Code" [(ngModel)]="model1.vouchercode" #vouchercode="ngModel" (focusout)="validatevouchercode()" required  maxlength="50"/>
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -68,9 +67,9 @@
 
                         <div class="row">
                             <div class="col-md-6">
-                                <div class="form-group" [ngClass]="{ 'has-error': catDataForm.submitted && !exDate.valid }">
+                                <div class="form-group" [ngClass]="{ 'has-error': catDataForm.submitted && !expirydate.valid }">
                                     <label for="">Expiry Date</label>
-                                    <input type="date" class="form-control"  name="exDate" placeholder="Expiry Date" [(ngModel)]="model1.exDate" #exDate="ngModel" id="party" name="party" min="2018-06-11" max="2018-06-30" required />
+                                    <input type="date" class="form-control"  name="expirydate" placeholder="Expiry Date" [(ngModel)]="model1.expirydate" #expirydate="ngModel" id="party" name="party" min="2018-06-11" max="2018-06-30" required />
                                 </div>
                             </div>
                         </div>
@@ -161,7 +160,6 @@
                             </ng-template>
                         </div>
                         </div>
-                    </form>
                 </div>
             </div>
         </div>

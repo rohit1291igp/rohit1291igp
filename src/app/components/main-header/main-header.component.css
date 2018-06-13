@@ -105,3 +105,11 @@
 .navRight li{
     cursor:pointer;
 }
+.navbar {
+    position: fixed;
+    min-height: 50px;
+    margin-bottom: 20px;
+    width: 100%;
+    border: 1px solid transparent;
+    z-index: 99;
+}

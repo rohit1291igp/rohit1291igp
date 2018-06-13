@@ -29,6 +29,8 @@ export class VoucherComponent implements OnInit {
   public showGrid: Boolean = false;
   public voucherModel;
   public animate = 'void';
+  public startLimit = 0;
+  public endLimit = 19;
 
   constructor(
     public BackendService: BackendService
@@ -44,7 +46,7 @@ export class VoucherComponent implements OnInit {
     console.log(_this.model.webstore);
     if (_this.model.webstore !== '') {
     const reqObj = {
-      url: 'vouchers/getvoucher?fkAssociateId=' + _this.model.webstore,
+      url: `vouchers/getvoucher?fkAssociateId=${_this.model.webstore}&startLimit=${_this.startLimit}&endLimit=${_this.endLimit}`,
       method: 'get'
       };
       this.BackendService.makeAjax(reqObj, function(err, response, headers){
@@ -53,10 +55,14 @@ export class VoucherComponent implements OnInit {
             alert('There was an error while fetching vouchers');
         }
         _this.vouchers = response.data.vouchermodellist;
+        _this.startLimit = _this.endLimit + 1;
+        _this.endLimit = _this.endLimit + 20;
         _this.showGrid = true;
-        $('html, body').animate({
-          'scrollTop' : $('.voucher-list-container').position().top
-        }, 2000);
+        if (_this.startLimit === 20) {
+          $('html, body').animate({
+            'scrollTop' : $('.voucher-list-container').position().top
+          }, 2000);
+        }
       console.log(response.data.vouchermodellist);
       });
     } else {
@@ -71,6 +77,7 @@ export class VoucherComponent implements OnInit {
       add: 'add'
     };
     $('body')[0].style.overflow = 'hidden';
+    $('#target :input').prop('disabled', true);
   };
 
   editVoucher(model) {
@@ -78,6 +85,11 @@ export class VoucherComponent implements OnInit {
     this.animate = 'active';
     this.voucherModel = model;
     this.voucherModel.fkasid = this.model.webstore;
+    if (this.voucherModel.fkasid === '5') {
+      this.voucherModel.fkasname = 'IGP';
+    } else if (this.voucherModel.fkasid === '830') {
+      this.voucherModel.fkasname = 'Interflora';
+    }
     this.voucherModel.enablefields = true;
     $('body')[0].style.overflow = 'hidden';
     $('#target :input').prop('disabled', true);
@@ -94,7 +106,7 @@ export class VoucherComponent implements OnInit {
     console.log(id);
     const _this = this;
       const reqObj = {
-          url: `voucher/deletevoucher?id=${id}&modifiedby=Cheta`,
+          url: `voucher/deletevoucher?id=${id}&modifiedby=Cheta&fkAssociateId=${fkasid}`,
           method: 'delete'
       };
         if (confirm(`Are you sure do you want to delete Voucher?`)) {
@@ -105,7 +117,7 @@ export class VoucherComponent implements OnInit {
                   return false;
               }
               alert(`The Voucher has been deleted`);
-            //  _this.vouchers = response.data;
+              _this.vouchers = response.data.vouchermodellist;
           });
         }else {
           return false;
