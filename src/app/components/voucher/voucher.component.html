@@ -35,7 +35,7 @@
 
 <section class="voucher-list-container">
     <br/>
-            <div *ngIf="showGrid && vouchers !== undefined" class="panel-body">
+            <div *ngIf="showGrid && vouchers[0] !== undefined" class="panel-body">
                     <input style="width: 50%;border-radius: 4px;margin-left: 25%" [(ngModel)]="searchText" placeholder="search id OR voucher code OR comment here"><br/><br/>
                     <table class="table table-hover">
                         <thead>
@@ -43,7 +43,7 @@
                             <th>Id</th>
                             <th>Voucher Code</th>
                             <th>Description</th>
-                            <th>Multiple Usage</th>
+                            <th>Expiry Date </th>
                             <th>Action</th>
                         </thead>
                         <tbody>
@@ -52,7 +52,7 @@
                                     <td>{{list.id}}</td>
                                     <td>{{list.vouchercode}}</td>                                   
                                     <td>{{list.comment}}</td>
-                                    <td>{{list.multipleusage}}</td>
+                                    <td>{{list.expirydate}}</td>
                                     <td>
                                             <button class="btn" (click)="editVoucher(list)" title="Edit"><i class="fa fa-pencil"></i></button>
                                             <!-- <button class="btn" (click)="viewVoucher(list)" title="View"><i class="fa fa-eye"></i></button>                                         -->
@@ -61,7 +61,7 @@
                             </tr>
                         </tbody>        
                     </table>
-                    <input class="btn btn-primary pull-right" type="button" (click)="getVouchers()" value="Show More" /><br/>
+                    <input class="btn btn-primary pull-right" type="button" (click)="showMoreVouchers()" value="Show More" /><br/>
             </div>
 </section>
 

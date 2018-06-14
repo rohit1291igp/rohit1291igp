@@ -54,7 +54,7 @@
                             <div class="col-md-6">
                                 <div class="form-group" [ngClass]="{ 'has-error': catDataForm.submitted && !vouchercode.valid }">
                                     <label for="">Voucher Code</label>
-                                    <input type="text" class="form-control"  name="vouchercode" placeholder="Voucher Code" [(ngModel)]="model1.vouchercode" #vouchercode="ngModel" (focusout)="validatevouchercode()" required  maxlength="50"/>
+                                    <input type="text" class="form-control"  name="vouchercode" placeholder="Voucher Code" [(ngModel)]="model1.vouchercode" #vouchercode="ngModel" (focusout)="validateVoucherCode()" required  maxlength="50"/>
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -113,7 +113,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group" [ngClass]="{ 'has-error': catDataForm.submitted && !applicableemail.valid }">
                                         <label for="">Applicable Email</label>
-                                        <input type="text" class="form-control" value="-1" placeholder="Applicable Email" name="applicableemail" #applicableemail="ngModel" [(ngModel)]="model1.applicableemail"  required />
+                                        <input  type="text" class="form-control" value="-1" placeholder="Applicable Email" name="applicableemail" #applicableemail="ngModel" [(ngModel)]="model1.applicableemail"  required />
                                     </div>
                                 </div>
                         </div>
@@ -132,9 +132,9 @@
                                         </div>
                                 </div>
                                 <div class="col-md-6">
-                                    <div class="form-group" [ngClass]="{ 'has-error': catDataForm.submitted && !applicablepid.valid }">
+                                    <div class="form-group" [ngClass]="{ 'has-error': catDataForm.submitted && !applicablePid.valid }">
                                         <label for="">Applicable Product Id</label>
-                                        <input type="number" class="form-control" value="-1" placeholder="Applicable Product Id" name="applicablepid" #applicablepid="ngModel" [(ngModel)]="model1.applicablepid"  required />
+                                        <input type="number" class="form-control" value="-1" placeholder="Applicable Product Id" name="applicablePid" #applicablePid="ngModel" [(ngModel)]="model1.applicablePid"  required />
                                     </div>
                                 </div>
                         </div>

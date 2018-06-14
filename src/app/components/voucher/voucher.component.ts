@@ -30,7 +30,7 @@ export class VoucherComponent implements OnInit {
   public voucherModel;
   public animate = 'void';
   public startLimit = 0;
-  public endLimit = 19;
+  public noOfRecords = 20;
 
   constructor(
     public BackendService: BackendService
@@ -43,10 +43,20 @@ export class VoucherComponent implements OnInit {
   // Get Categories
   getVouchers() {
     const _this = this;
+    _this.vouchers = [];
     console.log(_this.model.webstore);
+    _this.startLimit = 0;
     if (_this.model.webstore !== '') {
+      this.getVouchersWithLimit();
+    } else {
+    this.showGrid = false;
+    }
+  };
+
+  getVouchersWithLimit() {
+    const _this = this;
     const reqObj = {
-      url: `vouchers/getvoucher?fkAssociateId=${_this.model.webstore}&startLimit=${_this.startLimit}&endLimit=${_this.endLimit}`,
+      url: `vouchers/getvoucher?fkAssociateId=${_this.model.webstore}&startLimit=${_this.startLimit}&endLimit=${_this.noOfRecords}`,
       method: 'get'
       };
       this.BackendService.makeAjax(reqObj, function(err, response, headers){
@@ -54,21 +64,21 @@ export class VoucherComponent implements OnInit {
             console.log('Error=============>', err, response.errorCode);
             alert('There was an error while fetching vouchers');
         }
-        _this.vouchers = response.data.vouchermodellist;
-        _this.startLimit = _this.endLimit + 1;
-        _this.endLimit = _this.endLimit + 20;
+        _this.vouchers = _this.vouchers.concat(response.data.vouchermodellist);
         _this.showGrid = true;
-        if (_this.startLimit === 20) {
+        if (_this.startLimit === 0) {
           $('html, body').animate({
-            'scrollTop' : $('.voucher-list-container').position().top
-          }, 2000);
+            'scrollTop' : $('.voucher-list-container').position().top - 20
+          }, 1000);
         }
-      console.log(response.data.vouchermodellist);
+      console.log(_this.vouchers);
       });
-    } else {
-    this.showGrid = false;
-    }
   };
+
+  showMoreVouchers() {
+    this.startLimit = this.startLimit + 20;
+    this.getVouchersWithLimit();
+  }
 
   createVoucher() {
     this.showSideBar = true;

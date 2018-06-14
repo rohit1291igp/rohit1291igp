@@ -34,10 +34,10 @@ export class VoucherModelComponent implements OnInit, AfterViewInit {
       this.model1.multipleusage = 0;
       this.model1.ordervaluecheck = 1;
       this.model1.ordervalue = 0;
-      this.model1.applicableemail = [];
+      this.model1.applicableemail = '';
       this.model1.shippingwaivertype = 1;
       this.model1.productQuant = 0;
-      this.model1.applicablepid = 0;
+      this.model1.applicablePid = 0;
       }
       const _this = this;
       const reqObj = {
@@ -85,10 +85,10 @@ export class VoucherModelComponent implements OnInit, AfterViewInit {
       data['multipleusage'] = this.model1.multipleusage;
       data['ordervaluecheck'] = this.model1.ordervaluecheck;
       data['ordervalue'] = this.model1.ordervalue;
-      data['applicableemail'] = [this.model1.applicableemail];
+      data['applicableemail'] = this.getApplicableEmail();
       data['shippingwaivertype'] = this.model1.shippingwaivertype;
       data['productQuant'] = this.model1.productQuant;
-      data['applicablePid'] = this.model1.applicablepid;
+      data['applicablePid'] = this.model1.applicablePid;
       data['createdby'] = 'Cheta';
       console.log(JSON.stringify(data));
 
@@ -112,6 +112,14 @@ export class VoucherModelComponent implements OnInit, AfterViewInit {
       });
       // }
   };
+
+  getApplicableEmail() {
+    if (this.model1.applicableemail.indexOf(',') !== -1) {
+     return this.model1.applicableemail = this.model1.applicableemail.split(',');
+    } else {
+     return this.model1.applicableemail = [this.model1.applicableemail];
+    }
+  }
 
   // Validate model before saving/creating
   validateModel() {
@@ -155,7 +163,7 @@ export class VoucherModelComponent implements OnInit, AfterViewInit {
     $('.vouchertype').prop('disabled', false);
   }
 
-  validatevouchercode() {
+  validateVoucherCode() {
     const _this = this;
       const reqObj = {
           url: `voucher/validatevoucher?fkAssociateId=${this.model1.fkasid}&vouchercode=${this.model1.vouchercode}`,
@@ -187,10 +195,10 @@ export class VoucherModelComponent implements OnInit, AfterViewInit {
       data['multipleusage'] = this.model1.multipleusage;
       data['ordervaluecheck'] = this.model1.ordervaluecheck;
       data['ordervalue'] = this.model1.ordervalue;
-      data['applicableemail'] = this.model1.applicableemail;
+      data['applicableemail'] = this.getApplicableEmail();
       data['shippingwaivertype'] = this.model1.shippingwaivertype;
       data['productQuant'] = this.model1.productQuant;
-      data['applicablePid'] = this.model1.applicablepid;
+      data['applicablePid'] = this.model1.applicablePid;
       data['applicablecategory'] = this.model1.applicablecategory;
       data['modifiedby'] = 'Cheta';
       console.log(JSON.stringify(data));
