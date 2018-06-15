@@ -661,6 +661,7 @@
                         <span>
                             <span class="" *ngIf="order.orderProducts[0].ordersProductStatus == 'Processed'">(New)</span>
                             <span class="" *ngIf="order.orderProducts[0].ordersProductStatus == 'Confirmed'">(Confirmed)</span>
+                            <span class="" *ngIf="order.orderProducts[0].ordersProductStatus == 'Rejected'">(Rejected)</span>
                             <span class="" *ngIf="order.orderProducts[0].ordersProductStatus == 'Shipped' && order.orderProducts[0].deliveryStatus === 0">(Out for delivery)</span>
                             <span class="" *ngIf="order.orderProducts[0].ordersProductStatus == 'Shipped' && order.orderProducts[0].deliveryStatus === 1">(Delivered)</span>
                         </span>
