@@ -76,7 +76,7 @@ export class VoucherComponent implements OnInit {
   };
 
   showMoreVouchers() {
-    this.startLimit = this.startLimit + 20;
+    this.startLimit = this.startLimit + this.noOfRecords;
     this.getVouchersWithLimit();
   }
 
@@ -95,6 +95,9 @@ export class VoucherComponent implements OnInit {
     this.animate = 'active';
     this.voucherModel = model;
     this.voucherModel.fkasid = this.model.webstore;
+    this.voucherModel.startIndex = this.startLimit;
+    this.voucherModel.rowsCount = this.noOfRecords;
+    this.voucherModel.previousVoucherCode = this.voucherModel.vouchercode;
     if (this.voucherModel.fkasid === '5') {
       this.voucherModel.fkasname = 'IGP';
     } else if (this.voucherModel.fkasid === '830') {
@@ -116,7 +119,8 @@ export class VoucherComponent implements OnInit {
     console.log(id);
     const _this = this;
       const reqObj = {
-          url: `voucher/deletevoucher?id=${id}&modifiedby=Cheta&fkAssociateId=${fkasid}`,
+          // tslint:disable-next-line:max-line-length
+          url: `voucher/deletevoucher?id=${id}&modifiedby=Cheta&fkAssociateId=${fkasid}&startIndex=0&rowsCount=${this.startLimit + this.noOfRecords}`,
           method: 'delete'
       };
         if (confirm(`Are you sure do you want to delete Voucher?`)) {

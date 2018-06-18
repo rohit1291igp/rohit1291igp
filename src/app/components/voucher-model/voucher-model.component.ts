@@ -57,6 +57,7 @@ export class VoucherModelComponent implements OnInit, AfterViewInit {
               console.log(_this.model1.blackListPts);
           }
       });
+      this.getMinExpiryDate();
   }
 
   ngAfterViewInit() {
@@ -73,71 +74,88 @@ export class VoucherModelComponent implements OnInit, AfterViewInit {
     this.voucherModelClick.emit({data: data});
   };
 
+  getMinExpiryDate() {
+    const date = new Date();
+    const day = date.getDate();
+    const month = date.getMonth() + 1;
+    const year = date.getFullYear();
+    const minDate = `${year}-${('0' + (month)).slice(-2)}-${('0' + day).slice(-2)}`;
+    this.model1.minDate = minDate;
+    console.log(this.model1.minDate);
+  }
+
   addVoucher() {
       const data = {};
-      data['fkasid'] = this.model1.fkasid;
-      data['vouchertype'] = this.model1.vouchertype;
-      data['vouchercode'] = this.model1.vouchercode;
-      data['vouchervalue'] = this.model1.vouchervalue;
-      data['expirydate'] = this.model1.expirydate;
-      data['comment'] = this.model1.comment;
-      data['enabled'] = this.model1.enabled;
-      data['multipleusage'] = this.model1.multipleusage;
-      data['ordervaluecheck'] = this.model1.ordervaluecheck;
-      data['ordervalue'] = this.model1.ordervalue;
-      data['applicableemail'] = this.getApplicableEmail();
-      data['shippingwaivertype'] = this.model1.shippingwaivertype;
-      data['productQuant'] = this.model1.productQuant;
-      data['applicablePid'] = this.model1.applicablePid;
-      data['createdby'] = 'Cheta';
+      data['voucherModel'] = {};
+      data['rowLimitModel'] = {};
+      data['voucherModel']['fkasid'] = this.model1.fkasid;
+      data['voucherModel']['vouchertype'] = this.model1.vouchertype;
+      data['voucherModel']['vouchercode'] = this.model1.vouchercode;
+      data['voucherModel']['vouchervalue'] = this.model1.vouchervalue;
+      data['voucherModel']['expirydate'] = this.model1.expirydate;
+      data['voucherModel']['comment'] = this.model1.comment;
+      data['voucherModel']['enabled'] = this.model1.enabled;
+      data['voucherModel']['multipleusage'] = this.model1.multipleusage;
+      data['voucherModel']['ordervaluecheck'] = this.model1.ordervaluecheck;
+      data['voucherModel']['ordervalue'] = this.model1.ordervalue;
+      data['voucherModel']['applicableemail'] = this.getApplicableEmail('add');
+      data['voucherModel']['shippingwaivertype'] = this.model1.shippingwaivertype;
+      data['voucherModel']['productQuant'] = this.model1.productQuant;
+      data['voucherModel']['applicablePid'] = this.model1.applicablePid;
+      data['voucherModel']['createdby'] = 'Cheta';
+      // data['rowLimitModel']['startIndex'] = this.model1.startIndex;
+      data['rowLimitModel']['rowsCount'] = this.model1.startIndex + this.model1.rowsCount;
       console.log(JSON.stringify(data));
 
-      // if (this.validateModel()) {
-      const _this = this;
-      const reqObj = {
-        url: 'voucher/createvoucher',
-        method: 'post',
-        payload: data
-      };
+      if (this.validateModel()) {
+        const _this = this;
+        const reqObj = {
+          url: 'voucher/createvoucher',
+          method: 'post',
+          payload: data
+        };
 
-      _this.BackendService.makeAjax(reqObj, function(err, response, headers){
-      if (err || response.error || response.status === 'Error') {
-          console.log('Error=============>', err, response.errorCode);
-          alert('There was an error while creating the Voucher');
-          return false;
+        _this.BackendService.makeAjax(reqObj, function(err, response, headers){
+        if (err || response.error || response.status === 'Error') {
+            console.log('Error=============>', err, response.errorCode);
+            alert('There was an error while creating the Voucher');
+            return false;
+        }
+          alert('The Voucher has been Created.');
+          console.log(response.data.vouchermodellist);
+          _this.cancelVoucher(response.data.vouchermodellist);
+        });
       }
-        alert('The Voucher has been Created.');
-        console.log(response.data.vouchermodellist);
-         _this.cancelVoucher(response.data.vouchermodellist);
-      });
-      // }
   };
 
-  getApplicableEmail() {
+  getApplicableEmail(val) {
     if (this.model1.applicableemail.indexOf(',') !== -1) {
      return this.model1.applicableemail = this.model1.applicableemail.split(',');
-    } else {
+    } else if (val === 'add') {
      return this.model1.applicableemail = [this.model1.applicableemail];
+    } else {
+      return this.model1.applicableemail = this.model1.applicableemail;
     }
   }
 
   // Validate model before saving/creating
   validateModel() {
 
-  //     if (this.model1.fkasid === '' && typeof(this.model1.fkasid) === 'undefined') {
-  //         alert('Please enter the main content for the category.');
-  //         return false;
-  //     }
+      if (this.model1.vouchercode === '' || typeof(this.model1.vouchercode) === 'undefined') {
+          alert('Please enter the voucher code.');
+          return false;
+      }
 
-  //     if (this.model1.title === '' || typeof(this.model1.title) === 'undefined') {
-  //         alert('Please enter the main content for the category.');
-  //         return false;
-  //     }
+      // tslint:disable-next-line:max-line-length
+      if (this.model1.vouchervalue === 0 || this.model1.vouchervalue === '0' || this.model1.vouchervalue === '' ||  typeof(this.model1.vouchervalue) === 'undefined') {
+          alert('Please enter the voucher value.');
+          return false;
+      }
 
-  //     if (this.model1.url === '' || typeof(this.model1.url) === 'undefined') {
-  //         alert('Please enter the main content for the category.');
-  //         return false;
-  //     }
+      if (this.model1.expirydate === '' || typeof(this.model1.expirydate) === 'undefined') {
+        alert('Please select expiry date for voucher.');
+        return false;
+      }
 
   //     if (!this.uniqueUrl) {
   //         alert('The selected URL already exists. Please enter a new URL');
@@ -149,21 +167,32 @@ export class VoucherModelComponent implements OnInit, AfterViewInit {
   //         return false;
   //     }
 
-  //     return true;
-  // };
-  // }
+      return true;
 
   };
 
   enableFields() {
-    this.enablefields = true;
+    if (this.model1.vouchertype === '-1') {
+      this.enablefields = false;
+      this.model1.enablefields = false;
+    } else {
+      this.enablefields = true;
+    }
   }
 
   enableType() {
+    if (this.model1.fkasid === '') {
+      $('.vouchertype').prop('disabled', true);
+      this.enablefields = false;
+      $('.vouchertype').val('-1');
+    } else {
     $('.vouchertype').prop('disabled', false);
+    }
   }
 
   validateVoucherCode() {
+    // tslint:disable-next-line:max-line-length
+    if (this.model1.vouchercode !== '' && typeof(this.model1.vouchercode) !== 'undefined' && this.model1.previousVoucherCode !== this.model1.vouchercode) {
     const _this = this;
       const reqObj = {
           url: `voucher/validatevoucher?fkAssociateId=${this.model1.fkasid}&vouchercode=${this.model1.vouchercode}`,
@@ -180,30 +209,35 @@ export class VoucherModelComponent implements OnInit, AfterViewInit {
               _this.validVoucherCode = true;
           }
       });
+    }
   }
 
   saveVoucher() {
     const data = {};
-      data['id'] = this.model1.id;
-      data['fkasid'] = this.model1.fkasid;
-      data['vouchertype'] = this.model1.vouchertype;
-      data['vouchercode'] = this.model1.vouchercode;
-      data['vouchervalue'] = this.model1.vouchervalue;
-      data['expirydate'] = this.model1.expirydate;
-      data['comment'] = this.model1.comment;
-      data['enabled'] = this.model1.enabled;
-      data['multipleusage'] = this.model1.multipleusage;
-      data['ordervaluecheck'] = this.model1.ordervaluecheck;
-      data['ordervalue'] = this.model1.ordervalue;
-      data['applicableemail'] = this.getApplicableEmail();
-      data['shippingwaivertype'] = this.model1.shippingwaivertype;
-      data['productQuant'] = this.model1.productQuant;
-      data['applicablePid'] = this.model1.applicablePid;
-      data['applicablecategory'] = this.model1.applicablecategory;
-      data['modifiedby'] = 'Cheta';
+      data['voucherModel'] = {};
+      data['rowLimitModel'] = {};
+      data['voucherModel']['id'] = this.model1.id;
+      data['voucherModel']['fkasid'] = this.model1.fkasid;
+      data['voucherModel']['vouchertype'] = this.model1.vouchertype;
+      data['voucherModel']['vouchercode'] = this.model1.vouchercode;
+      data['voucherModel']['vouchervalue'] = this.model1.vouchervalue;
+      data['voucherModel']['expirydate'] = this.model1.expirydate;
+      data['voucherModel']['comment'] = this.model1.comment;
+      data['voucherModel']['enabled'] = this.model1.enabled === true ? 1 : 0;
+      data['voucherModel']['multipleusage'] = this.model1.multipleusage;
+      data['voucherModel']['ordervaluecheck'] = this.model1.ordervaluecheck === true ? 1 : 0;
+      data['voucherModel']['ordervalue'] = this.model1.ordervalue;
+      data['voucherModel']['applicableemail'] = this.getApplicableEmail('edit');
+      data['voucherModel']['shippingwaivertype'] = this.model1.shippingwaivertype === true ? 1 : 0;
+      data['voucherModel']['productQuant'] = this.model1.productQuant;
+      data['voucherModel']['applicablePid'] = this.model1.applicablePid;
+      data['voucherModel']['applicablecategory'] = this.model1.applicablecategory;
+      data['voucherModel']['modifiedby'] = 'Cheta';
+      // data['rowLimitModel']['startIndex'] = this.model1.startIndex;
+      data['rowLimitModel']['rowsCount'] = this.model1.startIndex + this.model1.rowsCount;
       console.log(JSON.stringify(data));
 
-    // if (this.validateModel()) {
+    if (this.validateModel()) {
       const _this = this;
       const reqObj = {
           url: 'voucher/updatevoucher',
@@ -221,6 +255,6 @@ export class VoucherModelComponent implements OnInit, AfterViewInit {
           alert('The Voucher has been saved.');
           _this.cancelVoucher(response.data.vouchermodellist);
       });
-    // }
+    }
   }
 }
