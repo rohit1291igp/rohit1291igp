@@ -1365,7 +1365,8 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
           case 'orderLog' : url = "getOrderLog"; method="get";
               if(_this.sidePanelData[orderIndex].orderLogData) return;
               paramsObj={
-                  orderId:_this.sidePanelData[orderIndex].orderId
+                  orderId:_this.sidePanelData[orderIndex].orderId,
+                  fkAssociateId : localStorage.getItem('fkAssociateId')
               };
               apiSuccessHandler=function(apiResponse){
                   _this.sidePanelData[orderIndex].orderLogData=apiResponse.result.logs;
