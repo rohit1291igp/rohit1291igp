@@ -696,7 +696,7 @@
                         <button class="btn btn-primary actions-button uppercase text-bold text-white bg-green"
                         [ngClass]="{'disableBtn' : (order.orderProducts[0].ordersProductStatus =='Shipped' && order.orderProducts[0].deliveryStatus === 1) ||
                         (order.orderProducts[0].ordersProductStatus =='Dispatched' && order.orderProducts[0].deliveryStatus === 1) ||
-                        (order.orderProducts[0].ordersProductStatus =='Confirmed' && order.deliverWhen !== 'today' && order.deliverWhen !== 'past' && order.deliverWhen !== 'future')}"
+                        (order.orderProducts[0].ordersProductStatus =='Confirmed' && order.deliverWhen !== 'today' && order.deliverWhen !== 'past' && order.deliverWhen !== 'tomorrow' && order.deliverWhen !== 'future')}"
                         (click)="updateOrderStatus($event, orderIndex, getNxtOrderStatus(order.orderProducts[0].ordersProductStatus), order.orderId, order.orderProducts, order.orderProducts[0].orderProductExtraInfo.deliveryDate, order.orderProducts[0].orderProductExtraInfo.deliveryTime)">
                               <span *ngIf="order.orderProducts[0].ordersProductStatus =='Processed'">Confirm</span>
                               <span *ngIf="order.orderProducts[0].ordersProductStatus =='Confirmed'">Out For Delivery</span>
@@ -957,7 +957,7 @@
                     <button style="width:100%;" class="btn btn-primary actions-button uppercase text-bold text-white bg-green"
                     [ngClass]="{'disableBtn' : (order.orderProducts[0].ordersProductStatus =='Shipped' && order.orderProducts[0].deliveryStatus === 1) ||
                     (order.orderProducts[0].ordersProductStatus =='Dispatched' && order.orderProducts[0].deliveryStatus === 1) ||
-                    (order.orderProducts[0].ordersProductStatus =='Confirmed' && order.deliverWhen !== 'today' && order.deliverWhen !== 'past' && order.deliverWhen !== 'future')}"
+                    (order.orderProducts[0].ordersProductStatus =='Confirmed' && order.deliverWhen !== 'today' && order.deliverWhen !== 'past' && order.deliverWhen !== 'tomorrow' && order.deliverWhen !== 'future')}"
                     (click)="updateOrderStatus($event, orderIndex, getNxtOrderStatus(order.orderProducts[0].ordersProductStatus), order.orderId, order.orderProducts, order.orderProducts[0].orderProductExtraInfo.deliveryDate, order.orderProducts[0].orderProductExtraInfo.deliveryTime)">
                     <span *ngIf="order.orderProducts[0].ordersProductStatus =='Processed'">Confirm</span>
                     <span *ngIf="order.orderProducts[0].ordersProductStatus =='Confirmed'">Out For Delivery</span>
