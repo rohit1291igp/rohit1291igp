@@ -63,6 +63,7 @@ import { VoucherModelComponent } from './components/voucher-model/voucher-model.
 
 //Custom Pipe
 import { FilterPipe} from './customPipes/filter.pipe';
+import { SendEmailComponent } from './components/send-email/send-email.component';
 
 //env config
 /*import {envConfig} from "./others/env.config";
@@ -102,7 +103,8 @@ export function ConfigLoader(envConfig: envConfig) {
     CategoryModalComponent,
     VoucherComponent,
     VoucherModelComponent,
-    FilterPipe
+    FilterPipe,
+    SendEmailComponent
   ],
   imports: [
     BrowserModule,

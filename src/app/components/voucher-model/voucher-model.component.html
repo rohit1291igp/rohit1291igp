@@ -1,147 +1,191 @@
 <div class="side-container">
     <!-- <h1 (click)="detect()">{{model}}</h1> -->
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-md-12">
-            <input class="btn btn-primary btn-sm" type="button" (click)="cancelVoucher('Not')" value="Cancel" />
-            <h3>{{model.title}}</h3>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <input class="btn btn-primary btn-sm" type="button" (click)="cancelVoucher('Not')" value="Cancel" />
+                <h3>{{model.title}}</h3>
+            </div>
         </div>
-    </div>
-    <form id="target" #catDataForm="ngForm" novalidate>
-    <div class="row">
-        <div class="col-md-12">
-            <div class="panel panel-default">
-                <div *ngIf="model1.add != 'add';else header_content" class="panel-heading">
-                    <h3 class="panel-title">Edit Information</h3>
-                </div>
-                <ng-template #header_content style="text-align: center;">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">Add Information</h3>
-                    </div>
-                </ng-template>
-                <div class="panel-body">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group" [ngClass]="{ 'has-error': catDataForm.submitted }">
-                                    <label for="">Webstore: </label>
-                                    <span *ngIf="model1.add != 'add';else input_content">{{model1.fkasname}}</span>
-                                    <ng-template #input_content style="text-align: center;">
-                                            <select class="form-control webstore" name="fkasid" #fkasid="ngModel" [(ngModel)]="model1.fkasid" (change)="enableType()" required > <!--(change)="resetCategoriesOnStoreChange()" -->
-                                                    <option value="">Select Webstore</option>
-                                                    <option value="5">IGP</option>
-                                                    <option value="830">Interflora</option>
+        <form id="target" #catDataForm="ngForm" novalidate>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel panel-default">
+                        <div *ngIf="model1.add != 'add';else header_content" class="panel-heading">
+                            <h3 class="panel-title">Edit Information</h3>
+                        </div>
+                        <ng-template #header_content style="text-align: center;">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Add Information</h3>
+                            </div>
+                        </ng-template>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group" [ngClass]="{ 'has-error': catDataForm.submitted }">
+                                        <label for="">Webstore: </label>
+                                        <span *ngIf="model1.add != 'add';else input_content">{{model1.fkasname}}</span>
+                                        <ng-template #input_content style="text-align: center;">
+                                            <select class="form-control webstore" name="fkasid" #fkasid="ngModel" [(ngModel)]="model1.fkasid" (change)="enableType()"
+                                                required>
+                                                <!--(change)="resetCategoriesOnStoreChange()" -->
+                                                <option value="">Select Webstore</option>
+                                                <option value="5">IGP</option>
+                                                <option value="830">Interflora</option>
                                             </select>
-                                    </ng-template>
+                                        </ng-template>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group" [ngClass]="{ 'has-error': catDataForm.submitted }">
-                                    <label for="">Type:</label>
-                                    <span *ngIf="model1.add != 'add';else type_content">{{model1.vouchertype}}</span>                                    
-                                    <ng-template #type_content >
-                                        <select class="form-control vouchertype" name="vouchertype" #vouchertype="ngModel" [(ngModel)]="model1.vouchertype" (change)="enableFields()" required > <!--(change)="resetCategoriesOnStoreChange()" -->
-                                            <option value="-1">Select Type</option>
-                                            <option value="0">% Based</option>
-                                            <option value="1">Value Based</option>
-                                        </select>
-                                    </ng-template>
-                                </div>
-                            </div>
-                        </div>
 
-                        <div *ngIf="enablefields || model1.enablefields">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group" [ngClass]="{ 'has-error': catDataForm.submitted && !vouchercode.valid }">
-                                    <label for="">Voucher Code</label>
-                                    <input type="text" class="form-control"  name="vouchercode" placeholder="Voucher Code" [(ngModel)]="model1.vouchercode" #vouchercode="ngModel" (focusout)="validateVoucherCode()" required  maxlength="50"/>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group" [ngClass]="{ 'has-error': catDataForm.submitted }">
+                                        <label for="">Type1:</label>
+                                        <span *ngIf="model1.add != 'add';else type_content">{{model1.vouchertype}}</span>
+                                        <ng-template #type_content>
+                                            <select *ngIf="metaData" class="form-control vouchertype" name="vouchertype" #vouchertype="ngModel" [(ngModel)]="model1.vouchertype"
+                                                (change)="enableFields()" required>
+                                                <!--(change)="resetCategoriesOnStoreChange()" -->
+                                                <option value="-1">Select Type</option>
+                                                <option *ngFor="let md of metaData.type1" value="md.id">{{md.value}}</option>
+                                                <!-- 
+                                                <option value="0">% Based</option>
+                                                <option value="1">Value Based</option> -->
+                                            </select>
+                                        </ng-template>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group" [ngClass]="{ 'has-error': catDataForm.submitted }">
+                                        <label for="">Type2:</label>
+                                        <span *ngIf="model1.add != 'add';else type2_content">{{model1.vouchertype}}</span>
+                                        <ng-template #type2_content>
+                                            <select *ngIf="metaData" class="form-control vouchertype" name="vouchertype2" #vouchertype2="ngModel" [(ngModel)]="model1.vouchertype2"
+                                                required>
+                                                <!--(change)="resetCategoriesOnStoreChange()" -->
+                                                <option value="-1">Select Type</option>
+                                                <option *ngFor="let md of metaData.type2" value="md.id">{{md.value}}</option>
+                                                <!-- 
+                                                <option value="0">% Based</option>
+                                                <option value="1">Value Based</option> -->
+                                            </select>
+                                        </ng-template>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-md-6">
-                                <div class="form-group" [ngClass]="{ 'has-error': catDataForm.submitted && !vouchervalue.valid }">
-                                    <label for="">Voucher Value</label>
-                                    <input type="text" class="form-control"  name="vouchervalue" placeholder="Voucher Value" [(ngModel)]="model1.vouchervalue" #vouchervalue="ngModel" required/>
-                                </div>
-                            </div>
-                        </div>
 
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group" [ngClass]="{ 'has-error': catDataForm.submitted && !expirydate.valid }">
-                                    <label for="">Expiry Date</label>
-                                    <input type="date" class="form-control"  name="expirydate" placeholder="Expiry Date" [(ngModel)]="model1.expirydate" #expirydate="ngModel" id="expirydate" min={{model1.minDate}} max="2018-06-30" required />
+                            <div *ngIf="enablefields || model1.enablefields">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group" [ngClass]="{ 'has-error': catDataForm.submitted && !vouchercode.valid }">
+                                            <label for="">Voucher Code</label>
+                                            <input type="text" class="form-control" name="vouchercode" placeholder="Voucher Code" [(ngModel)]="model1.vouchercode" #vouchercode="ngModel"
+                                                (focusout)="validateVoucherCode()" required maxlength="50" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group" [ngClass]="{ 'has-error': catDataForm.submitted && !vouchervalue.valid }">
+                                            <label for="">Voucher Value</label>
+                                            <input type="text" class="form-control" name="vouchervalue" placeholder="Voucher Value" [(ngModel)]="model1.vouchervalue"
+                                                #vouchervalue="ngModel" required/>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
 
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="form-group" [ngClass]="{ 'has-error': catDataForm.submitted && !comment.valid }">
-                                    <label for="">Comment</label>
-                                    <input type="text" class="form-control" placeholder="Comment"  name="comment" [(ngModel)]="model1.comment" #comment="ngModel"  required  maxlength="150"/>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group" [ngClass]="{ 'has-error': catDataForm.submitted && !expirydate.valid }">
+                                            <label for="">Expiry Date</label>
+                                            <input type="date" class="form-control" name="expirydate" placeholder="Expiry Date" [(ngModel)]="model1.expirydate" #expirydate="ngModel"
+                                                id="expirydate" min={{model1.minDate}} max="2018-06-30" required />
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-1">
-                                <div class="form-group" [ngClass]="{ 'has-error': catDataForm.submitted && !enabled.valid }">
-                                    <label for="">Enable</label>
-                                    <input type="checkbox" class="form-control" value="-1" placeholder="Enable" name="enabled" #enabled="ngModel" [(ngModel)]="model1.enabled"  required />
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group" [ngClass]="{ 'has-error': catDataForm.submitted && !multipleusage.valid }">
-                                    <label for="">MultipleUsage</label>
-                                    <input type="number" class="form-control" value="-1" placeholder="MultipleUsage" name="multipleusage" #multipleusage="ngModel" [(ngModel)]="model1.multipleusage"  required />
-                                </div>
-                            </div>
-                        </div>
 
-                        <div class="row">
-                            <div class="col-md-1">
-                                <div class="form-group" [ngClass]="{ 'has-error': catDataForm.submitted && !ordervaluecheck.valid }">
-                                    <label for="">OrdVal Check</label>
-                                    <input type="checkbox" class="form-control" value="-1"  name="ordervaluecheck" #ordervaluecheck="ngModel" [(ngModel)]="model1.ordervaluecheck"  required />
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group" [ngClass]="{ 'has-error': catDataForm.submitted && !comment.valid }">
+                                            <label for="">Comment</label>
+                                            <input type="text" class="form-control" placeholder="Comment" name="comment" [(ngModel)]="model1.comment" #comment="ngModel"
+                                                required maxlength="150" />
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-md-5">
-                                <div class="form-group" [ngClass]="{ 'has-error': catDataForm.submitted && !ordervalue.valid }">
-                                    <label for="">Order Value</label>
-                                    <input type="number" class="form-control" placeholder="Order Value" name="ordervalue" #ordervalue="ngModel" [(ngModel)]="model1.ordervalue"  required />
+                                <div class="row">
+                                    <div class="col-md-1">
+                                        <div class="form-group" [ngClass]="{ 'has-error': catDataForm.submitted && !enabled.valid }">
+                                            <label for="">Test</label>
+                                            <input type="checkbox" class="form-control" value="-1" placeholder="Enable" name="enabled" #enabled="ngModel" [(ngModel)]="model1.enabled"
+                                                required />
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group" [ngClass]="{ 'has-error': catDataForm.submitted && !applicableemail.valid }">
-                                    <label for="">Applicable Email</label>
-                                    <input type="text" class="form-control" placeholder="Applicable Email" name="applicableemail" [(ngModel)]="model1.applicableemail" #applicableemail="ngModel" required />
+                                <div class="row">
+                                    <div class="col-md-1">
+                                        <div class="form-group" [ngClass]="{ 'has-error': catDataForm.submitted && !enabled.valid }">
+                                            <label for="">Enable</label>
+                                            <input type="checkbox" class="form-control" value="-1" placeholder="Enable" name="enabled" #enabled="ngModel" [(ngModel)]="model1.enabled"
+                                                required />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group" [ngClass]="{ 'has-error': catDataForm.submitted && !multipleusage.valid }">
+                                            <label for="">MultipleUsage</label>
+                                            <input type="number" class="form-control" value="-1" placeholder="MultipleUsage" name="multipleusage" #multipleusage="ngModel"
+                                                [(ngModel)]="model1.multipleusage" required />
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
 
-                        <div class="row">   
-                            <div class="col-md-1">
-                                <div class="form-group" [ngClass]="{ 'has-error': catDataForm.submitted && !shippingwaivertype.valid }">
-                                    <label for="">Ship Waiver Type</label>
-                                    <input type="checkbox" class="form-control" value="-1"  name="shippingwaivertype" #shippingwaivertype="ngModel" [(ngModel)]="model1.shippingwaivertype"  required />
+                                <div class="row">
+                                    <div class="col-md-1">
+                                        <div class="form-group" [ngClass]="{ 'has-error': catDataForm.submitted && !ordervaluecheck.valid }">
+                                            <label for="">OrdVal Check</label>
+                                            <input type="checkbox" class="form-control" value="-1" name="ordervaluecheck" #ordervaluecheck="ngModel" [(ngModel)]="model1.ordervaluecheck"
+                                                required />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-5">
+                                        <div class="form-group" [ngClass]="{ 'has-error': catDataForm.submitted && !ordervalue.valid }">
+                                            <label for="">Order Value</label>
+                                            <input type="number" class="form-control" placeholder="Order Value" name="ordervalue" #ordervalue="ngModel" [(ngModel)]="model1.ordervalue"
+                                                required />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group" [ngClass]="{ 'has-error': catDataForm.submitted && !applicableemail.valid }">
+                                            <label for="">Applicable Email</label>
+                                            <input type="text" class="form-control" placeholder="Applicable Email" name="applicableemail" [(ngModel)]="model1.applicableemail"
+                                                #applicableemail="ngModel" required />
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group" [ngClass]="{ 'has-error': catDataForm.submitted && !productQuant.valid }">
-                                    <label for="">Product Quantity</label>
-                                    <input type="number" class="form-control" placeholder="Product Quantity" name="productQuant" #productQuant="ngModel" [(ngModel)]="model1.productQuant"  required />
+
+                                <div class="row">
+                                    <div class="col-md-1">
+                                        <div class="form-group" [ngClass]="{ 'has-error': catDataForm.submitted && !shippingwaivertype.valid }">
+                                            <label for="">Ship Waiver Type</label>
+                                            <input type="checkbox" class="form-control" value="-1" name="shippingwaivertype" #shippingwaivertype="ngModel" [(ngModel)]="model1.shippingwaivertype"
+                                                required />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group" [ngClass]="{ 'has-error': catDataForm.submitted && !productQuant.valid }">
+                                            <label for="">Product Quantity</label>
+                                            <input type="number" class="form-control" placeholder="Product Quantity" name="productQuant" #productQuant="ngModel" [(ngModel)]="model1.productQuant"
+                                                required />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group" [ngClass]="{ 'has-error': catDataForm.submitted && !applicablePid.valid }">
+                                            <label for="">Applicable Product Id</label>
+                                            <input type="number" class="form-control" placeholder="Applicable Product Id" name="applicablePid" #applicablePid="ngModel"
+                                                [(ngModel)]="model1.applicablePid" required />
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group" [ngClass]="{ 'has-error': catDataForm.submitted && !applicablePid.valid }">
-                                    <label for="">Applicable Product Id</label>
-                                    <input type="number" class="form-control" placeholder="Applicable Product Id" name="applicablePid" #applicablePid="ngModel" [(ngModel)]="model1.applicablePid"  required />
-                                </div>
-                            </div>
-                        </div>
-                        <!-- <div class="row">
+                                <!-- <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group" *ngIf="model1.add != 'add';else metatitle_content" [ngClass]="{ 'has-error' : catDataForm.submitted && !metaTitle.valid}">
                                     <label for="">Meta Title</label>
@@ -153,20 +197,21 @@
                                 </ng-template>
                             </div>
                         </div> -->
-                        <div class="row">
-                            <div *ngIf="model1.add != 'add';else addCat_content" class="col-md-12 text-right">
-                                    <button type="submit"  class="btn btn-primary pull-right"  (click)="saveVoucher()" >Save</button>
-                                <!-- <input class="btn btn-primary pull-right" type="submit" (click)="saveCategory(model)" value="Save" /> -->
+                                <div class="row">
+                                    <div *ngIf="model1.add != 'add';else addCat_content" class="col-md-12 text-right">
+                                        <button type="submit" class="btn btn-primary pull-right" (click)="saveVoucher()">Save</button>
+                                        <!-- <input class="btn btn-primary pull-right" type="submit" (click)="saveCategory(model)" value="Save" /> -->
+                                    </div>
+                                    <ng-template #addCat_content style="text-align: center;">
+                                        <br/><button type="submit" style="margin-right: 10px;" class="btn btn-primary pull-right"
+                                            (click)="addVoucher()">Add</button>
+                                    </ng-template>
+                                </div>
                             </div>
-                            <ng-template #addCat_content style="text-align: center;">
-                                    <br/><button type="submit" style="margin-right: 10px;" class="btn btn-primary pull-right"  (click)="addVoucher()" >Add</button>
-                            </ng-template>
                         </div>
-                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
+        </form>
     </div>
-  </form>
-  </div>
 </div>

@@ -1,4 +1,13 @@
-import { Component, OnInit, trigger, sequence, animate, transition, style, state } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  trigger,
+  sequence,
+  animate,
+  transition,
+  style,
+  state
+} from '@angular/core';
 import { BackendService } from '../../services/backend.service';
 
 @Component({
@@ -7,18 +16,26 @@ import { BackendService } from '../../services/backend.service';
   styleUrls: ['./voucher.component.css'],
   animations: [
     trigger('anim', [
-        transition('* => void', [
-            style({ height: '*', opacity: '1', width: '0%'}),
-            sequence([
-                animate('0.9s ease', style({ height: '0', width: '0%', opacity: 0  }))
-            ])
-        ]),
-        transition('void => active', [
-            style({ height: '*', opacity: '0', background: '#f2f2f2'}),
-            sequence([
-                animate('.3s ease', style({ height: '*', width: '50%',  opacity: 0.3, 'animation-fill-mode': 'forwards'}))
-            ])
+      transition('* => void', [
+        style({ height: '*', opacity: '1', width: '0%' }),
+        sequence([
+          animate('0.9s ease', style({ height: '0', width: '0%', opacity: 0 }))
         ])
+      ]),
+      transition('void => active', [
+        style({ height: '*', opacity: '0', background: '#f2f2f2' }),
+        sequence([
+          animate(
+            '.3s ease',
+            style({
+              height: '*',
+              width: '50%',
+              opacity: 0.3,
+              'animation-fill-mode': 'forwards'
+            })
+          )
+        ])
+      ])
     ])
   ]
 })
@@ -32,9 +49,7 @@ export class VoucherComponent implements OnInit {
   public startLimit = 0;
   public noOfRecords = 20;
 
-  constructor(
-    public BackendService: BackendService
-  ) { }
+  constructor(public BackendService: BackendService) {}
 
   ngOnInit() {
     this.model.webstore = '';
@@ -49,31 +64,36 @@ export class VoucherComponent implements OnInit {
     if (_this.model.webstore !== '') {
       this.getVouchersWithLimit();
     } else {
-    this.showGrid = false;
+      this.showGrid = false;
     }
-  };
+  }
 
   getVouchersWithLimit() {
     const _this = this;
     const reqObj = {
-      url: `vouchers/getvoucher?fkAssociateId=${_this.model.webstore}&startLimit=${_this.startLimit}&endLimit=${_this.noOfRecords}`,
+      url: `vouchers/getvoucher?fkAssociateId=${
+        _this.model.webstore
+      }&startLimit=${_this.startLimit}&endLimit=${_this.noOfRecords}`,
       method: 'get'
-      };
-      this.BackendService.makeAjax(reqObj, function(err, response, headers){
-        if (err || response.error) {
-            console.log('Error=============>', err, response.errorCode);
-            alert('There was an error while fetching vouchers');
-        }
-        _this.vouchers = _this.vouchers.concat(response.data.vouchermodellist);
-        _this.showGrid = true;
-        if (_this.startLimit === 0) {
-          $('html, body').animate({
-            'scrollTop' : $('.voucher-list-container').position().top - 20
-          }, 1000);
-        }
+    };
+    this.BackendService.makeAjax(reqObj, function(err, response, headers) {
+      if (err || response.error) {
+        console.log('Error=============>', err, response.errorCode);
+        alert('There was an error while fetching vouchers');
+      }
+      _this.vouchers = _this.vouchers.concat(response.data.vouchermodellist);
+      _this.showGrid = true;
+      if (_this.startLimit === 0) {
+        $('html, body').animate(
+          {
+            scrollTop: $('.voucher-list-container').position().top - 20
+          },
+          1000
+        );
+      }
       console.log(_this.vouchers);
-      });
-  };
+    });
+  }
 
   showMoreVouchers() {
     this.startLimit = this.startLimit + this.noOfRecords;
@@ -88,12 +108,14 @@ export class VoucherComponent implements OnInit {
     };
     $('body')[0].style.overflow = 'hidden';
     $('#target :input').prop('disabled', true);
-  };
+  }
 
   editVoucher(model) {
     this.showSideBar = true;
     this.animate = 'active';
     this.voucherModel = model;
+    console.log('VoucherModel');
+    console.log(this.voucherModel);
     this.voucherModel.fkasid = this.model.webstore;
     this.voucherModel.startIndex = this.startLimit;
     this.voucherModel.rowsCount = this.noOfRecords;
@@ -106,7 +128,7 @@ export class VoucherComponent implements OnInit {
     this.voucherModel.enablefields = true;
     $('body')[0].style.overflow = 'hidden';
     $('#target :input').prop('disabled', true);
-  };
+  }
 
   viewVoucher(model) {
     this.showSideBar = true;
@@ -118,24 +140,25 @@ export class VoucherComponent implements OnInit {
   deleteVoucher(id, fkasid) {
     console.log(id);
     const _this = this;
-      const reqObj = {
-          // tslint:disable-next-line:max-line-length
-          url: `voucher/deletevoucher?id=${id}&modifiedby=Cheta&fkAssociateId=${fkasid}&startIndex=0&rowsCount=${this.startLimit + this.noOfRecords}`,
-          method: 'delete'
-      };
-        if (confirm(`Are you sure do you want to delete Voucher?`)) {
-          _this.BackendService.makeAjax(reqObj, function(err, response, headers){
-              if (err || response.error || response.status === 'Error') {
-                  console.log('Error=============>', err, response.errorCode);
-                  alert('There was an error while deleting voucher');
-                  return false;
-              }
-              alert(`The Voucher has been deleted`);
-              _this.vouchers = response.data.vouchermodellist;
-          });
-        }else {
+    const reqObj = {
+      // tslint:disable-next-line:max-line-length
+      url: `voucher/deletevoucher?id=${id}&modifiedby=Cheta&fkAssociateId=${fkasid}&startIndex=0&rowsCount=${this
+        .startLimit + this.noOfRecords}`,
+      method: 'delete'
+    };
+    if (confirm(`Are you sure do you want to delete Voucher?`)) {
+      _this.BackendService.makeAjax(reqObj, function(err, response, headers) {
+        if (err || response.error || response.status === 'Error') {
+          console.log('Error=============>', err, response.errorCode);
+          alert('There was an error while deleting voucher');
           return false;
         }
+        alert(`The Voucher has been deleted`);
+        _this.vouchers = response.data.vouchermodellist;
+      });
+    } else {
+      return false;
+    }
   }
 
   // Parent Child Relationship!!!
@@ -147,8 +170,7 @@ export class VoucherComponent implements OnInit {
     this.animate = 'void';
     $('#target :input').prop('disabled', false);
     if (event.data !== undefined && event.data !== 'Not') {
-    this.vouchers = event.data;
+      this.vouchers = event.data;
     }
-  };
-
+  }
 }
