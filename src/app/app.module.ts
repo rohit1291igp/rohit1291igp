@@ -58,6 +58,12 @@ import { FeedsComponent } from './components/feeds/feeds.component';
 import { UploadExcelComponent } from './components/upload-excel/upload-excel.component';
 import { VendorDropdownComponent } from './components/vendor-dropdown/vendor-dropdown.component';
 import { CategoryComponent } from './components/category/category.component';
+import { VoucherComponent } from './components/voucher/voucher.component';
+import { VoucherModelComponent } from './components/voucher-model/voucher-model.component';
+
+//Custom Pipe
+import { FilterPipe} from './customPipes/filter.pipe';
+import { SendEmailComponent } from './components/send-email/send-email.component';
 
 //env config
 /*import {envConfig} from "./others/env.config";
@@ -94,7 +100,11 @@ export function ConfigLoader(envConfig: envConfig) {
     BlogViewComponent,
     SeoHomeComponent,
     CategoryComponent,
-    CategoryModalComponent
+    CategoryModalComponent,
+    VoucherComponent,
+    VoucherModelComponent,
+    FilterPipe,
+    SendEmailComponent
   ],
   imports: [
     BrowserModule,

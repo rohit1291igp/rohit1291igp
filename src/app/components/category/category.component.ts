@@ -65,6 +65,9 @@ export class CategoryComponent implements OnInit {
           console.log('Error=============>', err, response.errorCode);
           alert('There was an error while fetching categories');
       }
+      $('html, body').animate({
+        'scrollTop' : $('#categories').position().top
+      }, 1000);
       _this.categories = response.data;
     });
   }
