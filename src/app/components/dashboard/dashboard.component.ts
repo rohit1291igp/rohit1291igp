@@ -36,7 +36,7 @@ export class DashboardComponent implements OnInit {
 
   public myDatePickerOptions: IMyOptions = {
     // other options...
-    dateFormat: 'ddth mmm. yyyy',
+    dateFormat: 'dd mmm. yyyy',
     inline:false,
     alignSelectorRight : true,
     editableDateField:false,

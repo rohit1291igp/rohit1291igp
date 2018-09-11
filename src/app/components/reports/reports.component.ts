@@ -143,7 +143,7 @@ export class ReportsComponent implements OnInit{
       filterby:'='
   };
   public myDatePickerOptions: IMyOptions = {
-      dateFormat: 'ddth mmm. yyyy',
+      dateFormat: 'dd mmm. yyyy',
       editableDateField:false,
       openSelectorOnInputClick:true
   };
