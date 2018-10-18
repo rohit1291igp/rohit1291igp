@@ -10,7 +10,7 @@ export const environment = {
   userType: localStorage.getItem('userType'),
   mockAPI: sessionStorage.getItem('mockAPI'),
   s3AccessKey : 'AKIAJVEU6UYKL7BCJMZA',
-  s3SecretKey : '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',
+  s3SecretKey : 'eIVSKBtGS8BcItvfzXuWJR6GPy5vjfsZyRdjo867', 
   blogBucketName : 'blogcreatives',
   igpBlogCDN : 'https://cdn.igp.com/f_auto,q_auto,t_blogimage/blogs/',
   interfloraBlogCDN : 'https://res.cloudinary.com/interflora/f_auto,q_auto,t_blogimage/blogs/',
