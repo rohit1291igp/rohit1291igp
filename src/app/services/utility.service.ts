@@ -105,7 +105,7 @@ export class UtilityService {
             case 3 : delDetail= delDetail + " Midnight Delivery ";
                 break;
 
-            case 4 : delDetail= delDetail + " Fixed Date Delivery ";
+            case 4 : delDetail= delDetail + " Standard Delivery ";
                 break;
         }
         return delDetail;

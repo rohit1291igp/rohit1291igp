@@ -298,7 +298,7 @@
                                 <option *ngFor="let orderProduct of adminActions.adminActionDepData.orderProducts" [ngValue]="orderProduct.orderProductId">{{orderProduct.productName}}</option>
                             </select>
 
-                            <select name="deliveryType" class="form-control m-top-1" [(ngModel)]="adminActions.adminActionsModel.deliveryType" #deliveryType="ngModel" required>
+                            <select name="deliveryType" class="form-control m-top-1" [(ngModel)]="adminActions.adminActionsModel.deliveryType" #deliveryType="ngModel" (change)="changeSlots(deliveryType.value)" required>
                                 <option *ngFor="let deliveryType of adminActions.adminActionDepData.deliveryTypes" [ngValue]="deliveryType.value">{{deliveryType.name}}</option>
                             </select>
 
@@ -307,7 +307,7 @@
                                 <my-date-picker name="deliveryDate" [options]="myDatePickerOptions" [(ngModel)]="adminActions.adminActionsModel.deliveryDate" #deliveryDate="ngModel" placeholder="Delivery Date" required></my-date-picker>
                             </div>
 
-                            <select name="deliveryTime" class="form-control m-top-1" [(ngModel)]="adminActions.adminActionsModel.deliveryTime" #deliveryTime="ngModel" [ngClass]="{'hide' : (!adminActions.adminActionsModel.deliveryType || adminActions.adminActionsModel.deliveryType != 2 || !adminActions.adminActionsModel.deliveryDate)}" required>
+                            <select name="deliveryTime" class="form-control m-top-1" [(ngModel)]="adminActions.adminActionsModel.deliveryTime" #deliveryTime="ngModel" [ngClass]="{'hide' : (!adminActions.adminActionsModel.deliveryType || adminActions.adminActionsModel.deliveryType == 3 || !adminActions.adminActionsModel.deliveryDate)}" required>
                                 <option *ngFor="let deliveryTime of adminActions.adminActionDepData.deliveryTimes" [ngValue]="deliveryTime.value">{{deliveryTime.name}}</option>
                             </select>
 
