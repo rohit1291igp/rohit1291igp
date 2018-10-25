@@ -114,8 +114,8 @@ export class UtilityService {
     getDeliveryType(deliveryName){
         var delType:number;
         switch(deliveryName){
-            case "Standard Delivery" : delType=1;
-                break;
+            // case "Standard Delivery" : delType=1;
+            //     break;
 
             //case 2 : delDetail= delDetail + ((delDate == purDate) ? "Same Day Delivery" : " Fixed Time Delivery ");
             case "Fixed Time Delivery" : delType=2;
@@ -124,7 +124,7 @@ export class UtilityService {
             case "Midnight Delivery" : delType=3;
                 break;
 
-            case "Fixed Date Delivery" : delType=4;
+            case "Standard Delivery" : delType=4;
                 break;
         }
         return delType;
@@ -135,7 +135,7 @@ export class UtilityService {
             {"name" : "Select Delivery Type", "value":""},
             {"name" : "Fixed Time Delivery", "value":"2"},
             {"name" : "Midnight Delivery", "value":"3"},
-            {"name" : "Fixed Date Delivery", "value":"4"}
+            {"name" : "Standard Delivery", "value":"4"}
         ];
         return list;
     }
