@@ -38,7 +38,7 @@
                                     </div>  
                                 </div>
 
-                                <div class="col-md-3">
+                                <div class="col-md-2">
                                     <div class="form-group" [ngClass]="{ 'has-error' : createBlog.submitted && !status.valid }">
                                         <label for="">Status</label>
                                         <select class="form-control" name="status" #status="ngModel" [(ngModel)]="blogList.data.bloglist[0].status" required>
@@ -49,10 +49,17 @@
                                     </div>
                                 </div>
 
-                                <div class="col-md-3">
+                                <div class="col-md-2">
                                     <div class="form-group" [ngClass]="{ 'has-error': createBlog.submitted && !sortOrder.valid }">
                                         <label for="">Sort Order</label>
                                         <input type="text" class="form-control" name="sortOrder" [(ngModel)]="blogList.data.bloglist[0].sortorder" #sortOrder="ngModel" value="-1" placeholder="Sort Order" required />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group" [ngClass]="{ 'has-error' : createBlog.submitted && !publishdate.valid}">
+                                        <label for="">Published Date</label>
+                                        <input type="date" class="form-control" name="publishdate" placeholder="Published Date" [(ngModel)]="blogList.data.bloglist[0].publishdate" #publishdate="ngModel"
+                                            id="publishdate" min={{blogList.data.bloglist[0].minDate}} max="2019-06-30" required />
                                     </div>
                                 </div>
                             </div>
@@ -110,7 +117,7 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-12">
+                                <div class="col-md-6">
                                     <div class="form-group" [ngClass]="{ 'has-error' : createBlog.submitted && !keywords.valid}">
                                         <label for="">Meta Keywords</label>
                                         <textarea class="form-control" rows="3" placeholder="Meta Keywords" name="keywords" #keywords="ngModel" [(ngModel)]="blogList.data.seo.seokeywords" required maxlength="300"></textarea>
