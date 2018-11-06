@@ -314,6 +314,7 @@ export class BlogViewComponent implements OnInit, AfterViewInit {
     );
     data['description'] = this.replaceNonAscii(detail.bloglist[0].description);
     data['status'] = detail.bloglist[0].status;
+    data['publishdate'] = detail.bloglist[0].publishdate;
     data['url'] = detail.bloglist[0].url;
     data['imageurl'] = detail.bloglist[0].imageurl;
     data['fkasid'] = detail.bloglist[0].fkasid;
