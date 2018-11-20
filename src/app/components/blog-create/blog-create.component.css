@@ -71,7 +71,7 @@ h4{
 }
 
 .blog-image-upload{
-    position: relative;
+    /* position: relative; */
     margin-bottom: 1.5em;
     width: 0;
 }
