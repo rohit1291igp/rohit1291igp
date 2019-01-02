@@ -75,33 +75,35 @@ export class LoginComponent implements OnInit {
                     const token = _response.result.token;
                     const fkAssociateId =  _response.result.fkAssociateId;
                     const associateName = _response.result.associateName;
-                    const userType =  _response.result.userType; // || 'upload';
+                    const userType =  _response.result.userType.toLocaleLowerCase(); // || 'upload';
                     /*let admin =  _response.result.admin;
                      if(admin){
                      localStorage.setItem('admin', true);
                      }*/
-
                     console.log('User token', token);
                     console.log('fkAssociateId', fkAssociateId);
                     localStorage.setItem('currentUserToken', token);
                     localStorage.setItem('fkAssociateId', fkAssociateId);
                     localStorage.setItem('associateName', associateName);
                     localStorage.setItem('vendorName', _this.model.username);
-                    //localStorage.setItem('userType', userType);
+                    localStorage.setItem('userType', userType);
+                    environment.userType = userType;
                     console.log("detecting user type!");
-                    if(_this.model.username === "iipsroot"){
-                        localStorage.setItem('userType', 'upload');
-                        environment.userType='upload';
-                    }else if(_this.model.username === "Handels" || _this.model.username === "handels"){
-                        localStorage.setItem('userType', 'admin');
-                        environment.userType='admin';
-                    } else if(_this.model.username === 'blogger') {
-                        localStorage.setItem('userType', 'blogger');
-                    } else {
-                      console.log("vendor type detected!!");
-                      localStorage.setItem('userType', 'vendor');
-                      environment.userType='vendor';
-                    }
+                    // if(_this.model.username === "iipsroot"){
+                    //     localStorage.setItem('userType', 'upload');
+                    //     environment.userType='upload';
+                    // }else if(_this.model.username === "Handels" || _this.model.username === "handels"){
+                    //     localStorage.setItem('userType', 'admin');
+                    //     environment.userType='admin';
+                    // } else if(_this.model.username === 'blogger') {
+                    //     localStorage.setItem('userType', 'blogger');
+                    // } else if(_this.model.username == 'Artisans' || _this.model.username == 'artisans' || _this.model.username == 'gai1' || _this.model.username == 'GAI1' || _this.model.username == 'pranav' || _this.model.username == 'PRANAV') {
+                    //     localStorage.setItem('userType', 'warehouse');
+                    // } else {
+                    //   console.log("vendor type detected!!");
+                    //   localStorage.setItem('userType', 'vendor');
+                    //   environment.userType='vendor';
+                    // }
 
                     _this.UtilityService.changeRouteComponent();
                     _this.router.navigate(['/dashboard']);

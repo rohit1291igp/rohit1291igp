@@ -12,6 +12,7 @@ import { VoucherComponent } from './components/voucher/voucher.component';
 import { SendEmailComponent } from './components/send-email/send-email.component';
 
 import { AuthGuard } from './services/auth-guard.service';
+import { DownloadEmailComponent } from './components/download-email/download-email.component';
 
 const route: Routes = [
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
@@ -49,6 +50,7 @@ const route: Routes = [
     component: SendEmailComponent,
     canActivate: [AuthGuard]
   },
+  { path: 'download/:fileFor/:filedate/:fileTime', component: DownloadEmailComponent, canActivate: [AuthGuard] },
   // otherwise redirect to home
   { path: '**', redirectTo: 'dashboard' }
 ];
