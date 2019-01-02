@@ -1,4 +1,4 @@
-<ng-container *ngIf="environment.userType !== 'blogger'">
+<ng-container *ngIf="environment.userType !== 'blogger' && environment.userType !== 'warehouse'">
     <!--<div class="headerVendor navbar-brand" *ngIf="vendorName">- {{vendorName}}</div>-->
 <app-header-tabs (onTabChanged)="loadDashboardCount($event)" (onOrderSearch)="search($event)" [dashboardCounts]="dashboardData.counts"></app-header-tabs>
 
@@ -524,4 +524,14 @@
             </div>
         </div>
     </div>
+</ng-container>
+
+<ng-container *ngIf="environment.userType === 'warehouse'">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <h4 style="padding:2em;">Access denied.</h4>
+                </div>
+            </div>
+        </div>
 </ng-container>
