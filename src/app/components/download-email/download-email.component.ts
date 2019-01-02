@@ -64,8 +64,8 @@ export class DownloadEmailComponent implements OnInit {
     const splitURL = window.location.href.split('/');
     const fileFor = splitURL[splitURL.length - 3];
     const filedate = splitURL[splitURL.length - 2];
-    const fileName = filedate + '.csv';
     const fileTime = splitURL[splitURL.length - 1];
+    const fileName = fileFor + '_' + filedate + '_' + fileTime + '.csv';
     // let filePresent = false;
     const reqObj = {
       url: `linksInMail/getCsvLink?fileFor=${fileFor}&filedate=${filedate}&fileTime=${fileTime}`,
