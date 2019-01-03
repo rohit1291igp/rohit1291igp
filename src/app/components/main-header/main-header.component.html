@@ -16,7 +16,7 @@
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse navRight" id="bs-example-navbar-collapse-1" *ngIf="!isMobile && vendorName">
       <ul class="nav navbar-nav navbar-right">
-        <ng-container *ngIf="(environment.userType !== 'upload' && environment.userType !== 'blogger')">
+        <ng-container *ngIf="(environment.userType !== 'root' && environment.userType !== 'blogger')">
             <li class="fullHeightLi" [ngClass]="{'selected' : selectedTopTab === 'dashboard'}">
               <p><a ng-href="#/dashboard" routerLink="/dashboard">Dashboard</a></p>
             </li>
