@@ -166,7 +166,7 @@ export class UtilityService {
     changeRouteComponent(){
         var _this=this, userType = environment.userType;
         for (var i in _this.router.config) {
-            if (userType ==='upload' && _this.router.config[i].path == "dashboard") {
+            if (userType ==='root' && _this.router.config[i].path == "dashboard") {
                 _this.router.config[i].component = UploadExcelComponent;
                 break;
             }
