@@ -858,7 +858,7 @@ export class ReportsComponent implements OnInit{
             case "getOrderReport" : apiURLPath = "";
                 break;
 
-            case "getVendorReport" : apiURLPath = "handleComponentChange";
+            case "getVendorReport" : apiURLPath = "handleVendorComponentChange";
                 break;
 
             case "getPincodeReport" : apiURLPath = "handlePincodeChange";
