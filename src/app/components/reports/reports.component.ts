@@ -930,7 +930,6 @@ export class ReportsComponent implements OnInit{
     }
 
     actionBtnInvoke(actBtnTxt, cellValue, rowData, header, dataIndex, source){
-        debugger;
         var _this=this;
         console.log(actBtnTxt+'=========='+cellValue+'========='+JSON.stringify(rowData));
         var actBtnTxtModified=actBtnTxt;
