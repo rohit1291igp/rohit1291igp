@@ -447,7 +447,16 @@ export class ReportsComponent implements OnInit{
             if($('.componentDD').val() == "Select Component Code"){
                 alert("Please select component code");
                 return;
-            } else if($('.componentDD').val() !== undefined){
+            } else if($('.componentDD').val() !== undefined && $('.componentDD').val() == "All Component"){
+                if(_this.searchResultModel["Component_Code"]){
+                    delete _this.searchResultModel["Component_Code"];
+                }
+                else{
+                    alert("Already all components are listed");
+                    return;
+                }
+            }
+             else if($('.componentDD').val() !== undefined){
                 _this.searchResultModel["Component_Code"]=$('.componentDD').val();
             }
         }
