@@ -12,7 +12,9 @@ export const environment = {
   s3AccessKey : 'AKIAJVEU6UYKL7BCJMZA',
   s3SecretKey : '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', 
   blogBucketName : 'blogcreatives',
+  componentBucketName : 'handelscomponents',
   igpBlogCDN : 'https://cdn.igp.com/f_auto,q_auto,t_blogimage/blogs/',
   interfloraBlogCDN : 'https://res.cloudinary.com/interflora/f_auto,q_auto,t_blogimage/blogs/',
+  componentImageUrl : 'https://handelscomponents.s3.amazonaws.com/',
   blogsAcl : 'public-read'
 };

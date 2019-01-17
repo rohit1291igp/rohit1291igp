@@ -25,7 +25,7 @@ export class S3UploadService {
     */
     uploadImageToS3 (file, bucketName, acl, shouldRenameFile , cb) {
         const params: any = {
-            Bucket : environment.blogBucketName,
+            Bucket : bucketName,
             Key : shouldRenameFile ? this.renameFile(file) : file.name,
             ContentType : file.type,
             Body : file,
