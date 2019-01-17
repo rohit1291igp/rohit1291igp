@@ -6,6 +6,8 @@ import { UtilityService } from '../../services/utility.service';
 import {environment} from "../../../environments/environment";
 import { ReportsService } from '../../services/reports.service';
 import { OrdersActionTrayComponent } from '../orders-action-tray/orders-action-tray.component';
+import * as S3 from 'aws-sdk/clients/s3';
+import { S3UploadService } from '../../services/s3Upload.service';
 
 @Component({
   selector: 'app-reports',
@@ -66,8 +68,8 @@ export class ReportsComponent implements OnInit{
   searchReportFieldsValidation=false;
   componentTypes=[
       {"name" : "Select component type", "value" : "" },
-      {"name" : "General Products", "value" : "0" },
-      {"name" : "Cakes", "value" : "1" }
+      {"name" : "General Gifting", "value" : "0" },
+      {"name" : "Cake Only", "value" : "1" }
 
   ];
   statusList=[
@@ -149,6 +151,7 @@ export class ReportsComponent implements OnInit{
   };
   productsURL = environment.productsURL;
   productsCompURL = environment.productsCompURL;
+  componentImageUrl = environment.componentImageUrl;
   editTableCell = false;
   editTableCellObj:any={
       "caption": "",
@@ -159,6 +162,9 @@ export class ReportsComponent implements OnInit{
   public dateRange: Object = {};
   public reportData:any=null;
   public orginalReportData:any=null;
+  public env = environment;
+  public isUploading = false;
+  public isAddImage = true;
   searchResultModel:any={};
   confirmFlag=false;
   associateId = localStorage.getItem('fkAssociateId');
@@ -170,12 +176,15 @@ export class ReportsComponent implements OnInit{
        "noBtn": "Cancel"
      }
   };
+  listOfComponents = [];
+  uploadedImages = [];
   constructor(
       private _elementRef: ElementRef,
       public reportsService: ReportsService,
       public BackendService: BackendService,
       public UtilityService: UtilityService,
-      public route: ActivatedRoute
+      public route: ActivatedRoute,
+      public S3UploadService: S3UploadService
       ) { }
 
   ngOnInit() {
@@ -234,7 +243,7 @@ export class ReportsComponent implements OnInit{
           /* byDefault set deliveryDateFrom 2 days back - end */
 
           /* set default vendor - start */
-          if(_this.defaultVendor && ( _this.reportType === 'getVendorReport' || _this.reportType === 'getPincodeReport' || _this.reportType === 'getVendorDetails') && (_this.environment.userType && _this.environment.userType === 'admin')){
+          if(_this.defaultVendor && ( _this.reportType === 'getVendorReport' || _this.reportType === 'getComponentReport' || _this.reportType === 'getPincodeReport' || _this.reportType === 'getVendorDetails') && (_this.environment.userType && _this.environment.userType === 'admin')){
               _this.searchResultModel["fkAssociateId"]=_this.defaultVendor;
           }
           /* set default vendor - end */
@@ -270,6 +279,7 @@ export class ReportsComponent implements OnInit{
               _this.orginalReportData = JSON.parse(JSON.stringify(_this.reportData)); //Object.assign({}, _this.reportData);
               _this.showMoreTableData(null);
           });
+          _this.getComponentsList();
       });
   }
 
@@ -323,6 +333,63 @@ export class ReportsComponent implements OnInit{
         return this.reportLabelState[header][prop];
   }
 
+  getComponentsList(){
+    var _this = this;
+    if(_this.reportType == 'getComponentReport'){
+        let reqObj =  {
+            url : 'getListOfComponents?startLimit=0&endLimit=30',
+            method : "get",
+            payload : {}
+          };
+          _this.BackendService.makeAjax(reqObj, function(err, response, headers){
+            if(err || response.error == true) {
+                if(response){
+                    console.log('Error=============>', err, response.errorCode);
+                }else{
+                alert("Error Occurred while trying to get list of components.");
+                }
+                return;
+            }
+            console.log("response----->"+response.result.list);
+            _this.listOfComponents = response.result.list;
+          });
+    }
+  }
+
+  uploadFiles(event) {
+    const that = this;
+    if (event.target.files.length > 0) {
+        this.isUploading = true;
+        let j = 0;
+        for (let i = 0; i < event.target.files.length; i++) {
+            const file = event.target.files[i];
+            this.S3UploadService.uploadImageToS3(file, environment.componentBucketName, environment.blogsAcl, false, (err, data) => {
+                j++;
+                if (j === event.target.files.length) {
+                    that.isUploading = false;
+                    that.isAddImage = false;
+                }
+                if (err) {
+                    console.log('There was an error uploading your file: ', err);
+                    return false;
+                } else {
+                    this.uploadedImages.push(data);
+                }
+            });
+        }
+    }
+    }
+
+    getImageUrlList() {
+        const imageList = [];
+        if (this.uploadedImages.length > 0) {
+            this.uploadedImages.forEach(element => {
+                    imageList.push(element.Key);
+            });
+        }
+        return imageList;
+    }
+
   setReportsHeadersState(_e, header, prop, value){
       _e.preventDefault();
       _e.stopPropagation();
@@ -370,9 +437,17 @@ export class ReportsComponent implements OnInit{
         var _this=this;
         _this.BackendService.abortLastHttpCall();//abort  other  api calls
         console.log('Search report form submitted ---->', _this.searchResultModel);
+        if(_this.reportType == "getComponentReport"){
+            if($('.componentDD').val() == "Select Component Code"){
+                alert("Please select component code");
+                return;
+            } else if($('.componentDD').val() !== undefined){
+                _this.searchResultModel["Component_Code"]=$('.componentDD').val();
+            }
+        }
+        
         _this.queryString = _this.generateQueryString(_this.searchResultModel);
         console.log('searchReportSubmit =====> queryString ====>', _this.queryString);
-
         /*if(_this.queryString === ""){
             _this.searchReportFieldsValidation=true;
             return;
@@ -395,7 +470,7 @@ export class ReportsComponent implements OnInit{
             _this.columnFilterSubmit(e);
             _this.showMoreTableData(e);
         });
-
+        
    }
 
    //sort
@@ -867,6 +942,8 @@ export class ReportsComponent implements OnInit{
             case "getVendorDetails" : apiURLPath = "modifyVendorDetails";
                 break;
 
+            case "getComponentReport" : apiURLPath = "handleComponentChange";
+                break;
             default : apiURLPath ="";
         }
 
@@ -951,7 +1028,16 @@ export class ReportsComponent implements OnInit{
                         Component_Code: rowData['Component_Code'],
                         Quantity:_this.editTableCellObj.value
                     };
-                }else{
+                } else if(_this.reportType === "getComponentReport") {
+                    paramsObj={
+                        Component_Code: rowData['Component_Code'],
+                    };
+                    if(_this.editTableCellObj['header'] == 'Component_Image'){
+                        paramsObj[_this.editTableCellObj['header']] = _this.uploadedImages[0].Key;
+                    } else {
+                        paramsObj[_this.editTableCellObj['header']] = _this.editTableCellObj.value;
+                    }
+                } else{
                     if(header === "Price"){
                         paramsObj={
                             componentId:rowData['component_Id_Hide'],
@@ -1001,10 +1087,12 @@ export class ReportsComponent implements OnInit{
            console.log('Not a valid action');
         }
 
-        if(environment.userType && environment.userType === "admin"){
-            paramsObj.fkAssociateId = _this.searchResultModel["fkAssociateId"];
-        }else{
-            paramsObj.fkAssociateId =  localStorage.getItem('fkAssociateId');
+        if( _this.reportType !== "getComponentReport"){
+            if(environment.userType && environment.userType === "admin"){
+                paramsObj.fkAssociateId = _this.searchResultModel["fkAssociateId"];
+            }else{
+                paramsObj.fkAssociateId =  localStorage.getItem('fkAssociateId');
+            }
         }
 
         var paramsStr = _this.UtilityService.formatParams(paramsObj);
@@ -1306,6 +1394,15 @@ export class ReportsComponent implements OnInit{
                     price:_this.reportAddAction.reportAddActionModel.componentPrice
                 };
                 break;
+            case 'getComponentReport':  url = "addNewComponent";
+                paramsObj={
+                    Component_Image:_this.uploadedImages[0].Key,
+                    Component_Code:_this.reportAddAction.reportAddActionModel.componentCode,
+                    Component_Name:_this.reportAddAction.reportAddActionModel.componentName,
+                    Type:_this.reportAddAction.reportAddActionModel.componentType,
+                    Tax_Id:_this.reportAddAction.reportAddActionModel.componentTaxId,
+                    Component_Description:_this.reportAddAction.reportAddActionModel.componentDesc
+                };
         }
 
         let paramsStr = _this.UtilityService.formatParams(paramsObj);
@@ -1316,7 +1413,6 @@ export class ReportsComponent implements OnInit{
             url : url+paramsStr,
             method : (method || 'post')
         };
-
         _this.BackendService.makeAjax(reqObj, function(err, response, headers){
             //if(!response) response={result:[]};
             if(err || response.error) {

@@ -111,7 +111,38 @@
                 <div class="modal-body center-align">
                     <!--<label>{{editTableCellObj.caption}}:</label>-->
                     <form (ngSubmit)="f.form.valid && submitEditCell($event, editTableCellObj.actBtnTxt, editTableCellObj.cellValue, editTableCellObj.rowData, editTableCellObj.header, editTableCellObj.dataIndex)" #f="ngForm" nonvalidate>
-                        <input class="form-control custom-control" type="text" name="editTableCell" placeholder="{{editTableCellObj.caption}}" [(ngModel)]="editTableCellObj.value" #editTableCell="ngModel" required>
+                        <input *ngIf="editTableCellObj.header !== 'Component_Image'" class="form-control custom-control" type="text" name="editTableCell" placeholder="{{editTableCellObj.caption}}" [(ngModel)]="editTableCellObj.value" #editTableCell="ngModel" required>
+                        <div class="panel-body" *ngIf="editTableCellObj.header == 'Component_Image'">
+                                    
+                            <div class="manage-media">
+                                <div class="row" *ngIf="isAddImage">
+                                    <div class="col-md-12">
+                                        <input class="blog-image-upload" type="file" name="componentImage" (change)="uploadFiles($event)" required />
+                                    </div>
+                                </div>
+    
+                                <div class="selected-images" *ngIf="uploadedImages.length">
+                                    <div class="row">
+                                        <div class="col-md-12" *ngFor="let image of uploadedImages">
+                                            <div class="image-container">
+                                                <div class="row">
+                                                    <div class="col-md-4">
+                                                        <img style="width:100%" src="{{image.Location}}" class="image-responsive" />
+                                                    </div>
+                                                    <div class="col-md-8">
+                                                        <p><strong>Name</strong> : {{image.key}}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <br/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="media-loading-screen" *ngIf="isUploading">
+                                    <h3>Uploading Images..</h3>
+                                </div>
+                            </div>
+                        </div>
                         <div *ngIf="f.submitted && !editTableCell.valid" class="help-block theme-red">Please provide {{editTableCellObj.caption}} value</div>
                         <button class="btn btn-primary m-top-1">Save</button>
                     </form>
@@ -133,7 +164,7 @@
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="closePopup($event)"><span aria-hidden="true">×</span></button>
                     <h4 class="modal-title" id="myModalLabel">
                         Add
-                        <ng-container *ngIf="reportType === 'getVendorReport'">Component</ng-container>
+                        <ng-container *ngIf="reportType === 'getVendorReport' || reportType === 'getComponentReport'">Component</ng-container>
                         <ng-container *ngIf="reportType === 'getPincodeReport'">Pincode</ng-container>
                         <ng-container *ngIf="reportType === 'getVendorDetails'">Vendor</ng-container>
                     </h4>
@@ -186,24 +217,66 @@
                 </div>
 
 
-                <div class="modal-body center-align" *ngIf="reportType === 'getVendorReport'">
+                <div class="modal-body center-align" *ngIf="reportType === 'getVendorReport' || reportType === 'getComponentReport'">
                     <div class="form-group">
                         <form (ngSubmit)="f.form.valid && addActionSubmit($event)" #f="ngForm" nonvalidate>
                             <!--<input type="hidden" name="fkAssociateId" [(ngModel)]="reportAddAction.reportAddActionModel.fkAssociateId" #fkAssociateId="ngModel" >-->
                             <input name="componentCode" class="form-control custom-control m-top-1" [(ngModel)]="reportAddAction.reportAddActionModel.componentCode" #componentCode="ngModel" placeholder="component Code" required>
                             <input name="componentName" class="form-control custom-control m-top-1" [(ngModel)]="reportAddAction.reportAddActionModel.componentName" #componentName="ngModel" placeholder="component Name" required>
+                            <input name="componentDesc" class="form-control custom-control m-top-1" [(ngModel)]="reportAddAction.reportAddActionModel.componentDesc" #componentDesc="ngModel" placeholder="component Description" required>
 
                             <select name="componentType" class="form-control m-top-1" [(ngModel)]="reportAddAction.reportAddActionModel.componentType" #componentType="ngModel" required>
-                                <option *ngFor="let componentType of componentTypes" [ngValue]="componentType.value">{{componentType.name}}</option>
+                                <option *ngFor="let componentType of componentTypes" [ngValue]="componentType.name">{{componentType.name}}</option>
                             </select>
 
+                            <div class="panel panel-default" *ngIf="reportType === 'getComponentReport'">
+                        
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">Upload and Manage Images</h3>
+                                </div>
+                                
+                                <div class="panel-body">
+                                    
+                                    <div class="manage-media">
+                                        <div class="row" *ngIf="isAddImage">
+                                            <div class="col-md-12">
+                                                <input class="blog-image-upload" type="file" name="componentImage" (change)="uploadFiles($event)" required />
+                                            </div>
+                                        </div>
+            
+                                        <div class="selected-images" *ngIf="uploadedImages.length">
+                                            <div class="row">
+                                                <div class="col-md-12" *ngFor="let image of uploadedImages">
+                                                    <div class="image-container">
+                                                        <div class="row">
+                                                            <div class="col-md-2">
+                                                                <img style="width:100%" src="{{image.Location}}" class="image-responsive" />
+                                                            </div>
+                                                            <div class="col-md-10">
+                                                                <p><strong>Name</strong> : {{image.key}}</p>
+                                                                <p><strong>Image Link</strong> : {{image.Location}}</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <br/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="media-loading-screen" *ngIf="isUploading">
+                                            <h3>Uploading Images..</h3>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
-                            <input name="componentPrice" class="form-control custom-control m-top-1" [(ngModel)]="reportAddAction.reportAddActionModel.componentPrice" #componentPrice="ngModel" placeholder="component Price" required>
+                            <input name="componentTaxId" class="form-control custom-control m-top-1" [(ngModel)]="reportAddAction.reportAddActionModel.componentTaxId" #componentcomponentTaxId="ngModel" placeholder="component TaxId" required>
 
                             <div *ngIf="f.submitted && !componentCode.valid" class="help-block theme-red">Please provide component code!</div>
                             <div *ngIf="f.submitted && !componentName.valid" class="help-block theme-red">Please provide component name!</div>
+                            <div *ngIf="f.submitted && !componentImage.valid" class="help-block theme-red">Please provide component image!</div>                            
+                            <div *ngIf="f.submitted && !componentDesc.valid" class="help-block theme-red">Please provide component description!</div>
                             <div *ngIf="f.submitted && !componentType.valid" class="help-block theme-red">Please provide component type!</div>
-                            <div *ngIf="f.submitted && !componentPrice.valid" class="help-block theme-red">Please provide component price!</div>
+                            <div *ngIf="f.submitted && !componentTaxId.valid" class="help-block theme-red">Please provide component taxid!</div>
                             <button class="btn btn-primary m-top-1">Submit</button>
                         </form>
                     </div>
@@ -382,19 +455,23 @@
 
       </div>
 
-        <div class="col-sm-12 col-md-12 m-top-1 searchFields2" *ngIf="(reportType === 'getVendorReport' || reportType === 'getPincodeReport' || reportType === 'getVendorDetails') && (environment.userType && environment.userType === 'admin') " style="width:100%;">
+        <div class="col-sm-12 col-md-12 m-top-1 searchFields2" *ngIf="(reportType === 'getVendorReport' || reportType === 'getPincodeReport' || reportType === 'getVendorDetails' || reportType === 'getComponentReport') && (environment.userType && environment.userType === 'admin') " style="width:100%;">
             <div class="col-sm-9 col-md-9 reprts-search-fields bg-white padding1" style="padding-right:0; width:100%;">
                 <div class="underLine paddingHalf text-bold">Search Vendor</div>
                 <div class="btn btn-primary addActionBtn" (click)="addActionInit($event)">
                     Add
-                    <ng-container *ngIf="reportType === 'getVendorReport'">Component</ng-container>
+                    <ng-container *ngIf="reportType === 'getVendorReport' || reportType === 'getComponentReport'">Component</ng-container>
                     <ng-container *ngIf="reportType === 'getPincodeReport'">Pincode</ng-container>
                     <ng-container *ngIf="reportType === 'getVendorDetails'">Vendor</ng-container>
                 </div>
                 <form name="searchReport" (ngSubmit)="f.form.valid && searchReportSubmit($event,true)" #f="ngForm" nonvalidate>
                     <div class="searchFields m-top-1 inline" >
                         <div class="pull-left" style="width:70%;">
-                            <app-vendor-dropdown [configData]="{'modelData' :searchResultModel, 'defaultVendor' : defaultVendor}"></app-vendor-dropdown>
+                            <app-vendor-dropdown *ngIf="reportType !== 'getComponentReport'" [configData]="{'modelData' :searchResultModel, 'defaultVendor' : defaultVendor}"></app-vendor-dropdown>
+                            <select *ngIf="reportType == 'getComponentReport'" name="fkAssociateId" class="componentDD form-control" required>
+                                <option  [ngValue]="">Select Component Code</option>
+                                <option *ngFor="let comp of listOfComponents" [ngValue]="comp">{{comp}}</option>
+                            </select>
                         </div>
                     </div>
                     <div class="searchFieldsSubmit relative inline" >
@@ -511,7 +588,7 @@
                             <td class="reportTableCell" style="word-break: break-word;" *ngFor="let tableCol of reportData.tableHeaders; let i='index'" [ngClass]="{'hide' : isHiddenCell(tableCol)}" [style.width]="tableCol === 'email'? 'auto' : 'auto' ">
                                 <div class="tdTxt">
                                     <span *ngIf="tableCol == 'Component Image' || tableCol == 'Component_Image'" >
-                                        <img class="clk" style="width: 4em; box-shadow: 0 1px 3px #888888;" src="{{productsCompURL}}th/{{getCellValue(tableRowValue[tableCol])}}" alt="{{getCellValue(tableRowValue[tableCol])}}" (click)="imagePreview($event, productsCompURL+'full/'+(getCellValue(tableRowValue[tableCol])))">
+                                        <img class="clk" style="width: 4em; box-shadow: 0 1px 3px #888888;" src="{{componentImageUrl}}{{getCellValue(tableRowValue[tableCol])}}" alt="{{getCellValue(tableRowValue[tableCol])}}" (click)="imagePreview($event, componentImageUrl +(getCellValue(tableRowValue[tableCol])))">
                                     </span>
                                     <span *ngIf="tableCol == 'Product Image' || tableCol == 'Product_Image'" >
                                         <img class="clk" style="width: 4em; box-shadow: 0 1px 3px #888888;" src="{{productsURL}}th/{{getCellValue(tableRowValue[tableCol])}}" alt="{{getCellValue(tableRowValue[tableCol])}}" (click)="imagePreview($event, productsURL+'l/'+(getCellValue(tableRowValue[tableCol])))">
@@ -560,13 +637,19 @@
                                         <ng-container *ngFor="let tableAction of reportData.tableDataAction">
                                             <div class="tableDataActionBtn" *ngIf="tableAction[tableCol] && tableAction[tableCol].length">
                                                 <!--{{tableAction[tableCol] | json}}-->
-                                                <ng-container *ngIf="(tableRowValue[tableCol]['requestValue'] == -1)">
+                                                <ng-container *ngIf="reportType === 'getComponentReport'">
                                                     <div class="tableactBtn" *ngFor="let actBtn of tableAction[tableCol]; let z='index'" (click)="actionBtnInvoke(actBtn, getCellValue(tableRowValue[tableCol]), tableRowValue, tableCol, dataIndex, 1)">
                                                         <span class="tableactBtntxt">{{getActBtnTxt(actBtn, getCellValue(tableRowValue[tableCol]))}}</span>
                                                         <ng-container *ngIf="(z+1) < tableAction[tableCol].length"> &nbsp; |</ng-container>
                                                     </div>
                                                 </ng-container>
-                                                <ng-container *ngIf="!(tableRowValue[tableCol]['requestValue'] == -1)">
+                                                <ng-container *ngIf="reportType !== 'getComponentReport' && (tableRowValue[tableCol]['requestValue'] == -1)">
+                                                    <div class="tableactBtn" *ngFor="let actBtn of tableAction[tableCol]; let z='index'" (click)="actionBtnInvoke(actBtn, getCellValue(tableRowValue[tableCol]), tableRowValue, tableCol, dataIndex, 1)">
+                                                        <span class="tableactBtntxt">{{getActBtnTxt(actBtn, getCellValue(tableRowValue[tableCol]))}}</span>
+                                                        <ng-container *ngIf="(z+1) < tableAction[tableCol].length"> &nbsp; |</ng-container>
+                                                    </div>
+                                                </ng-container>
+                                                <ng-container *ngIf="reportType !== 'getComponentReport' && !(tableRowValue[tableCol]['requestValue'] == -1) && reportType !== 'getComponentReport'">
                                                     <div class="tableactBtn" (click)="actionBtnInvoke(tableRowValue[tableCol]['requestType'], getCellValue(tableRowValue[tableCol]), tableRowValue, tableCol, dataIndex, 0)">
                                                         <span class="tableactBtntxt">{{tableRowValue[tableCol]['requestType']}}</span>
                                                     </div>
