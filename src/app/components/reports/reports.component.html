@@ -225,8 +225,11 @@
                             <input name="componentName" class="form-control custom-control m-top-1" [(ngModel)]="reportAddAction.reportAddActionModel.componentName" #componentName="ngModel" placeholder="component Name" required>
                             <input name="componentDesc" class="form-control custom-control m-top-1" [(ngModel)]="reportAddAction.reportAddActionModel.componentDesc" #componentDesc="ngModel" placeholder="component Description" required>
 
-                            <select name="componentType" class="form-control m-top-1" [(ngModel)]="reportAddAction.reportAddActionModel.componentType" #componentType="ngModel" required>
+                            <select *ngIf="reportType === 'getComponentReport'" name="componentType" class="form-control m-top-1" [(ngModel)]="reportAddAction.reportAddActionModel.componentType" #componentType="ngModel" required>
                                 <option *ngFor="let componentType of componentTypes" [ngValue]="componentType.name">{{componentType.name}}</option>
+                            </select>
+                            <select *ngIf="reportType === 'getVendorReport'" name="componentType" class="form-control m-top-1" [(ngModel)]="reportAddAction.reportAddActionModel.componentType" #componentType="ngModel" required>
+                                <option *ngFor="let componentType of componentTypesVendor" [ngValue]="componentType.value">{{componentType.name}}</option>
                             </select>
 
                             <div class="panel panel-default" *ngIf="reportType === 'getComponentReport'">

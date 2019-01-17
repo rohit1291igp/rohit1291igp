@@ -72,6 +72,12 @@ export class ReportsComponent implements OnInit{
       {"name" : "Cake Only", "value" : "1" }
 
   ];
+  componentTypesVendor=[
+    {"name" : "Select component type", "value" : "" },
+    {"name" : "General Products", "value" : "0" },
+    {"name" : "Cakes", "value" : "1" }
+
+];
   statusList=[
         {"type" : "0", "name" : "All Orders status", "value" : "", "admin" : 1, "vendor" : 1 },
     {"type" : "1", "name" : "Processing", "value" : "Processing", "admin" : 1, "vendor" : 0 },
