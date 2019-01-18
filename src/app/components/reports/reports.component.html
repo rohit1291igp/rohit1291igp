@@ -480,7 +480,7 @@
                         </div>
                     </div>
                     <div class="searchFieldsSubmit relative inline" >
-                        <input *ngIf="reportType === 'getVendorReport'"  type="submit" class="btn btn-primary pull-right bg-igp searchSubmitBtn"  value="Search Vendor"/>
+                        <input *ngIf="reportType !== 'getComponentReport'"  type="submit" class="btn btn-primary pull-right bg-igp searchSubmitBtn"  value="Search Vendor"/>
                         <input *ngIf="reportType === 'getComponentReport'"  type="submit" class="btn btn-primary pull-right bg-igp searchSubmitBtn"  value="Search Component"/>
                     </div>
                 </form>
