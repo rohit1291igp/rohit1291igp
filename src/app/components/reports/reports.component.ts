@@ -343,7 +343,7 @@ export class ReportsComponent implements OnInit{
     var _this = this;
     if(_this.reportType == 'getComponentReport'){
         let reqObj =  {
-            url : 'getListOfComponents?startLimit=0&endLimit=30',
+            url : 'getListOfComponents?startLimit=0&endLimit=1000',
             method : "get",
             payload : {}
           };
