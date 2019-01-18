@@ -460,7 +460,7 @@
 
         <div class="col-sm-12 col-md-12 m-top-1 searchFields2" *ngIf="(reportType === 'getVendorReport' || reportType === 'getPincodeReport' || reportType === 'getVendorDetails' || reportType === 'getComponentReport') && (environment.userType && environment.userType === 'admin') " style="width:100%;">
             <div class="col-sm-9 col-md-9 reprts-search-fields bg-white padding1" style="padding-right:0; width:100%;">
-                <div *ngIf="reportType === 'getVendorReport'" class="underLine paddingHalf text-bold">Search Vendor</div>
+                <div *ngIf="reportType !== 'getComponentReport'" class="underLine paddingHalf text-bold">Search Vendor</div>
                 <div *ngIf="reportType === 'getComponentReport'" class="underLine paddingHalf text-bold">Search Component</div>
                 <div class="btn btn-primary addActionBtn" (click)="addActionInit($event)">
                     Add
