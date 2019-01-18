@@ -192,11 +192,12 @@ public onClick(targetElement) {
           _this._data.uploadErrorCount = response.data.count;
         } else {
           if (response.data) {
-            _this._data.uploadErrorList = response.data.filter( function(data){
-              if (data.indexOf('Mail Not Sent') !== -1) {
-                return data;
-              }
-            });
+            _this._data.uploadErrorList  = response.data;
+            // _this._data.uploadErrorList = response.data.filter( function(data){
+            //   if (data.indexOf('Mail Not Sent') !== -1) {
+            //     return data;
+            //   }
+            // });
             // _this._data.sentCount = response.data.sentCount ? response.data.sentCount : 0;
             // _this._data.notSentCount = response.data.notSentCount ? response.data.notSentCount : 0;
             console.log(_this._data.uploadErrorList);
