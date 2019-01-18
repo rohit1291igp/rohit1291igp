@@ -55,7 +55,8 @@ export class SendEmailComponent implements OnInit {
     issuelist: [
       { issue: 'Select Issue', value: '' },
       { issue: 'Address Related', value: 'AddressRelated'},
-      { issue: 'Customer Not Found', value: 'CustomerNotFound'}
+      { issue: 'Customer Not Found', value: 'CustomerNotFound'},
+      { issue: 'EGV E-Mails and SMS', value: 'egvmails'}
     ],
     selectedIssue: ''
   };
