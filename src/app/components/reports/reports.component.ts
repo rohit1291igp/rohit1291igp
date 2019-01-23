@@ -8,6 +8,7 @@ import { ReportsService } from '../../services/reports.service';
 import { OrdersActionTrayComponent } from '../orders-action-tray/orders-action-tray.component';
 import * as S3 from 'aws-sdk/clients/s3';
 import { S3UploadService } from '../../services/s3Upload.service';
+import { ConnectionBackend, RequestOptions, Request, RequestOptionsArgs, Response, Http, Headers} from "@angular/http";
 
 @Component({
   selector: 'app-reports',
@@ -181,6 +182,19 @@ export class ReportsComponent implements OnInit{
        "yesBtn": "Reject",
        "noBtn": "Cancel"
      }
+  };
+  _flags={
+    fileOversizeValidation:false,
+    emptyFileValidation:false,
+    uploadSuccessFlag:false
+};
+  _data = {
+    uploadFileName:"",
+    uploadErrorList:[],
+    uploadErrorCount:{
+        correct:"",
+        fail:""
+    },
   };
   listOfComponents = [];
   uploadedImages = [];
@@ -384,6 +398,117 @@ export class ReportsComponent implements OnInit{
             });
         }
     }
+    }
+
+    fileChange(e){
+        console.log('file changed');
+   }
+    uploadExcel(event){
+        var _this = this;
+        var fileInput=event.target.querySelector('#excelFile').files || {};
+        var fileOverSizeFlag= false;
+        let fileList: FileList = event.target.querySelector('#excelFile').files;
+      _this.isUploading = true;
+        if(fileList.length > 0) {
+            let file: File = fileList[0];
+            let formData = new FormData();
+            for (var i = 0; i < fileList.length; i++) {
+                if((fileList[i].size/1000000) > 5){
+                    fileOverSizeFlag=true;
+                    break;
+                }
+                formData.append("file"+i , fileList[i]);
+            }
+   
+            /*if(fileOverSizeFlag){
+                _this._flags.fileOversizeValidation=true;
+                return;
+            }else{
+                _this._flags.fileOversizeValidation=false;
+            }*/
+   
+            let headers = new Headers();
+            /** No need to include Content-Type in Angular 4 */
+            //headers.append('Content-Type', 'multipart/form-data');
+            //headers.append('Accept', 'application/json');
+            let options = new RequestOptions({ headers: headers });
+            console.log('Upload File - formData =============>', formData, options);
+            let reqObj =  {
+                url : 'addVendorComponentBulk',
+                method : "post",
+                payload : formData,
+                options : options
+            };
+   
+            _this.BackendService.makeAjax(reqObj, function(err, response, headers){
+                if(!response){
+                    err=null;
+                    response = {
+                        "status": "Success",
+                        "data": {
+                            "error": [
+                                {
+                                    "row": 0,
+                                    "msg": "Customer Details are wrongjava.net.UnknownHostException: api.igp.com"
+                                },
+                                {
+                                    "row": 1,
+                                    "msg": "Customer Details are wrongjava.net.UnknownHostException: api.igp.com"
+                                },
+                                {
+                                    "row": 2,
+                                    "msg": "Customer Details are wrongjava.net.UnknownHostException: api.igp.com"
+                                },
+                                {
+                                    "row": 3,
+                                    "msg": "Customer Details are wrongjava.net.UnknownHostException: api.igp.com"
+                                },
+                                {
+                                    "row": 4,
+                                    "msg": "Customer Details are wrongjava.net.UnknownHostException: api.igp.com"
+                                }
+                            ],
+                            "count": {
+                                    "correct": 2,
+                                    "fail": 5
+                                }
+                        }
+                    };
+                }
+   
+                if(err || response.error) {
+                    console.log('Error=============>', err, response.errorCode);
+                }
+                 _this.isUploading = false;
+                console.log('upload excel Response --->', response.result);
+                if(fileInput && 'value' in fileInput){
+                    _this._data.uploadFileName=fileInput.value.slice(fileInput.value.lastIndexOf('\\')+1)
+                }else{
+                    _this._data.uploadFileName="";
+                }
+   
+                // if(response.data.error.length){
+                //     _this._data.uploadErrorList=response.data.error;
+                //     _this._data.uploadErrorCount=response.data.count;
+                // }else{
+                //     _this._data.uploadErrorList=[];
+                //     _this._flags.uploadSuccessFlag=true;
+                // }
+
+                if(response.error == true){
+                    _this._data.uploadErrorList = response.result;
+                }else{
+                    _this._data.uploadErrorList=[];
+                    _this._flags.uploadSuccessFlag=true;
+                }
+   
+                if(fileInput && 'value' in fileInput) fileInput.value="";
+            });
+   
+        }else{
+            _this._flags.emptyFileValidation=true;
+          _this.isUploading = false;
+        }
     }
 
     getImageUrlList() {
@@ -905,6 +1030,7 @@ export class ReportsComponent implements OnInit{
         if(ignore) return;
         this.editTableCell = false;
         this.reportAddAction.reportAddActionFlag=false;
+        this._data.uploadErrorList=[];
     }
 
     getActBtnTxt(actBtnTxt, cellValue){
@@ -1035,7 +1161,7 @@ export class ReportsComponent implements OnInit{
                     paramsObj={
                         fkAssociateId: fkAssId
                     };
-                    paramsObj[changedField]=_this.editTableCellObj.rowData[_this.editTableCellObj.header];
+                    paramsObj[changedField]=_this.editTableCellObj.value;
                 }else if(_this.reportType === "getBarcodeToComponentReport"){
                     apiURLPath="changeBarcodeComponent";
                     paramsObj={
