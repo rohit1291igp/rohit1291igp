@@ -433,8 +433,15 @@ export class ReportsComponent implements OnInit{
             //headers.append('Accept', 'application/json');
             let options = new RequestOptions({ headers: headers });
             console.log('Upload File - formData =============>', formData, options);
+            let url;
+            if(_this.reportType === "getPincodeReport"){
+                url = 'addVendorPincodeBulk';
+            }else if(_this.reportType === "getVendorReport"){
+                url = 'addVendorComponentBulk';
+            }
+
             let reqObj =  {
-                url : 'addVendorComponentBulk',
+                url : url,
                 method : "post",
                 payload : formData,
                 options : options

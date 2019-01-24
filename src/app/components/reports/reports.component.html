@@ -194,32 +194,11 @@
                     </div>
                 </div>
 
-                <div class="modal-body center-align" *ngIf="reportType === 'getPincodeReport'">
+                
+
+                <div class="modal-body center-align" *ngIf="reportType === 'getVendorReport' || reportType === 'getComponentReport' || reportType === 'getPincodeReport'">
                     <div class="form-group">
-                        <form (ngSubmit)="f.form.valid && addActionSubmit($event)" #f="ngForm" nonvalidate>
-                            <!--<input type="hidden" name="fkAssociateId" [(ngModel)]="reportAddAction.reportAddActionModel.fkAssociateId" #fkAssociateId="ngModel" >-->
-
-                            <input name="pincode" class="form-control custom-control m-top-1" [(ngModel)]="reportAddAction.reportAddActionModel.pincode" #pincode="ngModel" placeholder="Pincode" required>
-                            <input name="cityId" class="form-control custom-control m-top-1" [(ngModel)]="reportAddAction.reportAddActionModel.cityId" #cityId="ngModel" placeholder="cityId" required>
-                            <select name="shipType" class="form-control m-top-1" [(ngModel)]="reportAddAction.reportAddActionModel.shipType" #shipType="ngModel" required>
-                                <option *ngFor="let deliveryType of reportAddAction.reportAddActionDepData.deliveryTypes" [ngValue]="deliveryType.value">{{deliveryType.name}}</option>
-                            </select>
-                            <input name="shipCharge" class="form-control custom-control m-top-1" [(ngModel)]="reportAddAction.reportAddActionModel.shipCharge" #shipCharge="ngModel" placeholder="shipCharge" required>
-
-
-                            <div *ngIf="f.submitted && !pincode.valid" class="help-block theme-red">Please pincode!</div>
-                            <div *ngIf="f.submitted && !cityId.valid" class="help-block theme-red">Please provide cityId!</div>
-                            <div *ngIf="f.submitted && !shipType.valid" class="help-block theme-red">Please provide delivery type!</div>
-                            <div *ngIf="f.submitted && !shipCharge.valid" class="help-block theme-red">Please provide shipCharge!</div>
-                            <button class="btn btn-primary m-top-1">Submit</button>
-                        </form>
-                    </div>
-                </div>
-
-
-                <div class="modal-body center-align" *ngIf="reportType === 'getVendorReport' || reportType === 'getComponentReport'">
-                    <div class="form-group">
-                            <div *ngIf="reportType === 'getVendorReport'" class="" style="height:70vh;overflow: hidden;">
+                            <div *ngIf="reportType === 'getVendorReport' || reportType === 'getPincodeReport'" class="" style="height:70vh;overflow: hidden;">
                                     <div class="" style="display: block; background: transparent;">
                                         <div class="modal-dialog modal-lg">
                                             <div class="modal-content" style="margin-left:25%;margin-top: 20%; width:50%;">
@@ -238,7 +217,9 @@
                                 
                                                         <button class="btn btn-primary m-top-1" *ngIf="!isUploading">Upload</button>
                                                         <div class="help-block theme-red" *ngIf="_flags.emptyFileValidation">Please choose a excel file.</div>
-                                                        <div class="m-top-1 text-bold text-green" *ngIf="_flags.uploadSuccessFlag">All Components are uploaded
+                                                        <div class="m-top-1 text-bold text-green" *ngIf="_flags.uploadSuccessFlag && reportType === 'getComponentReport'">All Components are uploaded
+                                                            successfully !</div>
+                                                        <div class="m-top-1 text-bold text-green" *ngIf="_flags.uploadSuccessFlag && reportType === 'getPincodeReport'">All Pincodes are uploaded
                                                             successfully !</div>
                                                     </form>
                                                 </div>
@@ -265,7 +246,7 @@
                                         </div>
                                     </div>
                                 </div>
-                        <form *ngIf="reportType !== 'getVendorReport'" (ngSubmit)="f.form.valid && addActionSubmit($event)" #f="ngForm" nonvalidate>
+                        <form *ngIf="reportType !== 'getVendorReport' && reportType !== 'getPincodeReport'" (ngSubmit)="f.form.valid && addActionSubmit($event)" #f="ngForm" nonvalidate>
                             <!--<input type="hidden" name="fkAssociateId" [(ngModel)]="reportAddAction.reportAddActionModel.fkAssociateId" #fkAssociateId="ngModel" >-->
                             <input name="componentCode" class="form-control custom-control m-top-1" [(ngModel)]="reportAddAction.reportAddActionModel.componentCode" #componentCode="ngModel" placeholder="component Code" required>
                             <input name="componentName" class="form-control custom-control m-top-1" [(ngModel)]="reportAddAction.reportAddActionModel.componentName" #componentName="ngModel" placeholder="component Name" required>
