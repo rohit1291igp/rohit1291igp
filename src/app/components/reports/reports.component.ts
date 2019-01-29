@@ -197,6 +197,7 @@ export class ReportsComponent implements OnInit{
     },
   };
   listOfComponents = [];
+  listOfBarcodes = [];
   uploadedImages = [];
   constructor(
       private _elementRef: ElementRef,
@@ -267,6 +268,11 @@ export class ReportsComponent implements OnInit{
               _this.searchResultModel["fkAssociateId"]=_this.defaultVendor;
           }
           /* set default vendor - end */
+          
+          if(_this.reportType === "getBarcodeToComponentReport"){
+              _this.searchResultModel['Product_Code']= "GAINS2016109";
+              _this.searchResultModel["fkAssociateId"]=_this.defaultVendor;
+          }
 
           _this.queryString = _this.generateQueryString(_this.searchResultModel);
           _this.reportsService.getReportData(_this.reportType, _this.queryString, function(error, _reportData){
@@ -299,7 +305,12 @@ export class ReportsComponent implements OnInit{
               _this.orginalReportData = JSON.parse(JSON.stringify(_this.reportData)); //Object.assign({}, _this.reportData);
               _this.showMoreTableData(null);
           });
-          _this.getComponentsList();
+          if(_this.reportType === 'getComponentReport'){
+            _this.getComponentsList();
+          }
+          if(_this.reportType === 'getBarcodeToComponentReport'){
+            _this.getBarcodeList();
+          }
       });
   }
 
@@ -375,6 +386,28 @@ export class ReportsComponent implements OnInit{
           });
     }
   }
+  getBarcodeList(){
+    var _this = this;
+    if(_this.reportType == 'getBarcodeToComponentReport'){
+        let reqObj =  {
+            url : 'getListOfBarcodes?startLimit=0&endLimit=10000',
+            method : "get",
+            payload : {}
+          };
+          _this.BackendService.makeAjax(reqObj, function(err, response, headers){
+            if(err || response.error == true) {
+                if(response){
+                    console.log('Error=============>', err, response.errorCode);
+                }else{
+                alert("Error Occurred while trying to get list of components.");
+                }
+                return;
+            }
+            console.log("response----->"+response.result.list);
+            _this.listOfBarcodes = response.result.list;
+          });
+    }
+  }
 
   uploadFiles(event) {
     const that = this;
@@ -438,8 +471,10 @@ export class ReportsComponent implements OnInit{
                 url = 'addVendorPincodeBulk';
             }else if(_this.reportType === "getVendorReport"){
                 url = 'addVendorComponentBulk';
+            }else if(_this.reportType === 'getBarcodeToComponentReport'){
+                url = 'addBarcodeToComponentBulk';
             }
-
+            
             let reqObj =  {
                 url : url,
                 method : "post",
@@ -592,6 +627,25 @@ export class ReportsComponent implements OnInit{
                 _this.searchResultModel["Component_Code"]=$('.componentDD').val();
             }
         }
+
+        if(_this.reportType == "getBarcodeToComponentReport"){
+            if($('.barcodeDD').val() == "Select Component Code"){
+                alert("Please select Barcode");
+                return;
+            } else if($('.barcodeDD').val() !== undefined && $('.barcodeDD').val() == "All Barcode"){
+                if(_this.searchResultModel["Product_Code"]){
+                    delete _this.searchResultModel["Product_Code"];
+                }
+                else{
+                    alert("Already all Barcodes are listed");
+                    return;
+                }
+            }
+             else if($('.barcodeDD').val() !== undefined){
+                _this.searchResultModel["Product_Code"]=$('.barcodeDD').val();
+            }
+        }
+
         
         _this.queryString = _this.generateQueryString(_this.searchResultModel);
         console.log('searchReportSubmit =====> queryString ====>', _this.queryString);
@@ -1228,6 +1282,7 @@ export class ReportsComponent implements OnInit{
                     apiURLPath="deleteBarcode";
                     paramsObj={
                         Product_Code: rowData['Product_Code'],
+                        Component_Code : rowData['Component_Code']
                     };
                 }
             }
@@ -1235,7 +1290,7 @@ export class ReportsComponent implements OnInit{
            console.log('Not a valid action');
         }
 
-        if( _this.reportType !== "getComponentReport"){
+        if( _this.reportType !== "getComponentReport" && _this.reportType !== "getBarcodeToComponentReport"){
             if(environment.userType && environment.userType === "admin"){
                 paramsObj.fkAssociateId = _this.searchResultModel["fkAssociateId"];
             }else{

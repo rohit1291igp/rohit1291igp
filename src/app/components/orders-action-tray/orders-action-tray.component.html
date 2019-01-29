@@ -790,6 +790,14 @@
                         <div class="btn btn-primary actions-button text-bold" (click)="approveAttemptOrder($event, orderIndex)" *ngIf="orderByStatus == 'AttemptedDelivery'">
                             Reattempt
                         </div>
+                        <div class="btn btn-primary actions-button text-bold" (click)="showCustomerDetails(orderIndex)" *ngIf="env.userType == 'admin'">
+                                Customer Details
+                        </div>
+                        <div class="custDetail-{{orderIndex}} hide"> 
+                                <div>Name: {{order.customersName}}</div>
+                                <div>Mobile: {{order.customersMobile}}</div>
+                                <div>Email: {{order.customersEmail}}</div>
+                        </div>
                     </div>
 
                   </div>
