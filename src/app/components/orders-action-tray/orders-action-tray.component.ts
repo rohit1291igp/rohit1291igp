@@ -129,6 +129,7 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
   };
   public dateRange: Object = {};
   loadTrayDataEvent;
+  custDetail = false;
   constructor(
       private _elementRef: ElementRef,
       public BackendService : BackendService,
@@ -1482,5 +1483,14 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
       _this.adminActions.adminActionDepData.orderIndex=orderIndex;
       _this.adminActionsSubmit(e);
   }
+
+  showCustomerDetails(orderIndex){
+    //this.custDetail = true;
+        if($('.custDetail-'+orderIndex).hasClass('hide')){
+        $('.custDetail-'+orderIndex).removeClass('hide');
+        }else{
+        $('.custDetail-'+orderIndex).addClass('hide');
+        } 
+    }
 
 }

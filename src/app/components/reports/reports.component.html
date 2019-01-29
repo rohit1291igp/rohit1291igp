@@ -167,6 +167,7 @@
                         <ng-container *ngIf="reportType === 'getVendorReport' || reportType === 'getComponentReport'">Component</ng-container>
                         <ng-container *ngIf="reportType === 'getPincodeReport'">Pincode</ng-container>
                         <ng-container *ngIf="reportType === 'getVendorDetails'">Vendor</ng-container>
+                        <ng-container *ngIf="reportType === 'getBarcodeToComponentReport'">Barcode</ng-container>
                     </h4>
                 </div>
 
@@ -196,9 +197,9 @@
 
                 
 
-                <div class="modal-body center-align" *ngIf="reportType === 'getVendorReport' || reportType === 'getComponentReport' || reportType === 'getPincodeReport'">
+                <div class="modal-body center-align" *ngIf="reportType === 'getVendorReport' || reportType === 'getComponentReport' || reportType === 'getPincodeReport' || reportType === 'getBarcodeToComponentReport'">
                     <div class="form-group">
-                            <div *ngIf="reportType === 'getVendorReport' || reportType === 'getPincodeReport'" class="" style="height:70vh;overflow: hidden;">
+                            <div *ngIf="reportType === 'getVendorReport' || reportType === 'getPincodeReport' || reportType === 'getBarcodeToComponentReport'" class="" style="height:70vh;overflow: hidden;">
                                     <div class="" style="display: block; background: transparent;">
                                         <div class="modal-dialog modal-lg">
                                             <div class="modal-content" style="margin-left:25%;margin-top: 20%; width:50%;">
@@ -221,6 +222,8 @@
                                                             successfully !</div>
                                                         <div class="m-top-1 text-bold text-green" *ngIf="_flags.uploadSuccessFlag && reportType === 'getPincodeReport'">All Pincodes are uploaded
                                                             successfully !</div>
+                                                        <div class="m-top-1 text-bold text-green" *ngIf="_flags.uploadSuccessFlag && reportType === 'getBarcodeToComponentReport'">All Barcodes are uploaded
+                                                            successfully !</div>
                                                     </form>
                                                 </div>
                                             </div>
@@ -228,7 +231,7 @@
                                     </div>
                                 </div>
                                 
-                                <div *ngIf="reportType === 'getVendorReport' || reportType === 'getPincodeReport'" class="error-section" [ngClass]="{'show-error-section': _data.uploadErrorList.length, 'hide-error-section': !_data.uploadErrorList.length}">
+                                <div *ngIf="reportType === 'getVendorReport' || reportType === 'getPincodeReport' || reportType === 'getBarcodeToComponentReport'" class="error-section" [ngClass]="{'show-error-section': _data.uploadErrorList.length, 'hide-error-section': !_data.uploadErrorList.length}">
                                     <!-- <div class="colInline col-sm-1 col-md-1" style="top: 1em; right: 1em; position: absolute;">
                                         <a href="#" (click)="closeErrorSection($event)" style="color:#000;">
                                             <i class="glyphicon glyphicon-remove close-tray"></i>
@@ -246,7 +249,7 @@
                                         </div>
                                     </div>
                                 </div>
-                        <form *ngIf="reportType !== 'getVendorReport' && reportType !== 'getPincodeReport'" (ngSubmit)="f.form.valid && addActionSubmit($event)" #f="ngForm" nonvalidate>
+                        <form *ngIf="reportType !== 'getVendorReport' && reportType !== 'getPincodeReport' && reportType !== 'getBarcodeToComponentReport'" (ngSubmit)="f.form.valid && addActionSubmit($event)" #f="ngForm" nonvalidate>
                             <!--<input type="hidden" name="fkAssociateId" [(ngModel)]="reportAddAction.reportAddActionModel.fkAssociateId" #fkAssociateId="ngModel" >-->
                             <input name="componentCode" class="form-control custom-control m-top-1" [(ngModel)]="reportAddAction.reportAddActionModel.componentCode" #componentCode="ngModel" placeholder="component Code" required>
                             <input name="componentName" class="form-control custom-control m-top-1" [(ngModel)]="reportAddAction.reportAddActionModel.componentName" #componentName="ngModel" placeholder="component Name" required>
@@ -485,30 +488,38 @@
 
       </div>
 
-        <div class="col-sm-12 col-md-12 m-top-1 searchFields2" *ngIf="(reportType === 'getVendorReport' || reportType === 'getPincodeReport' || reportType === 'getVendorDetails' || reportType === 'getComponentReport') && (environment.userType && environment.userType === 'admin') " style="width:100%;">
+        <div class="col-sm-12 col-md-12 m-top-1 searchFields2" *ngIf="(reportType === 'getVendorReport' || reportType === 'getPincodeReport' || reportType === 'getVendorDetails' || reportType === 'getComponentReport' || reportType === 'getBarcodeToComponentReport') && (environment.userType && environment.userType === 'admin') " style="width:100%;">
             <div class="col-sm-9 col-md-9 reprts-search-fields bg-white padding1" style="padding-right:0; width:100%;">
-                <div *ngIf="reportType !== 'getComponentReport'" class="underLine paddingHalf text-bold">Search Vendor</div>
+                <div *ngIf="reportType == 'getVendorReport' || reportType == 'getPincodeReport' || reportType == 'getVendorDetails'" class="underLine paddingHalf text-bold">Search Vendor</div>
                 <div *ngIf="reportType === 'getComponentReport'" class="underLine paddingHalf text-bold">Search Component</div>
+                <div *ngIf="reportType === 'getBarcodeToComponentReport'" class="underLine paddingHalf text-bold">Search Barcode</div>
                 <div class="btn btn-primary addActionBtn" (click)="addActionInit($event)">
                     Add
                     <ng-container *ngIf="reportType === 'getVendorReport' || reportType === 'getComponentReport'">Component</ng-container>
                     <ng-container *ngIf="reportType === 'getPincodeReport'">Pincode</ng-container>
                     <ng-container *ngIf="reportType === 'getVendorDetails'">Vendor</ng-container>
+                    <ng-container *ngIf="reportType === 'getBarcodeToComponentReport'">Barcode</ng-container>
                 </div>
                 <form name="searchReport" (ngSubmit)="f.form.valid && searchReportSubmit($event,true)" #f="ngForm" nonvalidate>
                     <div class="searchFields m-top-1 inline" >
                         <div class="pull-left" style="width:70%;">
-                            <app-vendor-dropdown *ngIf="reportType !== 'getComponentReport'" [configData]="{'modelData' :searchResultModel, 'defaultVendor' : defaultVendor}"></app-vendor-dropdown>
+                            <app-vendor-dropdown *ngIf="reportType !== 'getComponentReport' && reportType !== 'getBarcodeToComponentReport'" [configData]="{'modelData' :searchResultModel, 'defaultVendor' : defaultVendor}"></app-vendor-dropdown>
                             <select *ngIf="reportType == 'getComponentReport'" name="fkAssociateId" class="componentDD form-control" required>
                                 <option  [ngValue]="">Select Component Code</option>
                                 <option  [ngValue]="all">All Component</option>
                                 <option *ngFor="let comp of listOfComponents" [ngValue]="comp">{{comp}}</option>
                             </select>
+                            <select *ngIf="reportType == 'getBarcodeToComponentReport'" name="fkAssociateId" class="barcodeDD form-control" required>
+                                    <option  [ngValue]="">Select Barcode</option>
+                                    <option  [ngValue]="all">All Barcode</option>
+                                    <option *ngFor="let barcode of listOfBarcodes" [ngValue]="comp">{{barcode}}</option>
+                                </select>
                         </div>
                     </div>
                     <div class="searchFieldsSubmit relative inline" >
-                        <input *ngIf="reportType !== 'getComponentReport'"  type="submit" class="btn btn-primary pull-right bg-igp searchSubmitBtn"  value="Search Vendor"/>
+                        <input *ngIf="reportType == 'getVendorReport' || reportType == 'getPincodeReport' || reportType == 'getVendorDetails'"  type="submit" class="btn btn-primary pull-right bg-igp searchSubmitBtn"  value="Search Vendor"/>
                         <input *ngIf="reportType === 'getComponentReport'"  type="submit" class="btn btn-primary pull-right bg-igp searchSubmitBtn"  value="Search Component"/>
+                        <input *ngIf="reportType === 'getBarcodeToComponentReport'"  type="submit" class="btn btn-primary pull-right bg-igp searchSubmitBtn"  value="Search Barcode"/>
                     </div>
                 </form>
 
@@ -670,19 +681,19 @@
                                         <ng-container *ngFor="let tableAction of reportData.tableDataAction">
                                             <div class="tableDataActionBtn" *ngIf="tableAction[tableCol] && tableAction[tableCol].length">
                                                 <!--{{tableAction[tableCol] | json}}-->
-                                                <ng-container *ngIf="reportType === 'getComponentReport' || reportType === 'getVendorDetails'">
+                                                <ng-container *ngIf="reportType === 'getComponentReport' || reportType === 'getVendorDetails' || reportType === 'getBarcodeToComponentReport'">
                                                     <div class="tableactBtn" *ngFor="let actBtn of tableAction[tableCol]; let z='index'" (click)="actionBtnInvoke(actBtn, getCellValue(tableRowValue[tableCol]), tableRowValue, tableCol, dataIndex, 1)">
                                                         <span class="tableactBtntxt">{{getActBtnTxt(actBtn, getCellValue(tableRowValue[tableCol]))}}</span>
                                                         <ng-container *ngIf="(z+1) < tableAction[tableCol].length"> &nbsp; |</ng-container>
                                                     </div>
                                                 </ng-container>
-                                                <ng-container *ngIf="reportType !== 'getComponentReport' && reportType !== 'getVendorDetails' && (tableRowValue[tableCol]['requestValue'] == -1)">
+                                                <ng-container *ngIf="reportType !== 'getComponentReport' && reportType !== 'getVendorDetails' && reportType !== 'getBarcodeToComponentReport' && (tableRowValue[tableCol]['requestValue'] == -1)">
                                                     <div class="tableactBtn" *ngFor="let actBtn of tableAction[tableCol]; let z='index'" (click)="actionBtnInvoke(actBtn, getCellValue(tableRowValue[tableCol]), tableRowValue, tableCol, dataIndex, 1)">
                                                         <span class="tableactBtntxt">{{getActBtnTxt(actBtn, getCellValue(tableRowValue[tableCol]))}}</span>
                                                         <ng-container *ngIf="(z+1) < tableAction[tableCol].length"> &nbsp; |</ng-container>
                                                     </div>
                                                 </ng-container>
-                                                <ng-container *ngIf="reportType !== 'getComponentReport' && reportType !== 'getVendorDetails' && !(tableRowValue[tableCol]['requestValue'] == -1) && reportType !== 'getComponentReport'">
+                                                <ng-container *ngIf="reportType !== 'getComponentReport' && reportType !== 'getVendorDetails' && reportType !== 'getBarcodeToComponentReport' && !(tableRowValue[tableCol]['requestValue'] == -1) && reportType !== 'getComponentReport'">
                                                     <div class="tableactBtn" (click)="actionBtnInvoke(tableRowValue[tableCol]['requestType'], getCellValue(tableRowValue[tableCol]), tableRowValue, tableCol, dataIndex, 0)">
                                                         <span class="tableactBtntxt">{{tableRowValue[tableCol]['requestType']}}</span>
                                                     </div>

@@ -32,7 +32,7 @@
                         <ng-container *ngIf="(environment.userType === 'admin')">
                             <a class="" routerLink="/reports/getVendorDetails" ><li [ngClass]="{'selected' : selectedReportTab === 'getVendorDetails'}">Vendor Details</li></a>
                             <a class="" routerLink="/reports/getSlaReport" ><li [ngClass]="{'selected' : selectedReportTab === 'getSlaReport'}">SLA Report</li></a>
-                            <!--<a class="" routerLink="/reports/getBarcodeToComponentReport" ><li [ngClass]="{'selected' : selectedReportTab === 'getBarcodeToComponentReport'}">Barcode</li></a>-->
+                            <a class="" routerLink="/reports/getBarcodeToComponentReport" ><li [ngClass]="{'selected' : selectedReportTab === 'getBarcodeToComponentReport'}">Barcode</li></a>
                             <a class="" routerLink="/reports/getOrderFileUploadReport"><li [ngClass]="{'selected' : selectedReportTab === 'getOrderFileUploadReport'}">Uploaded Image</li></a>
                             <a class="" routerLink="/reports/getComponentReport"><li [ngClass]="{'selected' : selectedReportTab === 'getComponentReport'}">Component Report</li></a>
                         </ng-container>
