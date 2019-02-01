@@ -13,7 +13,7 @@ export class PrintTemplateComponent implements OnInit {
   @Input('printType') printType : string;
     productsURL = environment.productsURL;
     productsCompURL = environment.productsCompURL;
-    messageBgImage = 'assets/images/Order-Sheet-Creative.png';
+    messageBgImage = 'assets/images/IGP-logo-for-order-sheet.png';
     messageBgImageInterflora = 'assets/images/Order-Sheet-Creative-interflora.png';
 
   constructor(
