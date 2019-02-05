@@ -646,6 +646,11 @@ export class ReportsComponent implements OnInit{
             }
         }
 
+        if(_this.reportType == 'getOrderReport' || _this.reportType == 'getPayoutAndTaxesReport'){
+            _this.searchResultModel["startLimit"] = 0;
+            _this.searchResultModel["endLimit"] = 1000;
+        }
+
         
         _this.queryString = _this.generateQueryString(_this.searchResultModel);
         console.log('searchReportSubmit =====> queryString ====>', _this.queryString);
