@@ -683,7 +683,7 @@
 
                       <div class="text-bold">Deliver to: {{order.deliveryName}}</div>
                       <div class="address">{{order.addressType}} Address - {{order.deliveryStreetAddress}}, <span *ngIf="order.deliveryStreetAddress2">{{order.deliveryStreetAddress2}},</span>{{order.deliveryCity}}-{{order.deliveryPostcode}}, {{order.deliveryState}}</div>
-                      <div class="contact">CONTACT NUMBER - {{order.deliveryMobile}}</div>
+                      <div class="contact">CONTACT NUMBER - {{order.deliveryMobile}} <span *ngIf="order.deliveryAlternateMobile">,{{order.deliveryAlternateMobile}}</span></div>
                     </div>
                     <div class="col-md-4 order-actions" [ngClass]="{'borderLeft': !isMobile}" *ngIf="!isMobile">
 
