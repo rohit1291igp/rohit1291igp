@@ -814,6 +814,7 @@
                             <span class="" *ngIf="orderProduct.products_code">({{orderProduct.products_code}})  </span>
                         <!--</a>-->
                         <span class="" style="" *ngIf="orderProduct.personalized"> | <a target="_new" href="http://admin.indiangiftsportal.com/myshop/persInfo.php?pid={{orderProduct.productId}}&oid={{order.orderId}}">Download Photo</a></span>
+                        <br/><span class="text-bold" *ngIf="orderProduct.cakemessage">Message on cake: </span *ngIf="orderProduct.cakemessage"><span>{{orderProduct.cakemessage}}</span>
                     </p>
 
                     <div class="col-md-12 product-holder" [ngClass]="{'no-margin' : isMobile, 'noBtBorder' : (z+1 === order.orderProducts.length)}">
