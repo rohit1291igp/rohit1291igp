@@ -1215,18 +1215,12 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
           let deliveryType=_this.sidePanelData[orderIndex].orderProducts[0].orderProductExtraInfo.deliveryType;
           _this.adminActions.adminActionDepData.deliveryTimes = [
               {"name" : "Select Delivery Time", "value":""},
-              {"name" : "10:00 hrs - 11:00 hrs", "value":"10:00 hrs - 11:00 hrs"},
-              {"name" : "11:00 hrs - 12:00 hrs", "value":"11:00 hrs - 12:00 hrs"},
-              {"name" : "12:00 hrs - 13:00 hrs", "value":"12:00 hrs - 13:00 hrs"},
-              {"name" : "13:00 hrs - 14:00 hrs", "value":"13:00 hrs - 14:00 hrs"},
-              {"name" : "14:00 hrs - 15:00 hrs", "value":"14:00 hrs - 15:00 hrs"},
-              {"name" : "15:00 hrs - 16:00 hrs", "value":"15:00 hrs - 16:00 hrs"},
-              {"name" : "16:00 hrs - 17:00 hrs", "value":"16:00 hrs - 17:00 hrs"},
-              {"name" : "17:00 hrs - 18:00 hrs", "value":"17:00 hrs - 18:00 hrs"},
-              {"name" : "18:00 hrs - 19:00 hrs", "value":"18:00 hrs - 19:00 hrs"},
-              {"name" : "19:00 hrs - 20:00 hrs", "value":"19:00 hrs - 20:00 hrs"},
-              {"name" : "20:00 hrs - 21:00 hrs", "value":"20:00 hrs - 21:00 hrs"},
-              {"name" : "21:00 hrs - 22:00 hrs", "value":"21:00 hrs - 22:00 hrs"}
+              {"name" : "10:00 hrs - 12:00 hrs", "value":"10:00 hrs - 12:00 hrs"},
+              {"name" : "12:00 hrs - 14:00 hrs", "value":"12:00 hrs - 14:00 hrs"},
+              {"name" : "14:00 hrs - 16:00 hrs", "value":"14:00 hrs - 16:00 hrs"},
+              {"name" : "16:00 hrs - 18:00 hrs", "value":"16:00 hrs - 18:00 hrs"},
+              {"name" : "18:00 hrs - 20:00 hrs", "value":"18:00 hrs - 20:00 hrs"},
+              {"name" : "22:00 hrs - 22:00 hrs", "value":"22:00 hrs - 22:00 hrs"}
           ];
 
           _this.adminActions.adminActionDepData.deliveryTypes = _this.UtilityService.getDeliveryTypeList();
@@ -1443,26 +1437,19 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
         if(name == 4){
             this.adminActions.adminActionDepData.deliveryTimes = [
                 {"name" : "Select Delivery Time", "value":""},
-                {"name" : "09:00 hrs - 12:00 hrs", "value":"09:00 hrs - 12:00 hrs"},
-                {"name" : "12:00 hrs - 15:00 hrs", "value":"12:00 hrs - 15:00 hrs"},
-                {"name" : "15:00 hrs - 18:00 hrs", "value":"15:00 hrs - 18:00 hrs"},
-                {"name" : "18:00 hrs - 21:00 hrs", "value":"18:00 hrs - 21:00 hrs"}
+                {"name" : "09:00 hrs - 13:00 hrs", "value":"09:00 hrs - 13:00 hrs"},
+                {"name" : "13:00 hrs - 17:00 hrs", "value":"13:00 hrs - 17:00 hrs"},
+                {"name" : "17:00 hrs - 21:00 hrs", "value":"17:00 hrs - 21:00 hrs"}
             ]
         } else if(name == 2){
             this.adminActions.adminActionDepData.deliveryTimes = [
                 {"name" : "Select Delivery Time", "value":""},
-                {"name" : "10:00 hrs - 11:00 hrs", "value":"10:00 hrs - 11:00 hrs"},
-                {"name" : "11:00 hrs - 12:00 hrs", "value":"11:00 hrs - 12:00 hrs"},
-                {"name" : "12:00 hrs - 13:00 hrs", "value":"12:00 hrs - 13:00 hrs"},
-                {"name" : "13:00 hrs - 14:00 hrs", "value":"13:00 hrs - 14:00 hrs"},
-                {"name" : "14:00 hrs - 15:00 hrs", "value":"14:00 hrs - 15:00 hrs"},
-                {"name" : "15:00 hrs - 16:00 hrs", "value":"15:00 hrs - 16:00 hrs"},
-                {"name" : "16:00 hrs - 17:00 hrs", "value":"16:00 hrs - 17:00 hrs"},
-                {"name" : "17:00 hrs - 18:00 hrs", "value":"17:00 hrs - 18:00 hrs"},
-                {"name" : "18:00 hrs - 19:00 hrs", "value":"18:00 hrs - 19:00 hrs"},
-                {"name" : "19:00 hrs - 20:00 hrs", "value":"19:00 hrs - 20:00 hrs"},
-                {"name" : "20:00 hrs - 21:00 hrs", "value":"20:00 hrs - 21:00 hrs"},
-                {"name" : "21:00 hrs - 22:00 hrs", "value":"21:00 hrs - 22:00 hrs"}
+                {"name" : "10:00 hrs - 12:00 hrs", "value":"10:00 hrs - 12:00 hrs"},
+                {"name" : "12:00 hrs - 14:00 hrs", "value":"12:00 hrs - 14:00 hrs"},
+                {"name" : "14:00 hrs - 16:00 hrs", "value":"14:00 hrs - 16:00 hrs"},
+                {"name" : "16:00 hrs - 18:00 hrs", "value":"16:00 hrs - 18:00 hrs"},
+                {"name" : "18:00 hrs - 20:00 hrs", "value":"18:00 hrs - 20:00 hrs"},
+                {"name" : "22:00 hrs - 22:00 hrs", "value":"22:00 hrs - 22:00 hrs"}
             ];
         }
     }
