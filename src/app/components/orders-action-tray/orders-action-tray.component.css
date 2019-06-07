@@ -612,3 +612,7 @@
     width:7em;
     box-shadow: 0 1px 3px #888888;
 }
+.checkbox-inline{
+    float:left;
+    margin: 13px 0px;
+}
