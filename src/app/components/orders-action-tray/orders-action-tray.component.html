@@ -251,18 +251,10 @@
                             <select multiple name="orderProductId" class="form-control" [(ngModel)]="adminActions.adminActionsModel.orderProductId" #orderProductId="ngModel" required>
                                 <option *ngFor="let orderProduct of adminActions.adminActionDepData.orderProducts" [ngValue]="orderProduct.orderProductId" [attr.data-orderid]="orderProduct.orderId">{{orderProduct.productName}}</option>
                             </select>
-                            
-                            <select name="assignChangeVendor" class="form-control m-top-1" [(ngModel)]="adminActions.adminActionsModel.assignChangeVendor" #assignChangeVendor="ngModel" [disabled]="isSelectAnotherVendor" required>
+
+                            <select name="assignChangeVendor" class="form-control m-top-1" [(ngModel)]="adminActions.adminActionsModel.assignChangeVendor" #assignChangeVendor="ngModel" required>
                                 <option *ngFor="let vendor of adminActions.adminActionDepData.vendorList" [ngValue]="vendor.Vendor_Id">{{vendor.Vendor_Name}}</option>
                             </select>
-                            <label class="checkbox-inline">
-                                <input type="checkbox" value="" (change)="checkValue()"> Select Another Vendor
-                              </label>
-                            <select name="vendorname" class="form-control" (change)="selectOption($event.target.value)" [(ngModel)]="vendorId" #vendorname="ngModel" [disabled]="!isSelectAnotherVendor" required>
-                                    <option [ngValue]="undefined" disabled  selected> Please select another vender </option>
-                                <option *ngFor="let vendor of dropdownData" [ngValue]="vendor.Vendor_Id">{{vendor.Vendor_Name}}</option>
-                            </select>
-                            <!-- <app-vendor-dropdown [configData]="{'modelData' :searchResultModel, 'defaultVendor' : defaultVendor}" (vendorDdHandler)="getSelectedVendor($event)"></app-vendor-dropdown> -->
 
                             <!--<input name="assignChangeVendor" class="form-control custom-control m-top-1" [(ngModel)]="adminActions.adminActionsModel.assignChangeVendor" #assignChangeVendor="ngModel" placeholder="Vendor" required>-->
 
