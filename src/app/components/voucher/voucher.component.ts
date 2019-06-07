@@ -106,8 +106,7 @@ export class VoucherComponent implements OnInit {
     this.voucherModel = {
       add: 'add'
     };
-    let body = $('body')[0] as any;
-    body.style.overflow = 'hidden';
+    $('body')[0].style.overflow = 'hidden';
     $('#target :input').prop('disabled', true);
   }
 
@@ -127,8 +126,7 @@ export class VoucherComponent implements OnInit {
       this.voucherModel.fkasname = 'Interflora';
     }
     this.voucherModel.enablefields = true;
-    let body = $('body')[0] as any;
-    body.style.overflow = 'hidden';
+    $('body')[0].style.overflow = 'hidden';
     $('#target :input').prop('disabled', true);
   }
 
@@ -168,8 +166,7 @@ export class VoucherComponent implements OnInit {
     console.log('Parent');
     console.log(event);
     this.showSideBar = false;
-    let body = $('body')[0] as any;
-    body.style.overflow = 'auto';
+    $('body')[0].style.overflow = 'auto';
     this.animate = 'void';
     $('#target :input').prop('disabled', false);
     if (event.data !== undefined && event.data !== 'Not') {
