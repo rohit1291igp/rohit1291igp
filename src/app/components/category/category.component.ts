@@ -48,7 +48,8 @@ export class CategoryComponent implements OnInit {
     this.showSideBar = true;
     this.testAnimate = 'active';
     $('#target :input').prop('disabled', true);
-    $('body')[0].style.overflow = 'hidden';
+    let body = $('body')[0] as any;
+    body.style.overflow = 'hidden';
   };
 
   // Get Categories
@@ -80,7 +81,8 @@ export class CategoryComponent implements OnInit {
   // Edit Category
   editCategory(cat, type) {
     this.showSideBar = true;
-    $('body')[0].style.overflow = 'hidden';
+    let body = $('body')[0] as any;
+    body.style.overflow = 'hidden';
     this.testAnimate = 'active';
     this.cat = cat;
     this.cat.category = this.categories;
@@ -159,7 +161,8 @@ export class CategoryComponent implements OnInit {
     console.log('Parent');
     console.log(event);
     this.showSideBar = false;
-    $('body')[0].style.overflow = 'auto';
+    let body = $('body')[0] as any;
+    body.style.overflow = 'auto';
     this.testAnimate = 'void';
     $('#target :input').prop('disabled', false);
     if (event.data !== undefined && event.data !== 'Not') {
