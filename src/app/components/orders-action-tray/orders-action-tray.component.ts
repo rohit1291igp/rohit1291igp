@@ -58,6 +58,9 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
           "noBtn": "Cancel"
       }
   };
+    dropdownData=[
+        {"Vendor_Id" : "", "Vendor_Name" : "All vendors"}
+    ];
   printDropDwonData={
       title:"Print All",
       dDOptions : [
@@ -144,6 +147,7 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
      //this.scrollTo(document.getElementById("mainOrderSection"), 0, 1250);
      this.setlDatePicker(null);
      this.setRejectInitialValue();
+     this.getFeeds();
      //this.statusReasonModel.OrderProductsList = [];
   }
 
@@ -1164,6 +1168,8 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
               _this.adminActions.adminActionsModel.orderProductId="";
               _this.adminActions.adminActionsModel.componentId="";
               _this.adminActions.adminActionsModel.assignChangeVendor="";
+              _this.adminActions.adminActionsModel.assignChangeAnotherVendor="";
+              _this.adminActions.adminActionsModel.checkBox=false;
               _this.adminActions.adminActionsModel.deliveryTime="";
               _this.adminActions.adminActionsModel.deliveryType="";
 
@@ -1297,12 +1303,14 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
               };
               break;
 
-          case 'assignChangeVendor' : url = "assignReassignOrder";
+          case 'assignChangeVendor' :
+          case 'assignChangeAnotherVendor' :
+           url = "assignReassignOrder";
               paramsObj={
                   action:_this.orderByStatus == 'notAlloted' ? 'assign' : 'reassign',
                   orderId:_this.sidePanelData[orderIndex].orderId,
                   orderProductId:_this.adminActions.adminActionsModel.orderProductId,
-                  fkAssociateId:_this.adminActions.adminActionsModel.assignChangeVendor,
+                  fkAssociateId:_this.adminActions.adminActionsModel.checkBox ? _this.adminActions.adminActionsModel.assignChangeAnotherVendor : _this.adminActions.adminActionsModel.assignChangeVendor,
                   orderProductIds:getOrderProductIds()
               };
               apiSuccessHandler=function(apiResponse){
@@ -1479,5 +1487,58 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
         $('.custDetail-'+orderIndex).addClass('hide');
         } 
     }
+
+    getFeeds(){
+        let _this=this;
+        /*
+        let paramsObj={
+            pincode:"",
+            shippingType:""
+        };
+        let paramsStr = _this.UtilityService.formatParams(paramsObj);
+        */
+        let reqObj =  {
+              url : 'getVendorList',
+              method : 'get'
+        };
+    
+        _this.BackendService.makeAjax(reqObj, function(err, response, headers){
+              if(err || response.error) {
+                  console.log('Error=============>', err);
+              }
+              console.log('vendorList Response --->', response.result);
+              if(!response.result.length) {
+                 response.result = [
+                     {
+                         "Vendor_Id": 608,
+                         "Vendor_Name": "Crazers Point Baroda",
+                         "Status": 0
+                     },
+                     {
+                         "Vendor_Id": 659,
+                         "Vendor_Name": "Ivy The Flowers Boutique Baroda",
+                         "Status": 0
+                     },
+                     {
+                         "Vendor_Id": 798,
+                         "Vendor_Name": "Phoolwool Baroda",
+                         "Status": 0
+                     },
+                     {
+                         "Vendor_Id": 808,
+                         "Vendor_Name": "Honeybee Baroda",
+                         "Status": 0
+                     },
+                     {
+                         "Vendor_Id": 565,
+                         "Vendor_Name": "RDC Mumbai",
+                         "Status": 0
+                     }
+                 ];
+              }
+              _this.dropdownData=_this.dropdownData.concat(response.result);
+              _this.UtilityService.sharedData.dropdownData=response.result;
+          });
+      }
 
 }

@@ -252,14 +252,26 @@
                                 <option *ngFor="let orderProduct of adminActions.adminActionDepData.orderProducts" [ngValue]="orderProduct.orderProductId" [attr.data-orderid]="orderProduct.orderId">{{orderProduct.productName}}</option>
                             </select>
 
-                            <select name="assignChangeVendor" class="form-control m-top-1" [(ngModel)]="adminActions.adminActionsModel.assignChangeVendor" #assignChangeVendor="ngModel" required>
+                            <select name="assignChangeVendor" class="form-control m-top-1" [(ngModel)]="adminActions.adminActionsModel.assignChangeVendor" #assignChangeVendor="ngModel" [disabled]="adminActions.adminActionsModel.checkBox" required>
                                 <option *ngFor="let vendor of adminActions.adminActionDepData.vendorList" [ngValue]="vendor.Vendor_Id">{{vendor.Vendor_Name}}</option>
+                            </select>
+                            <div class="assignCheckbox">
+                                <input name="chk" [(ngModel)]="adminActions.adminActionsModel.checkBox" type="checkbox"> &nbsp;&nbsp; Select another Vendor
+                            </div>
+
+                            <select name="assignChangeAnotherVendor" class="form-control m-top-2" [(ngModel)]="adminActions.adminActionsModel.assignChangeAnotherVendor" #assignChangeAnotherVendor="ngModel" [disabled]="!adminActions.adminActionsModel.checkBox" required>
+                                <option *ngFor="let vendor of dropdownData" [ngValue]="vendor.Vendor_Id">{{vendor.Vendor_Name}}</option>
                             </select>
 
                             <!--<input name="assignChangeVendor" class="form-control custom-control m-top-1" [(ngModel)]="adminActions.adminActionsModel.assignChangeVendor" #assignChangeVendor="ngModel" placeholder="Vendor" required>-->
 
                             <div *ngIf="f.submitted && !orderProductId.valid" class="help-block theme-red">Please Select Order Product!</div>
-                            <div *ngIf="f.submitted && !assignChangeVendor.valid" class="help-block theme-red">Please Select vendor name!</div>
+                            <div class="checkbox" *ngIf="adminActions.adminActionsModel.checkBox">
+                                <div *ngIf="f.submitted && !assignChangeAnotherVendor.valid" class="help-block theme-red">Please Select vendor name!</div>
+                            </div>
+                            <div class="checkbox" *ngIf="!adminActions.adminActionsModel.checkBox">
+                                <div *ngIf="f.submitted && !assignChangeVendor.valid" class="help-block theme-red">Please Select vendor name!</div>
+                            </div>
                             <button class="btn btn-primary m-top-1">Submit</button>
                         </form>
                     </div>
