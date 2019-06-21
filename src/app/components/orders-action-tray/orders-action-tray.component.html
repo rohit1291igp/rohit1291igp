@@ -141,12 +141,12 @@
 
                         <button class="btn btn-primary m-top-1"
                         (click)="statusReasonSubmit($event, 'AttemptedDelivery')" style="left: 24em; bottom: 1em; position: absolute;" *ngIf="!trayOpen && !isMobile">
-                        Not Delivered
+                        Attempted Delivery 
                         </button>
 
                         <button class="btn btn-primary m-top-1"
                         (click)="statusReasonSubmit($event, 'AttemptedDelivery')" style="margin-top: 0.7em;" *ngIf="!trayOpen && isMobile">
-                        Not Delivered
+                        Attempted Delivery 
                         </button>
 
                         <button class="btn btn-primary m-top-1 viewDetailPopupBtn" style="left:32.5em; bottom:1em;" *ngIf="!trayOpen && !isMobile" (click)="toggleTray($event, 'OutForDeliveryView', statusReasonModel.orderId, null)">View Detail</button>
@@ -719,7 +719,7 @@
                         <button class="btn btn-primary actions-button uppercase text-bold text-white bg-green"
                         *ngIf="(order.orderProducts[0].ordersProductStatus =='Shipped' && order.orderProducts[0].deliveryStatus === 0) || order.orderProducts[0].ordersProductStatus =='OutForDelivery' || order.orderProducts[0].ordersProductStatus == 'Partially Dispatched'"
                         (click)="updateOrderStatus($event, orderIndex, 'AttemptedDelivery', order.orderId, order.orderProducts, order.orderProducts[0].orderProductExtraInfo.deliveryDate, order.orderProducts[0].orderProductExtraInfo.deliveryTime)">
-                            Not Delivered
+                        Attempted Delivery 
                         </button>
                       </div>
 
@@ -990,7 +990,7 @@
                     <button class="btn btn-primary actions-button uppercase text-bold text-white bg-green"
                         *ngIf="(order.orderProducts[0].ordersProductStatus =='Shipped' && order.orderProducts[0].deliveryStatus === 0) || order.orderProducts[0].ordersProductStatus =='OutForDelivery' || order.orderProducts[0].ordersProductStatus == 'Partially Dispatched'"
                         (click)="updateOrderStatus($event, orderIndex, 'AttemptedDelivery', order.orderId, order.orderProducts, order.orderProducts[0].orderProductExtraInfo.deliveryDate, order.orderProducts[0].orderProductExtraInfo.deliveryTime)">
-                        Not Delivered
+                        Attempted Delivery 
                     </button>
                 </div>
 
