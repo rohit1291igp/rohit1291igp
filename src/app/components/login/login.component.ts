@@ -26,6 +26,7 @@ export class LoginComponent implements OnInit {
         ) { }
 
     ngOnInit() {
+        this.model.associatename = "";
         this.model.username = "";
         this.model.password = "";
 
@@ -58,7 +59,8 @@ export class LoginComponent implements OnInit {
             }else{
                 let reqObj = {
                     //url : "IGPService/login?username="+this.model.username+"&password="+this.model.password,
-                    url : "login?username="+this.model.username+"&password="+this.model.password,
+                    // url : "login?username="+this.model.username+"&password="+this.model.password,
+                    url : `login?associatename=${this.model.associatename}&username=${this.model.username}&password=${this.model.password}`,                    
                     method : "post",
                     payload : {}
                 };
