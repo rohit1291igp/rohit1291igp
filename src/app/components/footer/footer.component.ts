@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 @Component({
   selector: 'app-footer',
   template: `<div class="row footer">
-                <div class="col-md-6 col-md-offset-3 underline"> Copyright &copy; 2000-2017. IGP.com. All rights reserved</div>
+                <div class="col-md-6 col-md-offset-3 underline"> Copyright &copy; 2000-2019. IGP.com. All rights reserved</div>
             </div>`,
   styles: [`.footer{
               /*position: fixed;*/
