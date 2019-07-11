@@ -4,6 +4,8 @@ import {environment} from "../../../environments/environment";
 import { AuthenticationService } from '../../services/authentication.service';
 import { BackendService } from '../../services/backend.service';
 import { UtilityService } from '../../services/utility.service';
+import { MatSnackBar } from '@angular/material';
+import { NotificationComponent } from '../reports/reports.component';
 
 @Component({
     selector: 'app-login',
@@ -22,7 +24,8 @@ export class LoginComponent implements OnInit {
         public router: Router,
         public authenticationService: AuthenticationService,
         public BackendService: BackendService,
-        public UtilityService: UtilityService
+        public UtilityService: UtilityService,
+        private _snackBar: MatSnackBar
         ) { }
 
     ngOnInit() {
@@ -68,9 +71,9 @@ export class LoginComponent implements OnInit {
                 this.BackendService.makeAjax(reqObj, function(err, response, headers){
                     _this.loading = false;
                     var _response = response;
-                    if(err || !response.result) {
-                        console.log(err)
-                        _this.apierror = "Login Failed (Either UserId/Password wrong)"
+                    if(err || response.error || !response.result) {
+                        // response.errorMessage && _this.openSnackBar(response.errorMessage)
+                        _this.apierror = response.error ? response.errorMessage : "Login Failed (Either UserId/Password wrong)";
                         return;
                     }
 
@@ -112,4 +115,11 @@ export class LoginComponent implements OnInit {
                 });
             }
     }
+
+    openSnackBar(data) {
+        this._snackBar.openFromComponent(NotificationComponent, {
+          data: data,
+          duration: 5 * 1000,
+        });
+      }
 }
