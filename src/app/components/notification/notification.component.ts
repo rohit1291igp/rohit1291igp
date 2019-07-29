@@ -1,0 +1,15 @@
+import { Component, Inject } from '@angular/core';
+import { MAT_SNACK_BAR_DATA } from '@angular/material';
+
+@Component({
+    selector: 'app-notification-bar',
+    template: `<span class="main">{{data}}</span>`,
+    styles: [`
+      .main{
+        color: #fff;
+      }
+    `],
+})
+export class NotificationComponent {
+    constructor(@Inject(MAT_SNACK_BAR_DATA) public data: any) { }
+}

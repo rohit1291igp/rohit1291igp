@@ -1,0 +1,176 @@
+:host {
+    font-size: 18px;
+}
+
+.main-container {
+    margin-bottom: 28px;
+    margin-top: 58px;
+}
+
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    font-size: 21px;
+    border: 1px solid;
+    font-weight: 400;
+    padding: 6px 5px;
+}
+
+.order-box {
+    border: 1px solid;
+    /* width: 45%; */
+    margin: 16px;
+    padding: 6px;
+    text-align: center;
+}
+
+.order-img {
+    /* border: 1px solid; */
+    margin: 16px;
+    /* padding: 6px; */
+    text-align: center;
+    display: flex;
+    justify-content: center;
+}
+
+.order-img>div {
+    border: 1px solid #000;
+    width: 100%;
+    max-height: 380px;
+    overflow: scroll;
+}
+
+.taken-images{
+    position: relative;
+    width: 100%;
+}
+
+.actual-img-container>h5 {
+    border: 1px solid #000;
+    padding: 9px 0;
+    margin: 0;
+}
+
+.actual-img-container>img {
+    border: 1px solid #ccc;
+    margin: 8px 0px;
+    width: 127px;
+    height: 76px;
+}
+
+.taken-img-container>h5 {
+    border: 1px solid #000;
+    padding: 9px 0;
+    margin: 0;
+}
+
+.taken-img-container>img {
+    border: 1px solid #ccc;
+    padding: 8px;
+    width: 127px;
+    height: 76px;
+}
+
+.report-photo-container {
+    display: flex;
+    justify-content: center;
+}
+
+.report-photo-container>.report {
+    border: 1px solid;
+    width: 45%;
+    margin: 16px;
+    padding: 6px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.report-photo-container>.photo {
+    border: 1px solid;
+    width: 45%;
+    margin: 16px;
+    /* padding: 6px; */
+    text-align: center;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.report-photo-container>.photo>button {
+    width: 100%;
+    height: 100%;
+}
+
+.delivery-out-btn {
+    display: flex;
+    justify-content: center;
+}
+
+.delivery-out-btn>a {
+    width: 100%;
+    padding: 8px 0px;
+    text-align: center;
+    background: #ccc;
+    color: #000;
+}
+
+.delivery-out-btn>button {
+    font-size: 21px;
+    width: 100%;
+    padding: 8px 0px;
+    border: 1px solid;
+    background: #4BB543;
+    color: #fff;
+    cursor: pointer;
+}
+
+.delivery-out-btn>button>a {
+    color: #fff;
+}
+
+.uploadFileSection {
+    width: 42%;
+    border: 1px solid #ccc;
+    height: 53px;
+    overflow: hidden;
+}
+
+.uploadedFiles {
+    border: 1px solid #ccc;
+    padding: 16px;
+    width: 127px;
+    height: 76px;
+    margin: 8px auto;
+}
+
+.uploadedFiles>i {
+    position: absolute;
+    right: 1px;
+    top: 0px;
+}
+
+.uploadedFiles>img {
+    width: 100%;
+    height: 50px;
+}
+
+.hidden-input {
+    width: 0px;
+    height: 0px;
+    visibility: hidden;
+}
+
+.spinner {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    text-align: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    opacity: 0.8;
+    justify-content: center;
+    align-items: center;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%);
+}

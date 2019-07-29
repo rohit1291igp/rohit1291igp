@@ -1,0 +1,33 @@
+<div class="main-container">
+    <!-- Header -->
+    <app-delivery-header [title]="headerTitle"></app-delivery-header>
+    <!-- Header Ends -->
+    <!-- Delivery Address -->
+    <div class="deilivery-addr">
+        <p *ngIf="orderDetails?.customersName">Name: {{orderDetails.customersName}}</p>
+        <p *ngIf="orderDetails?.deliveryStreetAddress">Address:
+            {{orderDetails.deliveryStreetAddress}}</p>
+    </div>
+    <!-- Delivery Address Ends -->
+    <!-- Call and Navigation section -->
+    <div class="call-navigate-container">
+        <a *ngIf="orderDetails?.deliveryMobile" class="call-btn"
+            href="tel:{{orderDetails?.deliveryMobile}}">CALL</a>
+        <!-- <button class="navigate"><i class="fa fa-angle-up"></i> NAVIGATE</button> -->
+    </div>
+    <!-- Call and Navigation section Ends -->
+    <!-- Image Section -->
+    <!-- <div *ngIf="orderDetails?.uploadedFilePath?.OutForDelivery.length > 0" class="order-img">
+        <div *ngFor="let imageSrc of orderDetails?.uploadedFilePath?.OutForDelivery">
+            <img src="{{imageSrc}}" width="460" height="345" />
+        </div>
+    </div> -->
+    <!-- Image Section Ends -->
+    <!-- Delivery Status -->
+    <div class="delivery-status-container">
+        <a routerLink="/delivery-app/undelivered">Mark as NOT DELIVERED</a>
+        <a routerLink="/delivery-app/delivered">Mark as DELIVERED</a>
+    </div>
+    <!-- Delivery Status Ends -->
+    <div style="clear: both"></div>
+</div>

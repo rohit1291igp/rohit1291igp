@@ -1,0 +1,53 @@
+<div class="deliveryboy-details-container">
+    <mat-card>
+        <h4>Filter Agent</h4>
+        <div class="search-container">
+            <mat-form-field>
+                <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+            </mat-form-field>
+        </div>
+        <div>
+            <button mat-raised-button class="add-delivery-boy-btn" (click)="openNewDeliveryBoyDialog()">Add
+                Agent</button>
+            <button mat-raised-button class="add-delivery-boy-btn" (click)="disabledItemsToggle()">
+                <span *ngIf="!viewDisabledItems">View All Disabled Agents</span>
+                <span *ngIf="viewDisabledItems">Hide All Disabled Agents</span>
+            </button>
+
+        </div>
+        <div>
+        </div>
+    </mat-card>
+    <br><br>
+
+    <ng-container
+        *ngIf="(dataSource?._renderData | async) && (dataSource?._renderData | async ).length > 0 else noRecord">
+        <mat-card>
+            <mat-table #table mat-table [dataSource]="dataSource" matSort>
+                <!-- {{columnNames | json}} -->
+                <ng-container matColumnDef="{{column.id}}" *ngFor="let column of columnNames;">
+                    <mat-header-cell mat-header-cell *matHeaderCellDef mat-sort-header> {{column.value}}
+                    </mat-header-cell>
+                    <mat-cell mat-cell *matCellDef="let element">
+                        <span [ngStyle]="{opacity: (element.Status == 0) ? 0.5 : 1}">{{element[column.id]}}</span>
+                        <ng-container *ngIf="column.id === 'action'">
+                            <button *ngIf="element.Status" mat-stroked-button
+                                (click)="editDeliveryBoy(element)">Edit</button>
+                            <button *ngIf="element.Status" mat-stroked-button
+                                (click)="deleteDeliveryBoy(element, 'disable')">Disable</button>
+                            <button *ngIf="!element.Status" mat-stroked-button
+                                (click)="deleteDeliveryBoy(element, 'enable')">Enable</button>
+                        </ng-container>
+                    </mat-cell>
+                </ng-container>
+                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                <mat-row class="delivery-boy-row" *matRowDef="let row; columns: displayedColumns;"></mat-row>
+            </mat-table>
+        </mat-card>
+
+    </ng-container>
+    <ng-template #noRecord>
+        <mat-card>No Record Found</mat-card>
+    </ng-template>
+
+</div>

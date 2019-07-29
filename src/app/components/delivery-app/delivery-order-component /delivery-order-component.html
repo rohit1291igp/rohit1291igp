@@ -1,0 +1,75 @@
+<div class="main-container">
+    <!-- Header -->
+    <app-delivery-header [title]="'Order Check'"></app-delivery-header>
+    <!-- Header Ends -->
+    <!-- Order Id -->
+    <div class="order-box">ORDER ID {{orderId}}</div>
+    <!-- Order Id Ends -->
+    <!-- Image Section -->
+
+    <div class="order-img">
+        <div class="actual-img-container">
+            <h5>Actual Images</h5>
+            <ng-container *ngIf="order && order?.orderProducts">
+                <ng-container *ngFor="let orderProduct of order?.orderProducts;">
+                    <img class="product-image clk"
+                        src="{{productsURL}}th/{{orderProduct.productImage}}?th={{orderProduct.productUpdateDateTime}}"
+                        alt="product_img"
+                        (click)="imagePreview($event, productsURL+'l/'+(orderProduct.productImage)+'?th='+orderProduct.productUpdateDateTime)">
+                </ng-container>
+            </ng-container>
+
+
+        </div>
+        <div class="taken-img-container">
+            <h5>Taken Images</h5>
+            <ng-container *ngIf="uploadedFiles.length > 0 else noImage">
+                <div class="taken-images" [ngStyle]="{opacity: loading ? '0.5' : '1'}">
+                    <div class="uploadedFiles relative" *ngFor="let uploadedFile of uploadedFiles;">
+                        <img src="{{uploadedFile}}" alt="uploadedImages" width="460" height="345"
+                            (click)="imagePreview($event,uploadedFile)" (load)="loaded()" />
+                        <i class="fa fa-times-circle" (click)="dltUploadedImage($event, uploadedFile)"></i>
+                    </div>
+                    <div [ngStyle]="{display: loading ? 'flex' : 'none'}" class="spinner">
+                        <mat-spinner [diameter]="30"></mat-spinner>
+                    </div>
+                </div>
+                <!-- {{imagePreviews | json}} -->
+                <!-- <div class="uploadedFiles relative" *ngFor="let x of imagePreviews">
+                    <img *ngIf="x" [src]="sanitizer.bypassSecurityTrustUrl(x)" (click)="imagePreview($event,x)" >
+                    <i class="fa fa-times-circle" (click)="dltUploadedImage($event, x)"></i>
+                </div> -->
+            </ng-container>
+            <ng-template #noImage>No Image</ng-template>
+        </div>
+    </div>
+    <!-- Image Section Ends -->
+    <!-- Report nd Photo section -->
+
+    <div class="report-photo-container">
+        <!-- <div class="report">Report Issue</div> -->
+        <!-- <div class="photo">Take Photo</div> -->
+        <div class="photo">
+            <button type="button" (click)="upload()">Take Photo</button>
+            <input id="fileInput" class="hidden-input" name="deliveredStatusFile" type="file"
+                [(ngModel)]="statusReasonModel.deliveredStatusFile" #deliveredStatusFile="ngModel"
+                (change)="fileChange($event)" placeholder="Upload Delivery Challan" accept=".jpeg, .jpg, .png"
+                multiple />
+
+            <!-- <button type="button" (click)="onUpload()">Upload File</button>     -->
+            <!-- <input id="fileInput" class="hidden-input" name="deliveredStatusFile" type="file"
+            [(ngModel)]="statusReasonModel.deliveredStatusFile" #deliveredStatusFile="ngModel"
+            (change)="fileChange($event)" placeholder="Upload Delivery Challan" accept=".jpeg, .jpg, .png"
+            multiple  type="file" capture="camera" (change)="fileChange($event)"> -->
+            <div class="clearfix"></div>
+        </div>
+
+    </div>
+    <!-- Report nd Photo section Ends -->
+    <div class="delivery-out-btn">
+        <a *ngIf="futureOrder" routerLink="/delivery-app/task"><i class="fa fa-long-arrow-left"></i> Back</a>
+        <button *ngIf="!futureOrder && futureOrder !== undefined" (click)="markOutForDelivery()">Out for
+            delivery</button>
+    </div>
+    <div style="clear: both"></div>
+</div>

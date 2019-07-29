@@ -1,0 +1,21 @@
+<div class="main-container">
+    <!-- Header -->
+    <div class="header-container">
+        <div><i class="fa fa-align-justify"></i></div>
+        <div style="color: #4BB543; font-weight:500;">Mark As Delivered</div>
+        <div></div>
+    </div><!-- Header Ends -->
+    <div class="date-container">
+        <div><a routerLink="/delivery-app">Home</a></div>
+        <div>Date:- {{myFormattedDate}}</div>
+    </div>
+    <!-- Orders Delivered Container -->
+    <div *ngIf="orders?.delivered?.total else " class="orders-delivered-container">
+        <h4>Total Orders Delivered ({{orders?.delivered?.total}})</h4>
+        <div class="chip-box-container">
+            <div class="chip-box" *ngFor="let x of orders?.delivered?.orderId">{{x}}</div>
+        </div>
+    </div><!-- Orders Delivered Container Ends -->
+    <!-- Delivery Address Ends -->
+    <div style="clear: both"></div>
+</div>

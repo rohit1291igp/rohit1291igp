@@ -1,11 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
-import {environment} from "../../../environments/environment";
+import { ActivatedRoute, Router } from '@angular/router';
+import { environment } from "../../../environments/environment";
 import { AuthenticationService } from '../../services/authentication.service';
 import { BackendService } from '../../services/backend.service';
 import { UtilityService } from '../../services/utility.service';
-import { MatSnackBar } from '@angular/material';
-import { NotificationComponent } from '../reports/reports.component';
 
 @Component({
     selector: 'app-login',
@@ -24,8 +22,7 @@ export class LoginComponent implements OnInit {
         public router: Router,
         public authenticationService: AuthenticationService,
         public BackendService: BackendService,
-        public UtilityService: UtilityService,
-        private _snackBar: MatSnackBar
+        public UtilityService: UtilityService
         ) { }
 
     ngOnInit() {
@@ -81,6 +78,7 @@ export class LoginComponent implements OnInit {
                     const fkAssociateId =  _response.result.fkAssociateId;
                     const associateName = _response.result.associateName;
                     const userType =  _response.result.userType.toLocaleLowerCase(); // || 'upload';
+                    const fkUserId = _response.result.user_id;
                     /*let admin =  _response.result.admin;
                      if(admin){
                      localStorage.setItem('admin', true);
@@ -92,6 +90,8 @@ export class LoginComponent implements OnInit {
                     localStorage.setItem('associateName', associateName);
                     localStorage.setItem('vendorName', _this.model.username);
                     localStorage.setItem('userType', userType);
+                    localStorage.setItem('fkUserId', fkUserId)
+
                     environment.userType = userType;
                     console.log("detecting user type!");
                     // if(_this.model.username === "iipsroot"){
@@ -111,15 +111,13 @@ export class LoginComponent implements OnInit {
                     // }
 
                     _this.UtilityService.changeRouteComponent();
-                    _this.router.navigate(['/dashboard']);
+                    if(userType === 'deliveryboy'){
+                        _this.router.navigate(['/delivery-app']);
+                    }else{
+                        _this.router.navigate(['/dashboard']);
+                    }
                 });
             }
     }
 
-    openSnackBar(data) {
-        this._snackBar.openFromComponent(NotificationComponent, {
-          data: data,
-          duration: 5 * 1000,
-        });
-      }
 }

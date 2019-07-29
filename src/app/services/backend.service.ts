@@ -40,7 +40,12 @@ export class BackendService {
                   }else if (environment.userType === 'blogger') {
                     reqObj.url = environment.origin + 'v1/' + reqObj.url;
                   } else {
-                      reqObj.url = environment.origin + 'v1/admin/handels/' + reqObj.url;
+                      if(environment.userType === 'deliveryboy'){
+                        reqObj.url = environment.origin + 'v1/handels/' + reqObj.url;
+                      }else{
+                        reqObj.url = environment.origin + 'v1/admin/handels/' + reqObj.url;
+
+                      }
                   }
               }else{
                   reqObj.url = environment.origin + 'v1/handels/' + reqObj.url;

@@ -66,6 +66,10 @@ export class DashboardComponent implements OnInit {
                 this.loadDbData();
             });
     }
+
+    if(environment.userType === 'deliveryboy'){
+      this.router.navigate(['/delivery-app/task']);
+    }
   }
 
   ngOnDestroy() {

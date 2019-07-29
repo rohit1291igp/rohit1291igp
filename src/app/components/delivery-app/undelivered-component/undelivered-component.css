@@ -1,0 +1,57 @@
+:host {
+    font-size: 18px;
+}
+
+.main-container {
+    margin-bottom: 28px;
+    margin-top: 58px;
+}
+
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    font-size: 21px;
+    border: 1px solid;
+    font-weight: 400;
+    padding: 6px 5px;
+}
+
+img {
+    width: 100%;
+    height: auto;
+}
+
+.reasons-cointainer {
+    margin: 12px 16px;
+    display: flex;
+    flex-direction: column;
+}
+
+.reasons-cointainer>button {
+    border: 1px solid;
+    margin: 8px 0;
+    padding: 4px;
+    text-align: center;
+}
+
+.reasons-cointainer>div:first-child {
+    border: none;
+    text-align: justify;
+    padding: 0px 16px;
+}
+
+.undelivered-btn {
+    margin: 56px 0px;
+    text-align: center;
+    border: 1px solid #000;
+    color: #4BB543;
+    font-weight: 500;
+}
+
+.undelivered-btn>button {
+    width: 100%;
+    padding: 11px;
+}
+textarea{
+    border: 1px solid #000;
+}

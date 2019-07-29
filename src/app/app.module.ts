@@ -1,7 +1,7 @@
  // Modules
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, APP_INITIALIZER } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule, Http, XHRBackend, RequestOptions } from '@angular/http';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { MyHttpInterceptor } from './others/my-http-interceptor';
@@ -14,7 +14,9 @@ import { DatePipe } from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgxEditorModule } from 'ngx-editor';
 import { CKEditorModule } from 'ng2-ckeditor';
-
+import {MatFormFieldModule, MatInputModule, MatCardModule, MatButtonModule, MatMenuModule, MatDialogModule, MatSnackBarModule, MatTableModule, MatPaginatorModule, MatSortModule, MatDialogRef, MAT_DIALOG_DATA, MatIconModule, MatProgressBarModule, MatProgressSpinnerModule} from '@angular/material';
+import {CdkTableModule} from '@angular/cdk/table';
+import { Ng2ImgMaxModule, Ng2ImgMaxService } from 'ng2-img-max';
 // Router and Services
 import { routing } from "./app.routing";
 import { BackendService } from './services/backend.service';
@@ -45,6 +47,18 @@ import { BlogListComponent } from './components/blog-list/blog-list.component';
 import { BlogViewComponent } from './components/blog-view/blog-view.component';
 import { SeoHomeComponent } from './components/seo-home/seo-home.component';
 import { CategoryModalComponent } from './components/category-modal/category-modal.component';
+import { AddDeliveryBoyComponent } from './components/add-deliveryboy/add-deliveryboy.component';
+import { DeliveryAppComponent } from './components/delivery-app/delivery-app-component';
+import { DeliveryTaskComponent } from './components/delivery-app/delivery-task-component/delivery-task-component';
+import { DeliveryOrderComponent } from './components/delivery-app/delivery-order-component /delivery-order-component';
+import { OutForDeliveryComponent } from './components/delivery-app/out-for-delivery-component /out-for-delivery-component';
+import { UnDeliveredComponent } from './components/delivery-app/undelivered-component/undelivered-component';
+import { DeliveredComponent } from './components/delivery-app/delivered-component/delivered-component';
+import { OrdersDeliveredComponent } from './components/delivery-app/orders-delivered-component/orders-delivered-component';
+import { DeliveryBoyDetailsComponent } from './components/deliveryboy-details/deliveryboy-details.component';
+import { NotificationComponent } from './components/notification/notification.component';
+import { DeliveryHeaderComponent } from './components/delivery-app/delivery-header/delivery-header.component';
+import { ImgPreviewComponent } from './components/img-preview/img-preview.component';
 
 //factories
 import {httpFactory} from "./others/http.factory";
@@ -106,21 +120,49 @@ export function ConfigLoader(envConfig: envConfig) {
     VoucherModelComponent,
     FilterPipe,
     SendEmailComponent,
-    DownloadEmailComponent
+    DownloadEmailComponent,
+    AddDeliveryBoyComponent,
+    DeliveryAppComponent,
+    DeliveryTaskComponent,
+    DeliveryOrderComponent,
+    OutForDeliveryComponent,
+    UnDeliveredComponent,
+    DeliveredComponent,
+    OrdersDeliveredComponent,
+    NotificationComponent,
+    DeliveryBoyDetailsComponent,
+    DeliveryHeaderComponent,
+    ImgPreviewComponent
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     FormsModule,
+    ReactiveFormsModule,
     HttpModule,
     HttpClientModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatTableModule,
+    MatCardModule,
+    MatButtonModule,
+    MatMenuModule,
+    MatDialogModule,
+    MatSnackBarModule,
+    CdkTableModule,
+    MatPaginatorModule,
+    MatSortModule,
+    MatIconModule,
+    MatProgressBarModule,
+    MatProgressSpinnerModule,
     routing,
     //BsDropdownModule.forRoot(),
     SelectModule,
     MyDatePickerModule,
-    BrowserAnimationsModule,
     TrimValueAccessorModule,
     NgxEditorModule,
-    CKEditorModule
+    CKEditorModule,
+    Ng2ImgMaxModule
   ],
   providers: [
     {
@@ -131,6 +173,8 @@ export function ConfigLoader(envConfig: envConfig) {
           useClass: MyHttpInterceptor,
           multi: true
      },
+     { provide: MAT_DIALOG_DATA, useValue: {} },
+    { provide: MatDialogRef, useValue: {} },
     /*  envConfig,
     {
       provide: APP_INITIALIZER,
@@ -149,9 +193,10 @@ export function ConfigLoader(envConfig: envConfig) {
     Time12Pipe,
     ReplacePipe,
     ObjectKeyValuePipe,
-    S3UploadService
+    S3UploadService,
+    Ng2ImgMaxService
   ],
-  entryComponents:[UploadExcelComponent],
+  entryComponents:[UploadExcelComponent,NotificationComponent, ImgPreviewComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

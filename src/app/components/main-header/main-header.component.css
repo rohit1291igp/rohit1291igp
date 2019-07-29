@@ -107,6 +107,7 @@
 }
 .navbar {
     position: fixed;
+    top:0;
     min-height: 50px;
     margin-bottom: 20px;
     width: 100%;
