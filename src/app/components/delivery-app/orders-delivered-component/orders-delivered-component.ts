@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
 })
 export class OrdersDeliveredComponent implements OnInit {
 
-    orders = [];
+    orders:any;
     public orderId:number;
     fkAssociateId: string;
     fkUserId: string;
