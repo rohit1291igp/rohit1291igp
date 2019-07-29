@@ -1,0 +1,56 @@
+<!-- <mat-card class="delivery-container"> -->
+<div class="delivery-container">
+    <i class="fa fa-times" style="float: right; cursor:pointer;" (click)="dialogRef.close()"></i>
+    <div style="margin-bottom: 8px;">Add Agent</div>
+    <!-- <mat-card-content class="form-container"> -->
+    <form [formGroup]="myForm" (ngSubmit)="onSubmit(myForm)">
+        <div class="form-row">
+            <div class="input-container">
+                <mat-form-field>
+                    <input [ngClass]="{
+                        'has-danger': myForm.controls.fname.invalid && myForm.controls.fname.dirty,
+                        'has-success': myForm.controls.fname.valid && myForm.controls.fname.dirty
+                      }" formControlName="fname" matInput placeholder="First name">
+                </mat-form-field>
+            </div>
+            <div class="input-container">
+                <mat-form-field>
+                    <input [ngClass]="{
+                        'has-danger': myForm.controls.lname.invalid && myForm.controls.lname.dirty,
+                        'has-success': myForm.controls.lname.valid && myForm.controls.lname.dirty
+                      }" formControlName="lname" matInput placeholder="Last name">
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="input-container">
+                <mat-form-field>
+                    <input formControlName="username" matInput placeholder="Username">
+                </mat-form-field>
+            </div>
+            <div class="input-container">
+                <mat-form-field>
+                    <input formControlName="password" matInput placeholder="Password">
+                </mat-form-field>
+            </div>
+
+        </div>
+        <div class="form-row">
+            <div class="input-container-full-with">
+                <mat-form-field>
+                    <div style="display: flex" >
+                        <div>+91</div>
+                        <input type="tel" formControlName="phone" matInput >
+                    </div>
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="form-row">
+            <button type="submit" mat-raised-button [disabled]="myForm.invalid">Submit</button>
+        </div>
+    </form>
+</div>
+
+
+<!-- </mat-card-content> -->
+<!-- </mat-card> -->

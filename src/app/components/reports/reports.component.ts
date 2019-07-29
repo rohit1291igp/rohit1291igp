@@ -1,14 +1,14 @@
-import { Component, OnInit, AfterContentInit, ViewChild, OnChanges, DoCheck, Input, Output, EventEmitter, HostListener, ElementRef, trigger, sequence, transition, animate, style, state } from '@angular/core';
-import { ActivatedRoute} from '@angular/router';
-import { IMyOptions, IMyDateModel } from 'mydatepicker';
+import { animate, Component, ElementRef, HostListener, OnInit, sequence, style, transition, trigger, ViewChild } from '@angular/core';
+import { Headers, RequestOptions } from "@angular/http";
+import { MatDialog, MatSnackBar } from '@angular/material';
+import { ActivatedRoute } from '@angular/router';
+import { IMyOptions } from 'mydatepicker';
+import { environment } from "../../../environments/environment";
 import { BackendService } from '../../services/backend.service';
-import { UtilityService } from '../../services/utility.service';
-import {environment} from "../../../environments/environment";
 import { ReportsService } from '../../services/reports.service';
-import { OrdersActionTrayComponent } from '../orders-action-tray/orders-action-tray.component';
-import * as S3 from 'aws-sdk/clients/s3';
 import { S3UploadService } from '../../services/s3Upload.service';
-import { ConnectionBackend, RequestOptions, Request, RequestOptionsArgs, Response, Http, Headers} from "@angular/http";
+import { UtilityService } from '../../services/utility.service';
+import { OrdersActionTrayComponent } from '../orders-action-tray/orders-action-tray.component';
 
 @Component({
   selector: 'app-reports',
@@ -199,13 +199,16 @@ export class ReportsComponent implements OnInit{
   listOfComponents = [];
   listOfBarcodes = [];
   uploadedImages = [];
+  durationInSeconds = 5;
   constructor(
       private _elementRef: ElementRef,
       public reportsService: ReportsService,
       public BackendService: BackendService,
       public UtilityService: UtilityService,
       public route: ActivatedRoute,
-      public S3UploadService: S3UploadService
+      public S3UploadService: S3UploadService,
+      public addDeliveryBoyDialog: MatDialog,
+      private _snackBar: MatSnackBar
       ) { }
 
   ngOnInit() {
@@ -264,7 +267,7 @@ export class ReportsComponent implements OnInit{
           /* byDefault set deliveryDateFrom 2 days back - end */
 
           /* set default vendor - start */
-          if(_this.defaultVendor && ( _this.reportType === 'getVendorReport' || _this.reportType === 'getComponentReport' || _this.reportType === 'getPincodeReport' || _this.reportType === 'getVendorDetails') && (_this.environment.userType && _this.environment.userType === 'admin')){
+          if(_this.defaultVendor && ( _this.reportType === 'getVendorReport' || _this.reportType === 'getComponentReport' || _this.reportType === 'getPincodeReport') && (_this.environment.userType && _this.environment.userType === 'admin')){
               _this.searchResultModel["fkAssociateId"]=_this.defaultVendor;
           }
           /* set default vendor - end */
@@ -1621,18 +1624,19 @@ export class ReportsComponent implements OnInit{
             url : url+paramsStr,
             method : (method || 'post')
         };
-        _this.BackendService.makeAjax(reqObj, function(err, response, headers){
-            //if(!response) response={result:[]};
-            if(err || response.error) {
-                console.log('Error=============>', err);
-                return;
-            }
-            console.log('admin action Response --->', response.result);
-            if(response.result){
-              alert('The request was successful.');
-                _this.reportAddAction.reportAddActionFlag=false;
-            }
-        });
+        // _this.BackendService.makeAjax(reqObj, function(err, response, headers){
+        //     //if(!response) response={result:[]};
+        //     if(err || response.error) {
+        //         console.log('Error=============>', err);
+        //         return;
+        //     }
+        //     console.log('admin action Response --->', response.result);
+        //     if(response.result){
+        //       alert('The request was successful.');
+        //         _this.reportAddAction.reportAddActionFlag=false;
+        //     }
+        // });
     }
 
 }
+

@@ -616,3 +616,8 @@
     text-align: left;
     margin-top: 2em;
 }
+
+.mat-button, .mat-raised-button{
+    background-color: #25C355;
+    color: #fff;
+}

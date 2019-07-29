@@ -1,0 +1,91 @@
+:host {
+    font-size: 18px;
+}
+
+.main-container {
+    margin-bottom: 28px;
+    margin-top: 58px;
+}
+
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    font-size: 21px;
+    border: 1px solid;
+    font-weight: 400;
+    padding: 6px 5px;
+}
+
+img {
+    width: 100%;
+    height: auto;
+}
+
+.orders-delivered-container {
+    padding: 9px 12px;
+}
+
+.chip-box-container {
+    display: flex;
+    flex-wrap: wrap;
+    font-size: 16px;
+    padding: 0px 8px;
+    /* justify-content: center; */
+}
+
+.chip-box {
+    border: 1px solid;
+    width: max-content;
+    padding: 4px 6px;
+    margin: 2px;
+    float: left;
+    border-radius: 16px;
+}
+
+.receiver-details-container>div {
+    font-size: 12px;
+    border: 1px solid #000;
+    margin: 4px;
+    text-align: center;
+    width: 47%;
+    padding: 5px 18px;
+}
+
+.reciever-container {
+    margin: 0px 16px;
+}
+
+.photo-container {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.photo-container>button {
+    border: 1px solid;
+    background: #fff;
+    padding: 6px 16px;
+}
+
+.delivered-btn {
+    margin: 28px 0px;
+    text-align: center;
+    border: 1px solid #000;
+    color: #4BB543;
+    font-weight: 500;
+}
+
+.delivered-btn>button {
+    width: 100%;
+    padding: 11px;
+}
+
+.date-container {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.date-container>div {
+    border: 1px solid;
+    padding: 4px 11px;
+    margin: 11px 6px;
+}

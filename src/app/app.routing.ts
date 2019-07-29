@@ -13,6 +13,15 @@ import { SendEmailComponent } from './components/send-email/send-email.component
 
 import { AuthGuard } from './services/auth-guard.service';
 import { DownloadEmailComponent } from './components/download-email/download-email.component';
+import { AddDeliveryBoyComponent } from './components/add-deliveryboy/add-deliveryboy.component';
+import { DeliveryAppComponent } from './components/delivery-app/delivery-app-component';
+import { DeliveryTaskComponent } from './components/delivery-app/delivery-task-component/delivery-task-component';
+import { DeliveryOrderComponent } from './components/delivery-app/delivery-order-component /delivery-order-component';
+import { OutForDeliveryComponent } from './components/delivery-app/out-for-delivery-component /out-for-delivery-component';
+import { DeliveredComponent } from './components/delivery-app/delivered-component/delivered-component';
+import { UnDeliveredComponent } from './components/delivery-app/undelivered-component/undelivered-component';
+import { OrdersDeliveredComponent } from './components/delivery-app/orders-delivered-component/orders-delivered-component';
+import { DeliveryBoyDetailsComponent } from './components/deliveryboy-details/deliveryboy-details.component';
 
 const route: Routes = [
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
@@ -25,6 +34,11 @@ const route: Routes = [
   {
     path: 'reports/:type',
     component: ReportsComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path:'deliveryBoyDetails', 
+    component: DeliveryBoyDetailsComponent,
     canActivate: [AuthGuard]
   },
   {
@@ -51,6 +65,25 @@ const route: Routes = [
     canActivate: [AuthGuard]
   },
   { path: 'download/:fileFor/:filedate/:fileTime', component: DownloadEmailComponent, canActivate: [AuthGuard] },
+  {
+    path: 'add-delivery-boy',
+    component: AddDeliveryBoyComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'delivery-app',
+    component: DeliveryAppComponent,
+    canActivate: [AuthGuard],
+    children: [
+      {path:'', redirectTo:'task', pathMatch:'full'},
+      {path: 'task', component: DeliveryTaskComponent},
+      {path:'task/:id/:day', component: DeliveryOrderComponent},
+      {path:'delivery/:id', component: OutForDeliveryComponent},
+      {path:'delivered', component: DeliveredComponent},
+      {path:'undelivered', component: UnDeliveredComponent},
+      {path:'orders-delivered', component: OrdersDeliveredComponent}
+    ]
+  },
   // otherwise redirect to home
   { path: '**', redirectTo: 'dashboard' }
 ];

@@ -15,6 +15,7 @@ export class MainHeaderComponent implements OnInit {
     isMobile=environment.isMobile;
     isAdmin=(environment.userType && environment.userType === "admin");
     vendorName:any = localStorage.getItem('associateName');
+    deliveryBoyName:any;
     userType:any = localStorage.getItem('userType');
     reportDropdownOpen=false;
     selectedTopTab;
@@ -47,6 +48,7 @@ export class MainHeaderComponent implements OnInit {
 
   ngOnInit() {
       var _this=this;
+      _this.deliveryBoyName = localStorage.getItem('vendorName');
       _this.router.events.subscribe((event) => {
           if (event instanceof NavigationEnd) {
               console.log('Url changed');

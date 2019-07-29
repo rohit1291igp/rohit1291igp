@@ -8,6 +8,9 @@ import { DashboardService } from '../../services/dashboard.service';
 import { DatePipe } from '@angular/common';
 import { Time12Pipe } from "../../customPipes/time12.pipe";
 import {environment} from "../../../environments/environment";
+import { AddDeliveryBoyComponent } from '../add-deliveryboy/add-deliveryboy.component';
+import { MatDialog, MatSnackBar } from '@angular/material';
+import { NotificationComponent } from '../notification/notification.component';
 
 @Component({
   selector: 'app-orders-action-tray',
@@ -133,6 +136,9 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
   public dateRange: Object = {};
   loadTrayDataEvent;
   custDetail = false;
+  deliveryBoyList: any[] = [];
+  deliveryBoyAssignBtnText: boolean;
+  assignedDeliveryBoy:string;
   constructor(
       private _elementRef: ElementRef,
       public BackendService : BackendService,
@@ -140,7 +146,9 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
       public UtilityService: UtilityService,
       public dashboardService: DashboardService,
       public datePipe: DatePipe,
-      public time12Pipe: Time12Pipe
+      public time12Pipe: Time12Pipe,
+      public addDeliveryBoyDialog: MatDialog,
+      private _snackBar: MatSnackBar
       ) { }
 
   ngOnInit() {
@@ -148,6 +156,9 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
      this.setlDatePicker(null);
      this.setRejectInitialValue();
      this.getFeeds();
+     if(environment.userType === 'vendor'){
+        this.getDeliveryBoyList();
+     }
      //this.statusReasonModel.OrderProductsList = [];
   }
 
@@ -613,9 +624,12 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
                   _this.apierror = err || response.errorCode;
               }
               return;
-          }
+          } 
           response = response;
           //console.log('sidePanel Response --->', response.result);
+          if(response.result){
+            _this.assignedDeliveryBoy = response.result[0].orderProducts[0].fkUserId;
+          }
           if(cb){
               return cb(null, response.result ? Array.isArray(response.result) ? response.result : [response.result] : []);
           }else{
@@ -1206,7 +1220,7 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
               if(err || response.error) {
                   console.log('Error=============>', err);
               }
-              console.log('vendorList Response --->', response.result);
+            //   console.log('vendorList Response --->', response.result);
               for(let i in response.result){
                   if(Number(response.result[i].Vendor_Id) === Number(_this.sidePanelData[orderIndex].orderProducts[0].fkAssociateId)){
                       response.result.splice(i, 1);
@@ -1540,5 +1554,100 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
               _this.UtilityService.sharedData.dropdownData=response.result;
           });
       }
+
+    getDeliveryBoyList(){
+        var _this = this
+        _this.deliveryBoyAssignBtnText = false;
+        const reqObj = {
+            url: `deliveryBoyDetails?fkAssociateId=${localStorage.getItem('fkAssociateId')}&endLimit=100&fkUserId=`,
+            method: "get",
+            payload: {}
+        };
+        _this.BackendService.makeAjax(reqObj, function (err, response, headers) {
+            //if(!response) response={result:[]};
+            if (err || response.error) {
+                console.log('Error=============>', err);
+                return;
+            }
+            if (response && response.tableData) {
+                _this.deliveryBoyList = response.tableData;
+            }
+        });
+    }
+
+    assignToDeliveryBoy(data, orderData){
+        var _this = this
+        const fkAssociateId = localStorage.getItem('fkAssociateId');
+        const orderId = orderData.orderId;
+        var orderProductMap = {};
+        orderProductMap[orderId] = orderData.orderProducts[0].productId ;
+        const reqObj = {
+            url: `assignReassignOrderDeliveryBoy`,
+            method: "post",
+            payload: {
+                fkAssociateId: fkAssociateId,
+                fkUserId: data.fkUserId,
+                orderProductMap: orderProductMap,
+                action: "assign"
+            }
+        };
+        _this.BackendService.makeAjax(reqObj, function (err, response, headers) {
+            //if(!response) response={result:[]};
+            if (err || response.error) {
+                console.log('Error=============>', err);
+                return;
+            }
+            if (response) {
+                console.log(response);
+            }
+        });
+    }
+
+    openNewDeliveryBoyDialog(): void {
+        var _this = this;
+        const dialogRef = this.addDeliveryBoyDialog.open(AddDeliveryBoyComponent, {
+            width: '650px'
+        });
+
+        dialogRef.afterClosed().subscribe(result => {
+            if (result) {
+                var deliveryBoy = {
+                    User_Name: result.username,
+                    Password: result.password,
+                    Type: 'deliveryBoy',
+                    Status: 1,
+                    fkAssociateId: localStorage.getItem('fkAssociateId'),
+                    Phone: result.phone,
+                    Full_Name: result.fname + ' ' + result.lname,
+                    fkUserId: result.fkUserId
+                };
+                const reqObj = {
+                    payload: deliveryBoy,
+                    url: 'deliveryBoyDetails',
+                    method: result.edit ? 'put' : 'post'
+                };
+                _this.BackendService.makeAjax(reqObj, function (err, response, headers) {
+                    //if(!response) response={result:[]};
+                    if (err || response.error) {
+                        console.log('Error=============>', err);
+                        return;
+                    }
+                    console.log('admin action Response --->', response.result);
+                    if (response.result) {
+                        _this.openSnackBar(`Added ${deliveryBoy.Full_Name} Sucessfully!`);
+                        _this.getDeliveryBoyList();
+                    }
+
+                });
+            }
+        });
+    }
+
+    openSnackBar(data) {
+        this._snackBar.openFromComponent(NotificationComponent, {
+            data: data,
+            duration: 5 * 1000,
+        });
+    }
 
 }

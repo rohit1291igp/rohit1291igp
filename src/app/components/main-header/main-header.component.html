@@ -3,11 +3,11 @@
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
       <span class="navbar-brand">
-
           <ng-container *ngIf="!vendorName">Indian Gifts Portal (IGP) - Admin Panel</ng-container>
           <ng-container *ngIf="vendorName">IGP</ng-container>
           <ng-container *ngIf="!environment.userType && vendorName">- Handels</ng-container>
-          <ng-container *ngIf="vendorName">- {{vendorName}}</ng-container></span>
+          <ng-container *ngIf="vendorName && environment.userType == 'vendor'">- {{vendorName}}</ng-container>
+          <ng-container *ngIf="deliveryBoyName && environment.userType == 'deliveryboy'">- {{deliveryBoyName}}</ng-container></span>
         <span  class="logout pull-right" (click)="logout($event)" *ngIf="isMobile && vendorName" style="margin-right: 0.5em;">
             <i class="icon glyphicon glyphicon-off"></i>
         </span>
@@ -17,9 +17,13 @@
     <div class="collapse navbar-collapse navRight" id="bs-example-navbar-collapse-1" *ngIf="!isMobile && vendorName">
       <ul class="nav navbar-nav navbar-right">
         <ng-container *ngIf="(environment.userType !== 'root' && environment.userType !== 'blogger')">
+            
             <li class="fullHeightLi" [ngClass]="{'selected' : selectedTopTab === 'dashboard'}">
               <p><a ng-href="#/dashboard" routerLink="/dashboard">Dashboard</a></p>
             </li>
+            <!-- <li *ngIf="environment.userType === 'vendor'" class="fullHeightLi" [ngClass]="{'selected' : selectedTopTab === 'adddeliveryboy'}">
+                <p (click)="selectedTopTab = 'adddeliveryboy'"><a ng-href="#/adddeliveryboy" routerLink="/add-delivery-boy">Add Delivery Boy</a></p>
+            </li> -->
             <li class="fullHeightLi relative" [ngClass]="{'selected' : selectedTopTab === 'reports'}" (click)="openReportDropdown($event)">
                <p>Reports</p>
                 <div class="reportDropdown abs" [ngClass]="{'slideropen' : reportDropdownOpen, 'sliderclosed': !reportDropdownOpen}">
@@ -27,6 +31,7 @@
                         <a routerLink="/reports/getOrderReport"><li [ngClass]="{'selected' : selectedReportTab === 'getOrderReport'}">Order Report</li></a>
                         <a routerLink="/reports/getVendorReport"><li [ngClass]="{'selected' : selectedReportTab === 'getVendorReport'}">Product Report</li></a>
                         <a routerLink="/reports/getPincodeReport"><li [ngClass]="{'selected' : selectedReportTab === 'getPincodeReport'}">Pincode Report</li></a>
+                        <a *ngIf="environment.userType === 'vendor'" routerLink="/deliveryBoyDetails"><li [ngClass]="{'selected' : selectedReportTab === 'deliveryBoyDetails'}">Delivery Boy Details</li></a>
                         <a class="" routerLink="/reports/getPayoutAndTaxesReport"><li [ngClass]="{'selected' : selectedReportTab === 'getPayoutAndTaxesReport'}">Payout & Taxes</li></a>
 
                         <ng-container *ngIf="(environment.userType === 'admin')">

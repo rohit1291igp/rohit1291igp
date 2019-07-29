@@ -1,0 +1,21 @@
+<div class="main-container">
+    <!-- Header -->
+    <app-delivery-header [title]="headerTitle"></app-delivery-header>
+    <!-- Header Ends -->
+    <!-- Reasons -->
+        <div class="reasons-cointainer">
+            <div>REASONS:</div>
+            <button [ngStyle]="{background: undeliveredReason === 'Receiver Not Available' ? '#fff' : ''}" (click)="getRecipientInfo('Receiver Not Available')">Recipient Not Available</button>
+            <button [ngStyle]="{background: undeliveredReason === 'Phone Not Reachable' ? '#fff' : ''}" (click)="getRecipientInfo('Phone Not Reachable')">Phone Not Reachable</button>
+            <button [ngStyle]="{background: undeliveredReason === 'Incorrect Address' ? '#fff' : ''}" (click)="getRecipientInfo('Incorrect Address')">Incorrect Address</button>
+            <button [ngStyle]="{background: undeliveredReason === 'Product Missing' ? '#fff' : ''}" (click)="getRecipientInfo('Product Missing')">Product Missing</button>
+            <button [ngStyle]="{background: undeliveredReason === 'Other' ? '#fff' : ''}" (click)="getRecipientInfo('Other')">Other</button>
+            <textarea *ngIf="undeliveredReason === 'Other'" rows="4" cols="50" (change)="doTextareaValueChange($event)">{{textareaValue}}</textarea>
+        </div>
+    <!-- Reasons Ends -->
+
+    <div class="undelivered-btn">
+        <button [ngStyle]="{opacity: undeliveredReason ? 1 : 0.5}" [disabled]="!undeliveredReason" (click)="updateOrder('AttemptedDelivery')">UNDELIVERED</button>
+    </div>
+    <div style="clear: both"></div>
+</div>

@@ -1,0 +1,27 @@
+.table {
+    width: 100%;
+}
+
+table {
+    width: 100%;
+}
+
+.mat-form-field {
+    font-size: 14px;
+    width: 100%;
+}
+
+.deliveryboy-details-container {
+    margin-top: 100px;
+    padding: 8px;
+}
+
+.search-container {
+    width: 20%;
+    float: left;
+    margin-right: 22px;
+}
+
+.delivery-boy-row {
+    cursor: pointer;
+}

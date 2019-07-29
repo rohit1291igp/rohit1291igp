@@ -1,0 +1,68 @@
+<div class="main-container">
+    <!-- Header -->
+    <div class="header-container">
+        <div><i class="fa fa-align-justify"></i></div>
+        <div style="color: #4BB543; font-weight:500;">Mark As Delivered</div>
+        <div></div>
+    </div><!-- Header Ends -->
+    <!-- Image Section -->
+    <div class="order-img" *ngIf="uploadedFiles.length > 0">
+        <div class="uploadedFiles relative" *ngFor="let uploadedFile of uploadedFiles; let i = index;">
+            <img  id="img{{i}}" src="{{uploadedFile}}" alt="uploadedImages" width="460" height="200" (click)="imagePreview($event, uploadedFile)"/>
+            <i class="fa fa-times-circle" (click)="dltUploadedImage($event, uploadedFile)"></i>
+        </div>
+    </div>
+    <!-- Image Section Ends -->
+    <!-- Delivery Address -->
+    <div class="receiver-details-container">
+        <button [ngStyle]="{background: recipientInfo === 'self' ? '#fff' : ''}"
+            (click)="getRecipientInfo('self')">SELF</button>
+        <button [ngStyle]="{background: recipientInfo === 'neighbor' ? '#fff' : ''}"
+            (click)="getRecipientInfo('neighbor')">NEIGHBOR</button>
+        <button [ngStyle]="{background: recipientInfo === 'securitygaurd' ? '#fff' : ''}"
+            (click)="getRecipientInfo('securitygaurd')">SECURITY GUARD</button>
+        <button [ngStyle]="{background: recipientInfo === 'others' ? '#fff' : ''}"
+            (click)="getRecipientInfo('others')">OTHER</button>
+    </div>
+    <!-- Delivery Address Ends -->
+    <!-- Reciever's Details -->
+    <div class="reciever-container">
+        <form [formGroup]="myForm">
+            <div class="form-row">
+                <div class="input-container">
+                    <mat-form-field>
+                        <input formControlName="name" matInput placeholder="Recipient name">
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="input-container-full-with">
+                    <mat-form-field>
+                        <div style="display: flex; align-items: center;">
+                            <div>+91</div>
+                            <input type="tel" formControlName="phone" matInput>
+                        </div>
+                    </mat-form-field>
+                </div>
+            </div>
+        </form>
+    </div>
+    <!-- Reciever's Details Ends -->
+
+    <!-- Order Photos -->
+    <div class="photo-container">
+        <!-- <button>POD Photo</button> -->
+        <button (click)="upload()">Take Photo</button>
+        <input id="fileInput" class="hidden-input" name="deliveredStatusFile" type="file"
+            [(ngModel)]="statusReasonModel.deliveredStatusFile" #deliveredStatusFile="ngModel"
+            (change)="fileChange($event)" placeholder="Upload Delivery Challan" accept=".jpeg, .jpg, .png" multiple />
+    </div>
+    <!-- Order Photos Ends -->
+    <div class="delivered-btn">
+        <button [ngStyle]="{opacity: recipientInfo ? 1 : 0.5}" [disabled]="!recipientInfo"
+            (click)="updateOrder('Delivered')">DELIVERED</button>
+        <!-- <a routerLink="/delivery-app/orders-delivered">DELIVERED</a> -->
+    </div>
+    <div style="clear: both"></div>
+</div>

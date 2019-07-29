@@ -1,0 +1,31 @@
+.delivery-container {
+    width: 100%;
+    margin: 0 auto;
+}
+
+mat-form-field {
+    width: 95%;
+}
+
+.form-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-row {
+    display: flex;
+}
+
+.input-container {
+    width: 50%;
+}
+
+.input-container-full-with {
+    width: 100%;
+}
+.has-danger{
+    color:#c91d12;
+}
+.has-success{
+    /* color: #4BB543; */
+}

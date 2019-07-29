@@ -1,0 +1,87 @@
+<div *ngIf="browserSupport else noBrowserSupport" class="main-container">
+    <!-- Header -->
+    <app-delivery-header [title]="'Task'"></app-delivery-header>
+    <!-- Header Ends -->
+    <!-- Search  -->
+    <div class="search-container">
+        <mat-form-field class="search-full-width">
+            <!-- <input type="search" matInput placeholder="Search" (keyup)="onSearch(search.value)" (blur)="onSearchOut()" #search> -->
+            <input id="search" [formControl]="inputSearch" matInput placeholder="Search">
+
+        </mat-form-field>
+        <!-- <input type="text" (keydown)="onKeyup($event)" />
+        <input type="text" id="test"  maxlength="3" /> -->
+    </div><!-- Search Ends -->
+    <!-- Pick Up Container -->
+    <div class="pick-up-container">
+        <ng-container *ngIf="!source || (filteredPickedUpOrderId | async).length > 0 else noSearchResult">
+            <mat-card>
+                <h4>Pending Pickups ({{orders?.toBePickedUp?.total}})</h4>
+                <div style="display: none">{{filteredPickedUpOrderId | async }}</div>
+                <ng-container *ngIf="pickedUpOrderId.length > 0 else noOrder">
+                    <div class="chip-box-container">
+                        <div class="chip-box"
+                            *ngFor="let order of source ? (filteredPickedUpOrderId | async) : pickedUpOrderId"
+                            (click)="addToDelivery(x)"><a routerLink="/delivery-app/task/{{order}}/today">{{order}}</a>
+                        </div>
+                    </div>
+
+                </ng-container>
+                <div *ngIf="orders?.toBePickedFuture?.total > 0">
+                    <button style="margin: 14px 6px;" mat-button mat-raised-button [matMenuTriggerFor]="menu">Future
+                        Pick up ({{orders?.toBePickedFuture.total}}) <i class="fa fa-angle-down"></i></button>
+                    <mat-menu #menu="matMenu">
+                        <button class="matmenu-btn" *ngFor="let order of orders?.toBePickedFuture?.orderId"
+                            mat-menu-item><a routerLink="/delivery-app/task/{{order}}/tomorrow">{{order}}</a></button>
+                    </mat-menu>
+                </div>
+                <ng-template #noOrder>No Orders</ng-template>
+            </mat-card>
+        </ng-container>
+
+        <ng-template #noSearchResult>
+            <mat-card>No Record</mat-card>
+        </ng-template>
+
+    </div><!-- Pick Up Container Ends -->
+    <div style="clear: both"></div>
+
+    <!-- Delivery -->
+    <div class="delivery-container">
+        <ng-container *ngIf="!source || (filteredPickedUpOrderId | async).length > 0 else noSearchResult">
+            <mat-card>
+                <h4>Pending Deliveries ({{orders?.toBeDelivered?.total}})</h4>
+                <ng-container *ngIf="toBeDeliveredOrderId.length > 0 else noDelivery">
+                    <!-- <ng-container *ngIf="(filteredToBeDeliveredOrderId | async).length > 0 else noDelivery"> -->
+                    <div class="chip-box-container">
+                        <div class="chip-box"
+                            *ngFor="let x of source ? (filteredToBeDeliveredOrderId | async) : toBeDeliveredOrderId"><a
+                                routerLink="/delivery-app/delivery/{{x}}/today">{{x}}</a></div>
+                    </div>
+                    <!-- </ng-container> -->
+                </ng-container>
+                <ng-template #noDelivery>
+                    Nothing To Deliver
+                </ng-template>
+            </mat-card>
+        </ng-container>
+        <ng-template #noSearchResult>
+            <mat-card>No Record</mat-card>
+        </ng-template>
+    </div>
+    <!--Delivery Ends-->
+    <div style="clear: both"></div>
+    <div *ngIf="orders?.delivered?.total > 1" class="order-delivered-box">
+        <a mat-raised-button routerLink="/delivery-app/orders-delivered">Order Delivered ({{orders?.delivered?.total}})</a>
+        <!-- <mat-card>
+            Order Delivered ({{orders?.delivered?.total}})
+        </mat-card> -->
+    </div>
+    <div style="clear: both"></div>
+</div>
+<ng-template #noBrowserSupport>
+    <h5 class="no-support-text">Not Supported in Desktop</h5>
+</ng-template>
+<!-- <div [ngStyle]="{display: loading ? 'flex' : 'none'}" class="spinner">
+<mat-spinner [diameter]="40"></mat-spinner>
+</div> -->
