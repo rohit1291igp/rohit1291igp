@@ -1065,6 +1065,14 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
       e.stopPropagation();
       if(imgSrc){
           if(imgSrc === "ignore") return;
+          if(e.target.currentSrc && e.target.currentSrc.indexOf('amazonaws.com') > -1){
+              setTimeout(()=>{
+                let tempSrc = document.querySelector('.img-responsive') as any;
+                tempSrc.src = e.target.currentSrc;
+              }, 10)
+              
+            // e.target.src = e.target.currentSrc;
+         }
           this.imagePreviewFlag = true;
           this.imagePreviewSrc = imgSrc;
       }else{
@@ -1648,6 +1656,14 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
             data: data,
             duration: 5 * 1000,
         });
+    }
+
+    onSrcError(event){
+        let tempSrc = event.target.currentSrc.split('th');
+        tempSrc = tempSrc[1].split('/');
+        tempSrc = tempSrc[1].split('?');
+        tempSrc = tempSrc[0];
+            event.target.src = `${environment.componentImageUrl}${tempSrc}`;
     }
 
 }
