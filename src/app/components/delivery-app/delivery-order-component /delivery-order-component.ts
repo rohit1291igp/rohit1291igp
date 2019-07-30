@@ -175,7 +175,12 @@ export class DeliveryOrderComponent implements OnInit {
 
             }
             if (response.result) {
-                this$.order = response.result[0];
+                for(let i=0; i < response.result.length; i++){
+                    if(response.result[i].orderProducts[0].ordersProductStatus === 'Confirmed'){
+                        this$.order = response.result[i];
+                    }
+                }
+                // this$.order = response.result[0];
             }
             
         });
