@@ -515,6 +515,16 @@
 .order-actions-cont .actions-button{
     width:48.5%;
 }
+.agent-action-btn{
+    display: flex;
+    flex-wrap: wrap;
+    margin-right: 7px;
+    margin-bottom: 0px;
+}
+.agent-action-btn > button:first-child {
+    margin-right: 3px;
+    margin-bottom: 6px;
+}
 
 .slaAlert .order-actions-cont .actions-button{
     width:43.5%;

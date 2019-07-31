@@ -703,10 +703,10 @@
                     </div>
                     <div class="col-md-4 order-actions" [ngClass]="{'borderLeft': !isMobile}" *ngIf="!isMobile">
 
-                        <div *ngIf="!isAdmin && env.deliveryBoyEnabled === 'true' && getNxtOrderStatus(order.orderProducts[0].ordersProductStatus) === 'OutForDelivery'" class="row order-actions-cont">
+                        <div *ngIf="!isAdmin && env.deliveryBoyEnabled === 'true' && getNxtOrderStatus(order.orderProducts[0].ordersProductStatus) === 'OutForDelivery'" class="row order-actions-cont agent-action-btn">
                             <button mat-button mat-raised-button mat-success [matMenuTriggerFor]="menu">
                                 <span *ngIf="!order.orderProducts[0].fkUserId">Assign to Agent</span>
-                                <span *ngIf="order.orderProducts[0].fkUserId"><i class="fa fa-edit"></i> {{order.orderProducts[0].fkUserId}}</span>
+                                <span *ngIf="order.orderProducts[0].fkUserId"><i class="fa fa-edit"></i> {{order.orderProducts[0].deliveryBoyName}}</span>
                             </button>
 
                             <mat-menu #menu="matMenu">

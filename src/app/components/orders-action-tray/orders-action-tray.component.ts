@@ -628,7 +628,7 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
           response = response;
           //console.log('sidePanel Response --->', response.result);
           if(response.result){
-            _this.assignedDeliveryBoy = response.result[0].orderProducts[0].fkUserId;
+            _this.assignedDeliveryBoy = response.result[0].orderProducts[0].deliveryBoyName;
           }
           if(cb){
               return cb(null, response.result ? Array.isArray(response.result) ? response.result : [response.result] : []);
