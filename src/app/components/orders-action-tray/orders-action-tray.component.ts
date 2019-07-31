@@ -154,7 +154,7 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
 
   ngOnInit() {
      //this.scrollTo(document.getElementById("mainOrderSection"), 0, 1250);
-    //  this.deliveryBoyEnabled = this.env.deliveryBoyEnabled;
+     this.deliveryBoyEnabled = localStorage.getItem('deliveryBoyEnabled') === 'true' ? true : false;
      this.setlDatePicker(null);
      this.setRejectInitialValue();
      this.getFeeds();
