@@ -139,6 +139,7 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
   deliveryBoyList: any[] = [];
   deliveryBoyAssignBtnText: boolean;
   assignedDeliveryBoy:string;
+  deliveryBoyEnabled:any;
   constructor(
       private _elementRef: ElementRef,
       public BackendService : BackendService,
@@ -153,6 +154,7 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
 
   ngOnInit() {
      //this.scrollTo(document.getElementById("mainOrderSection"), 0, 1250);
+     this.deliveryBoyEnabled = this.env.deliveryBoyEnabled;
      this.setlDatePicker(null);
      this.setRejectInitialValue();
      this.getFeeds();

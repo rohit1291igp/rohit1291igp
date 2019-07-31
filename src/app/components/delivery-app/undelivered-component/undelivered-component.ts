@@ -18,6 +18,7 @@ export class UnDeliveredComponent implements OnInit {
     myFormattedDate: string;
     orderProductId: number[] = [];
     orderDetails: any;
+    cancelOrderProductId:any;
     undeliveredReason: string;
     textareaValue:string;
     headerTitle: string;
@@ -50,10 +51,20 @@ export class UnDeliveredComponent implements OnInit {
 
             if (response && response.result) {
                 this$.headerTitle = `(ORDER ID ${this$.orderId})`;
-                this$.orderDetails = response.result[0];
-                this$.orderId = this$.orderDetails.orderId;
-                for (let i = 0; i < this$.orderDetails.orderProducts.length; i++) {
-                    this$.orderProductId.push(response.result[0].orderProducts[i].orderProductId);
+
+                this$.orderDetails = response.result;
+                this$.orderId = this$.orderDetails[0].orderId;
+                // for (let i = 0; i < this$.orderDetails.orderProducts.length; i++) {
+                //     this$.orderProductId.push(response.result[0].orderProducts[i].orderProductId);
+                // }
+                for(let i=0; i < this$.orderDetails.length; i++){
+                    let orderProductIds = this$.orderDetails[i].orderProducts;
+                    for(let a=0; a < orderProductIds.length; a++){
+                        this$.orderProductId.push(orderProductIds[a].orderProductId);
+                        if(orderProductIds[a].ordersProductStatus == 'OutForDelivery'){
+                            this$.cancelOrderProductId = orderProductIds[a].orderProductId;
+                        }
+                    }
                 }
             }
         });
@@ -86,9 +97,11 @@ export class UnDeliveredComponent implements OnInit {
         let pipe = new DatePipe('en-US');
         const now = Date.now();
         const myFormattedDate = pipe.transform(now, 'yyyy-MM-dd');
+        var orderProductId:any;
+        
 
         const reqObj = {
-            url: `doUpdateOrderStatus?responseType=json&scopeId=1&rejectionType=${rejectionTypeToReasonCode}&rejectionMessage=${this$.undeliveredReason === 'Other' ? this$.textareaValue : this$.undeliveredReason}&recipientInfo=&recipientName=&comments=${this$.undeliveredReason === 'Other' ? this$.textareaValue : this$.undeliveredReason}&orderProductIds=${this$.orderProductId}&status=${status}&fkAssociateId=${this$.fkAssociateId}&orderId=${this$.orderId}`,
+            url: `doUpdateOrderStatus?responseType=json&scopeId=1&rejectionType=${rejectionTypeToReasonCode}&rejectionMessage=${this$.undeliveredReason === 'Other' ? this$.textareaValue : this$.undeliveredReason}&recipientInfo=&recipientName=&comments=${this$.undeliveredReason === 'Other' ? this$.textareaValue : this$.undeliveredReason}&orderProductIds=${this$.cancelOrderProductId}&status=${status}&fkAssociateId=${this$.fkAssociateId}&orderId=${this$.orderId}`,
             method: "post"
         };
 

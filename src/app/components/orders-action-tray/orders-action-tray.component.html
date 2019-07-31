@@ -684,7 +684,7 @@
                             <br/><span class="uppercase delivery-time text-bold" >{{order.orderOccasion}}</span>
                           </span>
                           
-                        <span *ngIf="env.deliveryBoyEnabled === 'true'" class="delivery-boy">Delivery Boy Id:- {{assignedDeliveryBoy}}</span>
+                        <span *ngIf="deliveryBoyEnabled === 'true'" class="delivery-boy">Delivery Boy Name:- {{assignedDeliveryBoy}}</span>
 
                       </p>
                       <p *ngIf="isAdmin">Ordered through : {{order.orderSource}}</p>
@@ -703,7 +703,7 @@
                     </div>
                     <div class="col-md-4 order-actions" [ngClass]="{'borderLeft': !isMobile}" *ngIf="!isMobile">
 
-                        <div *ngIf="!isAdmin && env.deliveryBoyEnabled === 'true' && getNxtOrderStatus(order.orderProducts[0].ordersProductStatus) === 'OutForDelivery'" class="row order-actions-cont agent-action-btn">
+                        <div *ngIf="!isAdmin && deliveryBoyEnabled === 'true' && getNxtOrderStatus(order.orderProducts[0].ordersProductStatus) === 'OutForDelivery'" class="row order-actions-cont agent-action-btn">
                             <button mat-button mat-raised-button mat-success [matMenuTriggerFor]="menu">
                                 <span *ngIf="!order.orderProducts[0].fkUserId">Assign to Agent</span>
                                 <span *ngIf="order.orderProducts[0].fkUserId"><i class="fa fa-edit"></i> {{order.orderProducts[0].deliveryBoyName}}</span>
@@ -726,7 +726,7 @@
                           Reject
                         </div>
                         <!-- *ngIf="getNxtOrderStatus(order.orderProducts[0].ordersProductStatus) !== 'OutForDelivery'"  -->
-                        <button *ngIf="env.deliveryBoyEnabled === 'true' && getNxtOrderStatus(order.orderProducts[0].ordersProductStatus) !== 'OutForDelivery'" class="btn btn-primary actions-button uppercase text-bold text-white bg-green"
+                        <button *ngIf="deliveryBoyEnabled === 'true' && getNxtOrderStatus(order.orderProducts[0].ordersProductStatus) !== 'OutForDelivery'" class="btn btn-primary actions-button uppercase text-bold text-white bg-green"
                         [ngClass]="{'disableBtn' : (order.orderProducts[0].ordersProductStatus =='Shipped' && order.orderProducts[0].deliveryStatus === 1) ||
                         (order.orderProducts[0].ordersProductStatus =='Dispatched' && order.orderProducts[0].deliveryStatus === 1) ||
                         (order.orderProducts[0].ordersProductStatus =='Confirmed' && order.deliverWhen !== 'today' && order.deliverWhen !== 'past' && order.deliverWhen !== 'tomorrow' && order.deliverWhen !== 'future')}"
@@ -736,7 +736,8 @@
                               <span *ngIf="(order.orderProducts[0].ordersProductStatus =='Shipped' && order.orderProducts[0].deliveryStatus === 0) || order.orderProducts[0].ordersProductStatus =='OutForDelivery' || order.orderProducts[0].ordersProductStatus =='ApprovedAttemptedDelivery' || order.orderProducts[0].ordersProductStatus == 'Partially Dispatched' ">Mark as Delivered</span>
                               <span *ngIf="(order.orderProducts[0].ordersProductStatus =='Shipped' && order.orderProducts[0].deliveryStatus === 1)  || (order.orderProducts[0].ordersProductStatus =='Dispatched' && order.orderProducts[0].deliveryStatus === 1)">Mark as Delivered</span>
                         </button>
-                        <button *ngIf="env.deliveryBoyEnabled === 'false'" class="btn btn-primary actions-button uppercase text-bold text-white bg-green"
+                        <!-- {{deliveryBoyEnabled}} -->
+                        <button *ngIf="deliveryBoyEnabled === 'false'" class="btn btn-primary actions-button uppercase text-bold text-white bg-green"
                         [ngClass]="{'disableBtn' : (order.orderProducts[0].ordersProductStatus =='Shipped' && order.orderProducts[0].deliveryStatus === 1) ||
                         (order.orderProducts[0].ordersProductStatus =='Dispatched' && order.orderProducts[0].deliveryStatus === 1) ||
                         (order.orderProducts[0].ordersProductStatus =='Confirmed' && order.deliverWhen !== 'today' && order.deliverWhen !== 'past' && order.deliverWhen !== 'tomorrow' && order.deliverWhen !== 'future')}"
