@@ -53,6 +53,7 @@ export class LoginComponent implements OnInit {
                 localStorage.setItem('fkAssociateId', "test");
                 localStorage.setItem('associateName', "Test");
                 localStorage.setItem('vendorName', "Test");
+                
                 _this.UtilityService.changeRouteComponent();
                 _this.router.navigate(['/dashboard']);
                 //window.location.reload();
@@ -91,6 +92,7 @@ export class LoginComponent implements OnInit {
                     localStorage.setItem('vendorName', _this.model.username);
                     localStorage.setItem('userType', userType);
                     localStorage.setItem('fkUserId', fkUserId)
+                    localStorage.setItem('deliveryBoyEnabled', _response.result['deliveryBoyEnabled']);
 
                     environment.userType = userType;
                     console.log("detecting user type!");

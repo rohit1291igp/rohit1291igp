@@ -78,7 +78,7 @@ const route: Routes = [
       {path:'', redirectTo:'task', pathMatch:'full'},
       {path: 'task', component: DeliveryTaskComponent},
       {path:'task/:id/:day', component: DeliveryOrderComponent},
-      {path:'delivery/:id', component: OutForDeliveryComponent},
+      {path:'delivery/:id/:day', component: OutForDeliveryComponent},
       {path:'delivered', component: DeliveredComponent},
       {path:'undelivered', component: UnDeliveredComponent},
       {path:'orders-delivered', component: OrdersDeliveredComponent}

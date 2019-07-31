@@ -14,6 +14,7 @@ export const environment = {
   isMobile: window.screen.width < 1000,
   userType: localStorage.getItem('userType'),
   mockAPI: sessionStorage.getItem('mockAPI'),
+  deliveryBoyEnabled: localStorage.getItem('deliveryBoyEnabled') ,
   s3AccessKey : 'AKIAJVEU6UYKL7BCJMZA',
   s3SecretKey : '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', 
   // s3AccessKey : 'AKIAIYVR3IZCNZG4TU4Q',

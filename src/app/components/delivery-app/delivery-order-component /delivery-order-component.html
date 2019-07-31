@@ -10,12 +10,14 @@
     <div class="order-img">
         <div class="actual-img-container">
             <h5>Actual Images</h5>
-            <ng-container *ngIf="order && order?.orderProducts">
-                <ng-container *ngFor="let orderProduct of order?.orderProducts;">
-                    <img class="product-image clk"
-                        src="{{productsURL}}th/{{orderProduct.productImage}}?th={{orderProduct.productUpdateDateTime}}"
-                        alt="product_img"
-                        (click)="imagePreview($event, productsURL+'l/'+(orderProduct.productImage)+'?th='+orderProduct.productUpdateDateTime)">
+            <ng-container *ngIf="order && order.length > 0">
+                <ng-container *ngFor="let x of order;">
+                    <ng-container *ngFor="let imgSrc of x.orderProducts;">
+                            <img class="product-image clk"
+                            src="{{productsURL}}th/{{imgSrc.productImage}}?th={{imgSrc.productUpdateDateTime}}"
+                            alt="product_img"
+                            (click)="imagePreview($event, productsURL+'l/'+(imgSrc.productImage)+'?th='+imgSrc.productUpdateDateTime)">
+                    </ng-container>
                 </ng-container>
             </ng-container>
 

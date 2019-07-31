@@ -23,7 +23,7 @@ export class DeliveryOrderComponent implements OnInit {
     fkAssociateId: string;
     fkUserId: string;
     productId: any[] = [];
-    order: any;
+    order: any = [];
     futureOrder: boolean;
     public orderId: number;
     productsURL = environment.productsURL;
@@ -175,7 +175,12 @@ export class DeliveryOrderComponent implements OnInit {
 
             }
             if (response.result) {
-                this$.order = response.result[0];
+                for(let i=0; i < response.result.length; i++){
+                    if(response.result[i].orderProducts[0].ordersProductStatus === 'Confirmed'){
+                        this$.order.push(response.result[i]);
+                    }
+                }
+                // this$.order = response.result[0];
             }
             
         });

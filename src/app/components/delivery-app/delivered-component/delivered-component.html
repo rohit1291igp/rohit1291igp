@@ -15,13 +15,13 @@
     <!-- Image Section Ends -->
     <!-- Delivery Address -->
     <div class="receiver-details-container">
-        <button [ngStyle]="{background: recipientInfo === 'self' ? '#fff' : ''}"
+        <button [ngStyle]="{background: recipientInfo === 'self' ? '#fff' : '#ccc'}"
             (click)="getRecipientInfo('self')">SELF</button>
-        <button [ngStyle]="{background: recipientInfo === 'neighbor' ? '#fff' : ''}"
+        <button [ngStyle]="{background: recipientInfo === 'neighbor' ? '#fff' : '#ccc'}"
             (click)="getRecipientInfo('neighbor')">NEIGHBOR</button>
-        <button [ngStyle]="{background: recipientInfo === 'securitygaurd' ? '#fff' : ''}"
+        <button [ngStyle]="{background: recipientInfo === 'securitygaurd' ? '#fff' : '#ccc'}"
             (click)="getRecipientInfo('securitygaurd')">SECURITY GUARD</button>
-        <button [ngStyle]="{background: recipientInfo === 'others' ? '#fff' : ''}"
+        <button [ngStyle]="{background: recipientInfo === 'others' ? '#fff' : '#ccc'}"
             (click)="getRecipientInfo('others')">OTHER</button>
     </div>
     <!-- Delivery Address Ends -->
