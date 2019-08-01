@@ -6,6 +6,7 @@ import { FormControl } from '@angular/forms';
 import { map, startWith, takeUntil } from 'rxjs/operators';
 import { interval } from 'rxjs/observable/interval';
 import { timer } from 'rxjs/observable/timer';
+import { Router } from '@angular/router';
 @Component({
     selector: 'app-delivery-task-component',
     templateUrl: './delivery-task-component.html',
@@ -26,7 +27,9 @@ export class DeliveryTaskComponent implements OnInit {
     source = false;
     loading = true;
     browserSupport = false;
-    constructor(private BackendService: BackendService) {
+    deliverWhen:string;
+    orderDetails:any;
+    constructor(private BackendService: BackendService, private router: Router) {
         this.filteredPickedUpOrderId = this.inputSearch.valueChanges.pipe(
             startWith(null),
             map((input: string | null) => input ? this._filterPickedUpOrders(input) : this.pickedUpOrderId.slice()));
@@ -42,7 +45,6 @@ export class DeliveryTaskComponent implements OnInit {
         this.fkAssociateId = localStorage.getItem('fkAssociateId');
         this.fkUserId = localStorage.getItem('fkUserId');
         this.getOrderDetails();
-
         if (window.innerWidth <= 800 || window.innerHeight <= 600) {
             this.browserSupport = true;
         }
@@ -68,6 +70,10 @@ export class DeliveryTaskComponent implements OnInit {
                 return;
             }
             if (response) {
+                // this$.deliverWhen
+                this$.orderDetails = response.result;
+                let status = this$.orderDetails.find(f => f.orderId == orderId);
+                this$.router.navigate([`/delivery-app/task/${orderId}/${status.deliverWhen}`]);
                 this$.getOrderDetails()
                 // _this.orders = response.result;
             }
@@ -97,6 +103,10 @@ export class DeliveryTaskComponent implements OnInit {
                 return;
             }
         });
+    }
+
+    pickOrder(order){
+        this.addToDelivery(order);
     }
 
     private _filterPickedUpOrders(value: string): string[] {

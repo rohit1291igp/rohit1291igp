@@ -32,7 +32,8 @@
                         Pick up ({{orders?.toBePickedFuture.total}}) <i class="fa fa-angle-down"></i></button>
                     <mat-menu #menu="matMenu">
                         <button class="matmenu-btn" *ngFor="let order of orders?.toBePickedFuture?.orderId"
-                            mat-menu-item><a routerLink="/delivery-app/task/{{order}}/tomorrow">{{order}}</a></button>
+                            mat-menu-item (click)="pickOrder(order)">{{order}}</button>
+                            <!-- <a routerLink="/delivery-app/task/{{order}}/future">{{order}}</a> -->
                     </mat-menu>
                 </div>
                 <ng-template #noOrder>No Orders</ng-template>
