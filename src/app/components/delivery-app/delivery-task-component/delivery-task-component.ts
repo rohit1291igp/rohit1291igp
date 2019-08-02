@@ -48,12 +48,6 @@ export class DeliveryTaskComponent implements OnInit {
         if (window.innerWidth <= 800 || window.innerHeight <= 600) {
             this.browserSupport = true;
         }
-
-        // new Promise((resolve, reject) => {
-        //     resolve(this.getOrderDetails());
-        // }).then(() => {
-        //     this.loading = false;
-        // })
     }
 
     addToDelivery(orderId) {
