@@ -1624,18 +1624,18 @@ export class ReportsComponent implements OnInit{
             url : url+paramsStr,
             method : (method || 'post')
         };
-        // _this.BackendService.makeAjax(reqObj, function(err, response, headers){
-        //     //if(!response) response={result:[]};
-        //     if(err || response.error) {
-        //         console.log('Error=============>', err);
-        //         return;
-        //     }
-        //     console.log('admin action Response --->', response.result);
-        //     if(response.result){
-        //       alert('The request was successful.');
-        //         _this.reportAddAction.reportAddActionFlag=false;
-        //     }
-        // });
+        _this.BackendService.makeAjax(reqObj, function(err, response, headers){
+            //if(!response) response={result:[]};
+            if(err || response.error) {
+                console.log('Error=============>', err);
+                return;
+            }
+            console.log('admin action Response --->', response.result);
+            if(response.result){
+              alert('The request was successful.');
+                _this.reportAddAction.reportAddActionFlag=false;
+            }
+        });
     }
 
 }
