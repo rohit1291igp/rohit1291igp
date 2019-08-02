@@ -27,12 +27,13 @@ export class DeliveredComponent implements OnInit {
     statusReasonModel: any = {};
     imagePreviewFlag = false;
     imagePreviewSrc = "";
+    pendingDeliveryOrders: any = [];
     constructor(
-        private BackendService: BackendService, 
-        private router: Router, 
+        private BackendService: BackendService,
+        private router: Router,
         private fb: FormBuilder,
         private dialog: MatDialog
-        ) {
+    ) {
     }
 
     ngOnInit() {
@@ -43,6 +44,7 @@ export class DeliveredComponent implements OnInit {
         this.fkAssociateId = localStorage.getItem('fkAssociateId');
         this.fkUserId = localStorage.getItem('fkUserId');
         this.orderId = Number(localStorage.getItem('orderId'));
+        this.pendingDeliveryOrders = JSON.parse(localStorage.getItem('pendingDeliveryOrders'));
         this.getOrderDetails();
     }
 
@@ -84,27 +86,39 @@ export class DeliveredComponent implements OnInit {
         const myFormattedDate = pipe.transform(now, 'yyyy-MM-dd');
         const recipientInfo = this.myForm.value;
         var this$ = this;
-        const reqObj = {
-            url: `doUpdateOrderStatus?responseType=json&scopeId=1&rejectionType=&rejectionMessage=&recipientInfo=${this$.recipientInfo}&recipientName=${recipientInfo.name}&comments=${recipientInfo.phone}&orderProductIds=${this$.orderProductId[0]}&status=${status}&fkAssociateId=${this$.fkAssociateId}&orderId=${this$.orderId}`,
-            method: "post"
-        };
+        new Promise((resolve) => {
+            let selectedProducts = this$.pendingDeliveryOrders.find(f => f.orderId == this$.orderId);
+            for (let i = 0; i < selectedProducts.selectedProducts.length; i++) {
 
-        this$.BackendService.makeAjax(reqObj, function (err, response, headers) {
+                const reqObj = {
+                    url: `doUpdateOrderStatus?responseType=json&scopeId=1&rejectionType=&rejectionMessage=&recipientInfo=${this$.recipientInfo}&recipientName=${recipientInfo.name}&comments=${recipientInfo.phone}&orderProductIds=${selectedProducts.selectedProducts[i]}&status=${status}&fkAssociateId=${this$.fkAssociateId}&orderId=${this$.orderId}`,
+                    method: "post"
+                };
 
-            if (err || response.error) {
-                console.log('Error=============>', err);
-                return;
+                this$.BackendService.makeAjax(reqObj, function (err, response, headers) {
+
+                    if (err || response.error) {
+                        console.log('Error=============>', err);
+                        return;
+                    }
+
+                    if (response && response.result) {
+                        resolve(response.result);
+                        let updateOrderStorage = JSON.parse(localStorage.getItem('pendingDeliveryOrders'));
+                        updateOrderStorage = updateOrderStorage.filter(i => i.orderId != this$.orderId);
+                        localStorage.setItem('pendingDeliveryOrders', JSON.stringify(updateOrderStorage));
+                    }
+                });
             }
+        }).then((result) => {
+            if (status === 'Delivered') {
+                this$.router.navigate([`/delivery-app/task`])
+            } else {
+                this$.router.navigate([`/delivery-app/undelivered`])
 
-            if (response && response.result) {
-                if (status === 'Delivered') {
-                    this$.router.navigate([`/delivery-app/task`])
-                } else {
-                    this$.router.navigate([`/delivery-app/undelivered`])
-
-                }
             }
-        });
+        })
+
     }
 
     getRecipientInfo(info) {
@@ -163,39 +177,50 @@ export class DeliveredComponent implements OnInit {
     dltUploadedImage(event, fileName) {
         var this$ = this;
         var _orderId = this$.statusReasonModel.orderId;
+        var responseTest = [];
+        for (let i = 0; i < this$.orderProductId.length; i++) {
+            let reqObj = {
+                url: 'filedelete?orderId=' + this$.orderId + '&orderProductId=' + this$.orderProductId[i] + '&filePath=' + fileName,
+                method: 'delete'
+            };
 
-        let reqObj = {
-            url: 'filedelete?orderId=' + this$.orderId + '&orderProductId=' + this$.orderProductId[0] + '&filePath=' + fileName,
-            method: 'delete'
-        };
-
-        this$.BackendService.makeAjax(reqObj, function (err, response, headers) {
-            if (err || response.error) {
-                console.log('Error=============>', err, response.errorCode);
-            }
-            console.log('dltFile Response --->', response.result);
-
-            if (response.result) {
-                for (var i = 0; i < this$.uploadedFiles.length; i++) {
-                    if (this$.uploadedFiles[i] === fileName) {
-                        this$.uploadedFiles.splice(i, 1);
-                    }
+            this$.BackendService.makeAjax(reqObj, function (err, response, headers) {
+                if (err || response.error) {
+                    console.log('Error=============>', err, response.errorCode);
                 }
-            }
-        });
+                console.log('dltFile Response --->', response.result);
+
+                if (response.result) {
+                    // responseTest.push(response.result)
+                    // if(responseTest.length>0 && responseTest.length == this$.orderProductId.length){
+                    for (let i = 0; i < this$.uploadedFiles.length; i++) {
+                        if (this$.uploadedFiles[i] === fileName) {
+                            this$.uploadedFiles.splice(i, 1);
+                        }
+                    }
+                    // }
+                    // for (var i = 0; i < this$.uploadedFiles.length; i++) {
+                    //     if (this$.uploadedFiles[i] === fileName) {
+                    //         this$.uploadedFiles.splice(i, 1);
+                    //     }
+                    // }
+                }
+            });
+        }
+
 
     }
 
-    imagePreview(e, imgSrc){
-        let src = imgSrc.replace('td','l');
+    imagePreview(e, imgSrc) {
+        let src = imgSrc.replace('td', 'l');
         const dialogRef = this.dialog.open(ImgPreviewComponent, {
-            width: screen.availWidth+'px',
-            data: {imgSrc: src}
-          });
-      
-          dialogRef.afterClosed().subscribe(result => {
+            width: screen.availWidth + 'px',
+            data: { imgSrc: src }
+        });
+
+        dialogRef.afterClosed().subscribe(result => {
             console.log('The dialog was closed');
             // this.animal = result;
-          });
+        });
     }
 }

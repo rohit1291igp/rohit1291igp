@@ -40,6 +40,27 @@
     overflow: scroll;
 }
 
+.actual-img-item {
+    width: 76%;
+    border: 1px solid gray;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: row-reverse;
+    margin-top: 7px;
+    padding: 0px;
+}
+.actual-img-checkbox {
+    margin: -2px 0px;
+}
+
+.actual-img-item>img{
+    margin-top: 25px;
+    margin-bottom: 21px;
+    width: 100%;
+    height: 50px;
+    padding-left: 19px;
+}
+
 .taken-images{
     position: relative;
     width: 100%;

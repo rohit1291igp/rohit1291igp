@@ -14,7 +14,7 @@ import { DatePipe } from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgxEditorModule } from 'ngx-editor';
 import { CKEditorModule } from 'ng2-ckeditor';
-import {MatFormFieldModule, MatInputModule, MatCardModule, MatButtonModule, MatMenuModule, MatDialogModule, MatSnackBarModule, MatTableModule, MatPaginatorModule, MatSortModule, MatDialogRef, MAT_DIALOG_DATA, MatIconModule, MatProgressBarModule, MatProgressSpinnerModule} from '@angular/material';
+import {MatFormFieldModule, MatInputModule, MatCardModule, MatButtonModule, MatMenuModule, MatDialogModule, MatSnackBarModule, MatTableModule, MatPaginatorModule, MatSortModule, MatDialogRef, MAT_DIALOG_DATA, MatIconModule, MatProgressBarModule, MatProgressSpinnerModule, MatCheckboxModule} from '@angular/material';
 import {CdkTableModule} from '@angular/cdk/table';
 import { Ng2ImgMaxModule, Ng2ImgMaxService } from 'ng2-img-max';
 // Router and Services
@@ -155,6 +155,7 @@ export function ConfigLoader(envConfig: envConfig) {
     MatIconModule,
     MatProgressBarModule,
     MatProgressSpinnerModule,
+    MatCheckboxModule,
     routing,
     //BsDropdownModule.forRoot(),
     SelectModule,

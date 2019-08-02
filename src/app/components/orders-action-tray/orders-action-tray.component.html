@@ -711,7 +711,7 @@
 
                             <mat-menu #menu="matMenu">
                                 <ng-container *ngFor="let x of deliveryBoyList" >
-                                    <button mat-menu-item *ngIf="order.orderProducts[0].fkUserId !== x.fkUserId" (click)="assignToDeliveryBoy(x, order)">
+                                    <button mat-menu-item *ngIf="order.orderProducts[0].fkUserId !== x.fkUserId && x.Status" (click)="assignToDeliveryBoy(x, order)">
                                         {{x.Full_Name}}
                                     </button>
                                 </ng-container>      
