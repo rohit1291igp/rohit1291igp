@@ -84,49 +84,6 @@ export class DeliveryOrderComponent implements OnInit {
         this$.loading = true;
         let fileList: FileList = event.target.files;
 
-        // const width = 50;
-        // const height = 30;
-        // const fileName = event.target.files[0].name;
-        // const reader = new FileReader();
-        // reader.readAsDataURL(event.target.files[0]);
-        // reader.onload = (event1:any) => {
-        //     const img = new Image();
-        //     img.src = event1.target.result;
-        //     img.onload = () => {
-        //         const elem = document.createElement('canvas');
-        //         elem.width = width;
-        //         elem.height = height;
-        //         const ctx = elem.getContext('2d');
-        //         // img.width and img.height will contain the original dimensions
-        //         ctx.drawImage(img, 0, 0, width, height);
-        //         ctx.canvas.toBlob((blob) => {
-        //             const file = new File([blob], fileName, {
-        //                 type: 'image/jpeg',
-        //                 lastModified: Date.now()
-        //             });
-        //         }, 'image/jpeg', 1);
-        //     },
-        //         reader.onerror = error => console.log(error);
-        // };
-        // var oImg = document.createElement("img");
-        // oImg.setAttribute('src', fileList[0].name);
-        // oImg.setAttribute('alt', 'na');
-        // oImg.setAttribute('height', '1px');
-        // oImg.setAttribute('width', '1px');
-        // // document.body.appendChild(oImg);
-        // let formData = new FormData();
-        // formData.append("file", fileList[i]);
-        // var canvas = document.createElement('canvas')
-        /* ... your canvas manipulations ... */
-        // if (canvas.toBlob) {
-        //     canvas.toBlob(function (blob) {
-        //         // Do something with the blob object,
-        //         // e.g. creating a multipart form for file uploads:
-        //         var formData = new FormData()
-        //         formData.append('file', blob, fileList.name)
-        //         /* ... */
-        //     }, 'image/jpeg')
-        // }
         let file:any;
         new Promise((resolve) => {
             // this$.ng2ImgMax.compressImage(fileList[0], 0.20).subscribe(

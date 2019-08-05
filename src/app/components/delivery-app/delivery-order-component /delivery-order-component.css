@@ -77,9 +77,8 @@
 }
 
 /* width */
-
 ::-webkit-scrollbar {
-    width: 10px;
+    width: 5px;
 }
 
 /* Track */
@@ -142,6 +141,7 @@
     text-align: center;
     overflow: hidden;
     cursor: pointer;
+    border-radius: 35px;
 }
 
 .report-photo-container>.photo>button {
