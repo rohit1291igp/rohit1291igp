@@ -30,7 +30,7 @@ img {
     /* justify-content: space-between; */
     flex-wrap: wrap;
     position: relative;
-    min-height: 220px;
+    /* min-height: 220px; */
     max-height: 221px;
     overflow: auto;
 }
@@ -89,15 +89,17 @@ img {
     display: flex;
     margin: 28px 8px;
     text-align: center;
-    border: 1px solid #000;
+    /* border: 1px solid #000; */
     font-weight: 500;
-    border-radius: 35px;
+    /* border-radius: 35px; */
 }
 
 .delivered-btn> button{
     width: 100%;
     padding: 11px;
     color: #4BB543;
+    border: 1px solid #000;
+    border-radius: 35px;
 }
 
 .uploadedFiles{

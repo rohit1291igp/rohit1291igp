@@ -54,8 +54,16 @@ export class OutForDeliveryComponent implements OnInit {
                 localStorage.setItem('orderId',this$.orderId.toString());
                 this$.headerTitle = `(ORDER ID ${this$.orderId})`;
                 // this$.orderProductId = this$.orderDetails.orderProducts.orderProductId
-                for (let i = 0; i < this$.orderDetails.orderProducts.length; i++) {
-                    this$.orderProductId.push(response.result[0].orderProducts[i].orderProductId);
+                // for (let i = 0; i < this$.orderDetails.orderProducts.length; i++) {
+                //     this$.orderProductId.push(response.result[0].orderProducts[i].orderProductId);
+                // }
+                for (let i = 0; i < response.result.length; i++) {
+                    for (let a = 0; a < response.result[i].orderProducts.length; a++) {
+                        this$.orderProductId.push(response.result[i].orderProducts[a].orderProductId);
+                        if(response.result[i].orderProducts[a].ordersProductStatus != 'OutForDelivery'){
+                            this$.router.navigate(['/delivery-app/task']);
+                        }
+                    }
                 }
             }
         });

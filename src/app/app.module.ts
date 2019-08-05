@@ -79,6 +79,7 @@ import { VoucherModelComponent } from './components/voucher-model/voucher-model.
 import { FilterPipe} from './customPipes/filter.pipe';
 import { SendEmailComponent } from './components/send-email/send-email.component';
 import { DownloadEmailComponent } from './components/download-email/download-email.component';
+import { SelectItemForDelivered } from './components/select-item/select-item.component';
 
 //env config
 /*import {envConfig} from "./others/env.config";
@@ -132,7 +133,8 @@ export function ConfigLoader(envConfig: envConfig) {
     NotificationComponent,
     DeliveryBoyDetailsComponent,
     DeliveryHeaderComponent,
-    ImgPreviewComponent
+    ImgPreviewComponent,
+    SelectItemForDelivered
   ],
   imports: [
     BrowserModule,
@@ -197,7 +199,7 @@ export function ConfigLoader(envConfig: envConfig) {
     S3UploadService,
     Ng2ImgMaxService
   ],
-  entryComponents:[UploadExcelComponent,NotificationComponent, ImgPreviewComponent],
+  entryComponents:[UploadExcelComponent,NotificationComponent, ImgPreviewComponent, SelectItemForDelivered],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -6,6 +6,9 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { HttpHeaders } from '@angular/common/http';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialog } from '@angular/material';
 import { ImgPreviewComponent } from 'app/components/img-preview/img-preview.component';
+import { environment } from 'environments/environment';
+import { resolve } from 'url';
+import { SelectItemForDelivered } from 'app/components/select-item/select-item.component';
 
 
 @Component({
@@ -46,6 +49,7 @@ export class DeliveredComponent implements OnInit {
         this.fkUserId = localStorage.getItem('fkUserId');
         this.orderId = Number(localStorage.getItem('orderId'));
         this.pendingDeliveryOrders = JSON.parse(localStorage.getItem('pendingDeliveryOrders'));
+
         this.getOrderDetails();
         const img = document.querySelector('img')
         if (img) {
@@ -58,6 +62,20 @@ export class DeliveredComponent implements OnInit {
                 });
             }
         }
+    }
+
+    openSelectItemDialog(OrderData): void {
+        const dialogRef = this.dialog.open(SelectItemForDelivered, {
+            width: '500px',
+            data: OrderData,
+            disableClose: true
+        });
+
+        dialogRef.afterClosed().subscribe(result => {
+        this.pendingDeliveryOrders = JSON.parse(localStorage.getItem('pendingDeliveryOrders'));
+            console.log('The dialog was closed', result);
+            //   this.animal = result;
+        });
     }
 
     getOrderDetails() {
@@ -82,9 +100,21 @@ export class DeliveredComponent implements OnInit {
                 this$.orderDetails = response.result[0];
                 this$.orderId = this$.orderDetails.orderId;
                 this$.headerTitle = `Task 1 (ORDER ID ${this$.orderId})`;
+                let pendingDeliveryOrders = localStorage.getItem('pendingDeliveryOrders') ? JSON.parse(localStorage.getItem('pendingDeliveryOrders')) : [];
+                if (!pendingDeliveryOrders.find(i => i.orderId === this$.orderId)) {
+                    this$.openSelectItemDialog(response.result);
+                }
                 // this$.orderProductId = this$.orderDetails.orderProducts.orderProductId
-                for (let i = 0; i < this$.orderDetails.orderProducts.length; i++) {
-                    this$.orderProductId.push(response.result[0].orderProducts[i].orderProductId);
+                // for (let i = 0; i < this$.orderDetails.orderProducts.length; i++) {
+                //     this$.orderProductId.push(response.result[0].orderProducts[i].orderProductId);
+                // }
+                for (let i = 0; i < response.result.length; i++) {
+                    for (let a = 0; a < response.result[i].orderProducts.length; a++) {
+                        this$.orderProductId.push(response.result[i].orderProducts[a].orderProductId);
+                        if (response.result[i].orderProducts[a].ordersProductStatus != 'OutForDelivery') {
+                            this$.router.navigate(['/delivery-app/task']);
+                        }
+                    }
                 }
             }
         });

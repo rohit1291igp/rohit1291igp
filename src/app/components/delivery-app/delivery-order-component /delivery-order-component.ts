@@ -206,6 +206,9 @@ export class DeliveryOrderComponent implements OnInit {
                     }
                     for (let a = 0; a < response.result[i].orderProducts.length; a++) {
                         this$.productId.push(response.result[i].orderProducts[a].orderProductId);
+                        if(response.result[i].orderProducts[a].ordersProductStatus != 'Confirmed'){
+                            this$.router.navigate(['/delivery-app/task']);
+                        }
                     }
                 }
                 // this$.order = response.result[0];
