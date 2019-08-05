@@ -41,9 +41,8 @@ img {
 }
 
 .undelivered-btn {
-    margin: 56px 0px;
+    margin: 56px 8px;
     text-align: center;
-    border: 1px solid #000;
     color: #4BB543;
     font-weight: 500;
 }
@@ -51,6 +50,8 @@ img {
 .undelivered-btn>button {
     width: 100%;
     padding: 11px;
+    border: 1px solid #000;
+    border-radius: 35px;
 }
 textarea{
     border: 1px solid #000;

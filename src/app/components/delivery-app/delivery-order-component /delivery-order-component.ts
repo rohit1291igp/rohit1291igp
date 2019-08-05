@@ -10,8 +10,7 @@ import { MatDialog } from '@angular/material';
 import { ImgPreviewComponent } from 'app/components/img-preview/img-preview.component';
 import { Ng2ImgMaxService } from 'ng2-img-max';
 import { DomSanitizer } from '@angular/platform-browser';
-
-
+import * as toBlob from 'blueimp-canvas-to-blob';
 @Component({
     selector: 'app-delivery-order-component',
     templateUrl: './delivery-order-component.html',
@@ -34,7 +33,7 @@ export class DeliveryOrderComponent implements OnInit {
     imagePreviews: any = [];
     loading = true;
     selectProductsForDelivery = [];
-    checked =[]
+    checked = []
     constructor(
         private route: ActivatedRoute,
         public BackendService: BackendService,
@@ -83,32 +82,55 @@ export class DeliveryOrderComponent implements OnInit {
     fileChange(event) {
         var this$ = this;
         this$.loading = true;
-        var fileOverSizeFlag = false;
         let fileList: FileList = event.target.files;
+
+        let file:any;
         new Promise((resolve) => {
-            this$.ng2ImgMax.compressImage(fileList[0], 0.20).subscribe(
-                result => {
-                    const uploadedImage = new File([result], result.name);
-                    fileList = [uploadedImage] as any;
-                    resolve(true)
-                    // this$.getImagePreview(uploadedImage);
+            // this$.ng2ImgMax.compressImage(fileList[0], 0.20).subscribe(
+            //     result => {
+            //         const uploadedImage = new File([result], result.name);
+            //         fileList = [uploadedImage] as any;
+            //         resolve(true)
+            //         // this$.getImagePreview(uploadedImage);
+            //     },
+            //     error => {
+            //         console.log('😢 Oh no!', error);
+            //     }
+            // );
+            const width = 100;
+            const height = 100;
+            const fileName = event.target.files[0].name;
+            const reader = new FileReader();
+            reader.readAsDataURL(event.target.files[0]);
+            reader.onload = (event1: any) => {
+                const img = new Image();
+                img.src = event1.target.result;
+                img.onload = () => {
+                    const elem = document.createElement('canvas');
+                    elem.width = width;
+                    elem.height = height;
+                    const ctx = elem.getContext('2d');
+                    // img.width and img.height will contain the original dimensions
+                    ctx.drawImage(img, 0, 0, width, height);
+                    ctx.canvas.toBlob((blob) => {
+                        file = new File([blob], fileName, {
+                            type: 'image/png',
+                            lastModified: Date.now()
+                        });
+                        resolve(true);
+                    }, 'image/png', 1);
                 },
-                error => {
-                    console.log('😢 Oh no!', error);
-                }
-            );
+                    reader.onerror = error => console.log(error);
+            };
         }).then(() => {
             if (fileList.length > 0) {
-                let file: File = fileList[0];
-                let formData = new FormData();
-                for (var i = 0; i < fileList.length; i++) {
 
-                    // if ((fileList[i].size / 1000000) > 5) {
-                    //     fileOverSizeFlag = true;
-                    //     break;
-                    // }
-                    formData.append("file" + i, fileList[i]);
-                }
+                // let file: File = fileList[0];
+                let formData = new FormData();
+                // for (var i = 0; i < fileList.length; i++) {
+                //     formData.append("file" + i, fileList[i]);
+                // }
+                formData.append("file", file);
 
                 const httpOptions = {
                     headers: new HttpHeaders({
@@ -184,6 +206,9 @@ export class DeliveryOrderComponent implements OnInit {
                     }
                     for (let a = 0; a < response.result[i].orderProducts.length; a++) {
                         this$.productId.push(response.result[i].orderProducts[a].orderProductId);
+                        if(response.result[i].orderProducts[a].ordersProductStatus != 'Confirmed'){
+                            this$.router.navigate(['/delivery-app/task']);
+                        }
                     }
                 }
                 // this$.order = response.result[0];
@@ -279,8 +304,8 @@ export class DeliveryOrderComponent implements OnInit {
         var this$ = this;
         this$.loading = true;
         let pendingDeliveryOrders = localStorage.getItem('pendingDeliveryOrders') ? JSON.parse(localStorage.getItem('pendingDeliveryOrders')) : [];
-        pendingDeliveryOrders.push({'orderId': this$.orderId, selectedProducts:this$.selectProductsForDelivery});
-        pendingDeliveryOrders = pendingDeliveryOrders.filter(function(item, pos, self) {
+        pendingDeliveryOrders.push({ 'orderId': this$.orderId, selectedProducts: this$.selectProductsForDelivery });
+        pendingDeliveryOrders = pendingDeliveryOrders.filter(function (item, pos, self) {
             return self.indexOf(item) == pos;
         });
         let pipe = new DatePipe('en-US');
@@ -382,8 +407,8 @@ export class DeliveryOrderComponent implements OnInit {
     selectItemForDelivery(item, selected) {
         if (selected) {
             this.selectProductsForDelivery.push(item);
-            
-            this.selectProductsForDelivery = this.selectProductsForDelivery.filter(function(item, pos, self) {
+
+            this.selectProductsForDelivery = this.selectProductsForDelivery.filter(function (item, pos, self) {
                 return self.indexOf(item) == pos;
             });
             console.log(item);

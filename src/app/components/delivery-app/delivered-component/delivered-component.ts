@@ -6,6 +6,9 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { HttpHeaders } from '@angular/common/http';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialog } from '@angular/material';
 import { ImgPreviewComponent } from 'app/components/img-preview/img-preview.component';
+import { environment } from 'environments/environment';
+import { resolve } from 'url';
+import { SelectItemForDelivered } from 'app/components/select-item/select-item.component';
 
 
 @Component({
@@ -28,6 +31,7 @@ export class DeliveredComponent implements OnInit {
     imagePreviewFlag = false;
     imagePreviewSrc = "";
     pendingDeliveryOrders: any = [];
+    loading = true;
     constructor(
         private BackendService: BackendService,
         private router: Router,
@@ -45,11 +49,38 @@ export class DeliveredComponent implements OnInit {
         this.fkUserId = localStorage.getItem('fkUserId');
         this.orderId = Number(localStorage.getItem('orderId'));
         this.pendingDeliveryOrders = JSON.parse(localStorage.getItem('pendingDeliveryOrders'));
+
         this.getOrderDetails();
+        const img = document.querySelector('img')
+        if (img) {
+            if (img && img.complete) {
+                this.loaded()
+            } else {
+                img.addEventListener('load', this.loaded)
+                img.addEventListener('error', function () {
+                    alert('error')
+                });
+            }
+        }
+    }
+
+    openSelectItemDialog(OrderData): void {
+        const dialogRef = this.dialog.open(SelectItemForDelivered, {
+            width: '500px',
+            data: OrderData,
+            disableClose: true
+        });
+
+        dialogRef.afterClosed().subscribe(result => {
+        this.pendingDeliveryOrders = JSON.parse(localStorage.getItem('pendingDeliveryOrders'));
+            console.log('The dialog was closed', result);
+            //   this.animal = result;
+        });
     }
 
     getOrderDetails() {
         var this$ = this;
+        this$.loading = true;
         const reqObj = {
             url: `getOrder?responseType=json&scopeId=1&fkassociateId=${this$.fkAssociateId}&orderId=${this$.orderId}`,
             method: "get"
@@ -69,9 +100,21 @@ export class DeliveredComponent implements OnInit {
                 this$.orderDetails = response.result[0];
                 this$.orderId = this$.orderDetails.orderId;
                 this$.headerTitle = `Task 1 (ORDER ID ${this$.orderId})`;
+                let pendingDeliveryOrders = localStorage.getItem('pendingDeliveryOrders') ? JSON.parse(localStorage.getItem('pendingDeliveryOrders')) : [];
+                if (!pendingDeliveryOrders.find(i => i.orderId === this$.orderId)) {
+                    this$.openSelectItemDialog(response.result);
+                }
                 // this$.orderProductId = this$.orderDetails.orderProducts.orderProductId
-                for (let i = 0; i < this$.orderDetails.orderProducts.length; i++) {
-                    this$.orderProductId.push(response.result[0].orderProducts[i].orderProductId);
+                // for (let i = 0; i < this$.orderDetails.orderProducts.length; i++) {
+                //     this$.orderProductId.push(response.result[0].orderProducts[i].orderProductId);
+                // }
+                for (let i = 0; i < response.result.length; i++) {
+                    for (let a = 0; a < response.result[i].orderProducts.length; a++) {
+                        this$.orderProductId.push(response.result[i].orderProducts[a].orderProductId);
+                        if (response.result[i].orderProducts[a].ordersProductStatus != 'OutForDelivery') {
+                            this$.router.navigate(['/delivery-app/task']);
+                        }
+                    }
                 }
             }
         });
@@ -134,45 +177,133 @@ export class DeliveredComponent implements OnInit {
 
     fileChange(event) {
         var this$ = this;
-        var fileOverSizeFlag = false;
+        this$.loading = true;
         let fileList: FileList = event.target.files;
-        if (fileList.length > 0) {
-            let file: File = fileList[0];
-            let formData = new FormData();
-            for (var i = 0; i < fileList.length; i++) {
-                if ((fileList[i].size / 1000000) > 5) {
-                    fileOverSizeFlag = true;
-                    break;
-                }
-                formData.append("file" + i, fileList[i]);
+
+        let file: any;
+        new Promise((resolve) => {
+            // this$.ng2ImgMax.compressImage(fileList[0], 0.20).subscribe(
+            //     result => {
+            //         const uploadedImage = new File([result], result.name);
+            //         fileList = [uploadedImage] as any;
+            //         resolve(true)
+            //         // this$.getImagePreview(uploadedImage);
+            //     },
+            //     error => {
+            //         console.log('😢 Oh no!', error);
+            //     }
+            // );
+            const width = 100;
+            const height = 100;
+            const fileName = event.target.files[0].name;
+            const reader = new FileReader();
+            reader.readAsDataURL(event.target.files[0]);
+            reader.onload = (event1: any) => {
+                const img = new Image();
+                img.src = event1.target.result;
+                img.onload = () => {
+                    const elem = document.createElement('canvas');
+                    elem.width = width;
+                    elem.height = height;
+                    const ctx = elem.getContext('2d');
+                    // img.width and img.height will contain the original dimensions
+                    ctx.drawImage(img, 0, 0, width, height);
+                    ctx.canvas.toBlob((blob) => {
+                        file = new File([blob], fileName, {
+                            type: 'image/png',
+                            lastModified: Date.now()
+                        });
+                        resolve(true);
+                    }, 'image/png', 1);
+                },
+                    reader.onerror = error => console.log(error);
+            };
+        }).then(() => {
+            if (fileList.length > 0) {
+
+                // let file: File = fileList[0];
+                let formData = new FormData();
+                // for (var i = 0; i < fileList.length; i++) {
+                //     formData.append("file" + i, fileList[i]);
+                // }
+                formData.append("file", file);
+
+                const httpOptions = {
+                    headers: new HttpHeaders({
+                        'Accept': 'application/x-www-form-urlencoded',
+                        'Content-Type': 'application/json'
+                    })
+                };
+
+                let response;
+                // for (let i = 0; i < this$.productId.length; i++) {
+                response = null;
+                let reqObj = {
+                    url: 'fileupload?orderId=' + this$.orderId + '&orderProductId=' + this$.orderProductId[0] + '&status=' + 'OutForDelivery',
+                    method: "post",
+                    payload: formData,
+                    options: httpOptions
+                };
+
+                this$.BackendService.makeAjax(reqObj, function (err, response, headers) {
+                    if (err || response.error) {
+                        console.log('Error=============>', err, response.errorCode);
+                    }
+                    console.log('sidePanel Response --->', response.result);
+
+                    // this$.resizeImage(response.result.uploadedFilePath['OutForDelivery'])
+                    if (!response.error && response.result && response.result.uploadedFilePath) {
+                        const uploadedFileList = response.result.uploadedFilePath['OutForDelivery'];
+                        this$.uploadedFiles = uploadedFileList;
+                    }
+                });
             }
+        })
 
-            const httpOptions = {
-                headers: new HttpHeaders({
-                    'Accept': 'application/x-www-form-urlencoded',
-                    'Content-Type': 'application/json'
-                })
-            };
 
-            let reqObj = {
-                url: 'fileupload?orderId=' + this$.orderId + '&orderProductId=' + this$.orderProductId[0] + '&status=' + 'OutForDelivery',
-                method: "post",
-                payload: formData,
-                options: httpOptions
-            };
-
-            this$.BackendService.makeAjax(reqObj, function (err, response, headers) {
-                if (err || response.error) {
-                    console.log('Error=============>', err, response.errorCode);
-                }
-                console.log('sidePanel Response --->', response.result);
-                this$.uploadedFiles = [];
-                const uploadedFileList = response.result.uploadedFilePath['OutForDelivery'];
-                this$.uploadedFiles = uploadedFileList;
-            });
-
-        }
     }
+    loaded() {
+        this.loading = false;
+    }
+
+    // fileChange(event) {
+    //     var this$ = this;
+    //     var fileOverSizeFlag = false;
+    //     let fileList: FileList = event.target.files;
+    //     if (fileList.length > 0) {
+    //         let file: File = fileList[0];
+    //         let formData = new FormData();
+    //         for (var i = 0; i < fileList.length; i++) {
+
+    //             formData.append("file" + i, fileList[i]);
+    //         }
+
+    //         const httpOptions = {
+    //             headers: new HttpHeaders({
+    //                 'Accept': 'application/x-www-form-urlencoded',
+    //                 'Content-Type': 'application/json'
+    //             })
+    //         };
+
+    //         let reqObj = {
+    //             url: 'fileupload?orderId=' + this$.orderId + '&orderProductId=' + this$.orderProductId[0] + '&status=' + 'OutForDelivery',
+    //             method: "post",
+    //             payload: formData,
+    //             options: httpOptions
+    //         };
+
+    //         this$.BackendService.makeAjax(reqObj, function (err, response, headers) {
+    //             if (err || response.error) {
+    //                 console.log('Error=============>', err, response.errorCode);
+    //             }
+    //             console.log('sidePanel Response --->', response.result);
+    //             this$.uploadedFiles = [];
+    //             const uploadedFileList = response.result.uploadedFilePath['OutForDelivery'];
+    //             this$.uploadedFiles = uploadedFileList;
+    //         });
+
+    //     }
+    // }
 
     dltUploadedImage(event, fileName) {
         var this$ = this;
