@@ -76,9 +76,10 @@ export class UnDeliveredComponent implements OnInit {
                         this$.orderProductId.push(orderProductIds[a].orderProductId);
                         if (orderProductIds[a].ordersProductStatus == 'OutForDelivery') {
                             this$.cancelOrderProductId.push(orderProductIds[a].orderProductId);
-                        } else {
-                            this$.router.navigate(['/delivery-app/task']);
-                        }
+                        } 
+                        // else {
+                        //     this$.router.navigate(['/delivery-app/task']);
+                        // }
                     }
                 }
             }
@@ -125,10 +126,10 @@ export class UnDeliveredComponent implements OnInit {
         let pipe = new DatePipe('en-US');
         const now = Date.now();
         const myFormattedDate = pipe.transform(now, 'yyyy-MM-dd');
-        var orderProductId: any;
-        let responseTest = [];
+        
         new Promise((resolve) => {
             let selectedProducts = this$.pendingDeliveryOrders.find(f => f.orderId == this$.orderId);
+
             for (let i = 0; i < selectedProducts.selectedProducts.length; i++) {
                 const reqObj = {
                     url: `doUpdateOrderStatus?responseType=json&scopeId=1&rejectionType=${rejectionTypeToReasonCode}&rejectionMessage=${this$.undeliveredReason === 'Other' ? this$.textareaValue : this$.undeliveredReason}&recipientInfo=&recipientName=&comments=${this$.undeliveredReason === 'Other' ? this$.textareaValue : this$.undeliveredReason}&orderProductIds=${selectedProducts.selectedProducts[i]}&status=${status}&fkAssociateId=${this$.fkAssociateId}&orderId=${this$.orderId}`,
@@ -146,17 +147,16 @@ export class UnDeliveredComponent implements OnInit {
                         let updateOrderStorage = JSON.parse(localStorage.getItem('pendingDeliveryOrders'));
                         updateOrderStorage = updateOrderStorage.filter(i => i.orderId != this$.orderId);
                         localStorage.setItem('pendingDeliveryOrders', JSON.stringify(updateOrderStorage));
-                        responseTest.push(response.result);
-                        // if(responseTest.length > 0 && responseTest.length ==  this$.pendingDeliveryOrders.length){
-                        resolve(true)
-                        // }
+
+                        if (i === (selectedProducts.selectedProducts.length - 1)) {
+                            resolve(true)
+                        }
                     }
                 });
             }
         }).then(() => {
             this$.router.navigate([`/delivery-app`]);
         })
-
 
     }
 

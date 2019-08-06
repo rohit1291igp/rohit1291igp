@@ -1,13 +1,13 @@
 <div class="actual-img-container">
         <h5>Please Select Items to be delivered</h5>
-        <ng-container *ngIf="order && order.length > 0">
+        <ng-container *ngIf="data && data.length > 0">
             <div class="actual-img">
-                <ng-container *ngFor="let x of order;">
-                    <ng-container *ngFor="let imgSrc of x.orderProducts; let i =index">
+                <ng-container *ngFor="let x of data;">
+                    <ng-container *ngFor="let imgSrc of x.orderProducts; let i=index">
                         <div class="actual-img-item">
                             <div class="actual-img-checkbox">
                                 <mat-checkbox class="example-margin" [(ngModel)]="checked[i]"
-                                    (ngModelChange)="selectItemForDelivery(imgSrc.orderProductId, checked)">
+                                    (ngModelChange)="selectItemForDelivery(i)">
                                 </mat-checkbox>
                             </div>
                             <img class="product-image clk"
