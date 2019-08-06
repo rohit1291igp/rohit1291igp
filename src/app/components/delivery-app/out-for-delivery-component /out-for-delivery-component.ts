@@ -60,9 +60,9 @@ export class OutForDeliveryComponent implements OnInit {
                 for (let i = 0; i < response.result.length; i++) {
                     for (let a = 0; a < response.result[i].orderProducts.length; a++) {
                         this$.orderProductId.push(response.result[i].orderProducts[a].orderProductId);
-                        if(response.result[i].orderProducts[a].ordersProductStatus != 'OutForDelivery'){
-                            this$.router.navigate(['/delivery-app/task']);
-                        }
+                        // if(response.result[i].orderProducts[a].ordersProductStatus != 'OutForDelivery'){
+                        //     this$.router.navigate(['/delivery-app/task']);
+                        // }
                     }
                 }
             }

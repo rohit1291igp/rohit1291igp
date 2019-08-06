@@ -206,9 +206,9 @@ export class DeliveryOrderComponent implements OnInit {
                     }
                     for (let a = 0; a < response.result[i].orderProducts.length; a++) {
                         this$.productId.push(response.result[i].orderProducts[a].orderProductId);
-                        if(response.result[i].orderProducts[a].ordersProductStatus != 'Confirmed'){
-                            this$.router.navigate(['/delivery-app/task']);
-                        }
+                        // if(response.result[i].orderProducts[a].ordersProductStatus != 'Confirmed'){
+                        //     this$.router.navigate(['/delivery-app/task']);
+                        // }
                     }
                 }
                 // this$.order = response.result[0];
@@ -304,15 +304,20 @@ export class DeliveryOrderComponent implements OnInit {
         var this$ = this;
         this$.loading = true;
         let pendingDeliveryOrders = localStorage.getItem('pendingDeliveryOrders') ? JSON.parse(localStorage.getItem('pendingDeliveryOrders')) : [];
-        pendingDeliveryOrders.push({ 'orderId': this$.orderId, selectedProducts: this$.selectProductsForDelivery });
-        pendingDeliveryOrders = pendingDeliveryOrders.filter(function (item, pos, self) {
-            return self.indexOf(item) == pos;
-        });
+
+        if(this$.selectProductsForDelivery.length > 0){
+            pendingDeliveryOrders.push({ 'orderId': this$.orderId, selectedProducts: this$.selectProductsForDelivery });
+            pendingDeliveryOrders = pendingDeliveryOrders.filter(function (item, pos, self) {
+                return self.indexOf(item) == pos;
+            });
+        }
+        
         let pipe = new DatePipe('en-US');
         const now = Date.now();
         const myFormattedDate = pipe.transform(now, 'yyyy-MM-dd');
         var responseTest = [];
         localStorage.setItem('pendingDeliveryOrders', JSON.stringify(pendingDeliveryOrders));
+        
         for (let i = 0; i < this$.selectProductsForDelivery.length; i++) {
             const reqObj = {
                 url: `doUpdateOrderStatus?responseType=json&scopeId=1&rejectionType=&rejectionMessage=&recipientInfo=&recipientName=&comments=&orderProductIds=${this$.selectProductsForDelivery[i]}&status=OutForDelivery&fkAssociateId=${this$.fkAssociateId}&orderId=${this$.orderId}`,
@@ -321,14 +326,16 @@ export class DeliveryOrderComponent implements OnInit {
             this$.BackendService.makeAjax(reqObj, function (err, response, headers) {
 
                 if (err || response.error) {
-                    console.log('Error=============>', err);
-                    return;
+                    if (i === (this$.selectProductsForDelivery.length-1)) {
+                        this$.router.navigate([`/delivery-app`]);
+                        return;
+                    }
                 }
                 if (response && !response.error) {
                     // this$.router.navigate([`/delivery-app/delivery/${this$.orderId}`])
                     responseTest.push(response);
-                    if (responseTest.length > 0 && responseTest.length == this$.productId.length) {
-                        this$.router.navigate([`/delivery-app`])
+                    if (i === (this$.selectProductsForDelivery.length-1)) {
+                        this$.router.navigate([`/delivery-app`]);
                     }
                     // this$.router.navigate([`/delivery-app`])
                 }
@@ -404,14 +411,12 @@ export class DeliveryOrderComponent implements OnInit {
         });
     }
 
-    selectItemForDelivery(item, selected) {
-        if (selected) {
-            this.selectProductsForDelivery.push(item);
-
-            this.selectProductsForDelivery = this.selectProductsForDelivery.filter(function (item, pos, self) {
-                return self.indexOf(item) == pos;
-            });
-            console.log(item);
+    selectItemForDelivery(index) {
+        this.selectProductsForDelivery = this.order.flatMap(m => m.orderProducts.flatMap(i => i.orderProductId))
+        for (let i = 0, len =this.selectProductsForDelivery.length; i < len; i++) {
+            if (!this.checked[i]) {
+                this.selectProductsForDelivery.splice(index, 1);
+            }
         }
     }
 }

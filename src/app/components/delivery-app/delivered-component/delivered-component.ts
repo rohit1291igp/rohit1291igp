@@ -111,9 +111,9 @@ export class DeliveredComponent implements OnInit {
                 for (let i = 0; i < response.result.length; i++) {
                     for (let a = 0; a < response.result[i].orderProducts.length; a++) {
                         this$.orderProductId.push(response.result[i].orderProducts[a].orderProductId);
-                        if (response.result[i].orderProducts[a].ordersProductStatus != 'OutForDelivery') {
-                            this$.router.navigate(['/delivery-app/task']);
-                        }
+                        // if (response.result[i].orderProducts[a].ordersProductStatus != 'OutForDelivery') {
+                        //     this$.router.navigate(['/delivery-app/task']);
+                        // }
                     }
                 }
             }
@@ -146,14 +146,16 @@ export class DeliveredComponent implements OnInit {
                     }
 
                     if (response && response.result) {
-                        resolve(response.result);
                         let updateOrderStorage = JSON.parse(localStorage.getItem('pendingDeliveryOrders'));
                         updateOrderStorage = updateOrderStorage.filter(i => i.orderId != this$.orderId);
                         localStorage.setItem('pendingDeliveryOrders', JSON.stringify(updateOrderStorage));
+                        if (i === (selectedProducts.selectedProducts.length - 1)) {
+                            resolve(true)
+                        }
                     }
                 });
             }
-        }).then((result) => {
+        }).then(() => {
             if (status === 'Delivered') {
                 this$.router.navigate([`/delivery-app/task`])
             } else {

@@ -4,7 +4,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material";
 
 @Component({
     selector: 'select-item-component',
-    templateUrl:'./select-item.component.html',
+    templateUrl: './select-item.component.html',
     styleUrls: ['./select-item.component.css']
 
 })
@@ -20,31 +20,31 @@ export class SelectItemForDelivered implements OnInit {
     ngOnInit() {
         if (this.data) {
             this.order = this.data;
-            console.log(this.data)
         }
     }
 
-    selectItemForDelivery(item, selected) {
-        if (selected) {
-            this.selectProductsForDelivery.push(item);
-
-            this.selectProductsForDelivery = this.selectProductsForDelivery.filter(function (item, pos, self) {
-                return self.indexOf(item) == pos;
-            });
-            console.log(item);
+    selectItemForDelivery(index) {
+        this.selectProductsForDelivery = this.data.flatMap(m => m.orderProducts.flatMap(i => i.orderProductId))
+        for (let i = 0, len =this.selectProductsForDelivery.length; i < len; i++) {
+            if (!this.checked[i]) {
+                this.selectProductsForDelivery.splice(index, 1);
+            }
         }
     }
 
     submit() {
         new Promise((resolve) => {
-            let orderId = Number(localStorage.getItem('orderId'));
-            let pendingDeliveryOrders = localStorage.getItem('pendingDeliveryOrders') ? JSON.parse(localStorage.getItem('pendingDeliveryOrders')) : [];
-            pendingDeliveryOrders.push({ 'orderId': orderId, selectedProducts: this.selectProductsForDelivery });
-            pendingDeliveryOrders = pendingDeliveryOrders.filter(function (item, pos, self) {
-                return self.indexOf(item) == pos;
-            });
-            localStorage.setItem('pendingDeliveryOrders', JSON.stringify(pendingDeliveryOrders));
-            pendingDeliveryOrders.length > 0 && resolve(true);
+            if(this.selectProductsForDelivery.length){
+                let orderId = Number(localStorage.getItem('orderId'));
+                let pendingDeliveryOrders = localStorage.getItem('pendingDeliveryOrders') ? JSON.parse(localStorage.getItem('pendingDeliveryOrders')) : [];
+                pendingDeliveryOrders.push({ 'orderId': orderId, selectedProducts: this.selectProductsForDelivery });
+                pendingDeliveryOrders = pendingDeliveryOrders.filter(function (item, pos, self) {
+                    return self.indexOf(item) == pos;
+                });
+                localStorage.setItem('pendingDeliveryOrders', JSON.stringify(pendingDeliveryOrders));
+                resolve(true);
+            }
+            
         }).then(() => {
             this.dialogRef.close();
         })
