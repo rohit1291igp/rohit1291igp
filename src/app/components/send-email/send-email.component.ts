@@ -57,9 +57,11 @@ export class SendEmailComponent implements OnInit {
       { issue: 'Address Related', value: 'AddressRelated'},
       { issue: 'Customer Not Found', value: 'CustomerNotFound'},
       { issue: 'EGV E-Mails and SMS', value: 'egvmails'},
-      { issue: 'DISPATCH STATUS', value: 'dispatchStatus'},
-      { issue: 'IN TRANSIT', value: 'inTransit'},
-      { issue: 'INCOMPLETREFUND INITIATEDIN TRANSIT', value: 'refundInitiated'}
+      { issue: 'Dispatch Status', value: 'dispatchStatus'},
+      { issue: 'In Transit', value: 'inTransit'},
+      { issue: 'Incomplete Details', value: 'incompleteDetails'},
+      { issue: 'Refund Initiated', value: 'refundInitiated'}
+
     ],
     selectedIssue: ''
   };
