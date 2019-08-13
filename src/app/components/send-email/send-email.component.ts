@@ -60,8 +60,8 @@ export class SendEmailComponent implements OnInit {
       { issue: 'Dispatch Status', value: 'dispatchStatus'},
       { issue: 'In Transit', value: 'inTransit'},
       { issue: 'Incomplete Details', value: 'incompleteDetails'},
-      { issue: 'Refund Initiated', value: 'refundInitiated'}
-
+      { issue: 'Refund Initiated', value: 'refundInitiated'},
+      { issue: 'Generic Mail', value: 'genericmail'}
     ],
     selectedIssue: ''
   };
