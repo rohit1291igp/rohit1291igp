@@ -172,6 +172,7 @@ export class ReportsComponent implements OnInit{
   public env = environment;
   public isUploading = false;
   public isAddImage = true;
+  vendorList=[];
   searchResultModel:any={};
   confirmFlag=false;
   associateId = localStorage.getItem('fkAssociateId');
@@ -200,6 +201,7 @@ export class ReportsComponent implements OnInit{
   listOfBarcodes = [];
   uploadedImages = [];
   durationInSeconds = 5;
+  deliveryBoyList:any;
   constructor(
       private _elementRef: ElementRef,
       public reportsService: ReportsService,
@@ -315,7 +317,29 @@ export class ReportsComponent implements OnInit{
             _this.getBarcodeList();
           }
       });
+    //   _this.getDeliveryBoyList();
+    _this.getVendorList();
   }
+
+getDeliveryBoyList(){
+    var _this = this
+    // _this.deliveryBoyAssignBtnText = false;
+    const reqObj = {
+        url: `deliveryBoyDetails?fkAssociateId=${localStorage.getItem('fkAssociateId')}&endLimit=100&fkUserId=`,
+        method: "get",
+        payload: {}
+    };
+    _this.BackendService.makeAjax(reqObj, function (err, response, headers) {
+        //if(!response) response={result:[]};
+        if (err || response.error) {
+            console.log('Error=============>', err);
+            return;
+        }
+        if (response && response.tableData) {
+            _this.deliveryBoyList = response.tableData;
+        }
+    });
+}
 
   ngOnDestroy(){
       this.BackendService.abortLastHttpCall();
@@ -1635,6 +1659,88 @@ export class ReportsComponent implements OnInit{
               alert('The request was successful.');
                 _this.reportAddAction.reportAddActionFlag=false;
             }
+        });
+    }
+
+    assignToDeliveryBoy(data, orderData){
+        var _this = this
+        const fkAssociateId = localStorage.getItem('fkAssociateId');
+        const orderId = orderData.orderId;
+        var orderProductMap = {};
+        orderProductMap[orderId] = orderData.orderProducts[0].productId ;
+        const reqObj = {
+            url: `assignReassignOrderDeliveryBoy`,
+            method: "post",
+            payload: {
+                fkAssociateId: fkAssociateId,
+                fkUserId: data.fkUserId,
+                orderProductMap: orderProductMap,
+                action: "assign"
+            }
+        };
+        _this.BackendService.makeAjax(reqObj, function (err, response, headers) {
+            //if(!response) response={result:[]};
+            if (err || response.error) {
+                console.log('Error=============>', err);
+                return;
+            }
+            if (response) {
+                console.log(response);
+            }
+        });
+    }
+
+    getVendorList(){
+        let _this=this;
+        /*
+        let paramsObj={
+            pincode:"",
+            shippingType:""
+        };
+        let paramsStr = _this.UtilityService.formatParams(paramsObj);
+        */
+        let reqObj =  {
+              url : 'getVendorList',
+              method : 'get'
+        };
+
+    _this.BackendService.makeAjax(reqObj, function(err, response, headers){
+            if(err || response.error) {
+                console.log('Error=============>', err);
+            }
+            console.log('vendorList Response --->', response.result);
+            if(!response.result.length) {
+                response.result = [
+                    {
+                        "Vendor_Id": 608,
+                        "Vendor_Name": "Crazers Point Baroda",
+                        "Status": 0
+                    },
+                    {
+                        "Vendor_Id": 659,
+                        "Vendor_Name": "Ivy The Flowers Boutique Baroda",
+                        "Status": 0
+                    },
+                    {
+                        "Vendor_Id": 798,
+                        "Vendor_Name": "Phoolwool Baroda",
+                        "Status": 0
+                    },
+                    {
+                        "Vendor_Id": 808,
+                        "Vendor_Name": "Honeybee Baroda",
+                        "Status": 0
+                    },
+                    {
+                        "Vendor_Id": 565,
+                        "Vendor_Name": "RDC Mumbai",
+                        "Status": 0
+                    }
+                ];
+            }
+            _this.vendorList=_this.vendorList.concat(response.result);
+            _this.UtilityService.sharedData.dropdownData=response.result;
+
         });
     }
 
