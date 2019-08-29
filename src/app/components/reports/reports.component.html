@@ -503,7 +503,10 @@
                 <form name="searchReport" (ngSubmit)="f.form.valid && searchReportSubmit($event,true)" #f="ngForm" nonvalidate>
                     <div class="searchFields m-top-1 inline" >
                         <div class="pull-left" style="width:70%;">
-                            <app-vendor-dropdown *ngIf="reportType !== 'getComponentReport' && reportType !== 'getBarcodeToComponentReport'" [configData]="{'modelData' :searchResultModel, 'defaultVendor' : defaultVendor}"></app-vendor-dropdown>
+                            <ng-container *ngIf="vendorList.length > 0">
+                                    <app-vendor-dropdown *ngIf="reportType !== 'getComponentReport' && reportType !== 'getBarcodeToComponentReport'" [vendorList]="vendorList" [configData]="{'modelData' :searchResultModel, 'defaultVendor' : defaultVendor}"></app-vendor-dropdown>
+                            </ng-container>
+                            
                             <select *ngIf="reportType == 'getComponentReport'" name="fkAssociateId" class="componentDD form-control" required>
                                 <option  [ngValue]="">Select Component Code</option>
                                 <option  [ngValue]="all">All Component</option>
@@ -650,6 +653,21 @@
                                     <span *ngIf="ifDate(tableCol) == 'date'" >{{getCellValue(tableRowValue[tableCol]) | date : 'dd/MM/yy'}}</span>
                                     <span *ngIf="ifDate(tableCol) != 'date' && tableCol != 'Ship_Type' && tableCol != 'Component_Image' && tableCol != 'Component Image' && tableCol != 'Product Image' && tableCol != 'Product_Image' && tableCol != 'Out Of Delivery' && tableCol != 'Out_Of_Delivery' && tableCol != 'Proof Of Delivery' && tableCol != 'Proof_Of_Delivery' && tableCol != 'Vendor_List'" >
                                         <span *ngIf="getCellValue(tableRowValue[tableCol]) === 0">{{getCellValue(tableRowValue[tableCol])}}</span>
+                                        <!-- {{getCellValue(tableRowValue[tableCol])  | replace : '`,[' }} -->
+                                        <!--<span *ngIf="(tableCol == 'Delivery_Boy' && getCellValue(tableRowValue['Status']) == 'Confirmed') && getCellValue(tableRowValue['Delivery_Boy']) == 0">
+                                            <button mat-button mat-raised-button mat-success [matMenuTriggerFor]="menu">
+                                                Assign To Agent
+                                                <span><i class="fa fa-edit"></i> {{order.orderProducts[0].deliveryBoyName}}</span> 
+                                            </button>
+                
+                                            <mat-menu #menu="matMenu">
+                                                <ng-container *ngFor="let x of deliveryBoyList" >
+                                                    <button mat-menu-item *ngIf="x.Status" (click)="assignToDeliveryBoy(x, order)">
+                                                        {{x.Full_Name}}
+                                                    </button>
+                                                </ng-container>      
+                                            </mat-menu>
+                                        </span>-->
                                         <span *ngIf="getCellValue(tableRowValue[tableCol]) !== 0" [innerHTML]="getCellValue(tableRowValue[tableCol])  | replace : '`,[' "></span>
                                     </span>
                                     &nbsp; &nbsp; &nbsp;
