@@ -829,8 +829,8 @@
                         <div class="btn btn-primary actions-button text-bold" (click)="viewUploadImage($event, true, orderIndex)" *ngIf="chkUploadedImage(orderIndex)">
                             Uploaded Image
                         </div>
-
-                        <div class="btn btn-primary actions-button text-bold" (click)="approveAttemptOrder($event, orderIndex)" *ngIf="orderByStatus == 'AttemptedDelivery'">
+<!-- *ngIf="orderByStatus == 'AttemptedDelivery'"-->
+                        <div class="btn btn-primary actions-button text-bold" (click)="approveAttemptOrder($event, orderIndex)"  *ngIf="order.orderProducts[0].deliveryAttemptFlag">
                             Reattempt
                         </div>
                         <div class="btn btn-primary actions-button text-bold" (click)="showCustomerDetails(orderIndex)" *ngIf="env.userType == 'admin'">
