@@ -61,7 +61,8 @@ export class SendEmailComponent implements OnInit {
       { issue: 'In Transit', value: 'inTransit'},
       { issue: 'Incomplete Details', value: 'incompleteDetails'},
       { issue: 'Refund Initiated', value: 'refundInitiated'},
-      { issue: 'Generic Mail', value: 'genericmail'}
+      { issue: 'Generic Mail', value: 'genericmail'},
+      { issue: 'ITC Vouchers', value: 'itcvouchers'}
     ],
     selectedIssue: ''
   };
