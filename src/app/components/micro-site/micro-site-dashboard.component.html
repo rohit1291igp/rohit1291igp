@@ -77,13 +77,14 @@
                             <mat-header-cell mat-header-cell *matHeaderCellDef mat-sort-header> {{column.value}}
                             </mat-header-cell>
                             <mat-cell mat-cell *matCellDef="let element">
-                                <span>{{element[column.id]}}</span>
+                                <span *ngIf="element[column.id]">{{element[column.id]}}</span>
+                                <span *ngIf="!element[column.id]" style="padding-left: 8px;">-</span>
                             </mat-cell>
                         </ng-container>
                         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
                         <mat-row class="delivery-boy-row" *matRowDef="let row; columns: displayedColumns;"></mat-row>
                     </mat-table>
-                    <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+                    <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" showFirstLastButtons></mat-paginator>
                 </ng-container>
                 <ng-template #noRecord>
                     <div style="color:#C3404E">No Record Found</div>
