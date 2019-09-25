@@ -67,13 +67,13 @@ export class MicroSiteDasboardComponent implements OnInit {
             id: "emailId",
             value: "Email Id"
         },
-        // {
-        //     id: "couponCode",
-        //     value: "Coupon Code"
-        // },
+        {
+            id: "type",
+            value: "Transaction Type"
+        },
         {
             id: "uploadDate",
-            value: "Upload Date"
+            value: "Transaction Date"
         },
         {
             id: "couponUsedDate",
@@ -82,6 +82,10 @@ export class MicroSiteDasboardComponent implements OnInit {
         {
             id: "amount",
             value: "Amount"
+        },
+        {
+            id: "balance",
+            value: "Current Balance"
         }
     ];
 
@@ -106,6 +110,48 @@ export class MicroSiteDasboardComponent implements OnInit {
         });
         this.displayedColumns = this.columnNames.map(x => x.id);
         this.getUsers();
+    }
+
+    setTableColumn(type){
+        const tempData = [
+            {
+                id: "emailId",
+                value: "Email Id"
+            },
+            {
+                id: "type",
+                value: "Transaction Type"
+            },
+            {
+                id: "uploadDate",
+                value: "Transaction Date"
+            },
+            {
+                id: "couponUsedDate",
+                value: "Used Date"
+            },
+            {
+                id: "amount",
+                value: "Amount"
+            },
+            {
+                id: "balance",
+                value: "Current Balance"
+            }
+        ];
+        switch (type) {
+            case 'credit':
+                this.columnNames = tempData.filter(f => f.id != 'couponUsedDate');
+                break;
+            case 'debit':
+                this.columnNames = tempData.filter(f => f.id != 'uploadDate');
+                break;
+            default:
+                this.columnNames = tempData;
+                break;
+        }
+
+        this.displayedColumns = this.columnNames.map(x => x.id);
     }
 
     displayUploadForm(flag) {
@@ -141,8 +187,14 @@ export class MicroSiteDasboardComponent implements OnInit {
                 response.data.length > 0 && response.data.forEach(m => m.uploadDate = pipe.transform(m.uploadDate, 'dd/MM/yyyy'));
                 response.data.length > 0 && response.data.forEach(m => m.couponUsedDate = pipe.transform(m.couponUsedDate, 'dd/MM/yyyy'));
                 _this.dataSource = new MatTableDataSource(response.data);
-                _this.dataSource.sort = _this.sort;
-                _this.dataSource.paginator = _this.paginator;
+                _this.setTableColumn('all');
+                setTimeout(() => {
+                    _this.dataSource.sort = _this.sort;
+                    _this.dataSource.paginator = _this.paginator;
+                    if (_this.dataSource.paginator) {
+                        _this.dataSource.paginator.firstPage();
+                    }
+                }, 100);
             }
         });
     }
@@ -153,37 +205,7 @@ export class MicroSiteDasboardComponent implements OnInit {
     onSubmit(data) {
         // console.log(data);
         // console.log(data.value.filtertype);
-        const tempData = [
-            {
-                id: "emailId",
-                value: "Email Id"
-            },
-            {
-                id: "uploadDate",
-                value: "Upload Date"
-            },
-            {
-                id: "couponUsedDate",
-                value: "Used Date"
-            },
-            {
-                id: "amount",
-                value: "Amount"
-            }
-        ];
-        switch (data.value.filtertype) {
-            case 'credit':
-                this.columnNames = tempData.filter(f => f.id != 'couponUsedDate');
-                break;
-            case 'debit':
-                this.columnNames = tempData.filter(f => f.id != 'uploadDate');
-                break;
-            default:
-                this.columnNames = tempData;
-                break;
-        }
 
-        this.displayedColumns = this.columnNames.map(x => x.id);
         const _this = this;
         const pipe = new DatePipe('en-US');
         const datefrom = pipe.transform(data.value.datefrom, 'yyyy-MM-dd');
@@ -208,12 +230,12 @@ export class MicroSiteDasboardComponent implements OnInit {
             }
             if (response.status.toLowerCase() == 'success' && response.data) {
                 _this.displayUploadForm(false);
-                if(data.value.filtertype == 'all'){
+                if (data.value.filtertype == 'all') {
                     response.data = response.data.length > 0 && response.data.filter(f => {
-                        if(f.type == 'debit'){
-                         delete f.uploadDate;
+                        if (f.type == 'debit') {
+                            delete f.uploadDate;
                             return f;
-                        }else{
+                        } else {
                             return f;
                         }
                     });
@@ -222,8 +244,14 @@ export class MicroSiteDasboardComponent implements OnInit {
                 response.data.length > 0 && response.data.forEach(m => m.couponUsedDate = pipe.transform(m.couponUsedDate, 'dd/MM/yyyy'));
 
                 _this.dataSource = new MatTableDataSource(response.data);
-                _this.dataSource.sort = _this.sort;
-                _this.dataSource.paginator = _this.paginator;
+                _this.setTableColumn(data.value.filtertype)
+                setTimeout(() => {
+                    _this.dataSource.sort = _this.sort;
+                    _this.dataSource.paginator = _this.paginator;
+                    if (_this.dataSource.paginator) {
+                        _this.dataSource.paginator.firstPage();
+                    }
+                }, 100);
             }
         });
 
@@ -287,40 +315,5 @@ export class MicroSiteDasboardComponent implements OnInit {
             duration: 5 * 1000,
             panelClass: ['snackbar-background']
         });
-    }
-    typeChnage(event) {
-        console.log(event);
-        const tempData = [
-            {
-                id: "emailId",
-                value: "Email Id"
-            },
-            {
-                id: "uploadDate",
-                value: "Upload Date"
-            },
-            {
-                id: "couponUsedDate",
-                value: "Used Date"
-            },
-            {
-                id: "amount",
-                value: "Amount"
-            }
-        ];
-        switch (event) {
-            case 'credit':
-                this.columnNames = tempData.filter(f => f.id != 'couponUsedDate');
-                break;
-            case 'debit':
-                this.columnNames = tempData.filter(f => f.id != 'uploadDate');
-                break;
-            default:
-                this.columnNames = tempData;
-                break;
-        }
-
-        this.displayedColumns = this.columnNames.map(x => x.id);
-
     }
 }
