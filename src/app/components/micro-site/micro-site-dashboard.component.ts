@@ -76,7 +76,7 @@ export class MicroSiteDasboardComponent implements OnInit {
             value: "Upload Date"
         },
         {
-            id: "usedDate",
+            id: "couponUsedDate",
             value: "Used Date"
         },
         {
@@ -186,7 +186,7 @@ export class MicroSiteDasboardComponent implements OnInit {
                     });
                 }
                 response.data.length > 0 && response.data.forEach(m => m.uploadDate = pipe.transform(m.uploadDate, 'dd/MM/yyyy'));
-                response.data.length > 0 && response.data.forEach(m => m.usedDate = pipe.transform(m.usedDate, 'dd/MM/yyyy'));
+                response.data.length > 0 && response.data.forEach(m => m.couponUsedDate = pipe.transform(m.couponUsedDate, 'dd/MM/yyyy'));
 
                 _this.dataSource = new MatTableDataSource(response.data);
                 _this.dataSource.sort = _this.sort;
@@ -267,7 +267,7 @@ export class MicroSiteDasboardComponent implements OnInit {
                 value: "Upload Date"
             },
             {
-                id: "usedDate",
+                id: "couponUsedDate",
                 value: "Used Date"
             },
             {
@@ -277,7 +277,7 @@ export class MicroSiteDasboardComponent implements OnInit {
         ];
         switch (event) {
             case 'credit':
-                this.columnNames = tempData.filter(f => f.id != 'usedDate');
+                this.columnNames = tempData.filter(f => f.id != 'couponUsedDate');
                 break;
             case 'debit':
                 this.columnNames = tempData.filter(f => f.id != 'uploadDate');
