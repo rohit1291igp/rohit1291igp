@@ -128,7 +128,7 @@ export class MicroSiteDasboardComponent implements OnInit {
         const datefrom = pipe.transform(now, 'yyyy-MM-dd');
         const dateto = pipe.transform(now, 'yyyy-MM-dd');
         const reqObj = {
-            url: `itc/getuserrecord?fromdate=${datefrom}&todate=${dateto}&emailid=&type=all`,
+            url: `itc/getuserrecord?fromdate=${datefrom}&todate=${dateto}&email=&type=all`,
             method: "get"
         };
         _this.BackendService.makeAjax(reqObj, function (err, response, headers) {
@@ -163,7 +163,7 @@ export class MicroSiteDasboardComponent implements OnInit {
         let options = new RequestOptions({ headers: headers });
 
         let reqObj = {
-            url: `itc/getuserrecord?fromdate=${datefrom}&todate=${dateto}&emailid=${data.value.email}&type=${data.value.filtertype}`,
+            url: `itc/getuserrecord?fromdate=${datefrom}&todate=${dateto}&email=${data.value.email}&type=${data.value.filtertype}`,
             method: 'get',
             options: options
         };
