@@ -67,9 +67,9 @@
     <div class="itc-dashboard-user-container">
         <ng-container>
             <mat-card>
-                <mat-form-field>
+                <!-- <mat-form-field>
                     <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter" autocomplete="off">
-                </mat-form-field>
+                </mat-form-field> -->
                 <ng-container
                     *ngIf="(dataSource?._renderData | async) && (dataSource?._renderData | async ).length > 0 else noRecord">
                     <mat-table #table mat-table [dataSource]="dataSource" matSort>
