@@ -42,9 +42,10 @@ export class BackendService {
                   } else {
                       if(environment.userType === 'deliveryboy'){
                         reqObj.url = environment.origin + 'v1/handels/' + reqObj.url;
+                      }else if(environment.userType === 'microsite'){
+                        reqObj.url = environment.origin + 'v1/admin/' + reqObj.url;
                       }else{
                         reqObj.url = environment.origin + 'v1/admin/handels/' + reqObj.url;
-
                       }
                   }
               }else{

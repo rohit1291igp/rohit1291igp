@@ -90,18 +90,22 @@ export class FeedsComponent implements OnInit {
 
   getFeeds(){
       var _this=this;
+      const fkAssociateId = localStorage.getItem('fkAssociateId') ? localStorage.getItem('fkAssociateId') : null;
       var reqObj={
-          url:'vendorinstructionfeed?fkAssociateId='+localStorage.getItem('fkAssociateId'),
+          url:'vendorinstructionfeed?fkAssociateId='+fkAssociateId,
           method:'get'
       };
-
-      _this.BackendService.makeAjax(reqObj, function(err, response, headers){
-          if(err || response.error) {
-              console.log('Error=============>', err, response.errorCode);
-          }
-          console.log('feeds Response --->', response.result);
-          _this.feedData=response.result;
-      });
+      
+      if(fkAssociateId){
+        _this.BackendService.makeAjax(reqObj, function(err, response, headers){
+            if(err || response.error) {
+                console.log('Error=============>', err, response.errorCode);
+            }
+            console.log('feeds Response --->', response.result);
+            _this.feedData=response.result;
+        });
+      }
+      
   }
 
 }

@@ -318,7 +318,10 @@ export class ReportsComponent implements OnInit{
           }
       });
     //   _this.getDeliveryBoyList();
-    _this.getVendorList();
+    // _this.getVendorList();
+    if(environment.userType === 'admin'){
+        _this.getVendorList();
+     }
   }
 
 getDeliveryBoyList(){
