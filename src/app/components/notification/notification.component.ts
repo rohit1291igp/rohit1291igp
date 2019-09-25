@@ -8,6 +8,9 @@ import { MAT_SNACK_BAR_DATA } from '@angular/material';
       .main{
         color: #fff;
       }
+      .snackbar-background {
+        background: #C3404E;
+      }
     `],
 })
 export class NotificationComponent {

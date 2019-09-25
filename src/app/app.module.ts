@@ -14,7 +14,7 @@ import { DatePipe } from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgxEditorModule } from 'ngx-editor';
 import { CKEditorModule } from 'ng2-ckeditor';
-import {MatFormFieldModule, MatInputModule, MatCardModule, MatButtonModule, MatMenuModule, MatDialogModule, MatSnackBarModule, MatTableModule, MatPaginatorModule, MatSortModule, MatDialogRef, MAT_DIALOG_DATA, MatIconModule, MatProgressBarModule, MatProgressSpinnerModule, MatCheckboxModule} from '@angular/material';
+import {MatFormFieldModule, MatInputModule, MatCardModule, MatButtonModule, MatMenuModule, MatDialogModule, MatSnackBarModule, MatTableModule, MatPaginatorModule, MatSortModule, MatDialogRef, MAT_DIALOG_DATA, MatIconModule, MatProgressBarModule, MatProgressSpinnerModule, MatCheckboxModule, MatRadioModule, MatSelectModule, MatDatepickerModule, MatNativeDateModule} from '@angular/material';
 import {CdkTableModule} from '@angular/cdk/table';
 import { Ng2ImgMaxModule, Ng2ImgMaxService } from 'ng2-img-max';
 // Router and Services
@@ -80,6 +80,7 @@ import { FilterPipe} from './customPipes/filter.pipe';
 import { SendEmailComponent } from './components/send-email/send-email.component';
 import { DownloadEmailComponent } from './components/download-email/download-email.component';
 import { SelectItemForDelivered } from './components/select-item/select-item.component';
+import { MicroSiteDasboardComponent } from './components/micro-site/micro-site-dashboard.component';
 
 //env config
 /*import {envConfig} from "./others/env.config";
@@ -134,7 +135,8 @@ export function ConfigLoader(envConfig: envConfig) {
     DeliveryBoyDetailsComponent,
     DeliveryHeaderComponent,
     ImgPreviewComponent,
-    SelectItemForDelivered
+    SelectItemForDelivered,
+    MicroSiteDasboardComponent
   ],
   imports: [
     BrowserModule,
@@ -158,6 +160,11 @@ export function ConfigLoader(envConfig: envConfig) {
     MatProgressBarModule,
     MatProgressSpinnerModule,
     MatCheckboxModule,
+    MatRadioModule,
+    MatSelectModule,
+    MatDatepickerModule,
+    MatNativeDateModule,        // <----- import for date formating(optional)
+    // MatMomentDateModule,
     routing,
     //BsDropdownModule.forRoot(),
     SelectModule,

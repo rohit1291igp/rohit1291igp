@@ -115,6 +115,8 @@ export class LoginComponent implements OnInit {
                     _this.UtilityService.changeRouteComponent();
                     if(userType === 'deliveryboy'){
                         _this.router.navigate(['/delivery-app']);
+                    }else if(userType === 'microsite'){
+                        _this.router.navigate(['/dashboard-microsite']);
                     }else{
                         _this.router.navigate(['/dashboard']);
                     }

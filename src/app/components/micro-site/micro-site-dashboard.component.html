@@ -1,0 +1,94 @@
+<div class="itc-dashboard-main-container">
+    <div class="itc-dashboard-search-and-upload-container d-flex">
+        <mat-card>
+            <div class="itc-dashboard-user-header">Search User</div>
+            <form [formGroup]="SearchForm" (ngSubmit)="onSubmit(SearchForm)">
+                <div class="form-container">
+                    <div class="d-flex">
+                        <mat-form-field class="flex-1 m-8">
+                            <input matInput [matDatepicker]="picker" placeholder="From"
+                                (dateInput)="addEventFrom('input', $event)"
+                                (dateChange)="addEventFrom('change', $event)" autocomplete="off">
+                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-datepicker #picker></mat-datepicker>
+                        </mat-form-field>
+
+                        <mat-form-field class="flex-1 m-8">
+                            <input matInput [matDatepicker]="pickers" placeholder="To"
+                                (dateInput)="addEventTo('input', $event)" (dateChange)="addEventTo('change', $event)"
+                                autocomplete="off">
+                            <mat-datepicker-toggle matSuffix [for]="pickers"></mat-datepicker-toggle>
+                            <mat-datepicker #pickers></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+                    <div class="d-flex">
+                        <mat-form-field class="flex-1 m-8">
+                            <!-- (keyup)="applyFilter($event.target.value)" -->
+                            <input matInput formControlName="email" placeholder="Email" autocomplete="off">
+                        </mat-form-field>
+                        <mat-form-field class="m-8 flex-1">
+                            <mat-label>Type</mat-label>
+                            <mat-select formControlName="filtertype" (selectionChange)="typeChnage($event.value)">
+                                <mat-option *ngFor="let x of filterType" [value]="x.value">
+                                    {{x.viewValue}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <button [disabled]="!SearchForm.valid" type="submit" mat-raised-button
+                        class="btn-color">Search</button>
+                </div>
+            </form>
+        </mat-card>
+        <mat-card class="d-flex align-items-center justify-content-center text-align-center">
+            <div [ngClass]="displayUplaodFormFlag ? 'hide-form' : 'show-form'">
+                <button mat-stroked-button color="primary" (click)="displayUploadForm(true)"
+                    class="btn-color">Upload</button>
+            </div>
+            <mat-card [ngClass]="displayUplaodFormFlag ? 'show-form' : 'hide-form'">
+                <div>
+                    <i class="fa fa-times" style="float: right; cursor:pointer;color:#C3404E"
+                        (click)="displayUploadForm(false)"></i>
+                    <form (ngSubmit)="uploadExcel($event)">
+                        <div class="form-container">
+                            <input id="uploadFile" type="file" name="file" #file (change)="fileChange($event)"
+                                accept=".xls, .xlsx, .csv">
+                            <br>
+                            <button type="submit" mat-raised-button [disabled]="!file.value"
+                                class="btn-color">Upload</button>
+                        </div>
+                    </form>
+                </div>
+            </mat-card>
+
+
+        </mat-card>
+    </div>
+    <div class="itc-dashboard-user-container">
+        <ng-container>
+            <mat-card>
+                <mat-form-field>
+                    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter" autocomplete="off">
+                </mat-form-field>
+                <ng-container
+                    *ngIf="(dataSource?._renderData | async) && (dataSource?._renderData | async ).length > 0 else noRecord">
+                    <mat-table #table mat-table [dataSource]="dataSource" matSort>
+                        <ng-container matColumnDef="{{column.id}}" *ngFor="let column of columnNames;">
+                            <mat-header-cell mat-header-cell *matHeaderCellDef mat-sort-header> {{column.value}}
+                            </mat-header-cell>
+                            <mat-cell mat-cell *matCellDef="let element">
+                                <span>{{element[column.id]}}</span>
+                            </mat-cell>
+                        </ng-container>
+                        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                        <mat-row class="delivery-boy-row" *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                    </mat-table>
+                    <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+                </ng-container>
+                <ng-template #noRecord>
+                    <div style="color:#C3404E">No Record Found</div>
+                </ng-template>
+            </mat-card>
+        </ng-container>
+    </div>
+</div>

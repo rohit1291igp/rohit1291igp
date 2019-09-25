@@ -1,0 +1,55 @@
+.itc-dashboard-main-container {
+    margin-top: 75px;
+}
+
+.itc-dashboard-user-header {
+    margin-bottom: 8px;
+}
+
+.itc-dashboard-user-container {
+    margin: 16px;
+}
+
+.itc-dashboard-search-and-upload-container {
+    margin: 16px;
+    display: flex;
+}
+
+.itc-dashboard-search-and-upload-container>mat-card {
+    flex: 1;
+}
+
+.itc-dashboard-search-and-upload-container>mat-card:first-child {
+    margin-right: 20px;
+}
+
+.form-container {
+    display: flex;
+    flex-direction: column;
+}
+
+/* .form-container>mat-form-field {
+    margin: 8px;
+} */
+
+.hide-form {
+    width: 0;
+    overflow: hidden;
+    /* transition: all 0.5s ease-out; */
+    opacity: 0;
+}
+
+.show-form {
+    width: max-content;
+    /* transition: all 0.5s ease-in;
+    opacity: 1; */
+}
+
+.btn-color {
+    background: #C3404E;
+    color: #fff;
+}
+
+.snackbar-background {
+    background: #C3404E;
+}

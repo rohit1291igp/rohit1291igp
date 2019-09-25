@@ -22,6 +22,7 @@ import { DeliveredComponent } from './components/delivery-app/delivered-componen
 import { UnDeliveredComponent } from './components/delivery-app/undelivered-component/undelivered-component';
 import { OrdersDeliveredComponent } from './components/delivery-app/orders-delivered-component/orders-delivered-component';
 import { DeliveryBoyDetailsComponent } from './components/deliveryboy-details/deliveryboy-details.component';
+import { MicroSiteDasboardComponent } from './components/micro-site/micro-site-dashboard.component';
 
 const route: Routes = [
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
@@ -83,6 +84,11 @@ const route: Routes = [
       {path:'undelivered', component: UnDeliveredComponent},
       {path:'orders-delivered', component: OrdersDeliveredComponent}
     ]
+  },
+  {
+    path: 'dashboard-microsite',
+    component: MicroSiteDasboardComponent,
+    canActivate: [AuthGuard]
   },
   // otherwise redirect to home
   { path: '**', redirectTo: 'dashboard' }
