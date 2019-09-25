@@ -28,7 +28,7 @@
                         </mat-form-field>
                         <mat-form-field class="m-8 flex-1">
                             <mat-label>Type</mat-label>
-                            <mat-select formControlName="filtertype" (selectionChange)="typeChnage($event.value)">
+                            <mat-select formControlName="filtertype">
                                 <mat-option *ngFor="let x of filterType" [value]="x.value">
                                     {{x.viewValue}}
                                 </mat-option>
