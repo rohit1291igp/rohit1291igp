@@ -139,6 +139,7 @@ export class MicroSiteDasboardComponent implements OnInit {
             }
             if (response.status.toLowerCase() == 'success' && response.data) {
                 response.data.length > 0 && response.data.forEach(m => m.uploadDate = pipe.transform(m.uploadDate, 'dd/MM/yyyy'));
+                response.data.length > 0 && response.data.forEach(m => m.couponUsedDate = pipe.transform(m.couponUsedDate, 'dd/MM/yyyy'));
                 _this.dataSource = new MatTableDataSource(response.data);
                 _this.dataSource.sort = _this.sort;
                 _this.dataSource.paginator = _this.paginator;
