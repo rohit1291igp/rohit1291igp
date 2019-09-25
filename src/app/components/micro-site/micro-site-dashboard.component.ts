@@ -151,7 +151,39 @@ export class MicroSiteDasboardComponent implements OnInit {
         console.log(event);
     }
     onSubmit(data) {
-        console.log(data);
+        // console.log(data);
+        // console.log(data.value.filtertype);
+        const tempData = [
+            {
+                id: "emailId",
+                value: "Email Id"
+            },
+            {
+                id: "uploadDate",
+                value: "Upload Date"
+            },
+            {
+                id: "couponUsedDate",
+                value: "Used Date"
+            },
+            {
+                id: "amount",
+                value: "Amount"
+            }
+        ];
+        switch (data.value.filtertype) {
+            case 'credit':
+                this.columnNames = tempData.filter(f => f.id != 'couponUsedDate');
+                break;
+            case 'debit':
+                this.columnNames = tempData.filter(f => f.id != 'uploadDate');
+                break;
+            default:
+                this.columnNames = tempData;
+                break;
+        }
+
+        this.displayedColumns = this.columnNames.map(x => x.id);
         const _this = this;
         const pipe = new DatePipe('en-US');
         const datefrom = pipe.transform(data.value.datefrom, 'yyyy-MM-dd');
