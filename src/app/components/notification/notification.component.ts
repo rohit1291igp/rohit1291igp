@@ -7,6 +7,7 @@ import { MAT_SNACK_BAR_DATA } from '@angular/material';
     styles: [`
       .main{
         color: #fff;
+        font-size: 18px;
       }
       .snackbar-background {
         background: #C3404E;
