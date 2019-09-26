@@ -83,9 +83,19 @@ export class DeliveryOrderComponent implements OnInit {
         var this$ = this;
         this$.loading = true;
         let fileList: FileList = event.target.files;
-
+        this$.uploadedFiles.push(fileList);
         let file:any;
+
+        var reader = new FileReader();
+        reader.onload = function(){
+          var output = document.querySelectorAll('.image') as any;
+          output[output.length-1].src = reader.result;
+        };
+        reader.readAsDataURL(event.target.files[0]);
+
+
         new Promise((resolve) => {
+            resolve(true);
             // this$.ng2ImgMax.compressImage(fileList[0], 0.20).subscribe(
             //     result => {
             //         const uploadedImage = new File([result], result.name);
@@ -125,7 +135,7 @@ export class DeliveryOrderComponent implements OnInit {
         }).then(() => {
             if (fileList.length > 0) {
 
-                // let file: File = fileList[0];
+                let file: File = fileList[0];
                 let formData = new FormData();
                 // for (var i = 0; i < fileList.length; i++) {
                 //     formData.append("file" + i, fileList[i]);
@@ -158,6 +168,9 @@ export class DeliveryOrderComponent implements OnInit {
                     // this$.resizeImage(response.result.uploadedFilePath['OutForDelivery'])
                     if (!response.error && response.result && response.result.uploadedFilePath) {
                         const uploadedFileList = response.result.uploadedFilePath['OutForDelivery'];
+                        output.forEach(element => {
+                            
+                        });
                         this$.uploadedFiles = uploadedFileList;
                     }
                 });
