@@ -631,3 +631,27 @@
     background-color: #25C355;
     color: #fff;
 }
+
+.ofdImages-main-container {
+    margin: 18px 0px;
+}
+
+.ofdImages-container {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.ofdImages-container > img {
+    margin: 5px;
+}
+
+.ofdImages-hide{
+    max-height: 0;
+    transition: max-height 0.5s ease-out;
+    overflow: hidden;
+}
+.ofdImages-show{
+    max-height: 500px;
+    transition: max-height 0.5s ease-in;
+    overflow: hidden;
+}

@@ -157,7 +157,14 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
      this.deliveryBoyEnabled = localStorage.getItem('deliveryBoyEnabled') === 'true' ? true : false;
      this.setlDatePicker(null);
      this.setRejectInitialValue();
+<<<<<<< HEAD
     //  this.getFeeds();
+=======
+     if(environment.userType !== 'vendor'){
+        this.getFeeds();
+    }
+     
+>>>>>>> orderImage
      if(environment.userType === 'vendor'){
         this.getDeliveryBoyList();
      }
