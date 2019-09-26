@@ -168,9 +168,6 @@ export class DeliveryOrderComponent implements OnInit {
                     // this$.resizeImage(response.result.uploadedFilePath['OutForDelivery'])
                     if (!response.error && response.result && response.result.uploadedFilePath) {
                         const uploadedFileList = response.result.uploadedFilePath['OutForDelivery'];
-                        output.forEach(element => {
-                            
-                        });
                         this$.uploadedFiles = uploadedFileList;
                     }
                 });
