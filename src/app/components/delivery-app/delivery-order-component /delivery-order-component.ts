@@ -72,7 +72,6 @@ export class DeliveryOrderComponent implements OnInit {
             }
         }
 
-
     }
 
     load() {
