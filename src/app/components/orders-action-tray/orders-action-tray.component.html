@@ -1117,7 +1117,7 @@
         </div>
     </div>
     <br>
-    <ng-container *ngIf="env.userType == 'vendor'">
+    <ng-container *ngIf="env.userType == 'admin'">
 <!-- Out For Delivery Images -->
         <button *ngIf="sidePanelData && sidePanelData[0]?.uploadedFilePath?.OutForDelivery.length > 0" type="button" (click)="ofdImages = !ofdImages" mat-button mat-raised-button mat-success><ng-container *ngIf="ofdImages">Hide</ng-container><ng-container *ngIf="!ofdImages">Show</ng-container> Out For Delivery Images</button>
         <ng-container *ngIf="sidePanelData && sidePanelData[0]?.uploadedFilePath?.OutForDelivery.length > 0">
