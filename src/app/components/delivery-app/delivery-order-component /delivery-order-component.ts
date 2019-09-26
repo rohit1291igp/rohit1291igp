@@ -107,8 +107,8 @@ export class DeliveryOrderComponent implements OnInit {
                 img.src = event1.target.result;
                 img.onload = () => {
                     const elem = document.createElement('canvas');
-                    elem.width = width;
-                    elem.height = height;
+                    // elem.width = width;
+                    // elem.height = height;
                     const ctx = elem.getContext('2d');
                     // img.width and img.height will contain the original dimensions
                     ctx.drawImage(img, 0, 0, width, height);
