@@ -294,6 +294,10 @@ export class MicroSiteDasboardComponent implements OnInit {
                     _this.displayUploadForm(false);
                     _this.openSnackBar(`File Uploaded Sucessfully!`);
                     fileInput.value = '';
+                }else{
+                    _this.displayUploadForm(false);
+                    _this.openSnackBar(response.data[0]);
+                    fileInput.value = '';
                 }
             });
         }
