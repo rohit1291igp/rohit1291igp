@@ -36,7 +36,7 @@
             <ng-container *ngIf="uploadedFiles.length > 0 else noImage">
                 <div class="taken-images" [ngStyle]="{opacity: loading ? '0.5' : '1'}">
                     <div class="uploadedFiles relative" *ngFor="let uploadedFile of uploadedFiles;">
-                        <img src="{{uploadedFile}}" alt="uploadedImages" width="460" height="345"
+                        <img class="image" src="{{uploadedFile}}" alt="uploadedImages" width="460" height="345"
                             (click)="imagePreview($event,uploadedFile)" (load)="loaded()" />
                         <i class="fa fa-times-circle" (click)="dltUploadedImage($event, uploadedFile)"></i>
                     </div>
