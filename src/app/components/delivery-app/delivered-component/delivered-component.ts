@@ -24,7 +24,7 @@ export class DeliveredComponent implements OnInit {
     orderProductId: number[] = [];
     fkAssociateId: string;
     fkUserId: string;
-    uploadedFiles: any[] = [];
+    uploadedFiles = {ofdImages:[], dImages:[]};
     myForm: FormGroup;
     recipientInfo: any;
     statusReasonModel: any = {};
@@ -72,7 +72,7 @@ export class DeliveredComponent implements OnInit {
         });
 
         dialogRef.afterClosed().subscribe(result => {
-        this.pendingDeliveryOrders = JSON.parse(localStorage.getItem('pendingDeliveryOrders'));
+            this.pendingDeliveryOrders = JSON.parse(localStorage.getItem('pendingDeliveryOrders'));
             console.log('The dialog was closed', result);
             //   this.animal = result;
         });
@@ -93,7 +93,12 @@ export class DeliveredComponent implements OnInit {
             }
             if (response && response.result[0].uploadedFilePath && response.result[0].uploadedFilePath['OutForDelivery'].length > 0) {
                 for (let i = 0, length = response.result[0].uploadedFilePath['OutForDelivery'].length; i < length; i++) {
-                    this$.uploadedFiles.push(response.result[0].uploadedFilePath['OutForDelivery'][i]);
+                    this$.uploadedFiles.ofdImages.push(response.result[0].uploadedFilePath['OutForDelivery'][i]);
+                }
+            }
+            if (response && response.result[0].uploadedFilePath && response.result[0].uploadedFilePath['OutForDelivery'].length > 0) {
+                for (let i = 0, length = response.result[0].uploadedFilePath['Delivered'].length; i < length; i++) {
+                    this$.uploadedFiles.dImages.push(response.result[0].uploadedFilePath['Delivered'][i]);
                 }
             }
             if (response && response.result) {
@@ -181,136 +186,62 @@ export class DeliveredComponent implements OnInit {
         var this$ = this;
         this$.loading = true;
         let fileList: FileList = event.target.files;
-
-        let file: any;
-        new Promise((resolve) => {
-            // this$.ng2ImgMax.compressImage(fileList[0], 0.20).subscribe(
-            //     result => {
-            //         const uploadedImage = new File([result], result.name);
-            //         fileList = [uploadedImage] as any;
-            //         resolve(true)
-            //         // this$.getImagePreview(uploadedImage);
-            //     },
-            //     error => {
-            //         console.log('😢 Oh no!', error);
-            //     }
-            // );
-            const width = 100;
-            const height = 100;
-            const fileName = event.target.files[0].name;
-            const reader = new FileReader();
+        if (fileList.length == 0) {
+            this$.loading = false;
+            return false;
+        }
+        this$.uploadedFiles.dImages.push(fileList);
+        if (fileList.length > 0) {
+            var reader = new FileReader();
             reader.readAsDataURL(event.target.files[0]);
-            reader.onload = (event1: any) => {
-                const img = new Image();
-                img.src = event1.target.result;
-                img.onload = () => {
-                    const elem = document.createElement('canvas');
-                    elem.width = width;
-                    elem.height = height;
-                    const ctx = elem.getContext('2d');
-                    // img.width and img.height will contain the original dimensions
-                    ctx.drawImage(img, 0, 0, width, height);
-                    ctx.canvas.toBlob((blob) => {
-                        file = new File([blob], fileName, {
-                            type: 'image/png',
-                            lastModified: Date.now()
-                        });
-                        resolve(true);
-                    }, 'image/png', 1);
-                },
-                    reader.onerror = error => console.log(error);
+            reader.onload = function () {
+                var output = document.querySelectorAll('.image') as any;
+                output = Array.from(output);
+                const index = (this$.uploadedFiles.dImages.length - 1) + 1;
+                output.push(output[index - 1]);
+                if (output[index]) {
+                    output[index].src = reader.result;
+                }
             };
-        }).then(() => {
-            if (fileList.length > 0) {
+            let file: File = fileList[0];
+            let formData = new FormData();
 
-                // let file: File = fileList[0];
-                let formData = new FormData();
-                // for (var i = 0; i < fileList.length; i++) {
-                //     formData.append("file" + i, fileList[i]);
-                // }
-                formData.append("file", file);
+            formData.append("file", file);
 
-                const httpOptions = {
-                    headers: new HttpHeaders({
-                        'Accept': 'application/x-www-form-urlencoded',
-                        'Content-Type': 'application/json'
-                    })
-                };
+            const httpOptions = {
+                headers: new HttpHeaders({
+                    'Accept': 'application/x-www-form-urlencoded',
+                    'Content-Type': 'application/json'
+                })
+            };
 
-                let response;
-                // for (let i = 0; i < this$.productId.length; i++) {
-                response = null;
-                let reqObj = {
-                    url: 'fileupload?orderId=' + this$.orderId + '&orderProductId=' + this$.orderProductId[0] + '&status=' + 'OutForDelivery',
-                    method: "post",
-                    payload: formData,
-                    options: httpOptions
-                };
+            let reqObj = {
+                url: 'fileupload?orderId=' + this$.orderId + '&orderProductId=' + this$.orderProductId[0] + '&status=' + 'Delivered',
+                method: "post",
+                payload: formData,
+                options: httpOptions
+            };
 
-                this$.BackendService.makeAjax(reqObj, function (err, response, headers) {
-                    if (err || response.error) {
-                        console.log('Error=============>', err, response.errorCode);
-                    }
-                    console.log('sidePanel Response --->', response.result);
+            this$.BackendService.makeAjax(reqObj, function (err, response, headers) {
+                if (err || response.error) {
+                    console.log('Error=============>', err, response.errorCode);
+                }
+                console.log('sidePanel Response --->', response.result);
+                if (!response.error && response.result && response.result.uploadedFilePath) {
+                    let uploadedFileList = response.result.uploadedFilePath['Delivered'];
 
-                    // this$.resizeImage(response.result.uploadedFilePath['OutForDelivery'])
-                    if (!response.error && response.result && response.result.uploadedFilePath) {
-                        const uploadedFileList = response.result.uploadedFilePath['OutForDelivery'];
-                        this$.uploadedFiles = uploadedFileList;
-                    }
-                });
-            }
-        })
-
-
+                    this$.uploadedFiles.dImages = uploadedFileList;
+                }
+            });
+        }
     }
+
     loaded() {
         this.loading = false;
     }
 
-    // fileChange(event) {
-    //     var this$ = this;
-    //     var fileOverSizeFlag = false;
-    //     let fileList: FileList = event.target.files;
-    //     if (fileList.length > 0) {
-    //         let file: File = fileList[0];
-    //         let formData = new FormData();
-    //         for (var i = 0; i < fileList.length; i++) {
-
-    //             formData.append("file" + i, fileList[i]);
-    //         }
-
-    //         const httpOptions = {
-    //             headers: new HttpHeaders({
-    //                 'Accept': 'application/x-www-form-urlencoded',
-    //                 'Content-Type': 'application/json'
-    //             })
-    //         };
-
-    //         let reqObj = {
-    //             url: 'fileupload?orderId=' + this$.orderId + '&orderProductId=' + this$.orderProductId[0] + '&status=' + 'OutForDelivery',
-    //             method: "post",
-    //             payload: formData,
-    //             options: httpOptions
-    //         };
-
-    //         this$.BackendService.makeAjax(reqObj, function (err, response, headers) {
-    //             if (err || response.error) {
-    //                 console.log('Error=============>', err, response.errorCode);
-    //             }
-    //             console.log('sidePanel Response --->', response.result);
-    //             this$.uploadedFiles = [];
-    //             const uploadedFileList = response.result.uploadedFilePath['OutForDelivery'];
-    //             this$.uploadedFiles = uploadedFileList;
-    //         });
-
-    //     }
-    // }
-
     dltUploadedImage(event, fileName) {
         var this$ = this;
-        var _orderId = this$.statusReasonModel.orderId;
-        var responseTest = [];
         for (let i = 0; i < this$.orderProductId.length; i++) {
             let reqObj = {
                 url: 'filedelete?orderId=' + this$.orderId + '&orderProductId=' + this$.orderProductId[i] + '&filePath=' + fileName,
@@ -324,19 +255,11 @@ export class DeliveredComponent implements OnInit {
                 console.log('dltFile Response --->', response.result);
 
                 if (response.result) {
-                    // responseTest.push(response.result)
-                    // if(responseTest.length>0 && responseTest.length == this$.orderProductId.length){
-                    for (let i = 0; i < this$.uploadedFiles.length; i++) {
-                        if (this$.uploadedFiles[i] === fileName) {
-                            this$.uploadedFiles.splice(i, 1);
+                    for (let i = 0; i < this$.uploadedFiles.dImages.length; i++) {
+                        if (this$.uploadedFiles.dImages[i] === fileName) {
+                            this$.uploadedFiles.dImages.splice(i, 1);
                         }
                     }
-                    // }
-                    // for (var i = 0; i < this$.uploadedFiles.length; i++) {
-                    //     if (this$.uploadedFiles[i] === fileName) {
-                    //         this$.uploadedFiles.splice(i, 1);
-                    //     }
-                    // }
                 }
             });
         }
@@ -345,7 +268,8 @@ export class DeliveredComponent implements OnInit {
     }
 
     imagePreview(e, imgSrc) {
-        let src = imgSrc.replace('td', 'l');
+        // let src = imgSrc.replace('td', 'l');
+        let src = e.path[0].currentSrc;
         const dialogRef = this.dialog.open(ImgPreviewComponent, {
             width: screen.availWidth + 'px',
             data: { imgSrc: src }
