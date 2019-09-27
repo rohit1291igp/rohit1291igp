@@ -82,98 +82,53 @@ export class DeliveryOrderComponent implements OnInit {
         var this$ = this;
         this$.loading = true;
         let fileList: FileList = event.target.files;
+        if(fileList.length == 0){
+            this$.loading = false;
+            return false;
+        }
         this$.uploadedFiles.push(fileList);
-        let file:any;
 
-        var reader = new FileReader();
-        reader.onload = function(){
-          var output = document.querySelectorAll('.image') as any;
-          output[output.length-1].src = reader.result;
-        };
-        reader.readAsDataURL(event.target.files[0]);
-
-
-        new Promise((resolve) => {
-            resolve(true);
-            // this$.ng2ImgMax.compressImage(fileList[0], 0.20).subscribe(
-            //     result => {
-            //         const uploadedImage = new File([result], result.name);
-            //         fileList = [uploadedImage] as any;
-            //         resolve(true)
-            //         // this$.getImagePreview(uploadedImage);
-            //     },
-            //     error => {
-            //         console.log('😢 Oh no!', error);
-            //     }
-            // );
-            const width = 100;
-            const height = 100;
-            const fileName = event.target.files[0].name;
-            const reader = new FileReader();
+        if (fileList.length > 0) {
+            var reader = new FileReader();
             reader.readAsDataURL(event.target.files[0]);
-            reader.onload = (event1: any) => {
-                const img = new Image();
-                img.src = event1.target.result;
-                img.onload = () => {
-                    const elem = document.createElement('canvas');
-                    // elem.width = width;
-                    // elem.height = height;
-                    const ctx = elem.getContext('2d');
-                    // img.width and img.height will contain the original dimensions
-                    ctx.drawImage(img, 0, 0, width, height);
-                    ctx.canvas.toBlob((blob) => {
-                        file = new File([blob], fileName, {
-                            type: 'image/png',
-                            lastModified: Date.now()
-                        });
-                        resolve(true);
-                    }, 'image/png', 1);
-                },
-                    reader.onerror = error => console.log(error);
+            reader.onload = function () {
+                var output = document.querySelectorAll('.image') as any;
+                output = Array.from(output);
+                const index = (this$.uploadedFiles.length - 1) + 1;
+                output.push(output[index-1]);
+                if(output[index]){
+                    output[index].src = reader.result;
+                } 
             };
-        }).then(() => {
-            if (fileList.length > 0) {
+        
+            let file: File = fileList[0];
+            let formData = new FormData();
+            formData.append("file", file);
 
-                let file: File = fileList[0];
-                let formData = new FormData();
-                // for (var i = 0; i < fileList.length; i++) {
-                //     formData.append("file" + i, fileList[i]);
-                // }
-                formData.append("file", file);
+            const httpOptions = {
+                headers: new HttpHeaders({
+                    'Accept': 'application/x-www-form-urlencoded',
+                    'Content-Type': 'application/json'
+                })
+            };
 
-                const httpOptions = {
-                    headers: new HttpHeaders({
-                        'Accept': 'application/x-www-form-urlencoded',
-                        'Content-Type': 'application/json'
-                    })
-                };
+            let reqObj = {
+                url: 'fileupload?orderId=' + this$.orderId + '&orderProductId=' + this$.productId[0] + '&status=' + 'OutForDelivery',
+                method: "post",
+                payload: formData,
+                options: httpOptions
+            };
 
-                let response;
-                // for (let i = 0; i < this$.productId.length; i++) {
-                response = null;
-                let reqObj = {
-                    url: 'fileupload?orderId=' + this$.orderId + '&orderProductId=' + this$.productId[0] + '&status=' + 'OutForDelivery',
-                    method: "post",
-                    payload: formData,
-                    options: httpOptions
-                };
-
-                this$.BackendService.makeAjax(reqObj, function (err, response, headers) {
-                    if (err || response.error) {
-                        console.log('Error=============>', err, response.errorCode);
-                    }
-                    console.log('sidePanel Response --->', response.result);
-
-                    // this$.resizeImage(response.result.uploadedFilePath['OutForDelivery'])
-                    if (!response.error && response.result && response.result.uploadedFilePath) {
-                        const uploadedFileList = response.result.uploadedFilePath['OutForDelivery'];
-                        this$.uploadedFiles = uploadedFileList;
-                    }
-                });
-            }
-        })
-
-
+            this$.BackendService.makeAjax(reqObj, function (err, response, headers) {
+                if (err || response.error) {
+                    console.log('Error=============>', err, response.errorCode);
+                }
+                if (!response.error && response.result && response.result.uploadedFilePath) {
+                    const uploadedFileList = response.result.uploadedFilePath['OutForDelivery'];
+                    this$.uploadedFiles = uploadedFileList;
+                }
+            });
+        }
     }
 
     getOrderDetails() {
@@ -200,11 +155,7 @@ export class DeliveryOrderComponent implements OnInit {
                         {
                             type: 'image/jpeg'
                         }
-                        // name: "1828904_2348310_1563967883928.jpg"
-                        // size: 3988177
                     );
-
-                    // this$.test(modifieldImage)
                 }
 
             }
@@ -215,57 +166,14 @@ export class DeliveryOrderComponent implements OnInit {
                     }
                     for (let a = 0; a < response.result[i].orderProducts.length; a++) {
                         this$.productId.push(response.result[i].orderProducts[a].orderProductId);
-                        // if(response.result[i].orderProducts[a].ordersProductStatus != 'Confirmed'){
-                        //     this$.router.navigate(['/delivery-app/task']);
-                        // }
                     }
                 }
-                // this$.order = response.result[0];
             }
 
         });
     }
     loaded() {
         this.loading = false;
-    }
-    test(modifieldImage) {
-        var this$ = this;
-        modifieldImage = modifieldImage.map(m => {
-            return new File(
-                [m],
-                m,
-                {
-                    type: 'image/jpeg'
-                }
-                // name: "1828904_2348310_1563967883928.jpg"
-                // size: 3988177
-            )
-        })
-        // for(let i=0; i < modifieldImage.length;i++){
-
-        this$.ng2ImgMax.resizeImage(modifieldImage, 3000, 1000).subscribe(
-            results => {
-                if (results) {
-                    this$.uploadedImage = new File([results], results.name);
-
-                    // const reader: FileReader = new FileReader();
-                    // reader.readAsDataURL(this$.uploadedImage);
-                    // reader.onload = () => {
-                    this.imagePreviews.push(this$.uploadedImage);
-                    // };
-                }
-
-                // this$.getImagePreview(this$.uploadedImage);
-            },
-            error => {
-                console.log('😢 Oh no!', error, this$.uploadedImage);
-            }
-        );
-        // }
-        // modifieldImage.length> 0 && modifieldImage.forEach(element => {
-
-        // });
-
     }
 
     getImagePreview(file: File) {
@@ -314,19 +222,19 @@ export class DeliveryOrderComponent implements OnInit {
         this$.loading = true;
         let pendingDeliveryOrders = localStorage.getItem('pendingDeliveryOrders') ? JSON.parse(localStorage.getItem('pendingDeliveryOrders')) : [];
 
-        if(this$.selectProductsForDelivery.length > 0){
+        if (this$.selectProductsForDelivery.length > 0) {
             pendingDeliveryOrders.push({ 'orderId': this$.orderId, selectedProducts: this$.selectProductsForDelivery });
             pendingDeliveryOrders = pendingDeliveryOrders.filter(function (item, pos, self) {
                 return self.indexOf(item) == pos;
             });
         }
-        
+
         let pipe = new DatePipe('en-US');
         const now = Date.now();
         const myFormattedDate = pipe.transform(now, 'yyyy-MM-dd');
         var responseTest = [];
         localStorage.setItem('pendingDeliveryOrders', JSON.stringify(pendingDeliveryOrders));
-        
+
         for (let i = 0; i < this$.selectProductsForDelivery.length; i++) {
             const reqObj = {
                 url: `doUpdateOrderStatus?responseType=json&scopeId=1&rejectionType=&rejectionMessage=&recipientInfo=&recipientName=&comments=&orderProductIds=${this$.selectProductsForDelivery[i]}&status=OutForDelivery&fkAssociateId=${this$.fkAssociateId}&orderId=${this$.orderId}`,
@@ -335,18 +243,16 @@ export class DeliveryOrderComponent implements OnInit {
             this$.BackendService.makeAjax(reqObj, function (err, response, headers) {
 
                 if (err || response.error) {
-                    if (i === (this$.selectProductsForDelivery.length-1)) {
+                    if (i === (this$.selectProductsForDelivery.length - 1)) {
                         this$.router.navigate([`/delivery-app`]);
                         return;
                     }
                 }
                 if (response && !response.error) {
-                    // this$.router.navigate([`/delivery-app/delivery/${this$.orderId}`])
                     responseTest.push(response);
-                    if (i === (this$.selectProductsForDelivery.length-1)) {
+                    if (i === (this$.selectProductsForDelivery.length - 1)) {
                         this$.router.navigate([`/delivery-app`]);
                     }
-                    // this$.router.navigate([`/delivery-app`])
                 }
             });
         }
@@ -357,10 +263,6 @@ export class DeliveryOrderComponent implements OnInit {
 
     dltUploadedImage(event, fileName) {
         var this$ = this;
-        // var _orderId = this$.statusReasonModel.orderId
-        var responseTest = [];
-
-        // new Promise((resolve)=>{
         for (let i = 0; i < this$.productId.length; i++) {
             let reqObj = {
                 url: 'filedelete?orderId=' + this$.orderId + '&orderProductId=' + this$.productId[i] + '&filePath=' + fileName,
@@ -408,7 +310,8 @@ export class DeliveryOrderComponent implements OnInit {
     }
 
     imagePreview(e, imgSrc) {
-        let src = imgSrc.replace('td', 'l');
+        // let src = imgSrc.replace('td', 'l');
+        let src = e.path[0].currentSrc;
         const dialogRef = this.dialog.open(ImgPreviewComponent, {
             width: screen.availWidth + 'px',
             data: { imgSrc: src }
@@ -422,7 +325,7 @@ export class DeliveryOrderComponent implements OnInit {
 
     selectItemForDelivery(index) {
         this.selectProductsForDelivery = this.order.flatMap(m => m.orderProducts.flatMap(i => i.orderProductId))
-        for (let i = 0, len =this.selectProductsForDelivery.length; i < len; i++) {
+        for (let i = 0, len = this.selectProductsForDelivery.length; i < len; i++) {
             if (!this.checked[i]) {
                 this.selectProductsForDelivery.splice(index, 1);
             }
