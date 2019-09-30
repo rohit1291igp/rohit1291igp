@@ -1,86 +1,66 @@
  // Modules
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule, APP_INITIALIZER } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpModule, Http, XHRBackend, RequestOptions } from '@angular/http';
+import { CdkTableModule } from '@angular/cdk/table';
+import { DatePipe } from '@angular/common';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { MyHttpInterceptor } from './others/my-http-interceptor';
-//import { BsDropdownModule } from 'ng2-bootstrap';
-import { SelectModule } from 'ng2-select';
+import { NgModule } from '@angular/core';
+import { HttpModule } from '@angular/http';
+import { MatButtonModule, MatCardModule, MatCheckboxModule, MatDatepickerModule, MatDialogModule, MatDialogRef, MatFormFieldModule, MatIconModule, MatInputModule, MatMenuModule, MatNativeDateModule, MatPaginatorModule, MatProgressBarModule, MatProgressSpinnerModule, MatRadioModule, MatSelectModule, MatSnackBarModule, MatSortModule, MatTableModule, MAT_DIALOG_DATA } from '@angular/material';
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { RouterModule } from '@angular/router';
 import { MyDatePickerModule } from 'mydatepicker';
 //import { InputTrimDirective } from 'ng2-trim-directive';
 import { TrimValueAccessorModule } from 'ng-trim-value-accessor';
-import { DatePipe } from '@angular/common';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NgxEditorModule } from 'ngx-editor';
 import { CKEditorModule } from 'ng2-ckeditor';
-import {MatFormFieldModule, MatInputModule, MatCardModule, MatButtonModule, MatMenuModule, MatDialogModule, MatSnackBarModule, MatTableModule, MatPaginatorModule, MatSortModule, MatDialogRef, MAT_DIALOG_DATA, MatIconModule, MatProgressBarModule, MatProgressSpinnerModule, MatCheckboxModule, MatRadioModule, MatSelectModule, MatDatepickerModule, MatNativeDateModule} from '@angular/material';
-import {CdkTableModule} from '@angular/cdk/table';
 import { Ng2ImgMaxModule, Ng2ImgMaxService } from 'ng2-img-max';
+//import { BsDropdownModule } from 'ng2-bootstrap';
+import { SelectModule } from 'ng2-select';
+import { NgxEditorModule } from 'ngx-editor';
 // Router and Services
 import { routing } from "./app.routing";
-import { BackendService } from './services/backend.service';
-import { UtilityService } from './services/utility.service';
-import { Logger } from './services/logger.service';
-import { AuthenticationService } from './services/authentication.service';
-import { AuthGuard } from './services/auth-guard.service';
-import { UserService } from './services/user.service';
-import { DashboardService } from './services/dashboard.service';
-import { ReportsService } from './services/reports.service';
-import { S3UploadService } from './services/s3Upload.service';
-
+import { AddDeliveryBoyComponent } from './components/add-deliveryboy/add-deliveryboy.component';
 // Components
 import { AppComponent } from './components/app.component';
-import { LoginComponent } from './components/login/login.component';
-import { HomeComponent } from './components/home/home.component';
-import { DashboardComponent } from './components/dashboard/dashboard.component';
-import { MainHeaderComponent } from './components/main-header/main-header.component';
-import { HeaderTabsComponent } from './components/header-tabs/header-tabs.component';
-import { FooterComponent } from './components/footer/footer.component';
-import { OrdersButtonComponent } from './components/orders-button/orders-button.component';
-import { ButtonViewComponent } from './components/button-view/button-view.component';
-import { NoOrdersComponent } from './components/no-orders/no-orders.component';
-import { OrdersActionTrayComponent } from './components/orders-action-tray/orders-action-tray.component';
-import { LoaderComponent } from './components/loader/loader.component';
 import { BlogCreateComponent } from './components/blog-create/blog-create.component';
 import { BlogListComponent } from './components/blog-list/blog-list.component';
 import { BlogViewComponent } from './components/blog-view/blog-view.component';
-import { SeoHomeComponent } from './components/seo-home/seo-home.component';
 import { CategoryModalComponent } from './components/category-modal/category-modal.component';
-import { AddDeliveryBoyComponent } from './components/add-deliveryboy/add-deliveryboy.component';
-import { DeliveryAppComponent } from './components/delivery-app/delivery-app-component';
-import { DeliveryTaskComponent } from './components/delivery-app/delivery-task-component/delivery-task-component';
-import { DeliveryOrderComponent } from './components/delivery-app/delivery-order-component /delivery-order-component';
-import { OutForDeliveryComponent } from './components/delivery-app/out-for-delivery-component /out-for-delivery-component';
-import { UnDeliveredComponent } from './components/delivery-app/undelivered-component/undelivered-component';
-import { DeliveredComponent } from './components/delivery-app/delivered-component/delivered-component';
-import { OrdersDeliveredComponent } from './components/delivery-app/orders-delivered-component/orders-delivered-component';
-import { DeliveryBoyDetailsComponent } from './components/deliveryboy-details/deliveryboy-details.component';
-import { NotificationComponent } from './components/notification/notification.component';
-import { DeliveryHeaderComponent } from './components/delivery-app/delivery-header/delivery-header.component';
-import { ImgPreviewComponent } from './components/img-preview/img-preview.component';
-
-//factories
-import {httpFactory} from "./others/http.factory";
-import { PrintTemplateComponent } from './components/print-template/print-template.component';
-import { Time12Pipe } from './customPipes/time12.pipe';
-import { ReplacePipe } from './customPipes/replace.pipe';
-import { ReportsComponent } from './components/reports/reports.component';
-import { ObjectKeyValuePipe } from './customPipes/object-key-value.pipe';
-import { WidgetsComponent } from './components/widgets/widgets.component';
-import { FeedsComponent } from './components/feeds/feeds.component';
-import { UploadExcelComponent } from './components/upload-excel/upload-excel.component';
-import { VendorDropdownComponent } from './components/vendor-dropdown/vendor-dropdown.component';
 import { CategoryComponent } from './components/category/category.component';
-import { VoucherComponent } from './components/voucher/voucher.component';
-import { VoucherModelComponent } from './components/voucher-model/voucher-model.component';
-
-//Custom Pipe
-import { FilterPipe} from './customPipes/filter.pipe';
-import { SendEmailComponent } from './components/send-email/send-email.component';
+import { DeliveryBoyDetailsComponent } from './components/deliveryboy-details/deliveryboy-details.component';
 import { DownloadEmailComponent } from './components/download-email/download-email.component';
-import { SelectItemForDelivered } from './components/select-item/select-item.component';
+import { FooterComponent } from './components/footer/footer.component';
+import { HomeComponent } from './components/home/home.component';
+import { ImgPreviewComponent } from './components/img-preview/img-preview.component';
+import { LoginComponent } from './components/login/login.component';
+import { MainHeaderComponent } from './components/main-header/main-header.component';
 import { MicroSiteDasboardComponent } from './components/micro-site/micro-site-dashboard.component';
+import { NotificationComponent } from './components/notification/notification.component';
+import { SelectItemForDelivered } from './components/select-item/select-item.component';
+import { SendEmailComponent } from './components/send-email/send-email.component';
+import { SeoHomeComponent } from './components/seo-home/seo-home.component';
+import { UploadExcelComponent } from './components/upload-excel/upload-excel.component';
+import { VoucherModelComponent } from './components/voucher-model/voucher-model.component';
+import { VoucherComponent } from './components/voucher/voucher.component';
+//Custom Pipe
+import { FilterPipe } from './customPipes/filter.pipe';
+import { ObjectKeyValuePipe } from './customPipes/object-key-value.pipe';
+import { Time12Pipe } from './customPipes/time12.pipe';
+import { MyHttpInterceptor } from './others/my-http-interceptor';
+import { AuthGuard } from './services/auth-guard.service';
+import { AuthenticationService } from './services/authentication.service';
+import { BackendService } from './services/backend.service';
+import { DashboardService } from './services/dashboard.service';
+import { Logger } from './services/logger.service';
+import { ReportsService } from './services/reports.service';
+import { S3UploadService } from './services/s3Upload.service';
+import { UserService } from './services/user.service';
+import { UtilityService } from './services/utility.service';
+import { SharedModule } from './shared-module/shared/shared.module';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { DashboardModule } from './modules/dashboard.module';
+
+
+
 
 //env config
 /*import {envConfig} from "./others/env.config";
@@ -93,25 +73,11 @@ export function ConfigLoader(envConfig: envConfig) {
     AppComponent,
     LoginComponent,
     HomeComponent,
-    DashboardComponent,
     MainHeaderComponent,
-    HeaderTabsComponent,
     FooterComponent,
-    OrdersButtonComponent,
-    ButtonViewComponent,
-    NoOrdersComponent,
-    OrdersActionTrayComponent,
-    LoaderComponent,
-    PrintTemplateComponent,
     Time12Pipe,
-    ReplacePipe,
-    ReportsComponent,
     ObjectKeyValuePipe,
-    WidgetsComponent,
-    //  InputTrimDirective,
-      FeedsComponent,
     UploadExcelComponent,
-    VendorDropdownComponent,
     BlogCreateComponent,
     BlogListComponent,
     BlogViewComponent,
@@ -124,27 +90,18 @@ export function ConfigLoader(envConfig: envConfig) {
     SendEmailComponent,
     DownloadEmailComponent,
     AddDeliveryBoyComponent,
-    DeliveryAppComponent,
-    DeliveryTaskComponent,
-    DeliveryOrderComponent,
-    OutForDeliveryComponent,
-    UnDeliveredComponent,
-    DeliveredComponent,
-    OrdersDeliveredComponent,
     NotificationComponent,
     DeliveryBoyDetailsComponent,
-    DeliveryHeaderComponent,
     ImgPreviewComponent,
     SelectItemForDelivered,
-    MicroSiteDasboardComponent
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
-    FormsModule,
-    ReactiveFormsModule,
     HttpModule,
     HttpClientModule,
+    SharedModule,
+    DashboardModule.forRoot(),
     MatFormFieldModule,
     MatInputModule,
     MatTableModule,
@@ -163,16 +120,15 @@ export function ConfigLoader(envConfig: envConfig) {
     MatRadioModule,
     MatSelectModule,
     MatDatepickerModule,
-    MatNativeDateModule,        // <----- import for date formating(optional)
-    // MatMomentDateModule,
+    MatNativeDateModule,
     routing,
-    //BsDropdownModule.forRoot(),
     SelectModule,
     MyDatePickerModule,
     TrimValueAccessorModule,
     NgxEditorModule,
     CKEditorModule,
-    Ng2ImgMaxModule
+    Ng2ImgMaxModule,
+    // RouterModule
   ],
   providers: [
     {
@@ -201,12 +157,13 @@ export function ConfigLoader(envConfig: envConfig) {
     ReportsService,
     DatePipe,
     Time12Pipe,
-    ReplacePipe,
+    // ReplacePipe,
     ObjectKeyValuePipe,
     S3UploadService,
     Ng2ImgMaxService
   ],
   entryComponents:[UploadExcelComponent,NotificationComponent, ImgPreviewComponent, SelectItemForDelivered],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  exports: [RouterModule]
 })
 export class AppModule { }
