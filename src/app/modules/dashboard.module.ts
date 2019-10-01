@@ -10,10 +10,12 @@ import { NoOrdersComponent } from 'app/components/no-orders/no-orders.component'
 import { OrdersButtonComponent } from 'app/components/orders-button/orders-button.component';
 import { SharedModule } from 'app/shared-module/shared/shared.module';
 import { MyDatePickerModule } from 'mydatepicker';
+import { AuthGuard } from 'app/services/auth-guard.service';
 const routes: Routes = [
   {
     path: '',
-    component: DashboardComponent
+    component: DashboardComponent,
+    canActivate: [AuthGuard]
   }
 ];
 
