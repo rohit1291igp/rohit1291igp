@@ -1327,7 +1327,10 @@ getDeliveryBoyList(){
 
         if( _this.reportType !== "getComponentReport" && _this.reportType !== "getBarcodeToComponentReport"){
             if(environment.userType && environment.userType === "admin"){
-                paramsObj.fkAssociateId = _this.searchResultModel["fkAssociateId"];
+                
+                paramsObj.fkAssociateId = rowData.Vendor_Id;
+
+                // paramsObj.fkAssociateId = _this.searchResultModel["fkAssociateId"];
             }else{
                 paramsObj.fkAssociateId =  localStorage.getItem('fkAssociateId');
             }
@@ -1496,7 +1499,7 @@ getDeliveryBoyList(){
           }
 
        }else{
-            return cellValue || "";
+            return cellValue;
        }
     }
 
