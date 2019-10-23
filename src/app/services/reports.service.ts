@@ -69,7 +69,11 @@ export class ReportsService {
                   if(reportType === "getPincodeReport"){
                       queryParmas += '&endLimit=1000';
                   }else{
-                      queryParmas += '&endLimit='+_this.endLimit;
+                      if(reportType === "getVendorDetails"){
+                        queryParmas += '&endLimit='+400;
+                      }else{
+                        queryParmas += '&endLimit='+_this.endLimit;
+                      }
                   }
               }
 
