@@ -24,8 +24,6 @@ import { AppComponent } from './components/app.component';
 import { BlogCreateComponent } from './components/blog-create/blog-create.component';
 import { BlogListComponent } from './components/blog-list/blog-list.component';
 import { BlogViewComponent } from './components/blog-view/blog-view.component';
-import { CategoryModalComponent } from './components/category-modal/category-modal.component';
-import { CategoryComponent } from './components/category/category.component';
 import { DeliveryBoyDetailsComponent } from './components/deliveryboy-details/deliveryboy-details.component';
 import { DownloadEmailComponent } from './components/download-email/download-email.component';
 import { FooterComponent } from './components/footer/footer.component';
@@ -33,18 +31,14 @@ import { HomeComponent } from './components/home/home.component';
 import { ImgPreviewComponent } from './components/img-preview/img-preview.component';
 import { LoginComponent } from './components/login/login.component';
 import { MainHeaderComponent } from './components/main-header/main-header.component';
-import { MicroSiteDasboardComponent } from './components/micro-site/micro-site-dashboard.component';
 import { NotificationComponent } from './components/notification/notification.component';
 import { SelectItemForDelivered } from './components/select-item/select-item.component';
-import { SendEmailComponent } from './components/send-email/send-email.component';
-import { SeoHomeComponent } from './components/seo-home/seo-home.component';
 import { UploadExcelComponent } from './components/upload-excel/upload-excel.component';
-import { VoucherModelComponent } from './components/voucher-model/voucher-model.component';
-import { VoucherComponent } from './components/voucher/voucher.component';
 //Custom Pipe
-import { FilterPipe } from './customPipes/filter.pipe';
+import { FilterPipe, FilterPipeModule } from './customPipes/filter.pipe';
 import { ObjectKeyValuePipe } from './customPipes/object-key-value.pipe';
 import { Time12Pipe } from './customPipes/time12.pipe';
+import { DashboardModule } from './modules/dashboard.module';
 import { MyHttpInterceptor } from './others/my-http-interceptor';
 import { AuthGuard } from './services/auth-guard.service';
 import { AuthenticationService } from './services/authentication.service';
@@ -56,8 +50,6 @@ import { S3UploadService } from './services/s3Upload.service';
 import { UserService } from './services/user.service';
 import { UtilityService } from './services/utility.service';
 import { SharedModule } from './shared-module/shared/shared.module';
-import { DashboardComponent } from './components/dashboard/dashboard.component';
-import { DashboardModule } from './modules/dashboard.module';
 
 
 
@@ -81,13 +73,6 @@ export function ConfigLoader(envConfig: envConfig) {
     BlogCreateComponent,
     BlogListComponent,
     BlogViewComponent,
-    SeoHomeComponent,
-    CategoryComponent,
-    CategoryModalComponent,
-    VoucherComponent,
-    VoucherModelComponent,
-    FilterPipe,
-    SendEmailComponent,
     DownloadEmailComponent,
     AddDeliveryBoyComponent,
     NotificationComponent,
@@ -127,7 +112,7 @@ export function ConfigLoader(envConfig: envConfig) {
     TrimValueAccessorModule,
     NgxEditorModule,
     CKEditorModule,
-    Ng2ImgMaxModule,
+    Ng2ImgMaxModule
     // RouterModule
   ],
   providers: [

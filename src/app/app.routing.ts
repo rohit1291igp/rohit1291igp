@@ -7,30 +7,25 @@ import { CategoryComponent } from './components/category/category.component';
 import { DeliveryBoyDetailsComponent } from './components/deliveryboy-details/deliveryboy-details.component';
 import { DownloadEmailComponent } from './components/download-email/download-email.component';
 import { LoginComponent } from './components/login/login.component';
-import { MicroSiteDasboardComponent } from './components/micro-site/micro-site-dashboard.component';
-import { SendEmailComponent } from './components/send-email/send-email.component';
-import { SeoHomeComponent } from './components/seo-home/seo-home.component';
 import { VoucherComponent } from './components/voucher/voucher.component';
 import { AuthGuard } from './services/auth-guard.service';
 
 
 const route: Routes = [
-  
+
   { path: 'login', component: LoginComponent },
   {
     path: 'dashboard',
     loadChildren: './modules/dashboard.module#DashboardModule',
-    // component: DashboardComponent,
     canActivate: [AuthGuard]
   },
   {
     path: 'reports/:type',
-    // component: ReportsComponent,
     loadChildren: './modules/report.module#ReportModule',
     canActivate: [AuthGuard]
   },
   {
-    path:'deliveryBoyDetails', 
+    path: 'deliveryBoyDetails',
     component: DeliveryBoyDetailsComponent,
     canActivate: [AuthGuard]
   },
@@ -45,19 +40,31 @@ const route: Routes = [
     component: BlogViewComponent,
     canActivate: [AuthGuard]
   },
-  { path: 'seo', component: SeoHomeComponent, canActivate: [AuthGuard] },
+  {
+    path: 'seo',
+    loadChildren: './modules/seo.module#SeoHomeModule',
+    canActivate: [AuthGuard]
+  },
   {
     path: 'categories',
-    component: CategoryComponent,
+    loadChildren: './modules/categories.module#CategoriesModule',
     canActivate: [AuthGuard]
   },
-  { path: 'voucher', component: VoucherComponent, canActivate: [AuthGuard] },
+  {
+    path: 'voucher',
+    loadChildren: './modules/voucher.module#VoucherModule',
+    canActivate: [AuthGuard]
+  },
   {
     path: 'sendemail',
-    component: SendEmailComponent,
+    loadChildren: './modules/sendemail.module#SendEmailModule',
     canActivate: [AuthGuard]
   },
-  { path: 'download/:fileFor/:filedate/:fileTime', component: DownloadEmailComponent, canActivate: [AuthGuard] },
+  {
+    path: 'download/:fileFor/:filedate/:fileTime',
+    component: DownloadEmailComponent,
+    canActivate: [AuthGuard]
+  },
   {
     path: 'add-delivery-boy',
     component: AddDeliveryBoyComponent,
@@ -66,7 +73,6 @@ const route: Routes = [
   {
     path: 'delivery-app',
     loadChildren: './modules/delivery.module#DeliveryModule',
-    // component: DeliveryAppComponent,
     canActivate: [AuthGuard]
   },
   {
@@ -79,4 +85,4 @@ const route: Routes = [
   { path: '**', redirectTo: 'dashboard' }
 ];
 
-export const routing = RouterModule.forRoot(route, {useHash: true});
+export const routing = RouterModule.forRoot(route, { useHash: true });
