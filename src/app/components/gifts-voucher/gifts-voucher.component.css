@@ -1,0 +1,73 @@
+.gift-voucher-main-container {
+    margin-top: 75px;
+}
+
+.gift-voucher-user-header {
+    margin-bottom: 8px;
+    text-align: left;
+}
+
+.gift-voucher-list-container {
+    margin: 16px;
+}
+
+.gift-voucher-search-and-create-container {
+    margin: 16px;
+    display: flex;
+}
+
+.gift-voucher-search-and-create-container>mat-card {
+    flex: 1;
+}
+
+.gift-voucher-search-and-create-container>mat-card:first-child {
+    margin-right: 20px;
+}
+
+.form-container {
+    display: flex;
+    flex-direction: column;
+}
+
+/* .form-container>mat-form-field {
+    margin: 8px;
+} */
+
+.hide-form {
+    width: 0;
+    overflow: hidden;
+    /* transition: all 0.5s ease-out; */
+    opacity: 0;
+}
+
+.show-form {
+    width: max-content;
+    /* transition: all 0.5s ease-in;
+    opacity: 1; */
+}
+
+.btn-color {
+    background: #C3404E;
+    color: #fff;
+}
+
+.snackbar-background {
+    background: #C3404E;
+}
+
+/* mat-cell:nth-child(1),
+mat-header-cell:nth-child(1) {
+    flex: 0 0 30%;
+} */
+
+mat-cell:nth-child(5), mat-header-cell:nth-child(5) {
+    flex: 0 0 10%;
+}
+
+.cut-text {
+    width: 100px;
+    overflow: hidden;
+    display: inline-block;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}

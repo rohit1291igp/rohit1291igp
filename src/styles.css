@@ -871,3 +871,6 @@ body .dashboard-content, body .orders-button{
 .snackbar-background {
     background: #C3404E;
 }
+.full-width{
+    width: 100%;
+}
