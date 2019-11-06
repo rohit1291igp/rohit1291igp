@@ -1,0 +1,169 @@
+<div class="gift-voucher-main-container">
+    <div class="gift-voucher-search-and-create-container d-flex">
+        <mat-card>
+            <div class="gift-voucher-user-header">Search User</div>
+            <form [formGroup]="SearchVoucherCodeForm" (ngSubmit)="SearchVoucher(SearchVoucherCodeForm)">
+                <div class="form-container">
+                    <div class="d-flex">
+                        <mat-form-field class="flex-1 m-8">
+                            <input matInput formControlName="createdby" placeholder="Createdby (User)"
+                                autocomplete="off">
+                        </mat-form-field>
+
+                        <mat-form-field class="flex-1 m-8">
+                            <input matInput formControlName="vouchercode" placeholder="Voucher Code" autocomplete="off">
+                        </mat-form-field>
+                    </div>
+                    <div class="d-flex">
+                        <mat-form-field class="flex-1 m-8">
+                            <!-- (keyup)="applyFilter($event.target.value)" -->
+                            <mat-label>Status</mat-label>
+                            <mat-select matNativeControl formControlName="enabled" required>
+                                <mat-option value="0">Enable</mat-option>
+                                <mat-option value="1">Disable</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <mat-form-field class="m-8 flex-1">
+                            <mat-label>Voucher Type</mat-label>
+                            <mat-select matNativeControl formControlName="vouchertype" required>
+                                <mat-option value="0">discount in percentage</mat-option>
+                                <mat-option value="1">direct discount</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <button type="submit" mat-raised-button
+                        class="btn-color">Search</button>
+                </div>
+            </form>
+        </mat-card>
+        <mat-card class="d-flex align-items-center justify-content-center text-align-center">
+            <div class="full-width">
+                <div class="gift-voucher-user-header">Create Voucher</div>
+                <form [formGroup]="createVoucherForm" (ngSubmit)="createVoucher(createVoucherForm)">
+                    <div class="form-container">
+                        <table class="full-width" cellspacing="0">
+                            <tr>
+                                <td>
+                                    <mat-form-field class="full-width" style="padding-right: 8px;">
+                                        <input matInput formControlName="couponcost" placeholder="Voucher Code">
+                                    </mat-form-field>
+                                </td>
+                                <td>
+                                    <mat-form-field class="full-width">
+                                        <input type="number" matInput formControlName="couponcostdollar"
+                                            placeholder="Coupon Cost Dollar">
+                                    </mat-form-field>
+                                </td>
+                                <td>
+                                    <mat-form-field>
+                                        <mat-label>Coupon Type</mat-label>
+                                        <mat-select matNativeControl formControlName="coupontype" required>
+                                            <mat-option value="0">Generic</mat-option>
+                                            <mat-option value="1">domain based</mat-option>
+                                            <mat-option value="2">email based</mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <mat-form-field class="full-width" style="padding-right: 8px;">
+                                        <input matInput formControlName="couponlink"
+                                            placeholder="couponlink">
+                                    </mat-form-field>
+                                </td>
+                                <td>
+                                    <mat-form-field class="full-width" style="padding-right: 8px;">
+                                        <input type="number" matInput formControlName="purchaseorderid"
+                                            placeholder="purchaseorderid">
+                                    </mat-form-field>
+                                </td>
+                                <td>
+                                    <mat-form-field class="full-width">
+                                        <input type="number" matInput formControlName="couponstatus"
+                                            placeholder="Usage Limit">
+                                    </mat-form-field>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <mat-form-field class="full-width" style="padding-right: 8px;">
+                                        <!-- <input matInput formControlName="expirydate" placeholder="expirydate"> -->
+                                        <input matInput [matDatepicker]="expirydate" placeholder="Expiry Date"
+                                            (dateInput)="expiryDate('input', $event)" [min]="todaydate"
+                                            autocomplete="off">
+                                        <mat-datepicker-toggle matSuffix [for]="expirydate"></mat-datepicker-toggle>
+                                        <mat-datepicker #expirydate disabled="false"></mat-datepicker>
+                                    </mat-form-field>
+                                </td>
+                                <td>
+                                    <mat-form-field class="full-width" style="padding-right: 8px;">
+                                        <input type="number" matInput formControlName="couponuses"
+                                            placeholder="Used Orderid">
+                                    </mat-form-field>
+                                </td>
+                                <td>
+                                    <mat-form-field class="full-width">
+                                        <input matInput formControlName="vouchercat"
+                                            placeholder="Voucher Category">
+                                    </mat-form-field>
+                                </td>
+                            </tr>
+                        </table>
+                        <table>
+                            <tr style="line-height: 6;">
+                                <td>
+                                    <mat-form-field class="full-width" style="padding-right: 8px;">
+                                        <mat-label>Status</mat-label>
+                                        <mat-select matNativeControl formControlName="couponstatus" required>
+                                            <mat-option value="y">Enable</mat-option>
+                                            <mat-option value="n">Disable</mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </td>
+                                <td>
+                                    <mat-form-field class="full-width">
+                                        <textarea matInput formControlName="description"
+                                            placeholder="Description"></textarea>
+                                    </mat-form-field>
+                                </td>
+                            </tr>
+                        </table>
+                        <button type="submit" mat-raised-button class="btn-color"
+                            [disabled]="!createVoucherForm.valid">Create</button>
+                    </div>
+                </form>
+            </div>
+        </mat-card>
+    </div>
+    <div class="gift-voucher-list-container">
+        <ng-container>
+            <mat-card>
+                <ng-container
+                    *ngIf="(dataSource?._renderData | async) && (dataSource?._renderData | async ).length > 0 else noRecord">
+                    <mat-table #table mat-table [dataSource]="dataSource" matSort>
+                        <ng-container matColumnDef="{{column.id}}" *ngFor="let column of columnNames;">
+                            <mat-header-cell mat-header-cell *matHeaderCellDef mat-sort-header> {{column.value}}
+                            </mat-header-cell>
+                            <mat-cell mat-cell *matCellDef="let element">
+                                <span *ngIf="column.id !== 'expirydate' && column.id !== 'description'">{{element[column.id]}}</span>
+                                <span *ngIf="column.id == 'description'" class="cut-text">{{element[column.id]}}</span>
+                                <span *ngIf="column.id === 'expirydate'">{{element[column.id] | date: 'dd/MM/yyyy'}}</span>
+                                <!-- <span *ngIf="column.id == 'enabled' &&!element['enabled']" style="padding-left: 8px;">Active</span>
+                                <span *ngIf="column.id == 'enabled' && element['enabled']" style="padding-left: 8px;">Disabled</span> -->
+
+                                <!-- <span *ngIf="!element[column.id]" style="padding-left: 8px;">-</span> -->
+                            </mat-cell>
+                        </ng-container>
+                        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                        <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="openCouponDetail(row)"></mat-row>
+                    </mat-table>
+                    <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" showFirstLastButtons></mat-paginator>
+                </ng-container>
+                <ng-template #noRecord>
+                    <div style="color:#C3404E">No Record Found</div>
+                </ng-template>
+            </mat-card>
+        </ng-container>
+    </div>
+</div>

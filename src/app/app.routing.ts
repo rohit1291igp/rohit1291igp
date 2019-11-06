@@ -80,6 +80,11 @@ const route: Routes = [
     loadChildren: './modules/microsite.module#MicroSiteModule',
     canActivate: [AuthGuard]
   },
+  {
+    path: 'coupon',
+    loadChildren: './modules/coupon.module#CouponModule',
+    canActivate: [AuthGuard]
+  },
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
   // otherwise redirect to home
   { path: '**', redirectTo: 'dashboard' }
