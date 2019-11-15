@@ -708,8 +708,14 @@ getDeliveryBoyList(){
                 _this.columnFilterSubmit(e);
                 _this.showMoreTableData(e);
             }else{
+                var options = {
+                    showLabels: true, 
+                    showTitle: false,
+                    headers: Object.keys(_this.orginalReportData.tableData[0]).map(m => m.charAt(0).toUpperCase() + m.slice(1)),
+                    nullToEmptyString: true,
+                  };
                 let data = _this.orginalReportData.tableData;
-                let download = new Angular5Csv(data, filname);
+                let download = new Angular5Csv(data, filname, options);
             }
         
         });
