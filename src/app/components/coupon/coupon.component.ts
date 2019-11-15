@@ -99,17 +99,17 @@ export class CouponComponent implements OnInit {
   // }
 
   getVouchers() {
-    this.apiService.fetchVouchers().subscribe((res) => {
-      // let pipe = new DatePipe('en-US');
-      // res.length > 0 && res.forEach(m => m.expirydate = pipe.transform(new Date(m.expirydate), 'dd/MM/yyyy'));
-      this.dataSource = new MatTableDataSource(res);
-      setTimeout(() => {
-        this.dataSource.sort = this.sort;
-        this.dataSource.paginator = this.paginator;
-        if (this.dataSource.paginator) {
-          this.dataSource.paginator.firstPage();
-        }
-      }, 100);
+    this.apiService.fetchVouchers().subscribe((res: any) => {
+      if (res.status.toLowerCase() === 'success') {
+        this.dataSource = new MatTableDataSource(res.data.vouchermodellist);
+        setTimeout(() => {
+          this.dataSource.sort = this.sort;
+          this.dataSource.paginator = this.paginator;
+          if (this.dataSource.paginator) {
+            this.dataSource.paginator.firstPage();
+          }
+        }, 100);
+      }
     });
   }
 
@@ -125,7 +125,7 @@ export class CouponComponent implements OnInit {
 
   }
 
-  SearchVoucher(voucherData){
+  SearchVoucher(voucherData) {
     console.log(voucherData.value);
   }
 

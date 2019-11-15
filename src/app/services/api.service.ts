@@ -224,7 +224,8 @@ export class ApiService {
     }
 
     fetchVouchers() {
-        return Observable.of(this.coupondetails);
+        let fkAssociateId = 5;//localStorage.getItem('fkAssociateId');
+        return this.http.get(`${environment.origin}v1/vouchers/getvoucher?fkAssociateId=${fkAssociateId}&startLimit=1&endLimit=10`);//Observable.of(this.coupondetails);
     }
 
     searchVoucher(data) {
