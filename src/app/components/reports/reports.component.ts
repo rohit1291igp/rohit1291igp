@@ -9,6 +9,7 @@ import { ReportsService } from '../../services/reports.service';
 import { S3UploadService } from '../../services/s3Upload.service';
 import { UtilityService } from '../../services/utility.service';
 import { OrdersActionTrayComponent } from '../orders-action-tray/orders-action-tray.component';
+import { Angular5Csv } from 'angular5-csv/dist/Angular5-csv';
 
 @Component({
   selector: 'app-reports',
@@ -636,7 +637,7 @@ getDeliveryBoyList(){
       }
   }
 
-  searchReportSubmit(e, searchFields2?){
+  searchReportSubmit(e, searchFields2?, isDownload?:boolean, filname?:string){
         var _this=this;
         _this.BackendService.abortLastHttpCall();//abort  other  api calls
         console.log('Search report form submitted ---->', _this.searchResultModel);
@@ -703,8 +704,14 @@ getDeliveryBoyList(){
             /* need to handle filter - start */
             _this.orginalReportData.summary = _reportData.summary;
             _this.orginalReportData.tableData = _reportData.tableData; //_this.orginalReportData.tableData.concat(_reportData.tableData);
-            _this.columnFilterSubmit(e);
-            _this.showMoreTableData(e);
+            if(e && !isDownload){
+                _this.columnFilterSubmit(e);
+                _this.showMoreTableData(e);
+            }else{
+                let data = _this.orginalReportData.tableData;
+                let download = new Angular5Csv(data, filname);
+            }
+        
         });
         
    }
@@ -1475,7 +1482,14 @@ getDeliveryBoyList(){
     }
 
     downLoadCSV(e, fileName){
-      this.UtilityService.createCSV('table tr', (fileName || 'report'));
+
+        this.searchReportSubmit(null, null, true, fileName);
+        // if(this.orginalReportData.tableData.length > 0){
+        //     let data = this.orginalReportData.tableData;
+        //     let download = new Angular5Csv(data, fileName);
+        // }
+        
+    //   this.UtilityService.createCSV('table tr', (fileName || 'report'));
     }
 
     getCellValue(cellValue){

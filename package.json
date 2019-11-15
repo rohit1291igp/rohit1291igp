@@ -30,6 +30,7 @@
     "angular-froala-wysiwyg": "^2.8.1",
     "angular2-jwt": "^0.1.23",
     "angular4-notify": "^1.2.0",
+    "angular5-csv": "^0.2.11",
     "aws-sdk": "^2.243.1",
     "blueimp-canvas-to-blob": "^3.15.0",
     "core-js": "^2.4.1",
