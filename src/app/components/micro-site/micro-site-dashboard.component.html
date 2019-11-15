@@ -35,8 +35,13 @@
                             </mat-select>
                         </mat-form-field>
                     </div>
-                    <button [disabled]="!SearchForm.valid" type="submit" mat-raised-button
+                    <div class="d-flex">
+                        <button style="margin: 5px;flex:1;" id="search" [disabled]="!SearchForm.valid" type="submit" mat-raised-button
                         class="btn-color">Search</button>
+                        <button style="margin: 5px;flex:1;" id="download" [disabled]="!SearchForm.valid" type="submit" mat-raised-button
+                        class="btn-color">Download</button>  
+                    </div>
+                      
                 </div>
             </form>
         </mat-card>

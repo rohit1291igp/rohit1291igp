@@ -7,6 +7,7 @@ import { BackendService } from '../../services/backend.service';
 import { NotificationComponent } from '../notification/notification.component';
 import { NativeDateAdapter } from '@angular/material';
 import { MatDateFormats, DateAdapter, MAT_DATE_FORMATS } from '@angular/material/core';
+import { Angular5Csv } from 'angular5-csv/dist/Angular5-csv';
 
 export class AppDateAdapter extends NativeDateAdapter {
     format(date: Date, displayFormat: Object): string {
@@ -205,7 +206,7 @@ export class MicroSiteDasboardComponent implements OnInit {
     onSubmit(data) {
         // console.log(data);
         // console.log(data.value.filtertype);
-
+        var buttonName = document.activeElement.getAttribute("id");
         const _this = this;
         const pipe = new DatePipe('en-US');
         const datefrom = pipe.transform(data.value.datefrom, 'yyyy-MM-dd');
@@ -229,33 +230,48 @@ export class MicroSiteDasboardComponent implements OnInit {
                 return;
             }
             if (response.status.toLowerCase() == 'success' && response.data) {
-                _this.displayUploadForm(false);
-                if (data.value.filtertype == 'all') {
-                    response.data = response.data.length > 0 && response.data.filter(f => {
-                        if (f.type == 'debit') {
-                            delete f.uploadDate;
-                            return f;
-                        } else {
-                            return f;
-                        }
-                    });
-                }
-                response.data.length > 0 && response.data.forEach(m => m.uploadDate = pipe.transform(m.uploadDate, 'dd/MM/yyyy'));
-                response.data.length > 0 && response.data.forEach(m => m.couponUsedDate = pipe.transform(m.couponUsedDate, 'dd/MM/yyyy'));
-
-                _this.dataSource = new MatTableDataSource(response.data);
-                _this.setTableColumn(data.value.filtertype)
-                setTimeout(() => {
-                    _this.dataSource.sort = _this.sort;
-                    _this.dataSource.paginator = _this.paginator;
-                    if (_this.dataSource.paginator) {
-                        _this.dataSource.paginator.firstPage();
+                if(buttonName === 'search'){
+                    _this.displayUploadForm(false);
+                    if (data.value.filtertype == 'all') {
+                        response.data = response.data.length > 0 && response.data.filter(f => {
+                            if (f.type == 'debit') {
+                                delete f.uploadDate;
+                                return f;
+                            } else {
+                                return f;
+                            }
+                        });
                     }
-                }, 100);
-            }
+                    response.data.length > 0 && response.data.forEach(m => m.uploadDate = pipe.transform(m.uploadDate, 'dd/MM/yyyy'));
+                    response.data.length > 0 && response.data.forEach(m => m.couponUsedDate = pipe.transform(m.couponUsedDate, 'dd/MM/yyyy'));
+    
+                    _this.dataSource = new MatTableDataSource(response.data);
+                    _this.setTableColumn(data.value.filtertype);
+                    setTimeout(() => {
+                        _this.dataSource.sort = _this.sort;
+                        _this.dataSource.paginator = _this.paginator;
+                        if (_this.dataSource.paginator) {
+                            _this.dataSource.paginator.firstPage();
+                        }
+                    }, 100);
+                 }else{
+                    let userData = response.data;
+                    // let headerData = _this.swap(response.data[0]);
+                    var options = {
+                        showLabels: true, 
+                        showTitle: false,
+                        headers: Object.keys(userData[0]).map(m => m.charAt(0).toUpperCase() + m.slice(1)),
+                        nullToEmptyString: true,
+                      };
+                    // userData.unshift(headerData);
+                    let download = new Angular5Csv(userData, 'userReport', options);
+                 }
+                }
+                
         });
 
     }
+
     uploadExcel(event) {
         var _this = this;
         var fileInput = event.target.querySelector('#uploadFile') || {};
