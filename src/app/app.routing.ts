@@ -81,8 +81,8 @@ const route: Routes = [
     canActivate: [AuthGuard]
   },
   {
-    path: 'coupon',
-    loadChildren: './modules/coupon.module#CouponModule',
+    path: 'voucher',
+    loadChildren: './modules/voucher.module#VoucherModule',
     canActivate: [AuthGuard]
   },
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
