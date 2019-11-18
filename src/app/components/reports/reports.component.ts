@@ -203,6 +203,7 @@ export class ReportsComponent implements OnInit{
   uploadedImages = [];
   durationInSeconds = 5;
   deliveryBoyList:any;
+  isDownload: boolean;
   constructor(
       private _elementRef: ElementRef,
       public reportsService: ReportsService,
@@ -637,7 +638,7 @@ getDeliveryBoyList(){
       }
   }
 
-  searchReportSubmit(e, searchFields2?, isDownload?:boolean, filname?:string){
+  searchReportSubmit(e, searchFields2?){
         var _this=this;
         _this.BackendService.abortLastHttpCall();//abort  other  api calls
         console.log('Search report form submitted ---->', _this.searchResultModel);
@@ -704,20 +705,11 @@ getDeliveryBoyList(){
             /* need to handle filter - start */
             _this.orginalReportData.summary = _reportData.summary;
             _this.orginalReportData.tableData = _reportData.tableData; //_this.orginalReportData.tableData.concat(_reportData.tableData);
-            if(e && !isDownload){
+            _this.isDownload = true;
+            // if(e){
                 _this.columnFilterSubmit(e);
                 _this.showMoreTableData(e);
-            }else{
-                var options = {
-                    showLabels: true, 
-                    showTitle: false,
-                    headers: Object.keys(_this.orginalReportData.tableData[0]).map(m => m.charAt(0).toUpperCase() + m.slice(1)),
-                    nullToEmptyString: true,
-                  };
-                let data = _this.orginalReportData.tableData;
-                let download = new Angular5Csv(data, filname, options);
-            }
-        
+            // }
         });
         
    }
@@ -783,6 +775,16 @@ getDeliveryBoyList(){
                 _this.columnFilterSubmit(e);
                 _this.showMoreTableData(e);
             });
+        }
+        if(_this.orginalReportData.tableData.length == totalOrders && _this.isDownload){
+            var options = {
+                showLabels: true, 
+                showTitle: false,
+                headers: Object.keys(_this.orginalReportData.tableData[0]).map(m => m.charAt(0).toUpperCase() + m.slice(1)),
+                nullToEmptyString: true,
+              };
+            let data = _this.orginalReportData.tableData;
+            let download = new Angular5Csv(data, _this.reportType, options);
         }
     }
 
@@ -1489,7 +1491,7 @@ getDeliveryBoyList(){
 
     downLoadCSV(e, fileName){
 
-        this.searchReportSubmit(null, null, true, fileName);
+        this.searchReportSubmit(null, null);
         // if(this.orginalReportData.tableData.length > 0){
         //     let data = this.orginalReportData.tableData;
         //     let download = new Angular5Csv(data, fileName);
