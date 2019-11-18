@@ -632,107 +632,110 @@
                         </tr>
 
                         <tr class="reporTableRow" *ngFor="let tableRowValue of reportData.tableData; let dataIndex='index'" >
-                            <td class="reportTableCell" style="word-break: break-word;" *ngFor="let tableCol of reportData.tableHeaders; let i='index'" [ngClass]="{'hide' : isHiddenCell(tableCol)}" [style.width]="tableCol === 'email'? 'auto' : 'auto' ">
-                                <div class="tdTxt">
-                                    <span *ngIf="tableCol == 'Component Image' || tableCol == 'Component_Image'" >
-                                        <img class="clk" style="width: 4em; box-shadow: 0 1px 3px #888888;" src="{{componentImageUrl}}{{getCellValue(tableRowValue[tableCol])}}" alt="{{getCellValue(tableRowValue[tableCol])}}" (click)="imagePreview($event, componentImageUrl +(getCellValue(tableRowValue[tableCol])))">
-                                    </span>
-                                    <span *ngIf="tableCol == 'Product Image' || tableCol == 'Product_Image'" >
-                                        <img class="clk" style="width: 4em; box-shadow: 0 1px 3px #888888;" src="{{productsURL}}th/{{getCellValue(tableRowValue[tableCol])}}" alt="{{getCellValue(tableRowValue[tableCol])}}" (click)="imagePreview($event, productsURL+'l/'+(getCellValue(tableRowValue[tableCol])))">
-                                    </span>
-
-                                    <span *ngIf="tableCol == 'Out Of Delivery' || tableCol == 'Out_Of_Delivery' " >
-                                        <img class="clk inline" style="width: 4em; box-shadow: 0 1px 3px #888888; margin-left:0.5em;" src="{{imgsrc}}" alt="{{getCellValue(tableRowValue[tableCol])}}" (click)="imagePreview($event, imgsrc)" *ngFor="let imgsrc of getCellValue(tableRowValue[tableCol])">
-                                    </span>
-
-                                    <span *ngIf="tableCol == 'Proof Of Delivery' || tableCol == 'Proof_Of_Delivery' " >
-                                        <img class="clk inline" style="width: 4em; box-shadow: 0 1px 3px #888888; margin-left:0.5em;" src="{{imgsrc}}" alt="{{getCellValue(tableRowValue[tableCol])}}" (click)="imagePreview($event, imgsrc)" *ngFor="let imgsrc of getCellValue(tableRowValue[tableCol])">
-                                    </span>
-
-                                    <span *ngIf="tableCol == 'Ship_Type'" >{{getDeliveryName(getCellValue(tableRowValue[tableCol])) | replace : '`updated'}}</span>
-                                    <span *ngIf="ifDate(tableCol) == 'date'" >{{getCellValue(tableRowValue[tableCol]) | date : 'dd/MM/yy'}}</span>
-                                    <span *ngIf="ifDate(tableCol) != 'date' && tableCol != 'Ship_Type' && tableCol != 'Component_Image' && tableCol != 'Component Image' && tableCol != 'Product Image' && tableCol != 'Product_Image' && tableCol != 'Out Of Delivery' && tableCol != 'Out_Of_Delivery' && tableCol != 'Proof Of Delivery' && tableCol != 'Proof_Of_Delivery' && tableCol != 'Vendor_List'" >
-                                        <span *ngIf="getCellValue(tableRowValue[tableCol]) === 0">{{getCellValue(tableRowValue[tableCol])}}</span>
-                                        <!-- {{getCellValue(tableRowValue[tableCol])  | replace : '`,[' }} -->
-                                        <!--<span *ngIf="(tableCol == 'Delivery_Boy' && getCellValue(tableRowValue['Status']) == 'Confirmed') && getCellValue(tableRowValue['Delivery_Boy']) == 0">
-                                            <button mat-button mat-raised-button mat-success [matMenuTriggerFor]="menu">
-                                                Assign To Agent
-                                                <span><i class="fa fa-edit"></i> {{order.orderProducts[0].deliveryBoyName}}</span> 
-                                            </button>
-                
-                                            <mat-menu #menu="matMenu">
-                                                <ng-container *ngFor="let x of deliveryBoyList" >
-                                                    <button mat-menu-item *ngIf="x.Status" (click)="assignToDeliveryBoy(x, order)">
-                                                        {{x.Full_Name}}
-                                                    </button>
-                                                </ng-container>      
-                                            </mat-menu>
-                                        </span>-->
-                                        <span *ngIf="getCellValue(tableRowValue[tableCol]) !== 0" [innerHTML]="getCellValue(tableRowValue[tableCol])  | replace : '`,[' "></span>
-                                    </span>
-                                    &nbsp; &nbsp; &nbsp;
-                                    <span class="icon m" aria-hidden="true" *ngIf="tableCol === 'Order_No'" (click)="viewOrderDetail($event, getCellValue(tableRowValue[tableCol]))">
-                                        <img src="assets/images/icons/view.svg" alt="inr">
-                                    </span>
-                                    <span class="icon" aria-hidden="true" *ngIf="tableCol === 'invoice number'" (click)="dwldInv($event, tableRowValue['orderId'], getCellValue(tableRowValue[tableCol]))">
-                                        <span class="glyphicon glyphicon-download-alt" title="Download Invoice"></span>
-                                    </span>
-                                    <div *ngIf="tableCol === 'Vendor_List'">
-                                        <select (change)="addVendorToOrderMap($event, tableRowValue['Order_No'], tableRowValue['Order_Product_Id'])">
-                                          <option selected value="">Select Vendor</option>
-                                            <option  *ngFor="let vendor of tableRowValue[tableCol]; let i='index'" value="{{vendor.Vendor_Id}}">{{vendor.Vendor_Name}}</option>
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <!--update messgae start-->
-                                    <div class="updateTxt" *ngIf="isUpdated(getCellValue(tableRowValue[tableCol])) === 'updating' || isUpdated(getCellValue(tableRowValue[tableCol])) === 'updated'">
-                                        <div class="updateTxtMain" *ngIf="isUpdated(getCellValue(tableRowValue[tableCol])) === 'updating'"><app-loader></app-loader></div>
-                                        <div class="updateTxtMain" *ngIf="isUpdated(getCellValue(tableRowValue[tableCol])) === 'updated' && (environment.userType == 'vendor')">Request sent!</div>
-                                        <div class="updateTxtMain" *ngIf="isUpdated(getCellValue(tableRowValue[tableCol])) === 'updated' && (environment.userType && environment.userType === 'admin')">Done!</div>
-                                    </div>
-                                <!--update messgae end-->
-
-                                <!--<h6>{{reportData.tableDataAction | json}}</h6>-->
-                                <div *ngIf="reportData.tableDataAction && reportData.tableDataAction.length" class="tableDataAction">
-                                    <ng-container *ngIf="!checkApproveBtn(tableRowValue[tableCol])">
-                                        <ng-container *ngFor="let tableAction of reportData.tableDataAction">
-                                            <div class="tableDataActionBtn" *ngIf="tableAction[tableCol] && tableAction[tableCol].length">
-                                                <!--{{tableAction[tableCol] | json}}-->
-                                                <ng-container *ngIf="reportType === 'getComponentReport' || reportType === 'getVendorDetails' || reportType === 'getBarcodeToComponentReport'">
-                                                    <div class="tableactBtn" *ngFor="let actBtn of tableAction[tableCol]; let z='index'" (click)="actionBtnInvoke(actBtn, getCellValue(tableRowValue[tableCol]), tableRowValue, tableCol, dataIndex, 1)">
-                                                        <span class="tableactBtntxt">{{getActBtnTxt(actBtn, getCellValue(tableRowValue[tableCol]))}}</span>
-                                                        <ng-container *ngIf="(z+1) < tableAction[tableCol].length"> &nbsp; |</ng-container>
-                                                    </div>
-                                                </ng-container>
-                                                <ng-container *ngIf="reportType !== 'getComponentReport' && reportType !== 'getVendorDetails' && reportType !== 'getBarcodeToComponentReport' && reportType !== 'deliveryBoyDetails' && (tableRowValue[tableCol]['requestValue'] == -1)">
-                                                    <div class="tableactBtn" *ngFor="let actBtn of tableAction[tableCol]; let z='index'" (click)="actionBtnInvoke(actBtn, getCellValue(tableRowValue[tableCol]), tableRowValue, tableCol, dataIndex, 1)">
-                                                        <span class="tableactBtntxt">{{getActBtnTxt(actBtn, getCellValue(tableRowValue[tableCol]))}}</span>
-                                                        <ng-container *ngIf="(z+1) < tableAction[tableCol].length"> &nbsp; |</ng-container>
-                                                    </div>
-                                                </ng-container>
-                                                <ng-container *ngIf="reportType !== 'getComponentReport' && reportType !== 'getVendorDetails' && reportType !== 'getBarcodeToComponentReport' && reportType !== 'deliveryBoyDetails' && !(tableRowValue[tableCol]['requestValue'] == -1) && reportType !== 'getComponentReport'">
-                                                    <div class="tableactBtn" (click)="actionBtnInvoke(tableRowValue[tableCol]['requestType'], getCellValue(tableRowValue[tableCol]), tableRowValue, tableCol, dataIndex, 0)">
-                                                        <span class="tableactBtntxt">{{tableRowValue[tableCol]['requestType']}}</span>
-                                                    </div>
-                                                </ng-container>
-                                            </div>
-                                        </ng-container>
-                                    </ng-container>
-
-                                    <ng-container *ngIf="checkApproveBtn(tableRowValue[tableCol])">
-                                            <div class="tableDataActionBtn">
-                                                <div class="tableactBtn" (click)="approveReject($event, 1, tableCol, tableRowValue)">
-                                                    <span class="tableactBtntxt">Approve</span>  &nbsp; |
-                                                </div>
-
-                                                <div class="tableactBtn" (click)="approveReject($event, 0, tableCol, tableRowValue)">
-                                                    <span class="tableactBtntxt">Reject</span>
+                            <!-- <ng-container *ngIf="dataIndex < 10"> -->
+                                    <td class="reportTableCell" style="word-break: break-word;" *ngFor="let tableCol of reportData.tableHeaders; let i='index'" [ngClass]="{'hide' : isHiddenCell(tableCol)}" [style.width]="tableCol === 'email'? 'auto' : 'auto' ">
+                                            <div class="tdTxt">
+                                                <span *ngIf="tableCol == 'Component Image' || tableCol == 'Component_Image'" >
+                                                    <img class="clk" style="width: 4em; box-shadow: 0 1px 3px #888888;" src="{{componentImageUrl}}{{getCellValue(tableRowValue[tableCol])}}" alt="{{getCellValue(tableRowValue[tableCol])}}" (click)="imagePreview($event, componentImageUrl +(getCellValue(tableRowValue[tableCol])))">
+                                                </span>
+                                                <span *ngIf="tableCol == 'Product Image' || tableCol == 'Product_Image'" >
+                                                    <img class="clk" style="width: 4em; box-shadow: 0 1px 3px #888888;" src="{{productsURL}}th/{{getCellValue(tableRowValue[tableCol])}}" alt="{{getCellValue(tableRowValue[tableCol])}}" (click)="imagePreview($event, productsURL+'l/'+(getCellValue(tableRowValue[tableCol])))">
+                                                </span>
+            
+                                                <span *ngIf="tableCol == 'Out Of Delivery' || tableCol == 'Out_Of_Delivery' " >
+                                                    <img class="clk inline" style="width: 4em; box-shadow: 0 1px 3px #888888; margin-left:0.5em;" src="{{imgsrc}}" alt="{{getCellValue(tableRowValue[tableCol])}}" (click)="imagePreview($event, imgsrc)" *ngFor="let imgsrc of getCellValue(tableRowValue[tableCol])">
+                                                </span>
+            
+                                                <span *ngIf="tableCol == 'Proof Of Delivery' || tableCol == 'Proof_Of_Delivery' " >
+                                                    <img class="clk inline" style="width: 4em; box-shadow: 0 1px 3px #888888; margin-left:0.5em;" src="{{imgsrc}}" alt="{{getCellValue(tableRowValue[tableCol])}}" (click)="imagePreview($event, imgsrc)" *ngFor="let imgsrc of getCellValue(tableRowValue[tableCol])">
+                                                </span>
+            
+                                                <span *ngIf="tableCol == 'Ship_Type'" >{{getDeliveryName(getCellValue(tableRowValue[tableCol])) | replace : '`updated'}}</span>
+                                                <span *ngIf="ifDate(tableCol) == 'date'" >{{getCellValue(tableRowValue[tableCol]) | date : 'dd/MM/yy'}}</span>
+                                                <span *ngIf="ifDate(tableCol) != 'date' && tableCol != 'Ship_Type' && tableCol != 'Component_Image' && tableCol != 'Component Image' && tableCol != 'Product Image' && tableCol != 'Product_Image' && tableCol != 'Out Of Delivery' && tableCol != 'Out_Of_Delivery' && tableCol != 'Proof Of Delivery' && tableCol != 'Proof_Of_Delivery' && tableCol != 'Vendor_List'" >
+                                                    <span *ngIf="getCellValue(tableRowValue[tableCol]) === 0">{{getCellValue(tableRowValue[tableCol])}}</span>
+                                                    <!-- {{getCellValue(tableRowValue[tableCol])  | replace : '`,[' }} -->
+                                                    <!--<span *ngIf="(tableCol == 'Delivery_Boy' && getCellValue(tableRowValue['Status']) == 'Confirmed') && getCellValue(tableRowValue['Delivery_Boy']) == 0">
+                                                        <button mat-button mat-raised-button mat-success [matMenuTriggerFor]="menu">
+                                                            Assign To Agent
+                                                            <span><i class="fa fa-edit"></i> {{order.orderProducts[0].deliveryBoyName}}</span> 
+                                                        </button>
+                            
+                                                        <mat-menu #menu="matMenu">
+                                                            <ng-container *ngFor="let x of deliveryBoyList" >
+                                                                <button mat-menu-item *ngIf="x.Status" (click)="assignToDeliveryBoy(x, order)">
+                                                                    {{x.Full_Name}}
+                                                                </button>
+                                                            </ng-container>      
+                                                        </mat-menu>
+                                                    </span>-->
+                                                    <span *ngIf="getCellValue(tableRowValue[tableCol]) !== 0" [innerHTML]="getCellValue(tableRowValue[tableCol])  | replace : '`,[' "></span>
+                                                </span>
+                                                &nbsp; &nbsp; &nbsp;
+                                                <span class="icon m" aria-hidden="true" *ngIf="tableCol === 'Order_No'" (click)="viewOrderDetail($event, getCellValue(tableRowValue[tableCol]))">
+                                                    <img src="assets/images/icons/view.svg" alt="inr">
+                                                </span>
+                                                <span class="icon" aria-hidden="true" *ngIf="tableCol === 'invoice number'" (click)="dwldInv($event, tableRowValue['orderId'], getCellValue(tableRowValue[tableCol]))">
+                                                    <span class="glyphicon glyphicon-download-alt" title="Download Invoice"></span>
+                                                </span>
+                                                <div *ngIf="tableCol === 'Vendor_List'">
+                                                    <select (change)="addVendorToOrderMap($event, tableRowValue['Order_No'], tableRowValue['Order_Product_Id'])">
+                                                      <option selected value="">Select Vendor</option>
+                                                        <option  *ngFor="let vendor of tableRowValue[tableCol]; let i='index'" value="{{vendor.Vendor_Id}}">{{vendor.Vendor_Name}}</option>
+                                                    </select>
                                                 </div>
                                             </div>
-                                    </ng-container>
-                                </div>
-                            </td>
+            
+                                            <!--update messgae start-->
+                                                <div class="updateTxt" *ngIf="isUpdated(getCellValue(tableRowValue[tableCol])) === 'updating' || isUpdated(getCellValue(tableRowValue[tableCol])) === 'updated'">
+                                                    <div class="updateTxtMain" *ngIf="isUpdated(getCellValue(tableRowValue[tableCol])) === 'updating'"><app-loader></app-loader></div>
+                                                    <div class="updateTxtMain" *ngIf="isUpdated(getCellValue(tableRowValue[tableCol])) === 'updated' && (environment.userType == 'vendor')">Request sent!</div>
+                                                    <div class="updateTxtMain" *ngIf="isUpdated(getCellValue(tableRowValue[tableCol])) === 'updated' && (environment.userType && environment.userType === 'admin')">Done!</div>
+                                                </div>
+                                            <!--update messgae end-->
+            
+                                            <!--<h6>{{reportData.tableDataAction | json}}</h6>-->
+                                            <div *ngIf="reportData.tableDataAction && reportData.tableDataAction.length" class="tableDataAction">
+                                                <ng-container *ngIf="!checkApproveBtn(tableRowValue[tableCol])">
+                                                    <ng-container *ngFor="let tableAction of reportData.tableDataAction">
+                                                        <div class="tableDataActionBtn" *ngIf="tableAction[tableCol] && tableAction[tableCol].length">
+                                                            <!--{{tableAction[tableCol] | json}}-->
+                                                            <ng-container *ngIf="reportType === 'getComponentReport' || reportType === 'getVendorDetails' || reportType === 'getBarcodeToComponentReport'">
+                                                                <div class="tableactBtn" *ngFor="let actBtn of tableAction[tableCol]; let z='index'" (click)="actionBtnInvoke(actBtn, getCellValue(tableRowValue[tableCol]), tableRowValue, tableCol, dataIndex, 1)">
+                                                                    <span class="tableactBtntxt">{{getActBtnTxt(actBtn, getCellValue(tableRowValue[tableCol]))}}</span>
+                                                                    <ng-container *ngIf="(z+1) < tableAction[tableCol].length"> &nbsp; |</ng-container>
+                                                                </div>
+                                                            </ng-container>
+                                                            <ng-container *ngIf="reportType !== 'getComponentReport' && reportType !== 'getVendorDetails' && reportType !== 'getBarcodeToComponentReport' && reportType !== 'deliveryBoyDetails' && (tableRowValue[tableCol]['requestValue'] == -1)">
+                                                                <div class="tableactBtn" *ngFor="let actBtn of tableAction[tableCol]; let z='index'" (click)="actionBtnInvoke(actBtn, getCellValue(tableRowValue[tableCol]), tableRowValue, tableCol, dataIndex, 1)">
+                                                                    <span class="tableactBtntxt">{{getActBtnTxt(actBtn, getCellValue(tableRowValue[tableCol]))}}</span>
+                                                                    <ng-container *ngIf="(z+1) < tableAction[tableCol].length"> &nbsp; |</ng-container>
+                                                                </div>
+                                                            </ng-container>
+                                                            <ng-container *ngIf="reportType !== 'getComponentReport' && reportType !== 'getVendorDetails' && reportType !== 'getBarcodeToComponentReport' && reportType !== 'deliveryBoyDetails' && !(tableRowValue[tableCol]['requestValue'] == -1) && reportType !== 'getComponentReport'">
+                                                                <div class="tableactBtn" (click)="actionBtnInvoke(tableRowValue[tableCol]['requestType'], getCellValue(tableRowValue[tableCol]), tableRowValue, tableCol, dataIndex, 0)">
+                                                                    <span class="tableactBtntxt">{{tableRowValue[tableCol]['requestType']}}</span>
+                                                                </div>
+                                                            </ng-container>
+                                                        </div>
+                                                    </ng-container>
+                                                </ng-container>
+            
+                                                <ng-container *ngIf="checkApproveBtn(tableRowValue[tableCol])">
+                                                        <div class="tableDataActionBtn">
+                                                            <div class="tableactBtn" (click)="approveReject($event, 1, tableCol, tableRowValue)">
+                                                                <span class="tableactBtntxt">Approve</span>  &nbsp; |
+                                                            </div>
+            
+                                                            <div class="tableactBtn" (click)="approveReject($event, 0, tableCol, tableRowValue)">
+                                                                <span class="tableactBtntxt">Reject</span>
+                                                            </div>
+                                                        </div>
+                                                </ng-container>
+                                            </div>
+                                        </td>
+                            <!-- </ng-container> -->
+                            
                         </tr>
 
                     </tbody>

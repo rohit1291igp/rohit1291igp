@@ -705,7 +705,6 @@ getDeliveryBoyList(){
             /* need to handle filter - start */
             _this.orginalReportData.summary = _reportData.summary;
             _this.orginalReportData.tableData = _reportData.tableData; //_this.orginalReportData.tableData.concat(_reportData.tableData);
-            _this.isDownload = true;
             // if(e){
                 _this.columnFilterSubmit(e);
                 _this.showMoreTableData(e);
@@ -785,6 +784,7 @@ getDeliveryBoyList(){
               };
             let data = _this.orginalReportData.tableData;
             let download = new Angular5Csv(data, _this.reportType, options);
+            _this.isDownload = false;
         }
     }
 
@@ -1490,7 +1490,7 @@ getDeliveryBoyList(){
     }
 
     downLoadCSV(e, fileName){
-
+        this.isDownload = true;
         this.searchReportSubmit(null, null);
         // if(this.orginalReportData.tableData.length > 0){
         //     let data = this.orginalReportData.tableData;
