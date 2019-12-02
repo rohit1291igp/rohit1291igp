@@ -138,7 +138,7 @@ export class UnDeliveredComponent implements OnInit {
 
             for (let i = 0; i < selectedProducts.selectedProducts.length; i++) {
                 const reqObj = {
-                    url: `doUpdateOrderStatus?responseType=json&scopeId=1&rejectionType=${rejectionTypeToReasonCode}&rejectionMessage=${this$.undeliveredReason === 'Other' ? this$.textareaValue : this$.undeliveredReason}&recipientInfo=&recipientName=&comments=${this$.undeliveredReason === 'Other' ? this$.textareaValue : this$.undeliveredReason}&orderProductIds=${selectedProducts.selectedProducts[i]}&status=${status}&fkAssociateId=${this$.fkAssociateId}&orderId=${this$.orderId}`,
+                    url: `doUpdateOrderStatus?responseType=json&scopeId=1&rejectionType=${rejectionTypeToReasonCode}&rejectionMessage=${this$.undeliveredReason === 'Other' ? this$.textareaValue : this$.undeliveredReason}&recipientInfo=&recipientName=&comments=null&orderProductIds=${selectedProducts.selectedProducts[i]}&status=${status}&fkAssociateId=${this$.fkAssociateId}&orderId=${this$.orderId}`,
                     method: "post"
                 };
 
