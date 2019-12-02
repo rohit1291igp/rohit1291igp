@@ -842,10 +842,9 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
       /* variable and methods decleration - start */
       var _this = this;
       let currentTab = this.activeDashBoardDataType; //e.currentTarget.dataset.tab;
-      if(typeof status == 'object'){
-        _rejectOption = status.reason;
-        rejectionMessage = status.reason;
-        status = status.reason;
+      if(status == 'AttemptedDelivery'){
+        _rejectOption = e.target.innerText;
+        rejectionMessage = e.target.innerText;
       }
       var fireUpdateCall = function(){ //order Status update API - Method
           var orderProductIds = "";

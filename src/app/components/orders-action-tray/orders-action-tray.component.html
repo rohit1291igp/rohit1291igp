@@ -1139,7 +1139,7 @@
         <!-- Delivered Images -->
         <button *ngIf="sidePanelData && sidePanelData[0]?.uploadedFilePath?.Delivered.length > 0" type="button" (click)="dImages = !dImages" mat-button mat-raised-button mat-success><ng-container *ngIf="dImages">Hide</ng-container><ng-container *ngIf="!dImages">Show</ng-container> Delivered For Images</button>
             <ng-container *ngIf="sidePanelData && sidePanelData[0]?.uploadedFilePath?.Delivered.length > 0">
-                <div class="ofdImages-main-container" [ngClass]="dImages ? 'dImages-show' :'dImages-hide'">
+                <div class="ofdImages-main-container" [ngClass]="dImages ? 'ofdImages-show' :'ofdImages-hide'">
                     <mat-card style="max-width: 99%;padding: 10px;">
                         <div class="dImages-container">
                             <ng-container *ngFor="let imageSrc of sidePanelData[0]?.uploadedFilePath?.Delivered">
