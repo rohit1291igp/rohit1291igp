@@ -98,6 +98,15 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
       {"type" : "8", "name" : "Other", "value" : "Other" }
   ];
 
+  notDeliveredReason = [
+    {"type" : 9, "reason" : "Address couldn't be found"},
+    {"type" : 10, "reason" : "Incorrect address"},
+    {"type" : 11, "reason" : "Mobile number was not reachable"},
+    {"type" : 12, "reason" : "Door was locked/No one answered the door"},
+    {"type" : 13, "reason" : "Security denied entry"},
+    {"type" : 14, "reason" : "Recipient denied delivery"}
+  ]
+
   rejectReasonsMap = {
       "Delivery location not serviceable" : 1,
       "Product not available" : 2,
@@ -305,7 +314,12 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
  }
 
  getRejectionType(rejectionMessage){
-     return this.rejectReasonsMap[rejectionMessage] || "";
+     let reason = this.notDeliveredReason.find(i => i.reason == rejectionMessage);
+     if(reason){
+        return reason.type || "";
+     }else{
+        return this.rejectReasonsMap[rejectionMessage] || "";
+     }
  }
 
   setRejectInitialValue(){
@@ -742,6 +756,8 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
 
   updateOrderStatus(e, orderIndex, status, orderId, orderProducts, deliveryDate, deliveryTime){
       e.stopPropagation();
+      let confirm = window.confirm('Are you sure, you want to do this.');
+      if(!confirm){ return false};
       /* confirm popup - start */
         if(this.isMobile){
             if((status === "Confirmed" /*|| status === "Rejected"*/) && (!e.confirmCurrentTarget)){
@@ -826,6 +842,11 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
       /* variable and methods decleration - start */
       var _this = this;
       let currentTab = this.activeDashBoardDataType; //e.currentTarget.dataset.tab;
+      if(typeof status == 'object'){
+        _rejectOption = status.reason;
+        rejectionMessage = status.reason;
+        status = status.reason;
+      }
       var fireUpdateCall = function(){ //order Status update API - Method
           var orderProductIds = "";
           if(orderProducts && orderProducts.length){
@@ -842,6 +863,7 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
           //var _this = this; this.statusReasonModel
           //var reqURL = "?responseType=json&scopeId=1&rejectionMessage="+rejectionMessage+"&recipientInfo="+recipientInfo+"&orderProductIds="+orderProductIds+"&status="+status+"&fkAssociateId="+fkAssociateId+"&orderId="+orderId+"&method=igp.order.doUpdateOrderStatus";
           //var reqURL = "doUpdateOrderStatus?fileDateLength="+fileDateLength+"&responseType=json&scopeId=1&rejectionMessage="+rejectionMessage+"&recipientInfo="+recipientInfo+"&recipientName="+recipientName+"&comments="+recipientComments+"&orderProductIds="+orderProductIds+"&status="+status+"&fkAssociateId="+fkAssociateId+"&orderId="+orderId;
+          
           var reqURL = "doUpdateOrderStatus?responseType=json&scopeId=1&rejectionType="+_this.getRejectionType(_rejectOption)+"&rejectionMessage="+rejectionMessage+"&recipientInfo="+recipientInfo+"&recipientName="+recipientName+"&comments="+recipientComments+"&orderProductIds="+orderProductIds+"&status="+status+"&fkAssociateId="+fkAssociateId+"&orderId="+orderId;
 
           console.log('reqURL==============>', reqURL);

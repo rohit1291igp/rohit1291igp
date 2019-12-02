@@ -747,11 +747,15 @@
                               <span *ngIf="(order.orderProducts[0].ordersProductStatus =='Shipped' && order.orderProducts[0].deliveryStatus === 1)  || (order.orderProducts[0].ordersProductStatus =='Dispatched' && order.orderProducts[0].deliveryStatus === 1)">Mark as Delivered</span>
                         </button>
 
-                        <button class="btn btn-primary actions-button uppercase text-bold text-white bg-green"
-                        *ngIf="(order.orderProducts[0].ordersProductStatus =='Shipped' && order.orderProducts[0].deliveryStatus === 0) || order.orderProducts[0].ordersProductStatus =='OutForDelivery' || order.orderProducts[0].ordersProductStatus == 'Partially Dispatched'"
-                        (click)="updateOrderStatus($event, orderIndex, 'AttemptedDelivery', order.orderId, order.orderProducts, order.orderProducts[0].orderProductExtraInfo.deliveryDate, order.orderProducts[0].orderProductExtraInfo.deliveryTime)">
+                        <button [matMenuTriggerFor]="attemptedreason" class="btn btn-primary actions-button uppercase text-bold text-white bg-green"
+                        *ngIf="(order.orderProducts[0].ordersProductStatus =='Shipped' && order.orderProducts[0].deliveryStatus === 0) || order.orderProducts[0].ordersProductStatus =='OutForDelivery' || order.orderProducts[0].ordersProductStatus == 'Partially Dispatched'">
                             Not Delivered
                         </button>
+                        <mat-menu #attemptedreason="matMenu">
+                            <ng-container *ngFor="let x of notDeliveredReason" >
+                                <button mat-menu-item (click)="updateOrderStatus($event, orderIndex, 'AttemptedDelivery', order.orderId, order.orderProducts, order.orderProducts[0].orderProductExtraInfo.deliveryDate, order.orderProducts[0].orderProductExtraInfo.deliveryTime)">{{x.reason}}</button>
+                            </ng-container>      
+                        </mat-menu>
                       </div>
 
 
