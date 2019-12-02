@@ -107,21 +107,27 @@ export class UnDeliveredComponent implements OnInit {
         var this$ = this;
         let rejectionTypeToReasonCode: number;
         switch (this$.undeliveredReason) {
-            case 'Receiver Not Available':
+            case 'Address couldn\'t be found':
+                rejectionTypeToReasonCode = 9;
+                break;
+            case 'Incorrect address':
                 rejectionTypeToReasonCode = 10;
                 break;
-            case 'Phone Not Reachable':
+            case 'Mobile number was not reachable':
                 rejectionTypeToReasonCode = 11;
                 break;
-            case 'Incorrect Address':
+            case 'Door was locked/No one answered the door':
                 rejectionTypeToReasonCode = 12;
                 break;
-            case 'Product Missing':
+            case 'Security denied entry':
                 rejectionTypeToReasonCode = 13;
-                break;
-            case 'Other':
-                rejectionTypeToReasonCode = 13;
-                break;
+                break; 
+            case 'Recipient denied delivery':
+                rejectionTypeToReasonCode = 14;
+                break;       
+            // case 'Other':
+            //     rejectionTypeToReasonCode = 13;
+            //     break;
         }
         let pipe = new DatePipe('en-US');
         const now = Date.now();
