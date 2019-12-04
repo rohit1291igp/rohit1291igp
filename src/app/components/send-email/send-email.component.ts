@@ -62,7 +62,8 @@ export class SendEmailComponent implements OnInit {
       { issue: 'Incomplete Details', value: 'incompleteDetails'},
       { issue: 'Refund Initiated', value: 'refundInitiated'},
       { issue: 'Generic Mail', value: 'genericmail'},
-      { issue: 'ITC Vouchers', value: 'itcvouchers'}
+      { issue: 'ITC Vouchers', value: 'itcvouchers'},
+      { issue: 'Shipment Returned', value: 'undelivered'}
     ],
     selectedIssue: ''
   };
