@@ -860,7 +860,8 @@
                             <span class="uppercase text-igp">{{orderProduct.productName}}</span>
                             <span class="" *ngIf="orderProduct.products_code">({{orderProduct.products_code}})  </span>
                         <!--</a>-->
-                        <span class="" style="" *ngIf="orderProduct.personalized"> | <a target="_new" href="http://admin.indiangiftsportal.com/persInfo.php?pid={{orderProduct.productId}}&oid={{order.orderId}}">Download Photo</a></span>
+                        <!-- <span class="" style="" *ngIf="orderProduct.personalized"> | <a target="_new" href="http://admin.indiangiftsportal.com/persInfo.php?pid={{orderProduct.productId}}&oid={{order.orderId}}">Download Photo</a></span> -->
+                        <span class="" style="" *ngIf="orderProduct.personalized"> | <a href="{{orderProduct.personalizedInfo}}" target="_blank" download>Download Photo</a></span>
                         <br/><span class="text-bold" *ngIf="orderProduct.cakemessage">Name on cake: </span><span *ngIf="orderProduct.cakemessage">{{orderProduct.cakemessage}}</span>
                     </p>
 
