@@ -142,7 +142,7 @@
                             <div style="left: 22em; bottom: 1em; position: absolute;" *ngIf="!trayOpen && !isMobile">
                                 <select class="btn-primary" style="max-width: 150px;height: 34px;border-radius: 3px;
                                 margin-right: 8px;" (change)="statusReasonSubmit($event, 'AttemptedDelivery', true)">
-                                    <option selected>Attempted Delivery</option>
+                                    <option disabled selected>Attempted Delivery</option>
                                     <option *ngFor="let x of notDeliveredReason">{{x.reason}}</option>
                                 </select>
                             </div>
@@ -163,7 +163,7 @@
                             <div style="margin-top: 0.7em;" *ngIf="!trayOpen && isMobile">
                             <select class="btn-primary" style="max-width: 142px;
                             height: 34px;font-size: 14px;border-radius: 3px;margin-right: 8px;" (change)="statusReasonSubmit($event, 'AttemptedDelivery', true)">
-                                <option selected>Attempted Delivery</option>
+                                <option disabled selected>Attempted Delivery</option>
                                 <option *ngFor="let x of notDeliveredReason">{{x.reason}}</option>
                             </select>
                             </div>
