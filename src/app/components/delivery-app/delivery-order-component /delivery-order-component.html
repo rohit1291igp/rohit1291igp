@@ -78,7 +78,7 @@
     <!-- Report nd Photo section Ends -->
     <div class="delivery-out-btn">
         <a *ngIf="futureOrder" routerLink="/delivery-app/task"><i class="fa fa-long-arrow-left"></i> Back</a>
-        <button *ngIf="!futureOrder && futureOrder !== undefined" [disabled]="!selectProductsForDelivery.length > 0"
+        <button *ngIf="!futureOrder && futureOrder !== undefined" [ngClass]="{'disable':(selectProductsForDelivery.length > 0 && uploadedFiles.length > 0) ? false : true}"
             (click)="markOutForDelivery()">Out for
             delivery</button>
     </div>

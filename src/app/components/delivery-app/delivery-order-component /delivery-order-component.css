@@ -223,3 +223,9 @@
     left: 50%;
     transform: translateX(-50%);
 }
+.disable{
+    pointer-events: none;
+}
+.enable{
+    pointer-events: all;
+}
