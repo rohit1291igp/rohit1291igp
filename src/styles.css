@@ -868,6 +868,9 @@ body .dashboard-content, body .orders-button{
 .justify-content-center{
     justify-content: center !important;
 }
+.align-items-flex-end{
+    align-items: flex-end;
+}
 .snackbar-background {
     background: #C3404E;
 }
