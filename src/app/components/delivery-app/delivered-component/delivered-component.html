@@ -17,7 +17,7 @@
             <div class="uploadedFiles relative" *ngFor="let uploadedFile of uploadedFiles.ofdImages; let i = index;">
                 <img class="image" id="img{{i}}" src="{{uploadedFile}}" alt="uploadedImages" width="460" height="200"
                     (click)="imagePreview($event, uploadedFile)" (load)="loaded()" />
-                <i class="fa fa-times-circle" (click)="dltUploadedImage($event, uploadedFile)"></i>
+                <!-- <i class="fa fa-times-circle" (click)="dltUploadedImage($event, uploadedFile)"></i> -->
             </div>
             <div [ngStyle]="{display: loading ? 'flex' : 'none'}" class="spinner">
                 <mat-spinner [diameter]="30"></mat-spinner>
@@ -93,7 +93,7 @@
     </div>
     <!-- Order Photos Ends -->
     <div class="delivered-btn">
-        <button [ngStyle]="{opacity: recipientInfo ? 1 : 0.5}" [disabled]="!recipientInfo"
+        <button [ngClass]="{'disable':(recipientInfo && (uploadedFiles.ofdImages.length) > 0 && (uploadedFiles.dImages.length > 0)) ? false : true}"
             (click)="updateOrder('Delivered')">DELIVERED</button>
         <!-- <a routerLink="/delivery-app/orders-delivered">DELIVERED</a> -->
     </div>

@@ -756,8 +756,8 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
 
   updateOrderStatus(e, orderIndex, status, orderId, orderProducts, deliveryDate, deliveryTime){
       e.stopPropagation();
-      let confirm = window.confirm('Are you sure, you want to do this.');
-      if(!confirm){ return false};
+    //   let confirm = window.confirm('Are you sure, you want to do this.');
+    //   if(!confirm){ return false};
       /* confirm popup - start */
         if(this.isMobile){
             if((status === "Confirmed" /*|| status === "Rejected"*/) && (!e.confirmCurrentTarget)){
