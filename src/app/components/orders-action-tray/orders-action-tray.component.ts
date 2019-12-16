@@ -332,7 +332,7 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
       this.dateRange = { date: { year: setDate.getFullYear(), month: (setDate.getMonth()+1), day: setDate.getDate() } };
   }
 
-  statusReasonSubmit(_e, attemptedOrder?){
+  statusReasonSubmit(_e, attemptedOrder?, id?){
       _e.preventDefault();
       _e.stopPropagation();
       var _this= this;
@@ -347,12 +347,15 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
 
       this.statusMessageFlag=false;
       console.log('statusReason--->', this.statusReasonModel);
-
+      
       var statusMessgae = this.statusReasonModel.message ? this.statusReasonModel.message : this.statusReasonModel.rejectOption;
       var orderStatusEvent = _e;
       orderStatusEvent.customCurrentTarget =  _this.statusReasonModel.e[0];
       var orderIndex = this.statusReasonModel.orderIndex;
-      if(attemptedOrder) this.statusReasonModel.status='AttemptedDelivery';
+      if(attemptedOrder){
+        this.statusReasonModel.status='AttemptedDelivery';
+        // orderStatusEvent.target.innerText = _e.target.value;
+      }
       var orderStatus = this.statusReasonModel.status;
       var orderId = this.statusReasonModel.orderId;
       var orderProducts = this.statusReasonModel.orderProducts;
@@ -360,7 +363,7 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
       var orderDeliveryTime = this.statusReasonModel.deliveryTime;
       //this.statusReasonModel = {}
 
-      this.updateOrderStatus(orderStatusEvent, orderIndex, orderStatus, orderId, orderProducts, orderDeliveryDate, orderDeliveryTime);
+      this.updateOrderStatus(orderStatusEvent, orderIndex, orderStatus, orderId, orderProducts, orderDeliveryDate, orderDeliveryTime, id);
   }
 
   clearPopupData(){
@@ -754,7 +757,7 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
 
   }
 
-  updateOrderStatus(e, orderIndex, status, orderId, orderProducts, deliveryDate, deliveryTime){
+  updateOrderStatus(e, orderIndex, status, orderId, orderProducts, deliveryDate, deliveryTime, id?:boolean){
       e.stopPropagation();
     //   let confirm = window.confirm('Are you sure, you want to do this.');
     //   if(!confirm){ return false};
@@ -845,6 +848,10 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
       if(status == 'AttemptedDelivery'){
         _rejectOption = e.target.innerText;
         rejectionMessage = e.target.innerText;
+        if(id){
+            _rejectOption = e.target.value;
+            rejectionMessage = e.target.value;
+        }
       }
       var fireUpdateCall = function(){ //order Status update API - Method
           var orderProductIds = "";

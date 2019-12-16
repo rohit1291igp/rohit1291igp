@@ -138,23 +138,46 @@
                         <button class="btn btn-primary m-top-1">Mark as Delivered</button>
                             <div *ngIf="f.submitted && !message.valid" class="help-block"></div>
                         </form>
+                        <div class="d-flex justify-content-center align-items-flex-end">
+                            <div style="left: 22em; bottom: 1em; position: absolute;" *ngIf="!trayOpen && !isMobile">
+                                <select class="btn-primary" style="max-width: 150px;height: 34px;border-radius: 3px;
+                                margin-right: 8px;" (change)="statusReasonSubmit($event, 'AttemptedDelivery', true)">
+                                    <option selected>Attempted Delivery</option>
+                                    <option *ngFor="let x of notDeliveredReason">{{x.reason}}</option>
+                                </select>
+                            </div>
+                            <!-- <button [matMenuTriggerFor]="attemptedreasonDesktop" class="btn btn-primary m-top-1"
+                            style="left: 21em; bottom: 1em; position: absolute;" *ngIf="!trayOpen && !isMobile">
+                            Attempted Delivery
+                            </button>
+                            <mat-menu #attemptedreasonDesktop="matMenu">
+                                <ng-container *ngFor="let x of notDeliveredReason" >
+                                    <button mat-menu-item (click)="statusReasonSubmit($event, 'AttemptedDelivery')">{{x.reason}}</button>
+                                </ng-container>      
+                            </mat-menu> -->
 
-                        <button class="btn btn-primary m-top-1"
-                        (click)="statusReasonSubmit($event, 'AttemptedDelivery')" style="left: 21em; bottom: 1em; position: absolute;" *ngIf="!trayOpen && !isMobile">
-                        Attempted Delivery 
-                        </button>
-
-                        <button class="btn btn-primary m-top-1"
-                        (click)="statusReasonSubmit($event, 'AttemptedDelivery')" style="margin-top: 0.7em;" *ngIf="!trayOpen && isMobile">
-                        Attempted Delivery 
-                        </button>
-
-                        <button class="btn btn-primary m-top-1 viewDetailPopupBtn" style="left:33.5em; bottom:1em;" *ngIf="!trayOpen && !isMobile" (click)="toggleTray($event, 'OutForDeliveryView', statusReasonModel.orderId, null)">View Detail</button>
-                        <button class="btn btn-primary m-top-1" style="margin-top: 0.7em;" *ngIf="!trayOpen && isMobile" (click)="toggleTray($event, 'OutForDeliveryView', statusReasonModel.orderId, null)">View Detail</button>
-
-
-
+                            <!-- <button [matMenuTriggerFor]="attemptedreasonMobile" class="btn btn-primary m-top-1"
+                            style="margin-top: 0.7em;" *ngIf="!trayOpen && isMobile">
+                            Attempted Delivery 
+                            </button> -->
+                            <div style="margin-top: 0.7em;" *ngIf="!trayOpen && isMobile">
+                            <select class="btn-primary" style="max-width: 142px;
+                            height: 34px;font-size: 14px;border-radius: 3px;margin-right: 8px;" (change)="statusReasonSubmit($event, 'AttemptedDelivery', true)">
+                                <option selected>Attempted Delivery</option>
+                                <option *ngFor="let x of notDeliveredReason">{{x.reason}}</option>
+                            </select>
+                            </div>
+                            
+                            <!-- <mat-menu #attemptedreasonMobile="matMenu">
+                                <ng-container *ngFor="let x of notDeliveredReason" >
+                                    <button mat-menu-item (click)="statusReasonSubmit($event, 'AttemptedDelivery')">{{x.reason}}</button>
+                                </ng-container>      
+                            </mat-menu> -->
+                            
+                            <button class="btn btn-primary m-top-1 viewDetailPopupBtn" style="left:33.5em; bottom:1em;" *ngIf="!trayOpen && !isMobile" (click)="toggleTray($event, 'OutForDeliveryView', statusReasonModel.orderId, null)">View Detail</button>
+                            <button class="btn btn-primary m-top-1" style="margin-top: 0.7em;" *ngIf="!trayOpen && isMobile" (click)="toggleTray($event, 'OutForDeliveryView', statusReasonModel.orderId, null)">View Detail</button>
                         </div>
+                    </div>
                 </div>
 
 
@@ -1023,11 +1046,15 @@
                     <span *ngIf="(order.orderProducts[0].ordersProductStatus =='Shipped' && order.orderProducts[0].deliveryStatus === 1)  || (order.orderProducts[0].ordersProductStatus =='Dispatched' && order.orderProducts[0].deliveryStatus === 1)">Mark as Delivered</span>
                     </button>
 
-                    <button class="btn btn-primary actions-button uppercase text-bold text-white bg-green"
-                        *ngIf="(order.orderProducts[0].ordersProductStatus =='Shipped' && order.orderProducts[0].deliveryStatus === 0) || order.orderProducts[0].ordersProductStatus =='OutForDelivery' || order.orderProducts[0].ordersProductStatus == 'Partially Dispatched'"
-                        (click)="updateOrderStatus($event, orderIndex, 'AttemptedDelivery', order.orderId, order.orderProducts, order.orderProducts[0].orderProductExtraInfo.deliveryDate, order.orderProducts[0].orderProductExtraInfo.deliveryTime)">
+                    <button [matMenuTriggerFor]="attemptedreason2" class="btn btn-primary actions-button uppercase text-bold text-white bg-green"
+                        *ngIf="(order.orderProducts[0].ordersProductStatus =='Shipped' && order.orderProducts[0].deliveryStatus === 0) || order.orderProducts[0].ordersProductStatus =='OutForDelivery' || order.orderProducts[0].ordersProductStatus == 'Partially Dispatched'">
                         Attempted Delivery 
                     </button>
+                    <mat-menu #attemptedreason2="matMenu">
+                        <ng-container *ngFor="let x of notDeliveredReason" >
+                            <button mat-menu-item (click)="updateOrderStatus($event, orderIndex, 'AttemptedDelivery', order.orderId, order.orderProducts, order.orderProducts[0].orderProductExtraInfo.deliveryDate, order.orderProducts[0].orderProductExtraInfo.deliveryTime)">{{x.reason}}</button>
+                        </ng-container>      
+                    </mat-menu>
                 </div>
 
                 <div class="row">
