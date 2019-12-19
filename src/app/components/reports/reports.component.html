@@ -632,7 +632,7 @@
                         </tr>
 
                         <tr class="reporTableRow" *ngFor="let tableRowValue of reportData.tableData; let dataIndex='index'" >
-                            <ng-container *ngIf="dataIndex < 10">
+                            <ng-container *ngIf="dataIndex < 200">
                                     <td class="reportTableCell" style="word-break: break-word;" *ngFor="let tableCol of reportData.tableHeaders; let i='index'" [ngClass]="{'hide' : isHiddenCell(tableCol)}" [style.width]="tableCol === 'email'? 'auto' : 'auto' ">
                                             <div class="tdTxt">
                                                 <span *ngIf="tableCol == 'Component Image' || tableCol == 'Component_Image'" >
