@@ -361,7 +361,8 @@
         </div>
 
         <div class="col-sm-12 col-md-12 table-cont m-top-2 table-fixed">
-            <table class="report-table table table-striped table-bordered table-curved table-fixed">
+            <!-- {{reportDataLoader  | json}} -->
+            <table *ngIf="reportDataLoader.tableData else noRecord" class="report-table table table-striped table-bordered table-curved table-fixed">
                 <thead class="bg-igp text-white">
                 <tr>
                     <th *ngFor="let tableLabel of reportDataLoader.tableHeaders">
@@ -380,6 +381,7 @@
 
                 </tbody>
             </table>
+            <ng-template #noRecord><mat-card>No Record</mat-card></ng-template>
         </div>
     </div>
 </div>
