@@ -96,7 +96,7 @@ export class DeliveredComponent implements OnInit {
                     this$.uploadedFiles.ofdImages.push(response.result[0].uploadedFilePath['OutForDelivery'][i]);
                 }
             }
-            if (response && response.result[0].uploadedFilePath && response.result[0].uploadedFilePath['OutForDelivery'].length > 0) {
+            if (response && response.result[0].uploadedFilePath && response.result[0].uploadedFilePath['Delivered'].length > 0) {
                 for (let i = 0, length = response.result[0].uploadedFilePath['Delivered'].length; i < length; i++) {
                     this$.uploadedFiles.dImages.push(response.result[0].uploadedFilePath['Delivered'][i]);
                 }

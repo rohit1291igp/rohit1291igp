@@ -93,7 +93,7 @@
     </div>
     <!-- Order Photos Ends -->
     <div class="delivered-btn">
-        <button [ngClass]="{'disable':(recipientInfo && (uploadedFiles.ofdImages.length) > 0 && (uploadedFiles.dImages.length > 0)) ? false : true}"
+        <button [ngClass]="{'disable':(recipientInfo && (uploadedFiles.dImages.length > 0)) ? false : true}"
             (click)="updateOrder('Delivered')">DELIVERED</button>
         <!-- <a routerLink="/delivery-app/orders-delivered">DELIVERED</a> -->
     </div>
