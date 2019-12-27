@@ -475,6 +475,7 @@ getDeliveryBoyList(){
         let fileList: FileList = event.target.querySelector('#excelFile').files;
       _this.isUploading = true;
         if(fileList.length > 0) {
+            _this._flags.emptyFileValidation=false;
             let file: File = fileList[0];
             let formData = new FormData();
             for (var i = 0; i < fileList.length; i++) {
