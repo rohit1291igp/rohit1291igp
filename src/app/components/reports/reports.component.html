@@ -220,6 +220,8 @@
                                                         <div class="help-block theme-red" *ngIf="_flags.emptyFileValidation">Please choose a excel file.</div>
                                                         <div class="m-top-1 text-bold text-green" *ngIf="_flags.uploadSuccessFlag && reportType === 'getComponentReport'">All Components are uploaded
                                                             successfully !</div>
+                                                        <div class="m-top-1 text-bold text-green" *ngIf="_flags.uploadSuccessFlag && reportType === 'getVendorReport'">All Components are uploaded
+                                                                successfully !</div>    
                                                         <div class="m-top-1 text-bold text-green" *ngIf="_flags.uploadSuccessFlag && reportType === 'getPincodeReport'">All Pincodes are uploaded
                                                             successfully !</div>
                                                         <div class="m-top-1 text-bold text-green" *ngIf="_flags.uploadSuccessFlag && reportType === 'getBarcodeToComponentReport'">All Barcodes are uploaded
