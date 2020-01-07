@@ -887,6 +887,7 @@
                         <span class="" style="" *ngIf="orderProduct.personalized"> | <a href="{{orderProduct.personalizedInfo}}" target="_blank" download>Download Photo</a></span>
                         <br/><span class="text-bold" *ngIf="orderProduct.cakemessage">Name on cake: </span><span *ngIf="orderProduct.cakemessage">{{orderProduct.cakemessage}}</span>
                     </p>
+                    <p class="text-bold">{{orderProduct?.orderProductExtraInfo?.attributes.replace("[", "").replace("]", "")}}</p>
 
                     <div class="col-md-12 product-holder" [ngClass]="{'no-margin' : isMobile, 'noBtBorder' : (z+1 === order.orderProducts.length)}">
                       <div class="row">
