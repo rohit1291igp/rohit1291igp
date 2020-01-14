@@ -68,7 +68,7 @@ export class DownloadEmailComponent implements OnInit {
     const fileName = fileFor + '_' + filedate + '_' + fileTime + '.csv';
     // let filePresent = false;
     const reqObj = {
-      url: `linksInMail/getCsvLink?fileFor=${fileFor}&filedate=${filedate}&fileTime=${fileTime}`,
+      url: `linksInMail/getCsvLinkS3?fileFor=${fileFor}&filedate=${filedate}&fileTime=${fileTime}`,
       method: 'get'
     };
     _this.BackendService.makeAjax(reqObj, function(err, response, headers) {
