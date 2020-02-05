@@ -255,6 +255,26 @@ export class MicroSiteDasboardComponent implements OnInit {
                         }
                     }, 100);
                  }else{
+                    if (data.value.filtertype == 'all') {
+                        response.data = response.data.length > 0 && response.data.filter(f => {
+                            if (f.type == 'credit') {
+                                var a = {
+                                    "emailId": f.emailId,
+                                    "couponCode": f.couponCode,
+                                    "uploadDate": f.uploadDate,
+                                    "amount": f.amount,
+                                    "type": f.type,
+                                    "couponUsedDate": f.couponUsedDate,
+                                    "balance": f.balance
+                                }
+                                return a;
+                            } else {
+                                return f;
+                            }
+                        });
+                    }
+                    response.data.length > 0 && response.data.forEach(m => m.uploadDate = pipe.transform(m.uploadDate, 'dd/MM/yyyy'));
+                    response.data.length > 0 && response.data.forEach(m => m.couponUsedDate = pipe.transform(m.couponUsedDate, 'dd/MM/yyyy'));
                     let userData = response.data;
                     // let headerData = _this.swap(response.data[0]);
                     var options = {
@@ -264,13 +284,22 @@ export class MicroSiteDasboardComponent implements OnInit {
                         nullToEmptyString: true,
                       };
                     // userData.unshift(headerData);
-                    let download = new Angular5Csv(userData, 'userReport', options);
+                        let download = new Angular5Csv(userData, 'userReport', options);
                  }
                 }
                 
         });
 
     }
+
+     preferredOrder(obj, order) {
+        var newObject = {};
+        for(var i = 0; i < order.length; i++) {
+            if(obj.hasOwnProperty(order[i])) {
+                newObject[order[i]] = obj[order[i]];
+            }
+        }
+    } 
 
     uploadExcel(event) {
         var _this = this;
