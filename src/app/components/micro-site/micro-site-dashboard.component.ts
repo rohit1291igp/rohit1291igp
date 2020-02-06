@@ -255,11 +255,17 @@ export class MicroSiteDasboardComponent implements OnInit {
                         }
                     }, 100);
                  }else{
+
+                    var isdataready = false; 
+                    
                     let userData = JSON.parse(JSON.stringify(response.data));
 
                     if (data.value.filtertype == 'all') {
-                        userData = userData.length > 0 && userData.filter(f => {
+                        userData = userData.length > 0 && userData.filter((f,i) => {
                             if (f.type == 'credit') {
+                                if(i == (userData.length-1)){
+                                    isdataready = true;
+                                }
                                 var a = {
                                     "emailId": f.emailId,
                                     "couponCode": f.couponCode,
@@ -285,7 +291,9 @@ export class MicroSiteDasboardComponent implements OnInit {
                         nullToEmptyString: true,
                       };
                     // userData.unshift(headerData);
+                    if(isdataready){
                         let download = new Angular5Csv(userData, 'userReport', options);
+                    }
                  }
                 }
                 
