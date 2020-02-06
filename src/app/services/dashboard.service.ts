@@ -3,6 +3,7 @@ import {Http} from "@angular/http";
 import { BackendService } from './backend.service';
 import { UtilityService } from './utility.service';
 import {environment} from "../../environments/environment";
+import { Router } from '@angular/router';
 
 @Injectable()
 export class DashboardService {
@@ -61,8 +62,14 @@ export class DashboardService {
     constructor(
         private http: Http,
         private BackendService: BackendService,
-        private UtilityService: UtilityService
-        ) { }
+        private UtilityService: UtilityService,
+        private router: Router
+        ) { 
+            let userType = localStorage.getItem('userType');
+            if(userType == 'microsite'){
+                this.router.navigate(['/dashboard-microsite']);
+            }
+        }
 
     getAlertRow() {
         return {

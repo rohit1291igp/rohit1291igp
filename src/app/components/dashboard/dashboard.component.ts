@@ -74,7 +74,7 @@ export class DashboardComponent implements OnInit {
 
   ngOnDestroy() {
     if (environment.userType !== 'blogger') {
-        this.dashboardObservable.unsubscribe();
+        this.dashboardObservable && this.dashboardObservable.unsubscribe();
     }
   }
 
