@@ -255,8 +255,10 @@ export class MicroSiteDasboardComponent implements OnInit {
                         }
                     }, 100);
                  }else{
+                    let userData = JSON.parse(JSON.stringify(response.data));
+
                     if (data.value.filtertype == 'all') {
-                        response.data = response.data.length > 0 && response.data.filter(f => {
+                        userData = userData.length > 0 && userData.filter(f => {
                             if (f.type == 'credit') {
                                 var a = {
                                     "emailId": f.emailId,
@@ -273,9 +275,8 @@ export class MicroSiteDasboardComponent implements OnInit {
                             }
                         });
                     }
-                    response.data.length > 0 && response.data.forEach(m => m.uploadDate = pipe.transform(m.uploadDate, 'dd/MM/yyyy'));
-                    response.data.length > 0 && response.data.forEach(m => m.couponUsedDate = pipe.transform(m.couponUsedDate, 'dd/MM/yyyy'));
-                    let userData = response.data;
+                    userData.length > 0 && userData.forEach(m => m.uploadDate = pipe.transform(m.uploadDate, 'dd/MM/yyyy'));
+                    userData.length > 0 && userData.forEach(m => m.couponUsedDate = pipe.transform(m.couponUsedDate, 'dd/MM/yyyy'));
                     // let headerData = _this.swap(response.data[0]);
                     var options = {
                         showLabels: true, 
