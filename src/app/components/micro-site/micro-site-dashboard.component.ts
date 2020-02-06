@@ -113,7 +113,7 @@ export class MicroSiteDasboardComponent implements OnInit {
         this.getUsers();
     }
 
-    setTableColumn(type){
+    setTableColumn(type) {
         const tempData = [
             {
                 id: "emailId",
@@ -230,7 +230,7 @@ export class MicroSiteDasboardComponent implements OnInit {
                 return;
             }
             if (response.status.toLowerCase() == 'success' && response.data) {
-                if(buttonName === 'search'){
+                if (buttonName === 'search') {
                     _this.displayUploadForm(false);
                     if (data.value.filtertype == 'all') {
                         response.data = response.data.length > 0 && response.data.filter(f => {
@@ -244,7 +244,7 @@ export class MicroSiteDasboardComponent implements OnInit {
                     }
                     response.data.length > 0 && response.data.forEach(m => m.uploadDate = pipe.transform(m.uploadDate, 'dd/MM/yyyy'));
                     response.data.length > 0 && response.data.forEach(m => m.couponUsedDate = pipe.transform(m.couponUsedDate, 'dd/MM/yyyy'));
-    
+
                     _this.dataSource = new MatTableDataSource(response.data);
                     _this.setTableColumn(data.value.filtertype);
                     setTimeout(() => {
@@ -254,61 +254,65 @@ export class MicroSiteDasboardComponent implements OnInit {
                             _this.dataSource.paginator.firstPage();
                         }
                     }, 100);
-                 }else{
+                } else {
 
-                    var isdataready = false; 
-                    
-                    let userData = JSON.parse(JSON.stringify(response.data));
+                    var isdataready = false;
 
-                    if (data.value.filtertype == 'all') {
-                        userData = userData.length > 0 && userData.filter((f,i) => {
-                            if (f.type == 'credit') {
-                                if(i == (userData.length-1)){
-                                    isdataready = true;
-                                }
-                                var a = {
-                                    "emailId": f.emailId,
-                                    "couponCode": f.couponCode,
-                                    "uploadDate": f.uploadDate,
-                                    "amount": f.amount,
-                                    "type": f.type,
-                                    "couponUsedDate": f.couponUsedDate,
-                                    "balance": f.balance
-                                }
-                                return a;
-                            } else {
-                                return f;
+                    let userData = [];
+
+
+                    response.data.length > 0 && response.data.forEach((f, i) => {
+                        // if (f.type == 'credit') {
+                        if (i == userData.length) {
+                            isdataready = true;
+                        }
+                        if (data.value.filtertype == 'all') {
+                            var a = {
+                                "emailId": f.emailId,
+                                "couponCode": f.couponCode,
+                                "uploadDate": f.uploadDate,
+                                "amount": f.amount,
+                                "type": f.type,
+                                "couponUsedDate": f.couponUsedDate,
+                                "balance": f.balance
                             }
-                        });
-                    }
+                            return userData.push(a);
+                        }else{
+                            userData.push(f)
+                        }
+
+                    })
+
                     userData.length > 0 && userData.forEach(m => m.uploadDate = pipe.transform(m.uploadDate, 'dd/MM/yyyy'));
-                    userData.length > 0 && userData.forEach(m => m.couponUsedDate = pipe.transform(m.couponUsedDate, 'dd/MM/yyyy'));
+                    userData.length > 0 && userData.forEach(m => m.couponUsedDate ? m.couponUsedDate = pipe.transform(m.couponUsedDate, 'dd/MM/yyyy') : m.couponUsedDate = '');
                     // let headerData = _this.swap(response.data[0]);
-                    var options = {
-                        showLabels: true, 
-                        showTitle: false,
-                        headers: Object.keys(userData[0]).map(m => m.charAt(0).toUpperCase() + m.slice(1)),
-                        nullToEmptyString: true,
-                      };
-                    // userData.unshift(headerData);
-                    if(isdataready){
-                        let download = new Angular5Csv(userData, 'userReport', options);
+
+                    if (isdataready) {
+                        var options = {
+                            showLabels: true,
+                            showTitle: false,
+                            headers: Object.keys(userData[0]).map(m => m.charAt(0).toUpperCase() + m.slice(1)),
+                            nullToEmptyString: false,
+                        };
+                        // userData.unshift(headerData);
+                        let filedate = datefrom + '-' + dateto;
+                        let download = new Angular5Csv(userData, 'userReport-' + filedate, options);
                     }
-                 }
                 }
-                
+            }
+
         });
 
     }
 
-     preferredOrder(obj, order) {
+    preferredOrder(obj, order) {
         var newObject = {};
-        for(var i = 0; i < order.length; i++) {
-            if(obj.hasOwnProperty(order[i])) {
+        for (var i = 0; i < order.length; i++) {
+            if (obj.hasOwnProperty(order[i])) {
                 newObject[order[i]] = obj[order[i]];
             }
         }
-    } 
+    }
 
     uploadExcel(event) {
         var _this = this;
@@ -348,7 +352,7 @@ export class MicroSiteDasboardComponent implements OnInit {
                     _this.displayUploadForm(false);
                     _this.openSnackBar(`File Uploaded Sucessfully!`);
                     fileInput.value = '';
-                }else{
+                } else {
                     _this.displayUploadForm(false);
                     _this.openSnackBar(response.data[0]);
                     fileInput.value = '';
