@@ -69,6 +69,10 @@ export class MicroSiteDasboardComponent implements OnInit {
             value: "Email Id"
         },
         {
+            id: "couponCode",
+            value: "Coupon Code"
+        },
+        {
             id: "type",
             value: "Transaction Type"
         },
@@ -118,6 +122,10 @@ export class MicroSiteDasboardComponent implements OnInit {
             {
                 id: "emailId",
                 value: "Email Id"
+            },
+            {
+                id: "couponCode",
+                value: "Coupon Code"
             },
             {
                 id: "type",
