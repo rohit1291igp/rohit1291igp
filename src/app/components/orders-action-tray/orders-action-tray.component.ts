@@ -1280,7 +1280,7 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
               {"name" : "14:00 hrs - 16:00 hrs", "value":"14:00 hrs - 16:00 hrs"},
               {"name" : "16:00 hrs - 18:00 hrs", "value":"16:00 hrs - 18:00 hrs"},
               {"name" : "18:00 hrs - 20:00 hrs", "value":"18:00 hrs - 20:00 hrs"},
-              {"name" : "22:00 hrs - 22:00 hrs", "value":"22:00 hrs - 22:00 hrs"}
+              {"name" : "20:00 hrs - 22:00 hrs", "value":"20:00 hrs - 22:00 hrs"}
           ];
 
           _this.adminActions.adminActionDepData.deliveryTypes = _this.UtilityService.getDeliveryTypeList();
@@ -1511,7 +1511,7 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
                 {"name" : "14:00 hrs - 16:00 hrs", "value":"14:00 hrs - 16:00 hrs"},
                 {"name" : "16:00 hrs - 18:00 hrs", "value":"16:00 hrs - 18:00 hrs"},
                 {"name" : "18:00 hrs - 20:00 hrs", "value":"18:00 hrs - 20:00 hrs"},
-                {"name" : "22:00 hrs - 22:00 hrs", "value":"22:00 hrs - 22:00 hrs"}
+                {"name" : "20:00 hrs - 22:00 hrs", "value":"20:00 hrs - 22:00 hrs"}
             ];
         }
     }
