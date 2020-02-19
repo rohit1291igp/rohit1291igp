@@ -651,8 +651,8 @@
                             <!-- <ng-container *ngIf="dataIndex < paginationFlag"> -->
                                     <td class="reportTableCell" style="word-break: break-word;" *ngFor="let tableCol of reportData.tableHeaders; let i='index'" [ngClass]="{'hide' : isHiddenCell(tableCol)}" [style.width]="tableCol === 'email'? 'auto' : 'auto' ">
                                             <div class="tdTxt">
-                                                <span *ngIf="(environment.userType && environment.userType === 'vendor') && tableCol == 'Component_Cost_Vendor' && getCellValue(tableRowValue['Proc_Type_Vendor']) == 'Stocked' && reportType == 'getVendorReport'">
-                                                    <div class="reportDwld pull-right btn btn-primary" (click)="openStockItemForm()" [ngClass]="{'disableBtn' : !reportData.tableData.length}">
+                                                <span *ngIf="(environment.userType && environment.userType === 'vendor') && tableCol == 'Component_Cost_Vendor' && getCellValue(tableRowValue['Proc_Type_Vendor']) == 'Stocked' && reportType == 'getVendorReport'" style="display: table;margin: 0 auto;">
+                                                    <div class="reportDwld pull-right btn btn-primary" (click)="openStockItemForm(tableRowValue)" [ngClass]="{'disableBtn' : !reportData.tableData.length}">
                                                             Order Component <span class="glyphicon glyphicon-plus" title="Order Component"></span>
                                                             </div>
                                                 </span>

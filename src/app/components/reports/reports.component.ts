@@ -791,7 +791,7 @@ getDeliveryBoyList(){
             _this.orginalReportData.tableData = _reportData.tableData; //_this.orginalReportData.tableData.concat(_reportData.tableData);
             // if(e){
                 _this.columnFilterSubmit(e);
-                // _this.showMoreTableData(e);
+                _this.showMoreTableData(e);
             // }
         });
         
@@ -856,7 +856,7 @@ getDeliveryBoyList(){
                         _this.orginalReportData.summary = _reportData.summary;
                         _this.orginalReportData.tableData = _this.orginalReportData.tableData.concat(_reportData.tableData);
                         _this.columnFilterSubmit(e);
-                        // _this.showMoreTableData(e);
+                        _this.showMoreTableData(e);
                     });
                 // }
                 
@@ -1875,10 +1875,10 @@ getDeliveryBoyList(){
         });
     }
 
-    openStockItemForm(): void {
+    openStockItemForm(rowData): void {
         const dialogRef = this.dialog.open(AddStockComponent, {
           width: '500px',
-          data: this.listOfStockItems
+          data: rowData
         });
     
         dialogRef.afterClosed().subscribe(result => {
@@ -1893,38 +1893,38 @@ getDeliveryBoyList(){
     template: `
     <div class="delivery-container">
     <i class="fa fa-times" style="float: right; cursor:pointer;" (click)="dialogRef.close()"></i>
-    <div style="margin-bottom: 8px;">Add Item</div>
+    <div style="margin-bottom: 8px;">Order Component</div>
     <form [formGroup]="myForm" (ngSubmit)="onSubmit(myForm)">
         <div class="form-row">
             <div class="input-container">
             <div class="search-container" #myTarget >
             <div>
                 <mat-form-field>
-                    <input #inputValue (keyup)="filterValues(inputValue.value)" (focus)="showList('show')" (focusout)="showList('hide')" formControlName="itemName" matInput autocomplete="off" placeholder="Item Name" />
+                    <input #inputValue (keyup)="filterValues(inputValue.value)" (focus)="showList('show')" (focusout)="showList('hide')" formControlName="itemName" matInput autocomplete="off" placeholder="Component Name" readonly=true />
                 </mat-form-field>
             </div>
-            <div id="dropDownContainer" *ngIf='componentsListArray' class="d-flex flex-direction-column">
+            <!--<div id="dropDownContainer" *ngIf='componentsListArray' class="d-flex flex-direction-column">
                 <div *ngFor="let item of componentsListArray;let odd=odd;" style="cursor:pointer;">
                 <div style="padding:0 0 0 6px;height: 21px;overflow: hidden;" [ngStyle]="{background:odd?'#ccc':'#f2f2f2'}" (click)="selectComponent(item)">{{item.Component_Name}}</div>
                 </div>
-            </div>
+            </div>-->
         </div>
             </div>
-            <div class="input-container">
+            <!--<div class="input-container">
                 <mat-form-field>
-                    <input formControlName="componentId" matInput placeholder="Conponent Id">
+                    <input formControlName="componentId" matInput placeholder="Component Id">
                 </mat-form-field>
-            </div>
+            </div>-->
         </div>
         <div class="form-row">
             <div class="input-container">
                 <mat-form-field>
-                    <input formControlName="ComponentCostVendor" matInput placeholder="Component Cost Vendor">
+                    <input type="number" formControlName="ComponentCostVendor" matInput placeholder="Component Cost" autocomplete="off">
                 </mat-form-field>
             </div>
             <div class="input-container">
                 <mat-form-field>
-                    <input formControlName="StockQuantity" matInput placeholder="Stock Quantity">
+                    <input type="number" formControlName="StockQuantity" matInput placeholder="Stock Quantity" autocomplete="off">
                 </mat-form-field>
             </div>
 
@@ -1950,10 +1950,10 @@ getDeliveryBoyList(){
 
       ngOnInit() {
         this.myForm = this.fb.group({
-            itemName: ['', [Validators.required, Validators.pattern('^[a-zA-Z ]*$')]],
-            componentId: ['', [Validators.required]],
-            ComponentCostVendor: ['', Validators.required],
-            StockQuantity: ['', [Validators.required]]
+            itemName: [this.data.Component_Name, [Validators.required, Validators.pattern('^[a-zA-Z ]*$')]],
+            // componentId: [this., [Validators.required]],
+            ComponentCostVendor: [this.data.Component_Cost_Vendor, [Validators.required, Validators.pattern(/^-?(0|[1-9]\d*)?$/)]],
+            StockQuantity: ['', [Validators.required, Validators.pattern(/^-?(0|[1-9]\d*)?$/)]]
         });
         this.getComponent();
     }  
@@ -1981,7 +1981,7 @@ getDeliveryBoyList(){
                 payload: {
                     Vendor_Id: this.VendorId,
                     Component_Name: data.itemName,
-                    componentId: data.componentId,
+                    Component_Id: this.data.Component_Id,
                     Component_Cost_Vendor: data.ComponentCostVendor,
                     Stock_Quantity: data.StockQuantity
                 } 
@@ -2026,19 +2026,19 @@ getDeliveryBoyList(){
     }   
     
     showList(flag){
-        if(flag == 'show'){
-            if(this.myForm.controls['itemName'].value){
-                this.componentsListArray = this.componentsList.filter(restaurant => restaurant.Component_Name.toLowerCase().includes(this.myForm.controls['itemName'].value.toLowerCase()));
-            }else{
-                this.componentsListArray = this.componentsList;
-            }
+        // if(flag == 'show'){
+        //     if(this.myForm.controls['itemName'].value){
+        //         this.componentsListArray = this.componentsList.filter(restaurant => restaurant.Component_Name.toLowerCase().includes(this.myForm.controls['itemName'].value.toLowerCase()));
+        //     }else{
+        //         this.componentsListArray = this.componentsList;
+        //     }
             
-            document.getElementById('dropDownContainer').setAttribute('style', 'display:flex !important');
-        }else{
-            setTimeout(()=>{
-                document.getElementById('dropDownContainer').setAttribute('style', 'display:none !important');
-            }, 100)
-        }
+        //     document.getElementById('dropDownContainer').setAttribute('style', 'display:flex !important');
+        // }else{
+        //     setTimeout(()=>{
+        //         document.getElementById('dropDownContainer').setAttribute('style', 'display:none !important');
+        //     }, 100)
+        // }
     }
   
   }
