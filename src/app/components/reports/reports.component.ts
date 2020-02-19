@@ -1,6 +1,6 @@
-import { animate, Component, ElementRef, HostListener, OnInit, sequence, style, transition, trigger, ViewChild } from '@angular/core';
+import { animate, Component, ElementRef, HostListener, OnInit, sequence, style, transition, trigger, ViewChild, Inject } from '@angular/core';
 import { Headers, RequestOptions } from "@angular/http";
-import { MatDialog, MatSnackBar } from '@angular/material';
+import { MatDialog, MatSnackBar, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { ActivatedRoute } from '@angular/router';
 import { IMyOptions } from 'mydatepicker';
 import { environment } from "../../../environments/environment";
@@ -10,6 +10,8 @@ import { S3UploadService } from '../../services/s3Upload.service';
 import { UtilityService } from '../../services/utility.service';
 import { OrdersActionTrayComponent } from '../orders-action-tray/orders-action-tray.component';
 import { Angular5Csv } from 'angular5-csv/dist/Angular5-csv';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { NONAME } from 'dns';
 
 @Component({
   selector: 'app-reports',
@@ -199,11 +201,13 @@ export class ReportsComponent implements OnInit{
     },
   };
   listOfComponents = [];
+  listOfStockItems = [];
   listOfBarcodes = [];
   uploadedImages = [];
   durationInSeconds = 5;
   deliveryBoyList:any;
   isDownload: boolean;
+  paginationFlag = 100;
   constructor(
       private _elementRef: ElementRef,
       public reportsService: ReportsService,
@@ -212,11 +216,41 @@ export class ReportsComponent implements OnInit{
       public route: ActivatedRoute,
       public S3UploadService: S3UploadService,
       public addDeliveryBoyDialog: MatDialog,
-      private _snackBar: MatSnackBar
+      private _snackBar: MatSnackBar,
+      public dialog: MatDialog
       ) { }
 
   ngOnInit() {
       var _this = this;
+      window.onscroll = () => {
+        // var _this = this;
+        var wrap = document.getElementsByClassName('report-table')[0] as any;
+        if(wrap){
+            var contentHeight = wrap.offsetHeight;
+            var yOffset = window.pageYOffset; 
+            var y = yOffset + window.innerHeight;
+            if(y >= contentHeight){
+                // Ajax call to get more dynamic data goes here
+                if(!_this.reportData){
+                    return false;
+                }
+                var totalOrders= (_this.orginalReportData.summary && _this.orginalReportData.summary[0]) ? Number(_this.orginalReportData.summary[0].value) : 0;
+                if(_this.orginalReportData.tableData.length < totalOrders){
+                    _this.showMoreTableData(null);
+                    // wrap.innerHTML += '<div class="newData"></div>';
+                    _this.paginationFlag = _this.paginationFlag + 10; 
+                    // let halfHeight = document.querySelectorAll('.reporTableRow').length - 10;
+                    // let halfWeight = window.innerWidth / 2;
+                    window.scrollTo(0,document.body.scrollHeight - 1000);
+                }
+               
+                // window.scrollTo(halfWeight, window.innerHeight - 10)
+            }
+            var status = document.getElementById('status');
+            status.innerHTML = contentHeight+" | "+y;
+        }
+        
+      };
       this.route.params.subscribe(params => {
           /* reset all variable - start*/
           _this.showMoreBtn= false;
@@ -261,7 +295,6 @@ export class ReportsComponent implements OnInit{
           }
 
 
-
           /* byDefault set deliveryDateFrom 2 days back - start */
           if(_this.reportType === 'getOrderReport' || _this.reportType === 'getOrderFileUploadReport' || _this.reportType === 'getPayoutAndTaxesReport' || _this.reportType === 'getSlaReport'){
               var delDateFromObj = _this.UtilityService.getDateObj(0); //changed from 2 day back - today
@@ -269,7 +302,20 @@ export class ReportsComponent implements OnInit{
               console.log('oninit =====> queryString ====>', _this.queryString);
           }
           /* byDefault set deliveryDateFrom 2 days back - end */
-
+          if(_this.reportType === 'getComponentReport'){
+            _this.getComponentsList();
+          }
+          if(_this.reportType === 'getBarcodeToComponentReport'){
+            _this.getBarcodeList();
+          }
+          /* Stock Item Component */
+          if(_this.reportType === 'getComponentOrderReport'){
+            _this.getStockComponent();
+          }
+          /* Stock Item Component end */
+            if(_this.reportType === 'getVendorReport'){
+                _this.getStockComponent();                
+            }
           /* set default vendor - start */
           if(_this.defaultVendor && ( _this.reportType === 'getVendorReport' || _this.reportType === 'getComponentReport' || _this.reportType === 'getPincodeReport') && (_this.environment.userType && _this.environment.userType === 'admin')){
               _this.searchResultModel["fkAssociateId"]=_this.defaultVendor;
@@ -288,7 +334,6 @@ export class ReportsComponent implements OnInit{
                   return;
               }
               console.log('_reportData=============>', _reportData);
-
               /* report label states - start */
               var reportLabels = _reportData.tableHeaders;
               var reportLabelsLength = _reportData.tableHeaders.length;
@@ -310,14 +355,9 @@ export class ReportsComponent implements OnInit{
               _reportData.searchFields = _this.reportDataLoader.searchFields;
               _this.reportData = _reportData;
               _this.orginalReportData = JSON.parse(JSON.stringify(_this.reportData)); //Object.assign({}, _this.reportData);
-              _this.showMoreTableData(null);
+            //   _this.showMoreTableData(null);
           });
-          if(_this.reportType === 'getComponentReport'){
-            _this.getComponentsList();
-          }
-          if(_this.reportType === 'getBarcodeToComponentReport'){
-            _this.getBarcodeList();
-          }
+          
       });
     //   _this.getDeliveryBoyList();
     // _this.getVendorList();
@@ -415,6 +455,29 @@ getDeliveryBoyList(){
             }
             console.log("response----->"+response.result.list);
             _this.listOfComponents = response.result.list;
+          });
+    }
+  }
+  getStockComponent(){
+    // this.listOfStockItems = JSON.parse(localStorage.getItem('stockItem')).tableData;  
+    var _this = this;
+    if(environment.userType && environment.userType === "vendor"){
+        let reqObj =  {
+            url : `getListOfVendorComponents?startLimit=0&endLimit=10000&fkAssociateId=${localStorage.getItem('fkAssociateId')}`,
+            method : "get",
+            payload : {}
+          };
+          _this.BackendService.makeAjax(reqObj, function(err, response, headers){
+            if(err || response.error == true) {
+                if(response){
+                    console.log('Error=============>', err, response.errorCode);
+                }else{
+                alert("Error Occurred while trying to get list of components.");
+                }
+                return;
+            }
+            console.log("response----->"+response.result);
+            _this.listOfStockItems = response.result;
           });
     }
   }
@@ -683,6 +746,27 @@ getDeliveryBoyList(){
             _this.searchResultModel["startLimit"] = 0;
             _this.searchResultModel["endLimit"] = 1000;
         }
+       
+        if(_this.reportType == 'getComponentOrderReport'){
+            if($('.componentDD').val() == "Select Component Code"){
+                alert("Please select component code");
+                return;
+            } else if($('.componentDD').val() !== undefined && $('.componentDD').val() == "All Component"){
+                if(_this.searchResultModel["Component_Code"]){
+                    delete _this.searchResultModel["Component_Code"];
+                }
+                else{
+                    alert("Already all components are listed");
+                    return;
+                }
+            }
+             else if($('.componentDD').val() !== undefined){
+                _this.searchResultModel["Component_Code"]=$('.componentDD').val();
+            }
+            _this.searchResultModel["startLimit"] = 0;
+            _this.searchResultModel["endLimit"] = 1000;
+            
+        }
 
         
         _this.queryString = _this.generateQueryString(_this.searchResultModel);
@@ -702,13 +786,12 @@ getDeliveryBoyList(){
             console.log('searchReportSubmit _reportData=============>', _reportData);
             _reportData.searchFields = _this.reportData.searchFields;
             //_this.reportData = _reportData;
-
             /* need to handle filter - start */
             _this.orginalReportData.summary = _reportData.summary;
             _this.orginalReportData.tableData = _reportData.tableData; //_this.orginalReportData.tableData.concat(_reportData.tableData);
             // if(e){
                 _this.columnFilterSubmit(e);
-                _this.showMoreTableData(e);
+                // _this.showMoreTableData(e);
             // }
         });
         
@@ -743,50 +826,54 @@ getDeliveryBoyList(){
     showMoreTableData(e){
         var _this=this;
         if(_this.reportType === "getPincodeReport"){return;} // pagination issue
-        var totalOrders= (_this.orginalReportData.summary && _this.orginalReportData.summary[0]) ? Number(_this.orginalReportData.summary[0].value) : 0;
-        console.log('show more clicked');
-
-        if(_this.orginalReportData.tableData.length < totalOrders){
-            _this.BackendService.abortLastHttpCall();
-
-            var startLimit = _this.reportData.tableData.length;
-            var queryStrObj = Object.assign({}, _this.searchResultModel);
-            queryStrObj.startLimit = startLimit;
-            _this.queryString = _this.generateQueryString(queryStrObj);
-
-
-            _this.reportsService.getReportData(_this.reportType, _this.queryString, function(error, _reportData){
-                if(error || !_reportData.tableData.length){
-                    console.log('searchReportSubmit _reportData Error=============>', error);
-                    return;
-                }
-                console.log('searchReportSubmit _reportData=============>', _reportData);
-                /*if(_reportData.tableData.length < 1){
-                    _this.showMoreBtn=false;
-                }*/
-
-                //_this.reportData.summary = _reportData.summary;
-                //_this.reportData.tableData = _this.reportData.tableData.concat(_reportData.tableData);
-                //_this.orginalReportData = Object.assign({}, _this.reportData);
-
-                /* need to handle filter - start */
-                _this.orginalReportData.summary = _reportData.summary;
-                _this.orginalReportData.tableData = _this.orginalReportData.tableData.concat(_reportData.tableData);
-                _this.columnFilterSubmit(e);
-                _this.showMoreTableData(e);
-            });
+        if(_this.orginalReportData && _this.orginalReportData.summary.length > 0){
+            var totalOrders= (_this.orginalReportData.summary && _this.orginalReportData.summary[0]) ? Number(_this.orginalReportData.summary[0].value) : 0;
+            console.log('show more clicked');
+    
+            if(_this.orginalReportData.tableData.length < totalOrders){
+                _this.BackendService.abortLastHttpCall();
+                // if(_this.reportData){
+                    var startLimit = _this.reportData.tableData.length;
+                    var queryStrObj = Object.assign({}, _this.searchResultModel);
+                    queryStrObj.startLimit = startLimit;
+                    _this.queryString = _this.generateQueryString(queryStrObj);
+        
+                    _this.reportsService.getReportData(_this.reportType, _this.queryString, function(error, _reportData){
+                        if(error || !_reportData.tableData.length){
+                            console.log('searchReportSubmit _reportData Error=============>', error);
+                            return;
+                        }
+                        console.log('searchReportSubmit _reportData=============>', _reportData);
+                        /*if(_reportData.tableData.length < 1){
+                            _this.showMoreBtn=false;
+                        }*/
+        
+                        //_this.reportData.summary = _reportData.summary;
+                        //_this.reportData.tableData = _this.reportData.tableData.concat(_reportData.tableData);
+                        //_this.orginalReportData = Object.assign({}, _this.reportData);
+        
+                        /* need to handle filter - start */
+                        _this.orginalReportData.summary = _reportData.summary;
+                        _this.orginalReportData.tableData = _this.orginalReportData.tableData.concat(_reportData.tableData);
+                        _this.columnFilterSubmit(e);
+                        // _this.showMoreTableData(e);
+                    });
+                // }
+                
+            }
+            if(_this.orginalReportData.tableData.length == totalOrders && _this.isDownload){
+                var options = {
+                    showLabels: true, 
+                    showTitle: false,
+                    headers: Object.keys(_this.orginalReportData.tableData[0]).map(m => m.charAt(0).toUpperCase() + m.slice(1)),
+                    nullToEmptyString: true,
+                  };
+                let data = _this.orginalReportData.tableData;
+                let download = new Angular5Csv(data, _this.reportType, options);
+                _this.isDownload = false;
+            }
         }
-        if(_this.orginalReportData.tableData.length == totalOrders && _this.isDownload){
-            var options = {
-                showLabels: true, 
-                showTitle: false,
-                headers: Object.keys(_this.orginalReportData.tableData[0]).map(m => m.charAt(0).toUpperCase() + m.slice(1)),
-                nullToEmptyString: true,
-              };
-            let data = _this.orginalReportData.tableData;
-            let download = new Angular5Csv(data, _this.reportType, options);
-            _this.isDownload = false;
-        }
+        
     }
 
     viewOrderDetail(e, orderId){
@@ -1181,7 +1268,7 @@ getDeliveryBoyList(){
         console.log(actBtnTxtModified);
         var apiURLPath="";
         var apiMethod;
-        var paramsObj;
+        var paramsObj = {};
         switch(_this.reportType){
             case "getOrderReport" : apiURLPath = "";
                 break;
@@ -1197,6 +1284,10 @@ getDeliveryBoyList(){
 
             case "getComponentReport" : apiURLPath = "handleComponentChange";
                 break;
+
+            case "getComponentOrderReport" : apiURLPath = "orderedVendorComponentStocked";
+                break;
+
             default : apiURLPath ="";
         }
 
@@ -1293,7 +1384,7 @@ getDeliveryBoyList(){
                 } else{
                     if(header === "Price"){
                         paramsObj={
-                            componentId:rowData['component_Id_Hide'],
+                            componentId:rowData['Component_Id'],
                             reqPrice: _this.editTableCellObj.value,
                             oldPrice: _this.editTableCellObj["cellValue"]
                         };
@@ -1344,11 +1435,20 @@ getDeliveryBoyList(){
         if( _this.reportType !== "getComponentReport" && _this.reportType !== "getBarcodeToComponentReport"){
             if(environment.userType && environment.userType === "admin"){
                 
-                paramsObj.fkAssociateId = rowData.Vendor_Id;
-
+                if(_this.reportType === 'getComponentOrderReport'){
+                    paramsObj = rowData;
+                    for(let x in rowData){
+                        if(_this.editTableCellObj.header == x){
+                            rowData[x] = _this.editTableCellObj.value;
+                        }
+                    }
+                }else{
+                    paramsObj['fkAssociateId'] = rowData.Vendor_Id;
+                }
+                // _this.editTableCell = true;
                 // paramsObj.fkAssociateId = _this.searchResultModel["fkAssociateId"];
             }else{
-                paramsObj.fkAssociateId =  localStorage.getItem('fkAssociateId');
+                paramsObj['fkAssociateId'] =  localStorage.getItem('fkAssociateId');
             }
         }
 
@@ -1397,6 +1497,7 @@ getDeliveryBoyList(){
             //response = JSON.parse(response);
             console.log('sidePanel Response --->', response.result);
             if(response.result){
+                _this.closePopup(event, false);
                  console.log('Following operation is successful !!!');
                  if(_this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header]['value']){
                      _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header]['value'] = _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header]['value'].replace(/`updating/g , " ")+'`updated';
@@ -1436,6 +1537,7 @@ getDeliveryBoyList(){
 
     submitEditCell(e, actBtnTxt, cellValue, rowData, header, dataIndex){
         var _this=this;
+        _this.editTableCell = true;
         _this.actionBtnInvoke(actBtnTxt, cellValue, rowData, header, dataIndex, 1);
     }
 
@@ -1773,5 +1875,171 @@ getDeliveryBoyList(){
         });
     }
 
+    openStockItemForm(): void {
+        const dialogRef = this.dialog.open(AddStockComponent, {
+          width: '500px',
+          data: this.listOfStockItems
+        });
+    
+        dialogRef.afterClosed().subscribe(result => {
+          console.log('The dialog was closed');
+        });
+      }
+
 }
+
+@Component({
+    selector: 'app-add-component',
+    template: `
+    <div class="delivery-container">
+    <i class="fa fa-times" style="float: right; cursor:pointer;" (click)="dialogRef.close()"></i>
+    <div style="margin-bottom: 8px;">Add Item</div>
+    <form [formGroup]="myForm" (ngSubmit)="onSubmit(myForm)">
+        <div class="form-row">
+            <div class="input-container">
+            <div class="search-container" #myTarget >
+            <div>
+                <mat-form-field>
+                    <input #inputValue (keyup)="filterValues(inputValue.value)" (focus)="showList('show')" (focusout)="showList('hide')" formControlName="itemName" matInput autocomplete="off" placeholder="Item Name" />
+                </mat-form-field>
+            </div>
+            <div id="dropDownContainer" *ngIf='componentsListArray' class="d-flex flex-direction-column">
+                <div *ngFor="let item of componentsListArray;let odd=odd;" style="cursor:pointer;">
+                <div style="padding:0 0 0 6px;height: 21px;overflow: hidden;" [ngStyle]="{background:odd?'#ccc':'#f2f2f2'}" (click)="selectComponent(item)">{{item.Component_Name}}</div>
+                </div>
+            </div>
+        </div>
+            </div>
+            <div class="input-container">
+                <mat-form-field>
+                    <input formControlName="componentId" matInput placeholder="Conponent Id">
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="input-container">
+                <mat-form-field>
+                    <input formControlName="ComponentCostVendor" matInput placeholder="Component Cost Vendor">
+                </mat-form-field>
+            </div>
+            <div class="input-container">
+                <mat-form-field>
+                    <input formControlName="StockQuantity" matInput placeholder="Stock Quantity">
+                </mat-form-field>
+            </div>
+
+        </div>
+        <div class="form-row">
+            <button type="submit" mat-raised-button [disabled]="myForm.invalid">Submit</button>
+        </div>
+    </form>
+</div>
+    `,
+    styleUrls:['./reports.component.css']
+  })
+  export class AddStockComponent implements OnInit{
+    selected
+    myForm: FormGroup;
+    VendorId = localStorage.getItem('fkAssociateId');
+    componentsList = [];
+    componentsListArray = [];
+    constructor(
+      private fb: FormBuilder,
+      public dialogRef: MatDialogRef<AddStockComponent>,
+      @Inject(MAT_DIALOG_DATA) public data: any, private BackendService: BackendService,) {}
+
+      ngOnInit() {
+        this.myForm = this.fb.group({
+            itemName: ['', [Validators.required, Validators.pattern('^[a-zA-Z ]*$')]],
+            componentId: ['', [Validators.required]],
+            ComponentCostVendor: ['', Validators.required],
+            StockQuantity: ['', [Validators.required]]
+        });
+        this.getComponent();
+    }  
+  
+    getComponent(){
+        this.componentsList = this.data;
+    }
+
+    onNoClick(): void {
+      this.dialogRef.close();
+    }
+    
+    // restaurants = [{name:'Chocolate Cake',componentId:'12343'}, {name:'Flowers',componentId:'45676'},{name:'Gift Card',componentId:'12356'}];
+    filterValues(inputValue) {
+        this.componentsListArray = this.componentsList.filter(restaurant => restaurant.Component_Name.toLowerCase().includes(inputValue.toLowerCase()));
+        document.getElementById('dropDownContainer').setAttribute('style', 'display:flex !important');
+       }
+    onSubmit(form: FormGroup) {
+        if (this.data) {
+            let data = form.value;
+            var _this = this
+            const reqObj = {
+                url: `orderVendorComponentStocked`,
+                method: "post",
+                payload: {
+                    Vendor_Id: this.VendorId,
+                    Component_Name: data.itemName,
+                    componentId: data.componentId,
+                    Component_Cost_Vendor: data.ComponentCostVendor,
+                    Stock_Quantity: data.StockQuantity
+                } 
+            };
+            _this.BackendService.makeAjax(reqObj, function (err, response, headers) {
+                //if(!response) response={result:[]};
+                if (err || response.error) {
+                    console.log('Error=============>', err);
+                    return;
+                }
+                if (response) {
+                    _this.dialogRef.close(response);                
+                }
+            });
+        }
+    }
+
+    @ViewChild('myTarget') myTarget;
+
+    // @HostListener('document:click', ['$event.target'])
+    //     onClick(targetElement) {
+    //         if(this.myTarget){
+    //         const clickedInside = this.myTarget.nativeElement.contains(targetElement);
+    //             if (!clickedInside) {
+    //                 if(document.getElementById('dropDownContainer').childElementCount > 0){
+    //                     document.getElementById('dropDownContainer').setAttribute('style', 'display:none !important');
+    //                 }
+    //                 console.log(targetElement, clickedInside)
+    //                 //the click was made outside of this element
+    //             }else{
+    //                 // document.getElementById('dropDownContainer').setAttribute('style', 'display:flex !important');
+    //             }
+    //         }
+    //     }
+
+    selectComponent(item){
+        this.myForm.controls['itemName'].setValue(item.Component_Name);
+        this.myForm.controls['componentId'].setValue(item.Component_Id);
+        this.myForm.controls['ComponentCostVendor'].setValue(item.Component_Cost_Vendor);
+
+        document.getElementById('dropDownContainer').setAttribute('style', 'display:none !important');
+    }   
+    
+    showList(flag){
+        if(flag == 'show'){
+            if(this.myForm.controls['itemName'].value){
+                this.componentsListArray = this.componentsList.filter(restaurant => restaurant.Component_Name.toLowerCase().includes(this.myForm.controls['itemName'].value.toLowerCase()));
+            }else{
+                this.componentsListArray = this.componentsList;
+            }
+            
+            document.getElementById('dropDownContainer').setAttribute('style', 'display:flex !important');
+        }else{
+            setTimeout(()=>{
+                document.getElementById('dropDownContainer').setAttribute('style', 'display:none !important');
+            }, 100)
+        }
+    }
+  
+  }
 

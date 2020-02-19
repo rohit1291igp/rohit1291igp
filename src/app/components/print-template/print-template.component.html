@@ -101,7 +101,7 @@
                         <div class="bold">Date:</div>
                         <div class="" *ngIf="orderProduct.orderProductExtraInfo">{{orderProduct.orderProductExtraInfo.deliveryDate | date : 'dd-MM-yy'}}</div>
                     </div>
-                    <div class="t-col-4 display-inline ">{{orderProduct.productName}}ert<span *ngIf="orderProduct.cakemessage"><br/><strong>Message on Cake:</strong> {{orderProduct.cakemessage}}</span><br>
+                    <div class="t-col-4 display-inline ">{{orderProduct.productName}}<span *ngIf="orderProduct.cakemessage"><br/><strong>Message on Cake:</strong> {{orderProduct.cakemessage}}</span><br>
                      <span *ngIf="orderProduct?.orderProductExtraInfo?.attributes">{{orderProduct?.orderProductExtraInfo?.attributes.replace("[", "").replace("]", "")}}</span>   
                     </div>
                     <div class= "t-col-5 display-inline ">{{orderProduct.productQuantity}}</div>

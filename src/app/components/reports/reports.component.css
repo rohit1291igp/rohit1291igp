@@ -489,3 +489,26 @@ table thead th{
     margin: -2px 5px;
 }
 
+
+.search-container{
+    width: 100%;
+    position: relative;
+}
+#dropDownContainer{
+    position: absolute;
+    z-index: 1000;
+    width: 80%;
+    top:40px;
+    overflow: auto;
+    max-height: 128px;
+}
+.form-container {
+    display: flex;
+    flex-direction: column;
+}
+.form-row {
+    display: flex;
+}
+.input-container {
+    width: 50%;
+}
