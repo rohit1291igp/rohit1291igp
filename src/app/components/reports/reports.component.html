@@ -111,7 +111,7 @@
                 <div class="modal-body center-align">
                     <!--<label>{{editTableCellObj.caption}}:</label>-->
                     <form (ngSubmit)="f.form.valid && submitEditCell($event, editTableCellObj.actBtnTxt, editTableCellObj.cellValue, editTableCellObj.rowData, editTableCellObj.header, editTableCellObj.dataIndex)" #f="ngForm" nonvalidate>
-                        <input *ngIf="editTableCellObj.header !== 'Component_Image'" class="form-control custom-control" type="text" name="editTableCell" placeholder="{{editTableCellObj.caption}}" [(ngModel)]="editTableCellObj.value" #editTableCell="ngModel" required>
+                        <input *ngIf="editTableCellObj.header !== 'Component_Image' && editTableCellObj.caption != 'Component_Delivery_Status'" class="form-control custom-control" type="text" name="editTableCell" placeholder="{{editTableCellObj.caption}}" [(ngModel)]="editTableCellObj.value" #editTableCell="ngModel" required>
                         <div class="panel-body" *ngIf="editTableCellObj.header == 'Component_Image'">
                                     
                             <div class="manage-media">
@@ -143,7 +143,12 @@
                                 </div>
                             </div>
                         </div>
-                        <div *ngIf="f.submitted && !editTableCell.valid" class="help-block theme-red">Please provide {{editTableCellObj.caption}} value</div>
+                        <div *ngIf="f.submitted && !editTableCell" class="help-block theme-red">Please provide {{editTableCellObj.caption}} value</div>
+                        <ng-container *ngIf="editTableCellObj.caption == 'Component_Delivery_Status'">
+                            <select class="form-control" name="{{editTableCellObj.caption}}"  [(ngModel)]="editTableCellObj.value" #editTableCell="ngModel">
+                                    <option *ngFor="let statusName of statusList" [ngValue]="statusName.value" [attr.data-trayOpen]="statusName.type">{{statusName.name}}</option>
+                            </select>
+                        </ng-container>
                         <button class="btn btn-primary m-top-1">Save</button>
                     </form>
                 </div>
@@ -390,7 +395,7 @@
 
 <div class="container-fluid reports-cont" *ngIf="reportData">
     <div class="row">
-        <div class="col-sm-12 col-md-12 m-top-1" *ngIf="reportType === 'getOrderReport' || reportType === 'getPayoutAndTaxesReport' || reportType === 'getOrderFileUploadReport' " style="width:100%; height:14em;">
+        <div class="col-sm-12 col-md-12 m-top-1" *ngIf="reportType === 'getOrderReport' || reportType === 'getPayoutAndTaxesReport' || reportType === 'getOrderFileUploadReport'" style="width:100%; height:14em;">
 
             <div class="col-sm-9 col-md-9 reprts-search-fields bg-white padding1" style="margin-right:0.5%; height:100%;" [style.width]="(getTopBlockWidth()).left">
                 <div class="underLine paddingHalf text-bold">Search Parameters</div>
@@ -492,12 +497,12 @@
 
       </div>
 
-        <div class="col-sm-12 col-md-12 m-top-1 searchFields2" *ngIf="(reportType === 'getVendorReport' || reportType === 'getPincodeReport' || reportType === 'getVendorDetails' || reportType === 'getComponentReport' || reportType === 'getBarcodeToComponentReport') && (environment.userType && environment.userType === 'admin') " style="width:100%;">
+        <div class="col-sm-12 col-md-12 m-top-1 searchFields2" *ngIf="(reportType === 'getVendorReport' || reportType === 'getPincodeReport' || reportType === 'getVendorDetails' || reportType === 'getComponentReport' || reportType === 'getBarcodeToComponentReport' || reportType === 'getComponentOrderReport') && (environment.userType && environment.userType === 'admin') || ((reportType === 'getComponentOrderReport') && (environment.userType && environment.userType === 'vendor'))" style="width:100%;">
             <div class="col-sm-9 col-md-9 reprts-search-fields bg-white padding1" style="padding-right:0; width:100%;">
                 <div *ngIf="reportType == 'getVendorReport' || reportType == 'getPincodeReport' || reportType == 'getVendorDetails'" class="underLine paddingHalf text-bold">Search Vendor</div>
                 <div *ngIf="reportType === 'getComponentReport'" class="underLine paddingHalf text-bold">Search Component</div>
                 <div *ngIf="reportType === 'getBarcodeToComponentReport'" class="underLine paddingHalf text-bold">Search Barcode</div>
-                <div class="btn btn-primary addActionBtn" (click)="addActionInit($event)">
+                <div *ngIf="reportType != 'getComponentOrderReport'" class="btn btn-primary addActionBtn" (click)="addActionInit($event)">
                     Add
                     <ng-container *ngIf="reportType === 'getVendorReport' || reportType === 'getComponentReport'">Component</ng-container>
                     <ng-container *ngIf="reportType === 'getPincodeReport'">Pincode</ng-container>
@@ -507,7 +512,7 @@
                 <form name="searchReport" (ngSubmit)="f.form.valid && searchReportSubmit($event,true)" #f="ngForm" nonvalidate>
                     <div class="searchFields m-top-1 inline" >
                         <div class="pull-left" style="width:70%;">
-                            <ng-container *ngIf="vendorList.length > 0">
+                            <ng-container *ngIf="vendorList.length > 0 && (reportType === 'getVendorReport' || reportType === 'getPincodeReport' || reportType === 'getVendorDetails' || reportType === 'getComponentReport' || reportType === 'getBarcodeToComponentReport') && (environment.userType && environment.userType === 'admin')">
                                     <app-vendor-dropdown *ngIf="reportType !== 'getComponentReport' && reportType !== 'getBarcodeToComponentReport'" [vendorList]="vendorList" [configData]="{'modelData' :searchResultModel, 'defaultVendor' : defaultVendor}"></app-vendor-dropdown>
                             </ng-container>
                             
@@ -516,6 +521,12 @@
                                 <option  [ngValue]="all">All Component</option>
                                 <option *ngFor="let comp of listOfComponents" [ngValue]="comp">{{comp}}</option>
                             </select>
+                            <select *ngIf="reportType == 'getComponentOrderReport'" name="fkAssociateId" class="componentDD form-control" required>
+                                <option  [ngValue]="">Select Component Code</option>
+                                <option  [ngValue]="all">All Component</option>
+                                <option *ngFor="let comp of listOfStockItems" [ngValue]="comp">{{comp.Component_Name}}</option>
+                            </select>
+
                             <select *ngIf="reportType == 'getBarcodeToComponentReport'" name="fkAssociateId" class="barcodeDD form-control" required>
                                     <option  [ngValue]="">Select Barcode</option>
                                     <option  [ngValue]="all">All Barcode</option>
@@ -526,6 +537,7 @@
                     <div class="searchFieldsSubmit relative inline" >
                         <input *ngIf="reportType == 'getVendorReport' || reportType == 'getPincodeReport' || reportType == 'getVendorDetails'"  type="submit" class="btn btn-primary pull-right bg-igp searchSubmitBtn"  value="Search Vendor"/>
                         <input *ngIf="reportType === 'getComponentReport'"  type="submit" class="btn btn-primary pull-right bg-igp searchSubmitBtn"  value="Search Component"/>
+                        <input *ngIf="reportType === 'getComponentOrderReport'"  type="submit" class="btn btn-primary pull-right bg-igp searchSubmitBtn"  value="Search Stock Component"/>
                         <input *ngIf="reportType === 'getBarcodeToComponentReport'"  type="submit" class="btn btn-primary pull-right bg-igp searchSubmitBtn"  value="Search Barcode"/>
                     </div>
                 </form>
@@ -636,9 +648,14 @@
                         </tr>
 
                         <tr class="reporTableRow" *ngFor="let tableRowValue of reportData.tableData; let dataIndex='index'" >
-                            <ng-container *ngIf="dataIndex < 200">
+                            <!-- <ng-container *ngIf="dataIndex < paginationFlag"> -->
                                     <td class="reportTableCell" style="word-break: break-word;" *ngFor="let tableCol of reportData.tableHeaders; let i='index'" [ngClass]="{'hide' : isHiddenCell(tableCol)}" [style.width]="tableCol === 'email'? 'auto' : 'auto' ">
                                             <div class="tdTxt">
+                                                <span *ngIf="(environment.userType && environment.userType === 'vendor') && tableCol == 'Component_Cost_Vendor' && getCellValue(tableRowValue['Proc_Type_Vendor']) == 'Stocked' && reportType == 'getVendorReport'">
+                                                    <div class="reportDwld pull-right btn btn-primary" (click)="openStockItemForm()" [ngClass]="{'disableBtn' : !reportData.tableData.length}">
+                                                            Order Component <span class="glyphicon glyphicon-plus" title="Order Component"></span>
+                                                            </div>
+                                                </span>
                                                 <span *ngIf="tableCol == 'Component Image' || tableCol == 'Component_Image'" >
                                                     <img class="clk" style="width: 4em; box-shadow: 0 1px 3px #888888;" src="{{componentImageUrl}}{{getCellValue(tableRowValue[tableCol])}}" alt="{{getCellValue(tableRowValue[tableCol])}}" (click)="imagePreview($event, componentImageUrl +(getCellValue(tableRowValue[tableCol])))">
                                                 </span>
@@ -704,21 +721,21 @@
                                                     <ng-container *ngFor="let tableAction of reportData.tableDataAction">
                                                         <div class="tableDataActionBtn" *ngIf="tableAction[tableCol] && tableAction[tableCol].length">
                                                             <!--{{tableAction[tableCol] | json}}-->
-                                                            <ng-container *ngIf="reportType === 'getComponentReport' || reportType === 'getVendorDetails' || reportType === 'getBarcodeToComponentReport'">
+                                                            <ng-container *ngIf="reportType === 'getComponentReport' || reportType === 'getVendorDetails' || reportType === 'getBarcodeToComponentReport' || reportType === 'getComponentOrderReport'">
                                                                 <div class="tableactBtn" *ngFor="let actBtn of tableAction[tableCol]; let z='index'" (click)="actionBtnInvoke(actBtn, getCellValue(tableRowValue[tableCol]), tableRowValue, tableCol, dataIndex, 1)">
                                                                     <span class="tableactBtntxt">{{getActBtnTxt(actBtn, getCellValue(tableRowValue[tableCol]))}}</span>
                                                                     <ng-container *ngIf="(z+1) < tableAction[tableCol].length"> &nbsp; |</ng-container>
                                                                 </div>
                                                             </ng-container>
-                                                            <ng-container *ngIf="reportType !== 'getComponentReport' && reportType !== 'getVendorDetails' && reportType !== 'getBarcodeToComponentReport' && reportType !== 'deliveryBoyDetails' && (tableRowValue[tableCol]['requestValue'] == -1)">
+                                                            <ng-container *ngIf="reportType !== 'getComponentReport' && reportType !== 'getVendorDetails' && reportType !== 'getBarcodeToComponentReport' && reportType !== 'deliveryBoyDetails' && (tableRowValue[tableCol] && tableRowValue[tableCol]['requestValue'] && tableRowValue[tableCol]['requestValue'] == -1)">
                                                                 <div class="tableactBtn" *ngFor="let actBtn of tableAction[tableCol]; let z='index'" (click)="actionBtnInvoke(actBtn, getCellValue(tableRowValue[tableCol]), tableRowValue, tableCol, dataIndex, 1)">
                                                                     <span class="tableactBtntxt">{{getActBtnTxt(actBtn, getCellValue(tableRowValue[tableCol]))}}</span>
                                                                     <ng-container *ngIf="(z+1) < tableAction[tableCol].length"> &nbsp; |</ng-container>
                                                                 </div>
                                                             </ng-container>
-                                                            <ng-container *ngIf="reportType !== 'getComponentReport' && reportType !== 'getVendorDetails' && reportType !== 'getBarcodeToComponentReport' && reportType !== 'deliveryBoyDetails' && !(tableRowValue[tableCol]['requestValue'] == -1) && reportType !== 'getComponentReport'">
+                                                            <ng-container *ngIf="reportType !== 'getComponentReport' && reportType !== 'getVendorDetails' && reportType !== 'getBarcodeToComponentReport' && reportType !== 'deliveryBoyDetails' && !(tableRowValue[tableCol] && tableRowValue[tableCol]['requestValue'] &&tableRowValue[tableCol]['requestValue'] == -1) && reportType !== 'getComponentReport'">
                                                                 <div class="tableactBtn" (click)="actionBtnInvoke(tableRowValue[tableCol]['requestType'], getCellValue(tableRowValue[tableCol]), tableRowValue, tableCol, dataIndex, 0)">
-                                                                    <span class="tableactBtntxt">{{tableRowValue[tableCol]['requestType']}}</span>
+                                                                    <span class="tableactBtntxt" *ngIf="tableRowValue[tableCol] && tableRowValue[tableCol]['requestType']">{{tableRowValue[tableCol]['requestType']}}</span>
                                                                 </div>
                                                             </ng-container>
                                                         </div>
@@ -738,7 +755,7 @@
                                                 </ng-container>
                                             </div>
                                         </td>
-                            </ng-container>
+                            <!-- </ng-container> -->
                             
                         </tr>
 

@@ -50,6 +50,7 @@ import { S3UploadService } from './services/s3Upload.service';
 import { UserService } from './services/user.service';
 import { UtilityService } from './services/utility.service';
 import { SharedModule } from './shared-module/shared/shared.module';
+import { AddStockComponent } from './components/reports/reports.component';
 
 
 
@@ -79,6 +80,7 @@ export function ConfigLoader(envConfig: envConfig) {
     DeliveryBoyDetailsComponent,
     ImgPreviewComponent,
     SelectItemForDelivered,
+    AddStockComponent
   ],
   imports: [
     BrowserModule,
@@ -147,7 +149,7 @@ export function ConfigLoader(envConfig: envConfig) {
     S3UploadService,
     Ng2ImgMaxService
   ],
-  entryComponents:[UploadExcelComponent,NotificationComponent, ImgPreviewComponent, SelectItemForDelivered],
+  entryComponents:[UploadExcelComponent,NotificationComponent, ImgPreviewComponent, SelectItemForDelivered,AddStockComponent],
   bootstrap: [AppComponent],
   exports: [RouterModule]
 })

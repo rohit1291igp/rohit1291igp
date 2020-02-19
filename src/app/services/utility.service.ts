@@ -34,13 +34,15 @@ export class UtilityService {
         let d = new Date();
         if(incrementBy === 0){
             let year = d.getFullYear();
-            let month = d.getMonth() + 1;
+            // let month = d.getMonth() + 1;
+            let month = ("0" + (d.getMonth() + 1)).slice(-2) as any;
             let date = d.getDate();
             return {year: year, month: month, day: date};
         }else{
             let dm = new Date(d.setDate(d.getDate()+incrementBy));
             let year = dm.getFullYear();
-            let month = dm.getMonth() + 1;
+            // let month = dm.getMonth() + 1;
+            let month = ("0" + (d.getMonth() + 1)).slice(-2) as any;
             let date = dm.getDate();
             return {year: year, month: month, day: date};
         }

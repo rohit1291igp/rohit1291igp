@@ -218,7 +218,8 @@ body{
 }
 
 .abs{
-    position:absolute;
+    /* position:absolute; */
+    position: fixed;
 }
 
 .img-responsive{
@@ -870,6 +871,9 @@ body .dashboard-content, body .orders-button{
 }
 .align-items-flex-end{
     align-items: flex-end;
+}
+.flex-direction-column{
+    flex-direction: column;
 }
 .snackbar-background {
     background: #C3404E;
