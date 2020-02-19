@@ -57,12 +57,13 @@
 }
 
 .reportDropdown{
-    left:0;
+    /* left:0; */
     top: 3.5em;
     background: #c3404e;
     padding: 0;
     z-index: 2;
     border-top: 1px solid #fff;
+    right: 0;
 }
 
 .reportDropdown.slideropen{

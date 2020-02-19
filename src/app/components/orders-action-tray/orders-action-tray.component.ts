@@ -1691,10 +1691,11 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
     }
 
     onSrcError(event){
-        let tempSrc = event.target.currentSrc.split('th');
-        tempSrc = tempSrc[1].split('/');
-        tempSrc = tempSrc[1].split('?');
-        tempSrc = tempSrc[0];
+        let tempSrc = event.target.currentSrc.split('/th');
+        // tempSrc = tempSrc[1].split('/');
+        // tempSrc = tempSrc[1].split('?');
+        tempSrc = tempSrc[1].split('/')
+        tempSrc = tempSrc[1];
             event.target.src = `${environment.componentImageUrl}${tempSrc}`;
     }
 
