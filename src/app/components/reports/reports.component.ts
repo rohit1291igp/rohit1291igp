@@ -202,12 +202,16 @@ export class ReportsComponent implements OnInit{
   };
   listOfComponents = [];
   listOfStockItems = [];
+  tempListOfStockItems = [];
+  componentName:string = '';
   listOfBarcodes = [];
   uploadedImages = [];
   durationInSeconds = 5;
   deliveryBoyList:any;
   isDownload: boolean;
   paginationFlag = 100;
+  myForm: FormGroup;
+
   constructor(
       private _elementRef: ElementRef,
       public reportsService: ReportsService,
@@ -217,11 +221,16 @@ export class ReportsComponent implements OnInit{
       public S3UploadService: S3UploadService,
       public addDeliveryBoyDialog: MatDialog,
       private _snackBar: MatSnackBar,
-      public dialog: MatDialog
+      public dialog: MatDialog,
+      private fb: FormBuilder
       ) { }
 
   ngOnInit() {
       var _this = this;
+      _this.myForm = this.fb.group({
+        componentName: ['', [Validators.required]],
+        componentId: ['', [Validators.required]]
+        });
       window.onscroll = () => {
         // var _this = this;
         var wrap = document.getElementsByClassName('report-table')[0] as any;
@@ -478,6 +487,7 @@ getDeliveryBoyList(){
             }
             console.log("response----->"+response.result);
             _this.listOfStockItems = response.result;
+            _this.tempListOfStockItems = _this.listOfStockItems;
           });
     }
   }
@@ -702,7 +712,7 @@ getDeliveryBoyList(){
       }
   }
 
-  searchReportSubmit(e, searchFields2?){
+  searchReportSubmit(e, searchFields2?, formdata?:FormGroup){
         var _this=this;
         _this.BackendService.abortLastHttpCall();//abort  other  api calls
         console.log('Search report form submitted ---->', _this.searchResultModel);
@@ -746,7 +756,11 @@ getDeliveryBoyList(){
             _this.searchResultModel["startLimit"] = 0;
             _this.searchResultModel["endLimit"] = 1000;
         }
-       
+        if(_this.reportType == 'getVendorReport'){
+            // this.myForm.controls['fname'].setValue(fullname[0]);
+            let formData = formdata.value;
+            _this.searchResultModel["Component_Id"] = formData.componentId;
+        }
         if(_this.reportType == 'getComponentOrderReport'){
             if($('.componentDD').val() == "Select Component Code"){
                 alert("Please select component code");
@@ -1885,6 +1899,35 @@ getDeliveryBoyList(){
           console.log('The dialog was closed');
         });
       }
+    
+    filterValues(inputValue) {
+        this.tempListOfStockItems = this.listOfStockItems.filter(r => r.Component_Name.toLowerCase().includes(inputValue.toLowerCase()));
+        document.getElementById('dropDownContainer').setAttribute('style', 'display:flex !important');
+    }
+    showList(flag){
+        if(flag == 'show'){
+                if(this.myForm.controls['componentName'].value){
+                    this.tempListOfStockItems = this.listOfStockItems.filter(r => r.Component_Name.toLowerCase().includes(this.myForm.controls['componentName'].value.toLowerCase()));
+                }else{
+                    this.tempListOfStockItems = this.listOfStockItems;
+                }
+            document.getElementById('dropDownContainer').setAttribute('style', 'display:flex !important');
+        }else{
+            setTimeout(()=>{
+                document.getElementById('dropDownContainer').setAttribute('style', 'display:none !important');
+            }, 100)
+        }
+    }
+
+    selectComponent(item){
+        this.componentName = item.Component_Name;
+        this.myForm.controls['componentId'].setValue(item.Component_Id);
+        this.myForm.controls['componentName'].setValue(item.Component_Name);
+
+            setTimeout(()=>{
+                document.getElementById('dropDownContainer').setAttribute('style', 'display:none !important');
+            }, 100)
+    }   
 
 }
 

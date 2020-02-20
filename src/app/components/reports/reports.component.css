@@ -497,10 +497,13 @@ table thead th{
 #dropDownContainer{
     position: absolute;
     z-index: 1000;
-    width: 80%;
-    top:40px;
+    width: 100%;
+    top:35px;
     overflow: auto;
-    max-height: 128px;
+    max-height: 500px;
+    background: #fff;
+    box-shadow: 0px 3px 7px 2px #ccc;
+    border-radius: 5px;
 }
 .form-container {
     display: flex;
