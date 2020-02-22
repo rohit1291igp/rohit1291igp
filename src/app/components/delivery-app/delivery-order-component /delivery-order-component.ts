@@ -214,7 +214,9 @@ export class DeliveryOrderComponent implements OnInit {
 
     upload() {
         let ele = document.getElementById('fileInput');
-        ele.onclick(null);
+        if(ele){
+            ele.click();
+        }
     }
 
     markOutForDelivery() {

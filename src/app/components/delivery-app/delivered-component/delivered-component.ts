@@ -126,7 +126,9 @@ export class DeliveredComponent implements OnInit {
     }
     upload() {
         let ele = document.getElementById('fileInput');
-        ele.onclick(null);
+        if(ele){
+            ele.click();
+        }
     }
     updateOrder(status) {
         let pipe = new DatePipe('en-US');

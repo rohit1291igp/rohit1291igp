@@ -60,25 +60,35 @@
         <!-- <div class="report">Report Issue</div> -->
         <!-- <div class="photo">Take Photo</div> -->
         <div class="photo">
+            <label>
+                <input id="fileInput" type="file" [(ngModel)]="statusReasonModel.deliveredStatusFile" #deliveredStatusFile="ngModel"
+                (change)="fileChange($event)"  accept=".jpeg, .jpg, .png"/>
+                Take Photo
+            </label>
+            <div class="clearfix"></div>
+        </div>
+
+        <!-- <div class="photo">
             <button type="button" (click)="upload()">Take Photo</button>
             <input id="fileInput" class="hidden-input" name="deliveredStatusFile" type="file"
                 [(ngModel)]="statusReasonModel.deliveredStatusFile" #deliveredStatusFile="ngModel"
                 (change)="fileChange($event)" placeholder="Upload Delivery Challan" accept=".jpeg, .jpg, .png"
                 multiple />
 
-            <!-- <button type="button" (click)="onUpload()">Upload File</button>     -->
+            <button type="button" (click)="onUpload()">Upload File</button>     -->
             <!-- <input id="fileInput" class="hidden-input" name="deliveredStatusFile" type="file"
             [(ngModel)]="statusReasonModel.deliveredStatusFile" #deliveredStatusFile="ngModel"
             (change)="fileChange($event)" placeholder="Upload Delivery Challan" accept=".jpeg, .jpg, .png"
-            multiple  type="file" capture="camera" (change)="fileChange($event)"> -->
-            <div class="clearfix"></div>
-        </div>
+            multiple  type="file" capture="camera" (change)="fileChange($event)">
+            
+        </div> -->
 
     </div>
     <!-- Report nd Photo section Ends -->
     <div class="delivery-out-btn">
         <a *ngIf="futureOrder" routerLink="/delivery-app/task"><i class="fa fa-long-arrow-left"></i> Back</a>
-        <button *ngIf="!futureOrder && futureOrder !== undefined" [ngClass]="{'disable':(selectProductsForDelivery.length > 0 && uploadedFiles.length > 0) ? false : true}"
+        <button *ngIf="!futureOrder && futureOrder !== undefined"
+            [ngClass]="{'disable':(selectProductsForDelivery.length > 0 && uploadedFiles.length > 0) ? false : true}"
             (click)="markOutForDelivery()">Out for
             delivery</button>
     </div>
