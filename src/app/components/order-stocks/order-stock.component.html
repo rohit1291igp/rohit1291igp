@@ -2,9 +2,8 @@
     <i class="fa fa-times" style="float: right; cursor:pointer;" (click)="dialogRef.close()"></i>
     <h4>Order Details</h4>
     <div class="product-container">
-        <div *ngIf="data.Component_Image else noImg" class="product-container-img">
+        <div *ngIf="data.Component_Image" class="product-container-img">
             <img src="{{environment.componentImageUrl}}{{data.Component_Image}}" width="100" height="100">
-            <ng-template #noImg>No Image</ng-template>
         </div>
         <div class="product-container-desp">
             <!-- <p>{{data.Component_Name}}</p>
