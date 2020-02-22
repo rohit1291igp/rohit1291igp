@@ -1,6 +1,42 @@
 .navbar-right {
     margin-right: 0px !important
 }
+
 .login-container {
-    margin-top: 50px;
+    width: 30%;
+    min-height: 400px;
+    margin: 0 auto;
+    margin-top: 70px;
+}
+
+.example-full-width {
+    width: 100%;
+}
+
+.form-title {
+    color: #C3404E;
+}
+
+.login-btn {
+    background: #C3404E;
+    color: #fff;
+}
+
+.primary-color {
+    color: #666666;
+}
+
+.mat-form-field-ripple {
+    background: #C3404E !important;
+}
+
+.mat-form-field-underline>.mat-form-field-ripple {
+    background-color: #C3404E !important;
+}
+
+@media only screen and (max-width: 600px) {
+    .login-container{
+        width: 80%;
+        margin-top: 100px;
+    }
 }

@@ -1,34 +1,92 @@
 <div class="login-container">
-    <div class="apierror" *ngIf="apierror">{{apierror}}</div>
+    <mat-card>
+        <div class="apierror" *ngIf="apierror">{{apierror}}</div>
 
-    <div class="col-md-6 col-md-offset-3">
+        <!-- <div class="col-md-6 col-md-offset-3"> -->
 
-        <h2>Login</h2>
+        <h4 class="form-title">Login</h4>
         <form name="form" (ngSubmit)="f.form.valid && login()" #f="ngForm" novalidate>
-            <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !username.valid }">
+            <mat-form-field class="example-full-width">
+                <mat-label class="primary-color">Associate Name</mat-label>
+                <input matInput name="associatename" [(ngModel)]="model.associatename" #associatename="ngModel" required
+                    autocomplete="off">
+                <!-- <div *ngIf="f.submitted && !associatename.valid" class="help-block">Associate Name is required</div> -->
+            </mat-form-field>
+            <!-- <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !username.valid }">
                 <label for="username">Associate Name</label>
                 <input type="text" class="form-control" name="associatename" [(ngModel)]="model.associatename"
                     #associatename="ngModel" required />
                 <div *ngIf="f.submitted && !associatename.valid" class="help-block">Associate Name is required</div>
-            </div>
-            <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !username.valid }">
+            </div> -->
+            <mat-form-field class="example-full-width">
+                <mat-label class="primary-color">User Name</mat-label>
+                <input matInput name="username" [(ngModel)]="model.username" #username="ngModel" required
+                    autocomplete="off">
+                <!-- <div *ngIf="f.submitted && !associatename.valid" class="help-block">Associate Name is required</div> -->
+            </mat-form-field>
+            <!-- <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !username.valid }">
                 <label for="username">User Name</label>
                 <input type="text" class="form-control" name="username" [(ngModel)]="model.username" #username="ngModel"
                     required />
                 <div *ngIf="f.submitted && !username.valid" class="help-block">User Name is required</div>
-            </div>
-            <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !password.valid }">
+            </div> -->
+            <mat-form-field class="example-full-width">
+                    <mat-label class="primary-color">Password</mat-label>
+                    <input type="password" matInput name="password" [(ngModel)]="model.password"
+                    #password="ngModel" required
+                        autocomplete="off">
+                    <!-- <div *ngIf="f.submitted && !associatename.valid" class="help-block">Associate Name is required</div> -->
+                </mat-form-field>
+            <!-- <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !password.valid }">
                 <label for="password">Password</label>
                 <input type="password" class="form-control" name="password" [(ngModel)]="model.password"
                     #password="ngModel" required />
                 <div *ngIf="f.submitted && !password.valid" class="help-block">Password is required</div>
-            </div>
+            </div> -->
             <div class="form-group">
-                <button [disabled]="loading" class="btn btn-primary">Login</button>
+                <!-- <button [disabled]="loading" class="btn btn-primary">Login</button> -->
+                <button class="login-btn" [disabled]="loading && f.form.valid" mat-raised-button>Login</button>
                 <img *ngIf="loading"
                     src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
                 <!--<a [routerLink]="['/register']" class="btn btn-link">Register</a>-->
             </div>
         </form>
-    </div>
+        <!-- </div> -->
+    </mat-card>
 </div>
+
+
+<!-- <div class="login-container">
+        <div class="apierror" *ngIf="apierror">{{apierror}}</div>
+    
+        <div class="col-md-6 col-md-offset-3">
+    
+            <h2>Login</h2>
+            <form name="form" (ngSubmit)="f.form.valid && login()" #f="ngForm" novalidate>
+                <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !username.valid }">
+                    <label for="username">Associate Name</label>
+                    <input type="text" class="form-control" name="associatename" [(ngModel)]="model.associatename"
+                        #associatename="ngModel" required />
+                    <div *ngIf="f.submitted && !associatename.valid" class="help-block">Associate Name is required</div>
+                </div>
+                <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !username.valid }">
+                    <label for="username">User Name</label>
+                    <input type="text" class="form-control" name="username" [(ngModel)]="model.username" #username="ngModel"
+                        required />
+                    <div *ngIf="f.submitted && !username.valid" class="help-block">User Name is required</div>
+                </div>
+                <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !password.valid }">
+                    <label for="password">Password</label>
+                    <input type="password" class="form-control" name="password" [(ngModel)]="model.password"
+                        #password="ngModel" required />
+                    <div *ngIf="f.submitted && !password.valid" class="help-block">Password is required</div>
+                </div>
+                <div class="form-group">
+                    <button [disabled]="loading" class="btn btn-primary">Login</button>
+                    <img *ngIf="loading"
+                        src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+                    <!--<a [routerLink]="['/register']" class="btn btn-link">Register</a>-->
+<!--</div>
+            </form>
+        </div>
+    </div> -->

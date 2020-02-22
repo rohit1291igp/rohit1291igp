@@ -1,0 +1,37 @@
+<div class="delivery-container">
+    <i class="fa fa-times" style="float: right; cursor:pointer;" (click)="dialogRef.close()"></i>
+    <h4>Order Details</h4>
+    <div class="product-container">
+        <div *ngIf="data.Component_Image else noImg" class="product-container-img">
+            <img src="{{environment.componentImageUrl}}{{data.Component_Image}}" width="100" height="100">
+            <ng-template #noImg>No Image</ng-template>
+        </div>
+        <div class="product-container-desp">
+            <!-- <p>{{data.Component_Name}}</p>
+            <p>{{data.Component_Name}}</p> -->
+            <!-- <mat-list role="list"> -->
+                <p>Name : {{data.Component_Name}}</p>
+                <p>Current Stock : {{data.Stock_Quantity}}</p>
+                <p>Cost : {{data.Component_Cost_Vendor}}</p>
+              <!-- </mat-list> -->
+        </div>
+    </div>
+    <form [formGroup]="myForm" (ngSubmit)="onSubmit(myForm)">
+        <div class="form-row">
+            <div class="input-container">
+                <mat-form-field>
+                    <input type="number" (keyup)="calculate()" (change)="calculate()" formControlName="StockQuantity" matInput placeholder="Quantity" autocomplete="off">
+                </mat-form-field>
+            </div>
+            <div class="input-container">
+                <!-- <mat-form-field> -->
+                    <div style="padding: 2px 3px;border-bottom: 1px solid;width: 80%;">Total Cost : {{myForm?.value?.total}}</div>
+                    <!-- <input type="number" (keyup)="calculate()" (change)="calculate()" formControlName="total" matInput placeholder="Total Cost" autocomplete="off"> -->
+                <!-- </mat-form-field> -->
+            </div>
+        </div>
+        <div class="form-row">
+            <button type="submit" mat-raised-button [disabled]="myForm.invalid">Order</button>
+        </div>
+    </form>
+</div>
