@@ -164,5 +164,7 @@ img {
 }
 
 input[type="file"] {
-    display: none;
+    /* display: none; */
+    position: absolute;
+    right: 10000px;
 }
