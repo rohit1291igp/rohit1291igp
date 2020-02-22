@@ -1,7 +1,9 @@
-import { animate, Component, ElementRef, HostListener, OnInit, sequence, style, transition, trigger, ViewChild, Inject } from '@angular/core';
+import { animate, Component, ElementRef, HostListener, Inject, OnInit, sequence, style, transition, trigger, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Headers, RequestOptions } from "@angular/http";
-import { MatDialog, MatSnackBar, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { MatDialog, MatDialogRef, MatSnackBar, MAT_DIALOG_DATA } from '@angular/material';
 import { ActivatedRoute } from '@angular/router';
+import { Angular5Csv } from 'angular5-csv/dist/Angular5-csv';
 import { IMyOptions } from 'mydatepicker';
 import { environment } from "../../../environments/environment";
 import { BackendService } from '../../services/backend.service';
@@ -9,9 +11,7 @@ import { ReportsService } from '../../services/reports.service';
 import { S3UploadService } from '../../services/s3Upload.service';
 import { UtilityService } from '../../services/utility.service';
 import { OrdersActionTrayComponent } from '../orders-action-tray/orders-action-tray.component';
-import { Angular5Csv } from 'angular5-csv/dist/Angular5-csv';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { NONAME } from 'dns';
+import { OrderStockComponent } from '../order-stocks/order-stock.component';
 
 @Component({
   selector: 'app-reports',
@@ -228,38 +228,39 @@ export class ReportsComponent implements OnInit{
   ngOnInit() {
       var _this = this;
       _this.myForm = this.fb.group({
-        componentName: ['', [Validators.required]],
-        componentId: ['', [Validators.required]]
+        componentName: [''],
+        componentId: [''],
+        procTypeVendor: ['']
         });
-      window.onscroll = () => {
-        // var _this = this;
-        var wrap = document.getElementsByClassName('report-table')[0] as any;
-        if(wrap){
-            var contentHeight = wrap.offsetHeight;
-            var yOffset = window.pageYOffset; 
-            var y = yOffset + window.innerHeight;
-            if(y >= contentHeight){
-                // Ajax call to get more dynamic data goes here
-                if(!_this.reportData){
-                    return false;
-                }
-                var totalOrders= (_this.orginalReportData.summary && _this.orginalReportData.summary[0]) ? Number(_this.orginalReportData.summary[0].value) : 0;
-                if(_this.orginalReportData.tableData.length < totalOrders){
-                    _this.showMoreTableData(null);
-                    // wrap.innerHTML += '<div class="newData"></div>';
-                    _this.paginationFlag = _this.paginationFlag + 10; 
-                    // let halfHeight = document.querySelectorAll('.reporTableRow').length - 10;
-                    // let halfWeight = window.innerWidth / 2;
-                    window.scrollTo(0,document.body.scrollHeight - 1000);
-                }
+    //   window.onscroll = () => {
+    //     // var _this = this;
+    //     var wrap = document.getElementsByClassName('report-table')[0] as any;
+    //     if(wrap){
+    //         var contentHeight = wrap.offsetHeight;
+    //         var yOffset = window.pageYOffset; 
+    //         var y = yOffset + window.innerHeight;
+    //         if(y >= contentHeight){
+    //             // Ajax call to get more dynamic data goes here
+    //             if(!_this.reportData){
+    //                 return false;
+    //             }
+    //             var totalOrders= (_this.orginalReportData.summary && _this.orginalReportData.summary[0]) ? Number(_this.orginalReportData.summary[0].value) : 0;
+    //             if(_this.orginalReportData.tableData.length < totalOrders){
+    //                 _this.showMoreTableData(null);
+    //                 // wrap.innerHTML += '<div class="newData"></div>';
+    //                 _this.paginationFlag = _this.paginationFlag + 10; 
+    //                 // let halfHeight = document.querySelectorAll('.reporTableRow').length - 10;
+    //                 // let halfWeight = window.innerWidth / 2;
+    //                 window.scrollTo(0,document.body.scrollHeight - 1000);
+    //             }
                
-                // window.scrollTo(halfWeight, window.innerHeight - 10)
-            }
-            var status = document.getElementById('status');
-            status.innerHTML = contentHeight+" | "+y;
-        }
+    //             // window.scrollTo(halfWeight, window.innerHeight - 10)
+    //         }
+    //         var status = document.getElementById('status');
+    //         status.innerHTML = contentHeight+" | "+y;
+    //     }
         
-      };
+    //   };
       this.route.params.subscribe(params => {
           /* reset all variable - start*/
           _this.showMoreBtn= false;
@@ -364,7 +365,7 @@ export class ReportsComponent implements OnInit{
               _reportData.searchFields = _this.reportDataLoader.searchFields;
               _this.reportData = _reportData;
               _this.orginalReportData = JSON.parse(JSON.stringify(_this.reportData)); //Object.assign({}, _this.reportData);
-            //   _this.showMoreTableData(null);
+              _this.showMoreTableData(null);
           });
           
       });
@@ -486,11 +487,14 @@ getDeliveryBoyList(){
                 return;
             }
             console.log("response----->"+response.result);
-            _this.listOfStockItems = response.result;
+            _this.listOfStockItems = response.result
+            _this.listOfStockItems.unshift({Component_Id:'All',Component_Name:'All Components'});
             _this.tempListOfStockItems = _this.listOfStockItems;
+            _this.procTypeVendor = ['Stocked', 'Jit'];
           });
     }
   }
+  procTypeVendor
   getBarcodeList(){
     var _this = this;
     if(_this.reportType == 'getBarcodeToComponentReport'){
@@ -758,8 +762,15 @@ getDeliveryBoyList(){
         }
         if(_this.reportType == 'getVendorReport'){
             // this.myForm.controls['fname'].setValue(fullname[0]);
+            if(formdata){
             let formData = formdata.value;
-            _this.searchResultModel["Component_Id"] = formData.componentId;
+                if(formData.componentId == 'All'){
+                    _this.searchResultModel = {}//["Component_Id"] = formData.componentId;
+                }else{
+                    _this.searchResultModel["Component_Id"] = formData.componentId;
+                    _this.searchResultModel["Proc_Type_Vendor"] = formData.procTypeVendor;
+                }
+            }
         }
         if(_this.reportType == 'getComponentOrderReport'){
             if($('.componentDD').val() == "Select Component Code"){
@@ -1608,7 +1619,7 @@ getDeliveryBoyList(){
 
     downLoadCSV(e, fileName){
         this.isDownload = true;
-        this.searchReportSubmit(null, null);
+        this.searchReportSubmit(null, null, this.myForm);
         // if(this.orginalReportData.tableData.length > 0){
         //     let data = this.orginalReportData.tableData;
         //     let download = new Angular5Csv(data, fileName);
@@ -1890,7 +1901,7 @@ getDeliveryBoyList(){
     }
 
     openStockItemForm(rowData): void {
-        const dialogRef = this.dialog.open(AddStockComponent, {
+        const dialogRef = this.dialog.open(OrderStockComponent, {
           width: '500px',
           data: rowData
         });
@@ -1902,7 +1913,9 @@ getDeliveryBoyList(){
     
     filterValues(inputValue) {
         this.tempListOfStockItems = this.listOfStockItems.filter(r => r.Component_Name.toLowerCase().includes(inputValue.toLowerCase()));
-        document.getElementById('dropDownContainer').setAttribute('style', 'display:flex !important');
+        if(document.getElementById('dropDownContainer')){
+            document.getElementById('dropDownContainer').setAttribute('style', 'display:flex !important');
+        }
     }
     showList(flag){
         if(flag == 'show'){
@@ -1911,11 +1924,15 @@ getDeliveryBoyList(){
                 }else{
                     this.tempListOfStockItems = this.listOfStockItems;
                 }
-            document.getElementById('dropDownContainer').setAttribute('style', 'display:flex !important');
+                if(document.getElementById('dropDownContainer')){
+                    document.getElementById('dropDownContainer').setAttribute('style', 'display:flex !important');
+                }    
         }else{
-            setTimeout(()=>{
-                document.getElementById('dropDownContainer').setAttribute('style', 'display:none !important');
-            }, 100)
+            if(document.getElementById('dropDownContainer')){
+                setTimeout(()=>{
+                    document.getElementById('dropDownContainer').setAttribute('style', 'display:none !important');
+                }, 100)
+            }
         }
     }
 
@@ -1931,158 +1948,4 @@ getDeliveryBoyList(){
 
 }
 
-@Component({
-    selector: 'app-add-component',
-    template: `
-    <div class="delivery-container">
-    <i class="fa fa-times" style="float: right; cursor:pointer;" (click)="dialogRef.close()"></i>
-    <div style="margin-bottom: 8px;">Order Component</div>
-    <form [formGroup]="myForm" (ngSubmit)="onSubmit(myForm)">
-        <div class="form-row">
-            <div class="input-container">
-            <div class="search-container" #myTarget >
-            <div>
-                <mat-form-field>
-                    <input #inputValue (keyup)="filterValues(inputValue.value)" (focus)="showList('show')" (focusout)="showList('hide')" formControlName="itemName" matInput autocomplete="off" placeholder="Component Name" readonly=true />
-                </mat-form-field>
-            </div>
-            <!--<div id="dropDownContainer" *ngIf='componentsListArray' class="d-flex flex-direction-column">
-                <div *ngFor="let item of componentsListArray;let odd=odd;" style="cursor:pointer;">
-                <div style="padding:0 0 0 6px;height: 21px;overflow: hidden;" [ngStyle]="{background:odd?'#ccc':'#f2f2f2'}" (click)="selectComponent(item)">{{item.Component_Name}}</div>
-                </div>
-            </div>-->
-        </div>
-            </div>
-            <!--<div class="input-container">
-                <mat-form-field>
-                    <input formControlName="componentId" matInput placeholder="Component Id">
-                </mat-form-field>
-            </div>-->
-        </div>
-        <div class="form-row">
-            <div class="input-container">
-                <mat-form-field>
-                    <input type="number" formControlName="ComponentCostVendor" matInput placeholder="Component Cost" autocomplete="off">
-                </mat-form-field>
-            </div>
-            <div class="input-container">
-                <mat-form-field>
-                    <input type="number" formControlName="StockQuantity" matInput placeholder="Stock Quantity" autocomplete="off">
-                </mat-form-field>
-            </div>
-
-        </div>
-        <div class="form-row">
-            <button type="submit" mat-raised-button [disabled]="myForm.invalid">Submit</button>
-        </div>
-    </form>
-</div>
-    `,
-    styleUrls:['./reports.component.css']
-  })
-  export class AddStockComponent implements OnInit{
-    selected
-    myForm: FormGroup;
-    VendorId = localStorage.getItem('fkAssociateId');
-    componentsList = [];
-    componentsListArray = [];
-    constructor(
-      private fb: FormBuilder,
-      public dialogRef: MatDialogRef<AddStockComponent>,
-      @Inject(MAT_DIALOG_DATA) public data: any, private BackendService: BackendService,) {}
-
-      ngOnInit() {
-        this.myForm = this.fb.group({
-            itemName: [this.data.Component_Name, [Validators.required, Validators.pattern('^[a-zA-Z ]*$')]],
-            // componentId: [this., [Validators.required]],
-            ComponentCostVendor: [this.data.Component_Cost_Vendor, [Validators.required, Validators.pattern(/^-?(0|[1-9]\d*)?$/)]],
-            StockQuantity: ['', [Validators.required, Validators.pattern(/^-?(0|[1-9]\d*)?$/)]]
-        });
-        this.getComponent();
-    }  
-  
-    getComponent(){
-        this.componentsList = this.data;
-    }
-
-    onNoClick(): void {
-      this.dialogRef.close();
-    }
-    
-    // restaurants = [{name:'Chocolate Cake',componentId:'12343'}, {name:'Flowers',componentId:'45676'},{name:'Gift Card',componentId:'12356'}];
-    filterValues(inputValue) {
-        this.componentsListArray = this.componentsList.filter(restaurant => restaurant.Component_Name.toLowerCase().includes(inputValue.toLowerCase()));
-        document.getElementById('dropDownContainer').setAttribute('style', 'display:flex !important');
-       }
-    onSubmit(form: FormGroup) {
-        if (this.data) {
-            let data = form.value;
-            var _this = this
-            const reqObj = {
-                url: `orderVendorComponentStocked`,
-                method: "post",
-                payload: {
-                    Vendor_Id: this.VendorId,
-                    Component_Name: data.itemName,
-                    Component_Id: this.data.Component_Id,
-                    Component_Cost_Vendor: data.ComponentCostVendor,
-                    Stock_Quantity: data.StockQuantity
-                } 
-            };
-            _this.BackendService.makeAjax(reqObj, function (err, response, headers) {
-                //if(!response) response={result:[]};
-                if (err || response.error) {
-                    console.log('Error=============>', err);
-                    return;
-                }
-                if (response) {
-                    _this.dialogRef.close(response);                
-                }
-            });
-        }
-    }
-
-    @ViewChild('myTarget') myTarget;
-
-    // @HostListener('document:click', ['$event.target'])
-    //     onClick(targetElement) {
-    //         if(this.myTarget){
-    //         const clickedInside = this.myTarget.nativeElement.contains(targetElement);
-    //             if (!clickedInside) {
-    //                 if(document.getElementById('dropDownContainer').childElementCount > 0){
-    //                     document.getElementById('dropDownContainer').setAttribute('style', 'display:none !important');
-    //                 }
-    //                 console.log(targetElement, clickedInside)
-    //                 //the click was made outside of this element
-    //             }else{
-    //                 // document.getElementById('dropDownContainer').setAttribute('style', 'display:flex !important');
-    //             }
-    //         }
-    //     }
-
-    selectComponent(item){
-        this.myForm.controls['itemName'].setValue(item.Component_Name);
-        this.myForm.controls['componentId'].setValue(item.Component_Id);
-        this.myForm.controls['ComponentCostVendor'].setValue(item.Component_Cost_Vendor);
-
-        document.getElementById('dropDownContainer').setAttribute('style', 'display:none !important');
-    }   
-    
-    showList(flag){
-        // if(flag == 'show'){
-        //     if(this.myForm.controls['itemName'].value){
-        //         this.componentsListArray = this.componentsList.filter(restaurant => restaurant.Component_Name.toLowerCase().includes(this.myForm.controls['itemName'].value.toLowerCase()));
-        //     }else{
-        //         this.componentsListArray = this.componentsList;
-        //     }
-            
-        //     document.getElementById('dropDownContainer').setAttribute('style', 'display:flex !important');
-        // }else{
-        //     setTimeout(()=>{
-        //         document.getElementById('dropDownContainer').setAttribute('style', 'display:none !important');
-        //     }, 100)
-        // }
-    }
-  
-  }
 

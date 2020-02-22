@@ -48,13 +48,13 @@ export class MainHeaderComponent implements OnInit {
 
   ngOnInit() {
       var _this=this;
-      _this.deliveryBoyName = localStorage.getItem('vendorName');
       _this.router.events.subscribe((event) => {
           if (event instanceof NavigationEnd) {
               console.log('Url changed');
               _this.vendorName = localStorage.getItem('associateName');
               _this.activeTabHighlight();
-              environment.userType= localStorage.getItem('userType');
+              environment.userType = localStorage.getItem('userType');
+              _this.deliveryBoyName = localStorage.getItem('vendorName');
               _this.dashboardService.isAdmin=(environment.userType && environment.userType === "admin");
           }
       });

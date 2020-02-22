@@ -4,7 +4,7 @@ import { DatePipe } from '@angular/common';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { HttpModule } from '@angular/http';
-import { MatButtonModule, MatCardModule, MatCheckboxModule, MatDatepickerModule, MatDialogModule, MatDialogRef, MatFormFieldModule, MatIconModule, MatInputModule, MatMenuModule, MatNativeDateModule, MatPaginatorModule, MatProgressBarModule, MatProgressSpinnerModule, MatRadioModule, MatSelectModule, MatSnackBarModule, MatSortModule, MatTableModule, MAT_DIALOG_DATA } from '@angular/material';
+import { MatButtonModule, MatCardModule, MatCheckboxModule, MatDatepickerModule, MatDialogModule, MatDialogRef, MatFormFieldModule, MatIconModule, MatInputModule, MatMenuModule, MatNativeDateModule, MatPaginatorModule, MatProgressBarModule, MatProgressSpinnerModule, MatRadioModule, MatSelectModule, MatSnackBarModule, MatSortModule, MatTableModule, MAT_DIALOG_DATA, MatListModule } from '@angular/material';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
@@ -50,7 +50,7 @@ import { S3UploadService } from './services/s3Upload.service';
 import { UserService } from './services/user.service';
 import { UtilityService } from './services/utility.service';
 import { SharedModule } from './shared-module/shared/shared.module';
-import { AddStockComponent } from './components/reports/reports.component';
+import { OrderStockComponent } from './components/order-stocks/order-stock.component';
 
 
 
@@ -80,7 +80,7 @@ export function ConfigLoader(envConfig: envConfig) {
     DeliveryBoyDetailsComponent,
     ImgPreviewComponent,
     SelectItemForDelivered,
-    AddStockComponent
+    OrderStockComponent
   ],
   imports: [
     BrowserModule,
@@ -114,7 +114,8 @@ export function ConfigLoader(envConfig: envConfig) {
     TrimValueAccessorModule,
     NgxEditorModule,
     CKEditorModule,
-    Ng2ImgMaxModule
+    Ng2ImgMaxModule,
+    MatListModule
     // RouterModule
   ],
   providers: [
@@ -149,7 +150,7 @@ export function ConfigLoader(envConfig: envConfig) {
     S3UploadService,
     Ng2ImgMaxService
   ],
-  entryComponents:[UploadExcelComponent,NotificationComponent, ImgPreviewComponent, SelectItemForDelivered,AddStockComponent],
+  entryComponents:[UploadExcelComponent,NotificationComponent, ImgPreviewComponent, SelectItemForDelivered, OrderStockComponent],
   bootstrap: [AppComponent],
   exports: [RouterModule]
 })
