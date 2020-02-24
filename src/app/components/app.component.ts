@@ -39,3 +39,26 @@ export class AppComponent implements OnInit, OnChanges{
     }
   }
 }
+
+@Component({
+  selector: 'app-test',
+  template:` 
+  <div style="margin-top:120px">
+  <div class="photo">
+  <label>
+      <input id="fileInput" type="file" [(ngModel)]="statusReasonModel.deliveredStatusFile" #deliveredStatusFile="ngModel"
+      (change)="fileChange($event)"  accept=".jpeg, .jpg, .png"/>
+      Take Photo
+  </label>
+  <div class="clearfix"></div>
+</div>
+</div>
+`,
+styleUrls: ['./app.component.css']
+})
+export class testComponent{
+  statusReasonModel: any = {};
+  fileChange(e){
+    console.log(e)
+  }
+}
