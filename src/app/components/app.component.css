@@ -1,0 +1,18 @@
+input[type="file"] {
+    display: none;
+}
+.photo {
+    border: 1px solid;
+    width: 45%;
+    margin: 16px;
+    text-align: center;
+    overflow: hidden;
+    cursor: pointer;
+    border-radius: 35px;
+    font-weight: lighter;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 5px 0px 1px;
+    background: #f2f2f2;
+}

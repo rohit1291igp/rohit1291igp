@@ -20,7 +20,7 @@ import { NgxEditorModule } from 'ngx-editor';
 import { routing } from "./app.routing";
 import { AddDeliveryBoyComponent } from './components/add-deliveryboy/add-deliveryboy.component';
 // Components
-import { AppComponent } from './components/app.component';
+import { AppComponent, testComponent } from './components/app.component';
 import { BlogCreateComponent } from './components/blog-create/blog-create.component';
 import { BlogListComponent } from './components/blog-list/blog-list.component';
 import { BlogViewComponent } from './components/blog-view/blog-view.component';
@@ -80,7 +80,8 @@ export function ConfigLoader(envConfig: envConfig) {
     DeliveryBoyDetailsComponent,
     ImgPreviewComponent,
     SelectItemForDelivered,
-    OrderStockComponent
+    OrderStockComponent,
+    testComponent
   ],
   imports: [
     BrowserModule,
