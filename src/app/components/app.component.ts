@@ -47,7 +47,7 @@ export class AppComponent implements OnInit, OnChanges{
   <div class="photo">
   <label>
       <input id="fileInput" type="file" [(ngModel)]="statusReasonModel.deliveredStatusFile" #deliveredStatusFile="ngModel"
-      (change)="fileChange($event)"  accept=".jpeg, .jpg, .png"/>
+      (change)="fileChange($event)"  accept=".jpeg, .jpg, .png" capture/>
       Take Photo
   </label>
   <div class="clearfix"></div>
@@ -55,7 +55,9 @@ export class AppComponent implements OnInit, OnChanges{
 <br>
 <br/>
 <img [src]="url" height="200"> 
-<input type='file' (change)="onSelectFile($event)">
+<input type='file' (change)="onSelectFile($event)" capture>
+<br>
+<input type="file" accept="image/*;capture=camera">
 </div>
 `,
 styleUrls: ['./app.component.css']
