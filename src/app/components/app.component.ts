@@ -43,7 +43,7 @@ export class AppComponent implements OnInit, OnChanges{
 @Component({
   selector: 'app-test',
   template:` 
-  <div style="margin-top:120px">
+  <div style="margin-top:120px; font-size:20px;">
   <div class="photo">
   <label>
       <input id="fileInput" type="file" [(ngModel)]="statusReasonModel.deliveredStatusFile" #deliveredStatusFile="ngModel"
@@ -52,12 +52,28 @@ export class AppComponent implements OnInit, OnChanges{
   </label>
   <div class="clearfix"></div>
 </div>
+<br>
+<br/>
+<img [src]="url" height="200"> 
+<input type='file' (change)="onSelectFile($event)">
 </div>
 `,
 styleUrls: ['./app.component.css']
 })
 export class testComponent{
   statusReasonModel: any = {};
+  url = '';
+  onSelectFile(event) {
+    if (event.target.files && event.target.files[0]) {
+      var reader = new FileReader();
+
+      reader.readAsDataURL(event.target.files[0]); // read file as data url
+
+      reader.onload = (event:any) => { // called once readAsDataURL is completed
+        this.url = event.target.result;
+      }
+    }
+  }
   fileChange(e){
     console.log(e)
   }
