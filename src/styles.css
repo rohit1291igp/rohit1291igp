@@ -218,8 +218,8 @@ body{
 }
 
 .abs{
-    /* position:absolute; */
-    position: fixed;
+    position:absolute;
+    /* position: fixed; */
 }
 
 .img-responsive{
