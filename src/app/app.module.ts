@@ -51,6 +51,7 @@ import { UserService } from './services/user.service';
 import { UtilityService } from './services/utility.service';
 import { SharedModule } from './shared-module/shared/shared.module';
 import { OrderStockComponent } from './components/order-stocks/order-stock.component';
+import { AutoSelectionComponent } from './components/autoselection/auto-selection.component';
 
 
 
@@ -81,7 +82,8 @@ export function ConfigLoader(envConfig: envConfig) {
     ImgPreviewComponent,
     SelectItemForDelivered,
     OrderStockComponent,
-    testComponent
+    testComponent,
+    // AutoSelectionComponent
   ],
   imports: [
     BrowserModule,

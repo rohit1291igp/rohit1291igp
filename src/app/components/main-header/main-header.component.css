@@ -69,7 +69,10 @@
 .reportDropdown.slideropen{
     box-shadow: 0 1px 3px #888;
 }
-
+.reportsdropdownMenu{
+    overflow: auto;
+    max-height: 500px;
+}
 .reportsdropdownMenu li{
     list-style-type: none;
     white-space: nowrap ! important;
@@ -115,3 +118,24 @@
     border: 1px solid transparent;
     z-index: 99;
 }
+/* width */
+::-webkit-scrollbar {
+    width: 5px;
+    min-height: 5px; 
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: #C3404E; 
+  }
+   
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #fff; 
+    border-radius: 5px;
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #f2f2f2; 
+  }

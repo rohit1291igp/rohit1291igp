@@ -229,8 +229,10 @@ export class ReportsComponent implements OnInit{
       var _this = this;
       _this.myForm = this.fb.group({
         componentName: [''],
+        ComponentCode: [''],
         componentId: [''],
-        procTypeVendor: ['']
+        procTypeVendor: [''],
+        VendorId:['']
         });
     //   window.onscroll = () => {
     //     // var _this = this;
@@ -272,8 +274,7 @@ export class ReportsComponent implements OnInit{
           /* reset all variable - end*/
 
           console.log('params===>', params);
-          _this.reportType = params['type'];
-
+          _this.reportType = params['type']; 
           if(_this.reportType === 'getSlaReport'){
             _this.reportDataLoader['searchFields'] = [
               {
@@ -312,9 +313,11 @@ export class ReportsComponent implements OnInit{
               console.log('oninit =====> queryString ====>', _this.queryString);
           }
           /* byDefault set deliveryDateFrom 2 days back - end */
-          if(_this.reportType === 'getComponentReport'){
+          if(_this.reportType === 'getComponentReport' || _this.reportType === 'getComponentOrderReport'){
             _this.getComponentsList();
+            _this.getListOfVendorComponent()
           }
+          
           if(_this.reportType === 'getBarcodeToComponentReport'){
             _this.getBarcodeList();
           }
@@ -448,7 +451,7 @@ getDeliveryBoyList(){
 
   getComponentsList(){
     var _this = this;
-    if(_this.reportType == 'getComponentReport'){
+    if(environment.userType == 'admin'){
         let reqObj =  {
             url : 'getListOfComponents?startLimit=0&endLimit=1000',
             method : "get",
@@ -514,6 +517,28 @@ getDeliveryBoyList(){
             }
             console.log("response----->"+response.result.list);
             _this.listOfBarcodes = response.result.list;
+          });
+    }
+  }
+  getListOfVendorComponent(){
+    var _this = this;
+    if(environment.userType == 'vendor'){
+        let reqObj =  {
+            url : 'getListOfVendorComponents?startLimit=0&endLimit=10000',
+            method : "get",
+            payload : {}
+          };
+          _this.BackendService.makeAjax(reqObj, function(err, response, headers){
+            if(err || response.error == true) {
+                if(response){
+                    console.log('Error=============>', err, response.errorCode);
+                }else{
+                alert("Error Occurred while trying to get list of components.");
+                }
+                return;
+            }
+            console.log("response----->"+response.result.list);
+            _this.listOfComponents = response.result;
           });
     }
   }
@@ -773,26 +798,42 @@ getDeliveryBoyList(){
             }
         }
         if(_this.reportType == 'getComponentOrderReport'){
-            if($('.componentDD').val() == "Select Component Code"){
-                alert("Please select component code");
-                return;
-            } else if($('.componentDD').val() !== undefined && $('.componentDD').val() == "All Component"){
-                if(_this.searchResultModel["Component_Code"]){
-                    delete _this.searchResultModel["Component_Code"];
+            if(formdata){
+                let formData = formdata.value;
+                    if(formData.componentId == 'All'){
+                        _this.searchResultModel = {}//["Component_Id"] = formData.componentId;
+                    }else{
+                       
+                        if(environment.userType === "vendor"){
+                        //     //For Vendor
+                            _this.searchResultModel["Component_Id"] = formData.componentId;
+                        }else{
+                            //For Admin
+                            _this.searchResultModel["Component_Code"] = formData.ComponentCode.includes('#') ? formData.ComponentCode.split("#")[0] : formData.ComponentCode;
+                            _this.searchResultModel["Vendor_Id"] = formData.VendorId;
+                        }
+                    }
                 }
-                else{
-                    alert("Already all components are listed");
-                    return;
-                }
-            }
-             else if($('.componentDD').val() !== undefined){
-                _this.searchResultModel["Component_Code"]=$('.componentDD').val();
-            }
+                
+            // if($('.componentDD').val() == "Select Component Code"){
+            //     alert("Please select component code");
+            //     return;
+            // } else if($('.componentDD').val() !== undefined && $('.componentDD').val() == "All Component"){
+            //     if(_this.searchResultModel["Component_Code"]){
+            //         delete _this.searchResultModel["Component_Code"];
+            //     }
+            //     else{
+            //         alert("Already all components are listed");
+            //         return;
+            //     }
+            // }
+            //  else if($('.componentDD').val() !== undefined){
+            //     _this.searchResultModel["Component_Code"]=$('.componentDD').val();
+            // }
             _this.searchResultModel["startLimit"] = 0;
             _this.searchResultModel["endLimit"] = 1000;
             
-        }
-
+        } 
         
         _this.queryString = _this.generateQueryString(_this.searchResultModel);
         console.log('searchReportSubmit =====> queryString ====>', _this.queryString);
@@ -1911,40 +1952,21 @@ getDeliveryBoyList(){
         });
       }
     
-    filterValues(inputValue) {
-        this.tempListOfStockItems = this.listOfStockItems.filter(r => r.Component_Name.toLowerCase().includes(inputValue.toLowerCase()));
-        if(document.getElementById('dropDownContainer')){
-            document.getElementById('dropDownContainer').setAttribute('style', 'display:flex !important');
-        }
-    }
-    showList(flag){
-        if(flag == 'show'){
-                if(this.myForm.controls['componentName'].value){
-                    this.tempListOfStockItems = this.listOfStockItems.filter(r => r.Component_Name.toLowerCase().includes(this.myForm.controls['componentName'].value.toLowerCase()));
-                }else{
-                    this.tempListOfStockItems = this.listOfStockItems;
-                }
-                if(document.getElementById('dropDownContainer')){
-                    document.getElementById('dropDownContainer').setAttribute('style', 'display:flex !important');
-                }    
-        }else{
-            if(document.getElementById('dropDownContainer')){
-                setTimeout(()=>{
-                    document.getElementById('dropDownContainer').setAttribute('style', 'display:none !important');
-                }, 100)
+    selectComponent(e){
+        console.log(e);
+        if(this.myForm){
+            if(typeof e == 'string'){
+                this.myForm.controls['ComponentCode'].setValue(e);
+            }else{
+                this.myForm.controls['componentId'].setValue(e.Component_Id);
+                this.myForm.controls['componentName'].setValue(e.Component_Name);
+                this.myForm.controls['VendorId'].setValue(e.Vendor_Id);
+
             }
+           
         }
+        
     }
-
-    selectComponent(item){
-        this.componentName = item.Component_Name;
-        this.myForm.controls['componentId'].setValue(item.Component_Id);
-        this.myForm.controls['componentName'].setValue(item.Component_Name);
-
-            setTimeout(()=>{
-                document.getElementById('dropDownContainer').setAttribute('style', 'display:none !important');
-            }, 100)
-    }   
 
 }
 
