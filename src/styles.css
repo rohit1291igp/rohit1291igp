@@ -6,6 +6,7 @@ html{
 
 body{
     -webkit-overflow-scrolling: touch; /* for iPhone*/
+    padding-top: 62px;
 }
 /* Utility css start */
 .notVisible{

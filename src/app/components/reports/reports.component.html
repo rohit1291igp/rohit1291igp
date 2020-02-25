@@ -501,6 +501,7 @@
             <div class="col-sm-9 col-md-9 reprts-search-fields bg-white padding1" style="padding-right:0; width:100%;">
                 <div *ngIf="reportType == 'getVendorReport' || reportType == 'getPincodeReport' || reportType == 'getVendorDetails'" class="underLine paddingHalf text-bold">Search Vendor</div>
                 <div *ngIf="reportType === 'getComponentReport'" class="underLine paddingHalf text-bold">Search Component</div>
+                <div *ngIf="reportType === 'getComponentOrderReport' || environment.userType == 'vendor'" class="underLine paddingHalf text-bold">Search Component</div>
                 <div *ngIf="reportType === 'getBarcodeToComponentReport'" class="underLine paddingHalf text-bold">Search Barcode</div>
                 <div *ngIf="reportType != 'getComponentOrderReport'" class="btn btn-primary addActionBtn" (click)="addActionInit($event)">
                     Add
@@ -509,7 +510,7 @@
                     <ng-container *ngIf="reportType === 'getVendorDetails'">Vendor</ng-container>
                     <ng-container *ngIf="reportType === 'getBarcodeToComponentReport'">Barcode</ng-container>
                 </div>
-                <form name="searchReport" (ngSubmit)="f.form.valid && searchReportSubmit($event,true)" #f="ngForm" nonvalidate>
+                <form name="searchReport" (ngSubmit)="f.form.valid && searchReportSubmit($event,true, myForm)" #f="ngForm" nonvalidate>
                     <div class="searchFields m-top-1 inline" >
                         <div class="pull-left" style="width:70%;">
                             <ng-container *ngIf="vendorList.length > 0 && (reportType === 'getVendorReport' || reportType === 'getPincodeReport' || reportType === 'getVendorDetails' || reportType === 'getComponentReport' || reportType === 'getBarcodeToComponentReport') && (environment.userType && environment.userType === 'admin')">
@@ -521,12 +522,23 @@
                                 <option  [ngValue]="all">All Component</option>
                                 <option *ngFor="let comp of listOfComponents" [ngValue]="comp">{{comp}}</option>
                             </select>
-                            <select *ngIf="reportType == 'getComponentOrderReport'" name="fkAssociateId" class="componentDD form-control" required>
+                            <!-- <select *ngIf="reportType == 'getComponentOrderReport'" name="fkAssociateId" class="componentDD form-control" required>
                                 <option  [ngValue]="">Select Component Code</option>
                                 <option  [ngValue]="all">All Component</option>
-                                <option *ngFor="let comp of listOfStockItems" [ngValue]="comp">{{comp.Component_Name}}</option>
-                            </select>
+                                <option *ngFor="let comp of listOfComponents" [ngValue]="comp">{{comp}}</option>
+                            </select> -->
+                            <ng-container *ngIf="environment.userType == 'vendor' && reportType == 'getComponentOrderReport' && listOfComponents.length > 0">
+                                    <app-auto-selection style="width: 100%;margin-right:5px" [listOfComponents]="listOfComponents" placeholder="Component Name" type='object' relationName="getComponentOrderReport" displayName='Component_Name' (selectionObject)="selectComponent($event)"></app-auto-selection>
+                            </ng-container>
+                            <div style="display: flex">
+                            <ng-container *ngIf="environment.userType == 'admin' && reportType == 'getComponentOrderReport' && listOfComponents.length > 0">
+                                    <app-auto-selection style="width: 100%;margin-right:5px" [listOfComponents]="listOfComponents" placeholder="Component Name" type='list' relationName="getComponentOrderReport" (selectionObject)="selectComponent($event)"></app-auto-selection>
+                            </ng-container>
 
+                            <ng-container *ngIf="reportType == 'getComponentOrderReport' && vendorList.length > 0">
+                                    <app-auto-selection style="width: 100%;" [listOfComponents]="vendorList" placeholder="Vendor Name" displayName='Vendor_Name' type='object' relationName="vendorList" (selectionObject)="selectComponent($event)"></app-auto-selection>
+                            </ng-container>
+                            </div>
                             <select *ngIf="reportType == 'getBarcodeToComponentReport'" name="fkAssociateId" class="barcodeDD form-control" required>
                                     <option  [ngValue]="">Select Barcode</option>
                                     <option  [ngValue]="all">All Barcode</option>
@@ -553,14 +565,9 @@
                 <form [formGroup]="myForm" name="searchReport" (ngSubmit)="f.form.valid && searchReportSubmit($event,true,myForm)" #f="ngForm" nonvalidate>
                     <div class="searchFields m-top-1 inline" >
                         <div class="pull-left col-md-2" style="width:50%;position: relative;">
-                        <input class="form-control col-sm-12 col-md-12" (keyup)="filterValues(componentName.value)" #componentName formControlName="componentName" (focus)="showList('show')" (focusout)="showList('hide')" autocomplete="off" placeholder="Component Name" placeholder="Component Name">
-
-                            <!-- <input type="text" name="component" class="form-control col-sm-12 col-md-12" (keyup)="filterValues(componentName)" (focus)="showList('show')" (focusout)="showList('hide')" autocomplete="off" placeholder="Component Name" [(ngModel)]="componentName" /> -->
-                            <div id="dropDownContainer" *ngIf='tempListOfStockItems.length > 0' class="d-flex flex-direction-column" style="display: none !important;">
-                                    <div *ngFor="let item of tempListOfStockItems;let odd=odd;"  (click)="selectComponent(item)">
-                                    <div style="padding:4px 8px;cursor:pointer;">{{item.Component_Name}}</div>
-                                </div>
-                            </div>
+                            <ng-container *ngIf='tempListOfStockItems.length > 0'>
+                                    <app-auto-selection [listOfComponents]="tempListOfStockItems" displayName='Component_Name' placeholder="ComponentName" type='object' relationName="vendorGetComponentOrderReport" (selectionObject)="selectComponent($event)"></app-auto-selection>
+                            </ng-container>
                         </div>
                         <div class="pull-left col-md-2" style="width:50%;position: relative;">
                             <select class="form-control" formControlName="procTypeVendor">

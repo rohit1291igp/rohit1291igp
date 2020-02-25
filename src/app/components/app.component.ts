@@ -9,6 +9,7 @@ import { UtilityService } from '../services/utility.service';
 export class AppComponent implements OnInit, OnChanges{
   title = 'app works!';
   onlineFlag=navigator.onLine;
+  isOnline = true;
   constructor(private _ngZone: NgZone, public UtilityService: UtilityService) {}
 
   ngOnInit() {
@@ -16,6 +17,11 @@ export class AppComponent implements OnInit, OnChanges{
         this.UtilityService.changeRouteComponent();
         window.addEventListener('online',  this.updateOnlineStatus);
         window.addEventListener('offline', this.updateOnlineStatus);
+        if(navigator.onLine){
+          this.isOnline = true;
+         } else {
+          this.isOnline = false;
+         }
   }
 
   ngOnChanges(changes){
@@ -58,6 +64,15 @@ export class AppComponent implements OnInit, OnChanges{
 <input type='file' (change)="onSelectFile($event)" capture>
 <br>
 <input type="file" accept="image/*;capture=camera">
+<br>
+<input type="file" accept="image/*" capture="environment">
+<br>
+camera: <input type="file" accept="image/*" capture="camera">
+<br>
+<input type="file" accept="image/*" capture="user">
+<input type="file" accept="image/*" capture="environment">
+
+
 </div>
 `,
 styleUrls: ['./app.component.css']

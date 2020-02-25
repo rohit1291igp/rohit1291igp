@@ -1,5 +1,9 @@
+<ng-container *ngIf="isOnline else offine">
 <app-main-header></app-main-header>
 
 <router-outlet></router-outlet>
 
 <app-footer></app-footer>
+</ng-container>
+<ng-template #offine><h2 style="text-align: center;color:#c3404e;">There is no Internet!</h2></ng-template>
+

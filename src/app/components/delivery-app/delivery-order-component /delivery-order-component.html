@@ -62,7 +62,7 @@
         <div class="photo">
             <label>
                 <input id="fileInput" type="file" [(ngModel)]="statusReasonModel.deliveredStatusFile" #deliveredStatusFile="ngModel"
-                (change)="fileChange($event)"  accept=".jpeg, .jpg, .png"/>
+                (change)="fileChange($event)" accept="image/*" capture="camera"/>
                 Take Photo
             </label>
             <div class="clearfix"></div>

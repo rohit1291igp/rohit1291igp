@@ -352,15 +352,18 @@ export class MicroSiteDasboardComponent implements OnInit {
             _this.BackendService.makeAjax(reqObj, function (err, response, headers) {
 
                 if (err || response.error) {
+                    fileInput.value = '';
                     console.log('Error=============>', err);
                     _this.openSnackBar('Server Error');
                     return;
                 }
                 if (response.status.toLowerCase() == 'success') {
+                    fileInput.value = '';
                     _this.displayUploadForm(false);
                     _this.openSnackBar(`File Uploaded Sucessfully!`);
                     fileInput.value = '';
                 } else {
+                    fileInput.value = '';
                     _this.displayUploadForm(false);
                     _this.openSnackBar(response.data[0]);
                     fileInput.value = '';
