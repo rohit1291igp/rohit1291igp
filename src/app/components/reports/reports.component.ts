@@ -524,7 +524,7 @@ getDeliveryBoyList(){
     var _this = this;
     if(environment.userType == 'vendor'){
         let reqObj =  {
-            url : 'getListOfVendorComponents?startLimit=0&endLimit=10000',
+            url : `getListOfVendorComponents?fkAssociateId=${localStorage.getItem('fkAssociateId')}&startLimit=0&endLimit=10000`,
             method : "get",
             payload : {}
           };
