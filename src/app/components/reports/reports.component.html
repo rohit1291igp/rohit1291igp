@@ -549,7 +549,7 @@
                     <div class="searchFieldsSubmit relative inline" >
                         <input *ngIf="reportType == 'getVendorReport' || reportType == 'getPincodeReport' || reportType == 'getVendorDetails'"  type="submit" class="btn btn-primary pull-right bg-igp searchSubmitBtn"  value="Search Vendor"/>
                         <input *ngIf="reportType === 'getComponentReport'"  type="submit" class="btn btn-primary pull-right bg-igp searchSubmitBtn"  value="Search Component"/>
-                        <input *ngIf="reportType === 'getComponentOrderReport'"  type="submit" class="btn btn-primary pull-right bg-igp searchSubmitBtn"  value="Search Stock Component"/>
+                        <input *ngIf="reportType === 'getComponentOrderReport'"  type="submit" class="btn btn-primary pull-right bg-igp searchSubmitBtn" style="margin-bottom: 16px;" value="Search Component"/>
                         <input *ngIf="reportType === 'getBarcodeToComponentReport'"  type="submit" class="btn btn-primary pull-right bg-igp searchSubmitBtn"  value="Search Barcode"/>
                     </div>
                 </form>
@@ -566,7 +566,7 @@
                     <div class="searchFields m-top-1 inline" >
                         <div class="pull-left col-md-2" style="width:50%;position: relative;">
                             <ng-container *ngIf='tempListOfStockItems.length > 0'>
-                                    <app-auto-selection [listOfComponents]="tempListOfStockItems" displayName='Component_Name' placeholder="ComponentName" type='object' relationName="vendorGetComponentOrderReport" (selectionObject)="selectComponent($event)"></app-auto-selection>
+                                    <app-auto-selection [listOfComponents]="tempListOfStockItems" displayName='Component_Name' placeholder="Component Name" type='object' relationName="vendorGetComponentOrderReport" (selectionObject)="selectComponent($event)"></app-auto-selection>
                             </ng-container>
                         </div>
                         <div class="pull-left col-md-2" style="width:50%;position: relative;">

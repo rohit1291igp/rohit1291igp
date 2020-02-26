@@ -468,6 +468,8 @@ getDeliveryBoyList(){
             }
             console.log("response----->"+response.result.list);
             _this.listOfComponents = response.result.list;
+            _this.listOfComponents.unshift('All Components');
+
           });
     }
   }
@@ -537,8 +539,9 @@ getDeliveryBoyList(){
                 }
                 return;
             }
-            console.log("response----->"+response.result.list);
+            // console.log("response----->"+response.result.list);
             _this.listOfComponents = response.result;
+            _this.listOfComponents.unshift({Component_Id:'All',Component_Name:'All Components'});
           });
     }
   }
@@ -800,7 +803,7 @@ getDeliveryBoyList(){
         if(_this.reportType == 'getComponentOrderReport'){
             if(formdata){
                 let formData = formdata.value;
-                    if(formData.componentId == 'All'){
+                    if(formData.componentId == 'All' || formData.ComponentCode == 'All Components'){
                         _this.searchResultModel = {}//["Component_Id"] = formData.componentId;
                     }else{
                        
@@ -850,15 +853,18 @@ getDeliveryBoyList(){
                 return;
             }
             console.log('searchReportSubmit _reportData=============>', _reportData);
-            _reportData.searchFields = _this.reportData.searchFields;
-            //_this.reportData = _reportData;
-            /* need to handle filter - start */
-            _this.orginalReportData.summary = _reportData.summary;
-            _this.orginalReportData.tableData = _reportData.tableData; //_this.orginalReportData.tableData.concat(_reportData.tableData);
-            // if(e){
-                _this.columnFilterSubmit(e);
-                _this.showMoreTableData(e);
-            // }
+            if(_reportData.tableData){
+                _reportData.searchFields = _this.reportData.searchFields;
+                //_this.reportData = _reportData;
+                /* need to handle filter - start */
+                _this.orginalReportData.summary = _reportData.summary;
+                _this.orginalReportData.tableData = _reportData.tableData; //_this.orginalReportData.tableData.concat(_reportData.tableData);
+                // if(e){
+                    _this.columnFilterSubmit(e);
+                    _this.showMoreTableData(e);
+                // }
+            }
+            
         });
         
    }
@@ -891,7 +897,7 @@ getDeliveryBoyList(){
     //pagination
     showMoreTableData(e){
         var _this=this;
-        if(_this.reportType === "getPincodeReport"){return;} // pagination issue
+        // if(_this.reportType === "getPincodeReport"){return;} // pagination issue
         if(_this.orginalReportData && _this.orginalReportData.summary.length > 0){
             var totalOrders= (_this.orginalReportData.summary && _this.orginalReportData.summary[0]) ? Number(_this.orginalReportData.summary[0].value) : 0;
             console.log('show more clicked');
