@@ -86,16 +86,15 @@
     <!-- Order Photos -->
     <div class="photo-container">
         <!-- <button>POD Photo</button> -->
-        <div class="photo">
-            <button>
-                <label for="fileInput" style="margin: 0;">
-                    Take Photo
-                </label>
-            </button>
-                <input id="fileInput" type="file" name="t" [(ngModel)]="statusReasonModel.deliveredStatusFile" #deliveredStatusFile="ngModel"
-                    (change)="fileChange($event)"  accept=".jpeg, .jpg, .png"/>
-                <div class="clearfix"></div>
-            </div>
+
+            <div class="photo">
+                    <label>
+                        <input id="fileInput" type="file" [(ngModel)]="statusReasonModel.deliveredStatusFile" #deliveredStatusFile="ngModel"
+                        (change)="fileChange($event)" accept="image/*" capture="camera"/>
+                        Take Photo
+                    </label>
+                    <div class="clearfix"></div>
+                </div>
         <!-- <button (click)="upload()">Take Photo</button>
         <input id="fileInput" class="hidden-input" name="deliveredStatusFile" type="file"
             [(ngModel)]="statusReasonModel.deliveredStatusFile" #deliveredStatusFile="ngModel"
