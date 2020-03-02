@@ -944,7 +944,7 @@ getDeliveryBoyList(){
                 new Promise((resolve)=>{
                     for(let pi=0; pi < _this.orginalReportData.tableData.length; pi++){
                         for(let k in _this.orginalReportData.tableData[pi]){
-                            if(typeof _this.orginalReportData.tableData[pi][k] == 'object'){
+                            if(typeof _this.orginalReportData.tableData[pi][k] == 'object' &&_this.orginalReportData.tableData[pi][k] != null){
                                 _this.orginalReportData.tableData[pi][k] = _this.orginalReportData.tableData[pi][k].value ? _this.orginalReportData.tableData[pi][k].value : '';
                             }
                         }
