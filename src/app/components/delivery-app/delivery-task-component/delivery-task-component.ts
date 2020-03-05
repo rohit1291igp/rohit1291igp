@@ -13,7 +13,7 @@ import { Router } from '@angular/router';
     styleUrls: ['./delivery-task-component.css']
 })
 export class DeliveryTaskComponent implements OnInit {
-
+    panelOpenState = false;
     orders: any;
     deliveryList = [];
     fkAssociateId: string;
@@ -90,6 +90,7 @@ export class DeliveryTaskComponent implements OnInit {
                 return;
             }
             if (response) {
+                this$.loading = false;
                 this$.orders = response.result;
                 this$.pickedUpOrderId = this$.orders.toBePickedUp.orderId.map(d => d.toString());
                 this$.toBeDeliveredOrderId = this$.orders.toBeDelivered.orderId.map(d => d.toString());
@@ -113,5 +114,12 @@ export class DeliveryTaskComponent implements OnInit {
         const filterValue = value;
         this.source = true;
         return this.toBeDeliveredOrderId.filter(input => input.indexOf(filterValue) === 0);
+    }
+
+    reloadPage(event){
+        this.loading = true;
+        if(event.reload){
+            this.getOrderDetails();
+        }
     }
 }

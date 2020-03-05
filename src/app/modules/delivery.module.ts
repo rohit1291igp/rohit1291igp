@@ -21,7 +21,8 @@ import { DeliveredComponent } from 'app/components/delivery-app/delivered-compon
 import { UnDeliveredComponent } from 'app/components/delivery-app/undelivered-component/undelivered-component';
 import { OrdersDeliveredComponent } from 'app/components/delivery-app/orders-delivered-component/orders-delivered-component';
 import { DeliveryHeaderComponent } from 'app/components/delivery-app/delivery-header/delivery-header.component';
-
+var t = document.querySelector('.footer') as any;
+t.style.display = 'none';
 const routes: Routes = [
   {
     path: '',

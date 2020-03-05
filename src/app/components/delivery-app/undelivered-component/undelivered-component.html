@@ -1,17 +1,18 @@
+<app-delivery-header [title]="headerTitle"></app-delivery-header>
+
 <div class="main-container">
     <!-- Header -->
-    <app-delivery-header [title]="headerTitle"></app-delivery-header>
     <!-- Header Ends -->
     <!-- Reasons -->
         <div class="reasons-cointainer">
             <div>REASONS:</div>
-            <button [ngStyle]="{background: undeliveredReason === 'Address couldn\'t be found' ? '#fff' : '#ccc'}" (click)="getRecipientInfo('Address couldn\'t be found')">Address couldn't be found</button>
-            <button [ngStyle]="{background: undeliveredReason === 'Incorrect address' ? '#fff' : '#ccc'}" (click)="getRecipientInfo('Incorrect address')">Incorrect address</button>
-            <button [ngStyle]="{background: undeliveredReason === 'Mobile number was not reachable' ? '#fff' : '#ccc'}" (click)="getRecipientInfo('Mobile number was not reachable')">Mobile number was not reachable</button>
-            <button [ngStyle]="{background: undeliveredReason === 'Door was locked/No one answered the door' ? '#fff' : '#ccc'}" (click)="getRecipientInfo('Door was locked/No one answered the door')">Door was locked/No one answered the door</button>
-            <button [ngStyle]="{background: undeliveredReason === 'Security denied entry' ? '#fff' : '#ccc'}" (click)="getRecipientInfo('Security denied entry')">Security denied entry</button>
-            <button [ngStyle]="{background: undeliveredReason === 'Recipient denied delivery' ? '#fff' : '#ccc'}" (click)="getRecipientInfo('Recipient denied delivery')">Recipient denied delivery</button>
-            <!-- <button [ngStyle]="{background: undeliveredReason === 'Other' ? '#fff' : '#ccc'}" (click)="getRecipientInfo('Other')">Other</button>
+            <button [ngStyle]="{opacity: undeliveredReason === 'Address couldn\'t be found' ? '1' : '0.5'}" (click)="getRecipientInfo('Address couldn\'t be found')">Address couldn't be found</button>
+            <button [ngStyle]="{opacity: undeliveredReason === 'Incorrect address' ? '1' : '0.5'}" (click)="getRecipientInfo('Incorrect address')">Incorrect address</button>
+            <button [ngStyle]="{opacity: undeliveredReason === 'Mobile number was not reachable' ? '1' : '0.5'}" (click)="getRecipientInfo('Mobile number was not reachable')">Mobile number was not reachable</button>
+            <button [ngStyle]="{opacity: undeliveredReason === 'Door was locked/No one answered the door' ? '1' : '0.5'}" (click)="getRecipientInfo('Door was locked/No one answered the door')">Door was locked/No one answered the door</button>
+            <button [ngStyle]="{opacity: undeliveredReason === 'Security denied entry' ? '1' : '0.5'}" (click)="getRecipientInfo('Security denied entry')">Security denied entry</button>
+            <button [ngStyle]="{opacity: undeliveredReason === 'Recipient denied delivery' ? '1' : '0.5'}" (click)="getRecipientInfo('Recipient denied delivery')">Recipient denied delivery</button>
+            <!-- <button [ngStyle]="{opacity: undeliveredReason === 'Other' ? '#fff' : '#ccc'}" (click)="getRecipientInfo('Other')">Other</button>
             <textarea *ngIf="undeliveredReason === 'Other'" rows="4" cols="50" (change)="doTextareaValueChange($event)">{{textareaValue}}</textarea> -->
         </div>
     <!-- Reasons Ends -->

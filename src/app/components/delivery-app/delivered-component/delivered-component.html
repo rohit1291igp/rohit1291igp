@@ -1,12 +1,34 @@
+<app-delivery-header [title]="'Mark As Delivered'"></app-delivery-header>
+
 <div class="main-container">
     <!-- Header -->
-    <div class="header-container">
-        <div><i class="fa fa-align-justify"></i></div>
-        <div style="color: #4BB543; font-weight:500;">Mark As Delivered</div>
-        <div></div>
-    </div><!-- Header Ends -->
+    <!--Header Ends -->
+    <!--Actual Image Section-->
+    <mat-card style="margin:8px 0px;">
+        <div class="taken-img-header">
+            <ng-container *ngIf="uploadedFiles.PImages.length > 0 else noPImages">Actual Product images
+            </ng-container>
+            <ng-template #noPImages>No Product images</ng-template>
+        </div>
+
+        <div class="order-img" *ngIf="uploadedFiles.PImages.length > 0" [ngStyle]="{opacity: loading ? '0.5' : '1'}">
+            <ng-container *ngFor="let uploadedFile of uploadedFiles.PImages; let i = index;">
+                <div class="uploadedFiles relative" *ngFor="let imgSrc of uploadedFile.orderProducts">
+                    <img class="image" id="img{{i}}"
+                        src="{{productsURL}}th/{{imgSrc.productImage}}?th={{imgSrc.productUpdateDateTime}}"
+                        alt="uploadedImages" width="460" height="200" (click)="imagePreview($event, uploadedFile)"
+                        (load)="loaded()" />
+                </div>
+            </ng-container>
+
+            <div [ngStyle]="{display: loading ? 'flex' : 'none'}" class="spinner">
+                <mat-spinner [diameter]="30"></mat-spinner>
+            </div>
+        </div>
+    </mat-card>
+    <!--Actual Image Section Ends-->
     <!-- Out For Delivered Image Taken Section -->
-    <mat-card style="margin:8px;">
+    <mat-card style="margin:8px 0px;">
         <div class="taken-img-header">
             <ng-container *ngIf="uploadedFiles.ofdImages.length > 0 else noOfdImage">Out For Delivery images
             </ng-container>
@@ -27,10 +49,10 @@
 
     <!-- Out For Delivered Image Taken Section Ends -->
     <!-- Delivered Image Taken Section -->
-    <mat-card style="margin:8px;">
+    <mat-card style="margin:8px 0px;">
         <div class="taken-img-header">
             <ng-container *ngIf="uploadedFiles.dImages.length > 0 else noDImage">Delivered images</ng-container>
-            <ng-template #noDImage>No Delivered images</ng-template>
+            <ng-template #noDImage><span [ngClass]="{'error-notify-element-2':commonError && uploadedFiles.dImages.length == 0}">No Delivered images</span></ng-template>
         </div>
         <div class="order-img" *ngIf="uploadedFiles.dImages.length > 0" [ngStyle]="{opacity: loading ? '0.5' : '1'}">
             <div class="uploadedFiles relative" *ngFor="let uploadedFile of uploadedFiles.dImages; let i = index;">
@@ -42,19 +64,33 @@
                 <mat-spinner [diameter]="30"></mat-spinner>
             </div>
         </div>
+        <!-- Order Photos -->
+        <div class="photo-container">
+            <div class="photo">
+                <label>
+                    <input id="fileInput" type="file" [(ngModel)]="statusReasonModel.deliveredStatusFile"
+                        #deliveredStatusFile="ngModel" (change)="fileChange($event)" accept="image/*"
+                        capture="camera" />
+                    Take Photo
+                </label>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+        <!-- Order Photos Ends -->
     </mat-card>
 
     <!-- Delivered Image Taken Section Ends -->
     <!-- Delivery Address -->
-    <mat-card style="margin: 8px">
-        <div class="receiver-details-container">
-            <button [ngStyle]="{background: recipientInfo === 'self' ? '#fff' : '#ccc'}"
+    <mat-card style="margin: 8px 0px">
+        <div class="taken-img-header">Deliver To - </div>
+        <div class="receiver-details-container" [ngClass]="{'error-notify-element-1':commonError && !recipientInfo}">
+            <button [ngStyle]="{opacity: recipientInfo === 'self' ? '1' : '0.5'}"
                 (click)="getRecipientInfo('self')">SELF</button>
-            <button [ngStyle]="{background: recipientInfo === 'neighbor' ? '#fff' : '#ccc'}"
+            <button [ngStyle]="{opacity: recipientInfo === 'neighbor' ? '1' : '0.5'}"
                 (click)="getRecipientInfo('neighbor')">NEIGHBOR</button>
-            <button [ngStyle]="{background: recipientInfo === 'securitygaurd' ? '#fff' : '#ccc'}"
+            <button [ngStyle]="{opacity: recipientInfo === 'securitygaurd' ? '1' : '0.5'}"
                 (click)="getRecipientInfo('securitygaurd')">SECURITY GUARD</button>
-            <button [ngStyle]="{background: recipientInfo === 'others' ? '#fff' : '#ccc'}"
+            <button [ngStyle]="{opacity: recipientInfo === 'others' ? '1' : '0.5'}"
                 (click)="getRecipientInfo('others')">OTHER</button>
         </div>
         <!-- Delivery Address Ends -->
@@ -83,26 +119,9 @@
         </div>
         <!-- Reciever's Details Ends -->
     </mat-card>
-    <!-- Order Photos -->
-    <div class="photo-container">
-        <!-- <button>POD Photo</button> -->
-
-            <div class="photo">
-                    <label>
-                        <input id="fileInput" type="file" [(ngModel)]="statusReasonModel.deliveredStatusFile" #deliveredStatusFile="ngModel"
-                        (change)="fileChange($event)" accept="image/*" capture="camera"/>
-                        Take Photo
-                    </label>
-                    <div class="clearfix"></div>
-                </div>
-        <!-- <button (click)="upload()">Take Photo</button>
-        <input id="fileInput" class="hidden-input" name="deliveredStatusFile" type="file"
-            [(ngModel)]="statusReasonModel.deliveredStatusFile" #deliveredStatusFile="ngModel"
-            (change)="fileChange($event)" placeholder="Upload Delivery Challan" accept=".jpeg, .jpg, .png" multiple /> -->
-    </div>
-    <!-- Order Photos Ends -->
+    <div *ngIf="commonError" class="errText">{{commomErrorMsg}}</div>
     <div class="delivered-btn">
-        <button [ngClass]="{'disable':(recipientInfo && (uploadedFiles.dImages.length > 0)) ? false : true}"
+        <button [ngClass]="{'disable':!(recipientInfo && (uploadedFiles.dImages.length > 0)), 'active': (recipientInfo && (uploadedFiles.dImages.length > 0))}"
             (click)="updateOrder('Delivered')">DELIVERED</button>
         <!-- <a routerLink="/delivery-app/orders-delivered">DELIVERED</a> -->
     </div>

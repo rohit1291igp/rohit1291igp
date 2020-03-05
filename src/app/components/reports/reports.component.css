@@ -515,3 +515,10 @@ table thead th{
 .input-container {
     width: 50%;
 }
+.remove-filter-btn{
+    font-size: 10px;
+    background: #C3404E;
+    color: #fff;
+    border: none;
+    box-shadow: 0px 1px 3px 1px #ccc;
+}

@@ -1,8 +1,9 @@
 <div>
   <mat-card class="header-container">
-    <div><i class="fa fa-align-justify"></i></div>
-    <div>{{title}}</div>
-    <div></div>
+    <!-- <div><i class="fa fa-align-justify"></i></div> -->
+    <div *ngIf="reloadIcon" ><i class="fa fa-refresh" [ngClass]="{'rotating':rotateAnimation}" aria-hidden="true" (click)="reloadPage()"></i></div>
+    <div style="width: 100%;text-align: center;margin: 0 auto;">{{title}}</div>
     <!-- <div><i class="fa fa-camera"></i></div> -->
+    <div></div>
   </mat-card>
 </div>

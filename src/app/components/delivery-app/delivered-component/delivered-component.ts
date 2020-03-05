@@ -24,7 +24,7 @@ export class DeliveredComponent implements OnInit {
     orderProductId: number[] = [];
     fkAssociateId: string;
     fkUserId: string;
-    uploadedFiles = {ofdImages:[], dImages:[]};
+    uploadedFiles = { ofdImages: [], dImages: [], PImages: [] };
     myForm: FormGroup;
     recipientInfo: any;
     statusReasonModel: any = {};
@@ -32,6 +32,10 @@ export class DeliveredComponent implements OnInit {
     imagePreviewSrc = "";
     pendingDeliveryOrders: any = [];
     loading = true;
+    productsURL = environment.productsURL;
+    commonError = false;
+    commomErrorMsg:string;
+
     constructor(
         private BackendService: BackendService,
         private router: Router,
@@ -91,6 +95,16 @@ export class DeliveredComponent implements OnInit {
                 console.log('Error=============>', err);
                 return;
             }
+            if (response.result) {
+                for (let i = 0; i < response.result.length; i++) {
+                    if (response.result[i].orderProducts[0].ordersProductStatus) {
+                        // this$.order.push(response.result[i]);
+                        this$.uploadedFiles.PImages.push(response.result[i]);
+
+                    }
+                }
+            }
+
             if (response && response.result[0].uploadedFilePath && response.result[0].uploadedFilePath['OutForDelivery'].length > 0) {
                 for (let i = 0, length = response.result[0].uploadedFilePath['OutForDelivery'].length; i < length; i++) {
                     this$.uploadedFiles.ofdImages.push(response.result[0].uploadedFilePath['OutForDelivery'][i]);
@@ -126,7 +140,7 @@ export class DeliveredComponent implements OnInit {
     }
     upload() {
         let ele = document.getElementById('fileInput');
-        if(ele){
+        if (ele) {
             ele.click();
         }
     }
@@ -136,6 +150,16 @@ export class DeliveredComponent implements OnInit {
         const myFormattedDate = pipe.transform(now, 'yyyy-MM-dd');
         const recipientInfo = this.myForm.value;
         var this$ = this;
+        if(!this.recipientInfo){
+            this$.commonError = true;
+            this$.commomErrorMsg = 'Please Select Recipient Info';
+            return;
+        }
+        if(this$.uploadedFiles.dImages.length == 0){
+            this$.commonError = true;
+            this$.commomErrorMsg = 'Please Upload Image';
+            return;
+        }
         new Promise((resolve) => {
             let selectedProducts = this$.pendingDeliveryOrders.find(f => f.orderId == this$.orderId);
             for (let i = 0; i < selectedProducts.selectedProducts.length; i++) {
@@ -175,6 +199,8 @@ export class DeliveredComponent implements OnInit {
 
     getRecipientInfo(info) {
         this.recipientInfo = info;
+        this.commonError = false;
+
         if (info === 'self') {
             this.myForm.controls['name'].setValue(this.orderDetails.deliveryName);
             this.myForm.controls['phone'].setValue(this.orderDetails.deliveryMobile);
@@ -186,6 +212,7 @@ export class DeliveredComponent implements OnInit {
 
     fileChange(event) {
         var this$ = this;
+        this$.commonError = false;
         this$.loading = true;
         let fileList: FileList = event.target.files;
         if (fileList.length == 0) {

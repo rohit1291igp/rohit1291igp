@@ -1,20 +1,17 @@
+<app-delivery-header [title]="'Task'" (reload)="reloadPage($event)" reloadIcon=true></app-delivery-header>
+
 <div *ngIf="browserSupport else noBrowserSupport" class="main-container">
     <!-- Header -->
-    <app-delivery-header [title]="'Task'"></app-delivery-header>
     <!-- Header Ends -->
     <!-- Search  -->
-    <a *ngIf="fkUserId == 20287" routerLink="/test">test</a>
+    <!-- <a *ngIf="fkUserId == 20287" routerLink="/test">test</a> -->
     <div class="search-container">
         <mat-form-field class="search-full-width">
-            <!-- <input type="search" matInput placeholder="Search" (keyup)="onSearch(search.value)" (blur)="onSearchOut()" #search> -->
             <input id="search" [formControl]="inputSearch" matInput placeholder="Search">
-
         </mat-form-field>
-        <!-- <input type="text" (keydown)="onKeyup($event)" />
-        <input type="text" id="test"  maxlength="3" /> -->
     </div><!-- Search Ends -->
     <!-- Pick Up Container -->
-    <div class="pick-up-container">
+    <!-- <div class="pick-up-container">
         <ng-container *ngIf="!source || (filteredPickedUpOrderId | async).length > 0 else noSearchResult">
             <mat-card>
                 <h4>Pending Pickups ({{orders?.toBePickedUp?.total}})</h4>
@@ -34,7 +31,6 @@
                     <mat-menu #menu="matMenu">
                         <button class="matmenu-btn" *ngFor="let order of orders?.toBePickedFuture?.orderId"
                             mat-menu-item (click)="pickOrder(order)">{{order}}</button>
-                            <!-- <a routerLink="/delivery-app/task/{{order}}/future">{{order}}</a> -->
                     </mat-menu>
                 </div>
                 <ng-template #noOrder>No Orders</ng-template>
@@ -45,22 +41,21 @@
             <mat-card>No Record</mat-card>
         </ng-template>
 
-    </div><!-- Pick Up Container Ends -->
+    </div>-->
+    <!-- Pick Up Container Ends -->
     <div style="clear: both"></div>
 
     <!-- Delivery -->
-    <div class="delivery-container">
+    <!-- <div class="delivery-container">
         <ng-container *ngIf="!source || (filteredPickedUpOrderId | async).length > 0 else noSearchResult">
             <mat-card>
                 <h4>Pending Deliveries ({{orders?.toBeDelivered?.total}})</h4>
                 <ng-container *ngIf="toBeDeliveredOrderId.length > 0 else noDelivery">
-                    <!-- <ng-container *ngIf="(filteredToBeDeliveredOrderId | async).length > 0 else noDelivery"> -->
                     <div class="chip-box-container">
                         <div class="chip-box"
                             *ngFor="let x of source ? (filteredToBeDeliveredOrderId | async) : toBeDeliveredOrderId"><a
                                 routerLink="/delivery-app/delivery/{{x}}/today">{{x}}</a></div>
                     </div>
-                    <!-- </ng-container> -->
                 </ng-container>
                 <ng-template #noDelivery>
                     Nothing To Deliver
@@ -70,20 +65,103 @@
         <ng-template #noSearchResult>
             <mat-card>No Record</mat-card>
         </ng-template>
-    </div>
+    </div> -->
     <!--Delivery Ends-->
-    <div style="clear: both"></div>
-    <div *ngIf="orders?.delivered?.total > 1" class="order-delivered-box">
-        <a mat-raised-button routerLink="/delivery-app/orders-delivered">Order Delivered ({{orders?.delivered?.total}})</a>
-        <!-- <mat-card>
-            Order Delivered ({{orders?.delivered?.total}})
-        </mat-card> -->
-    </div>
-    <div style="clear: both"></div>
+
+    <mat-accordion multi>
+        <mat-expansion-panel [expanded]="orders?.toBePickedUp?.total > 0">
+            <mat-expansion-panel-header>
+                <mat-panel-title>
+                    Pending Pickups ({{orders?.toBePickedUp?.total}})
+                </mat-panel-title>
+                <mat-panel-description>
+
+                </mat-panel-description>
+            </mat-expansion-panel-header>
+            <ng-container *ngIf="pickedUpOrderId.length > 0 else noOrder">
+                <div class="chip-box-container">
+                    <div class="chip-box"
+                        *ngFor="let order of source ? (filteredPickedUpOrderId | async) : pickedUpOrderId"
+                        (click)="addToDelivery(x)"><a routerLink="/delivery-app/task/{{order}}/today">{{order}}</a>
+                    </div>
+                </div>
+            </ng-container>
+            <ng-template #noOrder>No Orders</ng-template>
+        </mat-expansion-panel>
+        <mat-expansion-panel [expanded]="orders?.toBePickedFuture?.total > 0">
+            <mat-expansion-panel-header>
+                <mat-panel-title>
+                    Pick up in Future ({{orders?.toBePickedFuture?.total}})
+                </mat-panel-title>
+                <mat-panel-description>
+
+                </mat-panel-description>
+            </mat-expansion-panel-header>
+            <ng-container *ngIf="orders?.toBePickedFuture?.total > 0 else noOrder">
+                <div class="chip-box-container">
+                    <ng-container *ngFor="let order of orders?.toBePickedFuture?.orderId">
+                        <div class="chip-box" (click)="addToDelivery(order)">{{order}}
+                        </div>
+                    </ng-container>
+                </div>
+            </ng-container>
+            <ng-template #noOrder>No Orders</ng-template>
+        </mat-expansion-panel>
+        <mat-expansion-panel [expanded]="orders?.toBeDelivered?.total > 0">
+            <mat-expansion-panel-header>
+                <mat-panel-title>
+                    Pending Deliveries ({{orders?.toBeDelivered?.total}})
+                </mat-panel-title>
+                <mat-panel-description>
+
+                </mat-panel-description>
+            </mat-expansion-panel-header>
+            <ng-container *ngIf="toBeDeliveredOrderId.length > 0 else noDelivery">
+                <!-- <ng-container *ngIf="(filteredToBeDeliveredOrderId | async).length > 0 else noDelivery"> -->
+                <div class="chip-box-container">
+                    <div class="chip-box"
+                        *ngFor="let x of source ? (filteredToBeDeliveredOrderId | async) : toBeDeliveredOrderId"><a
+                            routerLink="/delivery-app/delivery/{{x}}/today">{{x}}</a></div>
+                </div>
+                <!-- </ng-container> -->
+            </ng-container>
+            <ng-template #noDelivery>
+                Nothing To Deliver
+            </ng-template>
+        </mat-expansion-panel>
+        <mat-expansion-panel [expanded]="orders?.delivered?.total > 0">
+            <mat-expansion-panel-header>
+                <mat-panel-title>
+                    Order Delivered ({{orders?.delivered?.total}})
+                </mat-panel-title>
+                <mat-panel-description>
+
+                </mat-panel-description>
+            </mat-expansion-panel-header>
+            <ng-container *ngIf="orders?.delivered?.total > 1 else noDelivery">
+                <div class="chip-box-container">
+                    <div class="chip-box" *ngFor="let x of orders?.delivered?.orderId">{{x}}</div>
+                </div>
+            </ng-container>
+            <ng-template #noDelivery>
+                Nothing To Deliver
+            </ng-template>
+        </mat-expansion-panel>
+    </mat-accordion>
+
+
+
+
+    <!-- <div style="clear: both"></div> -->
+    <!-- <div *ngIf="orders?.delivered?.total > 1" class="order-delivered-box">
+        <a mat-raised-button routerLink="/delivery-app/orders-delivered">Order Delivered
+            ({{orders?.delivered?.total}})</a>
+    </div> -->
+    <!-- <div style="clear: both"></div> -->
 </div>
 <ng-template #noBrowserSupport>
     <h5 class="no-support-text">Not Supported in Desktop</h5>
 </ng-template>
-<!-- <div [ngStyle]="{display: loading ? 'flex' : 'none'}" class="spinner">
+<div [ngStyle]="{display: loading ? 'flex' : 'none'}" class="spinner">
 <mat-spinner [diameter]="40"></mat-spinner>
-</div> -->
+</div>

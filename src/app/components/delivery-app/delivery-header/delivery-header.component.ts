@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 
 @Component({
   selector: 'app-delivery-header',
@@ -7,11 +7,21 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class DeliveryHeaderComponent implements OnInit {
 
-  @Input() title:string;
-  
+  @Input() title: string;
+  @Input() reloadIcon: string;
+  @Output() reload = new EventEmitter();
+  rotateAnimation: boolean;
   constructor() { }
 
   ngOnInit() {
   }
 
+  reloadPage() {
+    this.reload.emit({ reload: 'true' });
+    this.rotateAnimation = true;
+
+    setTimeout(() => {
+      this.rotateAnimation = false;
+    }, 1000)
+  }
 }
