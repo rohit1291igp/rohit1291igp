@@ -33,7 +33,9 @@ export class DeliveryOrderComponent implements OnInit {
     imagePreviews: any = [];
     loading = true;
     selectProductsForDelivery = [];
-    checked = []
+    checked = [];
+    commonError = false;
+    commomErrorMsg:string;
     constructor(
         private route: ActivatedRoute,
         public BackendService: BackendService,
@@ -80,6 +82,7 @@ export class DeliveryOrderComponent implements OnInit {
 
     fileChange(event) {
         var this$ = this;
+        this$.commonError = false;
         this$.loading = true;
         let fileList: FileList = event.target.files;
         if(fileList.length == 0){
@@ -219,8 +222,18 @@ export class DeliveryOrderComponent implements OnInit {
         }
     }
 
-    markOutForDelivery() {
+    markOutForDelivery() {        
         var this$ = this;
+        if(this$.selectProductsForDelivery.length == 0){
+            this$.commonError = true;
+            this$.commomErrorMsg = 'Please Select Product Image';
+            return;
+        }
+        if(this$.uploadedFiles.length == 0){
+            this$.commonError = true;
+            this$.commomErrorMsg = 'Please Upload Image';
+            return;
+        }
         this$.loading = true;
         let pendingDeliveryOrders = localStorage.getItem('pendingDeliveryOrders') ? JSON.parse(localStorage.getItem('pendingDeliveryOrders')) : [];
 
@@ -326,6 +339,7 @@ export class DeliveryOrderComponent implements OnInit {
     }
 
     selectItemForDelivery(index) {
+        this.commonError = !this.commonError;
         this.selectProductsForDelivery = this.order.flatMap(m => m.orderProducts.flatMap(i => i.orderProductId))
         for (let i = 0, len = this.selectProductsForDelivery.length; i < len; i++) {
             if (!this.checked[i]) {

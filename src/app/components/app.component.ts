@@ -1,5 +1,8 @@
 import { Component, NgZone, OnInit, OnChanges } from '@angular/core';
 import { UtilityService } from '../services/utility.service';
+// import { BarcodeFormat } from '@zxing/library';
+import { BehaviorSubject } from 'rxjs';
+import { MatDialog } from '@angular/material';
 
 @Component({
   selector: 'app-root',
@@ -49,49 +52,109 @@ export class AppComponent implements OnInit, OnChanges{
 @Component({
   selector: 'app-test',
   template:` 
-  <div style="margin-top:120px; font-size:20px;">
-  <div class="photo">
-  <label>
-      <input id="fileInput" type="file" [(ngModel)]="statusReasonModel.deliveredStatusFile" #deliveredStatusFile="ngModel"
-      (change)="fileChange($event)"  accept=".jpeg, .jpg, .png" capture/>
-      Take Photo
-  </label>
-  <div class="clearfix"></div>
-</div>
-<br>
-<br/>
+<h1>testtttt{{qrResultString}}</h1>
 <img [src]="url" height="200"> 
-<input type='file' (change)="onSelectFile($event)" capture>
 <br>
-<input type="file" accept="image/*;capture=camera">
+camera: <!--<input type="file" accept="image/*" capture="camera" (change)="onSelectFile($event)">-->
 <br>
-<input type="file" accept="image/*" capture="environment">
-<br>
-camera: <input type="file" accept="image/*" capture="camera">
-<br>
-<input type="file" accept="image/*" capture="user">
-<input type="file" accept="image/*" capture="environment">
 
+<!-- <zxing-scanner [torch]="torchEnabled" [(device)]="currentDevice" (scanSuccess)="onCodeResult($event)"
+    [formats]="formatsEnabled" [tryHarder]="tryHarder" (permissionResponse)="onHasPermission($event)"
+    (camerasFound)="onCamerasFound($event)" (torchCompatible)="onTorchCompatible($event)"></zxing-scanner>-->
 
-</div>
 `,
 styleUrls: ['./app.component.css']
 })
 export class testComponent{
   statusReasonModel: any = {};
   url = '';
-  onSelectFile(event) {
-    if (event.target.files && event.target.files[0]) {
-      var reader = new FileReader();
+  // allowedFormats = [ BarcodeFormat.QR_CODE, BarcodeFormat.EAN_13, BarcodeFormat.CODE_128, BarcodeFormat.DATA_MATRIX /*, ...*/ ];
+  // availableDevices: MediaDeviceInfo[];
+  // currentDevice: MediaDeviceInfo = null;
 
-      reader.readAsDataURL(event.target.files[0]); // read file as data url
+  // formatsEnabled: BarcodeFormat[] = [
+  //   BarcodeFormat.CODE_128,
+  //   BarcodeFormat.DATA_MATRIX,
+  //   BarcodeFormat.EAN_13,
+  //   BarcodeFormat.QR_CODE,
+  // ];
 
-      reader.onload = (event:any) => { // called once readAsDataURL is completed
-        this.url = event.target.result;
-      }
-    }
+  hasDevices: boolean;
+  hasPermission: boolean;
+
+  qrResultString: string;
+
+  torchEnabled = false;
+  torchAvailable$ = new BehaviorSubject<boolean>(false);
+  tryHarder = false;
+
+  constructor(private readonly _dialog: MatDialog) { }
+
+  clearResult(): void {
+    this.qrResultString = null;
   }
-  fileChange(e){
-    console.log(e)
-  }
+
+  // onCamerasFound(devices: MediaDeviceInfo[]): void {
+  //   this.availableDevices = devices;
+  //   this.hasDevices = Boolean(devices && devices.length);
+  // }
+
+  // onCodeResult(resultString: string) {
+  //   this.qrResultString = resultString;
+  // }
+
+  // onDeviceSelectChange(selected: string) {
+  //   const device = this.availableDevices.find(x => x.deviceId === selected);
+  //   this.currentDevice = device || null;
+  // }
+
+  // openFormatsDialog() {
+  //   const data = {
+  //     formatsEnabled: this.formatsEnabled,
+  //   };
+
+    // this._dialog
+    //   .open(FormatsDialogComponent, { data })
+    //   .afterClosed()
+    //   .subscribe(x => { if (x) { this.formatsEnabled = x; } });
+  // }
+
+  // onHasPermission(has: boolean) {
+  //   this.hasPermission = has;
+  // }
+
+  // openInfoDialog() {
+  //   const data = {
+  //     hasDevices: this.hasDevices,
+  //     hasPermission: this.hasPermission,
+  //   };
+
+  //   // this._dialog.open(AppInfoDialogComponent, { data });
+  // }
+
+  // onTorchCompatible(isCompatible: boolean): void {
+  //   this.torchAvailable$.next(isCompatible || false);
+  // }
+
+  // toggleTorch(): void {
+  //   this.torchEnabled = !this.torchEnabled;
+  // }
+
+  // toggleTryHarder(): void {
+  //   this.tryHarder = !this.tryHarder;
+  // }
+  // onSelectFile(event) {
+  //   if (event.target.files && event.target.files[0]) {
+  //     var reader = new FileReader();
+
+  //     reader.readAsDataURL(event.target.files[0]); // read file as data url
+
+  //     reader.onload = (event:any) => { // called once readAsDataURL is completed
+  //       this.url = event.target.result;
+  //     }
+  //   }
+  // }
+  // fileChange(e){
+  //   console.log(e)
+  // }
 }

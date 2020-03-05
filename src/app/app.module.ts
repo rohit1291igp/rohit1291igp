@@ -61,7 +61,6 @@ import { AutoSelectionComponent } from './components/autoselection/auto-selectio
 export function ConfigLoader(envConfig: envConfig) {
     return () => envConfig.load();
 }*/
-
 @NgModule({
   declarations: [
     AppComponent,

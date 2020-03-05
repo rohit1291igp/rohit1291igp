@@ -2,7 +2,7 @@ import { CdkTableModule } from '@angular/cdk/table';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatButtonModule, MatCardModule, MatCheckboxModule, MatDialogModule, MatFormFieldModule, MatIconModule, MatInputModule, MatMenuModule, MatPaginatorModule, MatProgressBarModule, MatProgressSpinnerModule, MatSnackBarModule, MatSortModule, MatTableModule,MatListModule } from '@angular/material';
+import { MatButtonModule, MatCardModule, MatCheckboxModule, MatDialogModule, MatFormFieldModule, MatIconModule, MatInputModule, MatMenuModule, MatPaginatorModule, MatProgressBarModule, MatProgressSpinnerModule, MatSnackBarModule, MatSortModule, MatTableModule,MatListModule, MatExpansionModule } from '@angular/material';
 import { MyDatePickerModule } from 'mydatepicker';
 import { LoaderComponent } from '../../components/loader/loader.component';
 import { OrdersActionTrayComponent } from '../../components/orders-action-tray/orders-action-tray.component';
@@ -32,7 +32,8 @@ import { ReplacePipe } from '../../customPipes/replace.pipe';
     MatProgressBarModule,
     MatProgressSpinnerModule,
     MatCheckboxModule,
-    MatListModule
+    MatListModule,
+    MatExpansionModule
   ],
   declarations: [
     OrdersActionTrayComponent,
@@ -65,7 +66,8 @@ import { ReplacePipe } from '../../customPipes/replace.pipe';
     WidgetsComponent,
     LoaderComponent,
     PrintTemplateComponent,
-    ReplacePipe
+    ReplacePipe,
+    MatExpansionModule
   ],
 })
 export class SharedModule {
