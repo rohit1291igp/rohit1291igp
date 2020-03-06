@@ -87,11 +87,11 @@ export class MicroSiteDasboardComponent implements OnInit {
         {
             id: "amount",
             value: "Amount"
-        },
-        {
-            id: "balance",
-            value: "Current Balance"
-        }
+        }//,
+        // {
+        //     id: "balance",
+        //     value: "Current Balance"
+        // }
     ];
 
     constructor(
@@ -142,11 +142,11 @@ export class MicroSiteDasboardComponent implements OnInit {
             {
                 id: "amount",
                 value: "Amount"
-            },
-            {
-                id: "balance",
-                value: "Current Balance"
-            }
+            }//,
+            // {
+            //     id: "balance",
+            //     value: "Current Balance"
+            // }
         ];
         switch (type) {
             case 'credit':
