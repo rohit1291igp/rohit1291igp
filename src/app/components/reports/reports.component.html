@@ -609,7 +609,7 @@
                     <thead class="bg-igp text-white" (click)="stopEventPropgation($event)">
                         <tr>
                             <ng-container *ngFor="let tableLabel of reportData.tableHeaders; let a='index';">
-                                    <th class="relative" [ngClass]="{'reportDate' : tableLabel === 'Date', 'hide' : isHiddenCell(tableLabel), 'selectedHeader' : reportLabelState[tableLabel]['filterdd']}" style="width: 100px !important;overflow: auto;max-width: 100px !important">
+                                    <th class="relative" [ngClass]="{'reportDate' : tableLabel === 'Date', 'hide' : isHiddenCell(tableLabel), 'selectedHeader' : reportLabelState[tableLabel]['filterdd']}">
                                         <span>
                                             <span class="capitalize">{{tableLabel | replace : '_'}}</span>
                                             <span class="sortIcons" *ngIf="orginalReportData.tableData.length>0">
