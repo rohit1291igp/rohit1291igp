@@ -211,6 +211,7 @@ export class ReportsComponent implements OnInit{
   isDownload: boolean;
   paginationFlag = 100;
   myForm: FormGroup;
+  procTypeVendor = [];
 
   constructor(
       private _elementRef: ElementRef,
@@ -348,27 +349,37 @@ export class ReportsComponent implements OnInit{
               }
               console.log('_reportData=============>', _reportData);
               /* report label states - start */
-              var reportLabels = _reportData.tableHeaders;
-              var reportLabelsLength = _reportData.tableHeaders.length;
-              for(var i in reportLabels){
-                  _this.reportLabelState[reportLabels[i]] = {
-                      sortIncr : true,
-                      sortdec : true,
-                      filterdd : false,
-                      searchValue : "",
-                      filterBy:"=",
-                      filterValue:"",
-                      colDataType:_reportData.tableData.length ? _this.determineDataType(_reportData.tableData[0][reportLabels[i]]) : ""
-                  };
+              try {
+                _this.reportDataLoader = _reportData;
+                //   if(_reportData.tableData && _reportData.tableData.length > 0){
+                    var reportLabels = _reportData.tableHeaders;
+                    var reportLabelsLength = _reportData.tableHeaders.length;
+                    for(var i in reportLabels){
+                        _this.reportLabelState[reportLabels[i]] = {
+                            sortIncr : true,
+                            sortdec : true,
+                            filterdd : false,
+                            searchValue : "",
+                            filterBy:"=",
+                            filterValue:"",
+                            colDataType:_reportData.tableData.length ? _this.determineDataType(_reportData.tableData[0][reportLabels[i]]) : ""
+                        };
+                    }
+                    console.log('reportLabelState===>', _this.reportLabelState);
+                    /* report label states - end */
+      
+                    _reportData.searchFields = _this.reportDataLoader.searchFields;
+                    _this.reportData = _reportData;
+                    _this.orginalReportData = JSON.parse(JSON.stringify(_this.reportData)); //Object.assign({}, _this.reportData);
+                    _this.showMoreTableData(null);
+                //   }
               }
+              catch(err){
+                console.log(err,'rrrrrrrr')
+              }
+              
 
-              console.log('reportLabelState===>', _this.reportLabelState);
-              /* report label states - end */
-
-              _reportData.searchFields = _this.reportDataLoader.searchFields;
-              _this.reportData = _reportData;
-              _this.orginalReportData = JSON.parse(JSON.stringify(_this.reportData)); //Object.assign({}, _this.reportData);
-              _this.showMoreTableData(null);
+              
           });
           
       });
@@ -466,9 +477,9 @@ getDeliveryBoyList(){
                 }
                 return;
             }
-            console.log("response----->"+response.result.list);
-            _this.listOfComponents = response.result.list;
-            _this.listOfComponents.unshift('All Components');
+            console.log("response----->"+response.result);
+            _this.listOfComponents = response.result;
+            _this.listOfComponents.unshift({Component_Id:'All',Component_Name:'All Components'});
 
           });
     }
@@ -499,7 +510,6 @@ getDeliveryBoyList(){
           });
     }
   }
-  procTypeVendor
   getBarcodeList(){
     var _this = this;
     if(_this.reportType == 'getBarcodeToComponentReport'){
@@ -793,7 +803,8 @@ getDeliveryBoyList(){
             if(formdata){
             let formData = formdata.value;
                 if(formData.componentId == 'All'){
-                    _this.searchResultModel = {}//["Component_Id"] = formData.componentId;
+                    _this.searchResultModel["Component_Id"] = '';
+                    _this.searchResultModel["Proc_Type_Vendor"] = formData.procTypeVendor;
                 }else{
                     _this.searchResultModel["Component_Id"] = formData.componentId;
                     _this.searchResultModel["Proc_Type_Vendor"] = formData.procTypeVendor;
@@ -807,14 +818,16 @@ getDeliveryBoyList(){
                         _this.searchResultModel = {}//["Component_Id"] = formData.componentId;
                     }else{
                        
-                        if(environment.userType === "vendor"){
-                        //     //For Vendor
-                            _this.searchResultModel["Component_Id"] = formData.componentId;
-                        }else{
+                        // if(environment.userType === "vendor"){
+                        // //For Vendor
+                        //     _this.searchResultModel["Component_Id"] = formData.componentId;
+                        // }else{
                             //For Admin
-                            _this.searchResultModel["Component_Code"] = formData.ComponentCode.includes('#') ? formData.ComponentCode.split("#")[0] : formData.ComponentCode;
-                            _this.searchResultModel["Vendor_Id"] = formData.VendorId;
-                        }
+                            _this.searchResultModel["Component_Id"] = formData.componentId;
+                            _this.searchResultModel["Vendor_Id"] = formData.VendorId && formData.VendorId ? formData.VendorId : '';
+                        
+                           
+                        // }
                     }
                 }
                 
@@ -863,6 +876,10 @@ getDeliveryBoyList(){
                     _this.columnFilterSubmit(e);
                     _this.showMoreTableData(e);
                 // }
+            }else{
+                _this.orginalReportData.summary = [];
+                _this.orginalReportData.tableData = []; //
+                _this.reportData.tableData = []
             }
             
         });
@@ -1963,19 +1980,26 @@ getDeliveryBoyList(){
         });
     }
 
-    openStockItemForm(rowData): void {
+    openStockItemForm(rowData, index): void {
+        let ele = event as any;
+        let row = rowData;
         const dialogRef = this.dialog.open(OrderStockComponent, {
           width: '500px',
           data: rowData
         });
     
         dialogRef.afterClosed().subscribe(result => {
+            if(result){
+                if(this.reportType == 'getVendorReport' && environment.userType == 'vendor' && !result.error && result.result){
+                    this.reportData.tableData[index].Component_Delivery_Status = 'Processing';
+                    ele.target.style.display = 'none'; 
+                }
+            }
           console.log('The dialog was closed');
         });
       }
     
     selectComponent(e){
-        console.log(e);
         if(this.myForm){
             if(typeof e == 'string'){
                 this.myForm.controls['ComponentCode'].setValue(e);

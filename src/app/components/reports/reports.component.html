@@ -369,7 +369,7 @@
 
         <div class="col-sm-12 col-md-12 table-cont m-top-2 table-fixed">
             <!-- {{reportDataLoader  | json}} -->
-            <table *ngIf="reportDataLoader.tableData else noRecord" class="report-table table table-striped table-bordered table-curved table-fixed">
+            <table *ngIf="reportDataLoader.tableData && reportDataLoader.tableData.length > 0 else noRecord" class="report-table table table-striped table-bordered table-curved table-fixed">
                 <thead class="bg-igp text-white">
                 <tr>
                     <th *ngFor="let tableLabel of reportDataLoader.tableHeaders">
@@ -503,8 +503,8 @@
                     <button class="remove-filter-btn" (click)="ngOnInit()">Remove Filter</button> 
                 <div *ngIf="reportType == 'getVendorReport' || reportType == 'getPincodeReport' || reportType == 'getVendorDetails'" class="underLine paddingHalf text-bold">Search Vendor</div>
                 <div *ngIf="reportType === 'getComponentReport'" class="underLine paddingHalf text-bold">Search Component</div>
-                <div *ngIf="reportType === 'getComponentOrderReport' || environment.userType == 'vendor'" class="underLine paddingHalf text-bold">Search Component                    
-                </div>
+                <!-- <div *ngIf="reportType === 'getComponentOrderReport' || environment.userType == 'vendor'" class="underLine paddingHalf text-bold">Search Component                    
+                </div> -->
                 <div *ngIf="reportType === 'getBarcodeToComponentReport'" class="underLine paddingHalf text-bold">Search Barcode</div>
                 <div *ngIf="reportType != 'getComponentOrderReport'" class="btn btn-primary addActionBtn" (click)="addActionInit($event)">
                     Add
@@ -535,7 +535,7 @@
                             </ng-container>
                             <div style="display: flex">
                             <ng-container *ngIf="environment.userType == 'admin' && reportType == 'getComponentOrderReport' && listOfComponents.length > 0">
-                                    <app-auto-selection style="width: 100%;margin-right:5px" [listOfComponents]="listOfComponents" placeholder="Component Name" type='list' relationName="getComponentOrderReport" (selectionObject)="selectComponent($event)"></app-auto-selection>
+                                    <app-auto-selection style="width: 100%;margin-right:5px" [listOfComponents]="listOfComponents" placeholder="Component Name" type='object' relationName="getComponentOrderReport" displayName='Component_Name' (selectionObject)="selectComponent($event)"></app-auto-selection>
                             </ng-container>
 
                             <ng-container *ngIf="reportType == 'getComponentOrderReport' && vendorList.length > 0">
@@ -696,8 +696,8 @@
                             <ng-container *ngIf="dataIndex < 200">
                                     <td class="reportTableCell" style="word-break: break-word;" *ngFor="let tableCol of reportData.tableHeaders; let i='index'" [ngClass]="{'hide' : isHiddenCell(tableCol)}" [style.width]="tableCol === 'email'? 'auto' : 'auto' ">
                                             <div class="tdTxt">
-                                                <span *ngIf="(environment.userType && environment.userType === 'vendor') && tableCol == 'Stock_Quantity' && getCellValue(tableRowValue['Proc_Type_Vendor']) == 'Stocked' && reportType == 'getVendorReport'" style="display: table;margin: 0 auto;">
-                                                    <div class="reportDwld pull-right btn btn-primary" (click)="openStockItemForm(tableRowValue)" [ngClass]="{'disableBtn' : !reportData.tableData.length}">
+                                                <span *ngIf="(environment.userType && environment.userType === 'vendor') && tableCol == 'Stock_Quantity' && getCellValue(tableRowValue['Proc_Type_Vendor']) == 'Stocked' && reportType == 'getVendorReport' && getCellValue(tableRowValue['Component_Delivery_Status']) != 'Processing'" style="display: table;margin: 0 auto;">
+                                                    <div class="reportDwld pull-right btn btn-primary" (click)="openStockItemForm(tableRowValue, dataIndex)" [ngClass]="{'disableBtn' : !reportData.tableData.length}">
                                                             Order <span class="glyphicon glyphicon-plus" title="Order Component"></span>
                                                             </div>
                                                 </span>

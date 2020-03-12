@@ -49,6 +49,10 @@ export class AutoSelectionComponent implements OnInit {
     }
 
     filterValues(inputValue) {
+        if(inputValue.trim() == ''){
+            this.tempListOfStockItems = this.listOfComponents;
+            return true;
+        }
         if (this.type == 'object') {
             this.tempListOfStockItems = this.listOfComponents.filter(r => r[this.displayName].toLowerCase().includes(inputValue.toLowerCase()));
         }
@@ -77,8 +81,16 @@ export class AutoSelectionComponent implements OnInit {
                 document.getElementById(this.relationName).setAttribute('style', 'display:flex !important');
             }
         } else {
+            
             if (document.getElementById(this.relationName)) {
                 setTimeout(() => {
+                    if(!this.componentName){
+                        if(this.type == 'object'){
+                            this.selectionObject.emit({null:''});
+                        }else{
+                            this.selectionObject.emit('');
+                        }
+                    }
                     document.getElementById(this.relationName).setAttribute('style', 'display:none !important');
                 }, 200)
             }
@@ -86,7 +98,11 @@ export class AutoSelectionComponent implements OnInit {
     }
 
     selectComponent(item) {
+        event.preventDefault();
+        event.stopPropagation();
+     
         this.selectionObject.emit(item);
+
         if (this.type == 'object') {
             this.componentName = item[this.displayName];
         }
