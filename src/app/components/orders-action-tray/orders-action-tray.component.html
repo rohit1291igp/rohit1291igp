@@ -1033,10 +1033,29 @@
         <div class="col-md-4 order-actions no-padding" *ngIf="isMobile">
             <ng-container *ngIf="!isAdmin">
                 <div class="row">
+
+                    <div *ngIf="!isAdmin && deliveryBoyEnabled && getNxtOrderStatus(order.orderProducts[0].ordersProductStatus) === 'OutForDelivery'" class="row order-actions-cont agent-action-btn" style="margin: 0 auto;">
+                        <button mat-button mat-raised-button mat-success [matMenuTriggerFor]="menu" style="flex: 1;height: 37px;">
+                            <span *ngIf="!order.orderProducts[0].fkUserId">Assign to Agent</span>
+                            <span *ngIf="order.orderProducts[0].fkUserId"><i class="fa fa-edit"></i> {{order.orderProducts[0].deliveryBoyName}}</span>
+                        </button>
+
+                        <mat-menu #menu="matMenu">
+                            <ng-container *ngFor="let x of deliveryBoyList" >
+                                <button mat-menu-item *ngIf="order.orderProducts[0].fkUserId !== x.fkUserId && x.Status" (click)="assignToDeliveryBoy(x, order)">
+                                    {{x.Full_Name}}
+                                </button>
+                            </ng-container>      
+                        </mat-menu>
+
+                        <button style="flex: 1;height: 37px;" mat-button mat-raised-button (click)="openNewDeliveryBoyDialog()">Add Agent</button>
+                    </div> 
+                        
                     <div class="btn  actions-button uppercase text-bold bg-white text-red" style="width:100%; box-shadow: 0 1px 3px #888888;" [ngClass]="{'disableBtn' : order.orderProducts[0].ordersProductStatus !=='Processed', 'hide' : order.orderProducts[0].ordersProductStatus !=='Processed'}" (click)="updateOrderStatus($event, orderIndex, 'Rejected', order.orderId, order.orderProducts, order.orderProducts[0].orderProductExtraInfo.deliveryDate, order.orderProducts[0].orderProductExtraInfo.deliveryTime)">
                      Reject
                     </div>
-                    <button style="width:100%;" class="btn btn-primary actions-button uppercase text-bold text-white bg-green"
+                    
+                    <button *ngIf="deliveryBoyEnabled && getNxtOrderStatus(order.orderProducts[0].ordersProductStatus) !== 'OutForDelivery'"  style="width:100%;" class="btn btn-primary actions-button uppercase text-bold text-white bg-green"
                     [ngClass]="{'disableBtn' : (order.orderProducts[0].ordersProductStatus =='Shipped' && order.orderProducts[0].deliveryStatus === 1) ||
                     (order.orderProducts[0].ordersProductStatus =='Dispatched' && order.orderProducts[0].deliveryStatus === 1) ||
                     (order.orderProducts[0].ordersProductStatus =='Confirmed' && order.deliverWhen !== 'today' && order.deliverWhen !== 'past' && order.deliverWhen !== 'tomorrow' && order.deliverWhen !== 'future')}"
