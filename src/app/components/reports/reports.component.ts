@@ -351,7 +351,7 @@ export class ReportsComponent implements OnInit{
               console.log('_reportData=============>', _reportData);
               /* report label states - start */
               try {
-                _this.reportDataLoader = _reportData;
+                // _this.reportDataLoader = _reportData;
                 //   if(_reportData.tableData && _reportData.tableData.length > 0){
                     var reportLabels = _reportData.tableHeaders;
                     var reportLabelsLength = _reportData.tableHeaders.length;
