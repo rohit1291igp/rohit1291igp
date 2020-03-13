@@ -102,7 +102,7 @@ export class MainHeaderComponent implements OnInit {
       var _this = this;
       var currentRoute = window.location.href.split('#')[1];
 
-      if(currentRoute === "/dashboard"){
+      if(currentRoute === "/dashboard" || currentRoute === "/dashboard-microsite"){
           _this.selectedTopTab = "dashboard";
           _this.selectedReportTab="";
           _this.reportDropdownOpen=false;
