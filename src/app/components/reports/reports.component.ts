@@ -1,7 +1,7 @@
 import { animate, Component, ElementRef, HostListener, Inject, OnInit, sequence, style, transition, trigger, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { Headers, RequestOptions } from "@angular/http";
-import { MatDialog, MatDialogRef, MatSnackBar, MAT_DIALOG_DATA } from '@angular/material';
+import { MatDialog, MatDialogRef, MatSnackBar, MAT_DIALOG_DATA, MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
 import { ActivatedRoute } from '@angular/router';
 import { Angular5Csv } from 'angular5-csv/dist/Angular5-csv';
 import { IMyOptions } from 'mydatepicker';
@@ -213,7 +213,12 @@ export class ReportsComponent implements OnInit{
   myForm: FormGroup;
   procTypeVendor = [];
   dataSource: any;
-
+  displayedColumns = [];
+  columnNames = [];
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
+  toppings = new FormControl();
+  toppingList: string[] = ['Extra cheese', 'Mushroom', 'Onion', 'Pepperoni', 'Sausage', 'Tomato'];
   constructor(
       private _elementRef: ElementRef,
       public reportsService: ReportsService,
@@ -759,6 +764,8 @@ getDeliveryBoyList(){
         var _this=this;
         _this.BackendService.abortLastHttpCall();//abort  other  api calls
         console.log('Search report form submitted ---->', _this.searchResultModel);
+        _this.dataSource = new MatTableDataSource();
+        _this.columnNames = [];
         if(_this.reportType == "getComponentReport"){
             if($('.componentDD').val() == "Select Component Code"){
                 alert("Please select component code");
@@ -868,6 +875,9 @@ getDeliveryBoyList(){
             }
             console.log('searchReportSubmit _reportData=============>', _reportData);
             if(_reportData.tableData){
+                _this.dataSource = new MatTableDataSource(_reportData.tableData);
+                _this.dataSource.paginator = _this.paginator;
+                _this.dataSource.sort = _this.sort;
                 _reportData.searchFields = _this.reportData.searchFields;
                 //_this.reportData = _reportData;
                 /* need to handle filter - start */
@@ -945,6 +955,9 @@ getDeliveryBoyList(){
                         /* need to handle filter - start */
                         _this.orginalReportData.summary = _reportData.summary;
                         _this.orginalReportData.tableData = _this.orginalReportData.tableData.concat(_reportData.tableData);
+                        _this.dataSource = new MatTableDataSource(_this.orginalReportData.tableData);
+                        _this.dataSource.paginator = _this.paginator;
+                        _this.dataSource.sort = _this.sort;
                         _this.columnFilterSubmit(e);
                         _this.showMoreTableData(e);
                     });
@@ -984,7 +997,11 @@ getDeliveryBoyList(){
 
     viewOrderDetail(e, orderId){
         console.log('viewOrderDetail-------->', orderId);
-        this.child.toggleTray(e, "", orderId, null);
+        if(e.event){
+            this.child.toggleTray(e.event, "", e.orderId, null);
+        }else{
+            this.child.toggleTray(e, "", orderId, null);
+        }
     }
 
     dwldInv(e, orderId_, invNo){

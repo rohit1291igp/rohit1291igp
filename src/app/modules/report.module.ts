@@ -7,6 +7,7 @@ import { VendorDropdownComponent } from 'app/components/vendor-dropdown/vendor-d
 import { SharedModule } from 'app/shared-module/shared/shared.module';
 import { MyDatePickerModule } from 'mydatepicker';
 import { AutoSelectionComponent } from 'app/components/autoselection/auto-selection.component';
+import { NewReportsComponent } from 'app/components/new-reports-component/new-reports.component';
 
 const routes: Routes = [
   {
@@ -26,6 +27,7 @@ const routes: Routes = [
   ],
   declarations: [
     ReportsComponent,
+    NewReportsComponent,
     VendorDropdownComponent,
     AutoSelectionComponent
   ]

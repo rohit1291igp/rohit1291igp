@@ -605,7 +605,7 @@
                 <div  class="reportDwld pull-right btn btn-primary" (click)="bulkAssignAction()" *ngIf="(environment.userType && environment.userType === 'admin') && (reportType === 'getOrderReport')" [ngClass]="{'disableBtn' : !reportData.tableData.length}">
                   Bulk Assign <span class="glyphicon glyphicon-check" title="Bulk Assign"></span>
                 </div>
-                <table class="report-table table table-striped table-bordered table-curved fixed-headerx">
+                <table style="display: none;" class="report-table table table-striped table-bordered table-curved fixed-headerx">
                     <thead class="bg-igp text-white" (click)="stopEventPropgation($event)">
                         <tr>
                             <ng-container *ngFor="let tableLabel of reportData.tableHeaders; let a='index';">
@@ -834,7 +834,7 @@
                   </mat-form-field>
         </mat-card>
     
-        <div class="mat-elevation-z8" *ngIf="displayedColumns.length > 0">
+        <div style="display: none;"  class="mat-elevation-z8" *ngIf="displayedColumns.length > 0">
             <div class="example-container mat-elevation-z8">
                 <mat-table #table mat-table [dataSource]="dataSource" matSort>
                     <ng-container [matColumnDef]="col" *ngFor="let col of displayedColumns">
@@ -873,4 +873,7 @@
     </div>
     
     <!-- New Table Ends -->
+
+    <app-new-reports  [displayedColumns]="displayedColumns" [dataSource]="dataSource" [orginalReportData]="orginalReportData" (viewOrder)="viewOrderDetail($event)"></app-new-reports>
+    
 <app-orders-action-tray></app-orders-action-tray>
