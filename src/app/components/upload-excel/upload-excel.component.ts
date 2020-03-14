@@ -28,6 +28,7 @@ export class UploadExcelComponent implements OnInit {
         },
         vendorlist:[
             {user:"Select Vendor", value:""},
+            {user:"Rewardz Cards", value:"RC"},
             {user:"Rewardz", value:"RL"},
             {user:"Rediff", value:"Rediff"},
             {user:"Talash", value:"TL"},
