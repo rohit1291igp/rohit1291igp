@@ -1620,27 +1620,32 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
         const fkAssociateId = localStorage.getItem('fkAssociateId');
         const orderId = orderData.orderId;
         var orderProductMap = {};
-        orderProductMap[orderId] = orderData.orderProducts[0].productId ;
-        const reqObj = {
-            url: `assignReassignOrderDeliveryBoy`,
-            method: "post",
-            payload: {
-                fkAssociateId: fkAssociateId,
-                fkUserId: data.fkUserId,
-                orderProductMap: orderProductMap,
-                action: "assign"
-            }
-        };
-        _this.BackendService.makeAjax(reqObj, function (err, response, headers) {
-            //if(!response) response={result:[]};
-            if (err || response.error) {
-                console.log('Error=============>', err);
-                return;
-            }
-            if (response) {
-                console.log(response);
-            }
-        });
+        for(let i = 0; i < orderData.orderProducts.length; i++){
+            orderProductMap[orderId] = orderData.orderProducts[i].productId ;
+
+            const reqObj = {
+                url: `assignReassignOrderDeliveryBoy`,
+                method: "post",
+                payload: {
+                    fkAssociateId: fkAssociateId,
+                    fkUserId: data.fkUserId,
+                    orderProductMap: orderProductMap,
+                    action: "assign"
+                }
+            };
+
+            _this.BackendService.makeAjax(reqObj, function (err, response, headers) {
+                //if(!response) response={result:[]};
+                if (err || response.error) {
+                    console.log('Error=============>', err);
+                    return;
+                }
+                if (response) {
+                    console.log(response);
+                }
+            });
+        }
+        
     }
 
     openNewDeliveryBoyDialog(): void {
