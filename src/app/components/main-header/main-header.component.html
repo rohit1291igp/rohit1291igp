@@ -19,15 +19,19 @@
         <ng-container *ngIf="(environment.userType !== 'root' && environment.userType !== 'blogger')">
             
             <li  *ngIf="environment.userType != 'microsite'" class="fullHeightLi" [ngClass]="{'selected' : selectedTopTab === 'dashboard'}">
-              <p><a ng-href="#/dashboard" routerLink="/dashboard">Dashboard</a></p>
+                <p><a ng-href="#/dashboard" routerLink="/dashboard">Dashboard</a></p>
+            </li>
+            <li  *ngIf="environment.userType == 'microsite'" class="fullHeightLi" [ngClass]="{'selected' : selectedTopTab === 'dashboard'}">
+                <p><a ng-href="#/dashboard-microsite" routerLink="/dashboard-microsite">Dashboard</a></p>
             </li>
             <!-- <li *ngIf="environment.userType === 'vendor'" class="fullHeightLi" [ngClass]="{'selected' : selectedTopTab === 'adddeliveryboy'}">
                 <p (click)="selectedTopTab = 'adddeliveryboy'"><a ng-href="#/adddeliveryboy" routerLink="/add-delivery-boy">Add Delivery Boy</a></p>
             </li> -->
-            <li *ngIf="environment.userType != 'microsite'" class="fullHeightLi relative" [ngClass]="{'selected' : selectedTopTab === 'reports'}" (click)="openReportDropdown($event)">
+            <li class="fullHeightLi relative" [ngClass]="{'selected' : selectedTopTab === 'reports'}" (click)="openReportDropdown($event)">
                <p>Reports</p>
                 <div class="reportDropdown abs" [ngClass]="{'slideropen' : reportDropdownOpen, 'sliderclosed': !reportDropdownOpen}">
                     <ul class="reportsdropdownMenu no-padding">
+                        <ng-container *ngIf="(environment.userType != 'microsite')">
                         <a routerLink="/reports/getOrderReport"><li [ngClass]="{'selected' : selectedReportTab === 'getOrderReport'}">Order Report</li></a>
                         <a routerLink="/reports/getVendorReport"><li [ngClass]="{'selected' : selectedReportTab === 'getVendorReport'}">Product Report</li></a>
                         <a routerLink="/reports/getPincodeReport"><li [ngClass]="{'selected' : selectedReportTab === 'getPincodeReport'}">Pincode Report</li></a>
@@ -35,6 +39,8 @@
                         <a *ngIf="environment.userType != 'vendor'" class="" routerLink="/reports/getPayoutAndTaxesReport"><li [ngClass]="{'selected' : selectedReportTab === 'getPayoutAndTaxesReport'}">Payout & Taxes</li></a>
                         <a *ngIf="environment.userType === 'vendor'" class="" routerLink="/reports/getOrderFileUploadReport"><li [ngClass]="{'selected' : selectedReportTab === 'getOrderFileUploadReport'}">Uploaded Image</li></a>
                         <a *ngIf="environment.userType === 'admin' || environment.userType === 'vendor'" class="" routerLink="/reports/getComponentOrderReport"><li [ngClass]="{'selected' : selectedReportTab === 'getComponentOrderReport'}">Stock Component Report</li></a>
+                        </ng-container>
+                        <a *ngIf="(environment.userType == 'microsite')" class="" routerLink="/reports/itcReport" ><li [ngClass]="{'selected' : selectedReportTab === 'report'}">Current Balances</li></a>
                         <ng-container *ngIf="(environment.userType === 'admin')">
                             <a class="" routerLink="/reports/getVendorDetails" ><li [ngClass]="{'selected' : selectedReportTab === 'getVendorDetails'}">Vendor Details</li></a>
                             <a class="" routerLink="/reports/getSlaReport" ><li [ngClass]="{'selected' : selectedReportTab === 'getSlaReport'}">SLA Report</li></a>

@@ -336,6 +336,9 @@ export class ReportsComponent implements OnInit{
             if(_this.reportType === 'getVendorReport'){
                 _this.getStockComponent();                
             }
+            if(_this.reportType === 'itcReport'){
+                _this.reportType = 'itc/report'
+          }
           /* set default vendor - start */
           if(_this.defaultVendor && ( _this.reportType === 'getVendorReport' || _this.reportType === 'getComponentReport' || _this.reportType === 'getPincodeReport') && (_this.environment.userType && _this.environment.userType === 'admin')){
               _this.searchResultModel["fkAssociateId"]=_this.defaultVendor;
