@@ -281,8 +281,7 @@ export class MicroSiteDasboardComponent implements OnInit {
                                 "uploadDate": f.uploadDate,
                                 "amount": f.amount,
                                 "type": f.type,
-                                "couponUsedDate": f.couponUsedDate,
-                                "balance": f.balance
+                                "couponUsedDate": f.couponUsedDate
                             }
                             return userData.push(a);
                         }else{
