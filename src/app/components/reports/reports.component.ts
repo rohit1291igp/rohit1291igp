@@ -212,13 +212,15 @@ export class ReportsComponent implements OnInit{
   paginationFlag = 100;
   myForm: FormGroup;
   procTypeVendor = [];
-  dataSource: any;
+  dataSource = [];
+  tableHeaders = [];
   displayedColumns = [];
   columnNames = [];
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   toppings = new FormControl();
   toppingList: string[] = ['Extra cheese', 'Mushroom', 'Onion', 'Pepperoni', 'Sausage', 'Tomato'];
+  testArray = [{"ComponentCode":"testteddy","StockQuantity":11,"ComponentDeliveryStatus":"Rejected","AwbNo":"","ComponentId":1440,"CourierName":"","OrderComponentId":1,"VendorId":843,"ComponentName":"test teddy","ComponentImage":"Teddy (1).docx","VendorName":"Test","ComponentCostVendor":200.000,"OrderTime":"2020-02-27 17:53:42.0"},{"ComponentCode":"Cakeboxtest","StockQuantity":10,"ComponentDeliveryStatus":"Rejected","AwbNo":"","ComponentId":1441,"CourierName":"","OrderComponentId":15,"VendorId":843,"ComponentName":"Cake box test","ComponentImage":"Boxes (1).xlsx","VendorName":"Test","ComponentCostVendor":200.000,"OrderTime":"2020-02-27 17:53:42.0"}];
   constructor(
       private _elementRef: ElementRef,
       public reportsService: ReportsService,
@@ -376,7 +378,8 @@ export class ReportsComponent implements OnInit{
                     }
                     console.log('reportLabelState===>', _this.reportLabelState);
                     /* report label states - end */
-      
+                    _this.dataSource = _reportData.tableData ? _reportData.tableData : [];
+                    _this.tableHeaders = _reportData.tableHeaders ? _reportData.tableHeaders : [];
                     _reportData.searchFields = _this.reportDataLoader.searchFields;
                     _this.reportData = _reportData;
                     _this.orginalReportData = JSON.parse(JSON.stringify(_this.reportData)); //Object.assign({}, _this.reportData);
@@ -767,7 +770,7 @@ getDeliveryBoyList(){
         var _this=this;
         _this.BackendService.abortLastHttpCall();//abort  other  api calls
         console.log('Search report form submitted ---->', _this.searchResultModel);
-        _this.dataSource = new MatTableDataSource();
+        // _this.dataSource = new MatTableDataSource();
         _this.columnNames = [];
         if(_this.reportType == "getComponentReport"){
             if($('.componentDD').val() == "Select Component Code"){
@@ -878,14 +881,17 @@ getDeliveryBoyList(){
             }
             console.log('searchReportSubmit _reportData=============>', _reportData);
             if(_reportData.tableData){
-                _this.dataSource = new MatTableDataSource(_reportData.tableData);
-                _this.dataSource.paginator = _this.paginator;
-                _this.dataSource.sort = _this.sort;
+                // _this.dataSource = new MatTableDataSource(_reportData.tableData);
+                // _this.dataSource.paginator = _this.paginator;
+                // _this.dataSource.sort = _this.sort;
                 _reportData.searchFields = _this.reportData.searchFields;
                 //_this.reportData = _reportData;
                 /* need to handle filter - start */
                 _this.orginalReportData.summary = _reportData.summary;
-                _this.orginalReportData.tableData = _reportData.tableData; //_this.orginalReportData.tableData.concat(_reportData.tableData);
+                _this.orginalReportData.tableData = _reportData.tableData; //
+                _this.dataSource = _reportData.tableData ? _reportData.tableData : [];
+                _this.tableHeaders = _reportData.tableHeaders ? _reportData.tableHeaders : [];
+                _this.orginalReportData.tableData.concat(_reportData.tableData);
                 // if(e){
                     _this.columnFilterSubmit(e);
                     _this.showMoreTableData(e);
@@ -958,9 +964,11 @@ getDeliveryBoyList(){
                         /* need to handle filter - start */
                         _this.orginalReportData.summary = _reportData.summary;
                         _this.orginalReportData.tableData = _this.orginalReportData.tableData.concat(_reportData.tableData);
-                        _this.dataSource = new MatTableDataSource(_this.orginalReportData.tableData);
-                        _this.dataSource.paginator = _this.paginator;
-                        _this.dataSource.sort = _this.sort;
+                        _this.dataSource = _reportData.tableData ? _this.dataSource.concat(_reportData.tableData) : [];
+
+                        // _this.dataSource = new MatTableDataSource(_this.orginalReportData.tableData);
+                        // _this.dataSource.paginator = _this.paginator;
+                        // _this.dataSource.sort = _this.sort;
                         _this.columnFilterSubmit(e);
                         _this.showMoreTableData(e);
                     });
@@ -2035,9 +2043,9 @@ getDeliveryBoyList(){
     }
     applyFilter(filterValue: any) {
         this.dataSource.filter = filterValue.target.value.trim().toLowerCase();
-        if (this.dataSource.paginator) {
-            this.dataSource.paginator.firstPage();
-        }
+        // if (this.dataSource.paginator) {
+        //     this.dataSource.paginator.firstPage();
+        // }
     }
 
     getHeaderCellValue(headerData: any) {
@@ -2098,6 +2106,10 @@ getDeliveryBoyList(){
             console.log('The dialog was closed');
         });
 
+    }
+
+    newFormSubmit(event){
+        console.log(event)
     }
 
 }

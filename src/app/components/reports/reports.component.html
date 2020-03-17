@@ -820,7 +820,7 @@
 </div>
 <!-- New Table-->
 <div class="main-container">
-        <mat-card>
+        <!-- <mat-card>
             <mat-form-field>
                 <mat-label>Filter</mat-label>
                 <input matInput (keyup)="applyFilter($event)" placeholder="Search" autocomplete="off">
@@ -832,7 +832,7 @@
                       <mat-option *ngFor="let topping of toppingList" [value]="topping">{{topping}}</mat-option>
                     </mat-select>
                   </mat-form-field>
-        </mat-card>
+        </mat-card> -->
     
         <div style="display: none;"  class="mat-elevation-z8" *ngIf="displayedColumns.length > 0">
             <div class="example-container mat-elevation-z8">
@@ -873,7 +873,9 @@
     </div>
     
     <!-- New Table Ends -->
-
-    <app-new-reports  [displayedColumns]="displayedColumns" [dataSource]="dataSource" [orginalReportData]="orginalReportData" (viewOrder)="viewOrderDetail($event)"></app-new-reports>
+    <ng-container *ngIf="orginalReportData && orginalReportData?.tableData.length > 0">
+            <app-new-reports  [displayedColumns]="displayedColumns" [reportsHeader]="tableHeaders" [orginalReportData]="dataSource" [tableDataAction]="orginalReportData.tableDataAction"(viewOrder)="viewOrderDetail($event)" [SearchForm]="{'show':true, 'formFields':{'multipleSelection':true, 'dateRange':true}}" (submitForm)="newFormSubmit($event)"></app-new-reports>
+    </ng-container>
+    
     
 <app-orders-action-tray></app-orders-action-tray>

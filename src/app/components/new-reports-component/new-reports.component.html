@@ -1,55 +1,87 @@
 <!-- New Table-->
 <div class="main-container">
-        <!-- <mat-card>
-            <mat-form-field>
-                <mat-label>Filter</mat-label>
-                <input matInput (keyup)="applyFilter($event)" placeholder="Search" autocomplete="off">
-            </mat-form-field>
-    
-            <mat-form-field>
-                    <mat-label>Toppings</mat-label>
-                    <mat-select [formControl]="toppings" multiple>
-                      <mat-option *ngFor="let topping of toppingList" [value]="topping">{{topping}}</mat-option>
-                    </mat-select>
-                  </mat-form-field>
-        </mat-card> -->
-    
-        <div class="mat-elevation-z8" *ngIf="displayedColumns.length > 0">
-            <div class="example-container mat-elevation-z8">
-                <mat-table #table mat-table [dataSource]="dataSource" matSort>
-                    <ng-container [matColumnDef]="col" *ngFor="let col of displayedColumns">
-                        <mat-header-cell class="mat-header-row" *matHeaderCellDef> {{ getHeaderCellValue(col) }}
-                        </mat-header-cell>
-                        <mat-cell *matCellDef="let element; let i = index">
-                            <ng-container
-                                *ngIf="getRowCellValue(element[col]) != 'img' && getRowCellValue(element[col]) != 'menu'">
-                                {{ getRowCellValue(element[col]) }} <i *ngIf="getEditTableCell(col)" class="fa fa-edit" style="cursor: pointer;" (click)="openEditWindow(element, col, i)"></i>
-                            </ng-container>
-                            <ng-container *ngIf="getRowCellValue(element[col]) == 'img'"><img
-                                    src="{{componentImageUrl+element[col]}}" width="50" height="50">
-                            </ng-container>
-                            <ng-container *ngIf="getRowCellValue(element[col]) == 'menu'">
-                                <button mat-button [matMenuTriggerFor]="menu"><i class="fa fa-caret-down"
-                                        aria-hidden="true"></i>Vendor List</button>
-                                <mat-menu #menu="matMenu">
-                                    <button mat-menu-item *ngFor="let x of element[col]">{{x.Vendor_Name}}</button>
-                                </mat-menu>
-                            </ng-container>
-                            <ng-container *ngIf="col === 'Order_No'">
-                                <img (click)="viewOrderDetail($event, element[col])" width="20"
-                                    style="cursor: pointer;float:left;" src="assets/images/icons/view.svg" alt="inr">
-                            </ng-container>
-    
-                        </mat-cell>
-                    </ng-container>
-                    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-                    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-                </mat-table>
+    <mat-card>
+        <form [formGroup]="myForm" (ngSubmit)="onSubmit(myForm)">
+            <div class="form-container">
+                <div class="d-flex">
+                    <mat-form-field class="m-8">
+                        <input matInput [matDatepicker]="picker" placeholder="From"
+                            (dateInput)="addEventFrom('input', $event)" (dateChange)="addEventFrom('change', $event)"
+                            autocomplete="off">
+                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                    </mat-form-field>
+
+                    <mat-form-field class="m-8">
+                        <input matInput [matDatepicker]="pickers" placeholder="To"
+                            (dateInput)="addEventTo('input', $event)" (dateChange)="addEventTo('change', $event)"
+                            autocomplete="off">
+                        <mat-datepicker-toggle matSuffix [for]="pickers"></mat-datepicker-toggle>
+                        <mat-datepicker #pickers></mat-datepicker>
+                    </mat-form-field>
+
+                    <mat-form-field class="m-8">
+                        <mat-label>Filter</mat-label>
+                        <input formControlName="filter" matInput  (keyup)="applyFilter($event)">
+                    </mat-form-field>
+
+                    <mat-form-field class="m-8">
+                        <mat-label>Toppings</mat-label>
+                        <mat-select formControlName="toppings" multiple>
+                            <mat-option *ngFor="let topping of toppingList" [value]="topping">{{topping}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="d-flex">
+                        <button style="margin: 5px;" id="search" type="submit" mat-raised-button
+                        class="btn-color">Search</button>
+                        <button style="margin: 5px;" id="download" type="submit" mat-raised-button
+                        class="btn-color">Download</button>  
+                    </div>
+
             </div>
-            <!-- </mat-card> -->
-    
-            <mat-paginator [pageSizeOptions]="[50, 100, 250, 500]"></mat-paginator>
+        </form>
+
+    </mat-card>
+
+    <div class="mat-elevation-z8" *ngIf="displayedColumns.length > 0">
+        <div class="example-container mat-elevation-z8">
+            <mat-table #table mat-table [dataSource]="dataSource" matSort (matSortChange)="test($event)">
+                <ng-container matColumnDef="{{col.id}}" *ngFor="let col of columnNames">
+                    <mat-header-cell class="mat-header-row" *matHeaderCellDef> {{ getHeaderCellValue(col.value) }}
+                    </mat-header-cell>
+                    <mat-cell *matCellDef="let element; let i = index">
+                        <ng-container
+                            *ngIf="getRowCellValue(element[col.id]) != 'img' && getRowCellValue(element[col.id]) != 'menu'">
+                            {{ getRowCellValue(element[col.id]) }} <i *ngIf="getEditTableCell(col.id)"
+                                class="fa fa-edit" style="cursor: pointer;"
+                                (click)="openEditWindow(element, col.id, i)"></i>
+                        </ng-container>
+                        <ng-container *ngIf="getRowCellValue(element[col.id]) == 'img'"><img
+                                src="{{componentImageUrl+element[col.id]}}" width="50" height="50">
+                        </ng-container>
+                        <ng-container *ngIf="getRowCellValue(element[col.id]) == 'menu'">
+                            <button mat-button [matMenuTriggerFor]="menu"><i class="fa fa-caret-down"
+                                    aria-hidden="true"></i>Vendor List</button>
+                            <mat-menu #menu="matMenu">
+                                <button mat-menu-item *ngFor="let x of element[col.id]">{{x.Vendor_Name}}</button>
+                            </mat-menu>
+                        </ng-container>
+                        <ng-container *ngIf="col.id === 'Order_No'">
+                            <img (click)="viewOrderDetail($event, element[col.id])" width="20"
+                                style="cursor: pointer;float:left;" src="assets/images/icons/view.svg" alt="inr">
+                        </ng-container>
+
+                    </mat-cell>
+                </ng-container>
+                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+            </mat-table>
         </div>
+        <!-- </mat-card> -->
+
+        <mat-paginator [pageSizeOptions]="[50, 100, 250, 500]"></mat-paginator>
     </div>
-    
-    <!-- New Table Ends -->
+</div>
+
+<!-- New Table Ends -->

@@ -1,30 +1,104 @@
-import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
-import { MatDialog, MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ChangeDetectionStrategy, SimpleChanges, IterableDiffers, DoCheck, AfterViewChecked, AfterViewInit } from '@angular/core';
+import { FormControl, FormGroup, FormBuilder } from '@angular/forms';
+import { MatDialog, MatPaginator, MatSort, MatTableDataSource, MatDatepickerInputEvent } from '@angular/material';
 import { editComponent } from '../reports/reports.component';
+import { DatePipe } from '@angular/common';
 
+interface formFields{
+    multipleSelection:boolean,
+    dateRange:boolean
+}
+interface SearchForm{
+    show:boolean,
+    formFields:formFields
+}
 @Component({
-  selector: 'app-new-reports',
-  templateUrl: './new-reports.component.html',
-  styleUrls: ['./new-reports.component.css']
+    selector: 'app-new-reports',
+    templateUrl: './new-reports.component.html',
+    styleUrls: ['./new-reports.component.css']//,
+    //   changeDetection: ChangeDetectionStrategy.Default
 })
-export class NewReportsComponent implements OnInit{
-    @Input() displayedColumns:any[];
-    @Input() dataSource:any;
-    @Input() orginalReportData:any;
+export class NewReportsComponent implements OnInit {
+    @Input() displayedColumns: any[];
+    dataSource: any;
+    @Input() orginalReportData: any;
+    @Input() tableDataAction: any;
+    @Input() reportsHeader: any
     @Output() viewOrder = new EventEmitter();
     @ViewChild(MatPaginator) paginator: MatPaginator;
     @ViewChild(MatSort) sort: MatSort;
-    constructor(private dialog: MatDialog){
+    @Input() SearchForm: SearchForm;
+    @Output() submitForm = new EventEmitter();
+    columnNames = [];
+    toppings = new FormControl();
+    toppingList: string[] = ['Extra cheese', 'Mushroom', 'Onion', 'Pepperoni', 'Sausage', 'Tomato'];
+    myForm: FormGroup;
+
+    constructor(
+        private dialog: MatDialog, 
+        private _differs: IterableDiffers,
+        private fb: FormBuilder,
+        ) {
 
     }
 
-    ngOnInit(){
-        // this.dataSource = new MatTableDataSource(this.dataSource);
-        // this.dataSource.paginator = this.paginator;
-        // this.dataSource.sort = this.sort;
+    ngOnInit() {
+        this.myForm = this.fb.group({
+            name: [''],
+            toppings: [''],
+            filter: [''],
+            datefrom: [''],
+            dateto: [''],
+        });
+
+        this.createHeader(this.reportsHeader);
+        // this.orginalReportData.forEach((e) => {
+        //     for (let k in e) {
+        //         if (k) {
+        //             k = k.replace('_', '').replace('_', '');
+        //         }
+        //     }
+        // })
+       
+        this.dataSource = new MatTableDataSource(this.orginalReportData);
+
+        setTimeout(() => {
+            this.dataSource.sort = this.sort;
+            this.dataSource.paginator = this.paginator;
+        }, 100)
+
     }
- 
+
+    createHeader(reportsHeader){
+        this.columnNames = [];
+        new Promise((resolve)=>{
+            reportsHeader.forEach((e) => {
+                this.columnNames.push({ id: e, value: e });
+            });
+            if(reportsHeader.length == this.columnNames.length){
+                resolve(this.columnNames);
+            }
+        }).then((data:any)=>{
+            if (data.length > 0) {
+                this.displayedColumns = data.map(x => x.id);
+            }
+        })
+        
+        
+    }
+
+    ngOnChanges(changes: SimpleChanges) {
+        if (!changes["orginalReportData"].firstChange && changes["orginalReportData"].currentValue.length > changes["orginalReportData"].previousValue.length) {
+            this.dataSource.data = changes["orginalReportData"].currentValue;
+            if(changes["reportsHeader"] && changes["reportsHeader"].currentValue){
+                this.createHeader(changes["reportsHeader"].currentValue);
+
+            }
+        }
+    }
+
     applyFilter(filterValue: any) {
+        // this.myForm.controls['filter'].setValue(filterValue);
         this.dataSource.filter = filterValue.target.value.trim().toLowerCase();
         if (this.dataSource.paginator) {
             this.dataSource.paginator.firstPage();
@@ -40,7 +114,7 @@ export class NewReportsComponent implements OnInit{
     }
 
     getRowCellValue(rowData: any) {
-        if(rowData == undefined){
+        if (rowData == undefined) {
             return '-'
         }
         if (typeof rowData == 'object') {
@@ -60,7 +134,7 @@ export class NewReportsComponent implements OnInit{
     }
 
     getEditTableCell(col) {
-        let key = this.orginalReportData.tableDataAction.find(m => m && Object.keys(m) == col);
+        let key = this.tableDataAction.find(m => m && Object.keys(m) == col);
         if (key && key[col][0] == 'Edit') {
             return true;
         } else {
@@ -69,7 +143,7 @@ export class NewReportsComponent implements OnInit{
     }
 
     openEditWindow(rowData, colName, index) {
-   
+
         const dialogRef = this.dialog.open(editComponent, {
             width: '250px',
             data: { 'rowData': rowData[colName], 'colName': this.getHeaderCellValue(colName) }
@@ -82,8 +156,31 @@ export class NewReportsComponent implements OnInit{
 
     }
 
-    viewOrderDetail(e, orderId){
-        this.viewOrder.emit({event:e, orderId:orderId});
+    viewOrderDetail(e, orderId) {
+        this.viewOrder.emit({ event: e, orderId: orderId });
+    }
+    test(e) {
+        console.log(e)
+    }
+    addEventFrom(type: string, event: MatDatepickerInputEvent<Date>) {
+        this.myForm.patchValue({
+            datefrom: event.value
+        });
+    }
+    addEventTo(type: string, event: MatDatepickerInputEvent<Date>) {
+        this.myForm.patchValue({
+            dateto: event.value
+        });
+    }
+    onSubmit(data) {
+        // console.log(data);
+        // console.log(data.value.filtertype);
+        var buttonName = document.activeElement.getAttribute("id");
+        const _this = this;
+        const pipe = new DatePipe('en-US');
+        const datefrom = pipe.transform(data.value.datefrom, 'yyyy-MM-dd');
+        const dateto = pipe.transform(data.value.dateto, 'yyyy-MM-dd');
+        this.submitForm.emit(data.value);
     }
 }
 
