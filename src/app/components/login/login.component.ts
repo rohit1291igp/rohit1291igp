@@ -117,6 +117,10 @@ export class LoginComponent implements OnInit {
                         _this.router.navigate(['/delivery-app']);
                     }else if(userType === 'microsite'){
                         _this.router.navigate(['/dashboard-microsite']);
+                    }else if(userType === 'voucher'){
+                        _this.router.navigate(['/voucher/voucher']);
+                    }else if(userType === 'gv'){
+                        _this.router.navigate(['/voucher/gv']);
                     }else{
                         _this.router.navigate(['/dashboard']);
                     }

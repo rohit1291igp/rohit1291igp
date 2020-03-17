@@ -1,0 +1,135 @@
+<div class="side-container">
+  <!-- <h1 (click)="detect()">{{model}}</h1> -->
+  <div class="container-fluid">
+      <div class="row">
+          <div class="col-md-12">
+              <input class="btn btn-primary btn-sm" type="button" (click)="cancelVoucher('Not')" value="Cancel" />
+              <h3>{{model.title}}</h3>
+          </div>
+      </div>
+      <form id="target" #catDataForm="ngForm" novalidate>
+          <div class="row">
+              <div class="col-md-12">
+                  <div class="panel panel-default">
+                      <div *ngIf="model1.add != 'add';else header_content" class="panel-heading">
+                          <h3 class="panel-title">Edit Information</h3>
+                      </div>
+                      <ng-template #header_content style="text-align: center;">
+                          <div class="panel-heading">
+                              <h3 class="panel-title">Add Information</h3>
+                          </div>
+                      </ng-template>
+                      <div class="panel-body">
+                          <div class="row">
+                              <div class="col-md-6">
+                                  <div class="form-group">
+                                      <label for="">Webstore: </label>
+                                      <span *ngIf="model1.add != 'add';else input_content">{{model1.fkasname}}</span>
+                                      <ng-template #input_content style="text-align: center;">
+                                          <select class="form-control webstore" name="fkasid" #fkasid="ngModel" [(ngModel)]="model1.fkasid" (change)="enableFields()"
+                                              required>
+                                              <!--(change)="resetCategoriesOnStoreChange()" -->
+                                              <option value="">Select Webstore</option>
+                                              <option value="5">IGP</option>
+                                              <option value="830">Interflora</option>
+                                          </select>
+                                      </ng-template>
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="row" *ngIf="model1.add != 'add'">
+                            <div class="col-md-6">
+                            <div class="form-group" [ngClass]="{ 'has-error': catDataForm.submitted }">
+                            <label for="">GV Code: </label>
+                            <span *ngIf="model1.add != 'add'">{{model1.couponcode}}</span>
+                            </div>
+                            </div>
+                        </div>
+                          <div *ngIf="enablefields || model1.enablefields">
+                          <div class="row">
+                            <div class="col-md-6">
+                              <div class="form-group" [ngClass]="{ 'has-error': catDataForm.submitted && !couponcost.valid }">
+                                  <label for="">GV Cost</label>
+                                  <input type="number" class="form-control" name="couponcost" placeholder="Coupon Cost" [(ngModel)]="model1.couponcost" #couponcost="ngModel"
+                                      (focusout)="validateVoucherCode()" required maxlength="50" />
+                              </div>
+                            </div>
+                            <div class="col-md-4">
+                              <div class="form-group" [ngClass]="{ 'has-error': catDataForm.submitted && !purchaseorderid.valid }">
+                                  <label for="">Order Id</label>
+                                  <input type="number" class="form-control" value="-1" placeholder="Order Id" name="purchaseorderid" #purchaseorderid="ngModel"
+                                      [(ngModel)]="model1.purchaseorderid" required />
+                              </div>
+                          </div>
+                          </div>
+
+                              <div class="row">
+                                  <!-- <div class="col-md-6">
+                                      <div class="form-group" [ngClass]="{ 'has-error': catDataForm.submitted && !vouchercode.valid }">
+                                          <label for="">GV Code</label>
+                                          <input type="text" class="form-control" name="vouchercode" placeholder="Voucher Code" [(ngModel)]="model1.vouchercode" #vouchercode="ngModel"
+                                              (focusout)="validateVoucherCode()" required maxlength="50" />
+                                      </div>
+                                  </div> -->
+                                  <!-- <div class="col-md-6">
+                                      <div class="form-group" [ngClass]="{ 'has-error': catDataForm.submitted && !vouchervalue.valid }">
+                                          <label for="">GV Value</label>
+                                          <input type="text" class="form-control" name="vouchervalue" placeholder="Voucher Value" [(ngModel)]="model1.vouchervalue"
+                                              #vouchervalue="ngModel" required/>
+                                      </div>
+                                  </div> -->
+                              </div>
+
+                              <div class="row">
+                                  <div class="col-md-6">
+                                      <div class="form-group" [ngClass]="{ 'has-error': catDataForm.submitted && !expirydate.valid }">
+                                          <label for="">Expiry Date</label>
+                                          <input type="date" class="form-control" name="expirydate" placeholder="Expiry Date" [(ngModel)]="model1.expirydate" #expirydate="ngModel"
+                                              id="expirydate" min={{model1.minDate}}  required />
+                                      </div>
+                                  </div>
+                              </div>
+
+                              <div class="row">
+                                  <div class="col-md-12">
+                                      <div class="form-group" [ngClass]="{ 'has-error': catDataForm.submitted && !description.valid }">
+                                          <label for="">description</label>
+                                          <input type="text" class="form-control" placeholder="description" name="description" [(ngModel)]="model1.description" #description="ngModel"
+                                              required maxlength="150" />
+                                      </div>
+                                  </div>
+                              </div>
+                              <div *ngIf="model1.add == 'add'" class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group" [ngClass]="{ 'has-error': catDataForm.submitted && !createdby.valid }">
+                                        <label for="">Created By</label>
+                                        <input type="text" class="form-control" name="createdby" placeholder="Created By" [(ngModel)]="model1.createdby"
+                                            #createdby="ngModel" required/>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                  <div class="form-group" [ngClass]="{ 'has-error': catDataForm.submitted && !approvedby.valid }">
+                                      <label for="">Approved By</label>
+                                      <input type="text" class="form-control" name="approvedby" placeholder="Approved By" [(ngModel)]="model1.approvedby"
+                                            #approvedby="ngModel" required/>
+                                  </div>
+                              </div>
+                            </div>
+                              <div class="row">
+                                  <div *ngIf="model1.add != 'add';else addCat_content" class="col-md-12 text-right">
+                                      <button type="submit" class="btn btn-primary pull-right" (click)="saveVoucher()">Save</button>
+                                      <!-- <input class="btn btn-primary pull-right" type="submit" (click)="saveCategory(model)" value="Save" /> -->
+                                  </div>
+                                  <ng-template #addCat_content style="text-align: center;">
+                                      <br/><button type="submit" style="margin-right: 10px;" class="btn btn-primary pull-right"
+                                          (click)="addVoucher()">Add</button>
+                                  </ng-template>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </form>
+  </div>
+</div>

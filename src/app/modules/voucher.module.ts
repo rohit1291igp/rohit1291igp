@@ -15,12 +15,17 @@ import { GiftsVoucherComponent, GiftVoucherDialog } from 'app/components/gifts-v
 import { VoucherModelComponent } from 'app/components/voucher-model/voucher-model.component';
 import { VoucherComponent } from 'app/components/voucher/voucher.component';
 import { FilterPipeModule } from 'app/customPipes/filter.pipe';
+import { GvComponent } from 'app/components/gv/gv.component';
 
 
 const routes: Routes = [
     {
         path: 'voucher',
-        component: CouponComponent
+        component: VoucherComponent
+    },
+    {
+        path: 'gv',
+        component: VoucherComponent
     },
     {
         path: 'gifts-voucher',
@@ -58,7 +63,11 @@ const routes: Routes = [
         GiftsVoucherComponent,
         GiftVoucherDialog,
         VoucherComponent,
-        VoucherModelComponent
+        VoucherModelComponent,
+        GvComponent
+    ],
+    exports : [
+        MatSelectModule
     ],
     providers: [
         {

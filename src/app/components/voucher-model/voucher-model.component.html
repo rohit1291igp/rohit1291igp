@@ -22,7 +22,7 @@
                         <div class="panel-body">
                             <div class="row">
                                 <div class="col-md-6">
-                                    <div class="form-group" [ngClass]="{ 'has-error': catDataForm.submitted }">
+                                    <div class="form-group">
                                         <label for="">Webstore: </label>
                                         <span *ngIf="model1.add != 'add';else input_content">{{model1.fkasname}}</span>
                                         <ng-template #input_content style="text-align: center;">
@@ -40,15 +40,15 @@
 
                             <div class="row">
                                 <div class="col-md-6">
-                                    <div class="form-group" [ngClass]="{ 'has-error': catDataForm.submitted }">
+                                    <div class="form-group">
                                         <label for="">Type1:</label>
-                                        <span *ngIf="model1.add != 'add';else type_content">{{model1.vouchertype}}</span>
+                                        <span *ngIf="model1.add != 'add';else type_content">{{model1.vouchertypeview}}</span>
                                         <ng-template #type_content>
                                             <select *ngIf="metaData" class="form-control vouchertype" name="vouchertype" #vouchertype="ngModel" [(ngModel)]="model1.vouchertype"
                                                 (change)="enableFields()" required>
                                                 <!--(change)="resetCategoriesOnStoreChange()" -->
                                                 <option value="-1">Select Type</option>
-                                                <option *ngFor="let md of metaData.type1" value="md.id">{{md.value}}</option>
+                                                <option *ngFor="let md of metaData.type1" value="{{md.id}}">{{md.value}}</option>
                                                 <!-- 
                                                 <option value="0">% Based</option>
                                                 <option value="1">Value Based</option> -->
@@ -56,23 +56,19 @@
                                         </ng-template>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                                <!-- <div class="col-md-6">
                                     <div class="form-group" [ngClass]="{ 'has-error': catDataForm.submitted }">
                                         <label for="">Type2:</label>
                                         <span *ngIf="model1.add != 'add';else type2_content">{{model1.vouchertype}}</span>
                                         <ng-template #type2_content>
                                             <select *ngIf="metaData" class="form-control vouchertype" name="vouchertype2" #vouchertype2="ngModel" [(ngModel)]="model1.vouchertype2"
                                                 required>
-                                                <!--(change)="resetCategoriesOnStoreChange()" -->
                                                 <option value="-1">Select Type</option>
                                                 <option *ngFor="let md of metaData.type2" value="md.id">{{md.value}}</option>
-                                                <!-- 
-                                                <option value="0">% Based</option>
-                                                <option value="1">Value Based</option> -->
                                             </select>
                                         </ng-template>
                                     </div>
-                                </div>
+                                </div> -->
                             </div>
 
                             <div *ngIf="enablefields || model1.enablefields">
@@ -98,7 +94,7 @@
                                         <div class="form-group" [ngClass]="{ 'has-error': catDataForm.submitted && !expirydate.valid }">
                                             <label for="">Expiry Date</label>
                                             <input type="date" class="form-control" name="expirydate" placeholder="Expiry Date" [(ngModel)]="model1.expirydate" #expirydate="ngModel"
-                                                id="expirydate" min={{model1.minDate}} max="2018-06-30" required />
+                                                id="expirydate" min={{model1.minDate}}  required />
                                         </div>
                                     </div>
                                 </div>
@@ -107,12 +103,12 @@
                                     <div class="col-md-12">
                                         <div class="form-group" [ngClass]="{ 'has-error': catDataForm.submitted && !comment.valid }">
                                             <label for="">Comment</label>
-                                            <input type="text" class="form-control" placeholder="Comment" name="comment" [(ngModel)]="model1.comment" #comment="ngModel"
+                                            <input type="text" class="form-control" placeholder="Comment(add created by and required details)" name="comment" [(ngModel)]="model1.comment" #comment="ngModel"
                                                 required maxlength="150" />
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row">
+                                <!-- <div class="row">
                                     <div class="col-md-1">
                                         <div class="form-group" [ngClass]="{ 'has-error': catDataForm.submitted && !enabled.valid }">
                                             <label for="">Test</label>
@@ -120,57 +116,57 @@
                                                 required />
                                         </div>
                                     </div>
-                                </div>
+                                </div> -->
                                 <div class="row">
-                                    <div class="col-md-1">
+                                    <!-- <div class="col-md-1">
                                         <div class="form-group" [ngClass]="{ 'has-error': catDataForm.submitted && !enabled.valid }">
                                             <label for="">Enable</label>
                                             <input type="checkbox" class="form-control" value="-1" placeholder="Enable" name="enabled" #enabled="ngModel" [(ngModel)]="model1.enabled"
                                                 required />
                                         </div>
-                                    </div>
-                                    <div class="col-md-4">
+                                    </div> -->
+                                    <!-- <div class="col-md-4">
                                         <div class="form-group" [ngClass]="{ 'has-error': catDataForm.submitted && !multipleusage.valid }">
                                             <label for="">MultipleUsage</label>
                                             <input type="number" class="form-control" value="-1" placeholder="MultipleUsage" name="multipleusage" #multipleusage="ngModel"
                                                 [(ngModel)]="model1.multipleusage" required />
                                         </div>
-                                    </div>
+                                    </div> -->
                                 </div>
 
                                 <div class="row">
-                                    <div class="col-md-1">
+                                    <div class="col-md-3">
                                         <div class="form-group" [ngClass]="{ 'has-error': catDataForm.submitted && !ordervaluecheck.valid }">
-                                            <label for="">OrdVal Check</label>
+                                            <label for="">Order Val Check</label>
                                             <input type="checkbox" class="form-control" value="-1" name="ordervaluecheck" #ordervaluecheck="ngModel" [(ngModel)]="model1.ordervaluecheck"
                                                 required />
                                         </div>
                                     </div>
-                                    <div class="col-md-5">
-                                        <div class="form-group" [ngClass]="{ 'has-error': catDataForm.submitted && !ordervalue.valid }">
+                                     <div class="col-md-5">
+                                        <div *ngIf="model1.ordervaluecheck" class="form-group" [ngClass]="{ 'has-error': catDataForm.submitted && !ordervalue.valid }">
                                             <label for="">Order Value</label>
                                             <input type="number" class="form-control" placeholder="Order Value" name="ordervalue" #ordervalue="ngModel" [(ngModel)]="model1.ordervalue"
                                                 required />
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
+                                    <!--<div class="col-md-6">
                                         <div class="form-group" [ngClass]="{ 'has-error': catDataForm.submitted && !applicableemail.valid }">
                                             <label for="">Applicable Email</label>
                                             <input type="text" class="form-control" placeholder="Applicable Email" name="applicableemail" [(ngModel)]="model1.applicableemail"
                                                 #applicableemail="ngModel" required />
                                         </div>
-                                    </div>
+                                    </div> -->
                                 </div>
 
                                 <div class="row">
-                                    <div class="col-md-1">
-                                        <div class="form-group" [ngClass]="{ 'has-error': catDataForm.submitted && !shippingwaivertype.valid }">
+                                    <div class="col-md-3">
+                                        <div *ngIf="model1.vouchertype == 2" class="form-group" [ngClass]="{ 'has-error': catDataForm.submitted && !shippingwaivertype.valid }">
                                             <label for="">Ship Waiver Type</label>
                                             <input type="checkbox" class="form-control" value="-1" name="shippingwaivertype" #shippingwaivertype="ngModel" [(ngModel)]="model1.shippingwaivertype"
                                                 required />
                                         </div>
                                     </div>
-                                    <div class="col-md-4">
+                                    <!-- <div class="col-md-4">
                                         <div class="form-group" [ngClass]="{ 'has-error': catDataForm.submitted && !productQuant.valid }">
                                             <label for="">Product Quantity</label>
                                             <input type="number" class="form-control" placeholder="Product Quantity" name="productQuant" #productQuant="ngModel" [(ngModel)]="model1.productQuant"
@@ -183,7 +179,7 @@
                                             <input type="number" class="form-control" placeholder="Applicable Product Id" name="applicablePid" #applicablePid="ngModel"
                                                 [(ngModel)]="model1.applicablePid" required />
                                         </div>
-                                    </div>
+                                    </div> -->
                                 </div>
                                 <!-- <div class="row">
                             <div class="col-md-12">

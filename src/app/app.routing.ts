@@ -9,7 +9,6 @@ import { DownloadEmailComponent } from './components/download-email/download-ema
 import { LoginComponent } from './components/login/login.component';
 import { VoucherComponent } from './components/voucher/voucher.component';
 import { AuthGuard } from './services/auth-guard.service';
-import { testComponent } from './components/app.component';
 
 
 const route: Routes = [
@@ -85,10 +84,6 @@ const route: Routes = [
     path: 'voucher',
     loadChildren: './modules/voucher.module#VoucherModule',
     canActivate: [AuthGuard]
-  },
-  {
-    path: 'test',
-    component: testComponent
   },
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
   // otherwise redirect to home
