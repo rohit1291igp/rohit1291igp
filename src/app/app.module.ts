@@ -52,6 +52,9 @@ import { UtilityService } from './services/utility.service';
 import { SharedModule } from './shared-module/shared/shared.module';
 import { OrderStockComponent } from './components/order-stocks/order-stock.component';
 import { AutoSelectionComponent } from './components/autoselection/auto-selection.component';
+import { GvComponent } from './components/gv/gv.component';
+import { VoucherComponent } from './components/voucher/voucher.component';
+import { VoucherModelComponent } from './components/voucher-model/voucher-model.component';
 
 
 
