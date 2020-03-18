@@ -54,7 +54,7 @@ export class DeliveryTaskComponent implements OnInit {
         const this$ = this;
 
         const reqObj = {
-            url: `getOrder?responseType=json&scopeId=1&fkassociateId=${this$.fkAssociateId}&orderId=${orderId}`,
+            url: `getOrder?responseType=json&scopeId=1&fkassociateId=${this$.fkAssociateId}&fkUserId=${this$.fkUserId}&orderId=${orderId}`,
             method: "get"
         };
         this$.BackendService.makeAjax(reqObj, function (err, response, headers) {
