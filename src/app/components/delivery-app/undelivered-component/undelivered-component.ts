@@ -48,7 +48,7 @@ export class UnDeliveredComponent implements OnInit {
     getOrderDetails() {
         var this$ = this;
         const reqObj = {
-            url: `getOrder?responseType=json&scopeId=1&fkassociateId=${this$.fkAssociateId}&orderId=${this$.orderId}`,
+            url: `getOrder?responseType=json&scopeId=1&fkassociateId=${this$.fkAssociateId}&fkUserId=${this$.fkUserId}&orderId=${this$.orderId}`,
             method: "get"
         };
         this$.BackendService.makeAjax(reqObj, function (err, response, headers) {
