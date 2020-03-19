@@ -10,6 +10,7 @@ import { LoginComponent } from './components/login/login.component';
 import { VoucherComponent } from './components/voucher/voucher.component';
 import { AuthGuard } from './services/auth-guard.service';
 import { testComponent } from './components/app.component';
+import { PayoutDashboardComponent } from './components/payout-dashboard/payout-dashboard.component';
 
 
 const route: Routes = [
@@ -89,6 +90,10 @@ const route: Routes = [
   {
     path: 'test',
     component: testComponent
+  },
+  {
+    path:'payout-dashboard',
+    component: PayoutDashboardComponent
   },
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
   // otherwise redirect to home

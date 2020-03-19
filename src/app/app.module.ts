@@ -52,6 +52,8 @@ import { UtilityService } from './services/utility.service';
 import { SharedModule } from './shared-module/shared/shared.module';
 import { OrderStockComponent } from './components/order-stocks/order-stock.component';
 import { AutoSelectionComponent } from './components/autoselection/auto-selection.component';
+import { PayoutDashboardComponent } from './components/payout-dashboard/payout-dashboard.component';
+import { MomentDateAdapter, MatMomentDateModule } from '@angular/material-moment-adapter';
 
 
 
@@ -82,6 +84,7 @@ export function ConfigLoader(envConfig: envConfig) {
     SelectItemForDelivered,
     OrderStockComponent,
     testComponent,
+    PayoutDashboardComponent
     // AutoSelectionComponent
   ],
   imports: [

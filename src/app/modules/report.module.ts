@@ -26,8 +26,7 @@ const routes: Routes = [
   ],
   declarations: [
     ReportsComponent,
-    VendorDropdownComponent,
-    AutoSelectionComponent
+    VendorDropdownComponent
   ]
 })
 export class ReportModule { }

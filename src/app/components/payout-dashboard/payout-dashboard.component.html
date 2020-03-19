@@ -1,0 +1,52 @@
+<div class="main-container">
+    <mat-card class="d-flex">
+        <div style="flex: 1; font-size: 25px;" class="d-flex align-items-center">Payout Dashboard</div>
+        <div class="filter d-flex justify-content-flex-end align-items-center" style="flex: 2">
+            <mat-card style="width: 85%;">
+                <p style="color:#C3404E">Filter By</p>
+                    <form [formGroup]="myForm" (ngSubmit)="onSubmit(myForm)" class="d-flex  align-items-center" style="margin-right: 33px;width:100%;" >
+                            <div *ngIf="environment.userType == 'admin'" style="width: 40%;margin-right: 35px;">
+                                <app-auto-selection style="width: 100%;" [listOfComponents]="vendorList" placeholder="Vendor Name"
+                                    displayName='Vendor_Name' type='object' relationName="vendorList"
+                                    (selectionObject)="selectComponent($event)"></app-auto-selection>
+                            </div>
+                            <div>
+                                <!-- <span #dateInput></span> -->
+                                <mat-form-field>
+                                    <mat-label>Month and Year</mat-label>
+                                    <input matInput formControlName="date" #dateInput>
+                                    <input style="display: none" matInput [matDatepicker]="dp">
+                                    <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
+                                    <mat-datepicker #dp startView="multi-year" panelClass="example-month-picker">
+                                    </mat-datepicker>
+                                </mat-form-field>
+                            </div>
+                            <div *ngIf="environment.userType == 'admin'" class="form-row" style="margin: 0px 20px;">
+                                <button type="submit" mat-raised-button [disabled]="myForm.invalid">Search</button>
+                            </div>
+                        </form> 
+            </mat-card>
+               
+        </div>
+
+    </mat-card>
+    <br>
+    <mat-card class="d-flex justify-content-space-around align-items-baseline" style="width: 50%;margin:0 auto;">
+        <ul class="table-data">
+            <li>Total Orders : {{tabledata?.totalOrders}}</li>
+            <li>Smooth Delivery : {{tabledata?.smoothDeliveries}}</li>
+            <li>Delayed Update : {{tabledata?.delayedUpdate}}</li>
+            <li>Rejections : {{tabledata?.rejections}}</li>
+            <li>Complaints : {{tabledata?.complaints}}</li>
+            <li>Complaince : {{tabledata?.compliances}}</li>
+        </ul>
+        <ul class="table-data">
+            <li>Total Cost : {{tabledata?.totalCost}}</li>
+            <li>&nbsp;</li>
+            <li>Penalty : {{tabledata?.penalty}}</li>
+            <li>Rewards : {{tabledata?.rewards}}</li>
+            <li>Net Payout : {{tabledata?.netPayment}}</li>
+            <li>&nbsp;</li>
+        </ul>
+    </mat-card>
+</div>

@@ -17,7 +17,9 @@
     <div class="collapse navbar-collapse navRight" id="bs-example-navbar-collapse-1" *ngIf="!isMobile && vendorName">
       <ul class="nav navbar-nav navbar-right">
         <ng-container *ngIf="(environment.userType !== 'root' && environment.userType !== 'blogger')">
-            
+            <li  *ngIf="environment.userType != 'admin' || environment.userType != 'vendor'" class="fullHeightLi" [ngClass]="{'selected' : selectedTopTab === 'payout-dashboard'}">
+                    <p><a ng-href="#/payout-dashboard" routerLink="/payout-dashboard">Payout Dashboard</a></p>
+            </li>
             <li  *ngIf="environment.userType != 'microsite'" class="fullHeightLi" [ngClass]="{'selected' : selectedTopTab === 'dashboard'}">
                 <p><a ng-href="#/dashboard" routerLink="/dashboard">Dashboard</a></p>
             </li>
