@@ -1,7 +1,7 @@
 <div class="container-fluid">
   <div class="row">
-      <div style="margin-top:55px;" class="col-md-12">
-          <h3>Voucher Content</h3>
+      <div class="col-md-12">
+          <h3>{{pageName}} Content</h3>
       </div>
   </div>
   
@@ -9,22 +9,36 @@
       <div class="col-md-12">
           <div class="panel panel-default">
               <div class="panel-heading">
-                  <h3 class="panel-title">Vouchers</h3>
+                  <h3 class="panel-title">{{pageName}}</h3>
               </div>
               <div class="panel-body">
                   <form id="target" #catDataForm="ngForm">
-                      <div class="row">
-                          <div class="col-md-6">
+                      <div class="row" style="display: flex;align-items:center;flex-wrap: wrap;">
+                          <div class="col-md-2">
                               <div class="form-group" [ngClass]="{ 'has-error': catDataForm.submitted && !webstore.valid }">
-                                    <input class="btn btn-primary pull-right" type="button" (click)="createVoucher()" value="Create" /><br/>
-                                  <label for="">Webstore</label>
-                                  <select class="form-control" name="webstore" #webstore="ngModel" [(ngModel)]="model.webstore" (change)="getVouchers()" required>
-                                      <option value="">Select Webstore</option>
-                                      <option value="5">IGP</option>
-                                      <option value="830">Interflora</option>
-                                  </select>
+                                    <input class="btn btn-primary" type="button" (click)="createVoucher()" value="Create" /><br/>
+                                <mat-form-field>
+                                        <mat-select matNativeControl name="webstore" #webstore="ngModel" [(ngModel)]="model.webstore" required>
+                                          <mat-option value="">Select Webstore</mat-option>
+                                          <mat-option value="5">IGP</mat-option>
+                                          <mat-option value="830">Interflora</mat-option>
+                                        </mat-select>
+                                      </mat-form-field>
                               </div>
                           </div>
+                          <div class="col-md-2">
+                            <div class="form-group" [ngClass]="{ 'has-error': catDataForm.submitted && !vouchercode.valid }">
+                                    <br/><br/><mat-form-field class="example-full-width">
+                                            <mat-label>Voucher Code</mat-label>
+                                            <input type="text" matInput name="vouchercode" [(ngModel)]="model.vouchercode" #vouchercode="ngModel" placeholder="" required  />
+                                          </mat-form-field>
+                            </div>
+                          </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                        <br/> <br/><button mat-raised-button color="warn" (click)="getVouchers()" style="background-color: #C3404E">Search</button>                               
+                                </div>
+                            </div>
                       </div>
                   </form>
               </div>
@@ -36,7 +50,7 @@
 <section class="voucher-list-container">
     <br/>
             <div *ngIf="showGrid && vouchers[0] !== undefined" class="panel-body">
-                    <input style="width: 50%;border-radius: 4px;margin-left: 25%" [(ngModel)]="searchText" placeholder="search id OR voucher code OR comment here"><br/><br/>
+                    <!-- <input style="width: 50%;border-radius: 4px;margin-left: 25%" [(ngModel)]="searchText" placeholder="search id OR voucher code OR comment here"><br/><br/> -->
                     <table class="table table-hover">
                         <thead>
                             <!-- <th>Id</th> -->
@@ -50,22 +64,27 @@
                             <tr *ngFor="let list of vouchers | filter : searchText">
                                     <!-- <td>{{list.id}}</td> -->
                                     <td>{{list.id}}</td>
-                                    <td>{{list.vouchercode}}</td>                                   
-                                    <td>{{list.comment}}</td>
+                                    <td>{{list.vouchercode}}{{list.couponcode}}</td>                                   
+                                    <td>{{list.comment}}{{list.description}}</td>
                                     <td>{{list.expirydate}}</td>
                                     <td>
                                             <button class="btn" (click)="editVoucher(list)" title="Edit"><i class="fa fa-pencil"></i></button>
                                             <!-- <button class="btn" (click)="viewVoucher(list)" title="View"><i class="fa fa-eye"></i></button>                                         -->
-                                            <button class="btn" (click)="deleteVoucher(list.id,list.fkasid)" title="Delete"><i class="fa fa-trash"></i></button>
+                                            <button  class="btn" (click)="deleteVoucher(list.id,list.fkasid, list.couponstatus)" title="Enable/Disable"><i class="fa" [ngClass]="{'fa-toggle-on':list.couponstatus == 'Y' || list.enabled == '0', 'fa-toggle-off':list.couponstatus == 'N' || list.enabled == '1'}"></i></button>
+                                            <!-- <button *ngIf="voucherchild" class="btn" (click)="deleteVoucher(list.id,list.fkasid)" title="Delete"><i class="fa fa-trash"></i></button> -->
                                     </td>                                 
                             </tr>
                         </tbody>        
                     </table>
-                    <input class="btn btn-primary pull-right" type="button" (click)="showMoreVouchers()" value="Show More" /><br/>
+                    <!-- <input class="btn btn-primary pull-right" type="button" (click)="showMoreVouchers()" value="Show More" /><br/> -->
             </div>
 </section>
 
 
 </div>
-
-<app-voucher-model id='sidebar' *ngIf="showSideBar"  [@anim]="animate" [model]="voucherModel" (voucherModelClick)="clickDetect($event)"></app-voucher-model>
+<div class="loadChild" *ngIf="voucherchild">
+    <app-voucher-model id='sidebar' *ngIf="showSideBar"  [@anim]="animate" [model]="voucherModel" (voucherModelClick)="clickDetect($event)"></app-voucher-model>
+</div>
+<div class="loadChild" *ngIf="gvchild">
+    <app-gv id='sidebar' *ngIf="showSideBar"  [@anim]="animate" [model]="voucherModel" (voucherModelClick)="clickDetect($event)"></app-gv>
+</div>

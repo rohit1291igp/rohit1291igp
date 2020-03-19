@@ -50,6 +50,10 @@ import { S3UploadService } from './services/s3Upload.service';
 import { UserService } from './services/user.service';
 import { UtilityService } from './services/utility.service';
 import { SharedModule } from './shared-module/shared/shared.module';
+import { AutoSelectionComponent } from './components/autoselection/auto-selection.component';
+import { GvComponent } from './components/gv/gv.component';
+import { VoucherComponent } from './components/voucher/voucher.component';
+import { VoucherModelComponent } from './components/voucher-model/voucher-model.component';
 
 
 

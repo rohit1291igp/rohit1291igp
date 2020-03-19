@@ -9,6 +9,7 @@ import {
   state
 } from '@angular/core';
 import { BackendService } from '../../services/backend.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-voucher',
@@ -43,16 +44,26 @@ export class VoucherComponent implements OnInit {
   model: any = {};
   public vouchers;
   public showSideBar: Boolean = false;
+  public voucherchild: Boolean = false;
+  public gvchild: Boolean = false;
   public showGrid: Boolean = false;
   public voucherModel;
   public animate = 'void';
   public startLimit = 0;
   public noOfRecords = 20;
+  public pageName;
 
-  constructor(public BackendService: BackendService) {}
+  constructor(public BackendService: BackendService, private router : Router) {}
 
   ngOnInit() {
     this.model.webstore = '';
+    if(this.router.url.substr(9) == 'voucher'){
+      this.voucherchild = true;
+      this.pageName = 'Voucher';
+    } else if(this.router.url.substr(9) == 'gv'){
+      this.gvchild = true;
+      this.pageName = 'GV';
+    }
   }
 
   // Get Categories
@@ -62,6 +73,7 @@ export class VoucherComponent implements OnInit {
     console.log(_this.model.webstore);
     _this.startLimit = 0;
     if (_this.model.webstore !== '') {
+      console.log(this.router.url);
       this.getVouchersWithLimit();
     } else {
       this.showGrid = false;
@@ -69,20 +81,40 @@ export class VoucherComponent implements OnInit {
   }
 
   getVouchersWithLimit() {
-    const _this = this;
+    const _this = this;var url;
+    if(_this.model.vouchercode == '' || _this.model.vouchercode  == undefined){
+      return false;
+    }
+    if(_this.router.url.substr(9) == 'voucher'){
+      url = 'voucher/gv/getvoucherdetails';
+    } else {
+      url = 'gv/getgiftvoucherdetails';
+    }
     const reqObj = {
-      url: `vouchers/getvoucher?fkAssociateId=${
-        _this.model.webstore
-      }&startLimit=${_this.startLimit}&endLimit=${_this.noOfRecords}`,
+      url: `${url}?fkAssociateId=${_this.model.webstore}&vouchercode=${_this.model.vouchercode}`,
       method: 'get'
     };
     this.BackendService.makeAjax(reqObj, function(err, response, headers) {
       if (err || response.error) {
         console.log('Error=============>', err, response.errorCode);
         alert('There was an error while fetching vouchers');
+        return false;
       }
-      _this.vouchers = _this.vouchers.concat(response.data.vouchermodellist);
-      _this.showGrid = true;
+      if(_this.router.url.substr(9) == 'voucher'){
+        if(response.data.vouchermodellist){
+          _this.vouchers = _this.vouchers.concat(response.data.vouchermodellist);  
+          _this.showGrid = true;
+        } else if(response.data.error){
+          alert('Voucher does not exist');
+        }
+      } else{
+        if(response.data.giftvouchermodellist){
+          _this.vouchers = _this.vouchers.concat(response.data.giftvouchermodellist);          
+          _this.showGrid = true;
+        } else if(response.data.error){
+          alert('GV does not exist');
+        }
+      }
       if (_this.startLimit === 0) {
         $('html, body').animate(
           {
@@ -137,24 +169,40 @@ export class VoucherComponent implements OnInit {
     this.voucherModel.view = 'view';
   }
 
-  deleteVoucher(id, fkasid) {
+  deleteVoucher(id, fkasid, couponstatus) {
     console.log(id);
-    const _this = this;
+    const _this = this; var url = ""; var val;
+    console.log(couponstatus);
+    if(couponstatus == 'N'){
+      couponstatus = 'Y';
+      val = 'Enable';
+    } else {
+      couponstatus = 'N';
+      val = 'Disable';
+    }
+    if(_this.router.url.substr(9) == 'voucher'){
+      url = 'voucher/gv/deletevoucher';
+    } else {
+      url = 'gv/deletegiftvoucher';
+    }
     const reqObj = {
       // tslint:disable-next-line:max-line-length
-      url: `voucher/deletevoucher?id=${id}&modifiedby=Cheta&fkAssociateId=${fkasid}&startIndex=0&rowsCount=${this
-        .startLimit + this.noOfRecords}`,
+      url: `${url}?id=${id}&fkAssociateId=${fkasid}&couponstatus=${couponstatus}&startIndex=0&rowsCount=1`,
       method: 'delete'
     };
-    if (confirm(`Are you sure do you want to delete Voucher?`)) {
+    if (confirm(`Are you sure do you want to ${val} Coupon/GV Voucher?`)) {
       _this.BackendService.makeAjax(reqObj, function(err, response, headers) {
         if (err || response.error || response.status === 'Error') {
           console.log('Error=============>', err, response.errorCode);
-          alert('There was an error while deleting voucher');
+          alert('There was an error while deleting voucher: '+ response.data.error);
           return false;
         }
-        alert(`The Voucher has been deleted`);
-        _this.vouchers = response.data.vouchermodellist;
+        if(_this.router.url.substr(9) == 'voucher'){
+          _this.vouchers = response.data.vouchermodellist;
+          // alert(`The Coupon/GV Voucher has been ${val}d`);
+        } else {
+          _this.vouchers = response.data.giftvouchermodellist;
+        }
       });
     } else {
       return false;
@@ -166,6 +214,7 @@ export class VoucherComponent implements OnInit {
     console.log('Parent');
     console.log(event);
     this.showSideBar = false;
+    this.showGrid = true;
     $('body')[0].style.overflow = 'auto';
     this.animate = 'void';
     $('#target :input').prop('disabled', false);

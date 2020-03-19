@@ -40,34 +40,33 @@ export class VoucherModelComponent implements OnInit, AfterViewInit {
       this.model1.vouchervalue = 0;
       this.model1.expirydate = '';
       this.model1.comment = '';
-      this.model1.enabled = 1;
+      this.model1.enabled = 0; // 0 is enabled for API and 1 is disabled
       this.model1.multipleusage = 0;
-      this.model1.ordervaluecheck = 1;
+      this.model1.ordervaluecheck = 0;
       this.model1.ordervalue = 0;
       this.model1.applicableemail = '';
-      this.model1.shippingwaivertype = 1;
+      this.model1.shippingwaivertype = 0;
       this.model1.productQuant = 0;
       this.model1.applicablePid = 0;
       this.model1.metaData = {};
       this.getMinExpiryDate();
       this.getMetaData();
+    } else {
+      this.model1.expirydate = this.model1.expirydate.split(' ')[0];
     }
     const _this = this;
     const reqObj = {
-      url: `voucher/getTemporaryBlackListProdCats`,
+      url: `voucher/getMetaData`,
       method: 'get'
     };
 
     _this.BackendService.makeAjax(reqObj, function(err, response, headers) {
       if (err || response.error || response.status === 'Error') {
         console.log('Error=============>', err, response.errorCode);
-        alert(`There is an error while getting BlackList product types`);
+        alert(`There is an error while getting metadata`);
         return false;
       } else {
-        response.data.forEach(element => {
-          _this.model1.blackListPts.push(element);
-        });
-        console.log(_this.model1.blackListPts);
+        _this.model1.vouchertypeview = response.data.type1.filter((t) => t.id == _this.model1.vouchertype)[0].value;
       }
     });
   }
@@ -104,29 +103,28 @@ export class VoucherModelComponent implements OnInit, AfterViewInit {
     data['rowLimitModel'] = {};
     data['voucherModel']['fkasid'] = this.model1.fkasid;
     data['voucherModel']['vouchertype'] = this.model1.vouchertype;
-    data['voucherModel']['vouchertype2'] = this.model1.vouchertype2;
+    // data['voucherModel']['vouchertype2'] = this.model1.vouchertype2;
     data['voucherModel']['vouchercode'] = this.model1.vouchercode;
     data['voucherModel']['vouchervalue'] = this.model1.vouchervalue;
-    data['voucherModel']['expirydate'] = this.model1.expirydate;
+    data['voucherModel']['expirydate'] = this.model1.expirydate + " 23:59:59";
     data['voucherModel']['comment'] = this.model1.comment;
     data['voucherModel']['enabled'] = this.model1.enabled;
     data['voucherModel']['multipleusage'] = this.model1.multipleusage;
-    data['voucherModel']['ordervaluecheck'] = this.model1.ordervaluecheck;
+    data['voucherModel']['ordervaluecheck'] = this.model1.ordervaluecheck === true ? 1 : 0;
     data['voucherModel']['ordervalue'] = this.model1.ordervalue;
-    data['voucherModel']['applicableemail'] = this.getApplicableEmail('add');
+    // data['voucherModel']['applicableemail'] = this.getApplicableEmail('add');
     data['voucherModel']['shippingwaivertype'] = this.model1.shippingwaivertype;
-    data['voucherModel']['productQuant'] = this.model1.productQuant;
+    // data['voucherModel']['productQuant'] = this.model1.productQuant;
     data['voucherModel']['applicablePid'] = this.model1.applicablePid;
-    data['voucherModel']['createdby'] = 'Cheta';
+    data['voucherModel']['createdby'] = 'Chetan';
     // data['rowLimitModel']['startIndex'] = this.model1.startIndex;
-    data['rowLimitModel']['rowsCount'] =
-      this.model1.startIndex + this.model1.rowsCount;
+    data['rowLimitModel']['rowsCount'] = 1;
     console.log(JSON.stringify(data));
 
     if (this.validateModel()) {
       const _this = this;
       const reqObj = {
-        url: 'voucher/createvoucher',
+        url: 'voucher/gv/createvoucher',
         method: 'post',
         payload: data
       };
@@ -206,6 +204,11 @@ export class VoucherModelComponent implements OnInit, AfterViewInit {
       return false;
     }
 
+    // if(this.model1.ordervaluecheck && this.model1.ordervalue == '' || this.model1.ordervalue == undefined){
+    //   alert('Please add Order Value');
+    //   return false;
+    // }
+
     //     if (!this.uniqueUrl) {
     //         alert('The selected URL already exists. Please enter a new URL');
     //         return false;
@@ -247,7 +250,7 @@ export class VoucherModelComponent implements OnInit, AfterViewInit {
     ) {
       const _this = this;
       const reqObj = {
-        url: `voucher/validatevoucher?fkAssociateId=${
+        url: `voucher/gv/validatevoucher?fkAssociateId=${
           this.model1.fkasid
         }&vouchercode=${this.model1.vouchercode}`,
         method: 'get'
@@ -275,7 +278,7 @@ export class VoucherModelComponent implements OnInit, AfterViewInit {
     data['voucherModel']['vouchertype'] = this.model1.vouchertype;
     data['voucherModel']['vouchercode'] = this.model1.vouchercode;
     data['voucherModel']['vouchervalue'] = this.model1.vouchervalue;
-    data['voucherModel']['expirydate'] = this.model1.expirydate;
+    data['voucherModel']['expirydate'] = this.model1.expirydate + " 23:59:59";
     data['voucherModel']['comment'] = this.model1.comment;
     data['voucherModel']['enabled'] = this.model1.enabled === true ? 1 : 0;
     data['voucherModel']['multipleusage'] = this.model1.multipleusage;
@@ -288,16 +291,15 @@ export class VoucherModelComponent implements OnInit, AfterViewInit {
     data['voucherModel']['productQuant'] = this.model1.productQuant;
     data['voucherModel']['applicablePid'] = this.model1.applicablePid;
     data['voucherModel']['applicablecategory'] = this.model1.applicablecategory;
-    data['voucherModel']['modifiedby'] = 'Cheta';
+    data['voucherModel']['modifiedby'] = 'Chetan';
     // data['rowLimitModel']['startIndex'] = this.model1.startIndex;
-    data['rowLimitModel']['rowsCount'] =
-      this.model1.startIndex + this.model1.rowsCount;
+    data['rowLimitModel']['rowsCount'] = 1;
     console.log(JSON.stringify(data));
 
     if (this.validateModel()) {
       const _this = this;
       const reqObj = {
-        url: 'voucher/updatevoucher',
+        url: 'voucher/gv/updatevoucher',
         method: 'put',
         payload: data
       };
