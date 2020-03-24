@@ -41,26 +41,37 @@
                             <div class="col-md-6">
                             <div class="form-group" [ngClass]="{ 'has-error': catDataForm.submitted }">
                             <label for="">GV Code: </label>
-                            <span *ngIf="model1.add != 'add'">{{model1.couponcode}}</span>
+                            <span *ngIf="model1.add != 'add'">{{model1.couponcode}}</span><br/>
+                            <label for="">GV Cost: </label>
+                            <span *ngIf="model1.add != 'add'">{{model1.couponcost}}</span>
                             </div>
                             </div>
                         </div>
                           <div *ngIf="enablefields || model1.enablefields">
                           <div class="row">
                             <div class="col-md-6">
-                              <div class="form-group" [ngClass]="{ 'has-error': catDataForm.submitted && !couponcost.valid }">
-                                  <label for="">GV Cost</label>
-                                  <input type="number" class="form-control" name="couponcost" placeholder="Coupon Cost" [(ngModel)]="model1.couponcost" #couponcost="ngModel"
-                                      (focusout)="validateVoucherCode()" required maxlength="50" />
+                              <div class="form-group" [ngClass]="{ 'has-error': catDataForm.submitted && !primary_cost.valid }">
+                                  <label for="">Primary Cost</label>
+                                  <input type="number" class="form-control" name="primary_cost" placeholder="Coupon Cost" [(ngModel)]="model1.primary_cost" #primary_cost="ngModel"
+                                       required maxlength="50" onkeypress="return event.charCode >= 48 && event.charCode <= 57" />
                               </div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-6">
+                                <div class="form-group" [ngClass]="{ 'has-error': catDataForm.submitted && !secondary_cost.valid }">
+                                    <label for="">Secondary Cost</label>
+                                    <input type="number" class="form-control" name="secondary_cost" placeholder="Coupon Cost" [(ngModel)]="model1.secondary_cost" #secondary_cost="ngModel"
+                                         required maxlength="50" onkeypress="return event.charCode >= 48 && event.charCode <= 57" />
+                                </div>
+                              </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-md-6">
                               <div class="form-group" [ngClass]="{ 'has-error': catDataForm.submitted && !purchaseorderid.valid }">
                                   <label for="">Order Id</label>
                                   <input type="number" class="form-control" value="-1" placeholder="Order Id" name="purchaseorderid" #purchaseorderid="ngModel"
-                                      [(ngModel)]="model1.purchaseorderid" required />
+                                      [(ngModel)]="model1.purchaseorderid" onkeypress="return event.charCode >= 48 && event.charCode <= 57" required />
                               </div>
-                          </div>
+                            </div>
                           </div>
 
                               <div class="row">
