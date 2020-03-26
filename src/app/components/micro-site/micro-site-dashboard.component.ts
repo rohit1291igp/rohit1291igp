@@ -250,8 +250,8 @@ export class MicroSiteDasboardComponent implements OnInit {
                             }
                         });
                     }
-                    response.data.length > 0 && response.data.forEach(m => m.uploadDate = pipe.transform(m.uploadDate, 'dd/MM/yyyy'));
-                    response.data.length > 0 && response.data.forEach(m => m.couponUsedDate = pipe.transform(m.couponUsedDate, 'dd/MM/yyyy'));
+                    response.data.length > 0 && response.data.forEach(m => m.uploadDate = pipe.transform(m.uploadDate, 'dd/MM/yy'));
+                    response.data.length > 0 && response.data.forEach(m => m.couponUsedDate = pipe.transform(m.couponUsedDate, 'dd/MM/yy'));
 
                     _this.dataSource = new MatTableDataSource(response.data);
                     _this.setTableColumn(data.value.filtertype);
@@ -290,8 +290,8 @@ export class MicroSiteDasboardComponent implements OnInit {
 
                     })
 
-                    userData.length > 0 && userData.forEach(m => m.uploadDate = pipe.transform(m.uploadDate, 'dd/MM/yyyy'));
-                    userData.length > 0 && userData.forEach(m => m.couponUsedDate ? m.couponUsedDate = pipe.transform(m.couponUsedDate, 'dd/MM/yyyy') : m.couponUsedDate = '');
+                    userData.length > 0 && userData.forEach(m => m.uploadDate = pipe.transform(m.uploadDate, 'dd/MM/yy'));
+                    userData.length > 0 && userData.forEach(m => m.couponUsedDate ? m.couponUsedDate = pipe.transform(m.couponUsedDate, 'dd/MM/yy') : m.couponUsedDate = '');
                     // let headerData = _this.swap(response.data[0]);
 
                     if (isdataready) {
