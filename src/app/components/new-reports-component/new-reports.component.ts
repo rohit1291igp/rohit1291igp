@@ -19,15 +19,23 @@ interface SearchForm{
     //   changeDetection: ChangeDetectionStrategy.Default
 })
 export class NewReportsComponent implements OnInit {
-    @Input() displayedColumns: any[];
+    displayedColumns: any[];
     dataSource: any;
+    //Table Original Data
     @Input() orginalReportData: any;
+    //Table action array like (Edit)
     @Input() tableDataAction: any;
+    //Table Header Array
     @Input() reportsHeader: any
+    // Emit order data to open order tray
     @Output() viewOrder = new EventEmitter();
+    //table pagination
     @ViewChild(MatPaginator) paginator: MatPaginator;
+    //table sort
     @ViewChild(MatSort) sort: MatSort;
+    // Filter Form Configuration
     @Input() SearchForm: SearchForm;
+    // Emit 
     @Output() submitForm = new EventEmitter();
     columnNames = [];
     toppings = new FormControl();

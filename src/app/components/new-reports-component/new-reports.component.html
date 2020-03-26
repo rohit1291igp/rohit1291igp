@@ -1,5 +1,6 @@
 <!-- New Table-->
 <div class="main-container">
+    <!-- Filter Form -->
     <mat-card>
         <form [formGroup]="myForm" (ngSubmit)="onSubmit(myForm)">
             <div class="form-container">
@@ -43,8 +44,8 @@
         </form>
 
     </mat-card>
-
-    <div class="mat-elevation-z8" *ngIf="displayedColumns.length > 0">
+    <!-- Filter Form Ends -->
+    <div class="mat-elevation-z8">
         <div class="example-container mat-elevation-z8">
             <mat-table #table mat-table [dataSource]="dataSource" matSort (matSortChange)="test($event)">
                 <ng-container matColumnDef="{{col.id}}" *ngFor="let col of columnNames">

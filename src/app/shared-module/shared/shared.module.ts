@@ -34,7 +34,7 @@ import { ReplacePipe } from '../../customPipes/replace.pipe';
     MatCheckboxModule,
     MatListModule,
     MatExpansionModule,
-    MatDatepickerModule
+    MatDatepickerModule,
     MatRadioModule,
     MatSelectModule
   ],
@@ -72,7 +72,7 @@ import { ReplacePipe } from '../../customPipes/replace.pipe';
     PrintTemplateComponent,
     ReplacePipe,
     MatExpansionModule,
-    MatDatepickerModule
+    MatDatepickerModule,
     MatRadioModule,
     MatSelectModule
   ],
