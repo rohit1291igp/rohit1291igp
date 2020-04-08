@@ -16,8 +16,10 @@
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse navRight" id="bs-example-navbar-collapse-1" *ngIf="!isMobile && vendorName">
       <ul class="nav navbar-nav navbar-right">
+        <li  *ngIf="environment.userType == 'root'" class="fullHeightLi" [ngClass]="{'selected' : selectedTopTab === 'sendemail/uploadtemplate'}">
+            <p><a ng-href="#/sendemail/uploadtemplate" routerLink="/sendemail/uploadtemplate">Upload</a></p>
+        </li>
         <ng-container *ngIf="(environment.userType !== 'root' && environment.userType !== 'blogger')">
-            
             <li  *ngIf="environment.userType != 'microsite'" class="fullHeightLi" [ngClass]="{'selected' : selectedTopTab === 'dashboard'}">
                 <p><a ng-href="#/dashboard" routerLink="/dashboard">Dashboard</a></p>
             </li>

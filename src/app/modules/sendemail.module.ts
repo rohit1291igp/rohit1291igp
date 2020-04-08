@@ -5,11 +5,16 @@ import { RouterModule, Routes } from '@angular/router';
 import { MicroSiteDasboardComponent } from 'app/components/micro-site/micro-site-dashboard.component';
 import { SendEmailComponent } from 'app/components/send-email/send-email.component';
 import { MyDatePickerModule } from 'mydatepicker';
+import { NewExcelUploadComponent } from 'app/components/new-excel-upload/new-excel-upload.component';
 
 const routes: Routes = [
   {
     path: '',
     component: SendEmailComponent
+  },
+  {
+    path: 'uploadtemplate',
+    component: NewExcelUploadComponent
   }
 ];
 
@@ -22,7 +27,8 @@ const routes: Routes = [
     MyDatePickerModule
   ],
   declarations: [
-    SendEmailComponent
+    SendEmailComponent,
+    NewExcelUploadComponent
   ]
 })
 export class SendEmailModule { }
