@@ -111,11 +111,12 @@ export class LoginComponent implements OnInit {
                     //   localStorage.setItem('userType', 'vendor');
                     //   environment.userType='vendor';
                     // }
+                    
 
                     _this.UtilityService.changeRouteComponent();
                     if(userType === 'deliveryboy'){
                         _this.router.navigate(['/delivery-app']);
-                    }else if(userType === 'microsite'){
+                    }else if(userType === 'microsite' || userType === 'microsite-zeapl'){
                         _this.router.navigate(['/dashboard-microsite']);
                     }else if(userType === 'voucher'){
                         _this.router.navigate(['/voucher/voucher']);

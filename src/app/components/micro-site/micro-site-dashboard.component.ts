@@ -182,8 +182,9 @@ export class MicroSiteDasboardComponent implements OnInit {
         const now = Date.now();
         const datefrom = pipe.transform(now, 'yyyy-MM-dd');
         const dateto = pipe.transform(now, 'yyyy-MM-dd');
+        const micrositeUser = localStorage.getItem('userType') == 'microsite' ? 'itc' : 'zeapl';
         const reqObj = {
-            url: `itc/getuserrecord?fromdate=${datefrom}&todate=${dateto}&emailid=&type=all`,
+            url: `${micrositeUser}/getuserrecord?fromdate=${datefrom}&todate=${dateto}&emailid=&type=all`,
             method: "get"
         };
         _this.BackendService.makeAjax(reqObj, function (err, response, headers) {
@@ -225,9 +226,10 @@ export class MicroSiteDasboardComponent implements OnInit {
         headers.append('Content-Type', 'multipart/form-data');
         headers.append('Accept', 'application/json');
         let options = new RequestOptions({ headers: headers });
+        const micrositeUser = localStorage.getItem('userType') == 'microsite' ? 'itc' : 'zeapl';
 
         let reqObj = {
-            url: `itc/getuserrecord?fromdate=${datefrom}&todate=${dateto}&emailid=${data.value.email}&type=${data.value.filtertype}`,
+            url: `${micrositeUser}/getuserrecord?fromdate=${datefrom}&todate=${dateto}&emailid=${data.value.email}&type=${data.value.filtertype}`,
             method: 'get',
             options: options
         };
@@ -341,9 +343,12 @@ export class MicroSiteDasboardComponent implements OnInit {
             headers.append('Content-Type', 'multipart/form-data');
             headers.append('Accept', 'application/json');
             let options = new RequestOptions({ headers: headers });
+            const micrositeUser = localStorage.getItem('userType') == 'microsite' ? 'itc' : 'zeapl';
+            const micrositeVoucher = localStorage.getItem('userType') == 'microsite' ? 'itcvouchers' : 'zeaplvouchers';
+            
             let reqObj = {
                 url:
-                    'itc/userupload?issue=itcvouchers',
+                    `${micrositeUser}/userupload?issue=${micrositeVoucher}`,
                 method: 'post',
                 payload: formData,
                 options: options
@@ -361,6 +366,7 @@ export class MicroSiteDasboardComponent implements OnInit {
                     _this.displayUploadForm(false);
                     _this.openSnackBar(`File Uploaded Sucessfully!`);
                     fileInput.value = '';
+                    _this.getUsers();
                 } else {
                     fileInput.value = '';
                     _this.displayUploadForm(false);

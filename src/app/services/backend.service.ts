@@ -42,7 +42,7 @@ export class BackendService {
                   } else {
                       if(environment.userType === 'deliveryboy'){
                         reqObj.url = environment.origin + 'v1/handels/' + reqObj.url;
-                      }else if(environment.userType === 'microsite'){
+                      }else if(environment.userType === 'microsite' || environment.userType === 'microsite-zeapl'){
                         reqObj.url = environment.origin + 'v1/admin/' + reqObj.url;
                       } else if(environment.userType === 'voucher'){
                         reqObj.url = environment.origin + 'v1/' + reqObj.url;
