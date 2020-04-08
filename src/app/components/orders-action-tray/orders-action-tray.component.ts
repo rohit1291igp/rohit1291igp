@@ -149,6 +149,7 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
   deliveryBoyAssignBtnText: boolean;
   assignedDeliveryBoy:string;
   deliveryBoyEnabled:any;
+    reajectoption: any;
   constructor(
       private _elementRef: ElementRef,
       public BackendService : BackendService,
@@ -168,9 +169,11 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
      this.setRejectInitialValue();
      if(environment.userType === 'vendor'){
         this.getDeliveryBoyList();
+        this.getRejectResons('reject');
      }
      if(environment.userType === 'admin'){
         this.getFeeds();
+        this.getRejectResons('reassign');
      }
      //this.statusReasonModel.OrderProductsList = [];
   }
@@ -805,6 +808,7 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
 
       if( (status === "Delivered" || status === "Rejected" || status === "OutForDelivery") && (!e.customCurrentTarget)){
           if(status === "Rejected") {
+              this.reajectoption = this.statusReasonModel.rejectOption;
               this.statusReasonModel = {};
               this.setRejectInitialValue();
           }
@@ -909,6 +913,29 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
                   }
               }
               _this.setRejectInitialValue();
+              if(status === 'Rejected'){
+                var paramsObj={
+                    actionName:'reject',
+                    reason:_rejectOption || _this.reajectoption,
+                    remarks: rejectionMessage,
+                    orderId:orderId,
+                    orderProductId:orderProducts[orderIndex].orderProductId,
+                    fkAssociateId:fkAssociateId
+                 };
+                 let paramsStr = _this.UtilityService.formatParams(paramsObj);
+                  let reqObj =  {
+                    url : "savePerformanceReasons"+paramsStr,
+                    method :  'post'
+                    };
+                  _this.BackendService.makeAjax(reqObj, function(err, response, headers){
+                    //if(!response) response={result:[]};
+                    if(err || response.error) {
+                        console.log('Error=============>', err);
+                        return;
+                    }
+                    console.log(JSON.stringify(response));
+                });
+              }
 
           });
       }
@@ -967,6 +994,26 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
       }
       /* firing status api - start */
   }
+
+    getRejectResons(status: any) {
+        var _this = this;
+       // if (status === "Rejected") {
+            let reqObj = {
+                url: 'getPerformanceReasonList?action='+status,
+                method: "get"
+            };
+            this.BackendService.makeAjax(reqObj, function (err, response, headers) {
+                if (err || response.error) {
+                    console.log('Error=============>', err, response.errorCode);
+                    _this.apierror = err || response.errorCode;
+                    return;
+                }
+                else {
+                    _this.rejectReasons = response.result;
+                }
+            });
+      //  }
+    }
 
   getNxtOrderStatus(orderByStatus){ //Method to get custom status
       let orderUpdateByStatus;
@@ -1226,6 +1273,8 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
               _this.adminActions.adminActionsModel.checkBox=false;
               _this.adminActions.adminActionsModel.deliveryTime="";
               _this.adminActions.adminActionsModel.deliveryType="";
+              _this.adminActions.adminActionsModel.adminreason = "";
+              _this.adminActions.adminActionsModel.checkBoxReassign=true;
 
               _this.adminActions.adminActionsName=name;
               _this.adminActions.adminActionsSubName=subName;
@@ -1374,6 +1423,29 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
                   if(!dataLength){
                       _this.onStatusUpdate.emit("closed");
                       _this.trayOpen = false;
+                  }
+                  if(_this.adminActions.adminActionsModel.checkBoxReassign){
+                    var paramsObj={
+                        actionName:'reassign',
+                        reason:_this.adminActions.adminActionsModel.adminreason,
+                        remarks: "",
+                        orderId:_this.sidePanelData[orderIndex].orderId,
+                        orderProductId:_this.adminActions.adminActionsModel.orderProductId,
+                        fkAssociateId:_this.adminActions.adminActionsModel.checkBox ? _this.adminActions.adminActionsModel.assignChangeAnotherVendor : _this.adminActions.adminActionsModel.assignChangeVendor
+                     };
+                     let paramsStr = _this.UtilityService.formatParams(paramsObj);
+                      let reqObj =  {
+                        url : "savePerformanceReasons"+paramsStr,
+                        method : (method || 'post')
+                        };
+                      _this.BackendService.makeAjax(reqObj, function(err, response, headers){
+                        //if(!response) response={result:[]};
+                        if(err || response.error) {
+                            console.log('Error=============>', err);
+                            return;
+                        }
+                        console.log(JSON.stringify(response));
+                    });
                   }
               };
               break;
