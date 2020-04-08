@@ -1,0 +1,58 @@
+<div class="" style="height:85vh;">
+  <div class="" style="display: block; overflow:scroll; background: transparent;">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content" style="margin-top:25%; margin-left:25%; width:50%;">
+        <div class="modal-header" style="border-bottom:none;">
+          <div class="caption">Upload Excel File</div>
+        </div>
+        <div class="modal-body center-align">
+          <form (ngSubmit)="f.form.valid && uploadExcel($event)" #f="ngForm" nonvalidate>
+            <select id="selectedIssue" name="selectedIssue" class="form-control" [(ngModel)]="_data.selectedIssue" #selectedIssue="ngModel"
+              required>
+              <option *ngFor="let issue of _data.issuelist" [ngValue]="issue.value">
+                  <span class="capitalize">{{issue.issue}}</span>
+              </option>
+          </select>
+            <div class="m-top-1 left-align">
+              <input id="excelFile" class="form-control custom-control m-top-1" type="file" name="file" (change)="fileChange($event)" accept=".xls, .xlsx, .csv"
+                required>
+            </div>
+            <div class="m-top-1 left-align" *ngIf="isUploading">
+              <h3 style="text-align: center;">Uploading...</h3>
+            </div>
+
+            <button class="btn btn-primary m-top-1" *ngIf="!isUploading">Upload</button>
+            <div class="help-block theme-red" *ngIf="f.submitted && !selectedIssue.valid">Please select a Issue.</div>
+            <div class="help-block theme-red" *ngIf="_flags.emptyFileValidation">Please choose a excel file.</div>
+            <div class="help-block theme-red" *ngIf="_flags.wrongFileFormat">{{_data?.uploadErrorList[0]?.message}}</div>
+            <div class="m-top-1 text-bold text-green" *ngIf="_flags.uploadSuccessFlag && !_flags.wrongFileFormat">All orders are uploaded successfully
+              from {{_data.uploadFileName}}!</div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="error-section" [ngClass]="{'show-error-section': _data.uploadErrorList.length, 'hide-error-section': !_data.uploadErrorList.length}">
+  <div class="colInline col-sm-1 col-md-1" style="top: 1em; right: 1em; position: absolute;">
+    <a href="#/sendemail" (click)="closeErrorSection($event)" style="color:#000;">
+      <i class="glyphicon glyphicon-remove close-tray"></i>
+    </a>
+  </div>
+
+  <h3 style="text-decoration:underline;">{{_data.uploadFileName}}</h3>
+  <div class="count text-green" *ngIf="_data.uploadErrorCount && _data.uploadErrorCount.correct">
+    Success - {{_data.uploadErrorCount.correct}}
+  </div>
+
+  <div>
+    <div class="count text-igp" *ngIf="_data.uploadErrorCount && _data.uploadErrorCount.fail">Failed - {{_data.uploadErrorCount.fail}}</div>
+    <div class="caption m-top-1">List:-</div>
+    <div class="errorCont" *ngFor="let err of _data.uploadErrorList">
+      <div>{{err.message}}
+        <!-- <ng-container *ngIf="err.row">Row - {{err.row}} -</ng-container> {{err.msg}} -->
+      </div>
+    </div>
+  </div>
+</div>
