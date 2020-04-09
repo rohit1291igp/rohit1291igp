@@ -107,6 +107,11 @@ export class MainHeaderComponent implements OnInit {
           _this.selectedReportTab="";
           _this.reportDropdownOpen=false;
       }
+      if(currentRoute === "/sendemail/uploadtemplate"){
+        _this.selectedTopTab = "sendemail/uploadtemplate";
+        _this.selectedReportTab="";
+        _this.reportDropdownOpen=false;
+    }
 
       if(/^\/reports/.test(currentRoute)){
           _this.selectedTopTab = "reports";

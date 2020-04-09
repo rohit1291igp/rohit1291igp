@@ -33,6 +33,8 @@ export class GvComponent implements OnInit {
       // this.model1.vouchertype = 0;
       // this.model1.vouchertype2 = 0;
       this.model1.couponcost = 0;
+      this.model1.primary_cost = 0;
+      this.model1.secondary_cost = 0;
       this.model1.couponcostdollar = 9.999;
       this.model1.expirydate = '';
       this.model1.description = '';
@@ -122,40 +124,14 @@ export class GvComponent implements OnInit {
     });
   }
 
-  validateVoucherCode() {
-    // tslint:disable-next-line:max-line-length
-    if (
-      this.model1.couponcost !== 0 &&
-      typeof this.model1.couponcost !== 'undefined' &&
-      this.model1.previousVoucherCode !== this.model1.couponcost
-    ) {
-      const _this = this;
-      const reqObj = {
-        url: `gv/validategiftvoucher?fkAssociateId=${
-          this.model1.fkasid
-        }&vouchercode=${this.model1.vouchercode}`,
-        method: 'get'
-      };
-
-      _this.BackendService.makeAjax(reqObj, function(err, response, headers) {
-        if (err || response.error || response.status === 'Error') {
-          console.log('Error=============>', err, response.errorCode);
-          alert(`Voucher code already exists. Please enter new voucher code!`);
-          _this.validVoucherCode = false;
-          return false;
-        } else {
-          _this.validVoucherCode = true;
-        }
-      });
-    }
-  }
-
   addVoucher() {
     const data = {};
     data['giftVoucherModel'] = {};
     data['rowLimitModel'] = {};
     data['giftVoucherModel']['fkasid'] = this.model1.fkasid;
     data['giftVoucherModel']['couponcost'] = this.model1.couponcost;
+    data['giftVoucherModel']['primary_cost'] = this.model1.primary_cost;
+    data['giftVoucherModel']['secondary_cost'] = this.model1.secondary_cost;
     data['giftVoucherModel']['couponcostdollar'] = this.model1.couponcostdollar;
     data['giftVoucherModel']['couponuses'] = this.model1.couponuses;
     data['giftVoucherModel']['couponlink'] = this.model1.couponlink;
@@ -196,8 +172,8 @@ export class GvComponent implements OnInit {
   // Validate model before saving/creating
   validateModel() {
     if (
-      this.model1.couponcost === '' ||
-      typeof this.model1.couponcost === 'undefined'
+      this.model1.primary_cost === '' ||
+      typeof this.model1.primary_cost === 'undefined'
     ) {
       alert('Please enter the coupon cost.');
       return false;
@@ -237,6 +213,8 @@ export class GvComponent implements OnInit {
 
     data['giftVoucherModel']['fkasid'] = this.model1.fkasid;
     data['giftVoucherModel']['couponcost'] = this.model1.couponcost;
+    data['giftVoucherModel']['primary_cost'] = this.model1.primary_cost;
+    data['giftVoucherModel']['secondary_cost'] = this.model1.secondary_cost;
     data['giftVoucherModel']['couponcode'] = this.model1.couponcode;
     data['giftVoucherModel']['couponcostdollar'] = this.model1.couponcostdollar;
     data['giftVoucherModel']['couponuses'] = this.model1.couponuses;
