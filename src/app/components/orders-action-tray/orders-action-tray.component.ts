@@ -79,7 +79,8 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
       adminActionsSubName:"",
       adminActionsModel:null,
       adminActionDepData:null,
-      adminActionResponse:null
+      adminActionResponse:null,
+      adminbtnName : ""
   };
   activeOrderLogIndexes={};
   activeUIIndexes={};
@@ -1279,6 +1280,7 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
               _this.adminActions.adminActionsName=name;
               _this.adminActions.adminActionsSubName=subName;
               _this.adminActions.adminActionsFlag=true;
+              _this.adminActions.adminbtnName = e.target.innerText;
           }
       }, subName);
   }
