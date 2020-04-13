@@ -286,10 +286,10 @@
                             <select name="assignChangeAnotherVendor" class="form-control m-top-2" [(ngModel)]="adminActions.adminActionsModel.assignChangeAnotherVendor" #assignChangeAnotherVendor="ngModel" [disabled]="!adminActions.adminActionsModel.checkBox" required>
                                 <option *ngFor="let vendor of dropdownData" [ngValue]="vendor.Vendor_Id">{{vendor.Vendor_Name}}</option>
                             </select><br/>
-                            <div class="checkBoxReassign">
+                            <div class="checkBoxReassign" *ngIf="adminActions.adminbtnName !== '' && adminActions.adminbtnName !== 'Assign'">
                                     <input name="chk1" [(ngModel)]="adminActions.adminActionsModel.checkBoxReassign" type="checkbox"> &nbsp;&nbsp; Rejection penalty
                             </div>
-                            <select name="adminreason" class="form-control m-top-2" [(ngModel)]="adminActions.adminActionsModel.adminreason" #adminreason="ngModel"  [disabled]="!adminActions.adminActionsModel.checkBoxReassign" required>
+                            <select *ngIf="adminActions.adminbtnName !== '' && adminActions.adminbtnName !== 'Assign'" name="adminreason" class="form-control m-top-2" [(ngModel)]="adminActions.adminActionsModel.adminreason" #adminreason="ngModel"  [disabled]="!adminActions.adminActionsModel.checkBoxReassign" required>
                                     <option  [ngValue]="''" [selected]>Select reason for reassign</option>
                                     <option *ngFor="let reason of rejectReasons" [ngValue]="reason">{{reason}}</option>
                             </select>
