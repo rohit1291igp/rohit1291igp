@@ -852,6 +852,11 @@ getDeliveryBoyList(){
             _this.searchResultModel["startLimit"] = 0;
             _this.searchResultModel["endLimit"] = 1000;
             
+        }
+        if(_this.reportType == 'getbarcodestoverify'){
+            _this.searchResultModel["sku"] = e.target.firstElementChild.firstElementChild.value;
+            _this.searchResultModel["startLimit"] = 0;
+            _this.searchResultModel["endLimit"] = 100;
         } 
         
         _this.queryString = _this.generateQueryString(_this.searchResultModel);
@@ -875,6 +880,9 @@ getDeliveryBoyList(){
                 /* need to handle filter - start */
                 _this.orginalReportData.summary = _reportData.summary;
                 _this.orginalReportData.tableData = _reportData.tableData; //_this.orginalReportData.tableData.concat(_reportData.tableData);
+                if(_this.reportType == 'getbarcodestoverify'){
+                    _this.reportData = _reportData;
+                }
                 // if(e){
                     _this.columnFilterSubmit(e);
                     _this.showMoreTableData(e);
@@ -887,6 +895,30 @@ getDeliveryBoyList(){
             
         });
         
+   }
+
+   barcodeverified(e, val, tableRowValue){
+       var _this = this, isverified;
+       if(e.target.className.split(' ')[1] == 'fa-toggle-off'){
+           isverified = 1;
+       } else {
+           isverified = 0;
+       }
+       let reqObj =  {
+        url : 'doverifybarcode?sku='+tableRowValue.barcode+'&isVerified='+isverified,
+        method : "put",
+      };
+      _this.BackendService.makeAjax(reqObj, function(err, response, headers){
+        if(response.result){
+            if(e.target.className.split(' ')[1] == 'fa-toggle-off'){
+                e.target.className = 'fa fa-toggle-on';
+            } else if(e.target.className.split(' ')[1] == 'fa-toggle-on'){
+                e.target.className = 'fa fa-toggle-off';
+            }
+        }else{
+          alert("Error Occurred.");
+        }
+      });
    }
 
    //sort
