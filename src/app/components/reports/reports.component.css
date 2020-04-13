@@ -522,3 +522,26 @@ table thead th{
     border: none;
     box-shadow: 0px 1px 3px 1px #ccc;
 }
+
+.product-component {
+    vertical-align: bottom;
+    margin-bottom: 1em;
+    width: 75px;
+    height: 175px;
+    display: inline-block;
+    background-color: #f2f2f2;
+}
+
+.component-quantity {
+    margin: 2px 4px;
+    background-color: #C3404E;
+    color: #ffffff;
+    text-align: center;
+    font-weight: bold;
+}
+
+.component-image {
+    width: 75px;
+    height: 75px;
+    padding: 2px 4px;
+}

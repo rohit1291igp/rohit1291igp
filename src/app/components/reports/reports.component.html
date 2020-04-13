@@ -395,12 +395,12 @@
 
 <div class="container-fluid reports-cont" *ngIf="reportData">
     <div class="row">
-        <div class="col-sm-12 col-md-12 m-top-1" *ngIf="reportType === 'getOrderReport' || reportType === 'getPayoutAndTaxesReport' || reportType === 'getOrderFileUploadReport'" style="width:100%; height:14em;">
+        <div class="col-sm-12 col-md-12 m-top-1" *ngIf="reportType === 'getOrderReport' || reportType === 'getPayoutAndTaxesReport' || reportType === 'getOrderFileUploadReport' || reportType === 'getbarcodestoverify'" style="width:100%; height:14em;">
 
             <div class="col-sm-9 col-md-9 reprts-search-fields bg-white padding1" style="margin-right:0.5%; height:100%;" [style.width]="(getTopBlockWidth()).left">
                 <div class="underLine paddingHalf text-bold">Search Parameters</div>
                 <form name="searchReport" (ngSubmit)="f.form.valid && searchReportSubmit($event)" #f="ngForm" nonvalidate>
-                    <div class="searchFields m-top-1 inline">
+                    <div class="searchFields m-top-1 inline" *ngIf="reportType !== 'getbarcodestoverify'">
                         <div class="searchFiled pull-left" *ngFor="let searchField of reportData.searchFields;" >
                             <select class="form-control" name="{{searchField.name}}"  [(ngModel)]="searchResultModel[searchField.name]" *ngIf="searchField.name === 'status'">
                                 <option *ngFor="let statusName of statusList" [ngValue]="statusName.value" [attr.data-trayOpen]="statusName.type">{{statusName.name}}</option>
@@ -421,8 +421,14 @@
                             <app-vendor-dropdown [configData]="{'modelData' :searchResultModel, 'defaultVendor' : ''}"></app-vendor-dropdown>
                         </div>
                     </div>
-                    <div class="searchFieldsSubmit relative inline">
+                    <div class="searchFields m-top-1 inline" *ngIf="reportType == 'getbarcodestoverify'">
+                            <input class="form-control" type="text"  placeholder="Search Sku" style="width: 50%">
+                    </div>
+                    <div *ngIf="reportType !== 'getbarcodestoverify'" class="searchFieldsSubmit relative inline">
                         <input  type="submit" class="btn btn-primary pull-right bg-igp searchSubmitBtn"  value="Search All Parameters"/>
+                    </div>
+                    <div *ngIf="reportType == 'getbarcodestoverify'" class="searchFieldsSubmit relative inline" style="top:4em;">
+                            <input  type="submit" class="btn btn-primary pull-right bg-igp searchSubmitBtn"  value="Search Parameters"/>
                     </div>
                 </form>
 
@@ -599,7 +605,7 @@
 
 
         <div class="col-sm-12 col-md-12 table-area table-cont m-top-1" id="table-section">
-                <div class="reportDwld pull-right btn btn-primary" (click)="downLoadCSV($event, reportType)" [ngClass]="{'disableBtn' : !reportData.tableData.length}">
+                <div class="reportDwld pull-right btn btn-primary" (click)="downLoadCSV($event, reportType)" [ngClass]="{'disableBtn' : !reportData.tableData.length}" *ngIf="reportType !== 'getbarcodestoverify'">
                   Download <span class="glyphicon glyphicon-download-alt" title="Download Report"></span>
                 </div>
                 <div  class="reportDwld pull-right btn btn-primary" (click)="bulkAssignAction()" *ngIf="(environment.userType && environment.userType === 'admin') && (reportType === 'getOrderReport')" [ngClass]="{'disableBtn' : !reportData.tableData.length}">
@@ -718,8 +724,20 @@
                                                 </span>
             
                                                 <span *ngIf="tableCol == 'Ship_Type'" >{{getDeliveryName(getCellValue(tableRowValue[tableCol])) | replace : '`updated'}}</span>
+                                                <span style="cursor: pointer;" *ngIf="tableCol == 'isVerified'" (click)="barcodeverified($event, getCellValue(tableRowValue[tableCol]),tableRowValue)"><i class="fa" [ngClass]="{'fa-toggle-off': getCellValue(tableRowValue[tableCol]) == false , 'fa-toggle-on' : getCellValue(tableRowValue[tableCol]) == true}"></i></span>
                                                 <span *ngIf="ifDate(tableCol) == 'date'" >{{getCellValue(tableRowValue[tableCol]) | date : 'dd/MM/yy'}}</span>
-                                                <span *ngIf="ifDate(tableCol) != 'date' && tableCol != 'Ship_Type' && tableCol != 'Component_Image' && tableCol != 'Component Image' && tableCol != 'Product Image' && tableCol != 'Product_Image' && tableCol != 'Out Of Delivery' && tableCol != 'Out_Of_Delivery' && tableCol != 'Proof Of Delivery' && tableCol != 'Proof_Of_Delivery' && tableCol != 'Vendor_List'" >
+                                                <span style="display: flex;
+                                                align-items: center;
+                                                justify-content: center;" *ngIf="tableCol == 'component'">
+                                                <span *ngFor="let prodComponent of getCellValue(tableRowValue['component']); let i='index'" style="margin-right: 1em;">
+                                                        <div class="product-component relative">
+                                                                <img class="component-image clk" style="height: 80px;width: 70px;" src="{{componentImageUrl}}{{prodComponent.componentImage}}" alt="Component_img" (click)="imagePreview($event, componentImageUrl+prodComponent.componentImage)" (error)="onSrcError($event)">
+                                                                <div class="component-quantity center-align">x {{prodComponent.quantity | number | replace}}</div>
+                                                          <div class="component-name center-align">{{prodComponent.componentName}} </div>
+                                                        </div>
+                                                </span>
+                                                </span>
+                                                <span *ngIf="ifDate(tableCol) != 'date' && tableCol != 'Ship_Type' && tableCol != 'Component_Image' && tableCol != 'Component Image' && tableCol != 'Product Image' && tableCol != 'Product_Image' && tableCol != 'Out Of Delivery' && tableCol != 'Out_Of_Delivery' && tableCol != 'Proof Of Delivery' && tableCol != 'Proof_Of_Delivery' && tableCol != 'Vendor_List' && tableCol !== 'component'" >
                                                     <span *ngIf="getCellValue(tableRowValue[tableCol]) === 0">
                                                             {{getCellValue(tableRowValue[tableCol])}}
                                                     </span>
@@ -739,6 +757,10 @@
                                                             </ng-container>      
                                                         </mat-menu>
                                                     </span>-->
+                                                    <span class="testing" *ngIf="tableCol == 'sku'" style="display:inline-block;">
+                                                            <img class="clk" style="width: 4em; box-shadow: 0 1px 3px #888888;" src="{{productsURL}}th/{{getCellValue(tableRowValue['barcodeImage'])}}" alt="{{getCellValue(tableRowValue['barcodeImage'])}}" (click)="imagePreview($event, productsURL+'l/'+(getCellValue(tableRowValue['barcodeImage'])))">
+                                                            <br/><br/><span>{{getCellValue(tableRowValue['barcode'])}}</span>
+                                                    </span>
                                                     <span *ngIf="getCellValue(tableRowValue[tableCol]) !== 0" [innerHTML]="getCellValue(tableRowValue[tableCol])  | replace : '`,[' "></span>
                                                 </span>
                                                 &nbsp; &nbsp; &nbsp;
