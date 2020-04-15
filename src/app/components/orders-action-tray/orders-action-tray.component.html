@@ -244,6 +244,8 @@
                     </h4>
                     <h4 class="modal-title" id="myModalLabel" *ngIf="adminActions.adminActionsName === 'changeDeliveryType&Date'">Chage Delivery Type & Date</h4>
                     <h4 class="modal-title" id="myModalLabel" *ngIf="adminActions.adminActionsName === 'cancelRefund'">Cancel Order</h4>
+                    <h4 class="modal-title" id="myModalLabel" *ngIf="adminActions.adminActionsName === 'addComplaints'">Complaint</h4>
+                    <h4 class="modal-title" id="myModalLabel" *ngIf="adminActions.adminActionsName === 'addCompliance'">Complaince</h4>
                 </div>
 
                 <div class="modal-body center-align" *ngIf="adminActions.adminActionsName === 'email'">
@@ -309,6 +311,35 @@
                         </form>
                     </div>
                 </div>
+
+                <div class="modal-body center-align" *ngIf="adminActions.adminActionsName === 'addComplaints'">
+                        <div class="form-group">
+                            <form (ngSubmit)="f.form.valid && adminActionsSubmit($event)" #f="ngForm" nonvalidate>
+                                <select name="complaintreason" class="form-control m-top-2" [(ngModel)]="adminActions.adminActionsModel.complaintreason" #complaintreason="ngModel" required>
+                                        <option  [ngValue]="''" [selected]>Select reason for complaint</option>
+                                        <option *ngFor="let reason of rejectReasons" [ngValue]="reason">{{reason}}</option>
+                                </select>
+                                <textarea name="complainttext" class="form-control custom-control m-top-1" rows="3" style="resize:none" [(ngModel)]="adminActions.adminActionsModel.complainttext" #complainttext="ngModel" placeholder="Comment"></textarea>
+                                <!--<input name="assignChangeVendor" class="form-control custom-control m-top-1" [(ngModel)]="adminActions.adminActionsModel.assignChangeVendor" #assignChangeVendor="ngModel" placeholder="Vendor" required>-->
+                                <div *ngIf="f.submitted && !complaintreason.valid" class="help-block theme-red">Please Select reason for complaint!</div>
+                                <button class="btn btn-primary m-top-1">Submit</button>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="modal-body center-align" *ngIf="adminActions.adminActionsName === 'addCompliance'">
+                            <div class="form-group">
+                                <form (ngSubmit)="f.form.valid && adminActionsSubmit($event)" #f="ngForm" nonvalidate>
+                                    <select name="compliancereason" class="form-control m-top-2" [(ngModel)]="adminActions.adminActionsModel.compliancereason" #compliancereason="ngModel" required>
+                                            <option  [ngValue]="''" [selected]>Select reason for compliance</option>
+                                            <option *ngFor="let reason of rejectReasons" [ngValue]="reason">{{reason}}</option>
+                                    </select>
+                                    <textarea name="compliancetext" class="form-control custom-control m-top-1" rows="3" style="resize:none" [(ngModel)]="adminActions.adminActionsModel.compliancetext" #complainttext="ngModel" placeholder="Comment"></textarea>
+                                    <!--<input name="assignChangeVendor" class="form-control custom-control m-top-1" [(ngModel)]="adminActions.adminActionsModel.assignChangeVendor" #assignChangeVendor="ngModel" placeholder="Vendor" required>-->
+                                    <div *ngIf="f.submitted && !compliancereason.valid" class="help-block theme-red">Please Select reason for compliance!</div>
+                                    <button class="btn btn-primary m-top-1">Submit</button>
+                                </form>
+                            </div>
+                        </div>
 
                 <div class="modal-body center-align" *ngIf="adminActions.adminActionsName === 'changePrice'">
                     <div class="form-group">
@@ -878,6 +909,12 @@
                                 <div>Mobile: {{order.customersMobile}}</div>
                                 <div>Email: {{order.customersEmail}}</div>
                                 <div><span>{{order.customersCountry}},{{order.customersCity}}</span></div>
+                        </div>
+                        <div class="btn btn-primary actions-button text-bold" (click)="adminActionsInit($event, 'addComplaints', orderIndex)" *ngIf="env.userType == 'admin' && order.orderProducts[0].ordersProductStatus == 'Shipped'">
+                                Complaints
+                        </div>
+                        <div class="btn btn-primary actions-button text-bold" (click)="adminActionsInit($event, 'addCompliance', orderIndex)" *ngIf="env.userType == 'admin' && order.orderProducts[0].ordersProductStatus == 'Shipped'">
+                                Complaince
                         </div>
                     </div>
 
