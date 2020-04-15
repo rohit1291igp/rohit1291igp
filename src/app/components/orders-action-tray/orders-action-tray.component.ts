@@ -1275,6 +1275,10 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
               _this.adminActions.adminActionsModel.deliveryTime="";
               _this.adminActions.adminActionsModel.deliveryType="";
               _this.adminActions.adminActionsModel.adminreason = "";
+              _this.adminActions.adminActionsModel.complaintreason = "";
+              _this.adminActions.adminActionsModel.compliancereason = "";
+              _this.adminActions.adminActionsModel.complainttext = "";
+              _this.adminActions.adminActionsModel.compliancetext = "";
               _this.adminActions.adminActionsModel.checkBoxReassign=true;
 
               _this.adminActions.adminActionsName=name;
@@ -1348,7 +1352,11 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
           _this.orderProductChange(e, "0:");
       }else if(name === "cancelRefund"){
           orderProdsCollection();
-      }
+      } else if(name === "addComplaints"){
+        this.getRejectResons('complaint');
+    } else if(name === "addCompliance"){
+        this.getRejectResons('compliance');
+    }
 
       return cb(null);
   }
@@ -1542,6 +1550,46 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
                       _this.trayOpen = false;
                   }
               };
+              break;
+        case 'addComplaints' : 
+            paramsObj={
+                actionName:'complaint',
+                reason:_this.adminActions.adminActionsModel.complaintreason,
+                remarks: _this.adminActions.adminActionsModel.complainttext,
+                orderId:_this.sidePanelData[orderIndex].orderId,
+                orderProductId:_this.sidePanelData[orderIndex].orderProducts[orderIndex].orderProductId,
+                fkAssociateId:_this.sidePanelData[orderIndex].orderProducts[orderIndex].fkAssociateId
+            };
+            url = "savePerformanceReasons";
+            apiSuccessHandler=function(apiResponse){
+                let currentTab = _this.activeDashBoardDataType;
+                _this.onStatusUpdate.emit(currentTab);
+                let dataLength = _this.sidePanelDataOnStatusUpdate(orderIndex, _this.sidePanelData[orderIndex].orderId, null, null, apiResponse.result);
+                if(!dataLength){
+                    _this.onStatusUpdate.emit("closed");
+                    _this.trayOpen = false;
+                }
+            }
+            break;
+        case 'addCompliance' : 
+            paramsObj={
+                actionName:'compliance',
+                reason:_this.adminActions.adminActionsModel.compliancereason,
+                remarks: _this.adminActions.adminActionsModel.compliancetext,
+                orderId:_this.sidePanelData[orderIndex].orderId,
+                orderProductId:_this.sidePanelData[orderIndex].orderProducts[orderIndex].orderProductId,
+                fkAssociateId:_this.sidePanelData[orderIndex].orderProducts[orderIndex].fkAssociateId
+            };
+            url = "savePerformanceReasons";
+            apiSuccessHandler=function(apiResponse){
+                let currentTab = _this.activeDashBoardDataType;
+                _this.onStatusUpdate.emit(currentTab);
+                let dataLength = _this.sidePanelDataOnStatusUpdate(orderIndex, _this.sidePanelData[orderIndex].orderId, null, null, apiResponse.result);
+                if(!dataLength){
+                    _this.onStatusUpdate.emit("closed");
+                    _this.trayOpen = false;
+                }
+            }
               break;
       }
 
