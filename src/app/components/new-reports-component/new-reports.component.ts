@@ -74,7 +74,6 @@ export class NewReportsComponent implements OnInit {
             this.dataSource.sort = this.sort;
             this.dataSource.paginator = this.paginator;
         }, 100)
-
     }
 
     createHeader(reportsHeader){

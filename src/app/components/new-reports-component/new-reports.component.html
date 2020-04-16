@@ -23,7 +23,7 @@
 
                     <mat-form-field class="m-8">
                         <mat-label>Filter</mat-label>
-                        <input formControlName="filter" matInput  (keyup)="applyFilter($event)">
+                        <input formControlName="filter" matInput  (keyup)="applyFilter($event)" autocomplete="@@@&&&&9986345678">
                     </mat-form-field>
 
                     <mat-form-field class="m-8">
@@ -78,6 +78,7 @@
                 <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
                 <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
             </mat-table>
+            <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
         </div>
     </div>
 </div>
