@@ -69,14 +69,15 @@
                         <form (ngSubmit)="f.form.valid && statusReasonSubmit($event)" #f="ngForm" nonvalidate>
 
                             <select name="rejectopt" class="form-control" [(ngModel)]="statusReasonModel.rejectOption" #rejectopt="ngModel" required>
-                                <option *ngFor="let reason of rejectReasons" [ngValue]="reason.value" [attr.data-trayOpen]="reason.type">{{reason.name}}</option>
+                                <option  [ngValue]="''" [attr.data-trayOpen]="" [selected]>Select reason for rejection</option>
+                                <option *ngFor="let reason of rejectReasons; let orderIndex='index'" [ngValue]="reason" [attr.data-trayOpen]="orderIndex">{{reason}}</option>
                             </select>
 
                             <div *ngIf="f.submitted && !rejectopt.valid" class="help-block theme-red">Please select reason for rejection</div>
 
-                            <div *ngIf="statusReasonModel.rejectOption == 'Other'">
+                            <div> 
                                 <textarea name="message" class="form-control custom-control m-top-1" rows="3" style="resize:none" [(ngModel)]="statusReasonModel.message" #message="ngModel" placeholder="Reason for reject" required></textarea>
-                                <div *ngIf="f.submitted && !message.valid" class="help-block theme-red">Reject reason is required</div>
+                                <!-- <div *ngIf="f.submitted && !message.valid" class="help-block theme-red">Reject reason is required</div> -->
                             </div>
 
                             <div class="rejectStatusDp" *ngIf="statusReasonModel.rejectOption == 'Delivery not possible on given date'">
@@ -284,8 +285,14 @@
 
                             <select name="assignChangeAnotherVendor" class="form-control m-top-2" [(ngModel)]="adminActions.adminActionsModel.assignChangeAnotherVendor" #assignChangeAnotherVendor="ngModel" [disabled]="!adminActions.adminActionsModel.checkBox" required>
                                 <option *ngFor="let vendor of dropdownData" [ngValue]="vendor.Vendor_Id">{{vendor.Vendor_Name}}</option>
+                            </select><br/>
+                            <div class="checkBoxReassign">
+                                    <input name="chk1" [(ngModel)]="adminActions.adminActionsModel.checkBoxReassign" type="checkbox"> &nbsp;&nbsp; Rejection penalty
+                            </div>
+                            <select name="adminreason" class="form-control m-top-2" [(ngModel)]="adminActions.adminActionsModel.adminreason" #adminreason="ngModel"  [disabled]="!adminActions.adminActionsModel.checkBoxReassign" required>
+                                    <option  [ngValue]="''" [selected]>Select reason for reassign</option>
+                                    <option *ngFor="let reason of rejectReasons" [ngValue]="reason">{{reason}}</option>
                             </select>
-
                             <!--<input name="assignChangeVendor" class="form-control custom-control m-top-1" [(ngModel)]="adminActions.adminActionsModel.assignChangeVendor" #assignChangeVendor="ngModel" placeholder="Vendor" required>-->
 
                             <div *ngIf="f.submitted && !orderProductId.valid" class="help-block theme-red">Please Select Order Product!</div>
@@ -294,6 +301,9 @@
                             </div>
                             <div class="checkbox" *ngIf="!adminActions.adminActionsModel.checkBox">
                                 <div *ngIf="f.submitted && !assignChangeVendor.valid" class="help-block theme-red">Please Select vendor name!</div>
+                            </div>
+                            <div class="checkbox" *ngIf="adminActions.adminActionsModel.checkBoxReassign">
+                            <div *ngIf="f.submitted && !adminreason.valid" class="help-block theme-red">Please Select reason for reassign!</div>
                             </div>
                             <button class="btn btn-primary m-top-1">Submit</button>
                         </form>
