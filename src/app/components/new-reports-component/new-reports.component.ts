@@ -15,7 +15,8 @@ interface Field{
 interface formFields{
     multipleSelection:Field,
     dateRange:Field,
-    Selection:Field
+    Selection:Field,
+    textSearch:Field
 }
 interface SearchForm{
     show:boolean,
