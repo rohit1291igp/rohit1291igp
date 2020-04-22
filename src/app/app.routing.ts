@@ -9,6 +9,7 @@ import { DownloadEmailComponent } from './components/download-email/download-ema
 import { LoginComponent } from './components/login/login.component';
 import { VoucherComponent } from './components/voucher/voucher.component';
 import { AuthGuard } from './services/auth-guard.service';
+import { PerformanceReportComponent } from './components/performance-report/performance-report.component';
 
 
 const route: Routes = [
@@ -83,6 +84,11 @@ const route: Routes = [
   {
     path: 'voucher',
     loadChildren: './modules/voucher.module#VoucherModule',
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'performanceReport',
+    component: PerformanceReportComponent,
     canActivate: [AuthGuard]
   },
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },

@@ -1,12 +1,21 @@
-import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ChangeDetectionStrategy, SimpleChanges, IterableDiffers, DoCheck, AfterViewChecked, AfterViewInit } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ChangeDetectionStrategy, SimpleChanges, IterableDiffers, DoCheck, AfterViewChecked, AfterViewInit, NgModule } from '@angular/core';
 import { FormControl, FormGroup, FormBuilder } from '@angular/forms';
 import { MatDialog, MatPaginator, MatSort, MatTableDataSource, MatDatepickerInputEvent } from '@angular/material';
 import { editComponent } from '../reports/reports.component';
-import { DatePipe } from '@angular/common';
-
+import { DatePipe, CommonModule } from '@angular/common';
+import { SharedModule } from 'app/shared-module/shared/shared.module';
+import { BrowserModule } from '@angular/platform-browser';
+import { CapitalizePipeModule } from 'app/customPipes/capitalze.pipe';
+import { DateFormatterPipeModule } from 'app/customPipes/date-formatter';
+interface Field{
+    show:boolean,
+    placeholder:string,
+    value?:any;
+}
 interface formFields{
-    multipleSelection:boolean,
-    dateRange:boolean
+    multipleSelection:Field,
+    dateRange:Field,
+    Selection:Field
 }
 interface SearchForm{
     show:boolean,
@@ -35,13 +44,15 @@ export class NewReportsComponent implements OnInit {
     @ViewChild(MatSort) sort: MatSort;
     // Filter Form Configuration
     @Input() SearchForm: SearchForm;
-    // Emit 
+    // Emit Data
     @Output() submitForm = new EventEmitter();
+    //Date format
+    @Input() dateFormat:string;
     columnNames = [];
     toppings = new FormControl();
-    toppingList: string[] = ['Extra cheese', 'Mushroom', 'Onion', 'Pepperoni', 'Sausage', 'Tomato'];
+    @Input() dropDownList: string[];//= ['Extra cheese', 'Mushroom', 'Onion', 'Pepperoni', 'Sausage', 'Tomato'];
     myForm: FormGroup;
-
+    btnType = '';
     constructor(
         private dialog: MatDialog, 
         private _differs: IterableDiffers,
@@ -53,12 +64,13 @@ export class NewReportsComponent implements OnInit {
     ngOnInit() {
         this.myForm = this.fb.group({
             name: [''],
-            toppings: [''],
+            multiSelection: [''],
+            selection: [''],
             filter: [''],
-            datefrom: [''],
-            dateto: [''],
+            datefrom: [new Date()],
+            dateto: [new Date()],
         });
-
+        this.myForm.controls['selection'].setValue(this.SearchForm.formFields.Selection.value);
         this.createHeader(this.reportsHeader);
         // this.orginalReportData.forEach((e) => {
         //     for (let k in e) {
@@ -95,7 +107,7 @@ export class NewReportsComponent implements OnInit {
     }
 
     ngOnChanges(changes: SimpleChanges) {
-        if (!changes["orginalReportData"].firstChange && changes["orginalReportData"].currentValue.length > changes["orginalReportData"].previousValue.length) {
+        if (!changes["orginalReportData"].firstChange) {
             this.dataSource.data = changes["orginalReportData"].currentValue;
             if(changes["reportsHeader"] && changes["reportsHeader"].currentValue){
                 this.createHeader(changes["reportsHeader"].currentValue);
@@ -186,8 +198,16 @@ export class NewReportsComponent implements OnInit {
         const pipe = new DatePipe('en-US');
         const datefrom = pipe.transform(data.value.datefrom, 'yyyy-MM-dd');
         const dateto = pipe.transform(data.value.dateto, 'yyyy-MM-dd');
+        data.value['btnType'] = this.btnType;
         this.submitForm.emit(data.value);
     }
 }
 
+@NgModule({
+    imports:[CommonModule,SharedModule,CapitalizePipeModule, DateFormatterPipeModule],
+    declarations:[NewReportsComponent],
+    exports:[NewReportsComponent]
+})
+export class NewReportsComponentModule{
 
+}

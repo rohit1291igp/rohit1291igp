@@ -54,6 +54,10 @@ import { AutoSelectionComponent } from './components/autoselection/auto-selectio
 import { GvComponent } from './components/gv/gv.component';
 import { VoucherComponent } from './components/voucher/voucher.component';
 import { VoucherModelComponent } from './components/voucher-model/voucher-model.component';
+import { PerformanceReportComponent } from './components/performance-report/performance-report.component';
+import { NewReportsComponentModule } from './components/new-reports-component/new-reports.component';
+import { CapitalizePipeModule } from './customPipes/capitalze.pipe';
+import { DateFormatterPipeModule } from './customPipes/date-formatter';
 
 
 
@@ -84,7 +88,8 @@ export function ConfigLoader(envConfig: envConfig) {
     SelectItemForDelivered,
     OrderStockComponent,
     testComponent,
-    editComponent
+    editComponent,
+    PerformanceReportComponent
     // AutoSelectionComponent
   ],
   imports: [
@@ -120,7 +125,10 @@ export function ConfigLoader(envConfig: envConfig) {
     NgxEditorModule,
     CKEditorModule,
     Ng2ImgMaxModule,
-    MatListModule
+    MatListModule,
+    NewReportsComponentModule,
+    CapitalizePipeModule,
+    DateFormatterPipeModule
     // RouterModule
   ],
   providers: [

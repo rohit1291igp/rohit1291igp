@@ -605,7 +605,7 @@
                 <div  class="reportDwld pull-right btn btn-primary" (click)="bulkAssignAction()" *ngIf="(environment.userType && environment.userType === 'admin') && (reportType === 'getOrderReport')" [ngClass]="{'disableBtn' : !reportData.tableData.length}">
                   Bulk Assign <span class="glyphicon glyphicon-check" title="Bulk Assign"></span>
                 </div>
-                <table style="display: none;" class="report-table table table-striped table-bordered table-curved fixed-headerx">
+                <table class="report-table table table-striped table-bordered table-curved fixed-header">
                     <thead class="bg-igp text-white" (click)="stopEventPropgation($event)">
                         <tr>
                             <ng-container *ngFor="let tableLabel of reportData.tableHeaders; let a='index';">
@@ -819,9 +819,9 @@
     </div>
 </div>
    <!-- New Table-->
-    <ng-container *ngIf="orginalReportData && orginalReportData?.tableData.length > 0">
+    <!-- <ng-container *ngIf="orginalReportData && orginalReportData?.tableData.length > 0">
         <app-new-reports [reportsHeader]="tableHeaders" [orginalReportData]="dataSource" [tableDataAction]="orginalReportData.tableDataAction"(viewOrder)="viewOrderDetail($event)" [SearchForm]="{'show':true, 'formFields':{'multipleSelection':true, 'dateRange':true}}" (submitForm)="newFormSubmit($event)"></app-new-reports>
-    </ng-container>
+    </ng-container> -->
     <!-- New Table Ends -->
     
     

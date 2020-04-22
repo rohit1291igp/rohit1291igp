@@ -41,6 +41,7 @@
                         <a *ngIf="environment.userType != 'vendor'" class="" routerLink="/reports/getPayoutAndTaxesReport"><li [ngClass]="{'selected' : selectedReportTab === 'getPayoutAndTaxesReport'}">Payout & Taxes</li></a>
                         <a *ngIf="environment.userType === 'vendor'" class="" routerLink="/reports/getOrderFileUploadReport"><li [ngClass]="{'selected' : selectedReportTab === 'getOrderFileUploadReport'}">Uploaded Image</li></a>
                         <a *ngIf="environment.userType === 'admin' || environment.userType === 'vendor'" class="" routerLink="/reports/getComponentOrderReport"><li [ngClass]="{'selected' : selectedReportTab === 'getComponentOrderReport'}">Stock Component Report</li></a>
+                        <a *ngIf="environment.userType === 'admin' || environment.userType === 'vendor'" class="" routerLink="/performanceReport"><li [ngClass]="{'selected' : selectedReportTab === 'performanceReport'}">Performance Report</li></a>
                         </ng-container>
                         <a *ngIf="(environment.userType == 'microsite')" class="" routerLink="/reports/itcReport" ><li [ngClass]="{'selected' : selectedReportTab === 'report'}">Current Balances</li></a>
                         <a *ngIf="(environment.userType == 'microsite-zeapl')" class="" routerLink="/reports/zeaplReport" ><li [ngClass]="{'selected' : selectedReportTab === 'report'}">Current Balances</li></a>

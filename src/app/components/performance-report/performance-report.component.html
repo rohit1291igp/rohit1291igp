@@ -1,0 +1,6 @@
+<ng-container>
+    <app-new-reports [reportsHeader]="tableHeaders" [orginalReportData]="dataSource"
+        [tableDataAction]="orginalReportData?.tableDataAction" (viewOrder)="viewOrderDetail($event)"
+        [SearchForm]="{'show':true, 'formFields':{'dateRange':{'show':true}, 'textSearch':{'show':true, 'placeholder':'Filter'}, 'Selection':{'show':true,'placeholder':'Action', value:'ALL'}}}"
+        (submitForm)="newFormSubmit($event)" [dropDownList]="actionList"[dateFormat]="'dd-MM-yyyy'"></app-new-reports>
+</ng-container>

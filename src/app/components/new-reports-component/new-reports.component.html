@@ -1,60 +1,69 @@
-<!-- New Table-->
 <div class="main-container">
     <!-- Filter Form -->
     <mat-card>
         <form [formGroup]="myForm" (ngSubmit)="onSubmit(myForm)">
             <div class="form-container">
                 <div class="d-flex">
-                    <mat-form-field class="m-8">
-                        <input matInput [matDatepicker]="picker" placeholder="From"
-                            (dateInput)="addEventFrom('input', $event)" (dateChange)="addEventFrom('change', $event)"
-                            autocomplete="off">
-                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                        <mat-datepicker #picker></mat-datepicker>
+                    <ng-container *ngIf="SearchForm?.formFields?.dateRange?.show">
+                        <mat-form-field class="m-8">
+                            <input matInput [matDatepicker]="picker" placeholder="From"
+                                (dateInput)="addEventFrom('input', $event)"
+                                (dateChange)="addEventFrom('change', $event)" formControlName="datefrom" autocomplete="off">
+                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-datepicker #picker></mat-datepicker>
+                        </mat-form-field>
+
+                        <mat-form-field class="m-8">
+                            <input matInput [matDatepicker]="pickers" placeholder="To"
+                                (dateInput)="addEventTo('input', $event)" (dateChange)="addEventTo('change', $event)" formControlName="dateto"
+                                autocomplete="off">
+                            <mat-datepicker-toggle matSuffix [for]="pickers"></mat-datepicker-toggle>
+                            <mat-datepicker #pickers></mat-datepicker>
+                        </mat-form-field>
+                    </ng-container>
+
+                    <mat-form-field *ngIf="SearchForm?.formFields?.textSearch?.show"class="m-8">
+                        <mat-label>{{SearchForm?.formFields?.textSearch?.placeholder}}</mat-label>
+                        <input formControlName="filter" matInput (keyup)="applyFilter($event)"
+                            autocomplete="@@@&&&&9986345678">
                     </mat-form-field>
 
-                    <mat-form-field class="m-8">
-                        <input matInput [matDatepicker]="pickers" placeholder="To"
-                            (dateInput)="addEventTo('input', $event)" (dateChange)="addEventTo('change', $event)"
-                            autocomplete="off">
-                        <mat-datepicker-toggle matSuffix [for]="pickers"></mat-datepicker-toggle>
-                        <mat-datepicker #pickers></mat-datepicker>
-                    </mat-form-field>
-
-                    <mat-form-field class="m-8">
-                        <mat-label>Filter</mat-label>
-                        <input formControlName="filter" matInput  (keyup)="applyFilter($event)" autocomplete="@@@&&&&9986345678">
-                    </mat-form-field>
-
-                    <mat-form-field class="m-8">
-                        <mat-label>Toppings</mat-label>
-                        <mat-select formControlName="toppings" multiple>
+                    <mat-form-field *ngIf="SearchForm?.formFields?.multipleSelection?.show" class="m-8">
+                        <mat-label>{{SearchForm?.formFields?.multipleSelection?.placeholder}}</mat-label>
+                        <mat-select formControlName="multipleSelection" multiple>
                             <mat-option *ngFor="let topping of toppingList" [value]="topping">{{topping}}</mat-option>
                         </mat-select>
                     </mat-form-field>
+                    <mat-form-field *ngIf="SearchForm?.formFields?.Selection.show" class="m-8">
+                            <mat-label>{{SearchForm?.formFields?.Selection?.placeholder}}</mat-label>
+                            <mat-select formControlName="selection">
+                                <mat-option *ngFor="let option of dropDownList" [value]="option">{{option}}</mat-option>
+                            </mat-select>
+                        </mat-form-field>
                 </div>
                 <div class="d-flex">
-                        <button style="margin: 5px;" id="search" type="submit" mat-raised-button
-                        class="btn-color">Search</button>
-                        <button style="margin: 5px;" id="download" type="submit" mat-raised-button
-                        class="btn-color">Download</button>  
-                    </div>
-
+                    <button style="margin: 5px;" id="search" type="submit" mat-raised-button class="btn-color"
+                        (click)="btnType = 'search'">Search</button>
+                    <button style="margin: 5px;" id="download" type="submit" mat-raised-button class="btn-color"
+                        (click)="btnType = 'download'">Download</button>
+                </div>
             </div>
         </form>
 
     </mat-card>
     <!-- Filter Form Ends -->
-    <div class="mat-elevation-z8">
+    <!-- New Table-->
+    <div class="mat-elevation-z8" *ngIf="dataSource?.data?.length > 0 else noRecord">
         <div class="example-container mat-elevation-z8">
             <mat-table #table mat-table [dataSource]="dataSource" matSort (matSortChange)="test($event)">
                 <ng-container matColumnDef="{{col.id}}" *ngFor="let col of columnNames">
-                    <mat-header-cell class="mat-header-row" *matHeaderCellDef> {{ getHeaderCellValue(col.value) }}
+                    <mat-header-cell class="mat-header-row" *matHeaderCellDef>
+                        {{ getHeaderCellValue(col.value) | capitalize }}
                     </mat-header-cell>
                     <mat-cell *matCellDef="let element; let i = index">
                         <ng-container
                             *ngIf="getRowCellValue(element[col.id]) != 'img' && getRowCellValue(element[col.id]) != 'menu'">
-                            {{ getRowCellValue(element[col.id]) }} <i *ngIf="getEditTableCell(col.id)"
+                            {{ getRowCellValue(element[col.id]) | dateformatter:dateFormat}} <i *ngIf="getEditTableCell(col.id)"
                                 class="fa fa-edit" style="cursor: pointer;"
                                 (click)="openEditWindow(element, col.id, i)"></i>
                         </ng-container>
@@ -81,6 +90,9 @@
             <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
         </div>
     </div>
+    <ng-template #noRecord>
+        <mat-card style="color: #C3404E;">No Record</mat-card>
+    </ng-template>
 </div>
 
 <!-- New Table Ends -->
