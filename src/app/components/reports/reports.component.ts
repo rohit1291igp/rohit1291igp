@@ -858,7 +858,17 @@ getDeliveryBoyList(){
             
         }
         if(_this.reportType == 'getbarcodestoverify'){
-            _this.searchResultModel["sku"] = e.target.firstElementChild.firstElementChild.value;
+            if(e.target.firstElementChild.firstElementChild.value){
+                _this.searchResultModel["sku"] = e.target.firstElementChild.firstElementChild.value;
+                _this.searchResultModel["isVerified"] = ""
+            } else if(e.target.elements[1].value){
+                _this.searchResultModel["isVerified"] = e.target.elements[1].value;
+                _this.searchResultModel["sku"] = "";
+            }
+            if(e.target.firstElementChild.firstElementChild.value === "" && e.target.elements[1].value === ""){
+                alert("Please select or add any sku to search");
+                return "";
+            }
             _this.searchResultModel["startLimit"] = 0;
             _this.searchResultModel["endLimit"] = 100;
         } 
