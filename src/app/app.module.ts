@@ -4,7 +4,7 @@ import { DatePipe } from '@angular/common';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { HttpModule } from '@angular/http';
-import { MatButtonModule, MatCardModule, MatCheckboxModule, MatDatepickerModule, MatDialogModule, MatDialogRef, MatFormFieldModule, MatIconModule, MatInputModule, MatMenuModule, MatNativeDateModule, MatPaginatorModule, MatProgressBarModule, MatProgressSpinnerModule, MatRadioModule, MatSelectModule, MatSnackBarModule, MatSortModule, MatTableModule, MAT_DIALOG_DATA, MatListModule } from '@angular/material';
+import { MatButtonModule, MatCardModule, MatCheckboxModule, MatDatepickerModule, MatDialogModule, MatDialogRef, MatFormFieldModule, MatIconModule, MatInputModule, MatListModule, MatMenuModule, MatNativeDateModule, MatPaginatorModule, MatProgressBarModule, MatProgressSpinnerModule, MatRadioModule, MatSelectModule, MatSnackBarModule, MatSortModule, MatTableModule, MAT_DIALOG_DATA } from '@angular/material';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
@@ -32,10 +32,10 @@ import { ImgPreviewComponent } from './components/img-preview/img-preview.compon
 import { LoginComponent } from './components/login/login.component';
 import { MainHeaderComponent } from './components/main-header/main-header.component';
 import { NotificationComponent } from './components/notification/notification.component';
+import { OrderStockComponent } from './components/order-stocks/order-stock.component';
+import { editComponent } from './components/reports/reports.component';
 import { SelectItemForDelivered } from './components/select-item/select-item.component';
 import { UploadExcelComponent } from './components/upload-excel/upload-excel.component';
-//Custom Pipe
-import { FilterPipe, FilterPipeModule } from './customPipes/filter.pipe';
 import { ObjectKeyValuePipe } from './customPipes/object-key-value.pipe';
 import { Time12Pipe } from './customPipes/time12.pipe';
 import { DashboardModule } from './modules/dashboard.module';
@@ -50,11 +50,14 @@ import { S3UploadService } from './services/s3Upload.service';
 import { UserService } from './services/user.service';
 import { UtilityService } from './services/utility.service';
 import { SharedModule } from './shared-module/shared/shared.module';
-import { OrderStockComponent } from './components/order-stocks/order-stock.component';
 import { AutoSelectionComponent } from './components/autoselection/auto-selection.component';
 import { GvComponent } from './components/gv/gv.component';
 import { VoucherComponent } from './components/voucher/voucher.component';
 import { VoucherModelComponent } from './components/voucher-model/voucher-model.component';
+import { PerformanceReportComponent } from './components/performance-report/performance-report.component';
+import { NewReportsComponentModule } from './components/new-reports-component/new-reports.component';
+import { CapitalizePipeModule } from './customPipes/capitalze.pipe';
+import { DateFormatterPipeModule } from './customPipes/date-formatter';
 
 
 
@@ -85,6 +88,8 @@ export function ConfigLoader(envConfig: envConfig) {
     SelectItemForDelivered,
     OrderStockComponent,
     testComponent,
+    editComponent,
+    PerformanceReportComponent
     // AutoSelectionComponent
   ],
   imports: [
@@ -120,7 +125,10 @@ export function ConfigLoader(envConfig: envConfig) {
     NgxEditorModule,
     CKEditorModule,
     Ng2ImgMaxModule,
-    MatListModule
+    MatListModule,
+    NewReportsComponentModule,
+    CapitalizePipeModule,
+    DateFormatterPipeModule
     // RouterModule
   ],
   providers: [
@@ -155,7 +163,7 @@ export function ConfigLoader(envConfig: envConfig) {
     S3UploadService,
     Ng2ImgMaxService
   ],
-  entryComponents:[UploadExcelComponent,NotificationComponent, ImgPreviewComponent, SelectItemForDelivered, OrderStockComponent],
+  entryComponents:[UploadExcelComponent,NotificationComponent, ImgPreviewComponent, SelectItemForDelivered, OrderStockComponent,editComponent],
   bootstrap: [AppComponent],
   exports: [RouterModule]
 })

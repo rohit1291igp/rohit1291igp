@@ -1,7 +1,7 @@
 import { animate, Component, ElementRef, HostListener, Inject, OnInit, sequence, style, transition, trigger, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { Headers, RequestOptions } from "@angular/http";
-import { MatDialog, MatDialogRef, MatSnackBar, MAT_DIALOG_DATA } from '@angular/material';
+import { MatDialog, MatDialogRef, MatSnackBar, MAT_DIALOG_DATA, MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
 import { ActivatedRoute } from '@angular/router';
 import { Angular5Csv } from 'angular5-csv/dist/Angular5-csv';
 import { IMyOptions } from 'mydatepicker';
@@ -212,7 +212,15 @@ export class ReportsComponent implements OnInit{
   paginationFlag = 100;
   myForm: FormGroup;
   procTypeVendor = [];
-
+  dataSource = [];
+  tableHeaders = [];
+  displayedColumns = [];
+  columnNames = [];
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
+  toppings = new FormControl();
+  toppingList: string[] = ['Extra cheese', 'Mushroom', 'Onion', 'Pepperoni', 'Sausage', 'Tomato'];
+  testArray = [{"ComponentCode":"testteddy","StockQuantity":11,"ComponentDeliveryStatus":"Rejected","AwbNo":"","ComponentId":1440,"CourierName":"","OrderComponentId":1,"VendorId":843,"ComponentName":"test teddy","ComponentImage":"Teddy (1).docx","VendorName":"Test","ComponentCostVendor":200.000,"OrderTime":"2020-02-27 17:53:42.0"},{"ComponentCode":"Cakeboxtest","StockQuantity":10,"ComponentDeliveryStatus":"Rejected","AwbNo":"","ComponentId":1441,"CourierName":"","OrderComponentId":15,"VendorId":843,"ComponentName":"Cake box test","ComponentImage":"Boxes (1).xlsx","VendorName":"Test","ComponentCostVendor":200.000,"OrderTime":"2020-02-27 17:53:42.0"}];
   constructor(
       private _elementRef: ElementRef,
       public reportsService: ReportsService,
@@ -374,7 +382,8 @@ export class ReportsComponent implements OnInit{
                     }
                     console.log('reportLabelState===>', _this.reportLabelState);
                     /* report label states - end */
-      
+                    _this.dataSource = _reportData.tableData ? _reportData.tableData : [];
+                    _this.tableHeaders = _reportData.tableHeaders ? _reportData.tableHeaders : [];
                     _reportData.searchFields = _this.reportDataLoader.searchFields;
                     _this.reportData = _reportData;
                     _this.orginalReportData = JSON.parse(JSON.stringify(_this.reportData)); //Object.assign({}, _this.reportData);
@@ -765,6 +774,8 @@ getDeliveryBoyList(){
         var _this=this;
         _this.BackendService.abortLastHttpCall();//abort  other  api calls
         console.log('Search report form submitted ---->', _this.searchResultModel);
+        // _this.dataSource = new MatTableDataSource();
+        _this.columnNames = [];
         if(_this.reportType == "getComponentReport"){
             if($('.componentDD').val() == "Select Component Code"){
                 alert("Please select component code");
@@ -889,6 +900,9 @@ getDeliveryBoyList(){
             }
             console.log('searchReportSubmit _reportData=============>', _reportData);
             if(_reportData.tableData){
+                // _this.dataSource = new MatTableDataSource(_reportData.tableData);
+                // _this.dataSource.paginator = _this.paginator;
+                // _this.dataSource.sort = _this.sort;
                 _reportData.searchFields = _this.reportData.searchFields;
                 //_this.reportData = _reportData;
                 /* need to handle filter - start */
@@ -897,6 +911,10 @@ getDeliveryBoyList(){
                 if(_this.reportType == 'getbarcodestoverify'){
                     _this.reportData = _reportData;
                 }
+                _this.orginalReportData.tableData = _reportData.tableData; //
+                _this.dataSource = _reportData.tableData ? _reportData.tableData : [];
+                _this.tableHeaders = _reportData.tableHeaders ? _reportData.tableHeaders : [];
+                _this.orginalReportData.tableData.concat(_reportData.tableData);
                 // if(e){
                     _this.columnFilterSubmit(e);
                     _this.showMoreTableData(e);
@@ -993,6 +1011,11 @@ getDeliveryBoyList(){
                         /* need to handle filter - start */
                         _this.orginalReportData.summary = _reportData.summary;
                         _this.orginalReportData.tableData = _this.orginalReportData.tableData.concat(_reportData.tableData);
+                        _this.dataSource = _reportData.tableData ? _this.dataSource.concat(_reportData.tableData) : [];
+
+                        // _this.dataSource = new MatTableDataSource(_this.orginalReportData.tableData);
+                        // _this.dataSource.paginator = _this.paginator;
+                        // _this.dataSource.sort = _this.sort;
                         _this.columnFilterSubmit(e);
                         _this.showMoreTableData(e);
                     });
@@ -1032,7 +1055,11 @@ getDeliveryBoyList(){
 
     viewOrderDetail(e, orderId){
         console.log('viewOrderDetail-------->', orderId);
-        this.child.toggleTray(e, "", orderId, null);
+        if(e.event){
+            this.child.toggleTray(e.event, "", e.orderId, null);
+        }else{
+            this.child.toggleTray(e, "", orderId, null);
+        }
     }
 
     dwldInv(e, orderId_, invNo){
@@ -1633,7 +1660,6 @@ getDeliveryBoyList(){
                     _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header] = _this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header].replace(/`updated/g , " ");
                 },1000);
             }
-
             if(environment.userType && environment.userType === 'admin'){
                 if(_this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header]['value']){
                     //_this.reportData.tableData[_this.editTableCellObj.dataIndex][_this.editTableCellObj.header]['value'] = "";
@@ -2062,7 +2088,129 @@ getDeliveryBoyList(){
         }
         
     }
+    applyFilter(filterValue: any) {
+        this.dataSource.filter = filterValue.target.value.trim().toLowerCase();
+        // if (this.dataSource.paginator) {
+        //     this.dataSource.paginator.firstPage();
+        // }
+    }
 
+    getHeaderCellValue(headerData: any) {
+        if (headerData.includes('_')) {
+            return headerData.replace(/_|_/g, ' ');
+        } else {
+            return headerData;
+        }
+    }
+
+    getRowCellValue(rowData: any) {
+        if(rowData == undefined){
+            return '-'
+        }
+        if (typeof rowData == 'object') {
+            if (rowData.value) {
+                return rowData.value;
+            } else {
+                if (Array.isArray(rowData)) {
+                    return 'menu'
+                };
+            }
+        }
+        if (typeof rowData == 'number' || typeof rowData == 'string' && !(rowData.includes('.jpg') || rowData.includes('.png'))) {
+            return rowData;
+        } else {
+            return 'img'
+        }
+    }
+
+    getEditTableCell(col) {
+        let key = this.orginalReportData.tableDataAction.find(m => m && Object.keys(m) == col);
+        if (key && key[col][0] == 'Edit') {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    openEditWindow(rowData, colName, index) {
+        // this.dataSource.filter = rowData[colName].value.trim().toLowerCase();
+        // this.orginalReportData.tableData.forEach(m => {
+            
+        //     for(let k in m){
+        //         if(m[k] == rowData[k]){
+        //             m[colName] = 100;
+        //         } 
+        //     }
+        // });
+        // this.dataSource = new MatTableDataSource(this.orginalReportData.tableData);
+        const dialogRef = this.dialog.open(editComponent, {
+            width: '250px',
+            data: { 'rowData': rowData[colName], 'colName': this.getHeaderCellValue(colName) }
+        });
+
+        dialogRef.afterClosed().subscribe(result => {
+            rowData = 100;
+            console.log('The dialog was closed');
+        });
+
+    }
+
+    newFormSubmit(event){
+        console.log(event)
+    }
+
+}
+
+@Component({
+    selector: 'app-edit',
+    template: `
+    <i class="fa fa-times" style="float: right; cursor:pointer;" (click)="dialogRef.close()"></i>
+    <h4>Edit {{data.colName}}</h4>
+    <form [formGroup]="myForm" (ngSubmit)="onSubmit(myForm)">
+        <div class="form-row">
+            <div class="input-container">
+                <mat-form-field>
+                    <input [ngClass]="{
+                        'has-danger': myForm.controls.fieldName.invalid && myForm.controls.fieldName.dirty,
+                        'has-success': myForm.controls.fieldName.valid && myForm.controls.fieldName.dirty
+                      }" formControlName="fieldName" matInput placeholder="{{data.colName}}">
+                </mat-form-field>
+            </div>
+        </div>
+      
+        <div class="form-row">
+            <button type="submit" mat-raised-button [disabled]="myForm.invalid">Submit</button>
+        </div>
+    </form>
+    `
+})
+export class editComponent implements OnInit {
+    myForm: FormGroup;
+    constructor(
+        public dialogRef: MatDialogRef<editComponent>,
+        @Inject(MAT_DIALOG_DATA) public data: any,private fb: FormBuilder) {
+
+    }
+    ngOnInit() {
+        if(typeof this.data.rowData == 'object' && this.data.rowData != null){
+            this.myForm = this.fb.group({
+                fieldName: [this.data.rowData['value'], Validators.required]
+            });
+        }else{
+            this.myForm = this.fb.group({
+                fieldName: [this.data.rowData, Validators.required]
+            });
+        }
+       
+    }
+
+    onSubmit(data){
+        this.dialogRef.close(data);
+    }
+
+    onNoClick(): void {
+        this.dialogRef.close();
+    }
 }
 
 
