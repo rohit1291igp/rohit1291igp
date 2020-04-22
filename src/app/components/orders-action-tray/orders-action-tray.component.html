@@ -747,7 +747,6 @@
                               <span class="uppercase delivery-time text-bold" attr.data-dt="{{order.orderProducts[0].orderProductExtraInfo.deliveryDate}}" attr.data-pd="{{order.datePurchased}}" >{{getDeliveryDetail(order.orderProducts[0].orderProductExtraInfo, order.datePurchased)}}</span>
                             <br/><span class="uppercase delivery-time text-bold" >{{order.orderOccasion}}</span>
                           </span>
-                         
                         <span *ngIf="deliveryBoyEnabled && order?.orderProducts[0]?.deliveryBoyName" class="delivery-boy">Delivery Boy Name:- {{order?.orderProducts[0]?.deliveryBoyName}}</span>
 
                       </p>
