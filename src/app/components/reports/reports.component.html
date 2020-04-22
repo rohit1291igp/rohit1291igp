@@ -423,11 +423,16 @@
                     </div>
                     <div class="searchFields m-top-1 inline" *ngIf="reportType == 'getbarcodestoverify'">
                             <input class="form-control" type="text"  placeholder="Search Sku" style="width: 50%">
+                            <select name="isVerified" id="isVerified" style=" margin-top: 1em;width: 50%;">
+                                <option value="">Filter by Verification status</option>
+                                <option value="1">Verfied</option>
+                                <option value="0">Non Verfied</option>
+                            </select>
                     </div>
                     <div *ngIf="reportType !== 'getbarcodestoverify'" class="searchFieldsSubmit relative inline">
                         <input  type="submit" class="btn btn-primary pull-right bg-igp searchSubmitBtn"  value="Search All Parameters"/>
                     </div>
-                    <div *ngIf="reportType == 'getbarcodestoverify'" class="searchFieldsSubmit relative inline" style="top:4em;">
+                    <div *ngIf="reportType == 'getbarcodestoverify'" class="searchFieldsSubmit relative inline" style="top:6em;">
                             <input  type="submit" class="btn btn-primary pull-right bg-igp searchSubmitBtn"  value="Search Parameters"/>
                     </div>
                 </form>
