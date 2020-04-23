@@ -16,7 +16,8 @@ interface formFields{
     multipleSelection:Field,
     dateRange:Field,
     Selection:Field,
-    textSearch:Field
+    textSearch:Field,
+    vendorSelection:Field
 }
 interface SearchForm{
     show:boolean,
@@ -51,7 +52,9 @@ export class NewReportsComponent implements OnInit {
     @Input() dateFormat:string;
     columnNames = [];
     toppings = new FormControl();
-    @Input() dropDownList: string[];//= ['Extra cheese', 'Mushroom', 'Onion', 'Pepperoni', 'Sausage', 'Tomato'];
+    @Input() dropDownList: string[];
+    //Vendor List
+    @Input() vendorList:any[];
     myForm: FormGroup;
     btnType = '';
     constructor(
@@ -70,6 +73,7 @@ export class NewReportsComponent implements OnInit {
             filter: [''],
             datefrom: [new Date()],
             dateto: [new Date()],
+            vendorDetail:['']
         });
         this.myForm.controls['selection'].setValue(this.SearchForm.formFields.Selection.value);
         this.createHeader(this.reportsHeader);
@@ -108,8 +112,12 @@ export class NewReportsComponent implements OnInit {
     }
 
     ngOnChanges(changes: SimpleChanges) {
-        if (!changes["orginalReportData"].firstChange) {
+        if (changes["orginalReportData"] && !changes["orginalReportData"].firstChange) {
             this.dataSource.data = changes["orginalReportData"].currentValue;
+            setTimeout(() => {
+                this.dataSource.sort = this.sort;
+                this.dataSource.paginator = this.paginator;
+            }, 100)
             if(changes["reportsHeader"] && changes["reportsHeader"].currentValue){
                 this.createHeader(changes["reportsHeader"].currentValue);
 
