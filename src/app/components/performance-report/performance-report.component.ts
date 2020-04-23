@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
-import { MatDialog, MatSnackBar } from '@angular/material';
+import { MatDialog, MatSnackBar, MatPaginator } from '@angular/material';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { BackendService } from '../../services/backend.service';
@@ -17,14 +17,16 @@ import { Angular5Csv } from 'angular5-csv/dist/Angular5-csv';
 })
 export class PerformanceReportComponent implements OnInit {
     displayedColumns = [];
-    @ViewChild(MatSort) sort: MatSort;
     viewDisabledItems = false;
     originalDataSource: any;
     dataSource = [];
     tableHeaders = [];
     columnNames = [];
     orginalReportData: any;
-    actionList = ['reject','reassign','pricechange','complaint','compliance','SLA','ALL']
+    actionList = ['reject','reassign','pricechange','complaint','compliance','SLA','ALL'];
+    userType;
+    fkasid;
+    vendorList:any;
     constructor(
         private BackendService: BackendService,
         public addDeliveryBoyDialog: MatDialog,
@@ -41,8 +43,15 @@ export class PerformanceReportComponent implements OnInit {
         const now = Date.now();
         const datefrom = pipe.transform(now, 'yyyy-MM-dd');
         const dateto = pipe.transform(now, 'yyyy-MM-dd');
-
-        _this.reportsService.getReportData('getperformancereport', `action=complaint&fkasid=843&sdate=${dateto}&edate=${datefrom}&startlimit=0&endlimit=100`, function (error, _reportData) {
+        _this.userType = localStorage.getItem('userType') ? localStorage.getItem('userType') : null;
+        _this.fkasid = localStorage.getItem('fkAssociateId') ? localStorage.getItem('fkAssociateId') : null;
+        let url;
+        if(_this.userType == 'admin'){
+            url = `action=ALL&fkasid=${_this.fkasid}&sdate=${dateto}&edate=${datefrom}`
+        }else{
+            url = `action=ALL&fkasid=${_this.fkasid}&sdate=${dateto}&edate=${datefrom}`
+        }
+        _this.reportsService.getReportData('getperformancereport', url, function (error, _reportData) {
             if (error) {
                 console.log('_reportData Error=============>', error);
                 return;
@@ -60,6 +69,8 @@ export class PerformanceReportComponent implements OnInit {
                 console.log(err, 'rrrrrrrr')
             }
         });
+        //Get vendor List
+        _this.getVendor();
     }
 
     newFormSubmit(event) {
@@ -69,8 +80,11 @@ export class PerformanceReportComponent implements OnInit {
         var _this = this;
         const datefrom = pipe.transform(event.dateto, 'yyyy-MM-dd');
         const dateto = pipe.transform(event.datefrom, 'yyyy-MM-dd');
-
-        _this.reportsService.getReportData('getperformancereport', `action=${event.selection}&fkasid=843&sdate=${dateto}&edate=${datefrom}&startlimit=0&endlimit=100`, function (error, _reportData) {
+    
+        if(event.vendorDetail && event.vendorDetail.Vendor_Id){
+            _this.fkasid = event.vendorDetail.Vendor_Id;
+        }
+        _this.reportsService.getReportData('getperformancereport', `action=${event.selection}&sdate=${dateto}&edate=${datefrom}&fkasid=${_this.fkasid}`, function (error, _reportData) {
             if (error) {
                 console.log('_reportData Error=============>', error);
                 return;
@@ -115,5 +129,28 @@ export class PerformanceReportComponent implements OnInit {
             }
         });
     }
+
+    getVendor(){
+        let _this=this;
+        /*
+        let paramsObj={
+            pincode:"",
+            shippingType:""
+        };
+        let paramsStr = _this.UtilityService.formatParams(paramsObj);
+        */
+        let reqObj =  {
+              url : 'getVendorList',
+              method : 'get'
+        };
+    
+        _this.BackendService.makeAjax(reqObj, function(err, response, headers){
+              if(err || response.error) {
+                  console.log('Error=============>', err);
+              }else{
+                _this.vendorList = response.result;
+              }
+          });
+      }
 }
 
