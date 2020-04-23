@@ -1,6 +1,6 @@
 <ng-container>
     <app-new-reports [reportsHeader]="tableHeaders" [orginalReportData]="dataSource"
         [tableDataAction]="orginalReportData?.tableDataAction"
-        [SearchForm]="{'show':true, 'formFields':{'dateRange':{'show':true}, 'textSearch':{'show':true, 'placeholder':'Filter'}, 'Selection':{'show':true,'placeholder':'Action', value:'ALL'}, 'vendorSelection':{'show':true,'placeholder':'Select Vendor', value:''}}}"
+        [SearchForm]="{'show':true, 'formFields':{'dateRange':{'show':true}, 'Selection':{'show':true,'placeholder':'Action', value:'ALL'}, 'vendorSelection':{'show':true,'placeholder':'Select Vendor', value:''}}}"
         (submitForm)="newFormSubmit($event)" [dropDownList]="actionList" [vendorList]="vendorList"[dateFormat]="'dd-MM-yyyy'"></app-new-reports>
 </ng-container>
