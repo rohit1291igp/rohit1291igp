@@ -34,13 +34,13 @@
                             <mat-option *ngFor="let topping of toppingList" [value]="topping">{{topping}}</mat-option>
                         </mat-select>
                     </mat-form-field>
-                    <mat-form-field *ngIf="SearchForm?.formFields?.Selection.show" class="m-8">
+                    <mat-form-field *ngIf="SearchForm?.formFields?.Selection?.show" class="m-8">
                             <mat-label>{{SearchForm?.formFields?.Selection?.placeholder}}</mat-label>
                             <mat-select formControlName="selection">
                                 <mat-option *ngFor="let option of dropDownList" [value]="option">{{option}}</mat-option>
                             </mat-select>
                     </mat-form-field>
-                    <mat-form-field *ngIf="SearchForm?.formFields?.vendorSelection.show" class="m-8">
+                    <mat-form-field *ngIf="SearchForm?.formFields?.vendorSelection?.show" class="m-8">
                         <mat-label>{{SearchForm?.formFields?.vendorSelection?.placeholder}}</mat-label>
                         <mat-select formControlName="vendorDetail">
                             <mat-option *ngFor="let option of vendorList" [value]="option">{{option.Vendor_Name}}</mat-option>

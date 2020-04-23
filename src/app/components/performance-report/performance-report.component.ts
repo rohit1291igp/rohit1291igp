@@ -47,9 +47,11 @@ export class PerformanceReportComponent implements OnInit {
         _this.fkasid = localStorage.getItem('fkAssociateId') ? localStorage.getItem('fkAssociateId') : null;
         let url;
         if(_this.userType == 'admin'){
-            url = `action=ALL&fkasid=${_this.fkasid}&sdate=${dateto}&edate=${datefrom}`
+            url = `action=ALL&fkasid=${_this.fkasid}&sdate=${dateto}&edate=${datefrom}`;
+            //Get vendor List
+            _this.getVendor();
         }else{
-            url = `action=ALL&fkasid=${_this.fkasid}&sdate=${dateto}&edate=${datefrom}`
+            url = `action=ALL&fkasid=${_this.fkasid}&sdate=${dateto}&edate=${datefrom}`;
         }
         _this.reportsService.getReportData('getperformancereport', url, function (error, _reportData) {
             if (error) {
@@ -69,8 +71,7 @@ export class PerformanceReportComponent implements OnInit {
                 console.log(err, 'rrrrrrrr')
             }
         });
-        //Get vendor List
-        _this.getVendor();
+        
     }
 
     newFormSubmit(event) {
