@@ -1,6 +1,12 @@
-<ng-container>
+<ng-container *ngIf="userType === 'admin' else vendorView">
     <app-new-reports [reportsHeader]="tableHeaders" [orginalReportData]="dataSource"
         [tableDataAction]="orginalReportData?.tableDataAction"
         [SearchForm]="{'show':true, 'formFields':{'dateRange':{'show':true}, 'Selection':{'show':true,'placeholder':'Action', value:'ALL'}, 'vendorSelection':{'show':true,'placeholder':'Select Vendor', value:''}}}"
         (submitForm)="newFormSubmit($event)" [dropDownList]="actionList" [vendorList]="vendorList"[dateFormat]="'dd-MM-yyyy'"></app-new-reports>
 </ng-container>
+<ng-template #vendorView>
+    <app-new-reports [reportsHeader]="tableHeaders" [orginalReportData]="dataSource"
+        [tableDataAction]="orginalReportData?.tableDataAction"
+        [SearchForm]="{'show':true, 'formFields':{'dateRange':{'show':true}, 'Selection':{'show':true,'placeholder':'Action', value:'ALL'}}}"
+        (submitForm)="newFormSubmit($event)" [dropDownList]="actionList" [vendorList]="vendorList"[dateFormat]="'dd-MM-yyyy'"></app-new-reports>
+</ng-template>
