@@ -557,6 +557,7 @@ mat-row:nth-child(odd) {
     z-index: 1;
     background: #C3404E;
     padding-left: 10px;
+    word-break: break-word;
 }
 .mat-header-row > * {
     background: #C3404E;

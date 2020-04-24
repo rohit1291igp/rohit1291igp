@@ -78,9 +78,9 @@
                         </ng-container>
                         <ng-container *ngIf="getRowCellValue(element[col.id]) == 'menu'">
                             <button mat-button [matMenuTriggerFor]="menu"><i class="fa fa-caret-down"
-                                    aria-hidden="true"></i>Vendor List</button>
+                                    aria-hidden="true"></i>{{element[col.id]}}</button>
                             <mat-menu #menu="matMenu">
-                                <button mat-menu-item *ngFor="let x of element[col.id]">{{x.Vendor_Name}}</button>
+                                <button mat-menu-item *ngFor="let x of element[col.id]">{{x}}</button>
                             </mat-menu>
                         </ng-container>
                         <ng-container *ngIf="col.id === 'Order_No'">
