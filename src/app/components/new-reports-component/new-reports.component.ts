@@ -7,6 +7,8 @@ import { SharedModule } from 'app/shared-module/shared/shared.module';
 import { BrowserModule } from '@angular/platform-browser';
 import { CapitalizePipeModule } from 'app/customPipes/capitalze.pipe';
 import { DateFormatterPipeModule } from 'app/customPipes/date-formatter';
+import { environment } from '../../../environments/environment';
+
 interface Field{
     show:boolean,
     placeholder:string,
@@ -55,6 +57,8 @@ export class NewReportsComponent implements OnInit {
     @Input() dropDownList: string[];
     //Vendor List
     @Input() vendorList:any[];
+  public env = environment;
+
     myForm: FormGroup;
     btnType = '';
     constructor(

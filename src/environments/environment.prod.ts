@@ -1,8 +1,8 @@
 export const environment = {
   production: true,
   log : false,
-  origin: 'http://3.81.15.12:8081/',
-  // origin: 'http://adminapi.igp.com/',
+  // origin: 'http://34.204.124.92:8081/',
+  origin: 'http://adminapi.igp.com/',
   originMock: 'https://5a43a511342c490012f3fca2.mockapi.io/',
   apiInitial : 'IGPService/web/services/rest',
   productsURL : 'https://d1xs5fw35mbn8b.cloudfront.net/p/',
