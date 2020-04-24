@@ -7,8 +7,8 @@ export const environment = {
   production: false,
   log : true,
  // origin: 'http://35.171.85.169:8081/',54.88.211.119
-   origin: 'http://3.81.15.12:8081/',
-  // origin:'http://adminapi.igp.com/',
+  //  origin: 'http://192.168.0.124:8085/',
+  origin:'http://adminapi.igp.com/',
   originMock: 'https://5a43a511342c490012f3fca2.mockapi.io/',
   productsURL : 'https://d1xs5fw35mbn8b.cloudfront.net/p/',
   productsCompURL : 'http://admin.indiangiftsportal.com/handelscomponents/',
