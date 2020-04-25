@@ -109,13 +109,14 @@ export class PayoutDashboardComponent implements OnInit {
       case 'admin':
         this.getVendorList();
         this.payoutDasboardUrl = 'getHandelsPayoutDashboard';
+        this.getPayoutReport(null, d.getMonth()+1, d.getFullYear());
         break;
       case 'vendor':
         this.payoutDasboardUrl = 'getVendorPayoutDashboard';
+        this.getPayoutReport(localStorage.getItem('fkAssociateId'), d.getMonth()+1, d.getFullYear());
         break;
     }
 
-    this.getPayoutReport(null, d.getMonth()+1, d.getFullYear());
 
     this.date.setValue(d.getMonth()+1 + '/' + d.getFullYear())
     this.myForm.controls['date'].setValue(d.getMonth()+1 + '/' + d.getFullYear());
