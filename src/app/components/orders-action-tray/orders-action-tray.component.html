@@ -320,9 +320,15 @@
                                         <option *ngFor="let reason of rejectReasons" [ngValue]="reason">{{reason}}</option>
                                 </select>
                                 <textarea name="complainttext" class="form-control custom-control m-top-1" rows="3" style="resize:none" [(ngModel)]="adminActions.adminActionsModel.complainttext" #complainttext="ngModel" placeholder="Comment"></textarea>
+                                <div class="col-md-12" style="margin-top: 2em;">
+                                    <input class="blog-image-upload" type="file" name="componentImage" (change)="uploadFiles($event)" required />
+                                </div>
+                                <div class="media-loading-screen" *ngIf="isUploading">
+                                    <h3>Uploading Image...</h3>
+                                </div>
                                 <!--<input name="assignChangeVendor" class="form-control custom-control m-top-1" [(ngModel)]="adminActions.adminActionsModel.assignChangeVendor" #assignChangeVendor="ngModel" placeholder="Vendor" required>-->
                                 <div *ngIf="f.submitted && !complaintreason.valid" class="help-block theme-red">Please Select reason for complaint!</div>
-                                <button class="btn btn-primary m-top-1">Submit</button>
+                                <button class="btn btn-primary m-top-1" *ngIf="!isUploading">Submit</button>
                             </form>
                         </div>
                     </div>
@@ -334,9 +340,15 @@
                                             <option *ngFor="let reason of rejectReasons" [ngValue]="reason">{{reason}}</option>
                                     </select>
                                     <textarea name="compliancetext" class="form-control custom-control m-top-1" rows="3" style="resize:none" [(ngModel)]="adminActions.adminActionsModel.compliancetext" #complainttext="ngModel" placeholder="Comment"></textarea>
+                                    <div class="col-md-12" style="margin-top: 2em;">
+                                        <input class="blog-image-upload" type="file" name="componentImage" (change)="uploadFiles($event)" required />
+                                    </div>
+                                    <div class="media-loading-screen" *ngIf="isUploading">
+                                        <h3>Uploading Image...</h3>
+                                    </div>
                                     <!--<input name="assignChangeVendor" class="form-control custom-control m-top-1" [(ngModel)]="adminActions.adminActionsModel.assignChangeVendor" #assignChangeVendor="ngModel" placeholder="Vendor" required>-->
                                     <div *ngIf="f.submitted && !compliancereason.valid" class="help-block theme-red">Please Select reason for compliance!</div>
-                                    <button class="btn btn-primary m-top-1">Submit</button>
+                                    <button class="btn btn-primary m-top-1" *ngIf="!isUploading">Submit</button>
                                 </form>
                             </div>
                         </div>

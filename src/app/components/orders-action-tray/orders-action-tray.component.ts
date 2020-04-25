@@ -11,6 +11,7 @@ import {environment} from "../../../environments/environment";
 import { AddDeliveryBoyComponent } from '../add-deliveryboy/add-deliveryboy.component';
 import { MatDialog, MatSnackBar } from '@angular/material';
 import { NotificationComponent } from '../notification/notification.component';
+import { S3UploadService } from '../../services/s3Upload.service';
 
 @Component({
   selector: 'app-orders-action-tray',
@@ -144,6 +145,9 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
       disableUntil:this.UtilityService.getDateObj(-1)
   };
   public dateRange: Object = {};
+  public isUploading = false;
+  public isAddImage = true;
+  uploadedImages = [];
   loadTrayDataEvent;
   custDetail = false;
   deliveryBoyList: any[] = [];
@@ -160,7 +164,8 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
       public datePipe: DatePipe,
       public time12Pipe: Time12Pipe,
       public addDeliveryBoyDialog: MatDialog,
-      private _snackBar: MatSnackBar
+      private _snackBar: MatSnackBar,
+      public S3UploadService: S3UploadService,
       ) { }
 
   ngOnInit() {
@@ -1558,7 +1563,8 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
                 remarks: _this.adminActions.adminActionsModel.complainttext,
                 orderId:_this.sidePanelData[orderIndex].orderId,
                 orderProductId:_this.sidePanelData[orderIndex].orderProducts[orderIndex].orderProductId,
-                fkAssociateId:_this.sidePanelData[orderIndex].orderProducts[orderIndex].fkAssociateId
+                fkAssociateId:_this.sidePanelData[orderIndex].orderProducts[orderIndex].fkAssociateId,
+                uploadedImages: _this.uploadedImages.toString()
             };
             url = "savePerformanceReasons";
             apiSuccessHandler=function(apiResponse){
@@ -1578,7 +1584,8 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
                 remarks: _this.adminActions.adminActionsModel.compliancetext,
                 orderId:_this.sidePanelData[orderIndex].orderId,
                 orderProductId:_this.sidePanelData[orderIndex].orderProducts[orderIndex].orderProductId,
-                fkAssociateId:_this.sidePanelData[orderIndex].orderProducts[orderIndex].fkAssociateId
+                fkAssociateId:_this.sidePanelData[orderIndex].orderProducts[orderIndex].fkAssociateId,
+                uploadedImages: _this.uploadedImages.toString()
             };
             url = "savePerformanceReasons";
             apiSuccessHandler=function(apiResponse){
@@ -1825,5 +1832,29 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
         tempSrc = tempSrc[1];
             event.target.src = `${environment.componentImageUrl}${tempSrc}`;
     }
+
+    uploadFiles(event) {
+        const that = this;
+        if (event.target.files.length > 0) {
+            this.isUploading = true;
+            let j = 0;
+            for (let i = 0; i < event.target.files.length; i++) {
+                const file = event.target.files[i];
+                this.S3UploadService.uploadImageToS3(file, environment.componentBucketName, environment.blogsAcl, false, (err, data) => {
+                    j++;
+                    if (j === event.target.files.length) {
+                        that.isUploading = false;
+                        that.isAddImage = false;
+                    }
+                    if (err) {
+                        console.log('There was an error uploading your file: ', err);
+                        return false;
+                    } else {
+                        this.uploadedImages.push(data.key);
+                    }
+                });
+            }
+        }
+        }
 
 }
