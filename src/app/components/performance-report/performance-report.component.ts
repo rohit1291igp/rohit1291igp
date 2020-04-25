@@ -23,10 +23,10 @@ export class PerformanceReportComponent implements OnInit {
     tableHeaders = [];
     columnNames = [];
     orginalReportData: any;
-    actionList = ['reject','reassign','pricechange','complaint','compliance','SLA','ALL'];
+    actionList = [];
     userType;
     fkasid;
-    vendorList:any;
+    vendorList: any;
     constructor(
         private BackendService: BackendService,
         public addDeliveryBoyDialog: MatDialog,
@@ -40,17 +40,20 @@ export class PerformanceReportComponent implements OnInit {
         let pipe = new DatePipe('en-US');
 
         var _this = this
+        
         const now = Date.now();
         const datefrom = pipe.transform(now, 'yyyy-MM-dd');
         const dateto = pipe.transform(now, 'yyyy-MM-dd');
         _this.userType = localStorage.getItem('userType') ? localStorage.getItem('userType') : null;
         _this.fkasid = localStorage.getItem('fkAssociateId') ? localStorage.getItem('fkAssociateId') : null;
+        //get Action List
+        _this.getActionList();
         let url;
-        if(_this.userType == 'admin'){
+        if (_this.userType == 'admin') {
             url = `action=ALL&fkasid=${_this.fkasid}&sdate=${dateto}&edate=${datefrom}`;
             //Get vendor List
             _this.getVendor();
-        }else{
+        } else {
             url = `action=ALL&fkasid=${_this.fkasid}&sdate=${dateto}&edate=${datefrom}`;
         }
         _this.reportsService.getReportData('getperformancereport', url, function (error, _reportData) {
@@ -71,7 +74,7 @@ export class PerformanceReportComponent implements OnInit {
                 console.log(err, 'rrrrrrrr')
             }
         });
-        
+
     }
 
     newFormSubmit(event) {
@@ -81,8 +84,8 @@ export class PerformanceReportComponent implements OnInit {
         var _this = this;
         const datefrom = pipe.transform(event.dateto, 'yyyy-MM-dd');
         const dateto = pipe.transform(event.datefrom, 'yyyy-MM-dd');
-    
-        if(event.vendorDetail && event.vendorDetail.Vendor_Id){
+
+        if (event.vendorDetail && event.vendorDetail.Vendor_Id) {
             _this.fkasid = event.vendorDetail.Vendor_Id;
         }
         _this.reportsService.getReportData('getperformancereport', `action=${event.selection}&sdate=${dateto}&edate=${datefrom}&fkasid=${_this.fkasid}`, function (error, _reportData) {
@@ -131,8 +134,8 @@ export class PerformanceReportComponent implements OnInit {
         });
     }
 
-    getVendor(){
-        let _this=this;
+    getVendor() {
+        let _this = this;
         /*
         let paramsObj={
             pincode:"",
@@ -140,18 +143,35 @@ export class PerformanceReportComponent implements OnInit {
         };
         let paramsStr = _this.UtilityService.formatParams(paramsObj);
         */
-        let reqObj =  {
-              url : 'getVendorList',
-              method : 'get'
+        let reqObj = {
+            url: 'getVendorList',
+            method: 'get'
         };
-    
-        _this.BackendService.makeAjax(reqObj, function(err, response, headers){
-              if(err || response.error) {
-                  console.log('Error=============>', err);
-              }else{
+
+        _this.BackendService.makeAjax(reqObj, function (err, response, headers) {
+            if (err || response.error) {
+                console.log('Error=============>', err);
+            } else {
                 _this.vendorList = response.result;
-              }
-          });
-      }
+            }
+        });
+    }
+    getActionList(){
+        var _this = this;
+        const reqObj = {
+            url: 'actionlist',
+            method: 'get'
+        };
+        _this.BackendService.makeAjax(reqObj, function (err, response, headers) {
+            if (err || response.error) {
+                console.log('Error=============>', err);
+            }
+            if(response && (response.status == 'Success' || response.status == 'success')){
+                if(response && response.data){
+                    _this.actionList.push(...response.data);
+                }
+            }
+        });
+    }
 }
 

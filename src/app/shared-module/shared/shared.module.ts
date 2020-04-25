@@ -9,6 +9,7 @@ import { OrdersActionTrayComponent } from '../../components/orders-action-tray/o
 import { PrintTemplateComponent } from '../../components/print-template/print-template.component';
 import { WidgetsComponent } from '../../components/widgets/widgets.component';
 import { ReplacePipe } from '../../customPipes/replace.pipe';
+import { AutoSelectionComponent } from 'app/components/autoselection/auto-selection.component';
 
 
 @NgModule({
@@ -43,7 +44,8 @@ import { ReplacePipe } from '../../customPipes/replace.pipe';
     WidgetsComponent,
     LoaderComponent,
     PrintTemplateComponent,
-    ReplacePipe
+    ReplacePipe,
+    AutoSelectionComponent
   ],
   providers: [ReplacePipe],
   exports: [
@@ -74,7 +76,8 @@ import { ReplacePipe } from '../../customPipes/replace.pipe';
     MatExpansionModule,
     MatDatepickerModule,
     MatRadioModule,
-    MatSelectModule
+    MatSelectModule,
+    AutoSelectionComponent
   ],
 })
 export class SharedModule {
