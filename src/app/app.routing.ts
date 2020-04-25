@@ -3,13 +3,12 @@ import { AddDeliveryBoyComponent } from './components/add-deliveryboy/add-delive
 import { BlogCreateComponent } from './components/blog-create/blog-create.component';
 import { BlogListComponent } from './components/blog-list/blog-list.component';
 import { BlogViewComponent } from './components/blog-view/blog-view.component';
-import { CategoryComponent } from './components/category/category.component';
 import { DeliveryBoyDetailsComponent } from './components/deliveryboy-details/deliveryboy-details.component';
 import { DownloadEmailComponent } from './components/download-email/download-email.component';
 import { LoginComponent } from './components/login/login.component';
-import { VoucherComponent } from './components/voucher/voucher.component';
-import { AuthGuard } from './services/auth-guard.service';
+import { PayoutDashboardComponent } from './components/payout-dashboard/payout-dashboard.component';
 import { PerformanceReportComponent } from './components/performance-report/performance-report.component';
+import { AuthGuard } from './services/auth-guard.service';
 
 
 const route: Routes = [
@@ -90,6 +89,10 @@ const route: Routes = [
     path: 'performanceReport',
     component: PerformanceReportComponent,
     canActivate: [AuthGuard]
+  },
+  {
+    path:'payout-dashboard',
+    component: PayoutDashboardComponent
   },
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
   // otherwise redirect to home

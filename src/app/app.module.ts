@@ -33,7 +33,6 @@ import { LoginComponent } from './components/login/login.component';
 import { MainHeaderComponent } from './components/main-header/main-header.component';
 import { NotificationComponent } from './components/notification/notification.component';
 import { OrderStockComponent } from './components/order-stocks/order-stock.component';
-import { editComponent } from './components/reports/reports.component';
 import { SelectItemForDelivered } from './components/select-item/select-item.component';
 import { UploadExcelComponent } from './components/upload-excel/upload-excel.component';
 import { ObjectKeyValuePipe } from './customPipes/object-key-value.pipe';
@@ -58,6 +57,9 @@ import { PerformanceReportComponent } from './components/performance-report/perf
 import { NewReportsComponentModule } from './components/new-reports-component/new-reports.component';
 import { CapitalizePipeModule } from './customPipes/capitalze.pipe';
 import { DateFormatterPipeModule } from './customPipes/date-formatter';
+import { PayoutDashboardComponent } from './components/payout-dashboard/payout-dashboard.component';
+import { MomentDateAdapter, MatMomentDateModule } from '@angular/material-moment-adapter';
+import { editComponent } from './components/reports/reports.component';
 
 
 
@@ -89,7 +91,8 @@ export function ConfigLoader(envConfig: envConfig) {
     OrderStockComponent,
     testComponent,
     editComponent,
-    PerformanceReportComponent
+    PerformanceReportComponent,
+    PayoutDashboardComponent
     // AutoSelectionComponent
   ],
   imports: [

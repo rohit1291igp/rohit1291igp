@@ -870,8 +870,20 @@ body .dashboard-content, body .orders-button{
 .justify-content-center{
     justify-content: center !important;
 }
+.justify-content-space-around{
+    justify-content: space-around;
+}
+.justify-content-flex-end{
+    justify-content: flex-end;
+}
+.justify-content-flex-start{
+    justify-content: end;
+}
 .align-items-flex-end{
     align-items: flex-end;
+}
+.align-items-baseline{
+    align-items: baseline;
 }
 .flex-direction-column{
     flex-direction: column;
