@@ -31,6 +31,7 @@ const routes: Routes = [
       {path:'', redirectTo:'task', pathMatch:'full'},
       {path: 'task', component: DeliveryTaskComponent},
       {path:'task/:id/:day', component: DeliveryOrderComponent},
+      {path:'task/:id', component: DeliveryOrderComponent},
       {path:'delivery/:id/:day', component: OutForDeliveryComponent},
       {path:'delivered', component: DeliveredComponent},
       {path:'undelivered', component: UnDeliveredComponent},

@@ -47,7 +47,7 @@ export class DeliveryOrderComponent implements OnInit {
         this.route.params.subscribe(params => {
             console.log(params, 'id00000');
             this.orderId = params.id;
-            this.day = params.day;
+            this.day = params.day ? params.day : null;
         });
     }
 
@@ -163,8 +163,14 @@ export class DeliveryOrderComponent implements OnInit {
 
             }
             if (response.result) {
+                
                 for (let i = 0; i < response.result.length; i++) {
                     if (response.result[i].orderProducts[0].ordersProductStatus === 'Confirmed') {
+                        //check Order Id for today Or tommorow
+                        if(this$.orderId == response.result[i].orderId && !this$.day){
+                            this$.router.navigate([`/delivery-app/task/${this$.orderId}/${response.result[i].deliverWhen}`]);  
+                            return; 
+                        }
                         this$.order.push(response.result[i]);
                     }
                     for (let a = 0; a < response.result[i].orderProducts.length; a++) {
