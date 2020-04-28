@@ -1557,6 +1557,9 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
               };
               break;
         case 'addComplaints' : 
+            if(_this.adminActions.adminActionsModel.complaintreason == 'Others'){
+                return '';
+            }
             paramsObj={
                 actionName:'complaint',
                 reason:_this.adminActions.adminActionsModel.complaintreason,
@@ -1578,6 +1581,9 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
             }
             break;
         case 'addCompliance' : 
+            if(_this.adminActions.adminActionsModel.compliancereason == 'Others'){
+                return '';
+            }
             paramsObj={
                 actionName:'compliance',
                 reason:_this.adminActions.adminActionsModel.compliancereason,
