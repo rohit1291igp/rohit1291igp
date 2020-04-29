@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, ViewChildren, ViewChild, ElementRef } from "@angular/core";
+import { Component, OnInit, Input, Output, EventEmitter, ViewChildren, ViewChild, ElementRef, OnChanges, SimpleChanges } from "@angular/core";
 
 @Component({
     selector: 'app-auto-selection',
@@ -25,10 +25,11 @@ import { Component, OnInit, Input, Output, EventEmitter, ViewChildren, ViewChild
     border-radius: 5px;
 }`]
 })
-export class AutoSelectionComponent implements OnInit {
+export class AutoSelectionComponent implements OnInit, OnChanges {
     // listOfStockItems = [];
     tempListOfStockItems = [];
     componentName: string;
+    @Input() setValue: string;
     @Input() relationName: string;
     //Array of Data
     @Input() listOfComponents: any;
@@ -48,6 +49,11 @@ export class AutoSelectionComponent implements OnInit {
         this.tempListOfStockItems = this.listOfComponents;
     }
 
+    ngOnChanges(changes:SimpleChanges):void{
+        if(changes["setValue"] && !changes["setValue"].firstChange && !changes['setValue'].currentValue){
+            this.componentName = changes['setValue'].currentValue
+        }
+    }
     filterValues(inputValue) {
         if(inputValue.trim() == ''){
             this.tempListOfStockItems = this.listOfComponents;

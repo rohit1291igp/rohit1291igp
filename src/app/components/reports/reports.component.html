@@ -552,7 +552,7 @@
                                 <option  [ngValue]="all">All Component</option>
                                 <option *ngFor="let comp of listOfComponents" [ngValue]="comp">{{comp}}</option>
                             </select> -->
-                            <ng-container *ngIf="environment.userType == 'admin' || environment.userType == 'vendor' && reportType == 'getComponentOrderReport' && listOfComponents.length > 0">
+                            <ng-container *ngIf="(environment.userType == 'admin' && reportType == 'getComponentReport') || (environment.userType == 'vendor' && reportType == 'getComponentOrderReport') && listOfComponents.length > 0">
                                     <app-auto-selection style="width: 100%;margin-right:5px" [listOfComponents]="listOfComponents" placeholder="Component Name" type='object' relationName="getComponentOrderReport" displayName='Component_Name' (selectionObject)="selectComponent($event)"></app-auto-selection>
                             </ng-container>
                             <div style="display: flex">
@@ -820,12 +820,18 @@
                                                             </ng-container>
                                                             <ng-container *ngIf="reportType !== 'getComponentReport' && reportType !== 'getVendorDetails' && reportType !== 'getBarcodeToComponentReport' && reportType !== 'deliveryBoyDetails' && (tableRowValue[tableCol] && tableRowValue[tableCol]['requestValue'] && tableRowValue[tableCol]['requestValue'] == -1)">
                                                                 <div class="tableactBtn" *ngFor="let actBtn of tableAction[tableCol]; let z='index'" (click)="actionBtnInvoke(actBtn, getCellValue(tableRowValue[tableCol]), tableRowValue, tableCol, dataIndex, 1)">
-                                                                        <!-- *ngIf="getCellValue(tableRowValue['Proc_Type_Vendor'])) != 'Stocked'" -->
-                                                                        <!-- {{tableCol}}, {{getActBtnTxt(actBtn,getCellValue(tableRowValue['Proc_Type_Vendor'])) == 'Stocked'}} -->
-                                                                    <span class="tableactBtntxt"  *ngIf="getCellValue(tableRowValue['Proc_Type_Vendor']) != 'Stocked'">{{getActBtnTxt(actBtn, getCellValue(tableRowValue[tableCol]))}}</span>
+                                                                    <!-- {{tableCol | json}} -->
+                                                                    <span class="tableactBtntxt"  *ngIf="tableRowValue['Proc_Type_Vendor'] == 'JIT'">{{getActBtnTxt(actBtn, getCellValue(tableRowValue[tableCol]))}}</span>
                                                                     <ng-container *ngIf="(z+1) < tableAction[tableCol].length"> &nbsp; |</ng-container>
                                                                 </div>
                                                             </ng-container>
+                                                            <ng-container *ngIf="reportType !== 'getComponentReport' && reportType !== 'getVendorDetails' && reportType !== 'getBarcodeToComponentReport' && reportType !== 'deliveryBoyDetails' && (tableRowValue[tableCol] && tableRowValue[tableCol]['requestValue'] && tableRowValue[tableCol]['requestValue'] == -1)">
+                                                                    <div class="tableactBtn" *ngFor="let actBtn of tableAction[tableCol]; let z='index'" (click)="actionBtnInvoke(actBtn, getCellValue(tableRowValue[tableCol]), tableRowValue, tableCol, dataIndex, 1)">
+                                                                        <!-- {{tableCol | json}} -->
+                                                                        <span class="tableactBtntxt"  *ngIf="tableRowValue['Proc_Type_Vendor'] == 'Stocked' && tableCol !='InStock'">{{getActBtnTxt(actBtn, getCellValue(tableRowValue[tableCol]))}}</span>
+                                                                        <ng-container *ngIf="(z+1) < tableAction[tableCol].length"> &nbsp; |</ng-container>
+                                                                    </div>
+                                                                </ng-container>
                                                             <ng-container *ngIf="reportType !== 'getComponentReport' && reportType !== 'getVendorDetails' && reportType !== 'getBarcodeToComponentReport' && reportType !== 'deliveryBoyDetails' && !(tableRowValue[tableCol] && tableRowValue[tableCol]['requestValue'] &&tableRowValue[tableCol]['requestValue'] == -1) && reportType !== 'getComponentReport'">
                                                                 <div class="tableactBtn" (click)="actionBtnInvoke(tableRowValue[tableCol]['requestType'], getCellValue(tableRowValue[tableCol]), tableRowValue, tableCol, dataIndex, 0)">
                                                                     <span class="tableactBtntxt" *ngIf="tableRowValue[tableCol] && tableRowValue[tableCol]['requestType']">{{tableRowValue[tableCol]['requestType']}}</span>

@@ -43,3 +43,16 @@ button[disabled]{
     color: #fff !important;
     opacity: 0.5;
 } 
+.resetBtn{
+    margin: 0px;
+    width: 100px;
+    color: #ff0000;
+    cursor: pointer;
+}
+.loader-container {
+    position: absolute;
+    width: 100%;
+    opacity: 0.5;
+    background: #ccc;
+    top:-4px;
+}
