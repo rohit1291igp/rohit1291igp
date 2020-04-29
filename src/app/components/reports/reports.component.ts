@@ -1306,7 +1306,7 @@ getDeliveryBoyList(){
 
                     }else if(colDataType === "number"){
 
-                      if(_this.getCellValue(currentRow[colName].split(':').length - 1 == 2)){
+                      if(_this.getCellValue(String(currentRow[colName]).split(':').length - 1 == 2)){
                         console.log("adsfdsf");
                         if(_this.getCellValue(currentRow[colName][0]) == filterValue[0]){
                           if(filterBy == "="){
@@ -1466,7 +1466,7 @@ getDeliveryBoyList(){
             case "getOrderReport" : apiURLPath = "";
                 break;
 
-            case "getVendorReport" : apiURLPath = "handleVendorComponentChange";
+            case "getVendorReport" : environment.userType == 'admin' ? apiURLPath = "handleVendorComponentChange" : apiURLPath = "handleComponentChange";
                 break;
 
             case "getPincodeReport" : apiURLPath = "handlePincodeChange";
@@ -1580,6 +1580,12 @@ getDeliveryBoyList(){
                             componentId:rowData['Component_Id'],
                             reqPrice: _this.editTableCellObj.value,
                             oldPrice: _this.editTableCellObj["cellValue"]
+                        };
+                    }else if(header === "Component_Cost_Vendor"){
+                        paramsObj={
+                            componentId:rowData['Component_Id'],
+                            reqPrice: _this.editTableCellObj.value,
+                            oldCost: _this.editTableCellObj["cellValue"]
                         };
                     }else if(/Delivery/gi.test(header)){
                       paramsObj={

@@ -47,7 +47,8 @@ export class PayoutDashboardComponent implements OnInit {
   environment = environment;
   payoutDasboardUrl: string;
   myForm: FormGroup;
-
+  enableResetBtn = false;
+  fkAssociateId;
   @ViewChild('dateInput') dateInput: ElementRef;
   constructor(
     private datepicker: MatDatepicker<Moment>,
@@ -65,13 +66,18 @@ export class PayoutDashboardComponent implements OnInit {
 
   getPayoutReport(vendorId, month, year) {
     var _this = this;
+    _this.tabledata = null;
     let url;
     if (vendorId) {
       url = `${_this.payoutDasboardUrl}?fkAssociateId=${vendorId}&month=${month}&year=${year}`
     }
     if (!vendorId) {
-      url = `${_this.payoutDasboardUrl}?fkAssociateId=${localStorage.getItem('fkAssociateId')}&month=${month}&year=${year}`
+      url = `${_this.payoutDasboardUrl}?fkAssociateId=${_this.fkAssociateId}&month=${month}&year=${year}`
+      if(localStorage.getItem('userType') == 'admin'){
+        url = `${_this.payoutDasboardUrl}?month=${month}&year=${year}`
+      }
     }
+    
     const reqObj = {
       url: url,
       method: "get",
@@ -93,7 +99,7 @@ export class PayoutDashboardComponent implements OnInit {
       vendorId: ['', [Validators.required]],
       date: ['', [Validators.required]]
     });
-
+    this.fkAssociateId = localStorage.getItem('fkAssociateId');
     switch (environment.userType) {
       case 'admin':
         this.getVendorList();
@@ -232,9 +238,16 @@ export class PayoutDashboardComponent implements OnInit {
 
   onSubmit(formData) {
     console.log(formData);
+    this.enableResetBtn = true;
     let data = formData.value;
     this.getPayoutReport(data.vendorId, data.date.split('/')[0], data.date.split('/')[1]);
 
+  }
+
+  resetAll(){
+    this.enableResetBtn = false;
+    this.myForm.reset();
+    this.init();
   }
 
 }
