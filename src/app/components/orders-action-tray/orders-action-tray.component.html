@@ -328,6 +328,7 @@
                                 </div>
                                 <!--<input name="assignChangeVendor" class="form-control custom-control m-top-1" [(ngModel)]="adminActions.adminActionsModel.assignChangeVendor" #assignChangeVendor="ngModel" placeholder="Vendor" required>-->
                                 <div *ngIf="f.submitted && !complaintreason.valid" class="help-block theme-red">Please Select reason for complaint!</div>
+                                <div *ngIf="f.submitted && adminActions.adminActionsModel.complaintreason == 'Others'" class="help-block theme-red">Please enter your comment!</div>
                                 <button class="btn btn-primary m-top-1" *ngIf="!isUploading">Submit</button>
                             </form>
                         </div>
@@ -339,7 +340,7 @@
                                             <option  [ngValue]="''" [selected]>Select reason for compliance</option>
                                             <option *ngFor="let reason of rejectReasons" [ngValue]="reason">{{reason}}</option>
                                     </select>
-                                    <textarea name="compliancetext" class="form-control custom-control m-top-1" rows="3" style="resize:none" [(ngModel)]="adminActions.adminActionsModel.compliancetext" #complainttext="ngModel" placeholder="Comment"></textarea>
+                                    <textarea name="compliancetext" class="form-control custom-control m-top-1" rows="3" style="resize:none" [(ngModel)]="adminActions.adminActionsModel.compliancetext" #compliancetext="ngModel" placeholder="Comment"></textarea>
                                     <div class="col-md-12" style="margin-top: 2em;">
                                         <input class="blog-image-upload" type="file" name="componentImage" (change)="uploadFiles($event)" required />
                                     </div>
@@ -348,6 +349,7 @@
                                     </div>
                                     <!--<input name="assignChangeVendor" class="form-control custom-control m-top-1" [(ngModel)]="adminActions.adminActionsModel.assignChangeVendor" #assignChangeVendor="ngModel" placeholder="Vendor" required>-->
                                     <div *ngIf="f.submitted && !compliancereason.valid" class="help-block theme-red">Please Select reason for compliance!</div>
+                                    <div *ngIf="f.submitted && adminActions.adminActionsModel.compliancereason == 'Others'" class="help-block theme-red">Please enter your comment!</div>
                                     <button class="btn btn-primary m-top-1" *ngIf="!isUploading">Submit</button>
                                 </form>
                             </div>
