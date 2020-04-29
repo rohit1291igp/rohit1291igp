@@ -754,7 +754,7 @@
                                                 </span>
                                                 </span>
                                                 <span *ngIf="ifDate(tableCol) != 'date' && tableCol != 'Ship_Type' && tableCol != 'Component_Image' && tableCol != 'Component Image' && tableCol != 'Product Image' && tableCol != 'Product_Image' && tableCol != 'Out Of Delivery' && tableCol != 'Out_Of_Delivery' && tableCol != 'Proof Of Delivery' && tableCol != 'Proof_Of_Delivery' && tableCol != 'Vendor_List' && tableCol !== 'component'" >
-                                                    <span *ngIf="getCellValue(tableRowValue[tableCol]) === 0">
+                                                    <span *ngIf="getCellValue(tableRowValue[tableCol]) === 0 && tableCol !== 'Delivery_Boy_App'">
                                                             {{getCellValue(tableRowValue[tableCol])}}
                                                     </span>
                                                     
@@ -777,7 +777,11 @@
                                                             <img class="clk" style="width: 4em; box-shadow: 0 1px 3px #888888;" src="{{productsURL}}th/{{getCellValue(tableRowValue['barcodeImage'])}}" alt="{{getCellValue(tableRowValue['barcodeImage'])}}" (click)="imagePreview($event, productsURL+'l/'+(getCellValue(tableRowValue['barcodeImage'])))">
                                                             <br/><br/><span>{{getCellValue(tableRowValue['barcode'])}}</span>
                                                     </span>
-                                                    <span *ngIf="getCellValue(tableRowValue[tableCol]) !== 0" [innerHTML]="getCellValue(tableRowValue[tableCol])  | replace : '`,[' "></span>
+                                                    <span class="delboy" *ngIf="tableCol == 'Delivery_Boy_App'" style="display:inline-block;">
+                                                            <span *ngIf="getCellValue(tableRowValue[tableCol]) === 0">Disable</span>
+                                                            <span *ngIf="getCellValue(tableRowValue[tableCol]) === 1">Enable</span>
+                                                    </span>
+                                                    <span *ngIf="getCellValue(tableRowValue[tableCol]) !== 0 && tableCol !== 'Delivery_Boy_App'" [innerHTML]="getCellValue(tableRowValue[tableCol])  | replace : '`,[' "></span>
                                                 </span>
                                                 &nbsp; &nbsp; &nbsp;
                                                 <span class="icon m" aria-hidden="true" *ngIf="tableCol === 'Order_No'" (click)="viewOrderDetail($event, getCellValue(tableRowValue[tableCol]))">
