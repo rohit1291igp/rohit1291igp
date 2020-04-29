@@ -8,6 +8,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { CapitalizePipeModule } from 'app/customPipes/capitalze.pipe';
 import { DateFormatterPipeModule } from 'app/customPipes/date-formatter';
 import { environment } from '../../../environments/environment';
+import { ImgPreviewComponent } from '../img-preview/img-preview.component';
 
 interface Field{
     show:boolean,
@@ -16,10 +17,14 @@ interface Field{
 }
 interface formFields{
     multipleSelection:Field,
-    dateRange:Field,
+    dateRange:dateRange,
     Selection:Field,
     textSearch:Field,
     vendorSelection:Field
+}
+interface dateRange{
+    datefrom:Field,
+    dateto:Field
 }
 interface SearchForm{
     show:boolean,
@@ -57,7 +62,7 @@ export class NewReportsComponent implements OnInit {
     @Input() dropDownList: string[];
     //Vendor List
     @Input() vendorList:any[];
-  public env = environment;
+    public env = environment;
 
     myForm: FormGroup;
     btnType = '';
@@ -68,8 +73,9 @@ export class NewReportsComponent implements OnInit {
         ) {
 
     }
-
+    selected;
     ngOnInit() {
+
         this.myForm = this.fb.group({
             name: [''],
             multiSelection: [''],
@@ -80,6 +86,11 @@ export class NewReportsComponent implements OnInit {
             vendorDetail:['']
         });
         this.myForm.controls['selection'].setValue(this.SearchForm.formFields.Selection.value);
+        if(this.env.userType == 'admin'){
+            this.selected = this.SearchForm.formFields.vendorSelection.value;
+            this.myForm.controls['vendorDetail'].setValue(this.SearchForm.formFields.vendorSelection.value);
+        }
+        
         this.createHeader(this.reportsHeader);
         // this.orginalReportData.forEach((e) => {
         //     for (let k in e) {
@@ -96,7 +107,9 @@ export class NewReportsComponent implements OnInit {
             this.dataSource.paginator = this.paginator;
         }, 100)
     }
-
+    compareObjects(o1: any, o2: any): boolean {
+        return o1.Vendor_Id === o2.Vendor_Id;
+      }
     createHeader(reportsHeader){
         this.columnNames = [];
         new Promise((resolve)=>{
@@ -213,6 +226,17 @@ export class NewReportsComponent implements OnInit {
         const dateto = pipe.transform(data.value.dateto, 'yyyy-MM-dd');
         data.value['btnType'] = this.btnType;
         this.submitForm.emit(data.value);
+    }
+
+    imgPreview(imgSrc){
+        const dialogRef = this.dialog.open(ImgPreviewComponent, {
+            width: '50%',
+            data: {'imgSrc':imgSrc}
+          });
+      
+          dialogRef.afterClosed().subscribe(result => {
+            console.log('The dialog was closed');
+          });
     }
 }
 

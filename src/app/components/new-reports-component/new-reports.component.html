@@ -4,9 +4,9 @@
         <form [formGroup]="myForm" (ngSubmit)="onSubmit(myForm)">
             <div class="form-container">
                 <div class="d-flex">
-                    <ng-container *ngIf="SearchForm?.formFields?.dateRange?.show">
+                    <ng-container *ngIf="SearchForm?.formFields?.dateRange?.datefrom?.show">
                         <mat-form-field class="m-8">
-                            <input matInput [matDatepicker]="picker" placeholder="From"
+                            <input matInput [matDatepicker]="picker" placeholder="{{SearchForm?.formFields?.dateRange?.datefrom?.placeholder}}"
                                 (dateInput)="addEventFrom('input', $event)"
                                 (dateChange)="addEventFrom('change', $event)" formControlName="datefrom"
                                 autocomplete="off">
@@ -15,7 +15,7 @@
                         </mat-form-field>
 
                         <mat-form-field class="m-8">
-                            <input matInput [matDatepicker]="pickers" placeholder="To"
+                            <input matInput [matDatepicker]="pickers" placeholder="{{SearchForm?.formFields?.dateRange?.dateto?.placeholder}}"
                                 (dateInput)="addEventTo('input', $event)" (dateChange)="addEventTo('change', $event)"
                                 formControlName="dateto" autocomplete="off">
                             <mat-datepicker-toggle matSuffix [for]="pickers"></mat-datepicker-toggle>
@@ -41,13 +41,14 @@
                             <mat-option *ngFor="let option of dropDownList" [value]="option">{{option}}</mat-option>
                         </mat-select>
                     </mat-form-field>
-                    <mat-form-field *ngIf="SearchForm?.formFields?.vendorSelection?.show" class="m-8">
+                    <mat-form-field *ngIf="SearchForm?.formFields?.vendorSelection?.show && vendorList &&vendorList.length > 0" class="m-8">
                         <mat-label>{{SearchForm?.formFields?.vendorSelection?.placeholder}}</mat-label>
-                        <mat-select formControlName="vendorDetail">
-                            <mat-option *ngFor="let option of vendorList" [value]="option">{{option.Vendor_Name}}
+                        <mat-select formControlName="vendorDetail" [compareWith]="compareObjects" [(ngModel)]="selected">
+                            <mat-option *ngFor="let vendor of vendorList" [value]="vendor">{{vendor.Vendor_Name}}
                             </mat-option>
                         </mat-select>
                     </mat-form-field>
+                    
                 </div>
                 <div class="d-flex">
                     <button style="margin: 5px;" id="search" type="submit" mat-raised-button class="btn-color"
@@ -71,16 +72,16 @@
                     <mat-cell *matCellDef="let element; let i = index">
                         <ng-container
                             *ngIf="getRowCellValue(element[col.id]) != 'img' && getRowCellValue(element[col.id]) != 'menu'">
-                            {{ getRowCellValue(element[col.id]) | dateformatter:dateFormat}} <i
+                            {{ getRowCellValue(element[col.id]) | dateformatter:dateFormat:col.id}} <i
                                 *ngIf="getEditTableCell(col.id)" class="fa fa-edit" style="cursor: pointer;"
                                 (click)="openEditWindow(element, col.id, i)"></i>
                         </ng-container>
                         <ng-container *ngIf="getRowCellValue(element[col.id]) == 'img'"><img
                                 src="{{componentImageUrl+element[col.id]}}" width="50" height="50">
                         </ng-container>
-                        <ng-container *ngIf="getRowCellValue(element[col.id]) == 'menu'">
+                        <ng-container *ngIf="getRowCellValue(element[col.id]) == 'menu' && element[col.id].length > 0">
                             <ng-container *ngIf="col?.id.includes('image') else noImg">
-                                <div *ngFor="let x of element[col.id]"><img src="{{env?.componentImageUrl+x}}" width="100" height="100"></div>
+                                <div *ngFor="let x of element[col.id]" class="img-grid"><img src="{{env?.componentImageUrl+x}}" width="100" height="100" (click)="imgPreview(env?.componentImageUrl+x)"></div>
                             </ng-container>
                             <ng-template #noImg>
                                 <button mat-button [matMenuTriggerFor]="menu"><i class="fa fa-caret-down"

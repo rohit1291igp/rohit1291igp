@@ -8,7 +8,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
           <i class="fa fa-times-circle" (click)="dialogRef.close()"></i>
            <img src="{{data.imgSrc}}" width="100%" height="auto">
            </div>`,
-  styles:[`
+  styles: [`
           .img-preview-container{
             position:relative;
           }
@@ -21,13 +21,13 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
           .mat-dialog-container{
             padding : 18px;
           }
-        `]         
+        `]
 })
 export class ImgPreviewComponent {
 
   constructor(
     public dialogRef: MatDialogRef<ImgPreviewComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any) {}
+    @Inject(MAT_DIALOG_DATA) public data: any) { }
 
   close(): void {
     this.dialogRef.close();

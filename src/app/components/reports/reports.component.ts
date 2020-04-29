@@ -71,11 +71,14 @@ export class ReportsComponent implements OnInit{
   showMoreBtn=false;
   searchReportFieldsValidation=false;
   componentTypes=[
-      {"name" : "Select component type", "value" : "" },
       {"name" : "General Gifting", "value" : "0" },
       {"name" : "Cake Only", "value" : "1" }
 
   ];
+  ProcTypeOption=[
+    {"name" : "JIT", "value" : "JIT" },
+    {"name" : "Stocked", "value" : "Stocked"}
+];
   componentTypesVendor=[
     {"name" : "Select component type", "value" : "" },
     {"name" : "General Products", "value" : "0" },
@@ -777,21 +780,30 @@ getDeliveryBoyList(){
         // _this.dataSource = new MatTableDataSource();
         _this.columnNames = [];
         if(_this.reportType == "getComponentReport"){
-            if($('.componentDD').val() == "Select Component Code"){
-                alert("Please select component code");
-                return;
-            } else if($('.componentDD').val() !== undefined && $('.componentDD').val() == "All Component"){
-                if(_this.searchResultModel["Component_Code"]){
-                    delete _this.searchResultModel["Component_Code"];
+            if(formdata){
+                let formData = formdata.value;
+                    if(formData.componentId == 'All' || formData.ComponentCode == 'All Components'){
+                        _this.searchResultModel = {}//["Component_Id"] = formData.componentId;
+                    }else{
+                        //For Admin
+                        _this.searchResultModel["Component_Id"] = formData.componentId;
+                    }
                 }
-                else{
-                    alert("Already all components are listed");
-                    return;
-                }
-            }
-             else if($('.componentDD').val() !== undefined){
-                _this.searchResultModel["Component_Code"]=$('.componentDD').val();
-            }
+            // if($('.componentDD').val() == "Select Component Code"){
+            //     alert("Please select component code");
+            //     return;
+            // } else if($('.componentDD').val() !== undefined && $('.componentDD').val() == "All Component"){
+            //     if(_this.searchResultModel["Component_Code"]){
+            //         delete _this.searchResultModel["Component_Code"];
+            //     }
+            //     else{
+            //         alert("Already all components are listed");
+            //         return;
+            //     }
+            // }
+            //  else if($('.componentDD').val() !== undefined){
+            //     _this.searchResultModel["Component_Code"]=$('.componentDD').val();
+            // }
         }
 
         if(_this.reportType == "getBarcodeToComponentReport"){
@@ -1632,7 +1644,12 @@ getDeliveryBoyList(){
                 paramsObj['fkAssociateId'] =  localStorage.getItem('fkAssociateId');
             }
         }
-
+        for(let paramKey in paramsObj){
+            if(paramKey == 'Proc_Type' && environment.userType == 'admin'){
+                paramsObj['Proc_Type_Vendor'] = paramsObj['Proc_Type'];
+                delete paramsObj['Proc_Type'];
+            }
+        }
         var paramsStr = _this.UtilityService.formatParams(paramsObj);
 
         let reqObj= {
@@ -1897,7 +1914,7 @@ getDeliveryBoyList(){
         }
         /* componentType default value - start*/
         if(!_this.reportAddAction.reportAddActionModel) _this.reportAddAction.reportAddActionModel={};
-        _this.reportAddAction.reportAddActionModel.componentType="";
+        // _this.reportAddAction.reportAddActionModel.componentType="";
         /* componentType default value - end*/
         _this.reportAddAction.reportAddActionFlag=true;
     }

@@ -50,7 +50,7 @@ export class PerformanceReportComponent implements OnInit {
         _this.getActionList();
         let url;
         if (_this.userType == 'admin') {
-            url = `action=ALL&fkasid=${_this.fkasid}&sdate=${dateto}&edate=${datefrom}`;
+            url = `action=all&sdate=${dateto}&edate=${datefrom}`;
             //Get vendor List
             _this.getVendor();
         } else {
@@ -84,11 +84,18 @@ export class PerformanceReportComponent implements OnInit {
         var _this = this;
         const datefrom = pipe.transform(event.dateto, 'yyyy-MM-dd');
         const dateto = pipe.transform(event.datefrom, 'yyyy-MM-dd');
-
+        
+        console.log(pipe.transform('2020-04-26 08:59:53.0', 'h:mm:ss a'))
         if (event.vendorDetail && event.vendorDetail.Vendor_Id) {
             _this.fkasid = event.vendorDetail.Vendor_Id;
         }
-        _this.reportsService.getReportData('getperformancereport', `action=${event.selection}&sdate=${dateto}&edate=${datefrom}&fkasid=${_this.fkasid}`, function (error, _reportData) {
+        let url;
+        if(event.vendorDetail.Vendor_Id == 0){
+            url = `action=${event.selection}&sdate=${dateto}&edate=${datefrom}`;
+        }else{
+            url = `action=${event.selection}&sdate=${dateto}&edate=${datefrom}&fkasid=${_this.fkasid}`
+        }
+        _this.reportsService.getReportData('getperformancereport', url, function (error, _reportData) {
             if (error) {
                 console.log('_reportData Error=============>', error);
                 return;
@@ -152,7 +159,8 @@ export class PerformanceReportComponent implements OnInit {
             if (err || response.error) {
                 console.log('Error=============>', err);
             } else {
-                _this.vendorList = response.result;
+                _this.vendorList = response.result;//.map(m => m.Vendor_Name);
+                _this.vendorList.unshift({'Vendor_Id':0,'Vendor_Name':'Select All','Status':0,'Rating':0,'Daily_Cap':0,'Delivery_Boy_App':0});
             }
         });
     }
