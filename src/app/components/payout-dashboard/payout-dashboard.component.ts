@@ -67,7 +67,7 @@ export class PayoutDashboardComponent implements OnInit {
     var _this = this;
     let url;
     if (vendorId) {
-      url = `${_this.payoutDasboardUrl}?vendorId=${vendorId}&month=${month}&year=${year}`
+      url = `${_this.payoutDasboardUrl}?fkAssociateId=${vendorId}&month=${month}&year=${year}`
     }
     if (!vendorId) {
       url = `${_this.payoutDasboardUrl}?fkAssociateId=${localStorage.getItem('fkAssociateId')}&month=${month}&year=${year}`
