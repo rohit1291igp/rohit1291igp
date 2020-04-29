@@ -563,3 +563,15 @@ mat-row:nth-child(odd) {
     background: #C3404E;
     color: #fff;
 }
+.img-grid{
+    display: flex;
+    max-width: 100%;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.img-grid > img{
+    border: 1px solid;
+    margin: 3px;
+    max-width: 50px;
+    max-height: 30px;
+}

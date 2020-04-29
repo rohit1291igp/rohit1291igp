@@ -4,7 +4,7 @@ import { DatePipe } from '@angular/common';
     name: 'dateformatter'
 })
 export class DateFormatterPipe implements PipeTransform {
-    transform(date: string, format:string): string {
+    transform(date: string, format:string, condition:string): string {
         if (!date) return date;
         let pipe = new DatePipe('en-US');
         let dateFormat = format ? format : 'yyyy-MM-dd';
@@ -13,7 +13,11 @@ export class DateFormatterPipe implements PipeTransform {
         //         console.log(date);
         //         const date = (typeof date == 'string') ? new Date(date) : '';
                 if( typeof date == 'string' && date.includes('-') && date.includes(':') && String(new Date(date)).includes('GMT')){
-                        return pipe.transform(date, dateFormat)
+                        if(condition.toLowerCase().includes('time')){
+                            return pipe.transform(date, 'h:mm:ss a')
+                        }else{
+                            return pipe.transform(date, dateFormat)
+                        }
                   }else{
                       return date;
                   }
