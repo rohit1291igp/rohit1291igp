@@ -54,7 +54,7 @@ export class PerformanceReportComponent implements OnInit {
             //Get vendor List
             _this.getVendor();
         } else {
-            url = `action=ALL&fkasid=${_this.fkasid}&sdate=${dateto}&edate=${datefrom}`;
+            url = `action=all&fkasid=${_this.fkasid}&sdate=${dateto}&edate=${datefrom}`;
         }
         _this.reportsService.getReportData('getperformancereport', url, function (error, _reportData) {
             if (error) {
