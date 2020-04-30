@@ -38,10 +38,10 @@
         <ul class="table-data">
             <li>Total Orders : {{tabledata?.totalOrders}}</li>
             <li>Smooth Delivery : {{tabledata?.smoothDeliveries}}</li>
-            <li>Delayed Update : {{tabledata?.delayedUpdate}}</li>
-            <li>Rejections : {{tabledata?.rejections}}</li>
-            <li>Complaints : {{tabledata?.complaints}}</li>
-            <li>Complaince : {{tabledata?.compliances}}</li>
+            <li>Delayed Update : {{tabledata?.delayedUpdate}} ({{tabledata?.percDelayedUpdate}}%)</li>
+            <li>Rejections / PriceChanges : {{tabledata?.priceChangeAndReject}} ({{tabledata?.percPriceChangeAndReject}}%)</li>
+            <li>Complaints : {{tabledata?.complaints}} ({{tabledata?.percComplaints}}%)</li>
+            <li>Complaince : {{tabledata?.compliances}} ({{tabledata?.perccompliances}}%)</li>
         </ul>
         <ul class="table-data">
             <li>Total Cost : {{tabledata?.totalCost}}</li>
@@ -58,10 +58,10 @@
         <ul class="table-data">
             <li>Total Orders : {{tabledata?.totalOrders}}</li>
             <li>Smooth Delivery : {{tabledata?.smoothDeliveries}}</li>
-            <li>Delayed Update : {{tabledata?.delayedUpdate}}</li>
-            <li>Rejections : {{tabledata?.rejections}}</li>
-            <li>Complaints : {{tabledata?.complaints}}</li>
-            <li>Complaince : {{tabledata?.compliances}}</li>
+            <li>Delayed Update : {{tabledata?.delayedUpdate}} ({{tabledata?.percDelayedUpdate}}%)</li>
+            <li>Rejections / PriceChanges : {{tabledata?.priceChangeAndReject}} ({{tabledata?.percPriceChangeAndReject}}%)</li>
+            <li>Complaints : {{tabledata?.complaints}} ({{tabledata?.percComplaints}}%)</li>
+            <li>Complaince : {{tabledata?.compliances}} ({{tabledata?.perccompliances}}%)</li>
         </ul>
         <ul class="table-data">
             <li>Total Sales : {{tabledata?.totalCost}}</li>
