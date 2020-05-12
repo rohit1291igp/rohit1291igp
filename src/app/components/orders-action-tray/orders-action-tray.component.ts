@@ -1330,6 +1330,14 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
               _this.adminActions.adminActionDepData.vendorList.unshift({"Vendor_Id" : "", "Vendor_Name": "Select Vendor"});
               return cb(null);
           });
+          if(environment.userType === 'vendor'){
+            this.getDeliveryBoyList();
+            this.getRejectResons('reject');
+         }
+         if(environment.userType === 'admin'){
+            this.getFeeds();
+            this.getRejectResons('reassign');
+         }
       }else if(name === "changeDeliveryType&Date"){
           orderProdsCollection();
           let deliveryType=_this.sidePanelData[orderIndex].orderProducts[0].orderProductExtraInfo.deliveryType;
