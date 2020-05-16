@@ -2045,6 +2045,7 @@ getDeliveryBoyList(){
             if(response.result){
               alert('The request was successful.');
                 _this.reportAddAction.reportAddActionFlag=false;
+                _this.uploadedImages = [];
             }
         });
     }
