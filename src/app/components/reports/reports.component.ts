@@ -2018,7 +2018,8 @@ getDeliveryBoyList(){
                     Component_Name:_this.reportAddAction.reportAddActionModel.componentName,
                     Type:_this.reportAddAction.reportAddActionModel.componentType,
                     Tax_Id:_this.reportAddAction.reportAddActionModel.componentTaxId,
-                    Component_Description:_this.reportAddAction.reportAddActionModel.componentDesc
+                    Component_Description:_this.reportAddAction.reportAddActionModel.componentDesc,
+                    Proc_Type:_this.reportAddAction.reportAddActionModel.procTypeVendor == 'Stocked' ? 1 : 2
                 };
         }
 
