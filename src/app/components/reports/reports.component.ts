@@ -1544,7 +1544,7 @@ getDeliveryBoyList(){
                 return;
             }else{
                 paramsObj={
-                    componentId:rowData['component_Id_Hide'],
+                    componentId:rowData['Component_Id'],
                     inStock: (actBtnTxtModified === "InStock") ? 1 : 0
                 };
                 _this.confirmFlag=false;
