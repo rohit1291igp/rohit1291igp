@@ -68,7 +68,7 @@ import { environment } from "../../../environments/environment";
     calculate(){
         if(this.myForm.value){
             let data = this.myForm.value;
-            this.myForm.controls['total'].setValue(data.StockQuantity * this.data.Component_Cost_Vendor);
+            this.myForm.controls['total'].setValue(data.StockQuantity * Number(this.data.Component_Cost_Vendor.value));
 
         }
         

@@ -12,6 +12,7 @@ import { S3UploadService } from '../../services/s3Upload.service';
 import { UtilityService } from '../../services/utility.service';
 import { OrdersActionTrayComponent } from '../orders-action-tray/orders-action-tray.component';
 import { OrderStockComponent } from '../order-stocks/order-stock.component';
+import { HttpHeaders } from '@angular/common/http';
 
 @Component({
   selector: 'app-reports',
@@ -496,7 +497,7 @@ getDeliveryBoyList(){
                 }
                 return;
             }
-            console.log("response----->"+response.result);
+            // console.log("response----->"+response.result);
             _this.listOfComponents = response.result;
             _this.listOfComponents.unshift({Component_Id:'All',Component_Name:'All Components'});
 
@@ -546,7 +547,7 @@ getDeliveryBoyList(){
                 }
                 return;
             }
-            console.log("response----->"+response.result.list);
+            // console.log("response----->"+response.result.list);
             _this.listOfBarcodes = response.result.list;
           });
     }
@@ -582,7 +583,40 @@ getDeliveryBoyList(){
         let j = 0;
         for (let i = 0; i < event.target.files.length; i++) {
             const file = event.target.files[i];
-            this.S3UploadService.uploadImageToS3(file, environment.componentBucketName, environment.blogsAcl, false, (err, data) => {
+            // this.S3UploadService.uploadImageToS3(file, environment.componentBucketName, environment.blogsAcl, false, (err, data) => {
+            //     j++;
+            //     if (j === event.target.files.length) {
+            //         that.isUploading = false;
+            //         that.isAddImage = false;
+            //     }
+            //     if (err) {
+            //         console.log('There was an error uploading your file: ', err);
+            //         return false;
+            //     } else {
+            //         this.uploadedImages.push(data);
+            //     }
+            // });
+
+
+            // _this.deliveryBoyAssignBtnText = false;
+            let formData = new FormData();
+            formData.append("file", file);
+            const httpOptions = {
+                headers: new HttpHeaders({
+                    'Accept': 'application/x-www-form-urlencoded',
+                    'Content-Type': 'application/json'
+                })
+            };
+            const reqObj = {
+                url: `fileupload?ss3upload=1`,
+                method: "post",
+                // payload: {'s3commonupload':[formData]},
+                payload: formData,
+                options: httpOptions
+            };
+            
+            that.BackendService.makeAjax(reqObj, function (err, response, headers) {
+                //if(!response) response={result:[]};
                 j++;
                 if (j === event.target.files.length) {
                     that.isUploading = false;
@@ -592,9 +626,16 @@ getDeliveryBoyList(){
                     console.log('There was an error uploading your file: ', err);
                     return false;
                 } else {
-                    this.uploadedImages.push(data);
+                    if(response.result && response.result.uploadedFilePath && response.result.uploadedFilePath['s3commonupload']){
+                        let key = response.result.uploadedFilePath['s3commonupload'][0].split("/");
+                        key = key[key.length-1];
+                        const uploadedImageObj = {Key:key,Location:response.result.uploadedFilePath['s3commonupload'][0]}
+                        that.uploadedImages.push(uploadedImageObj);
+                        // that.ngOnInit();
+                    }
                 }
             });
+
         }
     }
     }
@@ -1986,6 +2027,7 @@ getDeliveryBoyList(){
             //if(!response) response={result:[]};
             if(err || response.error) {
                 console.log('Error=============>', err);
+                alert(response.errorCode);
                 return;
             }
             console.log('admin action Response --->', response.result);
@@ -2182,6 +2224,12 @@ getDeliveryBoyList(){
         console.log(event)
     }
 
+    selectComponentType(e){
+        console.log(e);
+        if(e.includes('Cake Only') && this.reportAddAction.reportAddActionModel.procTypeVendor == 'Stocked'){
+            this.reportAddAction.reportAddActionModel.procTypeVendor = '';
+        }
+    }
 }
 
 @Component({

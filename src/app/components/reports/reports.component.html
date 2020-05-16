@@ -267,14 +267,16 @@
                             <input name="componentName" class="form-control custom-control m-top-1" [(ngModel)]="reportAddAction.reportAddActionModel.componentName" #componentName="ngModel" placeholder="component Name" required>
                             <input name="componentDesc" class="form-control custom-control m-top-1" [(ngModel)]="reportAddAction.reportAddActionModel.componentDesc" #componentDesc="ngModel" placeholder="component Description" required>
 
-                            <select *ngIf="reportType === 'getComponentReport'" name="componentType" class="form-control m-top-1" [(ngModel)]="reportAddAction.reportAddActionModel.componentType" #componentType="ngModel" required>
+                            <select *ngIf="reportType === 'getComponentReport'" name="componentType" class="form-control m-top-1" [(ngModel)]="reportAddAction.reportAddActionModel.componentType"  #componentType="ngModel" (ngModelChange)="selectComponentType($event)"required>
                                 <option [ngValue]="undefined" disabled selected>Select a Component Type</option>
                                 <option *ngFor="let componentType of componentTypes" [ngValue]="componentType.name">{{componentType.name}}</option>
                             </select>
                             
                             <select *ngIf="reportType === 'getComponentReport'" name="procTypeVendor" class="form-control m-top-1" [(ngModel)]="reportAddAction.reportAddActionModel.procTypeVendor" #procTypeVendor="ngModel" required>
                                 <option [ngValue]="undefined" disabled selected>Select a Proc Type</option>
-                                <option *ngFor="let componentType of ProcTypeOption" [ngValue]="componentType.name">{{componentType.name}}</option>
+                                <ng-container *ngFor="let componentType of ProcTypeOption">
+                                    <option [ngStyle]="{'display':(reportAddAction.reportAddActionModel.componentType && reportAddAction.reportAddActionModel.componentType == 'Cake Only' && componentType.name == 'Stocked' ) ? 'none' : 'block'}" [ngValue]="componentType.name">{{componentType.name}}</option>
+                                </ng-container>
                             </select>
                             <select *ngIf="reportType === 'getVendorReport'" name="componentType" class="form-control m-top-1" [(ngModel)]="reportAddAction.reportAddActionModel.componentType" #componentType="ngModel" required>
                                 <option *ngFor="let componentType of componentTypesVendor" [ngValue]="componentType.value">{{componentType.name}}</option>
@@ -321,14 +323,14 @@
                             </div>
 
                             <input name="componentTaxId" class="form-control custom-control m-top-1" [(ngModel)]="reportAddAction.reportAddActionModel.componentTaxId" #componentcomponentTaxId="ngModel" placeholder="component TaxId" required>
-
-                            <div *ngIf="f.submitted && !componentCode.valid" class="help-block theme-red">Please provide component code!</div>
+                            
+                            <!-- <div *ngIf="f.submitted && !componentCode.valid" class="help-block theme-red">Please provide component code!</div>
                             <div *ngIf="f.submitted && !componentName.valid" class="help-block theme-red">Please provide component name!</div>
-                            <div *ngIf="f.submitted && !componentImage.valid" class="help-block theme-red">Please provide component image!</div>                            
-                            <div *ngIf="f.submitted && !componentDesc.valid" class="help-block theme-red">Please provide component description!</div>
+                            <div *ngIf="f.submitted && !componentImage.valid" class="help-block theme-red">Please provide component image!</div>                             -->
+                            <!-- <div *ngIf="f.submitted && !componentDesc.valid" class="help-block theme-red">Please provide component description!</div>
                             <div *ngIf="f.submitted && !componentType.valid" class="help-block theme-red">Please provide component type!</div>
-                            <div *ngIf="f.submitted && !componentTaxId.valid" class="help-block theme-red">Please provide component taxid!</div>
-                            <button class="btn btn-primary m-top-1">Submit</button>
+                            <div *ngIf="f.submitted && !componentTaxId.valid" class="help-block theme-red">Please provide component taxid!</div> -->
+                            <button class="btn btn-primary m-top-1" [disabled]="f.invalid">Submit</button>
                         </form>
                     </div>
                 </div>
@@ -813,10 +815,17 @@
                                                         <div class="tableDataActionBtn" *ngIf="tableAction[tableCol] && tableAction[tableCol].length">
                                                             <!--{{tableAction[tableCol] | json}}-->
                                                             <ng-container *ngIf="reportType === 'getComponentReport' || reportType === 'getVendorDetails' || reportType === 'getBarcodeToComponentReport' || reportType === 'getComponentOrderReport'">
-                                                                <div class="tableactBtn" *ngFor="let actBtn of tableAction[tableCol]; let z='index'" (click)="actionBtnInvoke(actBtn, getCellValue(tableRowValue[tableCol]), tableRowValue, tableCol, dataIndex, 1)">
-                                                                    <span class="tableactBtntxt">{{getActBtnTxt(actBtn, getCellValue(tableRowValue[tableCol]))}}</span>
-                                                                    <ng-container *ngIf="(z+1) < tableAction[tableCol].length"> &nbsp; |</ng-container>
-                                                                </div>
+                                                                <!-- sdsdsdssdsdsdds{{getCellValue(tableRowValue['Component_Delivery_Status']) | json}} -->
+                                                                <ng-container  *ngIf="getCellValue(tableRowValue['Component_Delivery_Status']) != 'Delivered'" >
+                                                                    <ng-container  *ngIf="getCellValue(tableRowValue['Component_Delivery_Status']) != 'Rejected'" >
+                                                                            <div class="tableactBtn" *ngFor="let actBtn of tableAction[tableCol]; let z='index'" (click)="actionBtnInvoke(actBtn, getCellValue(tableRowValue[tableCol]), tableRowValue, tableCol, dataIndex, 1)">
+                                                                                    <span class="tableactBtntxt">{{getActBtnTxt(actBtn, getCellValue(tableRowValue[tableCol]))}}</span>
+                                                                                    <ng-container *ngIf="(z+1) < tableAction[tableCol].length"> &nbsp; |</ng-container>
+                                                                                </div>
+                                                                        </ng-container>
+                                                                </ng-container>
+                                                                
+                                                                
                                                             </ng-container>
                                                             <ng-container *ngIf="reportType !== 'getComponentReport' && reportType !== 'getVendorDetails' && reportType !== 'getBarcodeToComponentReport' && reportType !== 'deliveryBoyDetails' && (tableRowValue[tableCol] && tableRowValue[tableCol]['requestValue'] && tableRowValue[tableCol]['requestValue'] == -1)">
                                                                 <div class="tableactBtn" *ngFor="let actBtn of tableAction[tableCol]; let z='index'" (click)="actionBtnInvoke(actBtn, getCellValue(tableRowValue[tableCol]), tableRowValue, tableCol, dataIndex, 1)">
