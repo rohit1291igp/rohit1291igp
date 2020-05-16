@@ -526,7 +526,7 @@ getDeliveryBoyList(){
             _this.listOfStockItems = response.result
             _this.listOfStockItems.unshift({Component_Id:'All',Component_Name:'All Components'});
             _this.tempListOfStockItems = _this.listOfStockItems;
-            _this.procTypeVendor = ['Stocked', 'Jit'];
+            _this.procTypeVendor = ['Stocked', 'JIT'];
           });
     }
   }
@@ -1691,8 +1691,15 @@ getDeliveryBoyList(){
                 paramsObj['fkAssociateId'] =  localStorage.getItem('fkAssociateId');
             }
         }
+        if(apiURLPath == "handleComponentChange" && environment.userType == 'admin'){
+            if(paramsObj['Proc_Type'] == 'Stocked'){
+                paramsObj['Proc_Type'] = 1; 
+            }else{
+                paramsObj['Proc_Type'] = 2; 
+            }
+        }
         for(let paramKey in paramsObj){
-            if(paramKey == 'Proc_Type' && environment.userType == 'admin'){
+            if(paramKey == 'Proc_Type' && environment.userType == 'admin' && apiURLPath == 'handleVendorComponentChange'){
                 paramsObj['Proc_Type_Vendor'] = paramsObj['Proc_Type'];
                 delete paramsObj['Proc_Type'];
             }

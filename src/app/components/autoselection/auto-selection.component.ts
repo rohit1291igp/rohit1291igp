@@ -98,7 +98,7 @@ export class AutoSelectionComponent implements OnInit, OnChanges {
                         }
                     }
                     document.getElementById(this.relationName).setAttribute('style', 'display:none !important');
-                }, 200)
+                }, 500)
             }
         }
     }
@@ -117,6 +117,6 @@ export class AutoSelectionComponent implements OnInit, OnChanges {
         }
         setTimeout(() => {
             document.getElementById(this.relationName).setAttribute('style', 'display:none !important');
-        }, 100)
+        }, 500)
     }
 }
