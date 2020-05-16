@@ -484,7 +484,7 @@ getDeliveryBoyList(){
     var _this = this;
     if(environment.userType == 'admin'){
         let reqObj =  {
-            url : 'getListOfComponents?startLimit=0&endLimit=1000',
+            url : 'getListOfComponents?startLimit=0&endLimit=5000',
             method : "get",
             payload : {}
           };
@@ -2021,6 +2021,9 @@ getDeliveryBoyList(){
                     Component_Description:_this.reportAddAction.reportAddActionModel.componentDesc,
                     Proc_Type:_this.reportAddAction.reportAddActionModel.procTypeVendor == 'Stocked' ? 1 : 2
                 };
+        }
+        if(url == 'addNewComponent'){
+            _this.getComponentsList();
         }
 
         let paramsStr = _this.UtilityService.formatParams(paramsObj);
