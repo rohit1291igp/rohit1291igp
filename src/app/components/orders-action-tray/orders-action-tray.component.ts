@@ -12,6 +12,7 @@ import { AddDeliveryBoyComponent } from '../add-deliveryboy/add-deliveryboy.comp
 import { MatDialog, MatSnackBar } from '@angular/material';
 import { NotificationComponent } from '../notification/notification.component';
 import { S3UploadService } from '../../services/s3Upload.service';
+import { HttpHeaders } from '@angular/common/http';
 
 @Component({
   selector: 'app-orders-action-tray',
@@ -1854,7 +1855,37 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
             let j = 0;
             for (let i = 0; i < event.target.files.length; i++) {
                 const file = event.target.files[i];
-                this.S3UploadService.uploadImageToS3(file, environment.componentBucketName, environment.blogsAcl, false, (err, data) => {
+                // this.S3UploadService.uploadImageToS3(file, environment.componentBucketName, environment.blogsAcl, false, (err, data) => {
+                //     j++;
+                //     if (j === event.target.files.length) {
+                //         that.isUploading = false;
+                //         that.isAddImage = false;
+                //     }
+                //     if (err) {
+                //         console.log('There was an error uploading your file: ', err);
+                //         return false;
+                //     } else {
+                //         this.uploadedImages.push(data.key);
+                //     }
+                // });
+                let formData = new FormData();
+                formData.append("file", file);
+                const httpOptions = {
+                    headers: new HttpHeaders({
+                        'Accept': 'application/x-www-form-urlencoded',
+                        'Content-Type': 'application/json'
+                    })
+                };
+                const reqObj = {
+                    url: `fileupload?ss3upload=1`,
+                    method: "post",
+                    // payload: {'s3commonupload':[formData]},
+                    payload: formData,
+                    options: httpOptions
+                };
+
+                that.BackendService.makeAjax(reqObj, function (err, response, headers) {
+                    //if(!response) response={result:[]};
                     j++;
                     if (j === event.target.files.length) {
                         that.isUploading = false;
@@ -1864,7 +1895,13 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
                         console.log('There was an error uploading your file: ', err);
                         return false;
                     } else {
-                        this.uploadedImages.push(data.key);
+                        if(response.result && response.result.uploadedFilePath && response.result.uploadedFilePath['s3commonupload']){
+                            let key = response.result.uploadedFilePath['s3commonupload'][0].split("/");
+                            key = key[key.length-1];
+                            const uploadedImageObj = {Key:key,Location:response.result.uploadedFilePath['s3commonupload'][0]}
+                            that.uploadedImages.push(uploadedImageObj.Key);
+                            // that.ngOnInit();
+                        }
                     }
                 });
             }
