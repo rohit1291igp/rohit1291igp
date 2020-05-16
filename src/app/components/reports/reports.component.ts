@@ -484,7 +484,7 @@ getDeliveryBoyList(){
     var _this = this;
     if(environment.userType == 'admin'){
         let reqObj =  {
-            url : 'getListOfComponents?startLimit=0&endLimit=1000',
+            url : 'getListOfComponents?startLimit=0&endLimit=5000',
             method : "get",
             payload : {}
           };
@@ -2022,6 +2022,9 @@ getDeliveryBoyList(){
                     Proc_Type:_this.reportAddAction.reportAddActionModel.procTypeVendor == 'Stocked' ? 1 : 2
                 };
         }
+        if(url == 'addNewComponent'){
+            _this.getComponentsList();
+        }
 
         let paramsStr = _this.UtilityService.formatParams(paramsObj);
         console.log('add API url --->', url);
@@ -2042,6 +2045,7 @@ getDeliveryBoyList(){
             if(response.result){
               alert('The request was successful.');
                 _this.reportAddAction.reportAddActionFlag=false;
+                _this.uploadedImages = [];
             }
         });
     }
