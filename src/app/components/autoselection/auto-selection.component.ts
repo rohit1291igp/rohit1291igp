@@ -51,7 +51,12 @@ export class AutoSelectionComponent implements OnInit, OnChanges {
 
     ngOnChanges(changes:SimpleChanges):void{
         if(changes["setValue"] && !changes["setValue"].firstChange && !changes['setValue'].currentValue){
-            this.componentName = changes['setValue'].currentValue
+            if(changes && changes['setValue'] != undefined){
+                this.componentName = changes['setValue'].currentValue
+            }
+        }
+        if(changes && !changes['listOfComponents'].firstChange && changes['listOfComponents'].currentValue){
+            this.listOfComponents = changes['listOfComponents'].currentValue;
         }
     }
     filterValues(inputValue) {
