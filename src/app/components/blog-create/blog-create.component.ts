@@ -276,7 +276,7 @@ export class BlogCreateComponent implements OnInit {
                     })
                 };
                 const reqObj = {
-                    url: `fileupload?ss3upload=1`,
+                    url: `admin/handels/fileupload?ss3upload=1`,
                     method: "post",
                     // payload: {'s3commonupload':[formData]},
                     payload: formData,
@@ -298,8 +298,7 @@ export class BlogCreateComponent implements OnInit {
                             let key = response.result.uploadedFilePath['s3commonupload'][0].split("/");
                             key = key[key.length-1];
                             const uploadedImageObj = {Key:key,Location:response.result.uploadedFilePath['s3commonupload'][0]}
-                            this.model.files.push(uploadedImageObj);
-                            // that.ngOnInit();
+                            that.model.files.push(uploadedImageObj);
                         }
                     }
                 });
