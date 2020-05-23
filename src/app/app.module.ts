@@ -57,7 +57,7 @@ import { PerformanceReportComponent } from './components/performance-report/perf
 import { NewReportsComponentModule } from './components/new-reports-component/new-reports.component';
 import { CapitalizePipeModule } from './customPipes/capitalze.pipe';
 import { DateFormatterPipeModule } from './customPipes/date-formatter';
-import { PayoutDashboardComponent } from './components/payout-dashboard/payout-dashboard.component';
+import { PayoutDashboardComponent, PayoutDashboardModule } from './components/payout-dashboard/payout-dashboard.component';
 import { MomentDateAdapter, MatMomentDateModule } from '@angular/material-moment-adapter';
 import { editComponent } from './components/reports/reports.component';
 
@@ -91,8 +91,7 @@ export function ConfigLoader(envConfig: envConfig) {
     OrderStockComponent,
     testComponent,
     editComponent,
-    PerformanceReportComponent,
-    PayoutDashboardComponent
+    PerformanceReportComponent
     // AutoSelectionComponent
   ],
   imports: [
@@ -131,7 +130,8 @@ export function ConfigLoader(envConfig: envConfig) {
     MatListModule,
     NewReportsComponentModule,
     CapitalizePipeModule,
-    DateFormatterPipeModule
+    DateFormatterPipeModule,
+    PayoutDashboardModule
     // RouterModule
   ],
   providers: [

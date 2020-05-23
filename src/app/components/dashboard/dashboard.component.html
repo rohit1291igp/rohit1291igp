@@ -216,6 +216,12 @@
                         </div>
                         <div class="clearfix"></div>
                     </div>
+                    <div class="col-sm-12 allOrderRow d-flex">
+                        <div class="col-sm-6 page center-align">
+                            <div class="text-bold">{{dashboardData.deliveryAttemptTotalCount}}</div>
+                            <div>Attempted orders</div>
+                        </div>
+                    </div>
 
                     <div class="clearfix"></div>
                     <div class="col-md-12 no-padding">
@@ -445,11 +451,14 @@
 
         <ng-container *ngIf="(dashboardData.delivered.today || dashboardData.delivered.total) && !isAdmin">
              <div class="cellNoHeight cell col-md-10">
-                <div class="row">
-                    <div class="col-md-7 relative" style="font-size: 1.1em;">
-                        <div class="deliverOrdered1" style="">Orders already delivered : <span class="text-bold">{{dashboardData.delivered.total}}</span></div>
-                        <div class="deliverOrdered2" style="">
+                <div class="row d-flex align-item-center flex-wrap-wrap">
+                    <div class="col-md-7 relative d-flex align-items-center justify-content-space-around" style="font-size: 1.1em;">
+                        <div class="" style="">Orders already delivered : <span class="text-bold">{{dashboardData.delivered.total}}</span></div>
+                        <div class="" style="">
                             <div class="line-height">Orders yet to be delivered : <span class="text-bold">{{dashboardData.delivered.today}}</span></div>
+                        </div>
+                        <div class="" style="">
+                            <div class="line-height">Attempted orders : <span class="text-bold">{{dashboardData.deliveryAttemptTotalCount}}</span></div>
                         </div>
                     </div>
                     <div class="col-md-5" style="padding: 1.5em 0.5em 0;">
@@ -484,7 +493,14 @@
 </app-orders-action-tray>
 
 
+<div *ngIf="environment.userType === 'vendor' else adminUser" class="d-flex" [ngClass]="{'flex-direction-column': isMobile}" style="background: #F2F2F2;padding: 2em 0;">
+<app-feeds [ngStyle]="{'width': isMobile ? '100%' : '50%'}"></app-feeds>
+<app-payout-dashboard [ngStyle]="{'width': isMobile ? '100%' : '49%'}"></app-payout-dashboard>    
+</div>
+<ng-template #adminUser>
 <app-feeds></app-feeds>
+</ng-template>
+
 </ng-container>
 
 <ng-container *ngIf="environment.userType === 'blogger'">

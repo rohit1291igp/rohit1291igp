@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild, NgModule } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDatepicker } from '@angular/material';
 import { MAT_DATE_FORMATS } from '@angular/material/core';
@@ -11,6 +11,8 @@ import * as _moment from 'moment';
 import { Moment } from 'moment';
 import { environment } from "../../../environments/environment";
 import { BackendService } from '../../services/backend.service';
+import { SharedModule } from 'app/shared-module/shared/shared.module';
+import { CommonModule } from '@angular/common';
 
 
 
@@ -251,3 +253,14 @@ export class PayoutDashboardComponent implements OnInit {
   }
 
 }
+
+@NgModule({
+  imports:[CommonModule,SharedModule],
+  declarations: [ 
+    PayoutDashboardComponent
+  ],
+  exports: [
+    PayoutDashboardComponent
+  ]
+})
+export class PayoutDashboardModule {}

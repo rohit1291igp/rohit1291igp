@@ -11,6 +11,7 @@ import { OrdersButtonComponent } from 'app/components/orders-button/orders-butto
 import { SharedModule } from 'app/shared-module/shared/shared.module';
 import { MyDatePickerModule } from 'mydatepicker';
 import { AuthGuard } from 'app/services/auth-guard.service';
+import { PayoutDashboardModule } from 'app/components/payout-dashboard/payout-dashboard.component';
 const routes: Routes = [
   {
     path: '',
@@ -26,7 +27,8 @@ const routes: Routes = [
     FormsModule,
     ReactiveFormsModule,
     MyDatePickerModule,
-    SharedModule
+    SharedModule,
+    PayoutDashboardModule
   ],
   declarations: [
     DashboardComponent,

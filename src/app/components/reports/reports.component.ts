@@ -608,9 +608,8 @@ getDeliveryBoyList(){
                 })
             };
             const reqObj = {
-                url: `fileupload?ss3upload=1`,
+                url: `fileupload?ss3upload=1&status=handlescomponents`,
                 method: "post",
-                // payload: {'s3commonupload':[formData]},
                 payload: formData,
                 options: httpOptions
             };
@@ -626,12 +625,13 @@ getDeliveryBoyList(){
                     console.log('There was an error uploading your file: ', err);
                     return false;
                 } else {
-                    if(response.result && response.result.uploadedFilePath && response.result.uploadedFilePath['s3commonupload']){
-                        let key = response.result.uploadedFilePath['s3commonupload'][0].split("/");
-                        key = key[key.length-1];
-                        const uploadedImageObj = {Key:key,Location:response.result.uploadedFilePath['s3commonupload'][0]}
-                        that.uploadedImages.push(uploadedImageObj);
-                        // that.ngOnInit();
+                    if(response.result && response.result.uploadedFilePath && response.result.uploadedFilePath['HANDLESCOMPONENTS']){
+                        if(response.result.uploadedFilePath['HANDLESCOMPONENTS'][0]){
+                            let key = response.result.uploadedFilePath['HANDLESCOMPONENTS'][0].split("/");
+                            key = key[key.length-1];
+                            const uploadedImageObj = {Key:key,Location:response.result.uploadedFilePath['HANDLESCOMPONENTS'][0]}
+                            that.uploadedImages.push(uploadedImageObj);
+                        }
                     }
                 }
             });
@@ -1854,7 +1854,7 @@ getDeliveryBoyList(){
     //   this.UtilityService.createCSV('table tr', (fileName || 'report'));
     }
 
-    getCellValue(cellValue){
+    getCellValue(cellValue, columnName?:any){
        if(cellValue && cellValue.constructor === Object){
           if(cellValue.requestValue === '-1'){
             return cellValue.value || "";
@@ -1869,7 +1869,11 @@ getDeliveryBoyList(){
               if(/stock/gi.test(cellValue.value)){
                 return 'Status : ' + (cellValue.value || "") + ' / Requested : ' + (cellValue.requestValue || "");
               }else{
-                return 'Old Price : ' + (cellValue.value || "") + ' / New Price: ' + (cellValue.requestValue || "");
+                  if(columnName == 'Component_Cost_Vendor'){
+                        return 'Old Cost : ' + (cellValue.value || "") + ' / New Cost: ' + (cellValue.requestValue || "");
+                  }else{
+                        return 'Old Price : ' + (cellValue.value || "") + ' / New Price: ' + (cellValue.requestValue || "");
+                  }
               }
             }
           }

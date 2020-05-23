@@ -783,7 +783,7 @@
                                                             <span *ngIf="getCellValue(tableRowValue[tableCol]) === 0">Disable</span>
                                                             <span *ngIf="getCellValue(tableRowValue[tableCol]) === 1">Enable</span>
                                                     </span>
-                                                    <span *ngIf="getCellValue(tableRowValue[tableCol]) !== 0 && tableCol !== 'Delivery_Boy_App'" [innerHTML]="getCellValue(tableRowValue[tableCol])  | replace : '`,[' "></span>
+                                                    <span *ngIf="getCellValue(tableRowValue[tableCol]) !== 0 && tableCol !== 'Delivery_Boy_App'" [innerHTML]="getCellValue(tableRowValue[tableCol], tableCol)  | replace : '`,[' "></span>
                                                 </span>
                                                 &nbsp; &nbsp; &nbsp;
                                                 <span class="icon m" aria-hidden="true" *ngIf="tableCol === 'Order_No'" (click)="viewOrderDetail($event, getCellValue(tableRowValue[tableCol]))">

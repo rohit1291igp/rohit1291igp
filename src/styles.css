@@ -894,3 +894,6 @@ body .dashboard-content, body .orders-button{
 .full-width{
     width: 100%;
 }
+.flex-wrap-wrap{
+    flex-wrap: wrap;
+}

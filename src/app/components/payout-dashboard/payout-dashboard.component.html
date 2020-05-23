@@ -1,45 +1,90 @@
 <div class="main-container">
-    <mat-card class="d-flex" style="padding: 8px;">
-        <div style="flex: 1; font-size: 25px;" class="d-flex align-items-center">Payout Dashboard</div>
-        <div class="filter d-flex justify-content-flex-end align-items-center" style="flex: 2">
+    <mat-card class="d-flex" [ngStyle]="{'padding':environment.userType == 'vendor' ? '4px' : '8px'}">
+        <div *ngIf="environment.userType == 'admin'" style="flex: 1; font-size: 25px;"
+            class="d-flex align-items-center">Payout Dashboard</div>
+        <div *ngIf="environment.userType == 'admin'" class="filter d-flex justify-content-flex-end align-items-center"
+            style="flex: 2">
             <mat-card class="d-flex align-items-center" style="width: fit-content;padding: 0px 16px;">
                 <p style="color:#C3404E;width:150px;font-size: 18px;">Filter By :- </p>
-                    <form [formGroup]="myForm" (ngSubmit)="onSubmit(myForm)" class="d-flex  align-items-center" style="margin-right: 33px;width:100%;" >
-                            <div *ngIf="environment.userType == 'admin'" style="width: 40%;margin-right: 35px;">
-                                <app-auto-selection style="width: 100%;" [listOfComponents]="vendorList" placeholder="Vendor Name"
-                                    displayName='Vendor_Name' type='object' relationName="vendorList"
-                                    (selectionObject)="selectComponent($event)" [setValue]="myForm?.value?.vendorId"></app-auto-selection>
-                            </div>
-                            <div>
-                                <!-- <span #dateInput></span> -->
-                                <mat-form-field>
-                                    <mat-label>Month and Year</mat-label>
-                                    <input matInput formControlName="date" #dateInput>
-                                    <input style="display: none" matInput [matDatepicker]="dp">
-                                    <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
-                                    <mat-datepicker #dp startView="multi-year" panelClass="example-month-picker">
-                                    </mat-datepicker>
-                                </mat-form-field>
-                            </div>
-                            <div *ngIf="environment.userType == 'admin'" class="form-row" style="margin: 0px 20px;">
-                                <button type="submit" mat-raised-button [disabled]="myForm.invalid">Search</button>
-                            </div>
-                            <div class="resetBtn" *ngIf="enableResetBtn" (click)="resetAll()"><i class="fa fa-times-circle" (click)="resetAll()"></i> Reset All</div>
-                        </form> 
+                <form [formGroup]="myForm" (ngSubmit)="onSubmit(myForm)" class="d-flex  align-items-center"
+                    style="margin-right: 33px;width:100%;">
+                    <div *ngIf="environment.userType == 'admin'" style="width: 40%;margin-right: 35px;">
+                        <app-auto-selection style="width: 100%;" [listOfComponents]="vendorList"
+                            placeholder="Vendor Name" displayName='Vendor_Name' type='object' relationName="vendorList"
+                            (selectionObject)="selectComponent($event)" [setValue]="myForm?.value?.vendorId">
+                        </app-auto-selection>
+                    </div>
+                    <div>
+                        <!-- <span #dateInput></span> -->
+                        <mat-form-field>
+                            <mat-label>Month and Year</mat-label>
+                            <input matInput formControlName="date" #dateInput>
+                            <input style="display: none" matInput [matDatepicker]="dp">
+                            <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
+                            <mat-datepicker #dp startView="multi-year" panelClass="example-month-picker">
+                            </mat-datepicker>
+                        </mat-form-field>
+                    </div>
+                    <div *ngIf="environment.userType == 'admin'" class="form-row" style="margin: 0px 20px;">
+                        <button type="submit" mat-raised-button [disabled]="myForm.invalid">Search</button>
+                    </div>
+                    <div class="resetBtn" *ngIf="enableResetBtn" (click)="resetAll()"><i class="fa fa-times-circle"
+                            (click)="resetAll()"></i> Reset All</div>
+                </form>
             </mat-card>
-               
         </div>
+        <ng-container *ngIf="environment.userType == 'vendor'">
+            <div class="filter d-flex align-items-center flex-wrap-wrap" style="flex: 2">
+                <h4 style="margin: 16px;">Payout Dashboard</h4>
+                <div style="color:#C3404E;margin-top: 10px;" class="d-flex align-items-center"><span style="margin: 8px;">Filter By :-</span>
+                <form [formGroup]="myForm" (ngSubmit)="onSubmit(myForm)" class="d-flex align-items-center"
+                    style="margin-top: 10px;">
+                    <div *ngIf="environment.userType == 'admin'" style="width: 40%;margin-right: 35px;">
+                        <app-auto-selection style="width: 100%;" [listOfComponents]="vendorList"
+                            placeholder="Vendor Name" displayName='Vendor_Name' type='object' relationName="vendorList"
+                            (selectionObject)="selectComponent($event)" [setValue]="myForm?.value?.vendorId">
+                        </app-auto-selection>
+                    </div>
+                    <div>
+                        <!-- <span #dateInput></span> -->
+                        <mat-form-field>
+                            <mat-label>Month and Year</mat-label>
+                            <input matInput formControlName="date" #dateInput>
+                            <input style="display: none" matInput [matDatepicker]="dp">
+                            <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
+                            <mat-datepicker #dp startView="multi-year" panelClass="example-month-picker">
+                            </mat-datepicker>
+                        </mat-form-field>
+                    </div>
+                    <div *ngIf="environment.userType == 'admin'" class="form-row" style="margin: 0px 20px;">
+                        <button type="submit" mat-raised-button [disabled]="myForm.invalid">Search</button>
+                    </div>
+                    <div class="resetBtn" *ngIf="enableResetBtn" (click)="resetAll()"><i class="fa fa-times-circle"
+                            (click)="resetAll()"></i> Reset All</div>
+                </form>
+                </div>
+            </div>
+        </ng-container>
+
+
 
     </mat-card>
-    <br>
-    <mat-card  *ngIf="environment.userType == 'admin'" class="d-flex justify-content-space-around align-items-baseline" style="width: 50%;margin:0 auto;position: relative;">
-        <div class="loader-container" *ngIf="!tabledata"><div class="loader"></div></div>
+    <ng-container *ngIf="environment.userType == 'admin'">
+        <br>
+    </ng-container>
+
+    <mat-card *ngIf="environment.userType == 'admin'" class="d-flex justify-content-space-around align-items-baseline"
+        style="width: 50%;margin:0 auto;position: relative;">
+        <div class="loader-container" *ngIf="!tabledata">
+            <div class="loader"></div>
+        </div>
 
         <ul class="table-data">
             <li>Total Orders : {{tabledata?.totalOrders}}</li>
             <li>Smooth Delivery : {{tabledata?.smoothDeliveries}}</li>
             <li>Delayed Update : {{tabledata?.delayedUpdate}} ({{tabledata?.percDelayedUpdate}}%)</li>
-            <li>Rejections / PriceChanges : {{tabledata?.priceChangeAndReject}} ({{tabledata?.percPriceChangeAndReject}}%)</li>
+            <li>Rejections / PriceChanges : {{tabledata?.priceChangeAndReject}}
+                ({{tabledata?.percPriceChangeAndReject}}%)</li>
             <li>Complaints : {{tabledata?.complaints}} ({{tabledata?.percComplaints}}%)</li>
             <li>Complaince : {{tabledata?.compliances}} ({{tabledata?.perccompliances}}%)</li>
         </ul>
@@ -52,18 +97,22 @@
             <li>&nbsp;</li>
         </ul>
     </mat-card>
-    <mat-card  *ngIf="environment.userType == 'vendor'" class="d-flex justify-content-space-around align-items-baseline" style="width: 50%;margin:0 auto;position: relative;">
-        <div class="loader-container" *ngIf="!tabledata"><div class="loader"></div></div>
+    <mat-card *ngIf="environment.userType == 'vendor'" class="d-flex justify-content-space-around align-items-baseline"
+        style="width: 100%;margin:0 auto;position: relative;">
+        <div class="loader-container" *ngIf="!tabledata">
+            <div class="loader"></div>
+        </div>
 
-        <ul class="table-data">
+        <ul class="table-data-vendor">
             <li>Total Orders : {{tabledata?.totalOrders}}</li>
             <li>Smooth Delivery : {{tabledata?.smoothDeliveries}}</li>
             <li>Delayed Update : {{tabledata?.delayedUpdate}} ({{tabledata?.percDelayedUpdate}}%)</li>
-            <li>Rejections / PriceChanges : {{tabledata?.priceChangeAndReject}} ({{tabledata?.percPriceChangeAndReject}}%)</li>
+            <li>Rejections / PriceChanges : {{tabledata?.priceChangeAndReject}}
+                ({{tabledata?.percPriceChangeAndReject}}%)</li>
             <li>Complaints : {{tabledata?.complaints}} ({{tabledata?.percComplaints}}%)</li>
             <li>Complaince : {{tabledata?.compliances}} ({{tabledata?.perccompliances}}%)</li>
         </ul>
-        <ul class="table-data">
+        <ul class="table-data-vendor">
             <li>Total Sales : {{tabledata?.totalCost}}</li>
             <li>Penalty : {{tabledata?.penalty}}</li>
             <li>Rewards : {{tabledata?.rewards}}</li>
