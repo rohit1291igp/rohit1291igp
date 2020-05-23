@@ -140,12 +140,12 @@
                                                         <img style="width:100%;max-width:100%;" src="{{image.Location}}" class="image-responsive" />
                                                     </div>
                                                     <div class="col-md-10">
-                                                        <p><strong>Name</strong> : {{image.key}}</p>
-                                                        <p><strong>IGP Link</strong> : {{env.igpBlogCDN}}{{image.key}}</p>
-                                                        <p><strong>Interflora Link</strong> : {{env.interfloraBlogCDN}}{{image.key}}</p>
-                                                        <button (click)="makeFeaturedImage(image.key)" [ngClass]="{ 'btn-success' : isFeaturedImage(image.key), 'btn-default' : !isFeaturedImage(image.key)}"  class="btn btn-default" type="button">
-                                                            <span *ngIf="!isFeaturedImage(image.key)">Make Featured Image</span>
-                                                            <span *ngIf="isFeaturedImage(image.key)">Featured</span>
+                                                        <p><strong>Name</strong> : {{image.Key}}</p>
+                                                        <p><strong>Link</strong> : {{image.Location}}</p>
+                                                        <!-- <p><strong>Interflora Link</strong> : {{image.Location}}</p> -->
+                                                        <button (click)="makeFeaturedImage(image.Key)" [ngClass]="{ 'btn-success' : isFeaturedImage(image.Key), 'btn-default' : !isFeaturedImage(image.Key)}"  class="btn btn-default" type="button">
+                                                            <span *ngIf="!isFeaturedImage(image.Key)">Make Featured Image</span>
+                                                            <span *ngIf="isFeaturedImage(image.Key)">Featured</span>
                                                         </button>
                                                     </div>
                                                 </div>

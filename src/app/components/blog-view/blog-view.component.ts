@@ -438,7 +438,7 @@ export class BlogViewComponent implements OnInit, AfterViewInit {
             })
         };
         const reqObj = {
-            url: `admin/handels/fileupload?ss3upload=1`,
+            url: `admin/handels/fileupload?ss3upload=1&status=blog`,
             method: "post",
             // payload: {'s3commonupload':[formData]},
             payload: formData,
@@ -450,17 +450,18 @@ export class BlogViewComponent implements OnInit, AfterViewInit {
             j++;
             if (j === event.target.files.length) {
                 that.isUploading = false;
+                // that.isAddImage = false;
             }
             if (err) {
                 console.log('There was an error uploading your file: ', err);
                 return false;
             } else {
-                if(response.result && response.result.uploadedFilePath && response.result.uploadedFilePath['s3commonupload']){
-                    let key = response.result.uploadedFilePath['s3commonupload'][0].split("/");
+                if(response.result && response.result.uploadedFilePath && response.result.uploadedFilePath['blog']){
+                    let key = response.result.uploadedFilePath['blog'][0].split("/");
                     key = key[key.length-1];
-                    const uploadedImageObj = {Key:key,Location:response.result.uploadedFilePath['s3commonupload'][0]}
-                    
+                    const uploadedImageObj = {Key:key,Location:response.result.uploadedFilePath['blog'][0]}
                     that.blogList.data.bloglist[0].files.push(uploadedImageObj);
+                    // that.ngOnInit();
                 }
             }
         });
