@@ -740,6 +740,7 @@ export class DashboardService {
         getDashboardDataResponse.delivered.total = apiResponse.result.deliveredTodayOrderCount;
         /* Delivered orders - end */
         getDashboardDataResponse.deliveryAttemptApproveCount = apiResponse.result.deliveryAttemptApproveCount;
+        getDashboardDataResponse.deliveryAttemptTotalCount = apiResponse.result.deliveryAttemptTotalCount;
 
         console.log('getDashboardDataResponse==============>', getDashboardDataResponse);
         getDashboardDataResponse["festivalDate"] = apiResponse.result.festivalDate; //fesDate;

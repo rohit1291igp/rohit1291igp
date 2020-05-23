@@ -13,7 +13,7 @@ ul.feeds{
     padding: 0;
     list-style-type: none;
     overflow-y: auto;
-    height: 21vh;
+    /* height: 21vh; */
 }
 
 ul.feeds li{
