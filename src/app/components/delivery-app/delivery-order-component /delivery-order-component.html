@@ -1,4 +1,4 @@
-<div class="main-container">
+<div class="main-container" [ngStyle]="{'pointer-events':markOutForDeliveryBtnClicked ? 'none' : 'all'}">
     <!-- Header -->
     <app-delivery-header [title]="'Order Check'"></app-delivery-header>
     <!-- Header Ends -->

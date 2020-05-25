@@ -1,6 +1,6 @@
 <app-delivery-header [title]="'Mark As Delivered'"></app-delivery-header>
 
-<div class="main-container">
+<div class="main-container" [ngStyle]="{'pointer-events':markAsDeliveredBtnClicked ? 'none' : 'all'}">
     <!-- Header -->
     <!--Header Ends -->
     <!--Actual Image Section-->

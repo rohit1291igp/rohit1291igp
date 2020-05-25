@@ -35,7 +35,7 @@ export class DeliveredComponent implements OnInit {
     productsURL = environment.productsURL;
     commonError = false;
     commomErrorMsg:string;
-
+    markAsDeliveredBtnClicked = false;
     constructor(
         private BackendService: BackendService,
         private router: Router,
@@ -150,6 +150,7 @@ export class DeliveredComponent implements OnInit {
         const myFormattedDate = pipe.transform(now, 'yyyy-MM-dd');
         const recipientInfo = this.myForm.value;
         var this$ = this;
+        this$.markAsDeliveredBtnClicked = true;
         if(!this.recipientInfo){
             this$.commonError = true;
             this$.commomErrorMsg = 'Please Select Recipient Info';
