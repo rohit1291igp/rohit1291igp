@@ -36,6 +36,7 @@ export class DeliveryOrderComponent implements OnInit {
     checked = [];
     commonError = false;
     commomErrorMsg:string;
+    markOutForDeliveryBtnClicked = false;    
     constructor(
         private route: ActivatedRoute,
         public BackendService: BackendService,
@@ -230,6 +231,7 @@ export class DeliveryOrderComponent implements OnInit {
 
     markOutForDelivery() {        
         var this$ = this;
+        this$.markOutForDeliveryBtnClicked = true;
         if(this$.selectProductsForDelivery.length == 0){
             this$.commonError = true;
             this$.commomErrorMsg = 'Please Select Product Image';
