@@ -231,7 +231,6 @@ export class DeliveryOrderComponent implements OnInit {
 
     markOutForDelivery() {        
         var this$ = this;
-        this$.markOutForDeliveryBtnClicked = true;
         if(this$.selectProductsForDelivery.length == 0){
             this$.commonError = true;
             this$.commomErrorMsg = 'Please Select Product Image';
@@ -259,6 +258,8 @@ export class DeliveryOrderComponent implements OnInit {
         localStorage.setItem('pendingDeliveryOrders', JSON.stringify(pendingDeliveryOrders));
 
         for (let i = 0; i < this$.selectProductsForDelivery.length; i++) {
+            this$.markOutForDeliveryBtnClicked = true;
+
             const reqObj = {
                 url: `doUpdateOrderStatus?responseType=json&scopeId=1&rejectionType=&rejectionMessage=&recipientInfo=&recipientName=&comments=&orderProductIds=${this$.selectProductsForDelivery[i]}&status=OutForDelivery&fkAssociateId=${this$.fkAssociateId}&orderId=${this$.orderId}`,
                 method: "post"
