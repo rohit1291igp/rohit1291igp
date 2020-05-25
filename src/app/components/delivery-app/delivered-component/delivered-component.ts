@@ -150,7 +150,6 @@ export class DeliveredComponent implements OnInit {
         const myFormattedDate = pipe.transform(now, 'yyyy-MM-dd');
         const recipientInfo = this.myForm.value;
         var this$ = this;
-        this$.markAsDeliveredBtnClicked = true;
         if(!this.recipientInfo){
             this$.commonError = true;
             this$.commomErrorMsg = 'Please Select Recipient Info';
@@ -164,6 +163,7 @@ export class DeliveredComponent implements OnInit {
         new Promise((resolve) => {
             let selectedProducts = this$.pendingDeliveryOrders.find(f => f.orderId == this$.orderId);
             for (let i = 0; i < selectedProducts.selectedProducts.length; i++) {
+                this$.markAsDeliveredBtnClicked = true;
 
                 const reqObj = {
                     url: `doUpdateOrderStatus?responseType=json&scopeId=1&rejectionType=&rejectionMessage=&recipientInfo=${this$.recipientInfo}&recipientName=${recipientInfo.name}&comments=${recipientInfo.phone}&orderProductIds=${selectedProducts.selectedProducts[i]}&status=${status}&fkAssociateId=${this$.fkAssociateId}&orderId=${this$.orderId}`,
