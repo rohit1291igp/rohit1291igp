@@ -25,7 +25,6 @@ export class HeaderTabsComponent implements OnInit {
   }
 
   ngOnInit() {
-    // this.selectedVendorGroup = {id:0, value:'Please vendor Group'}
   }
 
   selectTab(e, currentTab) {
@@ -34,6 +33,7 @@ export class HeaderTabsComponent implements OnInit {
     console.log('Tab clicked:', currentTab);
     if(currentTab != 4){
       this.onTabChanged.emit(e);
+      this.selectedVendorGroup = undefined;
     }
   }
 
