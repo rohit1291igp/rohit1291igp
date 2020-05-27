@@ -13,10 +13,11 @@ export class HeaderTabsComponent implements OnInit {
   @Output() onTabChanged: EventEmitter<any> = new EventEmitter();
   @Output() onOrderSearch: EventEmitter<any> = new EventEmitter();
   @Input('dashboardCounts') dashboardCounts:any;
+  @Input() vendorsList:any;
   elementRef: ElementRef;
   activeTab: number = 1;
   searchModel : any = {};
-
+  selectedVendorGroup;
   constructor(
     elementRef: ElementRef
   ) {
@@ -30,8 +31,10 @@ export class HeaderTabsComponent implements OnInit {
     e.preventDefault();
     this.activeTab = currentTab;
     console.log('Tab clicked:', currentTab);
-
-    this.onTabChanged.emit(e);
+    if(currentTab != 4){
+      this.onTabChanged.emit(e);
+      this.selectedVendorGroup = undefined;
+    }
   }
 
   search(e){
@@ -46,4 +49,7 @@ export class HeaderTabsComponent implements OnInit {
     this.searchModel.searchkey = "";
   }
 
+  selectVendor(obj){
+      this.onTabChanged.emit(obj);
+  }
 }

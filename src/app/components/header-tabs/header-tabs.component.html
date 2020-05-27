@@ -2,10 +2,25 @@
   <div class="col-md-12 no-padding">
     <div class="col-md-9">
         <ul class="nav nav-pills">
-            <li class="relative" [ngClass]="{'active': activeTab === 1}" (click)="selectTab($event, 1)" data-tab="all">
+            <li class="relative" [ngClass]="{'active': activeTab === 1}" (click)="selectTab($event, 1);enablesSelect=false" data-tab="all">
             <a href="#">All Orders ({{dashboardCounts.allOrders}})</a>
             <!--<div class="DbCount all">{{dashboardCounts.allOrders}}</div>-->
             </li>
+            <ng-container *ngIf="environment.userType == 'admin'">
+                <li class="relative" [ngClass]="{'active': activeTab === 4}" (click)="selectTab($event, 4)" data-tab="vendorGroup" (click)="enablesSelect=true">
+                    <a href="#" style="color: #000;">
+                        <ng-container *ngIf="enablesSelect else hiddenSelect">
+                            <select class="form-control m-top-1" [(ngModel)]="selectedVendorGroup" #editTableCell="ngModel" (ngModelChange)="selectVendor($event)" style="padding: 0;margin:0;height:22px">
+                                <option [ngValue]="undefined" disabled selected>Select a vendor group</option>
+                                <option *ngFor="let x of vendorsList" [ngValue]="x.id">{{x.value}}</option>
+                            </select>
+                        </ng-container>
+                        <ng-template #hiddenSelect>
+                            Select Vendor Group
+                        </ng-template>
+                    </a>
+                </li>
+            </ng-container>
             <ng-container *ngIf="!environment.userType">
             <li class="relative" [ngClass]="{'active': activeTab === 2}" (click)="selectTab($event, 2)" data-tab="sla">
             <a href="#">Action Required ({{dashboardCounts.actionRequired}})</a>

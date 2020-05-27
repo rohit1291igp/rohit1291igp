@@ -46,6 +46,8 @@ export class DashboardComponent implements OnInit {
   };
   public dateRange: Object = {};
   public dashboardObservable;
+  //list of vendors
+  vendorsList = [];
   constructor(
     public router: Router,
     public dashboardService: DashboardService,
@@ -65,6 +67,9 @@ export class DashboardComponent implements OnInit {
                 console.log('Dasboard IntervalObservable working !!!');
                 this.loadDbData();
             });
+        if(environment.userType == 'admin'){
+            this.getDashboardFiltersOptions();
+        }    
     }
 
     if(environment.userType === 'deliveryboy'){
@@ -179,6 +184,10 @@ export class DashboardComponent implements OnInit {
           this.dashboardData = this.dashboardService.reArrangeDbDate(this.dashboardData);
       }else{
           this.dashBoardDataType = (e && e.currentTarget) ? e.currentTarget.dataset.tab : e;
+          let vendorGroupId;
+          if(e && !isNaN(e)){
+            vendorGroupId = e;
+          }
           var _this = this;
           var cookieFDate = _this.UtilityService.getCookie("festivalDate") ?  JSON.parse(_this.UtilityService.getCookie("festivalDate")) : null;
           var cookieFDatwFormatted = cookieFDate ? cookieFDate.date.year+'-'+cookieFDate.date.month+'-'+cookieFDate.date.day : null;
@@ -189,7 +198,7 @@ export class DashboardComponent implements OnInit {
               }*/
               _this.dashboardData = result;
               _this.dateRange = _this.setFestivalDate(result.festivalDate || new Date());
-          }, _this.dashBoardDataType, _this.dashboardData);
+          }, _this.dashBoardDataType, _this.dashboardData, vendorGroupId);
       }
   }
 
@@ -204,5 +213,26 @@ export class DashboardComponent implements OnInit {
   ifExist(obj, prop){
      return prop in obj;
   }
+
+  getDashboardFiltersOptions(){
+    var _this=this;
+
+    const reqObj = {
+      url: `getDashboardFilters`,
+      method: "get"
+  };
+  this.BackendService.makeAjax(reqObj, function (err, response, headers) {
+      if (err || response.error) {
+        console.log('Error=============>', err);
+        return;
+    }
+    if (response.result) {
+        for (var prop in response.result) {
+            var item = {id : prop, value:response.result[prop]};
+            _this.vendorsList.push(item);
+        }
+    }
+  });
+  }   
 
 }
