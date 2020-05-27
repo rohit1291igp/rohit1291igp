@@ -18,6 +18,7 @@ export class HeaderTabsComponent implements OnInit {
   activeTab: number = 1;
   searchModel : any = {};
   selectedVendorGroup;
+  enablesSelect;
   constructor(
     elementRef: ElementRef
   ) {
