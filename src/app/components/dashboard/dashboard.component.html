@@ -1,6 +1,6 @@
 <ng-container *ngIf="environment.userType !== 'blogger' && environment.userType !== 'warehouse'">
     <!--<div class="headerVendor navbar-brand" *ngIf="vendorName">- {{vendorName}}</div>-->
-<app-header-tabs (onTabChanged)="loadDashboardCount($event)" (onOrderSearch)="search($event)" [dashboardCounts]="dashboardData.counts"></app-header-tabs>
+<app-header-tabs (onTabChanged)="loadDashboardCount($event)" (onOrderSearch)="search($event)" [dashboardCounts]="dashboardData.counts" [vendorsList]="vendorsList"></app-header-tabs>
 
 <section class="dbMobile" *ngIf="isMobile">
         <div class="topSection">

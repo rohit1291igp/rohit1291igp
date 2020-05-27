@@ -797,18 +797,28 @@ export class DashboardService {
         return getDashboardDataResponse;
     }
 
-    getDashboardCount(spcificDate, cb){
+    getDashboardCount(spcificDate, cb, vendorGroupId?:any){
             let fkAssociateId = localStorage.getItem('fkAssociateId');
             //let specificDate = Date.parse(spcificDate) || 0;
             let specificDate = spcificDate || 0;
             //console.log('environment----->', environment);
             let apiPath = this.isAdmin ? 'getDashboardDetail' : 'getVendorCountDetail';
-            let reqObj = {
-                //url : "?responseType=json&scopeId=1&fkAssociateId="+fkAssociateId+"&specificDate="+specificDate+"&method=igp.vendor.getVendorCountDetail",
-                url : apiPath+"?responseType=json&scopeId=1&fkAssociateId="+fkAssociateId+"&specificDate="+specificDate,
-                method : "get",
-                payload : {}
-            };
+            let reqObj;
+            if(vendorGroupId){
+                reqObj = {
+                    url : apiPath+"?responseType=json&scopeId=1&fkAssociateId="+fkAssociateId+"&specificDate="+specificDate+"&filterId="+vendorGroupId,
+                    method : "get",
+                    payload : {}
+                };
+            }else{
+                reqObj = {
+                    //url : "?responseType=json&scopeId=1&fkAssociateId="+fkAssociateId+"&specificDate="+specificDate+"&method=igp.vendor.getVendorCountDetail",
+                    url : apiPath+"?responseType=json&scopeId=1&fkAssociateId="+fkAssociateId+"&specificDate="+specificDate,
+                    method : "get",
+                    payload : {}
+                };
+            }
+            
 
             this.BackendService.makeAjax(reqObj, function(err, response, headers){
                 if(err || response.error) {
@@ -826,7 +836,7 @@ export class DashboardService {
 
     }
 
-    getDashboardData(specificDate, cb, dataType, currentDBData) {
+    getDashboardData(specificDate, cb, dataType, currentDBData, vendorGroupId?:any) {
         var _this = this;
         _this.getDashboardCount(specificDate, function(result){
             let getDashboardDataResponse;
@@ -836,7 +846,7 @@ export class DashboardService {
                 getDashboardDataResponse = _this.formarDashBoardData(result, dataType, currentDBData);
             }
             return cb(getDashboardDataResponse);
-        });
+        }, vendorGroupId);
     }
 
     getCustomData(){
