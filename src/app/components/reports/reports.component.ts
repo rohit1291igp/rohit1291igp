@@ -225,6 +225,8 @@ export class ReportsComponent implements OnInit{
   toppings = new FormControl();
   toppingList: string[] = ['Extra cheese', 'Mushroom', 'Onion', 'Pepperoni', 'Sausage', 'Tomato'];
   testArray = [{"ComponentCode":"testteddy","StockQuantity":11,"ComponentDeliveryStatus":"Rejected","AwbNo":"","ComponentId":1440,"CourierName":"","OrderComponentId":1,"VendorId":843,"ComponentName":"test teddy","ComponentImage":"Teddy (1).docx","VendorName":"Test","ComponentCostVendor":200.000,"OrderTime":"2020-02-27 17:53:42.0"},{"ComponentCode":"Cakeboxtest","StockQuantity":10,"ComponentDeliveryStatus":"Rejected","AwbNo":"","ComponentId":1441,"CourierName":"","OrderComponentId":15,"VendorId":843,"ComponentName":"Cake box test","ComponentImage":"Boxes (1).xlsx","VendorName":"Test","ComponentCostVendor":200.000,"OrderTime":"2020-02-27 17:53:42.0"}];
+  //list of vendors
+  vendorsGroupList = [];
   constructor(
       private _elementRef: ElementRef,
       public reportsService: ReportsService,
@@ -407,6 +409,7 @@ export class ReportsComponent implements OnInit{
     // _this.getVendorList();
     if(environment.userType === 'admin'){
         _this.getVendorList();
+        _this.getDashboardFiltersOptions();
      }
   }
 
@@ -868,6 +871,10 @@ getDeliveryBoyList(){
         if(_this.reportType == 'getOrderReport' || _this.reportType == 'getPayoutAndTaxesReport'){
             _this.searchResultModel["startLimit"] = 0;
             _this.searchResultModel["endLimit"] = 1000;
+            if(environment.userType == 'admin' && e.target["vendorGroupId"].value != "undefined"){
+                _this.searchResultModel["filterId"] = e.target["vendorGroupId"].value;
+            }
+            
         }
         if(_this.reportType == 'getVendorReport'){
             // this.myForm.controls['fname'].setValue(fullname[0]);
@@ -2246,6 +2253,29 @@ getDeliveryBoyList(){
             this.reportAddAction.reportAddActionModel.procTypeVendor = '';
         }
     }
+
+    getDashboardFiltersOptions(){
+        var _this=this;
+    
+        const reqObj = {
+          url: `getDashboardFilters`,
+          method: "get"
+      };
+      this.BackendService.makeAjax(reqObj, function (err, response, headers) {
+          if (err || response.error) {
+            console.log('Error=============>', err);
+            return;
+        }
+        if (response.result) {
+            _this.vendorsGroupList.push({id : "0", value:"All Vendor's Group"});
+
+            for (var prop in response.result) {
+                var item = {id : prop, value:response.result[prop]};
+                _this.vendorsGroupList.push(item);
+            }
+        }
+      });
+      }  
 }
 
 @Component({
