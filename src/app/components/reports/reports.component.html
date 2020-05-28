@@ -433,7 +433,14 @@
                         <div class="searchFiled pull-left" *ngIf="(environment.userType && environment.userType === 'admin')" >
                             <app-vendor-dropdown [configData]="{'modelData' :searchResultModel, 'defaultVendor' : ''}"></app-vendor-dropdown>
                         </div>
+                        <div class="searchFiled pull-left" *ngIf="(environment.userType && environment.userType === 'admin') && reportType === 'getOrderReport'">
+                            <select name="vendorGroupId" class="form-control" (ngModelChange)="selectVendor($event)">
+                                <option [value]="undefined" disabled selected>Select a vendor group</option>
+                                <option *ngFor="let x of vendorsGroupList" [value]="x.id">{{x.value}}</option>
+                            </select>
+                        </div>
                     </div>
+
                     <div class="searchFields m-top-1 inline" *ngIf="reportType == 'getbarcodestoverify'">
                             <input class="form-control" type="text"  placeholder="Search Sku" style="width: 50%">
                             <select name="isVerified" id="isVerified" style=" margin-top: 1em;width: 50%;">
@@ -442,6 +449,7 @@
                                 <option value="0">Non Verfied</option>
                             </select>
                     </div>
+                
                     <div *ngIf="reportType !== 'getbarcodestoverify'" class="searchFieldsSubmit relative inline">
                         <input  type="submit" class="btn btn-primary pull-right bg-igp searchSubmitBtn"  value="Search All Parameters"/>
                     </div>
