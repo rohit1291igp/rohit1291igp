@@ -51,6 +51,8 @@ export class HeaderTabsComponent implements OnInit {
   }
 
   selectVendor(obj){
+      //set vendorGrpId
+      localStorage.setItem("vendorGrpId", obj);
       this.onTabChanged.emit(obj);
   }
 }
