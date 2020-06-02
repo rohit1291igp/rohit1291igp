@@ -811,12 +811,18 @@ export class DashboardService {
                     payload : {}
                 };
             }else{
+          let filterId = localStorage.getItem('vendorGrpId') ? localStorage.getItem('vendorGrpId') : 0;
+
                 reqObj = {
                     //url : "?responseType=json&scopeId=1&fkAssociateId="+fkAssociateId+"&specificDate="+specificDate+"&method=igp.vendor.getVendorCountDetail",
                     url : apiPath+"?responseType=json&scopeId=1&fkAssociateId="+fkAssociateId+"&specificDate="+specificDate,
                     method : "get",
                     payload : {}
                 };
+
+                if(this.isAdmin){
+                    reqObj.url += `&filterId=${filterId}`
+                }    
             }
             
 
