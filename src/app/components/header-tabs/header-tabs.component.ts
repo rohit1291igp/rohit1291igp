@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter,ElementRef } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter,ElementRef, OnChanges, SimpleChanges } from '@angular/core';
 import {environment} from "../../../environments/environment";
 declare var $:any;
 
@@ -7,7 +7,7 @@ declare var $:any;
   templateUrl: './header-tabs.component.html',
   styleUrls: ['./header-tabs.component.css']
 })
-export class HeaderTabsComponent implements OnInit {
+export class HeaderTabsComponent implements OnInit, OnChanges {
   environment=environment;
   isMobile=environment.isMobile;
   @Output() onTabChanged: EventEmitter<any> = new EventEmitter();
@@ -28,6 +28,13 @@ export class HeaderTabsComponent implements OnInit {
   ngOnInit() {
   }
 
+  ngOnChanges(changes: SimpleChanges){
+    let vendorGrpId = localStorage.getItem("vendorGrpId") ? true : false;
+    if(vendorGrpId){
+      this.dashboardCounts = JSON.parse(localStorage.getItem('dashboardCounts'));
+    }
+  }
+
   selectTab(e, currentTab) {
     e.preventDefault();
     this.activeTab = currentTab;
@@ -35,6 +42,10 @@ export class HeaderTabsComponent implements OnInit {
     if(currentTab != 4){
       this.onTabChanged.emit(e);
       this.selectedVendorGroup = undefined;
+      localStorage.removeItem("vendorGrpId");
+    }
+    if(currentTab == 4){
+
     }
   }
 
