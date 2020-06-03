@@ -57,7 +57,10 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit() {
     // var _this = this;
-
+    if(environment.userType == 'admin'){
+      this.getDashboardFiltersOptions();
+      localStorage.removeItem("vendorGrpId");
+    } 
     if (environment.userType !== 'blogger') {
         this.isRowAlert = this.dashboardService.getAlertRow();
         this.dashboardData = this.dashboardService.getCustomData();
@@ -67,10 +70,7 @@ export class DashboardComponent implements OnInit {
                 console.log('Dasboard IntervalObservable working !!!');
                 this.loadDbData();
             });
-        if(environment.userType == 'admin'){
-            this.getDashboardFiltersOptions();
-            localStorage.removeItem("vendorGrpId");
-        }    
+           
     }
 
     if(environment.userType === 'deliveryboy'){
