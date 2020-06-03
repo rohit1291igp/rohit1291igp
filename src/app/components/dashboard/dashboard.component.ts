@@ -69,6 +69,7 @@ export class DashboardComponent implements OnInit {
             });
         if(environment.userType == 'admin'){
             this.getDashboardFiltersOptions();
+            localStorage.removeItem("vendorGrpId");
         }    
     }
 
@@ -93,6 +94,7 @@ export class DashboardComponent implements OnInit {
            return;
            }*/
           _this.dashboardData = result;
+          localStorage.setItem("dashboardCounts", JSON.stringify(_this.dashboardData.counts));
           _this.dateRange = _this.setFestivalDate(result.festivalDate || new Date());
           _this.isRowAlert = _this.dashboardService.getAlertRow();
       },_this.dashBoardDataType, null);
@@ -187,6 +189,8 @@ export class DashboardComponent implements OnInit {
           let vendorGroupId;
           if(e && !isNaN(e)){
             vendorGroupId = e;
+          }else{
+            localStorage.removeItem("vendorGrpId");
           }
           var _this = this;
           var cookieFDate = _this.UtilityService.getCookie("festivalDate") ?  JSON.parse(_this.UtilityService.getCookie("festivalDate")) : null;
