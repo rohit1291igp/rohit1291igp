@@ -94,7 +94,12 @@ export class DashboardComponent implements OnInit {
            return;
            }*/
           _this.dashboardData = result;
-          localStorage.setItem("dashboardCounts", JSON.stringify(_this.dashboardData.counts));
+          let vendorGrpId = localStorage.getItem("vendorGrpId") ? true : false;
+          if(vendorGrpId){
+            _this.dashboardData.counts = JSON.parse(localStorage.getItem('dashboardCounts'));
+          }else{
+            localStorage.setItem("dashboardCounts", JSON.stringify(_this.dashboardData.counts));
+          }
           _this.dateRange = _this.setFestivalDate(result.festivalDate || new Date());
           _this.isRowAlert = _this.dashboardService.getAlertRow();
       },_this.dashBoardDataType, null);
