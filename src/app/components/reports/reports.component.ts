@@ -1694,6 +1694,12 @@ getDeliveryBoyList(){
                 }
                 // _this.editTableCell = true;
                 // paramsObj.fkAssociateId = _this.searchResultModel["fkAssociateId"];
+                if(_this.reportType === 'getVendorReport'){
+                    paramsObj['componentId'] = rowData.Component_Id;
+                    paramsObj['Component_Id'] = rowData.Component_Id;
+                    paramsObj['Proc_Type_Vendor'] = (rowData.Proc_Type_Vendor == 'Stocked') ? 1 : 2;
+
+                }
             }else{
                 paramsObj['fkAssociateId'] =  localStorage.getItem('fkAssociateId');
             }
