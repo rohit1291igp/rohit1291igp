@@ -111,7 +111,7 @@
                 <div class="modal-body center-align">
                     <!--<label>{{editTableCellObj.caption}}:</label>-->
                     <form (ngSubmit)="f.form.valid && submitEditCell($event, editTableCellObj.actBtnTxt, editTableCellObj.cellValue, editTableCellObj.rowData, editTableCellObj.header, editTableCellObj.dataIndex)" #f="ngForm" nonvalidate>
-                        <input *ngIf="editTableCellObj.header !== 'Component_Image' && editTableCellObj.caption != 'Component_Delivery_Status' && editTableCellObj.caption != 'Proc_Type'" class="form-control custom-control" type="text" name="editTableCell" placeholder="{{editTableCellObj.caption}}" [(ngModel)]="editTableCellObj.value" #editTableCell="ngModel" required>
+                        <input *ngIf="editTableCellObj.header !== 'Component_Image' && editTableCellObj.caption != 'Component_Delivery_Status' && editTableCellObj.caption != 'Proc_Type' && editTableCellObj.caption != 'Proc_Type_Vendor'" class="form-control custom-control" type="text" name="editTableCell" placeholder="{{editTableCellObj.caption}}" [(ngModel)]="editTableCellObj.value" #editTableCell="ngModel" required>
                         <div class="panel-body" *ngIf="editTableCellObj.header == 'Component_Image'">
                                     
                             <div class="manage-media">
@@ -154,6 +154,11 @@
                                 <option *ngFor="let statusName of ProcTypeOption" [ngValue]="statusName.value" [attr.data-trayOpen]="statusName.type">{{statusName.name}}</option>
                             </select>
                         </ng-container>
+                        <ng-container *ngIf="editTableCellObj.caption == 'Proc_Type_Vendor'">
+                                <select *ngIf="reportType === 'getVendorReport'" name="{{editTableCellObj.caption}}" class="form-control m-top-1" [(ngModel)]="editTableCellObj.value" #editTableCell="ngModel" required>
+                                    <option *ngFor="let statusName of ProcTypeOption" [ngValue]="statusName.value" [attr.data-trayOpen]="statusName.type">{{statusName.name}}</option>
+                                </select>
+                            </ng-container>
                         <button class="btn btn-primary m-top-1">Save</button>
                     </form>
                 </div>
@@ -822,7 +827,7 @@
                                                     <ng-container *ngFor="let tableAction of reportData.tableDataAction">
                                                         <div class="tableDataActionBtn" *ngIf="tableAction[tableCol] && tableAction[tableCol].length">
                                                             <!--{{tableAction[tableCol] | json}}-->
-                                                            <ng-container *ngIf="reportType === 'getComponentReport' || reportType === 'getVendorDetails' || reportType === 'getBarcodeToComponentReport' || reportType === 'getComponentOrderReport'">
+                                                            <ng-container *ngIf="reportType === 'getComponentReport' || reportType === 'getVendorDetails' || reportType === 'getBarcodeToComponentReport' || reportType === 'getComponentOrderReport' || (reportType === 'getVendorReport' && environment.userType == 'admin')">
                                                                 <!-- sdsdsdssdsdsdds{{getCellValue(tableRowValue['Component_Delivery_Status']) | json}} -->
                                                                 <ng-container  *ngIf="getCellValue(tableRowValue['Component_Delivery_Status']) != 'Delivered'" >
                                                                     <ng-container  *ngIf="getCellValue(tableRowValue['Component_Delivery_Status']) != 'Rejected'" >
@@ -835,7 +840,7 @@
                                                                 
                                                                 
                                                             </ng-container>
-                                                            <ng-container *ngIf="reportType !== 'getComponentReport' && reportType !== 'getVendorDetails' && reportType !== 'getBarcodeToComponentReport' && reportType !== 'deliveryBoyDetails' && (tableRowValue[tableCol] && tableRowValue[tableCol]['requestValue'] && tableRowValue[tableCol]['requestValue'] == -1)">
+                                                            <ng-container *ngIf="reportType !== 'getComponentReport' && reportType !== 'getVendorDetails' && reportType !== 'getBarcodeToComponentReport' && reportType !== 'deliveryBoyDetails' && (environment.userType == 'vendor' && reportType == 'getVendorReport') && (tableRowValue[tableCol] && tableRowValue[tableCol]['requestValue'] && tableRowValue[tableCol]['requestValue'] == -1)">
                                                                 <div class="tableactBtn" *ngFor="let actBtn of tableAction[tableCol]; let z='index'" (click)="actionBtnInvoke(actBtn, getCellValue(tableRowValue[tableCol]), tableRowValue, tableCol, dataIndex, 1)">
                                                                     <!-- {{tableCol | json}} -->
                                                                     <span class="tableactBtntxt"  *ngIf="tableRowValue['Proc_Type_Vendor'] == 'JIT'">{{getActBtnTxt(actBtn, getCellValue(tableRowValue[tableCol]))}}</span>
