@@ -871,7 +871,7 @@ getDeliveryBoyList(){
         if(_this.reportType == 'getOrderReport' || _this.reportType == 'getPayoutAndTaxesReport'){
             _this.searchResultModel["startLimit"] = 0;
             _this.searchResultModel["endLimit"] = 1000;
-            if(environment.userType == 'admin' && e.target["vendorGroupId"].value != "undefined"){
+            if(environment.userType == 'admin' && e && e.target["vendorGroupId"].value != "undefined"){
                 _this.searchResultModel["filterId"] = e.target["vendorGroupId"].value;
             }
             
