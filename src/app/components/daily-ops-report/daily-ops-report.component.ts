@@ -117,7 +117,7 @@ export class DailyOpsReportComponent implements OnInit {
         if(this.myForm.value.warehouseopsreport == 1){
             url += `downloadCSVPart1?purchaseDateFrom=${datefrom}&purchaseDateTo=${dateto}`;
         }else{
-            url += `downloadCSVPart2?purchaseDateFrom=${datefrom}&purchaseDateTo=${dateto}`;
+            url += `downloadCSVPart2?releasedDateFrom=${datefrom}&releasedDateTo=${dateto}`;
         }
         if(this.myForm.value.warehousename == 0){
             url += `&fkAsID=${_this.fkasid}`
