@@ -4,8 +4,8 @@
             <mat-form-field class="m-8" [ngClass]="{'full-width': showWarehouseDropdown}">
                 <mat-label>Choose Warehouse Ops Report</mat-label>
                 <mat-select formControlName="warehouseopsreport">
-                    <mat-option value="1">Warehouse Ops Part 1</mat-option>
-                    <mat-option value="2">Warehouse Ops Part 2</mat-option>
+                    <mat-option value="1">Warehouse Ops</mat-option>
+                    <mat-option value="2">Courier Ops</mat-option>
                 </mat-select>
             </mat-form-field>
             <mat-form-field *ngIf="showWarehouseDropdown" class="m-8 full-width">
@@ -34,6 +34,6 @@
                 <mat-datepicker #pickerTo></mat-datepicker>
             </mat-form-field>
         </div>
-        <button style="margin: 5px;" id="download" type="submit" mat-raised-button class="btn-color">Download</button>
+        <button style="margin: 5px;" type="submit" mat-raised-button class="btn-color">Download</button>
     </form>
 </mat-card>
