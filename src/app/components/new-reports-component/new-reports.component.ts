@@ -9,6 +9,8 @@ import { CapitalizePipeModule } from 'app/customPipes/capitalze.pipe';
 import { DateFormatterPipeModule } from 'app/customPipes/date-formatter';
 import { environment } from '../../../environments/environment';
 import { ImgPreviewComponent } from '../img-preview/img-preview.component';
+import { Observable } from 'rxjs';
+import { startWith,map } from 'rxjs/operators';
 
 interface Field{
     show:boolean,
@@ -62,6 +64,8 @@ export class NewReportsComponent implements OnInit {
     @Input() dropDownList: string[];
     //Vendor List
     @Input() vendorList:any[];
+    @Input() stockComponentList:any[];
+    @Input() procList:any[]
     public env = environment;
 
     myForm: FormGroup;
@@ -74,8 +78,8 @@ export class NewReportsComponent implements OnInit {
 
     }
     selected;
+    selected_stock_comp;
     ngOnInit() {
-
         this.myForm = this.fb.group({
             name: [''],
             multiSelection: [''],
@@ -83,7 +87,9 @@ export class NewReportsComponent implements OnInit {
             filter: [''],
             datefrom: [new Date()],
             dateto: [new Date()],
-            vendorDetail:['']
+            vendorDetail:[''],
+            procDetail:[''],
+            stockComponent:['']
         });
         this.myForm.controls['selection'].setValue(this.SearchForm.formFields.Selection.value);
         if(this.env.userType == 'admin'){
@@ -106,6 +112,15 @@ export class NewReportsComponent implements OnInit {
             this.dataSource.sort = this.sort;
             this.dataSource.paginator = this.paginator;
         }, 100)
+
+        // StockComponentList AutoComplete
+        this.filteredOptions = this.myForm.controls['stockComponent'].valueChanges
+      .pipe(
+        startWith(''),
+        map(value => typeof value === 'string' ? value : value['Component_Name']),
+        map(name => name ? this._filter(name) : this.stockComponentList.slice())
+      );
+
     }
     compareObjects(o1: any, o2: any): boolean {
         return o1.Vendor_Id === o2.Vendor_Id;
@@ -217,6 +232,7 @@ export class NewReportsComponent implements OnInit {
         });
     }
     onSubmit(data) {
+        console.log("prvz",data)
         // console.log(data);
         // console.log(data.value.filtertype);
         var buttonName = document.activeElement.getAttribute("id");
@@ -238,6 +254,20 @@ export class NewReportsComponent implements OnInit {
             console.log('The dialog was closed');
           });
     }
+
+    // Stock Component List
+    myControl = new FormControl();
+  filteredOptions: Observable<any[]>;
+
+  displayFn(user: any): string {
+    return user && user.Component_Name ? user.Component_Name : '';
+  }
+
+  private _filter(name: string): any[] {
+    const filterValue = name.toLowerCase();
+
+    return this.stockComponentList.filter(option => option.Component_Name.toLowerCase().indexOf(filterValue) === 0);
+  }
 }
 
 @NgModule({

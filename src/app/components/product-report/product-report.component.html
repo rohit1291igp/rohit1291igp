@@ -1,0 +1,12 @@
+<ng-container *ngIf="userType === 'admin' else vendorView">
+  <app-new-reports [reportsHeader]="tableHeaders" [orginalReportData]="dataSource"
+      [tableDataAction]="orginalReportData?.tableDataAction"
+      [SearchForm]="{'show':true, 'formFields':{'dateRange':{datefrom:{'show':false,'placeholder':'From Delivery Date','value':''}, dateto:{'show':false,'placeholder':'To Delivery Date','value':''}}, 'Selection':{'show':false,'placeholder':'Action', value:'all'}, 'vendorSelection':{'show':true,'placeholder':'Select Vendor', value:{'Vendor_Id':0,'Vendor_Name':'Select All','Status':0,'Rating':0,'Daily_Cap':0,'Delivery_Boy_App':0}}}}"
+      (submitForm)="newFormSubmit($event)" [dropDownList]="actionList" [vendorList]="vendorList"[dateFormat]="'dd-MM-yyyy'"></app-new-reports>
+</ng-container>
+<ng-template #vendorView>
+  <app-new-reports [reportsHeader]="tableHeaders" [orginalReportData]="dataSource"
+      [tableDataAction]="orginalReportData?.tableDataAction"
+      [SearchForm]="{'show':true, 'formFields':{'dateRange':{datefrom:{'show':false,'placeholder':'From Delivery Date','value':''}, dateto:{'false':true,'placeholder':'To Delivery Date','value':''}}, 'Selection':{'show':false,'placeholder':'Action', value:'all'}, 'stockComponentList':{'show':true,'placeholder':'Select Component',value:'all'},'procList':{'show':true,'placeholder':'Select Proc Type',value:'Stocked'}}}"
+      (submitForm)="newFormSubmit($event)" [dropDownList]="actionList" [vendorList]="vendorList" [stockComponentList]="listOfStockItems" [procList]="procTypeVendor" [dateFormat]="'dd-MM-yyyy'"></app-new-reports>
+</ng-template>

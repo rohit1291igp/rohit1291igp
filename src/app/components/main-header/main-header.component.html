@@ -38,7 +38,7 @@
                     <ul class="reportsdropdownMenu no-padding">
                         <ng-container *ngIf="(environment.userType != 'microsite' && environment.userType != 'microsite-zeapl')">
                         <a routerLink="/reports/getOrderReport"><li [ngClass]="{'selected' : selectedReportTab === 'getOrderReport'}">Order Report</li></a>
-                        <a routerLink="/reports/getVendorReport"><li [ngClass]="{'selected' : selectedReportTab === 'getVendorReport'}">Product Report</li></a>
+                        <a routerLink="/productReport"><li [ngClass]="{'selected' : selectedReportTab === 'getVendorReport'}">Product Report</li></a>
                         <a routerLink="/reports/getPincodeReport"><li [ngClass]="{'selected' : selectedReportTab === 'getPincodeReport'}">Pincode Report</li></a>
                         <a *ngIf="environment.userType === 'vendor'" routerLink="/deliveryBoyDetails"><li [ngClass]="{'selected' : selectedReportTab === 'deliveryBoyDetails'}">Delivery Boy Details</li></a>
                         <a *ngIf="environment.userType != 'vendor'" class="" routerLink="/reports/getPayoutAndTaxesReport"><li [ngClass]="{'selected' : selectedReportTab === 'getPayoutAndTaxesReport'}">Payout & Taxes</li></a>
