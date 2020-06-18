@@ -109,10 +109,9 @@ export class DailyOpsReportComponent implements OnInit {
 
         console.log(pipe.transform('2020-04-26 08:59:53.0', 'h:mm:ss a'))
 
-        const fileFor = this.myForm.value.warehouseopsreport == 1 ? 'warehouseOps_Part1' : 'warehouseOps_Part2';
+        const fileFor = this.myForm.value.warehouseopsreport == 1 ? 'warehouseOps' : 'CourierOps';
         const filedate = datefrom;
-        const fileTime = '02';
-        const fileName = fileFor + '_' + filedate + '_' + fileTime + '.csv';
+        const fileName = fileFor + '_' + filedate + '_' + '.csv';
         // let filePresent = false;
         let url = 'warehouseops/';
         if(this.myForm.value.warehouseopsreport == 1){
@@ -127,7 +126,7 @@ export class DailyOpsReportComponent implements OnInit {
         }
         //adminapi.igp.com/v1/admin/warehouseops/downloadCSVPart1?purchaseDateFrom=${datefrom}&purchaseDateTo=${dateto}
         const reqObj = {
-            url: `warehouseops/downloadCSVPart1?purchaseDateFrom=${datefrom}&purchaseDateTo=${dateto}&fkAsID=354`,
+            url: url,
             method: 'get'
         };
         _this.BackendService.makeAjax(reqObj, function (err, response, headers) {
