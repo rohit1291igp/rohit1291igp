@@ -36,7 +36,7 @@
                <p>Reports</p>
                 <div class="reportDropdown abs" [ngClass]="{'slideropen' : reportDropdownOpen, 'sliderclosed': !reportDropdownOpen}">
                     <ul class="reportsdropdownMenu no-padding">
-                        <ng-container *ngIf="(environment.userType != 'microsite' && environment.userType != 'microsite-zeapl')">
+                        <ng-container *ngIf="(environment.userType != 'microsite' && environment.userType != 'microsite-zeapl' && environment.userType != 'warehouse')">
                         <a routerLink="/reports/getOrderReport"><li [ngClass]="{'selected' : selectedReportTab === 'getOrderReport'}">Order Report</li></a>
                         <a routerLink="/reports/getVendorReport"><li [ngClass]="{'selected' : selectedReportTab === 'getVendorReport'}">Product Report</li></a>
                         <a routerLink="/reports/getPincodeReport"><li [ngClass]="{'selected' : selectedReportTab === 'getPincodeReport'}">Pincode Report</li></a>
@@ -56,6 +56,9 @@
                             <a class="" routerLink="/reports/getbarcodestoverify" ><li [ngClass]="{'selected' : selectedReportTab === 'getbarcodestoverify'}">Barcode Verify</li></a>
                             <a class="" routerLink="/reports/getOrderFileUploadReport"><li [ngClass]="{'selected' : selectedReportTab === 'getOrderFileUploadReport'}">Uploaded Image</li></a>
                             <a class="" routerLink="/reports/getComponentReport"><li [ngClass]="{'selected' : selectedReportTab === 'getComponentReport'}">Component Report</li></a>
+                        </ng-container>
+                        <ng-container *ngIf="environment.userType == 'warehouse'">
+                            <a routerLink="/dailywarehouseOpsReport"><li [ngClass]="{'selected' : selectedReportTab === 'dailywarehouseOpsReport'}">Daily Ops Report</li></a>
                         </ng-container>
                     </ul>
                 </div>

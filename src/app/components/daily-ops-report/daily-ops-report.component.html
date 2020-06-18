@@ -1,0 +1,40 @@
+<mat-card class="main-card-container">
+    <form [formGroup]="myForm" (ngSubmit)="Download(myForm)">
+        <div class="d-flex">
+            <mat-form-field class="m-8" [ngClass]="{'full-width': showWarehouseDropdown}">
+                <mat-label>Choose Warehouse Ops Report</mat-label>
+                <mat-select formControlName="warehouseopsreport">
+                    <mat-option value="1">Warehouse Ops Part 1</mat-option>
+                    <mat-option value="2">Warehouse Ops Part 2</mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field *ngIf="showWarehouseDropdown" class="m-8 full-width">
+                <mat-label>Choose Warehouse Name</mat-label>
+                <mat-select formControlName="warehousename">
+                    <mat-option value="4">Lucknow</mat-option>
+                    <mat-option value="354">Mumbai</mat-option>
+                    <mat-option value="318">Jaipur</mat-option>
+                    <mat-option value="0">All</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div class="d-flex">
+            <mat-form-field class="m-8 full-width">
+                <input matInput [matDatepicker]="pickerFrom" placeholder="From"
+                    (dateInput)="addEventFrom('input', $event)" (dateChange)="addEventFrom('change', $event)"
+                    autocomplete="off">
+                <mat-datepicker-toggle matSuffix [for]="pickerFrom"></mat-datepicker-toggle>
+                <mat-datepicker #pickerFrom></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field class="m-8 full-width">
+                <input matInput [matDatepicker]="pickerTo" placeholder="To" (dateInput)="addEventTo('input', $event)"
+                    (dateChange)="addEventTo('change', $event)" autocomplete="off">
+                <mat-datepicker-toggle matSuffix [for]="pickerTo"></mat-datepicker-toggle>
+                <mat-datepicker #pickerTo></mat-datepicker>
+            </mat-form-field>
+        </div>
+        <button style="margin: 5px;" id="download" type="submit" mat-raised-button class="btn-color"
+            (click)="btnType = 'download'">Download</button>
+    </form>
+</mat-card>

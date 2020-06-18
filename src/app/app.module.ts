@@ -60,6 +60,7 @@ import { DateFormatterPipeModule } from './customPipes/date-formatter';
 import { PayoutDashboardComponent, PayoutDashboardModule } from './components/payout-dashboard/payout-dashboard.component';
 import { MomentDateAdapter, MatMomentDateModule } from '@angular/material-moment-adapter';
 import { editComponent } from './components/reports/reports.component';
+import { DailyOpsReportComponent } from './components/daily-ops-report/daily-ops-report.component';
 
 
 
@@ -91,7 +92,8 @@ export function ConfigLoader(envConfig: envConfig) {
     OrderStockComponent,
     testComponent,
     editComponent,
-    PerformanceReportComponent
+    PerformanceReportComponent,
+    DailyOpsReportComponent
     // AutoSelectionComponent
   ],
   imports: [

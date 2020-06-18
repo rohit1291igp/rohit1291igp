@@ -9,6 +9,7 @@ import { LoginComponent } from './components/login/login.component';
 import { PayoutDashboardComponent } from './components/payout-dashboard/payout-dashboard.component';
 import { PerformanceReportComponent } from './components/performance-report/performance-report.component';
 import { AuthGuard } from './services/auth-guard.service';
+import { DailyOpsReportComponent } from './components/daily-ops-report/daily-ops-report.component';
 
 
 const route: Routes = [
@@ -93,6 +94,10 @@ const route: Routes = [
   {
     path:'payout-dashboard',
     component: PayoutDashboardComponent
+  },
+  {
+    path:'dailywarehouseOpsReport',
+    component: DailyOpsReportComponent
   },
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
   // otherwise redirect to home

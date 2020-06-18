@@ -122,6 +122,8 @@ export class LoginComponent implements OnInit {
                         _this.router.navigate(['/voucher/voucher']);
                     }else if(userType === 'gv'){
                         _this.router.navigate(['/voucher/gv']);
+                    }else if(userType === 'warehouse'){
+                        _this.router.navigate(['/dailywarehouseOpsReport']);
                     }else{
                         _this.router.navigate(['/dashboard']);
                     }
