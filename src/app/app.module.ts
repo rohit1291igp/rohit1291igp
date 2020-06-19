@@ -4,7 +4,7 @@ import { DatePipe } from '@angular/common';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { HttpModule } from '@angular/http';
-import { MatButtonModule, MatCardModule, MatCheckboxModule, MatDatepickerModule, MatDialogModule, MatDialogRef, MatFormFieldModule, MatIconModule, MatInputModule, MatListModule, MatMenuModule, MatNativeDateModule, MatPaginatorModule, MatProgressBarModule, MatProgressSpinnerModule, MatRadioModule, MatSelectModule, MatSnackBarModule, MatSortModule, MatTableModule, MAT_DIALOG_DATA } from '@angular/material';
+import { MatButtonModule, MatCardModule, MatCheckboxModule, MatDatepickerModule, MatDialogModule, MatDialogRef, MatFormFieldModule, MatIconModule, MatInputModule, MatListModule, MatMenuModule, MatNativeDateModule, MatPaginatorModule, MatProgressBarModule, MatProgressSpinnerModule, MatRadioModule, MatSelectModule, MatSnackBarModule, MatSortModule, MatTableModule, MAT_DIALOG_DATA, MatAutocompleteModule } from '@angular/material';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
@@ -61,6 +61,7 @@ import { PayoutDashboardComponent, PayoutDashboardModule } from './components/pa
 import { MomentDateAdapter, MatMomentDateModule } from '@angular/material-moment-adapter';
 import { editComponent } from './components/reports/reports.component';
 import { DailyOpsReportComponent } from './components/daily-ops-report/daily-ops-report.component';
+import {StockComponentsReportsComponent} from './components/stock-components-reports/stock-components-reports.component';
 
 
 
@@ -93,7 +94,8 @@ export function ConfigLoader(envConfig: envConfig) {
     testComponent,
     editComponent,
     PerformanceReportComponent,
-    DailyOpsReportComponent
+    DailyOpsReportComponent,
+    StockComponentsReportsComponent
     // AutoSelectionComponent
   ],
   imports: [
@@ -122,6 +124,7 @@ export function ConfigLoader(envConfig: envConfig) {
     MatSelectModule,
     MatDatepickerModule,
     MatNativeDateModule,
+    MatAutocompleteModule,
     routing,
     SelectModule,
     MyDatePickerModule,

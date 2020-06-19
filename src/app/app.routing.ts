@@ -8,8 +8,11 @@ import { DownloadEmailComponent } from './components/download-email/download-ema
 import { LoginComponent } from './components/login/login.component';
 import { PayoutDashboardComponent } from './components/payout-dashboard/payout-dashboard.component';
 import { PerformanceReportComponent } from './components/performance-report/performance-report.component';
+import { StockComponentsReportsComponent } from './components/stock-components-reports/stock-components-reports.component';
 import { AuthGuard } from './services/auth-guard.service';
 import { DailyOpsReportComponent } from './components/daily-ops-report/daily-ops-report.component';
+
+
 
 
 const route: Routes = [
@@ -92,12 +95,17 @@ const route: Routes = [
     canActivate: [AuthGuard]
   },
   {
-    path:'payout-dashboard',
-    component: PayoutDashboardComponent
-  },
-  {
     path:'dailywarehouseOpsReport',
     component: DailyOpsReportComponent
+  },
+  {
+    path: 'stockReport',
+    component: StockComponentsReportsComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path:'payout-dashboard',
+    component: PayoutDashboardComponent
   },
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
   // otherwise redirect to home
