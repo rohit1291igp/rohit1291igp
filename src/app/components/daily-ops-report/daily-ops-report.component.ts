@@ -116,14 +116,15 @@ export class DailyOpsReportComponent implements OnInit {
         let url = 'warehouseops/';
         if(this.myForm.value.warehouseopsreport == 1){
             url += `downloadCSVPart1?purchaseDateFrom=${datefrom}&purchaseDateTo=${dateto}`;
+            if(this.myForm.value.warehousename == 0){
+                url += `&fkAsID=${_this.fkasid}`
+            }else{
+                url += `&fkAsID=${this.myForm.value.warehousename}`
+            }
         }else{
             url += `downloadCSVPart2?releasedDateFrom=${datefrom}&releasedDateTo=${dateto}`;
         }
-        if(this.myForm.value.warehousename == 0){
-            url += `&fkAsID=${_this.fkasid}`
-        }else{
-            url += `&fkAsID=${this.myForm.value.warehousename}`
-        }
+        
         //adminapi.igp.com/v1/admin/warehouseops/downloadCSVPart1?purchaseDateFrom=${datefrom}&purchaseDateTo=${dateto}
         const reqObj = {
             url: url,
