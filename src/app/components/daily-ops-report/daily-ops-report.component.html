@@ -5,7 +5,7 @@
                 <mat-label>Choose Warehouse Ops Report</mat-label>
                 <mat-select formControlName="warehouseopsreport">
                     <mat-option value="1">Warehouse Ops</mat-option>
-                    <mat-option value="2">Courier Ops</mat-option>
+                    <mat-option *ngIf="!showWarehouseDropdown" value="2">Courier Ops</mat-option>
                 </mat-select>
             </mat-form-field>
             <mat-form-field *ngIf="showWarehouseDropdown" class="m-8 full-width">
