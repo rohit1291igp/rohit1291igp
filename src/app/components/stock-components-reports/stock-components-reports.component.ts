@@ -38,7 +38,7 @@ export class StockComponentsReportsComponent implements OnInit {
 
 
     ngOnInit() {
-        
+
         var _this = this;
         _this.userType = localStorage.getItem('userType') ? localStorage.getItem('userType') : null;
         _this.fkasid = localStorage.getItem('fkAssociateId') ? localStorage.getItem('fkAssociateId') : null;
@@ -80,8 +80,8 @@ export class StockComponentsReportsComponent implements OnInit {
         const dateToday = pipe.transform(Date.now(), 'yyyy-MM-dd');
         console.log(event);
         let url: string;
-        if (event.componentSelection.Component_Id && event.componentSelection.Component_Id != 'All') {
-            url = "startLimit=0&endLimit=100&Component_Id=" + event.componentSelection.Component_Id;
+        if (event.componentSelected && event.componentSelected.Component_Id != 'All') {
+            url = "startLimit=0&endLimit=100&Component_Id=" + event.componentSelected.Component_Id;
         }
         else {
             url = "startLimit=0&endLimit=100";
@@ -125,7 +125,7 @@ export class StockComponentsReportsComponent implements OnInit {
                             }
                         }
                     }).then((data) => {
-                        
+
                         let download = new Angular5Csv(data, 'StockComponentReport-' + dateToday, options);
                     })
                 } else {

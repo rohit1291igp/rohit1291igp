@@ -103,7 +103,7 @@ export class NewReportsComponent implements OnInit {
             .pipe(
                 startWith(''),
                 map(value => typeof value === 'string' ? value : value['Component_Name']),
-                map(name => name ? this._filter(name) : this.componentDropDownList)
+                map(name => name ? this.componentfilter(name) : this.componentDropDownList)
 
             );
 
@@ -122,11 +122,11 @@ export class NewReportsComponent implements OnInit {
         }, 100)
     }
 
-    displayFn(component: any): string {
+    componenetDisplayFn(component: any): string {
         return component && component.Component_Name ? component.Component_Name : '';
     }
 
-    private _filter(name: string): any[] {
+    private componentfilter(name: string): any[] {
         const filterValue = name.toLowerCase();
         return this.componentDropDownList.filter(option => option.Component_Name.toLowerCase().indexOf(filterValue) === 0);
     }

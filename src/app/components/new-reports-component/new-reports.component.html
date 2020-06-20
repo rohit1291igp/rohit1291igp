@@ -46,7 +46,7 @@
                     <mat-form-field *ngIf="SearchForm?.formFields?.componentSelection?.show" class="m-8">
                         <mat-label>{{SearchForm?.formFields?.componentSelection?.placeholder}}</mat-label>
                         <input type="text" matInput [formControl]="myComponentControl" [matAutocomplete]="auto">
-                        <mat-autocomplete #auto="matAutocomplete" (optionSelected)='getComponents($event.option.value)' [displayWith]="displayFn">
+                        <mat-autocomplete #auto="matAutocomplete" (optionSelected)='getComponents($event.option.value)' [displayWith]="componenetDisplayFn">
                             <mat-option *ngFor="let option of filteredComponentsOptions | async" [value]="option">
                                 {{option.Component_Name}}</mat-option>
                         </mat-autocomplete>
