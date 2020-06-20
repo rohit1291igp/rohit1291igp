@@ -6,7 +6,8 @@
                 <div class="d-flex">
                     <ng-container *ngIf="SearchForm?.formFields?.dateRange?.datefrom?.show">
                         <mat-form-field class="m-8">
-                            <input matInput [matDatepicker]="picker" placeholder="{{SearchForm?.formFields?.dateRange?.datefrom?.placeholder}}"
+                            <input matInput [matDatepicker]="picker"
+                                placeholder="{{SearchForm?.formFields?.dateRange?.datefrom?.placeholder}}"
                                 (dateInput)="addEventFrom('input', $event)"
                                 (dateChange)="addEventFrom('change', $event)" formControlName="datefrom"
                                 autocomplete="off">
@@ -15,7 +16,8 @@
                         </mat-form-field>
 
                         <mat-form-field class="m-8">
-                            <input matInput [matDatepicker]="pickers" placeholder="{{SearchForm?.formFields?.dateRange?.dateto?.placeholder}}"
+                            <input matInput [matDatepicker]="pickers"
+                                placeholder="{{SearchForm?.formFields?.dateRange?.dateto?.placeholder}}"
                                 (dateInput)="addEventTo('input', $event)" (dateChange)="addEventTo('change', $event)"
                                 formControlName="dateto" autocomplete="off">
                             <mat-datepicker-toggle matSuffix [for]="pickers"></mat-datepicker-toggle>
@@ -41,14 +43,25 @@
                             <mat-option *ngFor="let option of dropDownList" [value]="option">{{option}}</mat-option>
                         </mat-select>
                     </mat-form-field>
-                    <mat-form-field *ngIf="SearchForm?.formFields?.vendorSelection?.show && vendorList &&vendorList.length > 0" class="m-8">
+                    <mat-form-field *ngIf="SearchForm?.formFields?.componentSelection?.show" class="m-8">
+                        <mat-label>{{SearchForm?.formFields?.componentSelection?.placeholder}}</mat-label>
+                        <input type="text" matInput [formControl]="myComponentControl" [matAutocomplete]="auto">
+                        <mat-autocomplete #auto="matAutocomplete" (optionSelected)='getComponents($event.option.value)' [displayWith]="displayFn">
+                            <mat-option *ngFor="let option of filteredComponentsOptions | async" [value]="option">
+                                {{option.Component_Name}}</mat-option>
+                        </mat-autocomplete>
+                    </mat-form-field>
+                    <mat-form-field
+                        *ngIf="SearchForm?.formFields?.vendorSelection?.show && vendorList &&vendorList.length > 0"
+                        class="m-8">
                         <mat-label>{{SearchForm?.formFields?.vendorSelection?.placeholder}}</mat-label>
-                        <mat-select formControlName="vendorDetail" [compareWith]="compareObjects" [(ngModel)]="selected">
+                        <mat-select formControlName="vendorDetail" [compareWith]="compareObjects"
+                            [(ngModel)]="selected">
                             <mat-option *ngFor="let vendor of vendorList" [value]="vendor">{{vendor.Vendor_Name}}
                             </mat-option>
                         </mat-select>
                     </mat-form-field>
-                    
+
                 </div>
                 <div class="d-flex">
                     <button style="margin: 5px;" id="search" type="submit" mat-raised-button class="btn-color"
@@ -64,7 +77,9 @@
     <!-- New Table-->
     <div class="mat-elevation-z8" *ngIf="dataSource?.data?.length > 0 else noRecord">
         <div class="example-container mat-elevation-z8">
+
             <mat-table #table mat-table [dataSource]="dataSource" matSort (matSortChange)="test($event)">
+
                 <ng-container matColumnDef="{{col.id}}" *ngFor="let col of columnNames">
                     <mat-header-cell class="mat-header-row" *matHeaderCellDef>
                         {{ getHeaderCellValue(col.value) | capitalize }}
@@ -77,11 +92,14 @@
                                 (click)="openEditWindow(element, col.id, i)"></i>
                         </ng-container>
                         <ng-container *ngIf="getRowCellValue(element[col.id]) == 'img'"><img
-                                src="{{componentImageUrl+element[col.id]}}" width="50" height="50">
+                                src="{{componentImageUrl+element[col.id]}}" width="50" height="50"
+                                alt="{{element[col.id]}}">
                         </ng-container>
                         <ng-container *ngIf="getRowCellValue(element[col.id]) == 'menu' && element[col.id].length > 0">
                             <ng-container *ngIf="col?.id.includes('image') else noImg">
-                                <div *ngFor="let x of element[col.id]" class="img-grid"><img src="{{env?.componentImageUrl+x}}" width="100" height="100" (click)="imgPreview(env?.componentImageUrl+x)"></div>
+                                <div *ngFor="let x of element[col.id]" class="img-grid"><img
+                                        src="{{env?.componentImageUrl+x}}" width="100" height="100"
+                                        (click)="imgPreview(env?.componentImageUrl+x)"></div>
                             </ng-container>
                             <ng-template #noImg>
                                 <button mat-button [matMenuTriggerFor]="menu"><i class="fa fa-caret-down"
@@ -100,9 +118,11 @@
                     </mat-cell>
                 </ng-container>
                 <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-                <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                <mat-row *matRowDef="let row; columns: displayedColumns;">
+                </mat-row>
             </mat-table>
-            <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+            <mat-paginator [pageSizeOptions]="[5, 10, 20]" length="{{dataSource?.length}}" showFirstLastButtons>
+            </mat-paginator>
         </div>
     </div>
     <ng-template #noRecord>
