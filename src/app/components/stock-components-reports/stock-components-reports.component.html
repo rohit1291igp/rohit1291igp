@@ -1,0 +1,14 @@
+<ng-container *ngIf="userType === 'admin' && listOfComponents.length>0 else vendorView">
+  <app-new-reports [reportsHeader]="tableHeaders" [orginalReportData]="dataSource"
+    [tableDataAction]="orginalReportData?.tableDataAction"
+    [SearchForm]="{'show':true, 'formFields':{'componentSelection':{'show':true,'placeholder':'Component Name',value:'all'}}}"
+    (submitForm)="newFormSubmit($event)" [componentDropDownList]="listOfComponents" [vendorList]="vendorList"
+    [dateFormat]="'dd-MM-yyyy'"></app-new-reports>
+</ng-container>
+<ng-template #vendorView>
+  <app-new-reports *ngIf='listOfComponents.length>0' [reportsHeader]="tableHeaders" [orginalReportData]="dataSource"
+    [tableDataAction]="orginalReportData?.tableDataAction"
+    [SearchForm]="{'show':true, 'formFields':{'componentSelection':{'show':true,'placeholder':'Component Name',value:'all'}}}"
+    (submitForm)="newFormSubmit($event)" [componentDropDownList]="listOfComponents" [vendorList]="vendorList"
+    [dateFormat]="'dd-MM-yyyy'"></app-new-reports>
+</ng-template>
