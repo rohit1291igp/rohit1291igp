@@ -224,7 +224,7 @@ export class NewReportsComponent implements OnInit {
     openEditWindow(rowData, colName, index) {
         const dialogRef = this.dialog.open(editComponent, {
             width: '250px',
-            data: { 'rowData': rowData, 'colName': this.getHeaderCellValue(colName) }
+            data: { 'rowData': rowData, 'colName': this.getHeaderCellValue(colName).replace(/ /g, '_') }
         });
 
         dialogRef.afterClosed().subscribe(result => {
