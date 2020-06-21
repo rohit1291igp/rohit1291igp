@@ -2311,23 +2311,24 @@ export class editComponent implements OnInit {
     myForm: FormGroup;
     constructor(
         public dialogRef: MatDialogRef<editComponent>,
-        @Inject(MAT_DIALOG_DATA) public data: any,private fb: FormBuilder) {
+        @Inject(MAT_DIALOG_DATA) public data: any, private fb: FormBuilder) {
 
     }
     ngOnInit() {
-        if(typeof this.data.rowData == 'object' && this.data.rowData != null){
+        if (typeof this.data.rowData == 'object' && this.data.rowData != null) {
             this.myForm = this.fb.group({
-                fieldName: [this.data.rowData['value'], Validators.required]
+                fieldName: [this.data.rowData[this.data.colName], Validators.required]
             });
-        }else{
+        } else {
             this.myForm = this.fb.group({
                 fieldName: [this.data.rowData, Validators.required]
             });
         }
-       
+
     }
 
-    onSubmit(data){
+    onSubmit(data) {
+        data.data = this.data;
         this.dialogRef.close(data);
     }
 
