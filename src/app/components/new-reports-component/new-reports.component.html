@@ -55,7 +55,7 @@
                             </mat-option>
                         </mat-select> -->
                         <input type="text" matInput formControlName="stockComponent" [matAutocomplete]="auto">
-                        <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+                        <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayComponentName">
                         <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
                             {{option.Component_Name}}
                         </mat-option>
@@ -75,6 +75,8 @@
                         (click)="btnType = 'search'">Search</button>
                     <button style="margin: 5px;" id="download" type="submit" mat-raised-button class="btn-color"
                         (click)="btnType = 'download'">Download</button>
+                    <button *ngIf="env.userType==='admin'" style="margin: 5px;" id="upload" type="button" mat-raised-button class="btn-color"
+                        (click)="onAddComponent()">Add Component</button>
                 </div>
             </div>
         </form>
@@ -93,7 +95,7 @@
                         <ng-container
                             *ngIf="getRowCellValue(element[col.id]) != 'img' && getRowCellValue(element[col.id]) != 'menu'">
                             {{ getRowCellValue(element[col.id]) | dateformatter:dateFormat:col.id}} <i
-                                *ngIf="getEditTableCell(col.id)" class="fa fa-edit" style="cursor: pointer;"
+                                *ngIf="getEditTableCell(col.id) && col.id!=='Proc_Type_Vendor'" class="fa fa-edit" style="cursor: pointer;"
                                 (click)="openEditWindow(element, col.id, i)"></i>
                         </ng-container>
                         <ng-container *ngIf="getRowCellValue(element[col.id]) == 'img'"><img

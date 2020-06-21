@@ -3,6 +3,7 @@ import { MatDialog, MatSnackBar, MatPaginator } from '@angular/material';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { BackendService } from '../../services/backend.service';
+import { UtilityService } from '../../services/utility.service'
 import { AddDeliveryBoyComponent } from '../add-deliveryboy/add-deliveryboy.component';
 import { NotificationComponent } from '../notification/notification.component';
 import { ActivatedRoute } from '@angular/router';
@@ -10,6 +11,7 @@ import { ReportsService } from 'app/services/reports.service';
 import { DatePipe } from '@angular/common';
 import { Angular5Csv } from 'angular5-csv/dist/Angular5-csv';
 import { environment } from "../../../environments/environment"
+import { Headers, RequestOptions } from "@angular/http";
 @Component({
   selector: 'app-product-report',
   templateUrl: './product-report.component.html',
@@ -30,11 +32,12 @@ export class ProductReportComponent implements OnInit {
     fkasid;
     vendorList: any;
     constructor(
-        private BackendService: BackendService,
+        private backendService: BackendService,
         public addDeliveryBoyDialog: MatDialog,
         private _snackBar: MatSnackBar,
         private route: ActivatedRoute,
-        private reportsService: ReportsService
+        private reportsService: ReportsService,
+        private utilityService: UtilityService
     ) { }
 
 
@@ -188,7 +191,7 @@ export class ProductReportComponent implements OnInit {
           console.log('show more clicked');
         console.log(this.orginalReportData)
           if(_this.orginalReportData.tableData.length < totalOrders){
-              _this.BackendService.abortLastHttpCall();
+              _this.backendService.abortLastHttpCall();
               // if(_this.reportData){
                   var startLimit = _this.orginalReportData.tableData.length;
                   var queryStrObj = Object.assign({}, _this.searchResultModel);
@@ -292,7 +295,7 @@ export class ProductReportComponent implements OnInit {
             method: 'get'
         };
 
-        _this.BackendService.makeAjax(reqObj, function (err, response, headers) {
+        _this.backendService.makeAjax(reqObj, function (err, response, headers) {
             if (err || response.error) {
                 console.log('Error=============>', err);
             } else {
@@ -307,7 +310,7 @@ export class ProductReportComponent implements OnInit {
             url: 'actionlist',
             method: 'get'
         };
-        _this.BackendService.makeAjax(reqObj, function (err, response, headers) {
+        _this.backendService.makeAjax(reqObj, function (err, response, headers) {
             if (err || response.error) {
                 console.log('Error=============>', err);
             }
@@ -330,7 +333,7 @@ export class ProductReportComponent implements OnInit {
               method : "get",
               payload : {}
             };
-            _this.BackendService.makeAjax(reqObj, function(err, response, headers){
+            _this.backendService.makeAjax(reqObj, function(err, response, headers){
               if(err || response.error == true) {
                   if(response){
                       console.log('Error=============>', err, response.errorCode);
@@ -357,7 +360,7 @@ export class ProductReportComponent implements OnInit {
               method : "get",
               payload : {}
             };
-            _this.BackendService.makeAjax(reqObj, function(err, response, headers){
+            _this.backendService.makeAjax(reqObj, function(err, response, headers){
               if(err || response.error == true) {
                   if(response){
                       console.log('Error=============>', err, response.errorCode);
@@ -372,6 +375,237 @@ export class ProductReportComponent implements OnInit {
               _this.procTypeVendor = ['Stocked', 'JIT'];
             });
       }
+    }
+
+
+    onEditSubmit(data){
+        console.log("prvz prod edit",data)
+        this.productReportEditSubmit(data)
+    }
+
+    productReportEditSubmit(data){
+        "http://adminapi.igp.com/v1/handels/handleComponentChange?componentId=461&reqPrice=191&oldPrice=191&fkAssociateId=843"
+        let apiUrl="";
+        let payload={}
+        let method = 'put'
+        apiUrl = environment.userType==='admin' ? "handleVendorComponentChange" : "handleComponentChange" 
+        apiUrl+="?ComponentId="+data.data['component']['Component_Id']
+        apiUrl+="&fkAssociateId="+localStorage.getItem('fkAssociateId');
+
+        if(data.data.colName==="Price"){
+            apiUrl+="&reqPrice="+data.requestedvalue+'&oldPrice='+data.data.rowData.value;
+        }else if(data.data.colName==="Component Cost Vendor"){
+            apiUrl+="&reqPrice="+data.requestedvalue+'&oldCost='+data.data.rowData.value;
+        }else if(data.data.colName==='Stock Quantity'){
+            apiUrl="orderVendorComponentStocked"
+            payload={
+                Component_Id: data.data.component.Component_Id,
+                Stock_Quantity: data.requestedvalue,
+                Vendor_Id: data.data.component.Vendor_Id,
+            }
+            method='post'
+        }else {
+            return
+        }
+
+        
+        let reqObj =  {
+            url : apiUrl,
+            method : method,
+            payload : payload
+          };
+
+        this.backendService.makeAjax(reqObj,(err,res)=>{
+            if(err){
+                console.log("prvz edit",err);
+            }else{
+                console.log("prvz edit success",res);
+            }
+        })
+    }
+
+    reportAddAction={
+        reportAddActionFlag:false,
+        reportAddActionModel:null,
+        reportAddActionDepData:null
+    };
+
+    _data = {
+        uploadFileName:"",
+        uploadErrorList:[],
+        uploadErrorCount:{
+            correct:"",
+            fail:""
+        },
+      };
+    closePopup(e, ignore){
+        e.stopPropagation();
+        if(ignore) return;
+        this.reportAddAction.reportAddActionFlag=false;
+        this._data.uploadErrorList=[];
+    }
+
+    _flags={
+        fileOversizeValidation:false,
+        emptyFileValidation:false,
+        uploadSuccessFlag:false
+    };
+
+    onAddComponent(){
+        console.log("hello")
+        let _this=this;
+        _this.reportAddAction.reportAddActionFlag=true;
+    }
+
+    addActionSubmit(e){
+        let _this=this;
+        let paramsObj={};
+        let url="";
+        let method;
+            paramsObj={
+                fkAssociateId:_this.searchResultModel["fkAssociateId"],
+                componentCode:_this.reportAddAction.reportAddActionModel.componentCode,
+                componentName:_this.reportAddAction.reportAddActionModel.componentName,
+                type:_this.reportAddAction.reportAddActionModel.componentType,
+                price:_this.reportAddAction.reportAddActionModel.componentPrice
+            };
+
+        let paramsStr = _this.utilityService.formatParams(paramsObj);
+        console.log('add API url --->', url);
+        console.log('add API Params string --->', paramsStr);
+
+        let reqObj =  {
+            url : url+paramsStr,
+            method : (method || 'post')
+        };
+        _this.backendService.makeAjax(reqObj, function(err, response, headers){
+            //if(!response) response={result:[]};
+            if(err || response.error) {
+                console.log('Error=============>', err);
+                alert(response.errorCode);
+                return;
+            }
+            console.log('admin action Response --->', response.result);
+            if(response.result){
+              alert('The request was successful.');
+                _this.reportAddAction.reportAddActionFlag=false;
+            }
+        });
+    }
+
+    fileChange(e){
+        console.log('file changed');
+   }
+    public isUploading = false;
+    uploadExcel(event){
+        var _this = this;
+        var fileInput=event.target.querySelector('#excelFile').files || {};
+        var fileOverSizeFlag= false;
+        let fileList: FileList = event.target.querySelector('#excelFile').files;
+        _this.isUploading = true;
+        if(fileList.length > 0) {
+            _this._flags.emptyFileValidation=false;
+            let file: File = fileList[0];
+            let formData = new FormData();
+            for (var i = 0; i < fileList.length; i++) {
+                if((fileList[i].size/1000000) > 5){
+                    fileOverSizeFlag=true;
+                    break;
+                }
+                formData.append("file"+i , fileList[i]);
+            }
+   
+            /*if(fileOverSizeFlag){
+                _this._flags.fileOversizeValidation=true;
+                return;
+            }else{
+                _this._flags.fileOversizeValidation=false;
+            }*/
+   
+            let headers = new Headers();
+            /** No need to include Content-Type in Angular 4 */
+            //headers.append('Content-Type', 'multipart/form-data');
+            //headers.append('Accept', 'application/json');
+            let options = new RequestOptions({ headers: headers });
+            console.log('Upload File - formData =============>', formData, options);
+            let url = 'addVendorComponentBulk';
+            
+            let reqObj =  {
+                url : url,
+                method : "post",
+                payload : formData,
+                options : options
+            };
+   
+            _this.backendService.makeAjax(reqObj, function(err, response, headers){
+                if(!response){
+                    err=null;
+                    response = {
+                        "status": "Success",
+                        "data": {
+                            "error": [
+                                {
+                                    "row": 0,
+                                    "msg": "Customer Details are wrongjava.net.UnknownHostException: api.igp.com"
+                                },
+                                {
+                                    "row": 1,
+                                    "msg": "Customer Details are wrongjava.net.UnknownHostException: api.igp.com"
+                                },
+                                {
+                                    "row": 2,
+                                    "msg": "Customer Details are wrongjava.net.UnknownHostException: api.igp.com"
+                                },
+                                {
+                                    "row": 3,
+                                    "msg": "Customer Details are wrongjava.net.UnknownHostException: api.igp.com"
+                                },
+                                {
+                                    "row": 4,
+                                    "msg": "Customer Details are wrongjava.net.UnknownHostException: api.igp.com"
+                                }
+                            ],
+                            "count": {
+                                    "correct": 2,
+                                    "fail": 5
+                                }
+                        }
+                    };
+                }
+   
+                if(err || response.error) {
+                    console.log('Error=============>', err, response.errorCode);
+                }
+                 _this.isUploading = false;
+                console.log('upload excel Response --->', response.result);
+                if(fileInput && 'value' in fileInput){
+                    _this._data.uploadFileName=fileInput.value.slice(fileInput.value.lastIndexOf('\\')+1)
+                }else{
+                    _this._data.uploadFileName="";
+                }
+   
+                // if(response.data.error.length){
+                //     _this._data.uploadErrorList=response.data.error;
+                //     _this._data.uploadErrorCount=response.data.count;
+                // }else{
+                //     _this._data.uploadErrorList=[];
+                //     _this._flags.uploadSuccessFlag=true;
+                // }
+
+                if(response.error == true){
+                    _this._data.uploadErrorList = response.result;
+                }else{
+                    _this._data.uploadErrorList=[];
+                    _this._flags.uploadSuccessFlag=true;
+                }
+   
+                if(fileInput && 'value' in fileInput) fileInput.value="";
+            });
+   
+        }else{
+            _this._flags.emptyFileValidation=true;
+          _this.isUploading = false;
+        }
     }
 
 }

@@ -11,6 +11,7 @@ import { environment } from '../../../environments/environment';
 import { ImgPreviewComponent } from '../img-preview/img-preview.component';
 import { Observable } from 'rxjs';
 import { startWith,map } from 'rxjs/operators';
+import { OrderStockComponent } from '../order-stocks/order-stock.component';
 
 interface Field{
     show:boolean,
@@ -57,6 +58,10 @@ export class NewReportsComponent implements OnInit {
     @Input() SearchForm: SearchForm;
     // Emit Data
     @Output() submitForm = new EventEmitter();
+    // Edit submit event emmit
+    @Output() editSubmit = new EventEmitter();
+    // fileUpload modal
+    @Output() fileUpload = new EventEmitter();
     //Date format
     @Input() dateFormat:string;
     columnNames = [];
@@ -203,15 +208,37 @@ export class NewReportsComponent implements OnInit {
     }
 
     openEditWindow(rowData, colName, index) {
-        const dialogRef = this.dialog.open(editComponent, {
-            width: '250px',
-            data: { 'rowData': rowData[colName], 'colName': this.getHeaderCellValue(colName) }
-        });
-
-        dialogRef.afterClosed().subscribe(result => {
-            rowData = 100;
-            console.log('The dialog was closed');
-        });
+        console.log("prvz rowdata",rowData)
+        if(colName==='Stock_Quantity' && environment.userType==='vendor'){
+            const dialogRef = this.dialog.open(OrderStockComponent, {
+                width: '500px',
+                data: rowData
+              });
+            //   const subscribedDialog = dialogRef.componentInstance.formSubmit.subscribe(data=>{
+            //     console.log("parvez event emmitted");
+            //     this.editSubmit.emit({requestedvalue:data.value.fieldName, data: { 'rowData': rowData[colName],'component':rowData, 'colName': this.getHeaderCellValue(colName) }})
+            // })
+    
+            dialogRef.afterClosed().subscribe(result => {
+                rowData = 100;
+                console.log('The dialog was closed');
+            });
+        }else{
+            const dialogRef = this.dialog.open(editComponent, {
+                width: '250px',
+                data: { 'rowData': rowData[colName],'component':rowData, 'colName': this.getHeaderCellValue(colName) }
+            });
+            const subscribedDialog = dialogRef.componentInstance.formSubmit.subscribe(data=>{
+                console.log("parvez event emmitted");
+                this.editSubmit.emit({requestedvalue:data.value.fieldName, data: { 'rowData': rowData[colName],'component':rowData, 'colName': this.getHeaderCellValue(colName) }})
+            })
+    
+            dialogRef.afterClosed().subscribe(result => {
+                rowData = 100;
+                console.log('The dialog was closed');
+                subscribedDialog.unsubscribe();
+            });
+        }
 
     }
 
@@ -232,7 +259,6 @@ export class NewReportsComponent implements OnInit {
         });
     }
     onSubmit(data) {
-        console.log("prvz",data)
         // console.log(data);
         // console.log(data.value.filtertype);
         var buttonName = document.activeElement.getAttribute("id");
@@ -254,13 +280,15 @@ export class NewReportsComponent implements OnInit {
             console.log('The dialog was closed');
           });
     }
+    onAddComponent(){
+        this.fileUpload.emit('')
+    }
 
     // Stock Component List
-    myControl = new FormControl();
-  filteredOptions: Observable<any[]>;
+    filteredOptions: Observable<any[]>;
 
-  displayFn(user: any): string {
-    return user && user.Component_Name ? user.Component_Name : '';
+  displayComponentName(component: any): string {
+    return component && component.Component_Name ? component.Component_Name : '';
   }
 
   private _filter(name: string): any[] {
