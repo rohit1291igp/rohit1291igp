@@ -1718,6 +1718,7 @@ getDeliveryBoyList(){
         }
         if(environment.userType == 'admin' && apiURLPath == 'handleVendorComponentChange' && header == 'Stock_Quantity'){
             paramsObj['Stock_Quantity'] = _this.editTableCellObj.value;
+            delete paramsObj['Proc_Type_Vendor'];
         }
         var paramsStr = _this.UtilityService.formatParams(paramsObj);
 
