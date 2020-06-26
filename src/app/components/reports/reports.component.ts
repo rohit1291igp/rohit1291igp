@@ -1698,7 +1698,6 @@ getDeliveryBoyList(){
                     paramsObj['componentId'] = rowData.Component_Id;
                     paramsObj['Component_Id'] = rowData.Component_Id;
                     paramsObj['Proc_Type_Vendor'] = (rowData.Proc_Type_Vendor == 'Stocked') ? 1 : 2;
-
                 }
             }else{
                 paramsObj['fkAssociateId'] =  localStorage.getItem('fkAssociateId');
@@ -1716,6 +1715,10 @@ getDeliveryBoyList(){
                 paramsObj['Proc_Type_Vendor'] = paramsObj['Proc_Type'];
                 delete paramsObj['Proc_Type'];
             }
+        }
+        if(environment.userType == 'admin' && apiURLPath == 'handleVendorComponentChange' && header == 'Stock_Quantity'){
+            paramsObj['Stock_Quantity'] = _this.editTableCellObj.value;
+            delete paramsObj['Proc_Type_Vendor'];
         }
         var paramsStr = _this.UtilityService.formatParams(paramsObj);
 
