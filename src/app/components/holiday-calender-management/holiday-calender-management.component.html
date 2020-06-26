@@ -1,0 +1,149 @@
+<mat-drawer-container autosize>
+  <mat-drawer #drawer class="sidenav-pad" mode="side" position="end">
+    <p class="text-right"><span style="font-size: 2em; cursor: pointer;" (click)="drawer.close()">&times;</span></p>
+    <h1 mat-dialog-title style="color: rgba(255, 0, 0, 0.712);">Holiday Calender Error</h1>
+    <div mat-dialog-content>
+        <div style="color: rgba(255, 0, 0, 0.705);">
+            <div class="caption m-top-1">Error list:-</div>
+            <div class="errorCont" *ngFor="let err of updateError">
+                <div>
+                    <ng-container *ngIf="err.row">Row - {{err.row}} -</ng-container> {{err.msg}}
+                </div>
+            </div>
+        </div>
+    </div>
+  </mat-drawer>
+
+  <div style="min-height:80vh;">
+    <div class="container">
+      <form [formGroup]="holidayCalenderForm" name="HolidayCalender" #f="ngForm" (ngSubmit)="onSubmit($event)">
+        <div class="row">
+          <div class="col-sm-3 col-md-3">
+            <div class="row">
+              <mat-form-field fxFlex>
+                <textarea matInput
+                          formControlName="skus"
+                          matTextareaAutosize
+                          placeholder="Please Enter SKU Ids"
+                          [matAutosizeMinRows]="5"
+                          [matAutosizeMaxRows]="10"
+                          required
+                          ></textarea>
+              </mat-form-field>
+            </div>
+            <div class="row">
+              <mat-checkbox formControlName="duplicatesFlag">Include Duplicates</mat-checkbox><br><br><br>
+              <button type="button" (click)="OnfetchSkuData()" [disabled]="holidayCalenderForm.get('skus').invalid" mat-button mat-raised-button mat-success>
+                View Details 
+            </button>
+            </div>
+          </div>
+          <div class="col-sm-9 col-md-9">
+            <div class="row">
+              <h4>Holiday</h4>
+              <mat-form-field class="example-full-width">
+                <mat-label>Holiday From Date</mat-label>
+                <input matInput [min]="minDate" [max]="maxDate" [matDatepicker]="holidayFromPicker"
+                (dateInput)="addEventFrom('input','holiday', $event)"
+                (dateChange)="addEventFrom('change','holiday', $event)"
+                [value]="holidayCalenderForm.get('holidayDateFrom').value"
+                autocomplete="off"
+                >
+                <mat-datepicker-toggle matSuffix [for]="holidayFromPicker"></mat-datepicker-toggle>
+                <mat-datepicker #holidayFromPicker></mat-datepicker>
+              </mat-form-field>
+              <mat-form-field class="example-full-width">
+                <mat-label>Holiday To Date</mat-label>
+                <input matInput [min]="holidayCalenderForm.get('holidayDateFrom').value" [max]="maxDate" [matDatepicker]="holidayToPicker"
+                (dateInput)="addEventTo('input','holiday', $event)"
+                (dateChange)="addEventTo('change','holiday', $event)"
+                [value]="holidayCalenderForm.get('holidayDateTo').value"
+                autocomplete="off"
+                >
+                <mat-datepicker-toggle matSuffix [for]="holidayToPicker"></mat-datepicker-toggle>
+                <mat-datepicker #holidayToPicker></mat-datepicker>
+              </mat-form-field>
+    
+              <!-- Mat Select Chips Starts Here-->
+              
+              <mat-form-field>
+                <mat-label>Delivery Types</mat-label>
+                <mat-select formControlName="deliveryTypes" multiple
+                >
+                  <mat-select-trigger>
+                    {{holidayCalenderForm.get('deliveryTypes').value ? holidayCalenderForm.get('deliveryTypes').value[0] : ''}}
+                    <span *ngIf="holidayCalenderForm.get('deliveryTypes').value?.length > 1" class="example-additional-selection">
+                      (+{{holidayCalenderForm.get('deliveryTypes').value.length - 1}} {{holidayCalenderForm.get('deliveryTypes').value?.length === 2 ? 'other' : 'others'}})
+                    </span>
+                  </mat-select-trigger>
+                  <mat-option *ngFor="let deliveryType of deliveryTypesOptions" [value]="deliveryType">{{deliveryType}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+    
+              <!-- Mat Select Chips Ends Here-->
+    
+    
+            </div>
+            <div class="row">
+              <h4>Single Timeslot</h4>
+              <mat-form-field class="example-full-width">
+                <mat-label>Single From Date</mat-label>
+                <input matInput [min]="minDate" [max]="maxDate" [matDatepicker]="singleFromPicker"
+                (dateInput)="addEventFrom('input','single', $event)"
+                (dateChange)="addEventFrom('change','single', $event)"
+                [value]="holidayCalenderForm.get('singleDateFrom').value"
+                autocomplete="off"
+                >
+                <mat-datepicker-toggle matSuffix [for]="singleFromPicker"></mat-datepicker-toggle>
+                <mat-datepicker #singleFromPicker></mat-datepicker>
+              </mat-form-field>
+              <mat-form-field class="example-full-width">
+                <mat-label>Single To Date</mat-label>
+                <input matInput [min]="holidayCalenderForm.get('singleDateFrom').value" [max]="maxDate" [matDatepicker]="singleToPicker"
+                (dateInput)="addEventTo('input','single', $event)"
+                (dateChange)="addEventTo('change','single', $event)"
+                [value]="holidayCalenderForm.get('singleDateTo').value"
+                autocomplete="off"
+                >
+                <mat-datepicker-toggle matSuffix [for]="singleToPicker"></mat-datepicker-toggle>
+                <mat-datepicker #singleToPicker></mat-datepicker>
+              </mat-form-field>
+              <br>
+              <mat-checkbox formControlName="fixedDateDelivery">Fixed Date Delivery</mat-checkbox>
+            </div>
+            <div class="row mar-top">
+                <button type="submit" color="primary" [disabled]="submitValidation()" mat-button mat-raised-button mat-success>
+                  Submit 
+                </button>
+                <button (click)="onClearAll()" type="button" mat-button mat-raised-button mat-success>
+                  Cancel 
+                </button>
+            </div>
+          </div>
+        </div>
+    </form>
+    </div>
+    
+    <div *ngIf="dataSource.length" class="mar-top">
+      <ng-container *ngIf="userType === 'admin' else vendorView">
+        <app-new-reports [reportsHeader]="tableHeaders" [orginalReportData]="dataSource"
+            [tableDataAction]="[]"
+            [showEditButton]="true"
+            (editSubmit)="onEditClick($event)"
+            [SearchForm]="{'show':false, 'formFields':{'dateRange':{datefrom:{'show':true,'placeholder':'From Delivery Date','value':''}, dateto:{'show':true,'placeholder':'To Delivery Date','value':''}}, 'Selection':{'show':true,'placeholder':'Action', value:'all'}, 'vendorSelection':{'show':true,'placeholder':'Select Vendor', value:{'Vendor_Id':0,'Vendor_Name':'Select All','Status':0,'Rating':0,'Daily_Cap':0,'Delivery_Boy_App':0}}}}"
+            (submitForm)="newFormSubmit($event)" [dropDownList]="actionList" [vendorList]="vendorList"[dateFormat]="'dd-MM-yyyy'"></app-new-reports>
+    </ng-container>
+    <ng-template #vendorView>
+        <app-new-reports [reportsHeader]="tableHeaders" [orginalReportData]="dataSource"
+            [tableDataAction]="[]"
+            [showEditButton]="true"
+            (editSubmit)="onEditClick($event)"
+            [SearchForm]="{'show':false, 'formFields':{'dateRange':{datefrom:{'show':true,'placeholder':'From Delivery Date','value':''}, dateto:{'show':true,'placeholder':'To Delivery Date','value':''}}, 'Selection':{'show':true,'placeholder':'Action', value:'all'}}}"
+            (submitForm)="newFormSubmit($event)" [dropDownList]="actionList" [vendorList]="vendorList"[dateFormat]="'dd-MM-yyyy'"></app-new-reports>
+    </ng-template>
+    </div>
+  </div>
+
+</mat-drawer-container>
+
+

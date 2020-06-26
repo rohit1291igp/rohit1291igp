@@ -1,6 +1,6 @@
 <div class="main-container">
     <!-- Filter Form -->
-    <mat-card>
+    <mat-card *ngIf="SearchForm?.show">
         <form [formGroup]="myForm" (ngSubmit)="onSubmit(myForm)">
             <div class="form-container">
                 <div class="d-flex">
@@ -98,7 +98,10 @@
                                 *ngIf="getEditTableCell(col.id) && col.id!=='Proc_Type_Vendor'" class="fa fa-edit" style="cursor: pointer;"
                                 (click)="openEditWindow(element, col.id, i)"></i>
                         </ng-container>
-                        <ng-container *ngIf="getRowCellValue(element[col.id]) == 'img'"><img
+                        <ng-container *ngIf="col.id==='actions'">
+                            <button mat-button (click)="onEditAction(element)" >Edit</button>
+                        </ng-container>
+                        <ng-container *ngIf="getRowCellValue(element[col.id]) === 'img'"><img
                                 src="{{env?.componentImageUrl+element[col.id]}}" width="50" height="50">
                         </ng-container>
                         <ng-container *ngIf="getRowCellValue(element[col.id]) == 'menu' && element[col.id].length > 0">
@@ -106,8 +109,8 @@
                                 <div *ngFor="let x of element[col.id]" class="img-grid"><img src="{{env?.componentImageUrl+x}}" width="100" height="100" (click)="imgPreview(env?.componentImageUrl+x)"></div>
                             </ng-container>
                             <ng-template #noImg>
-                                <button mat-button [matMenuTriggerFor]="menu"><i class="fa fa-caret-down"
-                                        aria-hidden="true"></i>{{element[col.id]}}</button>
+                                <span style="cursor: pointer;" mat-button [matMenuTriggerFor]="menu"><i class="fa fa-caret-down"
+                                        aria-hidden="true"></i>{{element[col.id]}}</span>
                                 <mat-menu #menu="matMenu">
                                     <button mat-menu-item *ngFor="let x of element[col.id]">{{x}}</button>
                                 </mat-menu>

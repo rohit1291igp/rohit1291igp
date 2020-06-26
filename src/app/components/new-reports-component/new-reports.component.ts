@@ -48,6 +48,8 @@ export class NewReportsComponent implements OnInit {
     @Input() tableDataAction: any;
     //Table Header Array
     @Input() reportsHeader: any
+    // Show Edit Action at End
+    @Input() showEditButton:boolean;
     // Emit order data to open order tray
     @Output() viewOrder = new EventEmitter();
     //table pagination
@@ -162,6 +164,10 @@ export class NewReportsComponent implements OnInit {
         }
     }
 
+    onEditAction(element){
+        this.editSubmit.emit(element);
+    }
+
     applyFilter(filterValue: any) {
         // this.myForm.controls['filter'].setValue(filterValue);
         this.dataSource.filter = filterValue.target.value.trim().toLowerCase();
@@ -191,7 +197,7 @@ export class NewReportsComponent implements OnInit {
                 };
             }
         }
-        if (typeof rowData == 'number' || typeof rowData == 'string' && !(rowData.includes('.jpg') || rowData.includes('.png'))) {
+        if (typeof rowData =='boolean' || typeof rowData == 'number' || typeof rowData == 'string' && !(rowData.includes('.jpg') || rowData.includes('.png'))) {
             return rowData;
         } else {
             return 'img'
@@ -295,6 +301,11 @@ export class NewReportsComponent implements OnInit {
     const filterValue = name.toLowerCase();
 
     return this.stockComponentList.filter(option => option.Component_Name.toLowerCase().indexOf(filterValue) === 0);
+  }
+
+  isArray(value){
+      console.log(value)
+      return Array.isArray(value)
   }
 }
 

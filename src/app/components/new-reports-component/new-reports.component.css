@@ -575,3 +575,12 @@ mat-row:nth-child(odd) {
     max-width: 50px;
     max-height: 30px;
 }
+
+
+.mat-row {
+    height: auto;
+  }
+  
+  .mat-cell {
+    padding: 8px 8px 8px 0;
+  }
