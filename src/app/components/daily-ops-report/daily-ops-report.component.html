@@ -1,14 +1,14 @@
 <mat-card class="main-card-container">
     <form [formGroup]="myForm" (ngSubmit)="Download(myForm)">
         <div class="d-flex">
-            <mat-form-field class="m-8" [ngClass]="{'full-width': showWarehouseDropdown}">
+            <mat-form-field class="m-8" [ngClass]="{'full-width': showWarehouseDropdown && myForm.value.warehouseopsreport == 1}">
                 <mat-label>Choose Warehouse Ops Report</mat-label>
                 <mat-select formControlName="warehouseopsreport">
                     <mat-option value="1">Warehouse Ops</mat-option>
                     <mat-option value="2">Courier Ops</mat-option>
                 </mat-select>
             </mat-form-field>
-            <mat-form-field *ngIf="showWarehouseDropdown" class="m-8 full-width">
+            <mat-form-field *ngIf="showWarehouseDropdown && myForm.value.warehouseopsreport == 1" class="m-8 full-width">
                 <mat-label>Choose Warehouse Name</mat-label>
                 <mat-select formControlName="warehousename">
                     <mat-option value="4">Lucknow</mat-option>

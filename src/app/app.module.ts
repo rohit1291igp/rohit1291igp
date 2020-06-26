@@ -62,6 +62,7 @@ import { MomentDateAdapter, MatMomentDateModule } from '@angular/material-moment
 import { editComponent } from './components/reports/reports.component';
 import { DailyOpsReportComponent } from './components/daily-ops-report/daily-ops-report.component';
 import {StockComponentsReportsComponent} from './components/stock-components-reports/stock-components-reports.component';
+import { DeliveryTimeManagementComponent } from './components/delivery-time-management/delivery-time-management.component';
 
 
 
@@ -95,7 +96,8 @@ export function ConfigLoader(envConfig: envConfig) {
     editComponent,
     PerformanceReportComponent,
     DailyOpsReportComponent,
-    StockComponentsReportsComponent
+    StockComponentsReportsComponent,
+    DeliveryTimeManagementComponent
     // AutoSelectionComponent
   ],
   imports: [

@@ -11,6 +11,7 @@ import { PerformanceReportComponent } from './components/performance-report/perf
 import { StockComponentsReportsComponent } from './components/stock-components-reports/stock-components-reports.component';
 import { AuthGuard } from './services/auth-guard.service';
 import { DailyOpsReportComponent } from './components/daily-ops-report/daily-ops-report.component';
+import { DeliveryTimeManagementComponent } from './components/delivery-time-management/delivery-time-management.component';
 
 
 
@@ -95,7 +96,12 @@ const route: Routes = [
     canActivate: [AuthGuard]
   },
   {
-    path:'dailywarehouseOpsReport',
+    path: 'deliveryTimeManagement',
+    component: DeliveryTimeManagementComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'dailywarehouseOpsReport',
     component: DailyOpsReportComponent
   },
   {
@@ -104,7 +110,7 @@ const route: Routes = [
     canActivate: [AuthGuard]
   },
   {
-    path:'payout-dashboard',
+    path: 'payout-dashboard',
     component: PayoutDashboardComponent
   },
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },

@@ -63,6 +63,8 @@ export class NewReportsComponent implements OnInit {
     toppings = new FormControl();
     @Input() dropDownList: string[];
 
+    @Output() editData = new EventEmitter();
+
     @Input() componentDropDownList: any[];
     //Vendor List
     @Input() vendorList: any[];
@@ -92,18 +94,18 @@ export class NewReportsComponent implements OnInit {
             datefrom: [new Date()],
             dateto: [new Date()],
             vendorDetail: [''],
-            
+
         });
 
         if (this.SearchForm.formFields.Selection) {
             this.myForm.controls['selection'].setValue(this.SearchForm.formFields.Selection.value);
         }
-        
+
         this.filteredComponentsOptions = this.myComponentControl.valueChanges
             .pipe(
                 startWith(''),
                 map(value => typeof value === 'string' ? value : value['Component_Name']),
-                map(name => name ? this._filter(name) : this.componentDropDownList)
+                map(name => name ? this.componentfilter(name) : this.componentDropDownList)
 
             );
 
@@ -122,11 +124,11 @@ export class NewReportsComponent implements OnInit {
         }, 100)
     }
 
-    displayFn(component: any): string {
+    componenetDisplayFn(component: any): string {
         return component && component.Component_Name ? component.Component_Name : '';
     }
 
-    private _filter(name: string): any[] {
+    private componentfilter(name: string): any[] {
         const filterValue = name.toLowerCase();
         return this.componentDropDownList.filter(option => option.Component_Name.toLowerCase().indexOf(filterValue) === 0);
     }
@@ -180,7 +182,7 @@ export class NewReportsComponent implements OnInit {
 
     getHeaderCellValue(headerData: any) {
 
-        headerData = headerData.replace(/([A-Z])/g, ' $1').replace(/^./, function (str) { return str.toUpperCase(); });
+        //headerData = headerData.replace(/([A-Z])/g, ' $1').replace(/^./, function (str) { return str.toUpperCase(); });
         if (headerData.includes('_')) {
             return headerData.replace(/_|_/g, ' ');
         } else {
@@ -189,7 +191,7 @@ export class NewReportsComponent implements OnInit {
     }
 
     getRowCellValue(rowData: any) {
-        if (rowData == undefined) {
+        if (rowData == undefined || rowData == '') {
             return '-'
         }
         if (typeof rowData == 'object') {
@@ -222,12 +224,14 @@ export class NewReportsComponent implements OnInit {
     openEditWindow(rowData, colName, index) {
         const dialogRef = this.dialog.open(editComponent, {
             width: '250px',
-            data: { 'rowData': rowData[colName], 'colName': this.getHeaderCellValue(colName) }
+            data: { 'rowData': rowData, 'colName': this.getHeaderCellValue(colName).replace(/ /g, '_') }
         });
 
         dialogRef.afterClosed().subscribe(result => {
             rowData = 100;
             console.log('The dialog was closed');
+            console.log(result);
+            this.editData.emit(result);
         });
 
     }
@@ -269,6 +273,7 @@ export class NewReportsComponent implements OnInit {
 
         dialogRef.afterClosed().subscribe(result => {
             console.log('The dialog was closed');
+            console.log(result);
         });
     }
 }
