@@ -2,7 +2,7 @@ import { CdkTableModule } from '@angular/cdk/table';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatButtonModule, MatCardModule, MatCheckboxModule, MatDialogModule, MatFormFieldModule, MatIconModule, MatInputModule, MatMenuModule, MatPaginatorModule, MatProgressBarModule, MatProgressSpinnerModule, MatSnackBarModule, MatSortModule, MatTableModule,MatListModule, MatRadioModule, MatSelectModule, MatExpansionModule, MatDatepickerModule , MatAutocompleteModule} from '@angular/material';
+import { MatButtonModule, MatCardModule, MatCheckboxModule, MatDialogModule, MatFormFieldModule, MatIconModule, MatInputModule, MatMenuModule, MatPaginatorModule, MatProgressBarModule, MatProgressSpinnerModule, MatSnackBarModule, MatSortModule, MatTableModule,MatListModule, MatRadioModule, MatSelectModule, MatExpansionModule, MatDatepickerModule , MatAutocompleteModule,MatSidenavModule} from '@angular/material';
 import { MyDatePickerModule } from 'mydatepicker';
 import { LoaderComponent } from '../../components/loader/loader.component';
 import { OrdersActionTrayComponent } from '../../components/orders-action-tray/orders-action-tray.component';
@@ -38,7 +38,8 @@ import { AutoSelectionComponent } from 'app/components/autoselection/auto-select
     MatDatepickerModule,
     MatRadioModule,
     MatSelectModule,
-    MatAutocompleteModule
+    MatAutocompleteModule,
+    MatSidenavModule
   ],
   declarations: [
     OrdersActionTrayComponent,
@@ -79,7 +80,8 @@ import { AutoSelectionComponent } from 'app/components/autoselection/auto-select
     MatRadioModule,
     MatSelectModule,
     AutoSelectionComponent,
-    MatAutocompleteModule
+    MatAutocompleteModule,
+    MatSidenavModule
   ],
 })
 export class SharedModule {
