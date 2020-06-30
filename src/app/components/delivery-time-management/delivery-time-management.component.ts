@@ -254,14 +254,4 @@ export class DeliveryTimeManagementComponent implements OnInit {
 
 }
 
-@NgModule({
-	imports: [CommonModule, MatSidenavModule, MatIconModule],
-	declarations: [DeliveryTimeManagementComponent],
-	exports: [DeliveryTimeManagementComponent]
-})
-
-export class DeliveryTimeManagementComponentModule {
-
-}
-
 
