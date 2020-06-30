@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ChangeDetectionStrategy, SimpleChanges, IterableDiffers, DoCheck, AfterViewChecked, AfterViewInit, NgModule } from '@angular/core';
 import { FormControl, FormGroup, FormBuilder } from '@angular/forms';
-import { MatDialog, MatPaginator, MatSort, MatTableDataSource, MatDatepickerInputEvent } from '@angular/material';
+import { MatDialog, MatPaginator, MatSort, MatTableDataSource, MatDatepickerInputEvent, MatAutocompleteModule } from '@angular/material';
 import { editComponent } from '../reports/reports.component';
 import { DatePipe, CommonModule } from '@angular/common';
 import { SharedModule } from 'app/shared-module/shared/shared.module';
@@ -13,25 +13,25 @@ import { Observable } from 'rxjs';
 import { startWith,map } from 'rxjs/operators';
 import { OrderStockComponent } from '../order-stocks/order-stock.component';
 
-interface Field{
-    show:boolean,
-    placeholder:string,
-    value?:any;
+interface Field {
+    show: boolean,
+    placeholder: string,
+    value?: any;
 }
-interface formFields{
-    multipleSelection:Field,
-    dateRange:dateRange,
-    Selection:Field,
-    textSearch:Field,
-    vendorSelection:Field
+interface formFields {
+    multipleSelection: Field,
+    dateRange: dateRange,
+    Selection: Field,
+    textSearch: Field,
+    vendorSelection: Field,
 }
-interface dateRange{
-    datefrom:Field,
-    dateto:Field
+interface dateRange {
+    datefrom: Field,
+    dateto: Field
 }
-interface SearchForm{
-    show:boolean,
-    formFields:formFields
+interface SearchForm {
+    show: boolean,
+    formFields: formFields
 }
 @Component({
     selector: 'app-new-reports',
@@ -65,10 +65,14 @@ export class NewReportsComponent implements OnInit {
     // fileUpload modal
     @Output() fileUpload = new EventEmitter();
     //Date format
-    @Input() dateFormat:string;
+    @Input() dateFormat: string;
     columnNames = [];
     toppings = new FormControl();
     @Input() dropDownList: string[];
+
+    @Output() editData = new EventEmitter();
+
+    @Input() componentDropDownList: any[];
     //Vendor List
     @Input() vendorList:any[];
     @Input() stockComponentList:any[];
@@ -78,14 +82,18 @@ export class NewReportsComponent implements OnInit {
     myForm: FormGroup;
     btnType = '';
     constructor(
-        private dialog: MatDialog, 
+        private dialog: MatDialog,
         private _differs: IterableDiffers,
         private fb: FormBuilder,
-        ) {
+    ) {
 
     }
     selected;
     selected_stock_comp;
+    filteredComponentsOptions: Observable<any[]>;
+    myComponentControl = new FormControl();
+    componentSelected;
+
     ngOnInit() {
         this.myForm = this.fb.group({
             name: [''],
@@ -98,21 +106,26 @@ export class NewReportsComponent implements OnInit {
             procDetail:[''],
             stockComponent:['']
         });
-        this.myForm.controls['selection'].setValue(this.SearchForm.formFields.Selection.value);
-        if(this.env.userType == 'admin'){
+
+        if (this.SearchForm.formFields.Selection) {
+            this.myForm.controls['selection'].setValue(this.SearchForm.formFields.Selection.value);
+        }
+
+        this.filteredComponentsOptions = this.myComponentControl.valueChanges
+            .pipe(
+                startWith(''),
+                map(value => typeof value === 'string' ? value : value['Component_Name']),
+                map(name => name ? this.componentfilter(name) : this.componentDropDownList)
+
+            );
+
+        //this.myForm.controls['selection'].setValue(this.SearchForm.formFields.Selection.value);
+        if (this.env.userType == 'admin') {
             this.selected = this.SearchForm.formFields.vendorSelection.value;
             this.myForm.controls['vendorDetail'].setValue(this.SearchForm.formFields.vendorSelection.value);
         }
-        
+
         this.createHeader(this.reportsHeader);
-        // this.orginalReportData.forEach((e) => {
-        //     for (let k in e) {
-        //         if (k) {
-        //             k = k.replace('_', '').replace('_', '');
-        //         }
-        //     }
-        // })
-       
         this.dataSource = new MatTableDataSource(this.orginalReportData);
 
         setTimeout(() => {
@@ -129,25 +142,39 @@ export class NewReportsComponent implements OnInit {
       );
 
     }
+
+    componenetDisplayFn(component: any): string {
+        return component && component.Component_Name ? component.Component_Name : '';
+    }
+
+    private componentfilter(name: string): any[] {
+        const filterValue = name.toLowerCase();
+        return this.componentDropDownList.filter(option => option.Component_Name.toLowerCase().indexOf(filterValue) === 0);
+    }
+    getComponents(obj: any) {
+        this.componentSelected = obj
+    }
+
     compareObjects(o1: any, o2: any): boolean {
         return o1.Vendor_Id === o2.Vendor_Id;
-      }
-    createHeader(reportsHeader){
+    }
+
+    createHeader(reportsHeader) {
         this.columnNames = [];
-        new Promise((resolve)=>{
+        new Promise((resolve) => {
             reportsHeader.forEach((e) => {
                 this.columnNames.push({ id: e, value: e });
             });
-            if(reportsHeader.length == this.columnNames.length){
+            if (reportsHeader.length == this.columnNames.length) {
                 resolve(this.columnNames);
             }
-        }).then((data:any)=>{
+        }).then((data: any) => {
             if (data.length > 0) {
                 this.displayedColumns = data.map(x => x.id);
             }
         })
-        
-        
+
+
     }
 
     ngOnChanges(changes: SimpleChanges) {
@@ -157,7 +184,7 @@ export class NewReportsComponent implements OnInit {
                 this.dataSource.sort = this.sort;
                 this.dataSource.paginator = this.paginator;
             }, 100)
-            if(changes["reportsHeader"] && changes["reportsHeader"].currentValue){
+            if (changes["reportsHeader"] && changes["reportsHeader"].currentValue) {
                 this.createHeader(changes["reportsHeader"].currentValue);
 
             }
@@ -177,6 +204,8 @@ export class NewReportsComponent implements OnInit {
     }
 
     getHeaderCellValue(headerData: any) {
+
+        //headerData = headerData.replace(/([A-Z])/g, ' $1').replace(/^./, function (str) { return str.toUpperCase(); });
         if (headerData.includes('_')) {
             return headerData.replace(/_|_/g, ' ');
         } else {
@@ -185,7 +214,7 @@ export class NewReportsComponent implements OnInit {
     }
 
     getRowCellValue(rowData: any) {
-        if (rowData == undefined) {
+        if (rowData == undefined || rowData == '') {
             return '-'
         }
         if (typeof rowData == 'object') {
@@ -205,6 +234,8 @@ export class NewReportsComponent implements OnInit {
     }
 
     getEditTableCell(col) {
+        if (!this.tableDataAction)
+            return false;
         let key = this.tableDataAction.find(m => m && Object.keys(m) == col);
         if (key && key[col][0] == 'Edit') {
             return true;
@@ -245,6 +276,17 @@ export class NewReportsComponent implements OnInit {
                 subscribedDialog.unsubscribe();
             });
         }
+        const dialogRef = this.dialog.open(editComponent, {
+            width: '250px',
+            data: { 'rowData': rowData, 'colName': this.getHeaderCellValue(colName).replace(/ /g, '_') }
+        });
+
+        dialogRef.afterClosed().subscribe(result => {
+            rowData = 100;
+            console.log('The dialog was closed');
+            console.log(result);
+            this.editData.emit(result);
+        });
 
     }
 
@@ -273,18 +315,20 @@ export class NewReportsComponent implements OnInit {
         const datefrom = pipe.transform(data.value.datefrom, 'yyyy-MM-dd');
         const dateto = pipe.transform(data.value.dateto, 'yyyy-MM-dd');
         data.value['btnType'] = this.btnType;
+        data.value['componentSelected'] = this.componentSelected;
         this.submitForm.emit(data.value);
     }
 
-    imgPreview(imgSrc){
+    imgPreview(imgSrc) {
         const dialogRef = this.dialog.open(ImgPreviewComponent, {
             width: '50%',
-            data: {'imgSrc':imgSrc}
-          });
-      
-          dialogRef.afterClosed().subscribe(result => {
+            data: { 'imgSrc': imgSrc }
+        });
+
+        dialogRef.afterClosed().subscribe(result => {
             console.log('The dialog was closed');
-          });
+            console.log(result);
+        });
     }
     onAddComponent(){
         this.fileUpload.emit('')
@@ -310,10 +354,10 @@ export class NewReportsComponent implements OnInit {
 }
 
 @NgModule({
-    imports:[CommonModule,SharedModule,CapitalizePipeModule, DateFormatterPipeModule],
-    declarations:[NewReportsComponent],
-    exports:[NewReportsComponent]
+    imports: [CommonModule, SharedModule, CapitalizePipeModule, DateFormatterPipeModule, MatAutocompleteModule],
+    declarations: [NewReportsComponent],
+    exports: [NewReportsComponent]
 })
-export class NewReportsComponentModule{
+export class NewReportsComponentModule {
 
 }
