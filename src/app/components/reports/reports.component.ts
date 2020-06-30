@@ -1,4 +1,4 @@
-import { animate, Component, ElementRef, HostListener, Inject, OnInit, sequence, style, transition, trigger, ViewChild } from '@angular/core';
+import { animate, Component, ElementRef, HostListener, Inject, OnInit, sequence, style, transition, trigger, ViewChild, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { Headers, RequestOptions } from "@angular/http";
 import { MatDialog, MatDialogRef, MatSnackBar, MAT_DIALOG_DATA, MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
@@ -2311,14 +2311,18 @@ getDeliveryBoyList(){
     `
 })
 export class editComponent implements OnInit {
+    @Output() formSubmit = new EventEmitter()
     myForm: FormGroup;
     constructor(
         public dialogRef: MatDialogRef<editComponent>,
-        @Inject(MAT_DIALOG_DATA) public data: any, private fb: FormBuilder) {
+        @Inject(MAT_DIALOG_DATA) public data: any,private fb: FormBuilder,
+        private backendService:BackendService
+        ) {
 
     }
     ngOnInit() {
-        if (typeof this.data.rowData == 'object' && this.data.rowData != null) {
+        console.log("prvz before edit",this.data)
+        if(typeof this.data.rowData == 'object' && this.data.rowData != null){
             this.myForm = this.fb.group({
                 fieldName: [this.data.rowData[this.data.colName], Validators.required]
             });
@@ -2330,7 +2334,9 @@ export class editComponent implements OnInit {
 
     }
 
-    onSubmit(data) {
+    onSubmit(data){
+        console.log("prvz edit submit",data)
+        this.formSubmit.emit(data);
         data.data = this.data;
         this.dialogRef.close(data);
     }
@@ -2339,5 +2345,3 @@ export class editComponent implements OnInit {
         this.dialogRef.close();
     }
 }
-
-

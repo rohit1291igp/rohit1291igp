@@ -10,10 +10,10 @@ import { PayoutDashboardComponent } from './components/payout-dashboard/payout-d
 import { PerformanceReportComponent } from './components/performance-report/performance-report.component';
 import { StockComponentsReportsComponent } from './components/stock-components-reports/stock-components-reports.component';
 import { AuthGuard } from './services/auth-guard.service';
-import { DailyOpsReportComponent } from './components/daily-ops-report/daily-ops-report.component';
+import { ProductReportComponent } from './components/product-report/product-report.component';
+import { HolidayCalenderManagementComponent } from './components/holiday-calender-management/holiday-calender-management.component';
 import { DeliveryTimeManagementComponent } from './components/delivery-time-management/delivery-time-management.component';
-
-
+import { DailyOpsReportComponent } from './components/daily-ops-report/daily-ops-report.component';
 
 
 const route: Routes = [
@@ -93,6 +93,16 @@ const route: Routes = [
   {
     path: 'performanceReport',
     component: PerformanceReportComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'productReport',
+    component: ProductReportComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'HolidayCalendarManagement',
+    component: HolidayCalenderManagementComponent,
     canActivate: [AuthGuard]
   },
   {
