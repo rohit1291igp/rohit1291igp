@@ -5,6 +5,7 @@ import { MatDialog, MatPaginator, MatSort, MatTableDataSource, MatDatepickerInpu
 import { BackendService } from '../../services/backend.service';
 import { DatePipe, CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
+import { HttpClient } from "@angular/common/http";
 
 import { MatSidenav } from "@angular/material/sidenav";
 
@@ -45,56 +46,56 @@ export class DeliveryTimeManagementComponent implements OnInit {
 			}
 		}
 	}
-
-	responseData = {
-		"summary": [
-			{
-				"label": "Total Sku",
-				"value": "2"
-			}
-		],
-		"tableHeaders": [
-			"SKU",
-			"Product_Delivery_Days",
-			"Source",
-			"Desination_key",
-			"Destination",
-			"Delivery_Days"
-		],
-		"tableData": [
-			{
-				"SKU": "M11111717",
-				"Product_Delivery_Days": 2,
-				"Source": [
-					"Jaipur WH",
-					"Mumbai WH",
-					"Lucknow WH"
-				],
-				"Desination_key": "city",
-				"Destination": [
-					"Pune",
-					"Jaipur",
-					"Indore"
-				],
-				"Delivery_Days": 2
-			},
-			{
-				"SKU": "M11111787",
-				"Product_Delivery_Days": 2,
-				"Source": [
-					"Jaipur WH",
-					"Lucknow WH"
-				],
-				"Desination_key": "city",
-				"Destination": [
-					"Mumbai",
-					"bhopal"
-				],
-				"Delivery_Days": 2
-			}
-		],
-		"tableDataAction": []
-	}
+	responseData;
+	// responseData = {
+	// 	"summary": [
+	// 		{
+	// 			"label": "Total Sku",
+	// 			"value": "2"
+	// 		}
+	// 	],
+	// 	"tableHeaders": [
+	// 		"SKU",
+	// 		"Product_Delivery_Days",
+	// 		"Source",
+	// 		"Desination_key",
+	// 		"Destination",
+	// 		"Delivery_Days"
+	// 	],
+	// 	"tableData": [
+	// 		{
+	// 			"SKU": "M11111717",
+	// 			"Product_Delivery_Days": 2,
+	// 			"Source": [
+	// 				"Jaipur WH",
+	// 				"Mumbai WH",
+	// 				"Lucknow WH"
+	// 			],
+	// 			"Desination_key": "city",
+	// 			"Destination": [
+	// 				"Pune",
+	// 				"Jaipur",
+	// 				"Indore"
+	// 			],
+	// 			"Delivery_Days": 2
+	// 		},
+	// 		{
+	// 			"SKU": "M11111787",
+	// 			"Product_Delivery_Days": 2,
+	// 			"Source": [
+	// 				"Jaipur WH",
+	// 				"Lucknow WH"
+	// 			],
+	// 			"Desination_key": "city",
+	// 			"Destination": [
+	// 				"Mumbai",
+	// 				"bhopal"
+	// 			],
+	// 			"Delivery_Days": 2
+	// 		}
+	// 	],
+	// 	"tableDataAction": []
+	// }
 
 	warehouseList = [
 		{ key: 0, value: 'All' },
@@ -139,7 +140,7 @@ export class DeliveryTimeManagementComponent implements OnInit {
 
 	cancelForm(data) { }
 
-	onSearchSubmit(data) {
+	onSubmit(data) {
 		switch (this.btnType) {
 			case 'search': {
 				this.getSearchResults(data);
@@ -167,29 +168,68 @@ export class DeliveryTimeManagementComponent implements OnInit {
 		} else {
 			fkaid = localStorage.fkAssociateId;
 		}
+
 		let destinationKey = data.value.destinationType.toLowerCase();
+		///v1/admin/warehousedt/skuwisedeliverytime?startLimit=0&&endLimit=100
+		///v1/admin/warehousedt/skuwisedeliverytime?whId=4&&destinationkey=country&&startLimit=0&&endLimit=100
 		let destinationList = this.extractArrayFromTextArea(data.value.destinations);
-		let reqObj = {
-			url: 'getListOfComponents?startLimit=0&endLimit=5000',
-			method: "get",
-			payload: {
-				sku: [],
-				destinationKey: '',
-				destinationList: []
+		let reqObj :any = {};
+		//let payload;
+
+
+		reqObj.url += "&whId=" + fkaid;
+		if (sku_id.length > 0 && destinationList.length > 0) {
+
+			reqObj.url += "&destinationkey=" + destinationKey;
+			reqObj = {
+				url: '/v1/admin/warehousedt/fakerapi1skuwisedeliverytime?startLimit=0&endLimit=100',
+				method: "post",
+				payload: {
+					SKU: sku_id,
+					DESTINATION: destinationList
+				}
 			}
 		}
-		//let payload;
-		if (fkaid) {
-			reqObj.url += "&fkaid=" + fkaid;
+		else if (sku_id.length > 0) {
+
+			reqObj = {
+				url: '/v1/admin/warehousedt/fakerapi1skuwisedeliverytime?startLimit=0&endLimit=100',
+				method: "post",
+				payload: {
+					SKU: sku_id,
+				}
+			}
 		}
-		if (sku_id) {
-			reqObj.payload.sku = sku_id
+		else if (destinationList.length > 0) {
+
+
+			reqObj = {
+				url: '/v1/admin/warehousedt/fakerapi1skuwisedeliverytime?startLimit=0&endLimit=100',
+				method: "post",
+				payload: {
+					DESTINATION: destinationList
+				}
+			}
 		}
-		if (destinationKey && destinationList) {
-			reqObj.payload.destinationKey = destinationKey;
-			reqObj.payload.destinationList = destinationList;
+		if (destinationKey) {
+			reqObj.url += "&destinationkey=" + destinationKey;
 		}
-		// this.dataSource = 
+		else {
+			reqObj.url += "&destinationkey=City";
+		}
+		console.log('reqObj');
+		console.log(reqObj);
+
+		_this.BackendService.makeAjax(reqObj, function (err, response, headers) {
+			if (err || response.error) {
+				console.log('Error=============>', err, response.errorCode);
+				alert('Something went wrong.');
+				return;
+			}
+			_this.responseData = response;
+			alert('Updated Succesfully.');
+			console.log('sidePanel Response --->', response);
+		})
 	}
 
 	updateForm(data) {
@@ -240,12 +280,17 @@ export class DeliveryTimeManagementComponent implements OnInit {
 	getListViewName(arr) {
 		let str = '';
 		arr.some((element, index) => {
-			str += element + ', ';
 			if (str.length > 20) return true
-			else return false
+			str += element + ', ';
+			return false
+
 		})
-		str = str.slice(0, 20);
-		return str += '...'
+		if (str.length > 20) {
+			str = str.slice(0, 20);
+			str += '...'
+
+		}
+		return str;
 	}
 
 	getHeader(str) {
