@@ -4,7 +4,7 @@ import { DatePipe } from '@angular/common';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { HttpModule } from '@angular/http';
-import { MatButtonModule, MatCardModule, MatCheckboxModule, MatDatepickerModule, MatDialogModule, MatDialogRef, MatFormFieldModule, MatIconModule, MatInputModule, MatListModule, MatMenuModule, MatNativeDateModule, MatPaginatorModule, MatProgressBarModule, MatProgressSpinnerModule, MatRadioModule, MatSelectModule, MatSnackBarModule, MatSortModule, MatTableModule, MAT_DIALOG_DATA, MatSidenavModule,MatAutocompleteModule } from '@angular/material';
+import { MatButtonModule, MatCardModule, MatCheckboxModule, MatDatepickerModule, MatDialogModule, MatDialogRef, MatFormFieldModule, MatIconModule, MatInputModule, MatListModule, MatMenuModule, MatNativeDateModule, MatPaginatorModule, MatProgressBarModule, MatProgressSpinnerModule, MatRadioModule, MatSelectModule, MatSnackBarModule, MatSortModule, MatTableModule, MAT_DIALOG_DATA, MatSidenavModule,MatAutocompleteModule, MatTabsModule } from '@angular/material';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
@@ -65,6 +65,8 @@ import {StockComponentsReportsComponent} from './components/stock-components-rep
 import { DeliveryTimeManagementComponent } from './components/delivery-time-management/delivery-time-management.component';
 import { ProductReportComponent } from './components/product-report/product-report.component';
 import { HolidayCalenderManagementComponent } from './components/holiday-calender-management/holiday-calender-management.component';
+import { ProductDecentralizationComponent } from './components/product-decentralization/product-decentralization.component';
+import { DeliveryPriorityComponent } from './components/product-decentralization/delivery-priority/delivery-priority.component';
 
 
 
@@ -101,7 +103,9 @@ export function ConfigLoader(envConfig: envConfig) {
     HolidayCalenderManagementComponent,
     DailyOpsReportComponent,
     StockComponentsReportsComponent,
-    DeliveryTimeManagementComponent
+    DeliveryTimeManagementComponent,
+    ProductDecentralizationComponent,
+    DeliveryPriorityComponent
     // AutoSelectionComponent
   ],
   imports: [
@@ -132,6 +136,7 @@ export function ConfigLoader(envConfig: envConfig) {
     MatNativeDateModule,
     MatSidenavModule,
     MatAutocompleteModule,
+    MatTabsModule,
     routing,
     SelectModule,
     MyDatePickerModule,
