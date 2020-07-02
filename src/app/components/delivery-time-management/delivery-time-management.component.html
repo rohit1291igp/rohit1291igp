@@ -82,7 +82,7 @@
 								<button class="btnRadius" id="update" type="submit" mat-raised-button color="accent"
 									(click)="btnType = 'update'">Update</button>
 								<button class="btnRadius" id="cancel" type="submit" mat-raised-button color="warn"
-									(click)="btnType = 'cancel'">Cancel</button>
+									(click)="btnType = 'cancel'">Clear</button>
 
 							</div>
 							<!-- <div class="width50 d-flex">
@@ -91,28 +91,20 @@
 						</div>
 					</div>
 				</form>
-				<div class="mat-elevation-z8" *ngIf="responseData?.tableData else noRecord">
-					<mat-table [dataSource]="responseData.tableData">
-						<ng-container [matColumnDef]="column" *ngFor="let column of responseData.tableHeaders">
+				<div class="mat-elevation-z8" *ngIf="dataSource?.data?.length > 0 else noRecord">
+					<mat-table [dataSource]="dataSource">
+						<ng-container [matColumnDef]="column" *ngFor="let column of tableHeaders">
 							<mat-header-cell *matHeaderCellDef> {{getHeader(column)}} </mat-header-cell>
 							<mat-cell *matCellDef="let element">
-								<ng-container *ngIf="column!='Source'&& column!='Destination' else arrayView">
-									{{element[column]}}
+								<ng-container>
+									{{element[column] || '-'}}
 								</ng-container>
-								<ng-template #arrayView>
-									<mat-select placeholder="{{getListViewName(element[column])}}">
-										<mat-option *ngFor="let ele of element[column]">
-											{{ele}}
-										</mat-option>
-									</mat-select>
-								</ng-template>
 							</mat-cell>
 						</ng-container>
-						<mat-header-row *matHeaderRowDef="responseData.tableHeaders"></mat-header-row>
-						<mat-row *matRowDef="let row; columns: responseData.tableHeaders;"></mat-row>
+						<mat-header-row *matHeaderRowDef="tableHeaders"></mat-header-row>
+						<mat-row *matRowDef="let row; columns: tableHeaders;"></mat-row>
 					</mat-table>
-					<mat-paginator [pageSizeOptions]="[5, 10, 20]" length="{{responseData?.tableData?.length}}"
-						showFirstLastButtons>
+					<mat-paginator [pageSizeOptions]="[5, 10, 20]" length="{{dataSource?.length}}" showFirstLastButtons>
 					</mat-paginator>
 				</div>
 				<ng-template #noRecord>
