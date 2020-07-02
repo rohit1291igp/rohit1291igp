@@ -115,7 +115,7 @@ export class DeliveryTimeManagementComponent implements OnInit {
 		let destinationKey = data.value.destinationType.toLowerCase();
 		let destinationList = _this.extractArrayFromTextArea(data.value.destinations);
 		let reqObj: any = {
-			url: 'v1/admin/warehousedt/fakerapi1skuwisedeliverytime?startLimit=0&endLimit=1000',
+			url: 'warehousedt/skuwisedeliverytime?startLimit=0&endLimit=1000',
 			method: "post",
 			payload: <any>{}
 		};
@@ -186,7 +186,7 @@ export class DeliveryTimeManagementComponent implements OnInit {
 		let destinationKey = data.value.destinationType;
 		let destinationList = _this.extractArrayFromTextArea(data.value.destinations);
 		let reqObj: any = {
-			url: 'v1/admin/warehousedt/fakerapi1updateskudelivertime',
+			url: 'warehousedt/updateskudelivertime',
 			method: "put",
 			payload: <any>{}
 		};
