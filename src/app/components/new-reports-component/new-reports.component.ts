@@ -214,7 +214,7 @@ export class NewReportsComponent implements OnInit {
     }
 
     getRowCellValue(rowData: any) {
-        if (rowData == undefined || rowData == '') {
+        if (rowData == undefined || rowData === '') {
             return '-'
         }
         if (typeof rowData == 'object') {
