@@ -144,6 +144,7 @@ addEventTo(type: string, section:string, event: MatDatepickerInput<Date>) {
     if(this.holidayCalenderForm.get('clearHoliday').value){
       finalObj['Holiday_From']="";
       finalObj['Holiday_To']="";
+      finalObj['Holiday_type']=[];
     }
     if(this.holidayCalenderForm.get('clearSingleTimeslot').value){
       finalObj['Single_Timeslot_From']="";
@@ -260,7 +261,8 @@ addEventTo(type: string, section:string, event: MatDatepickerInput<Date>) {
     if(flag){
       this.holidayCalenderForm.patchValue({
         'holidayDateFrom':'',
-        'holidayDateTo':''
+        'holidayDateTo':'',
+        'deliveryTypes':[]
       })  
     }
     this.holidayCalenderForm.patchValue({
