@@ -14,7 +14,7 @@
     </div>
   </mat-drawer>
 
-  <div style="min-height:80vh;">
+  <div style="min-height:80vh;" class="m-top-2">
     <div class="container">
       <form [formGroup]="holidayCalenderForm" name="HolidayCalender" #f="ngForm" (ngSubmit)="onSubmit($event)">
         <div class="row">
@@ -78,7 +78,7 @@
               
               <mat-form-field>
                 <mat-label>Delivery Types</mat-label>
-                <mat-select formControlName="deliveryTypes" multiple>
+                <mat-select formControlName="deliveryTypes" multiple [disabled]="holidayCalenderForm.get('clearHoliday').value">
                   <mat-select-trigger>
                     {{holidayCalenderForm.get('deliveryTypes').value ? holidayCalenderForm.get('deliveryTypes').value[0] : ''}}
                     <span *ngIf="holidayCalenderForm.get('deliveryTypes').value?.length > 1" class="example-additional-selection">
@@ -97,7 +97,7 @@
             <div *ngIf="selectedFieldForUpdate==='singletimeslot'" class="row">
               <!-- <h4>Single Timeslot</h4> -->
               <mat-form-field class="example-full-width">
-                <mat-label>Single From Date</mat-label>
+                <mat-label>From Date</mat-label>
                 <input matInput [min]="minDate" [max]="maxDate" [matDatepicker]="singleFromPicker"
                 (dateInput)="addEventFrom('input','single', $event)"
                 (dateChange)="addEventFrom('change','single', $event)"
@@ -109,7 +109,7 @@
                 <mat-datepicker #singleFromPicker></mat-datepicker>
               </mat-form-field>
               <mat-form-field class="example-full-width">
-                <mat-label>Single To Date</mat-label>
+                <mat-label>To Date</mat-label>
                 <input matInput [min]="holidayCalenderForm.get('singleDateFrom').value" [max]="maxDate" [matDatepicker]="singleToPicker"
                 (dateInput)="addEventTo('input','single', $event)"
                 (dateChange)="addEventTo('change','single', $event)"

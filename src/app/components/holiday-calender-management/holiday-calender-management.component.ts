@@ -144,6 +144,7 @@ addEventTo(type: string, section:string, event: MatDatepickerInput<Date>) {
     if(this.holidayCalenderForm.get('clearHoliday').value){
       finalObj['Holiday_From']="";
       finalObj['Holiday_To']="";
+      finalObj['Holiday_type']=[];
     }
     if(this.holidayCalenderForm.get('clearSingleTimeslot').value){
       finalObj['Single_Timeslot_From']="";
@@ -184,12 +185,13 @@ addEventTo(type: string, section:string, event: MatDatepickerInput<Date>) {
   }
 
   onEditClick(skuRow){
+    this.onClearAll();
     if(this.selectedFieldForUpdate==='holiday'){
       this.holidayCalenderForm.patchValue({
         "skus":`${skuRow['SKU']}`,
         "holidayDateFrom": `${skuRow['Holiday_From']}`,
         "holidayDateTo": `${skuRow['Holiday_To']}`,
-        "fixedDateDelivery":`${skuRow['Fixed_Date_Delivery']}`,
+        "fixedDateDelivery":skuRow['Fixed_Date_Delivery'],
         "deliveryTypes":skuRow['Holiday_type'],
       })
     }else if(this.selectedFieldForUpdate==='singletimeslot'){
@@ -197,7 +199,7 @@ addEventTo(type: string, section:string, event: MatDatepickerInput<Date>) {
         "skus":`${skuRow['SKU']}`,
         "singleDateFrom": `${skuRow['Single_Timeslot_From']}`,
         "singleDateTo": `${skuRow['Single_Timeslot_To']}`,
-        "fixedDateDelivery":`${skuRow['Fixed_Date_Delivery']}`,
+        "fixedDateDelivery":skuRow['Fixed_Date_Delivery'],
       })
     }
   }
@@ -240,6 +242,9 @@ addEventTo(type: string, section:string, event: MatDatepickerInput<Date>) {
       if(err){
         this.openSnackBar('Unable to fetch!')
       }else{
+        if(response.tableData===null){
+          this.openSnackBar('Unable to fetch data for SKU')
+        }
         this.tableHeaders=response.tableHeaders;
         this.dataSource=response.tableData||[];
         this.tableHeaders.push('actions')
@@ -256,7 +261,8 @@ addEventTo(type: string, section:string, event: MatDatepickerInput<Date>) {
     if(flag){
       this.holidayCalenderForm.patchValue({
         'holidayDateFrom':'',
-        'holidayDateTo':''
+        'holidayDateTo':'',
+        'deliveryTypes':[]
       })  
     }
     this.holidayCalenderForm.patchValue({
@@ -286,7 +292,11 @@ addEventTo(type: string, section:string, event: MatDatepickerInput<Date>) {
 
   checkDeliveryTypesSelect(deliveryType){
     if(deliveryType==="Standard Delivery"){
-      return false
+      if(this.holidayCalenderForm.get('deliveryTypes').value.includes('Fixed Time Delivery')||this.holidayCalenderForm.get('deliveryTypes').value.includes('Midnight Delivery')){
+        return true;
+      }else{
+        return false
+      }
     }else if(this.holidayCalenderForm.get('deliveryTypes').value.includes('Standard Delivery')){
       this.holidayCalenderForm.patchValue({
         deliveryTypes:['Standard Delivery']

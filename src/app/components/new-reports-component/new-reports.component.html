@@ -109,6 +109,7 @@
                     <mat-cell *matCellDef="let element; let i = index">
                         <ng-container
                             *ngIf="getRowCellValue(element[col.id]) != 'img' && getRowCellValue(element[col.id]) != 'menu'">
+                            <span *ngIf="col.id==='Fixed_Date_Delivery'">&nbsp;&nbsp;</span>
                             {{ getRowCellValue(element[col.id]) | dateformatter:dateFormat:col.id}} <i
                                 *ngIf="getEditTableCell(col.id) && col.id!=='Proc_Type_Vendor'" class="fa fa-edit" style="cursor: pointer;"
                                 (click)="openEditWindow(element, col.id, i)"></i>
