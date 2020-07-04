@@ -63,6 +63,7 @@ import { editComponent } from './components/reports/reports.component';
 import { DailyOpsReportComponent } from './components/daily-ops-report/daily-ops-report.component';
 import {StockComponentsReportsComponent} from './components/stock-components-reports/stock-components-reports.component';
 import { DeliveryTimeManagementComponent } from './components/delivery-time-management/delivery-time-management.component';
+import { ProductAvailabilityComponent } from './components/product-decentralized/product-availability/product-availability.component';
 
 
 
@@ -97,7 +98,8 @@ export function ConfigLoader(envConfig: envConfig) {
     PerformanceReportComponent,
     DailyOpsReportComponent,
     StockComponentsReportsComponent,
-    DeliveryTimeManagementComponent
+    DeliveryTimeManagementComponent,
+    ProductAvailabilityComponent
     // AutoSelectionComponent
   ],
   imports: [

@@ -1,0 +1,153 @@
+<mat-sidenav-container (backdropClick)="sidenavClose('backdrop')">
+  <mat-sidenav #sidenav (keydown.escape)="sidenavClose('escape')" disableClose>
+    <!-- Sidebar Errors -->
+    <!-- <p><button mat-button (click)="sidenavClose('toggle button')">Close</button></p> -->
+    <mat-card *ngFor="let ele of responseDataPut?.data?.error">
+      {{ele.msg}} in Row: {{ele.row}}
+    </mat-card>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <div>
+      <mat-card>
+        <form [formGroup]="searchForm" (ngSubmit)="onSubmit(searchForm)">
+          <div class="searchField">
+            <div class="width50" style="border:1px solid #ccc">
+              <div class="form-container">
+                <div class="d-flex">
+                  <div class="width50">
+                    <mat-form-field class="width100">
+                      <mat-label class="mat-label">Enter SKU, WH,Stock, Priority </mat-label>
+                      <textarea matInput formControlName="excelData"
+                        placeholder="{{'\n'}} You can copy-paste from excelsheet" rows="10" col='20'></textarea>
+                    </mat-form-field>
+                    <mat-hint></mat-hint>
+                  </div>
+                  <div style="width:1px; border-left:2px #ccc dotted"></div>
+                  <div class="width50">
+                    <div style="margin-top: 25%; text-align: center;">
+                      <input type="file" id="file" (change)="readExcel($event)" />
+                      <label for="file" class="btn-2" (change)="readExcel($event)">Upload Excel</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="d-flex;" style="text-align: center; ">
+                  <button class="btnRadius" id="view" type="submit" mat-raised-button
+                    (click)="btnType = 'view'">View</button>
+                  <button class="btnRadius" id="add" type="submit" mat-raised-button
+                    (click)="btnType = 'add'">Add</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="width50" style="border:1px solid #ccc">
+              <div class="form-container">
+                <div class="d-flex">
+                  <div class="width50">
+                    <mat-form-field>
+                      <mat-label>Enter SKU IDs</mat-label>
+                      <textarea matInput formControlName="sku_id" placeholder="You can enter multiple SKU IDs" rows="10"
+                        col='20'></textarea>
+                    </mat-form-field>
+                  </div>
+                  <div class="width50">
+                    <mat-form-field>
+                      <mat-label>Source</mat-label>
+                      <mat-select formControlName="source" [(value)]='searchForm.value.source'>
+                        <mat-option *ngFor="let option of warehouseList" [value]="option">
+                          {{option.value}}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="d-flex;  r-buttons">
+                  <button class="btnRadius" id="search" type="submit" mat-raised-button
+                    (click)="btnType = 'search'">Search</button>
+                  <button class="btnRadius" id="clear" type="submit" mat-raised-button
+                    (click)="btnType = 'clear'">Clear</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </form>
+        <div class="mat-elevation-z8" *ngIf="dataSource?.data?.length > 0 else noRecord">
+          <!-- <mat-table [dataSource]="dataSource">
+                            <ng-container [matColumnDef]="column" *ngFor="let column of tableHeaders">
+                              <mat-header-cell *matHeaderCellDef> {{getHeader(column)}} </mat-header-cell>
+                              <mat-cell *matCellDef="let element">
+                                <ng-container>
+                                  {{element[column] || '-'}}
+                                </ng-container>
+                              </mat-cell>
+                            </ng-container>
+                            <mat-header-row *matHeaderRowDef="tableHeaders"></mat-header-row>
+                            <mat-row *matRowDef="let row; columns: tableHeaders;"></mat-row>
+                          </mat-table>
+                          <mat-paginator [pageSizeOptions]="[5, 10, 20]" length="{{dataSource?.length}}" showFirstLastButtons>
+                          </mat-paginator>
+                        </div>
+                        <ng-template #noRecord>
+                          <mat-card style="color: #C3404E;">No Record</mat-card>
+                        </ng-template>
+                        <div class="mat-elevation-z8"> -->
+          <mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+            <ng-container matColumnDef="select">
+              <mat-header-cell *matHeaderCellDef>
+                <mat-checkbox (change)="$event ? masterToggle() : null"
+                  [checked]="selection.hasValue() && isAllSelected()"
+                  [indeterminate]="selection.hasValue() && !isAllSelected()">
+                </mat-checkbox>
+              </mat-header-cell>
+              <mat-cell *matCellDef="let row,let index=index">
+                <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
+                  [checked]="selection.isSelected(row)">
+                </mat-checkbox>
+              </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="sku">
+              <mat-header-cell *matHeaderCellDef> SKU </mat-header-cell>
+              <mat-cell *matCellDef="let row"> {{row.sku}} </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="warehouse">
+              <mat-header-cell *matHeaderCellDef> Warehouse </mat-header-cell>
+              <mat-cell *matCellDef="let row;let index = index">{{row.warehouse}}</mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="stock">
+              <mat-header-cell *matHeaderCellDef> Stock </mat-header-cell>
+              <mat-cell *matCellDef="let row;let index = index">{{row.stock|| '-'}}
+                <!-- <editable (update)="updateField(index, 'stock')">
+                  <ng-template viewMode>
+                    {{row.stock}}
+                  </ng-template>
+                  <ng-template editMode>
+                    <input [formControl]="getControl(index, 'stock')" focusable editableOnEnter>
+                  </ng-template>
+                </editable> -->
+              </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="priority">
+              <mat-header-cell *matHeaderCellDef> Priority </mat-header-cell>
+              <mat-cell *matCellDef="let row;let index = index">{{row.priority||'-'}}
+                <!-- <editable (update)="updateField(index, 'priority')">
+                  <ng-template viewMode>
+                    {{row.priority}}
+                  </ng-template>
+                  <ng-template editMode>
+                    <input [formControl]="getControl(index, 'priority')" focusable editableOnEnter>
+                  </ng-template>
+                </editable> -->
+              </mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="tableHeaders"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: tableHeaders;"></mat-row>
+          </mat-table>
+          <mat-paginator [pageSizeOptions]="[5, 10, 20]" length="{{dataSource?.length}}" showFirstLastButtons>
+          </mat-paginator>
+        </div>
+      </mat-card>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>
