@@ -60,6 +60,8 @@ export class MicroSiteDasboardComponent implements OnInit {
         { value: 'credit', viewValue: 'Credit' },
         { value: 'debit', viewValue: 'Debit' }
     ];
+    fksId;
+    vendorName;
     /**
      * Pre-defined columns list for delivery boy table
      */
@@ -101,6 +103,8 @@ export class MicroSiteDasboardComponent implements OnInit {
     ) { }
 
     ngOnInit() {
+        this.fksId = localStorage.getItem('fkAssociateId');
+        this.vendorName = localStorage.getItem('vendorName');
         this.myForm = this.fb.group({
             name: ['', [Validators.required, Validators.pattern('^[a-zA-Z ]*$')]],
             email: ['', [Validators.required]],
