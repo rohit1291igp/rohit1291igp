@@ -59,7 +59,7 @@ import { CapitalizePipeModule } from './customPipes/capitalze.pipe';
 import { DateFormatterPipeModule } from './customPipes/date-formatter';
 import { PayoutDashboardComponent, PayoutDashboardModule } from './components/payout-dashboard/payout-dashboard.component';
 import { MomentDateAdapter, MatMomentDateModule } from '@angular/material-moment-adapter';
-import { editComponent } from './components/reports/reports.component';
+import { editComponent, DownloadStockedComponent } from './components/reports/reports.component';
 import { DailyOpsReportComponent } from './components/daily-ops-report/daily-ops-report.component';
 
 
@@ -93,7 +93,8 @@ export function ConfigLoader(envConfig: envConfig) {
     testComponent,
     editComponent,
     PerformanceReportComponent,
-    DailyOpsReportComponent
+    DailyOpsReportComponent,
+    DownloadStockedComponent
     // AutoSelectionComponent
   ],
   imports: [
@@ -168,7 +169,7 @@ export function ConfigLoader(envConfig: envConfig) {
     S3UploadService,
     Ng2ImgMaxService
   ],
-  entryComponents:[UploadExcelComponent,NotificationComponent, ImgPreviewComponent, SelectItemForDelivered, OrderStockComponent,editComponent],
+  entryComponents:[UploadExcelComponent,NotificationComponent, ImgPreviewComponent, SelectItemForDelivered, OrderStockComponent,editComponent, DownloadStockedComponent],
   bootstrap: [AppComponent],
   exports: [RouterModule]
 })
