@@ -2404,7 +2404,7 @@ export class editComponent implements OnInit {
     <i class="fa fa-times" style="float: right; cursor:pointer;" (click)="dialogRef.close()"></i>
 
         <div>
-        <h5>Please Selct Vendor group</h5>
+        <h5>Please Select Vendor group</h5>
         <div class="form-group">
             <select name="vendorGroupId" class="form-control" [(ngModel)]="selectedVendor">
                 <option [value]="undefined" disabled selected>Select a vendor group</option>
