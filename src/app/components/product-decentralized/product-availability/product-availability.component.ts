@@ -7,7 +7,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { HttpClient } from "@angular/common/http";
 import * as Excel from 'exceljs/dist/exceljs.min.js';
 import { SelectionModel } from '@angular/cdk/collections';
-
 import { MatSidenav } from "@angular/material/sidenav";
 
 interface ProductStock {
@@ -156,44 +155,41 @@ export class ProductAvailabilityComponent implements OnInit {
 		let validExcel = true;
 		const arryBuffer = new Response(target.files[0]).arrayBuffer();
 		arryBuffer.then(function (data) {
-			workbook.xlsx.load(data)
-				.then(function () {
-
-					// play with workbook and worksheet now
-					console.log(workbook);
-					const worksheet = workbook.getWorksheet(1);
-					console.log('rowCount: ', worksheet.rowCount);
-					worksheet.eachRow(function (row, rowNumber) {
-						if (rowNumber == 1 && !((row.values[1].toLowerCase() == 'sku') && (row.values[2].toLowerCase() == 'warehouse') && (row.values[3].toLowerCase() == 'stock') && (row.values[4].toLowerCase() == 'priority'))) {
-							alert('Invalid excelsheet format');
-							validExcel = false;
-							return;
-						}
-						if (rowNumber != 1 && validExcel) {
-							tableData.push({
-								sku: row.values[1],
-								warehouse: row.values[2],
-								stock: row.values[3],
-								priority: row.values[4]
-							})
-						}
-					});
-					this.selection.clear()
-					_this.tableform.get("tableEntries")['controls'] = []
-					tableData.forEach((ele) => {
-						const control = _this.fb.group({
-							stock: [ele.stock],
-							priority: [ele.priority]
-						});
-						(<FormArray>_this.tableform.get("tableEntries")).push(control);
-					});
-					_this.dataSource = new MatTableDataSource(tableData);
-					_this.tableHeaders = ["select", "sku", "warehouse", "stock", "priority", "actions"];
-					setTimeout(() => {
-						_this.dataSource.sort = _this.sort;
-						_this.dataSource.paginator = _this.paginator;
-					}, 100)
+			workbook.xlsx.load(data).then(function () {
+				console.log(workbook);
+				const worksheet = workbook.getWorksheet(1);
+				console.log('rowCount: ', worksheet.rowCount);
+				worksheet.eachRow(function (row, rowNumber) {
+					if (rowNumber == 1 && !((row.values[1].toLowerCase() == 'sku') && (row.values[2].toLowerCase() == 'warehouse') && (row.values[3].toLowerCase() == 'stock') && (row.values[4].toLowerCase() == 'priority'))) {
+						alert('Invalid excelsheet format');
+						validExcel = false;
+						return;
+					}
+					if (rowNumber != 1 && validExcel) {
+						tableData.push({
+							sku: row.values[1],
+							warehouse: row.values[2],
+							stock: row.values[3],
+							priority: row.values[4]
+						})
+					}
 				});
+				_this.selection.clear()
+				_this.tableform.get("tableEntries")['controls'] = []
+				tableData.forEach((ele) => {
+					const control = _this.fb.group({
+						stock: [ele.stock],
+						priority: [ele.priority]
+					});
+					(<FormArray>_this.tableform.get("tableEntries")).push(control);
+				});
+				_this.dataSource = new MatTableDataSource(tableData);
+				_this.tableHeaders = ["select", "sku", "warehouse", "stock", "priority", "actions"];
+				setTimeout(() => {
+					_this.dataSource.sort = _this.sort;
+					_this.dataSource.paginator = _this.paginator;
+				}, 100)
+			});
 		});
 	}
 
@@ -202,7 +198,7 @@ export class ProductAvailabilityComponent implements OnInit {
 		console.log(data);
 		let dataSource = _this.extractArrayFromTextArea(data.value.excelData);
 		console.log(dataSource);
-		this.selection.clear()
+		_this.selection.clear()
 		_this.tableform.get("tableEntries")['controls'] = []
 		dataSource.forEach((ele) => {
 			const control = _this.fb.group({
@@ -254,7 +250,8 @@ export class ProductAvailabilityComponent implements OnInit {
 	saveDomain(domain: any, index: any) {
 		console.log(index);
 		console.log(this.tableform.get("tableEntries")["controls"][index].value.stock);
-		this.a[index].stock = this.tableform.get("tableEntries")["controls"][index].value.stock;
+		this.dataSource.data[index].stock = this.tableform.get("tableEntries")["controls"][index].value.stock;
+		this.dataSource.data[index].priority = this.tableform.get("tableEntries")["controls"][index].value.priority;
 		domain.editable = !domain.editable;
 	}
 	cancelDomain(domain: any, i: number) {

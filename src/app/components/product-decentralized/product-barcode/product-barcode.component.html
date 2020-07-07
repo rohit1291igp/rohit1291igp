@@ -17,7 +17,7 @@
                 <div class="d-flex">
                   <div class="width50">
                     <mat-form-field class="width100">
-                      <mat-label class="mat-label">Enter SKU, WH,Stock, Priority </mat-label>
+                      <mat-label class="mat-label">Enter Original Barcode, Warehouse, Mapped Barcode </mat-label>
                       <textarea matInput formControlName="excelData"
                         placeholder="{{'\n'}} You can copy-paste from excelsheet" rows="10" col='20'></textarea>
                     </mat-form-field>
@@ -72,6 +72,7 @@
           </div>
         </form>
         <!-- Table Contents -->
+        <!--  ">orgBarCode", "warehouse", "mappedBarCode" -->
         <div class="mat-elevation-z8" *ngIf="dataSource?.data?.length > 0 else noRecord">
           <form [formGroup]="tableform">
             <mat-table #table [dataSource]="dataSource" formArrayName="tableEntries" matSort>
@@ -88,10 +89,10 @@
                   </mat-checkbox>
                 </mat-cell>
               </ng-container>
-              <ng-container matColumnDef="sku">
-                <mat-header-cell mat-sort-header *matHeaderCellDef> SKU </mat-header-cell>
+              <ng-container matColumnDef="orgBarCode">
+                <mat-header-cell mat-sort-header *matHeaderCellDef> Original Barcode </mat-header-cell>
                 <mat-cell *matCellDef="let row; let index = index" [formGroupName]="index">
-                  {{row.sku||'-'}}
+                  {{row.orgBarCode||'-'}}
                 </mat-cell>
               </ng-container>
               <ng-container matColumnDef="warehouse">
@@ -100,23 +101,13 @@
                   {{row.warehouse||'-'}}
                 </mat-cell>
               </ng-container>
-              <ng-container matColumnDef="priority">
-                <mat-header-cell mat-sort-header *matHeaderCellDef> Priority </mat-header-cell>
-                <mat-cell *matCellDef="let row; let index = index" [formGroupName]="index">
-                  <!-- {{row.priority}} -->
-                  <span *ngIf="!row.editable">
-                    {{row.priority||'-'}}
-                  </span>
-                  <input *ngIf="row.editable" type="text" formControlName="priority">
-                </mat-cell>
-              </ng-container>
-              <ng-container matColumnDef="stock">
-                <mat-header-cell mat-sort-header *matHeaderCellDef> Stock </mat-header-cell>
+              <ng-container matColumnDef="mappedBarCode">
+                <mat-header-cell mat-sort-header *matHeaderCellDef> Mapped Barcode </mat-header-cell>
                 <mat-cell *matCellDef="let row; let index = index" [formGroupName]="index">
                   <span *ngIf="!row.editable">
-                    {{row.stock||'-'}}
+                    {{row.mappedBarCode||'-'}}
                   </span>
-                  <input *ngIf="row.editable" type="text" formControlName="stock">
+                  <input *ngIf="row.editable" type="text" formControlName="mappedBarCode">
                 </mat-cell>
               </ng-container>
               <ng-container matColumnDef="actions">
