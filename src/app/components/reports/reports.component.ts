@@ -2298,48 +2298,35 @@ getDeliveryBoyList(){
         });
 
         dialogRef.afterClosed().subscribe(vendorGrpId => {
-            const reqObj = {
-                url: `getVendorStokedQuantity?filterId=${vendorGrpId}`,
-                method: "get"
-            };
-            $this.BackendService.makeAjax(reqObj, function (err, response, headers) {
-                if (err || response.error) {
-                  console.log('Error=============>', err);
-                  return;
-              }
-              if (response.result) {
-                  let header = Object.keys(response.result[0]);
-                   header = header.map(x => {
-                        if (x.includes('_')) {
-                                return x.replace(/_|_/g, ' ');
-                        } else {
-                            return x;
-                        }
-                    })
-                var options = {
-                    showLabels: true, 
-                    showTitle: false,
-                    headers: header.map(m => m.charAt(0).toUpperCase() + m.slice(1)),
-                    nullToEmptyString: true,
-                  };
-                // let data = [];
-                // new Promise((resolve)=>{
-                //     for(let pi=0; pi < $this.orginalReportData.tableData.length; pi++){
-                //         for(let k in $this.orginalReportData.tableData[pi]){
-                //             if(typeof $this.orginalReportData.tableData[pi][k] == 'object' &&$this.orginalReportData.tableData[pi][k] != null){
-                //                 $this.orginalReportData.tableData[pi][k] = $this.orginalReportData.tableData[pi][k].value ? $this.orginalReportData.tableData[pi][k].value : '';
-                //             }
-                //         }
-                //         if(pi == ($this.orginalReportData.tableData.length-1)){
-                //             resolve($this.orginalReportData.tableData);
-                //         }
-                //     }
-                // }).then((data)=>{
-                    // data = $this.orginalReportData.tableData;
-                    let download = new Angular5Csv(response.result, `Stocked-component-${currentdate}`, options);
-                // })
-              }
-            });
+            if(vendorGrpId != undefined){
+                const reqObj = {
+                    url: `getVendorStokedQuantity?filterId=${vendorGrpId}`,
+                    method: "get"
+                };
+                $this.BackendService.makeAjax(reqObj, function (err, response, headers) {
+                    if (err || response.error) {
+                      console.log('Error=============>', err);
+                      return;
+                  }
+                  if (response.result) {
+                      let header = Object.keys(response.result[0]);
+                       header = header.map(x => {
+                            if (x.includes('_')) {
+                                    return x.replace(/_|_/g, ' ');
+                            } else {
+                                return x;
+                            }
+                        })
+                    var options = {
+                        showLabels: true, 
+                        showTitle: false,
+                        headers: header.map(m => m.charAt(0).toUpperCase() + m.slice(1)),
+                        nullToEmptyString: true,
+                      };
+                        let download = new Angular5Csv(response.result, `Stocked-component-${currentdate}`, options);
+                  }
+                });
+            }
         });
 
     }
@@ -2412,8 +2399,8 @@ export class editComponent implements OnInit {
             </select>
         </div>    
         </div>
-        <div class="form-row">
-            <button type="submit" mat-raised-button class="bg-igp" (click)="onSubmit()" style="color: #fff;">Submit</button>
+        <div class="form-row" >
+            <button *ngIf="selectedVendor" type="submit" mat-raised-button class="bg-igp" (click)="onSubmit()" style="color: #fff;">Submit</button>
         </div>
     `
 })
