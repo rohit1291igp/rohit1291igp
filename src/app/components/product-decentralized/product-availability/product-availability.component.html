@@ -75,10 +75,23 @@
         <div>
 
         </div>
-        {{tableform.value|json}}
+        {{selection|json}}
         <div class="mat-elevation-z8" *ngIf="dataSource?.data?.length > 0 else noRecord">
           <form [formGroup]="tableform">
             <mat-table #table [dataSource]="dataSource" formArrayName="tableEntries" matSort>
+              <ng-container matColumnDef="select">
+                <mat-header-cell *matHeaderCellDef>
+                  <mat-checkbox (change)="$event ? masterToggle() : null"
+                    [checked]="selection.hasValue() && isAllSelected()"
+                    [indeterminate]="selection.hasValue() && !isAllSelected()">
+                  </mat-checkbox>
+                </mat-header-cell>
+                <mat-cell *matCellDef="let row,let index=index">
+                  <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
+                    [checked]="selection.isSelected(row)">
+                  </mat-checkbox>
+                </mat-cell>
+              </ng-container>
               <ng-container matColumnDef="sku">
                 <mat-header-cell mat-sort-header *matHeaderCellDef> SKU </mat-header-cell>
                 <mat-cell *matCellDef="let row; let index = index" [formGroupName]="index">
@@ -116,7 +129,6 @@
                   <button mat-button *ngIf="!row.editable" (click)="editDomain(row)">
                     Edit
                   </button>
-
                   <button mat-button color="primary" *ngIf="row.editable" (click)="saveDomain(row,index)">Save</button>
                   <button mat-button color="warn" *ngIf="row.editable" class="btn btn-primary"
                     (click)="cancelDomain(row,index)">Cancel</button>

@@ -33,6 +33,7 @@ export class ProductAvailabilityComponent implements OnInit {
 	dataSource: MatTableDataSource<any>;
 	tableHeaders: string[];
 	searchForm: FormGroup;
+
 	constructor(
 		private fb: FormBuilder,
 		private BackendService: BackendService,
@@ -43,7 +44,6 @@ export class ProductAvailabilityComponent implements OnInit {
 	}
 
 	btnType: string;
-
 	tableform: FormGroup;
 	editIndex: number;
 	responseDataPut;
@@ -80,8 +80,9 @@ export class ProductAvailabilityComponent implements OnInit {
 			});
 			(<FormArray>this.tableform.get("tableEntries")).push(control);
 		});
+		this.selection.clear()
 		this.dataSource = new MatTableDataSource(this.a);
-		this.tableHeaders = ["sku", "warehouse", "stock", "priority", "actions"];
+		this.tableHeaders = ["select", "sku", "warehouse", "stock", "priority", "actions"];
 		setTimeout(() => {
 			this.dataSource.sort = this.sort;
 			this.dataSource.paginator = this.paginator;
@@ -152,7 +153,7 @@ export class ProductAvailabilityComponent implements OnInit {
 		if (target.files.length !== 1) {
 			throw new Error('Cannot use multiple files');
 		}
-
+		let validExcel = true;
 		const arryBuffer = new Response(target.files[0]).arrayBuffer();
 		arryBuffer.then(function (data) {
 			workbook.xlsx.load(data)
@@ -165,10 +166,10 @@ export class ProductAvailabilityComponent implements OnInit {
 					worksheet.eachRow(function (row, rowNumber) {
 						if (rowNumber == 1 && !((row.values[1].toLowerCase() == 'sku') && (row.values[2].toLowerCase() == 'warehouse') && (row.values[3].toLowerCase() == 'stock') && (row.values[4].toLowerCase() == 'priority'))) {
 							alert('Invalid excelsheet format');
+							validExcel = false;
 							return;
 						}
-						if (rowNumber != 1) {
-
+						if (rowNumber != 1 && validExcel) {
 							tableData.push({
 								sku: row.values[1],
 								warehouse: row.values[2],
@@ -177,7 +178,7 @@ export class ProductAvailabilityComponent implements OnInit {
 							})
 						}
 					});
-					//_this.dataSource = new MatTableDataSource(tableData);
+					this.selection.clear()
 					_this.tableform.get("tableEntries")['controls'] = []
 					tableData.forEach((ele) => {
 						const control = _this.fb.group({
@@ -187,9 +188,7 @@ export class ProductAvailabilityComponent implements OnInit {
 						(<FormArray>_this.tableform.get("tableEntries")).push(control);
 					});
 					_this.dataSource = new MatTableDataSource(tableData);
-					_this.tableHeaders = ["sku", "warehouse", "stock", "priority", "actions"];
-					//	_this.tableHeaders = ["sku", "warehouse", "stock", "priority"];
-
+					_this.tableHeaders = ["select", "sku", "warehouse", "stock", "priority", "actions"];
 					setTimeout(() => {
 						_this.dataSource.sort = _this.sort;
 						_this.dataSource.paginator = _this.paginator;
@@ -203,6 +202,7 @@ export class ProductAvailabilityComponent implements OnInit {
 		console.log(data);
 		let dataSource = _this.extractArrayFromTextArea(data.value.excelData);
 		console.log(dataSource);
+		this.selection.clear()
 		_this.tableform.get("tableEntries")['controls'] = []
 		dataSource.forEach((ele) => {
 			const control = _this.fb.group({
@@ -212,9 +212,7 @@ export class ProductAvailabilityComponent implements OnInit {
 			(<FormArray>_this.tableform.get("tableEntries")).push(control);
 		});
 		_this.dataSource = new MatTableDataSource(dataSource);
-		_this.tableHeaders = ["sku", "warehouse", "stock", "priority", "actions"];
-		// _this.dataSource = new MatTableDataSource(dataSource);
-		//this.tableHeaders = ["sku", "warehouse", "stock", "priority"];
+		_this.tableHeaders = ["select", "sku", "warehouse", "stock", "priority", "actions"];
 		setTimeout(() => {
 			_this.dataSource.sort = _this.sort;
 			_this.dataSource.paginator = _this.paginator;
