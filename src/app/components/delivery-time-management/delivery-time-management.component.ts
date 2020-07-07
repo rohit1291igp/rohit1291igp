@@ -198,7 +198,6 @@ export class DeliveryTimeManagementComponent implements OnInit {
 			}
 		}
 		let validFkaid = false;
-
 		_this.warehouseList.forEach(ele => {
 			if (ele.key == data.value.source.key || ele.key == localStorage.fkAssociateId) {
 				validFkaid = true;
@@ -239,6 +238,10 @@ export class DeliveryTimeManagementComponent implements OnInit {
 		}
 		console.log('reqObj');
 		console.log(reqObj);
+		let confirmation = confirm("Would you like to procedd with changes?");
+		if (!confirmation) {
+		  return
+		} 
 
 		_this.BackendService.makeAjax(reqObj, function (err, response, headers) {
 			if (err || response.error) {
