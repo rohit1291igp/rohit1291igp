@@ -1,6 +1,6 @@
 import { Component, OnInit, NgModule, ViewChild } from '@angular/core';
-import { FormControl, FormGroup, FormBuilder } from '@angular/forms';
-import { MatDialog, MatPaginator, MatSort, MatTableDataSource, MatDatepickerInputEvent, MatAutocompleteModule, MatIcon, MatSidenavModule } from '@angular/material';
+import { FormControl, FormGroup, FormBuilder, FormArray, FormsModule } from '@angular/forms';
+import { MatDialog, MatPaginator, MatSort, MatTableDataSource, MatDatepickerInputEvent, MatAutocompleteModule, MatIcon, MatSidenavModule, MatTableModule } from '@angular/material';
 import { BackendService } from '../../../services/backend.service';
 import { DatePipe, CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
@@ -29,15 +29,23 @@ export class ProductAvailabilityComponent implements OnInit {
 	@ViewChild("sidenav") sidenav: MatSidenav;
 	@ViewChild(MatSort) sort: MatSort;
 	@ViewChild(MatPaginator) paginator: MatPaginator;
-	dataSource: MatTableDataSource<ProductStock>;
+
+	dataSource: MatTableDataSource<any>;
 	tableHeaders: string[];
 	searchForm: FormGroup;
 	constructor(
 		private fb: FormBuilder,
 		private BackendService: BackendService,
-	) { }
+	) {
+		this.tableform = this.fb.group({
+			tableEntries: this.fb.array([])
+		});
+	}
 
 	btnType: string;
+
+	tableform: FormGroup;
+	editIndex: number;
 	responseDataPut;
 	warehouseList = [
 		{ key: 0, value: 'All' },
@@ -45,9 +53,9 @@ export class ProductAvailabilityComponent implements OnInit {
 		{ key: 354, value: 'Mumbai WH' },
 		{ key: 318, value: 'Jaipur WH' }
 	];
-
+	a = [];
 	destinationTypeOptions: string[] = ['City', 'Pincode', 'Country'];
-	selection = new SelectionModel<ProductStock>(true, []);
+	selection = new SelectionModel<any>(true, []);
 
 	ngOnInit() {
 		this.searchForm = this.fb.group({
@@ -55,15 +63,25 @@ export class ProductAvailabilityComponent implements OnInit {
 			excelData: [''],
 			source: [{ key: null, value: null }],
 		});
-		// let a: ProductStock[] = [
-		// 	{ "sku": "HD1006698", "warehouse": "Lucknow WH", "stock": 500, "priority": "1", "id": "1" },
-		// 	{ "sku": "HD1004765", "warehouse": "Mumbai WH", "stock": null, "priority": "2", "id": "1" },
-		// 	{ "sku": "HD1004770", "warehouse": "Jaipur WH", "stock": 10, "priority": "3", "id": "1" },
-		// 	{ "sku": "HD1006721", "warehouse": "Mumbai WH", "stock": 32423, "priority": "3", "id": "1" }, { "sku": "HD1006742", "warehouse": "Jaipur WH", "stock": 245, "priority": "2", "id": "1" },
-		// 	{ "sku": "HD1006757", "warehouse": "Lucknow WH", "stock": 23224, "priority": "3", "id": "1" }
-		// ]
-		// this.dataSource = new MatTableDataSource(a);
-		this.tableHeaders = ['select', "sku", "warehouse", "stock", "priority"];
+
+
+
+		this.a = [
+			{ "sku": "HD1006698", "warehouse": "Lucknow WH", "stock": 500, "priority": "1", "id": "1", "editable": false },
+			{ "sku": "HD1004765", "warehouse": "Mumbai WH", "stock": null, "priority": "2", "id": "1", "editable": false },
+			{ "sku": "HD1004770", "warehouse": "Jaipur WH", "stock": 10, "priority": "3", "id": "1", "editable": false },
+			{ "sku": "HD1006721", "warehouse": "Mumbai WH", "stock": 32423, "priority": "3", "id": "1", "editable": false }, { "sku": "HD1006742", "warehouse": "Jaipur WH", "stock": 245, "priority": "2", "id": "1", "editable": false },
+			{ "sku": "HD1006757", "warehouse": "Lucknow WH", "stock": 23224, "priority": "3", "id": "1", "editable": false }
+		];
+		this.a.forEach((ele) => {
+			const control = this.fb.group({
+				stock: [ele.stock],
+				priority: [ele.priority]
+			});
+			(<FormArray>this.tableform.get("tableEntries")).push(control);
+		});
+		this.dataSource = new MatTableDataSource(this.a);
+		this.tableHeaders = ["sku", "warehouse", "stock", "priority", "actions"];
 		setTimeout(() => {
 			this.dataSource.sort = this.sort;
 			this.dataSource.paginator = this.paginator;
@@ -145,15 +163,31 @@ export class ProductAvailabilityComponent implements OnInit {
 					const worksheet = workbook.getWorksheet(1);
 					console.log('rowCount: ', worksheet.rowCount);
 					worksheet.eachRow(function (row, rowNumber) {
-						console.log('Row: ' + rowNumber + ' Value: ' + row.values);
-						tableData.push({
-							sku: row.values[1],
-							warehouse: row.values[2],
-							stock: row.values[3],
-							priority: row.values[4]
-						})
+						if (rowNumber == 1 && !((row.values[1].toLowerCase() == 'sku') && (row.values[2].toLowerCase() == 'warehouse') && (row.values[3].toLowerCase() == 'stock') && (row.values[4].toLowerCase() == 'priority'))) {
+							alert('Invalid excelsheet format');
+							return;
+						}
+						if (rowNumber != 1) {
+
+							tableData.push({
+								sku: row.values[1],
+								warehouse: row.values[2],
+								stock: row.values[3],
+								priority: row.values[4]
+							})
+						}
+					});
+					//_this.dataSource = new MatTableDataSource(tableData);
+					_this.tableform.get("tableEntries")['controls'] = []
+					tableData.forEach((ele) => {
+						const control = _this.fb.group({
+							stock: [ele.stock],
+							priority: [ele.priority]
+						});
+						(<FormArray>_this.tableform.get("tableEntries")).push(control);
 					});
 					_this.dataSource = new MatTableDataSource(tableData);
+					_this.tableHeaders = ["sku", "warehouse", "stock", "priority", "actions"];
 					//	_this.tableHeaders = ["sku", "warehouse", "stock", "priority"];
 
 					setTimeout(() => {
@@ -169,7 +203,17 @@ export class ProductAvailabilityComponent implements OnInit {
 		console.log(data);
 		let dataSource = _this.extractArrayFromTextArea(data.value.excelData);
 		console.log(dataSource);
+		_this.tableform.get("tableEntries")['controls'] = []
+		dataSource.forEach((ele) => {
+			const control = _this.fb.group({
+				stock: [ele.stock],
+				priority: [ele.priority]
+			});
+			(<FormArray>_this.tableform.get("tableEntries")).push(control);
+		});
 		_this.dataSource = new MatTableDataSource(dataSource);
+		_this.tableHeaders = ["sku", "warehouse", "stock", "priority", "actions"];
+		// _this.dataSource = new MatTableDataSource(dataSource);
 		//this.tableHeaders = ["sku", "warehouse", "stock", "priority"];
 		setTimeout(() => {
 			_this.dataSource.sort = _this.sort;
@@ -208,6 +252,19 @@ export class ProductAvailabilityComponent implements OnInit {
 	}
 	getHeader(str) {
 		return str.replace(/_/g, " ").replace(/( [a-z])/g, function (str) { return str.toUpperCase(); });
+	}
+	saveDomain(domain: any, index: any) {
+		console.log(index);
+		console.log(this.tableform.get("tableEntries")["controls"][index].value.stock);
+		this.a[index].stock = this.tableform.get("tableEntries")["controls"][index].value.stock;
+		domain.editable = !domain.editable;
+	}
+	cancelDomain(domain: any, i: number) {
+		domain.editable = !domain.editable;
+	}
+
+	editDomain(domain: any) {
+		domain.editable = !domain.editable;
 	}
 
 

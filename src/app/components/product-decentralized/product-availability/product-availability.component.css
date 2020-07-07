@@ -61,6 +61,15 @@ textarea::-webkit-scrollbar-thumb {
     text-align: center;
 }
 
+::ng-deep .mat-sort-header-container {
+    display: flex;
+    /* display:flex; */
+    /* justify-content: flex-end; */
+    justify-content: center;
+    text-align: center;
+    cursor: pointer;
+}
+
 .mat-cell {
     text-align: center;
     justify-content: center;

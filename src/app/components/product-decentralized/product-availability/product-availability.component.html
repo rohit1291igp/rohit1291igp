@@ -72,80 +72,67 @@
           </div>
 
         </form>
-        <div class="mat-elevation-z8" *ngIf="dataSource?.data?.length > 0 else noRecord">
-          <!-- <mat-table [dataSource]="dataSource">
-                            <ng-container [matColumnDef]="column" *ngFor="let column of tableHeaders">
-                              <mat-header-cell *matHeaderCellDef> {{getHeader(column)}} </mat-header-cell>
-                              <mat-cell *matCellDef="let element">
-                                <ng-container>
-                                  {{element[column] || '-'}}
-                                </ng-container>
-                              </mat-cell>
-                            </ng-container>
-                            <mat-header-row *matHeaderRowDef="tableHeaders"></mat-header-row>
-                            <mat-row *matRowDef="let row; columns: tableHeaders;"></mat-row>
-                          </mat-table>
-                          <mat-paginator [pageSizeOptions]="[5, 10, 20]" length="{{dataSource?.length}}" showFirstLastButtons>
-                          </mat-paginator>
-                        </div>
-                        <ng-template #noRecord>
-                          <mat-card style="color: #C3404E;">No Record</mat-card>
-                        </ng-template>
-                        <div class="mat-elevation-z8"> -->
-          <mat-table [dataSource]="dataSource" class="mat-elevation-z8">
-            <ng-container matColumnDef="select">
-              <mat-header-cell *matHeaderCellDef>
-                <mat-checkbox (change)="$event ? masterToggle() : null"
-                  [checked]="selection.hasValue() && isAllSelected()"
-                  [indeterminate]="selection.hasValue() && !isAllSelected()">
-                </mat-checkbox>
-              </mat-header-cell>
-              <mat-cell *matCellDef="let row,let index=index">
-                <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
-                  [checked]="selection.isSelected(row)">
-                </mat-checkbox>
-              </mat-cell>
-            </ng-container>
-            <ng-container matColumnDef="sku">
-              <mat-header-cell *matHeaderCellDef> SKU </mat-header-cell>
-              <mat-cell *matCellDef="let row"> {{row.sku}} </mat-cell>
-            </ng-container>
-            <ng-container matColumnDef="warehouse">
-              <mat-header-cell *matHeaderCellDef> Warehouse </mat-header-cell>
-              <mat-cell *matCellDef="let row;let index = index">{{row.warehouse}}</mat-cell>
-            </ng-container>
-            <ng-container matColumnDef="stock">
-              <mat-header-cell *matHeaderCellDef> Stock </mat-header-cell>
-              <mat-cell *matCellDef="let row;let index = index">{{row.stock|| '-'}}
-                <!-- <editable (update)="updateField(index, 'stock')">
-                  <ng-template viewMode>
-                    {{row.stock}}
-                  </ng-template>
-                  <ng-template editMode>
-                    <input [formControl]="getControl(index, 'stock')" focusable editableOnEnter>
-                  </ng-template>
-                </editable> -->
-              </mat-cell>
-            </ng-container>
-            <ng-container matColumnDef="priority">
-              <mat-header-cell *matHeaderCellDef> Priority </mat-header-cell>
-              <mat-cell *matCellDef="let row;let index = index">{{row.priority||'-'}}
-                <!-- <editable (update)="updateField(index, 'priority')">
-                  <ng-template viewMode>
-                    {{row.priority}}
-                  </ng-template>
-                  <ng-template editMode>
-                    <input [formControl]="getControl(index, 'priority')" focusable editableOnEnter>
-                  </ng-template>
-                </editable> -->
-              </mat-cell>
-            </ng-container>
+        <div>
 
-            <mat-header-row *matHeaderRowDef="tableHeaders"></mat-header-row>
-            <mat-row *matRowDef="let row; columns: tableHeaders;"></mat-row>
-          </mat-table>
-          <mat-paginator [pageSizeOptions]="[5, 10, 20]" length="{{dataSource?.length}}" showFirstLastButtons>
-          </mat-paginator>
+        </div>
+        {{tableform.value|json}}
+        <div class="mat-elevation-z8" *ngIf="dataSource?.data?.length > 0 else noRecord">
+          <form [formGroup]="tableform">
+            <mat-table #table [dataSource]="dataSource" formArrayName="tableEntries" matSort>
+              <ng-container matColumnDef="sku">
+                <mat-header-cell mat-sort-header *matHeaderCellDef> SKU </mat-header-cell>
+                <mat-cell *matCellDef="let row; let index = index" [formGroupName]="index">
+                  {{row.sku||'-'}}
+                </mat-cell>
+              </ng-container>
+              <ng-container matColumnDef="warehouse">
+                <mat-header-cell mat-sort-header *matHeaderCellDef> Warehouse </mat-header-cell>
+                <mat-cell *matCellDef="let row; let index = index" [formGroupName]="index">
+                  {{row.warehouse||'-'}}
+                </mat-cell>
+              </ng-container>
+              <ng-container matColumnDef="priority">
+                <mat-header-cell mat-sort-header *matHeaderCellDef> Priority </mat-header-cell>
+                <mat-cell *matCellDef="let row; let index = index" [formGroupName]="index">
+                  <!-- {{row.priority}} -->
+                  <span *ngIf="!row.editable">
+                    {{row.priority||'-'}}
+                  </span>
+                  <input *ngIf="row.editable" type="text" formControlName="priority">
+                </mat-cell>
+              </ng-container>
+              <ng-container matColumnDef="stock">
+                <mat-header-cell mat-sort-header *matHeaderCellDef> Stock </mat-header-cell>
+                <mat-cell *matCellDef="let row; let index = index" [formGroupName]="index">
+                  <span *ngIf="!row.editable">
+                    {{row.stock||'-'}}
+                  </span>
+                  <input *ngIf="row.editable" type="text" formControlName="stock">
+                </mat-cell>
+              </ng-container>
+              <ng-container matColumnDef="actions">
+                <mat-header-cell mat-sort-header *matHeaderCellDef> Actions </mat-header-cell>
+                <mat-cell *matCellDef="let row; let index = index">
+                  <button mat-button *ngIf="!row.editable" (click)="editDomain(row)">
+                    Edit
+                  </button>
+
+                  <button mat-button color="primary" *ngIf="row.editable" (click)="saveDomain(row,index)">Save</button>
+                  <button mat-button color="warn" *ngIf="row.editable" class="btn btn-primary"
+                    (click)="cancelDomain(row,index)">Cancel</button>
+
+                </mat-cell>
+              </ng-container>
+              <mat-header-row *matHeaderRowDef="tableHeaders"></mat-header-row>
+              <mat-row *matRowDef="let row; let i = index; columns: tableHeaders;"></mat-row>
+            </mat-table>
+            <mat-paginator [pageSizeOptions]="[5, 10, 20]" length="{{dataSource?.length}}" showFirstLastButtons>
+            </mat-paginator>
+            <!-- <button type="button" (click)="addRow()">Add row</button> -->
+          </form>
+          <ng-template #noRecord>
+            <mat-card style="color: #C3404E;">No Record</mat-card>
+          </ng-template>
         </div>
       </mat-card>
     </div>
