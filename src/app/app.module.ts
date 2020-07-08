@@ -105,7 +105,7 @@ export function ConfigLoader(envConfig: envConfig) {
     StockComponentsReportsComponent,
     DeliveryTimeManagementComponent,
     ProductDecentralizationComponent,
-    DeliveryPriorityComponent
+    DeliveryPriorityComponent,
     // AutoSelectionComponent
   ],
   imports: [
@@ -184,7 +184,7 @@ export function ConfigLoader(envConfig: envConfig) {
     S3UploadService,
     Ng2ImgMaxService
   ],
-  entryComponents:[UploadExcelComponent,NotificationComponent, ImgPreviewComponent, SelectItemForDelivered, OrderStockComponent,editComponent],
+  entryComponents:[UploadExcelComponent,NotificationComponent, ImgPreviewComponent, SelectItemForDelivered, OrderStockComponent,editComponent,],
   bootstrap: [AppComponent],
   exports: [RouterModule]
 })
