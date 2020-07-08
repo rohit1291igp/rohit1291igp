@@ -63,10 +63,16 @@ import { editComponent } from './components/reports/reports.component';
 import { DailyOpsReportComponent } from './components/daily-ops-report/daily-ops-report.component';
 import {StockComponentsReportsComponent} from './components/stock-components-reports/stock-components-reports.component';
 import { DeliveryTimeManagementComponent } from './components/delivery-time-management/delivery-time-management.component';
+
+import { ProductAvailabilityComponent } from './components/product-decentralized/product-availability/product-availability.component';
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { ProductBarcodeComponent } from './components/product-decentralized/product-barcode/product-barcode.component';
+
 import { ProductReportComponent } from './components/product-report/product-report.component';
 import { HolidayCalenderManagementComponent } from './components/holiday-calender-management/holiday-calender-management.component';
 import { ProductDecentralizationComponent } from './components/product-decentralization/product-decentralization.component';
 import { DeliveryPriorityComponent } from './components/product-decentralization/delivery-priority/delivery-priority.component';
+
 
 
 
@@ -104,6 +110,8 @@ export function ConfigLoader(envConfig: envConfig) {
     DailyOpsReportComponent,
     StockComponentsReportsComponent,
     DeliveryTimeManagementComponent,
+    ProductAvailabilityComponent,
+    ProductBarcodeComponent,
     ProductDecentralizationComponent,
     DeliveryPriorityComponent
     // AutoSelectionComponent
@@ -148,7 +156,9 @@ export function ConfigLoader(envConfig: envConfig) {
     NewReportsComponentModule,
     CapitalizePipeModule,
     DateFormatterPipeModule,
-    PayoutDashboardModule
+    PayoutDashboardModule,
+    FormsModule, 
+    ReactiveFormsModule
     // RouterModule
   ],
   providers: [
