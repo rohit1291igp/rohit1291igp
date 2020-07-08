@@ -5,6 +5,7 @@ import { MatDialog, MatPaginator, MatSort, MatTableDataSource, MatDatepickerInpu
 import { BackendService } from '../../services/backend.service';
 import { DatePipe, CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
+import { HttpClient } from "@angular/common/http";
 
 import { MatSidenav } from "@angular/material/sidenav";
 
@@ -18,6 +19,10 @@ import { MatSidenav } from "@angular/material/sidenav";
 export class DeliveryTimeManagementComponent implements OnInit {
 
 	@ViewChild("sidenav") sidenav: MatSidenav;
+	@ViewChild(MatSort) sort: MatSort;
+	@ViewChild(MatPaginator) paginator: MatPaginator;
+	dataSource: MatTableDataSource<any>;
+	tableHeaders;
 	searchForm: FormGroup;
 	constructor(
 		private fb: FormBuilder,
@@ -26,86 +31,14 @@ export class DeliveryTimeManagementComponent implements OnInit {
 
 	}
 	btnType: String;
-	responseDataPut = {
-		"status": "Success",
-		"data": {
-			"error": [
-				{
-					"row": 3,
-					"msg": "Wrong SKU uploaded : (M11111717)"
-				},
-				{
-					"row": 5,
-					"msg": "Can't process this SKU : (M11111717)"
-				}
-			],
-			"count": {
-				"correct": 5,
-				"fail": 3
-			}
-		}
-	}
-
-	responseData = {
-		"summary": [
-			{
-				"label": "Total Sku",
-				"value": "2"
-			}
-		],
-		"tableHeaders": [
-			"SKU",
-			"Product_Delivery_Days",
-			"Source",
-			"Desination_key",
-			"Destination",
-			"Delivery_Days"
-		],
-		"tableData": [
-			{
-				"SKU": "M11111717",
-				"Product_Delivery_Days": 2,
-				"Source": [
-					"Jaipur WH",
-					"Mumbai WH",
-					"Lucknow WH"
-				],
-				"Desination_key": "city",
-				"Destination": [
-					"Pune",
-					"Jaipur",
-					"Indore"
-				],
-				"Delivery_Days": 2
-			},
-			{
-				"SKU": "M11111787",
-				"Product_Delivery_Days": 2,
-				"Source": [
-					"Jaipur WH",
-					"Lucknow WH"
-				],
-				"Desination_key": "city",
-				"Destination": [
-					"Mumbai",
-					"bhopal"
-				],
-				"Delivery_Days": 2
-			}
-		],
-		"tableDataAction": []
-	}
-
+	responseDataPut;
 	warehouseList = [
 		{ key: 0, value: 'All' },
 		{ key: 4, value: 'Lucknow WH' },
 		{ key: 354, value: 'Mumbai WH' },
-		{ key: 318, value: 'Jaipur WH' },
-		{ key: 72, value: 'Handel' }
+		{ key: 318, value: 'Jaipur WH' }
 	];
-	dataSource;
-	displayedColumns;
-	columnsToDisplay;
+
 	destinationTypeOptions: string[] = ['City', 'Pincode', 'Country'];
 
 	ngOnInit() {
@@ -119,27 +52,34 @@ export class DeliveryTimeManagementComponent implements OnInit {
 
 		});
 
-
-
-		//localStorage.fkAssociateId
-		console.log('Hi');
 		const toSelect = this.warehouseList.find(c => c.key == localStorage.fkAssociateId);
-
 		this.searchForm.get('source').setValue(toSelect);
-		if (toSelect) {
+		if (toSelect && toSelect.key != 0) {
 			this.searchForm.get('source').disable();
 		}
+		else {
+			this.searchForm.get('source').setValue(this.warehouseList[0])
+		}
 
-		//this.searchForm.value.source = this.warehouseList[2];
 	}
 	sidenavClose(reason: string) {
-		//this.reason = reason;
 		this.sidenav.close();
 	}
 
-	cancelForm(data) { }
+	cancelForm() {
+		this.searchForm.reset();
+		const toSelect = this.warehouseList.find(c => c.key == localStorage.fkAssociateId);
+		this.searchForm.get('source').setValue(toSelect);
+		if (toSelect && toSelect.key != 0) {
+			this.searchForm.get('source').disable();
+		}
+		else {
+			this.searchForm.get('source').setValue(this.warehouseList[0])
+		}
+		this.searchForm.get('destinationType').setValue("");
+	}
 
-	onSearchSubmit(data) {
+	onSubmit(data) {
 		switch (this.btnType) {
 			case 'search': {
 				this.getSearchResults(data);
@@ -151,7 +91,7 @@ export class DeliveryTimeManagementComponent implements OnInit {
 				break;
 			}
 			case 'cancel': {
-				this.cancelForm(data)
+				this.cancelForm()
 				break;
 			}
 		}
@@ -160,93 +100,211 @@ export class DeliveryTimeManagementComponent implements OnInit {
 	getSearchResults(data) {
 
 		let _this = this;
-		let sku_id = this.extractArrayFromTextArea(data.value.sku_id)
+		let sku_id = _this.extractArrayFromTextArea(data.value.sku_id)
 		let fkaid;
-		if (data.value.source) {
-			fkaid = data.value.source.key;
-		} else {
-			fkaid = localStorage.fkAssociateId;
-		}
-		let destinationKey = data.value.destinationType.toLowerCase();
-		let destinationList = this.extractArrayFromTextArea(data.value.destinations);
-		let reqObj = {
-			url: 'getListOfComponents?startLimit=0&endLimit=5000',
-			method: "get",
-			payload: {
-				sku: [],
-				destinationKey: '',
-				destinationList: []
+		let validFkaid = false;
+		let destinationKey = data.value.destinationType;
+		let destinationList = _this.extractArrayFromTextArea(data.value.destinations);
+		let reqObj: any = {
+			url: 'warehousedt/skuwisedeliverytime?startLimit=0&endLimit=1000',
+			method: "post",
+			payload: <any>{}
+		};
+
+		_this.warehouseList.forEach(ele => {
+			if (ele.key == data.value.source['key'] || ele.key == localStorage.fkAssociateId) {
+				validFkaid = true;
+			}
+		});
+		if (validFkaid) {
+			if (data.value.source) {
+				fkaid = data.value.source.key;
+			} else {
+				fkaid = localStorage.fkAssociateId;
 			}
 		}
-		//let payload;
-		if (fkaid) {
-			reqObj.url += "&fkaid=" + fkaid;
+		else {
+			fkaid = 0;
 		}
-		if (sku_id) {
-			reqObj.payload.sku = sku_id
+
+		reqObj.url += "&whId=" + fkaid;
+		if (sku_id.length > 0 && destinationList.length > 0) {
+			reqObj.payload.SKU = sku_id;
+			reqObj.payload.DESTINATION = destinationList;
 		}
-		if (destinationKey && destinationList) {
-			reqObj.payload.destinationKey = destinationKey;
-			reqObj.payload.destinationList = destinationList;
+		else if (sku_id.length > 0) {
+			reqObj.payload.SKU = sku_id;
 		}
-		// this.dataSource = 
+		else if (destinationList.length > 0) {
+			reqObj.payload.DESTINATION = destinationList;
+		}
+
+
+		if (destinationKey) {
+			reqObj.url += "&destinationkey=" + destinationKey;
+		}
+		else {
+			reqObj.url += "&destinationkey=City";
+		}
+		console.log('reqObj');
+		console.log(reqObj);
+
+		_this.BackendService.makeAjax(reqObj, function (err, response, headers) {
+			if (err || response.error) {
+				alert('Something went wrong.');
+				console.log('Error=============>', err, response.errorCode);
+				return;
+			}
+			_this.dataSource = new MatTableDataSource(response.tableData);
+			_this.tableHeaders = response.tableHeaders;
+			_this.tableHeaders.push('Actions');
+			console.log('skuwise Response --->', response);
+			setTimeout(() => {
+				_this.dataSource.sort = _this.sort;
+				_this.dataSource.paginator = _this.paginator;
+			}, 100)
+		})
 	}
 
 	updateForm(data) {
-		//
+
 		let _this = this;
-		let sku_id = this.extractArrayFromTextArea(data.value.sku_id)
+		let sku_id = _this.extractArrayFromTextArea(data.value.sku_id)
 		let fkaid;
-		if (data.value.source) {
-			fkaid = data.value.source.key;
-		} else {
-			fkaid = localStorage.fkAssociateId;
+		let productDeliveryDay = data.value.productDeliveryDays;
+		let deliveryDays = data.value.deliveryDays;
+		let destinationKey = data.value.destinationType;
+		let destinationList = _this.extractArrayFromTextArea(data.value.destinations);
+		let reqObj: any = {
+			url: 'warehousedt/updateskudelivertime',
+			method: "put",
+			payload: <any>{}
+		};
+
+		if (productDeliveryDay < 0) {
+			alert("Sorry, Product Delivery Days cannot be negative");
+			return;
 		}
-		let destinationKey = data.value.destinationType.toLowerCase();
-		let destinationList = this.extractArrayFromTextArea(data.value.destinations);
-		let reqObj = {
-			url: 'getListOfComponents?startLimit=0&endLimit=5000',
-			method: "get",
-			payload: {
-				sku: [],
-				destinationKey: '',
-				destinationList: []
+		if ((sku_id.length > 0)) {
+			if (!(productDeliveryDay || destinationList.length || deliveryDays)) {
+				alert("Sorry, update fields are missing");
+				return;
 			}
 		}
-		//let payload;
-		if (fkaid) {
-			reqObj.url += "&fkaid=" + fkaid;
+		else {
+			if (!(destinationList.length && deliveryDays)) {
+				alert("Sorry, update fields are missing");
+				return;
+			}
 		}
-		if (sku_id) {
-			reqObj.payload.sku = sku_id
+		let validFkaid = false;
+		_this.warehouseList.forEach(ele => {
+			if (ele.key == data.value.source.key || ele.key == localStorage.fkAssociateId) {
+				validFkaid = true;
+			}
+		});
+		if (validFkaid) {
+			if (data.value.source) {
+				fkaid = data.value.source.key;
+			} else {
+				fkaid = localStorage.fkAssociateId;
+			}
 		}
-		if (destinationKey && destinationList) {
-			reqObj.payload.destinationKey = destinationKey;
-			reqObj.payload.destinationList = destinationList;
+		else {
+			fkaid = 0;
 		}
 
-		if (_this.responseDataPut.data.count.fail > 0) {
-			this.sidenav.open();
+		reqObj.payload.whID = fkaid;
+		if (sku_id.length > 0 && destinationList.length > 0) {
+			reqObj.payload.destinationKey = destinationKey;
+			reqObj.payload.SKU = sku_id;
+			reqObj.payload.destination = destinationList;
 		}
+		else if (sku_id.length > 0) {
+			reqObj.payload.SKU = sku_id;
+		}
+		else if (destinationList.length > 0) {
+			reqObj.payload.destination = destinationList;
+		}
+		reqObj.payload.productDeliveryDay = productDeliveryDay;
+		reqObj.payload.deliveryDays = deliveryDays;
+
+
+		if (destinationKey) {
+			reqObj.payload.destinationKey = destinationKey;
+		}
+		else {
+			reqObj.payload.destinationKey = "City";
+		}
+		console.log('reqObj');
+		console.log(reqObj);
+		let confirmation = confirm("Would you like to procedd with changes?");
+		if (!confirmation) {
+		  return
+		} 
+
+		_this.BackendService.makeAjax(reqObj, function (err, response, headers) {
+			if (err || response.error) {
+				alert('Something went wrong.');
+				console.log('Error=============>', err, response.errorCode);
+				return;
+			}
+			_this.responseDataPut = response;
+			_this.getSearchResults(data);
+			console.log('sidePanel Response --->', response);
+			setTimeout(() => {
+				_this.dataSource.sort = _this.sort;
+				_this.dataSource.paginator = _this.paginator;
+			}, 100)
+		})
+	}
+
+	editRowData(rowData) {
+		this.cancelForm();
+		this.searchForm.patchValue({
+			"sku_id": rowData['SKU'],
+			"productDeliveryDays": rowData['Product_Delivery_Days'],
+			"destinationType": rowData['Desination_key'],
+			"destinations": rowData['Destination'],
+			"deliveryDays": rowData['Delivery_Days']
+		})
 	}
 
 	extractArrayFromTextArea(text) {
-		let arr = text.split(/\n/g);
-		let arr1 = arr.filter(el => {
-			return (el != null && el != '')
-		});
-		return arr1
+		if (text) {
+			let arr = text.split(/\n/g);
+			let arr1 = arr.filter(el => {
+				return (el != null && el != '')
+			});
+			return arr1
+		}
+		return "";
 	}
-	getListViewName(arr) {
-		let str = '';
-		arr.some((element, index) => {
-			str += element + ', ';
-			if (str.length > 20) return true
-			else return false
-		})
-		str = str.slice(0, 20);
-		return str += '...'
+
+	getValidation() {
+		let _this = this;
+		let sku_id = _this.extractArrayFromTextArea(this.searchForm.get('sku_id').value);
+		let fkaid;
+		let productDeliveryDay = this.searchForm.get('productDeliveryDays').value;
+		let deliveryDays = this.searchForm.get('deliveryDays').value
+
+		let destinationList = _this.extractArrayFromTextArea(this.searchForm.get('destinations').value);
+		if (productDeliveryDay < 0) {
+			return true;
+		}
+		if ((sku_id.length > 0)) {
+			if (!(productDeliveryDay || destinationList.length || deliveryDays)) {
+				return true;
+			}
+		}
+		else {
+			if (!(destinationList.length && deliveryDays)) {
+				return true;
+			}
+		}
+		return false;
 	}
+
 
 	getHeader(str) {
 		return str.replace(/_/g, " ").replace(/( [a-z])/g, function (str) { return str.toUpperCase(); });
