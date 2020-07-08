@@ -14,6 +14,7 @@ import { ProductReportComponent } from './components/product-report/product-repo
 import { HolidayCalenderManagementComponent } from './components/holiday-calender-management/holiday-calender-management.component';
 import { DeliveryTimeManagementComponent } from './components/delivery-time-management/delivery-time-management.component';
 import { DailyOpsReportComponent } from './components/daily-ops-report/daily-ops-report.component';
+import { ProductDecentralizationComponent } from './components/product-decentralization/product-decentralization.component';
 
 
 const route: Routes = [
@@ -122,6 +123,10 @@ const route: Routes = [
   {
     path: 'payout-dashboard',
     component: PayoutDashboardComponent
+  },
+  {
+    path: 'productDecentralization',
+    component:  ProductDecentralizationComponent
   },
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
   // otherwise redirect to home
