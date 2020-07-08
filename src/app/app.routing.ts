@@ -12,6 +12,8 @@ import { StockComponentsReportsComponent } from './components/stock-components-r
 import { AuthGuard } from './services/auth-guard.service';
 import { DailyOpsReportComponent } from './components/daily-ops-report/daily-ops-report.component';
 import { DeliveryTimeManagementComponent } from './components/delivery-time-management/delivery-time-management.component';
+import { ProductAvailabilityComponent } from './components/product-decentralized/product-availability/product-availability.component';
+import { ProductBarcodeComponent } from "./components/product-decentralized/product-barcode/product-barcode.component";
 
 
 
@@ -112,6 +114,15 @@ const route: Routes = [
   {
     path: 'payout-dashboard',
     component: PayoutDashboardComponent
+  },
+  {
+    path: 'availability',
+    component: ProductAvailabilityComponent
+
+  },
+  {
+    path: 'barcode',
+    component: ProductBarcodeComponent
   },
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
   // otherwise redirect to home

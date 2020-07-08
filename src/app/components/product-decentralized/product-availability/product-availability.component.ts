@@ -55,6 +55,7 @@ export class ProductAvailabilityComponent implements OnInit {
 	a = [];
 	destinationTypeOptions: string[] = ['City', 'Pincode', 'Country'];
 	selection = new SelectionModel<any>(true, []);
+	openEdits = 0;
 
 	ngOnInit() {
 		this.searchForm = this.fb.group({
@@ -247,20 +248,56 @@ export class ProductAvailabilityComponent implements OnInit {
 	getHeader(str) {
 		return str.replace(/_/g, " ").replace(/( [a-z])/g, function (str) { return str.toUpperCase(); });
 	}
-	saveDomain(domain: any, index: any) {
+	saveRowEdit(row: any, index: any) {
 		console.log(index);
-		console.log(this.tableform.get("tableEntries")["controls"][index].value.stock);
-		this.dataSource.data[index].stock = this.tableform.get("tableEntries")["controls"][index].value.stock;
-		this.dataSource.data[index].priority = this.tableform.get("tableEntries")["controls"][index].value.priority;
-		domain.editable = !domain.editable;
+		let tableIndex = index + this.paginator.pageIndex * this.paginator.pageSize
+		this.dataSource.data[tableIndex].stock = this.tableform.get("tableEntries")["controls"][tableIndex].value.stock;
+		this.dataSource.data[tableIndex].priority = this.tableform.get("tableEntries")["controls"][tableIndex].value.priority;
+		row.editable = !row.editable;
+		this.openEdits--;
 	}
-	cancelDomain(domain: any, i: number) {
-		domain.editable = !domain.editable;
+	cancelRowEdit(row: any, index: number) {
+		let tableIndex = index + this.paginator.pageIndex * this.paginator.pageSize;
+		this.tableform.get("tableEntries")["controls"][tableIndex].get('priority').setValue(this.dataSource.data[tableIndex].priority);
+		this.tableform.get("tableEntries")["controls"][tableIndex].get('stock').setValue(this.dataSource.data[tableIndex].stock);
+		row.editable = !row.editable;
+		this.openEdits--;
 	}
 
-	editDomain(domain: any) {
-		domain.editable = !domain.editable;
+	enableRowEdit(row: any) {
+		row.editable = !row.editable;
+		this.openEdits++;
 	}
+	saveAllChanges() {
+		let confirmation = confirm("Would you like to proceed with changes?");
+		if (confirmation) {
+			this.dataSource.data.forEach((row, index) => {
+				if (row.editable) {
+					this.dataSource.data[index].stock = this.tableform.get("tableEntries")["controls"][index].value.stock;
+					this.dataSource.data[index].priority = this.tableform.get("tableEntries")["controls"][index].value.priority;
+					row.editable = !row.editable;
+					this.openEdits--;
+				}
+			});
+		}
+	}
+
+	cancelAllChanges() {
+		let confirmation = confirm("Would you like to cancel all changes?");
+		if (confirmation) {
+			this.dataSource.data.forEach((row, index) => {
+				if (row.editable) {
+					this.tableform.get("tableEntries")["controls"][index].get('priority').setValue(this.dataSource.data[index].priority);
+					this.tableform.get("tableEntries")["controls"][index].get('stock').setValue(this.dataSource.data[index].stock);
+					this.dataSource.data[index].editable = !this.dataSource.data[index].editable;
+					this.openEdits--;
+				}
+			})
+
+		}
+
+	}
+
 
 
 

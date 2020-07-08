@@ -148,3 +148,8 @@ table {
     -webkit-hyphens: auto;
     hyphens: auto;
 }
+
+.badge {
+    position: absolute;
+    background-color: #c3404e;
+}

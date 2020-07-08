@@ -1,4 +1,4 @@
-import { Component, OnInit, NgModule, ViewChild } from '@angular/core';
+import { Component, OnInit, NgModule, ViewChild, ChangeDetectorRef, AfterViewChecked } from '@angular/core';
 import { FormControl, FormGroup, FormBuilder, FormArray, FormsModule } from '@angular/forms';
 import { MatDialog, MatPaginator, MatSort, MatTableDataSource, MatDatepickerInputEvent, MatAutocompleteModule, MatIcon, MatSidenavModule, MatTableModule } from '@angular/material';
 import { BackendService } from '../../../services/backend.service';
@@ -14,7 +14,7 @@ import { MatSidenav } from "@angular/material/sidenav";
   templateUrl: './product-barcode.component.html',
   styleUrls: ['./product-barcode.component.css']
 })
-export class ProductBarcodeComponent implements OnInit {
+export class ProductBarcodeComponent implements OnInit, AfterViewChecked {
 
   @ViewChild("sidenav") sidenav: MatSidenav;
   @ViewChild(MatSort) sort: MatSort;
@@ -27,6 +27,7 @@ export class ProductBarcodeComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private BackendService: BackendService,
+    private cdRef: ChangeDetectorRef
   ) {
     this.tableform = this.fb.group({
       tableEntries: this.fb.array([])
@@ -46,6 +47,7 @@ export class ProductBarcodeComponent implements OnInit {
   a = [];
   destinationTypeOptions: string[] = ['City', 'Pincode', 'Country'];
   selection = new SelectionModel<any>(true, []);
+  openEdits = 0;
 
   ngOnInit() {
     this.searchForm = this.fb.group({
@@ -53,9 +55,6 @@ export class ProductBarcodeComponent implements OnInit {
       excelData: [''],
       source: [{ key: null, value: null }],
     });
-
-
-
     this.a = [
       { "orgBarCode": "44836256234", "warehouse": "Lucknow WH", "mappedBarCode": "84128948234", "editable": false },
       { "orgBarCode": "8923715453", "warehouse": "Jaipur WH", "mappedBarCode": "83457823345", "editable": false },
@@ -85,6 +84,10 @@ export class ProductBarcodeComponent implements OnInit {
     else {
       this.searchForm.get('source').setValue(this.warehouseList[0])
     }
+  }
+
+  ngAfterViewChecked() {
+    this.cdRef.detectChanges();
   }
   sidenavClose(reason: string) {
     this.sidenav.close();
@@ -234,20 +237,58 @@ export class ProductBarcodeComponent implements OnInit {
   getHeader(str) {
     return str.replace(/_/g, " ").replace(/( [a-z])/g, function (str) { return str.toUpperCase(); });
   }
-  saveDomain(domain: any, index: any) {
+
+  saveRowEdit(domain: any, index: any) {
     console.log(index);
-    console.log(this.tableform.get("tableEntries")["controls"][index].value.mappedBarCode);
-    this.dataSource.data[index].mappedBarCode = this.tableform.get("tableEntries")["controls"][index].value.mappedBarCode;
-    
+    let tableIndex = index + this.paginator.pageIndex * this.paginator.pageSize
+    console.log(this.tableform.get("tableEntries")["controls"][tableIndex].value.mappedBarCode);
+    this.dataSource.data[tableIndex].mappedBarCode = this.tableform.get("tableEntries")["controls"][tableIndex].value.mappedBarCode;
     domain.editable = !domain.editable;
-  }
-  cancelDomain(domain: any, i: number) {
-    domain.editable = !domain.editable;
+    this.openEdits--;
   }
 
-  editDomain(domain: any) {
-    domain.editable = !domain.editable;
+  cancelRowEdit(row: any, index: number) {
+    let tableIndex = index + this.paginator.pageIndex * this.paginator.pageSize
+    this.tableform.get("tableEntries")["controls"][tableIndex].get('mappedBarCode').setValue(this.dataSource.data[tableIndex].mappedBarCode);
+    row.editable = !row.editable;
+    this.openEdits--;
   }
 
+  enableRowEdit(row: any) {
+
+    row.editable = !row.editable;
+    this.openEdits++;
+  }
+  deleteSelectedRows() {
+    console.log(this.selection.selected);
+  }
+
+  saveAllChanges() {
+    let confirmation = confirm("Would you like to proceed with changes?");
+    if (confirmation) {
+      this.dataSource.data.forEach((row, index) => {
+        if (row.editable) {
+          this.dataSource.data[index].mappedBarCode = this.tableform.get("tableEntries")["controls"][index].value.mappedBarCode;
+          row.editable = !row.editable;
+          this.openEdits--;
+        }
+      });
+    }
+  }
+
+  cancelAllChanges() {
+    let confirmation = confirm("Would you like to discard changes?");
+    if (confirmation) {
+      this.dataSource.data.forEach((row, index) => {
+        if (row.editable) {
+          this.tableform.get("tableEntries")["controls"][index].get('mappedBarCode').setValue(row.mappedBarCode);
+          this.dataSource.data[index].editable = !this.dataSource.data[index].editable;
+          this.openEdits--;
+        }
+      })
+
+    }
+
+  }
 
 }
