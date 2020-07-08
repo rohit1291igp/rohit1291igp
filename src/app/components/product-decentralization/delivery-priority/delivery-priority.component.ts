@@ -156,23 +156,8 @@ export class DeliveryPriorityComponent implements OnInit {
     });
 
 
-
-    this.a = [
-      { "orgBarCode": "44836256234", "warehouse": "Lucknow WH", "mappedBarCode": "84128948234", "editable": false },
-      { "orgBarCode": "8923715453", "warehouse": "Jaipur WH", "mappedBarCode": "83457823345", "editable": false },
-      { "orgBarCode": "2342352", "warehouse": "Goa WH", "mappedBarCode": "0989788887", "editable": false },
-      { "orgBarCode": "665787456", "warehouse": "Lucknow WH", "mappedBarCode": "274589345", "editable": false }, { "orgBarCode": "38472834528435", "warehouse": "Kanpur WH", "mappedBarCode": "384723458375", "editable": false },
-      { "orgBarCode": "7325617312645", "warehouse": "Lucknow WH", "mappedBarCode": "82375823475", "editable": false }
-    ];
-    this.a.forEach((ele) => {
-      const control = this.fb.group({
-        // mappedBarCode: [ele.mappedBarCode],
-        priority: [ele.priority]
-      });
-      (<FormArray>this.tableform.get("tableEntries")).push(control);
-    });
     this.selection.clear()
-    this.dataSource = new MatTableDataSource(this.a);
+    this.dataSource = new MatTableDataSource([]);
     this.tableHeaders = ["select", "sku", "warehouse", this.selectedFieldForUpload,"priority", "actions"];
     setTimeout(() => {
       this.dataSource.sort = this.sort;
