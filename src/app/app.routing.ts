@@ -10,11 +10,13 @@ import { PayoutDashboardComponent } from './components/payout-dashboard/payout-d
 import { PerformanceReportComponent } from './components/performance-report/performance-report.component';
 import { StockComponentsReportsComponent } from './components/stock-components-reports/stock-components-reports.component';
 import { AuthGuard } from './services/auth-guard.service';
-import { DailyOpsReportComponent } from './components/daily-ops-report/daily-ops-report.component';
+import { ProductReportComponent } from './components/product-report/product-report.component';
+import { HolidayCalenderManagementComponent } from './components/holiday-calender-management/holiday-calender-management.component';
 import { DeliveryTimeManagementComponent } from './components/delivery-time-management/delivery-time-management.component';
 import { ProductAvailabilityComponent } from './components/product-decentralized/product-availability/product-availability.component';
 import { ProductBarcodeComponent } from "./components/product-decentralized/product-barcode/product-barcode.component";
-
+import { DailyOpsReportComponent } from './components/daily-ops-report/daily-ops-report.component';
+import { ProductDecentralizationComponent } from './components/product-decentralization/product-decentralization.component';
 
 
 
@@ -98,6 +100,16 @@ const route: Routes = [
     canActivate: [AuthGuard]
   },
   {
+    path: 'productReport',
+    component: ProductReportComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'HolidayCalendarManagement',
+    component: HolidayCalenderManagementComponent,
+    canActivate: [AuthGuard]
+  },
+  {
     path: 'deliveryTimeManagement',
     component: DeliveryTimeManagementComponent,
     canActivate: [AuthGuard]
@@ -116,6 +128,7 @@ const route: Routes = [
     component: PayoutDashboardComponent
   },
   {
+
     path: 'availability',
     component: ProductAvailabilityComponent
 
@@ -123,6 +136,10 @@ const route: Routes = [
   {
     path: 'barcode',
     component: ProductBarcodeComponent
+  },{
+    path: 'productDecentralization',
+    component:  ProductDecentralizationComponent
+
   },
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
   // otherwise redirect to home

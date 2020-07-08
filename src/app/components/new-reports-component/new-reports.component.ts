@@ -10,7 +10,8 @@ import { DateFormatterPipeModule } from 'app/customPipes/date-formatter';
 import { environment } from '../../../environments/environment';
 import { ImgPreviewComponent } from '../img-preview/img-preview.component';
 import { Observable } from 'rxjs';
-import { map, startWith } from 'rxjs/operators';
+import { startWith,map } from 'rxjs/operators';
+import { OrderStockComponent } from '../order-stocks/order-stock.component';
 
 interface Field {
     show: boolean,
@@ -47,6 +48,8 @@ export class NewReportsComponent implements OnInit {
     @Input() tableDataAction: any;
     //Table Header Array
     @Input() reportsHeader: any
+    // Show Edit Action at End
+    @Input() showEditButton:boolean;
     // Emit order data to open order tray
     @Output() viewOrder = new EventEmitter();
     //table pagination
@@ -57,6 +60,10 @@ export class NewReportsComponent implements OnInit {
     @Input() SearchForm: SearchForm;
     // Emit Data
     @Output() submitForm = new EventEmitter();
+    // Edit submit event emmit
+    @Output() editSubmit = new EventEmitter();
+    // fileUpload modal
+    @Output() fileUpload = new EventEmitter();
     //Date format
     @Input() dateFormat: string;
     columnNames = [];
@@ -67,7 +74,9 @@ export class NewReportsComponent implements OnInit {
 
     @Input() componentDropDownList: any[];
     //Vendor List
-    @Input() vendorList: any[];
+    @Input() vendorList:any[];
+    @Input() stockComponentList:any[];
+    @Input() procList:any[]
     public env = environment;
 
     myForm: FormGroup;
@@ -80,12 +89,12 @@ export class NewReportsComponent implements OnInit {
 
     }
     selected;
+    selected_stock_comp;
     filteredComponentsOptions: Observable<any[]>;
     myComponentControl = new FormControl();
     componentSelected;
 
     ngOnInit() {
-
         this.myForm = this.fb.group({
             name: [''],
             multiSelection: [''],
@@ -93,8 +102,9 @@ export class NewReportsComponent implements OnInit {
             filter: [''],
             datefrom: [new Date()],
             dateto: [new Date()],
-            vendorDetail: [''],
-
+            vendorDetail:[''],
+            procDetail:[''],
+            stockComponent:['']
         });
 
         if (this.SearchForm.formFields.Selection) {
@@ -122,6 +132,15 @@ export class NewReportsComponent implements OnInit {
             this.dataSource.sort = this.sort;
             this.dataSource.paginator = this.paginator;
         }, 100)
+
+        // StockComponentList AutoComplete
+        this.filteredOptions = this.myForm.controls['stockComponent'].valueChanges
+      .pipe(
+        startWith(''),
+        map(value => typeof value === 'string' ? value : value['Component_Name']),
+        map(name => name ? this._filter(name) : this.stockComponentList.slice())
+      );
+
     }
 
     componenetDisplayFn(component: any): string {
@@ -172,6 +191,10 @@ export class NewReportsComponent implements OnInit {
         }
     }
 
+    onEditAction(element){
+        this.editSubmit.emit(element);
+    }
+
     applyFilter(filterValue: any) {
         // this.myForm.controls['filter'].setValue(filterValue);
         this.dataSource.filter = filterValue.target.value.trim().toLowerCase();
@@ -203,7 +226,7 @@ export class NewReportsComponent implements OnInit {
                 };
             }
         }
-        if (typeof rowData == 'number' || typeof rowData == 'string' && !(rowData.includes('.jpg') || rowData.includes('.png'))) {
+        if (typeof rowData =='boolean' || typeof rowData == 'number' || typeof rowData == 'string' && !(rowData.includes('.jpg') || rowData.includes('.png'))) {
             return rowData;
         } else {
             return 'img'
@@ -222,6 +245,37 @@ export class NewReportsComponent implements OnInit {
     }
 
     openEditWindow(rowData, colName, index) {
+        console.log("prvz rowdata",rowData)
+        if(colName==='Stock_Quantity' && environment.userType==='vendor'){
+            const dialogRef = this.dialog.open(OrderStockComponent, {
+                width: '500px',
+                data: rowData
+              });
+            //   const subscribedDialog = dialogRef.componentInstance.formSubmit.subscribe(data=>{
+            //     console.log("parvez event emmitted");
+            //     this.editSubmit.emit({requestedvalue:data.value.fieldName, data: { 'rowData': rowData[colName],'component':rowData, 'colName': this.getHeaderCellValue(colName) }})
+            // })
+    
+            dialogRef.afterClosed().subscribe(result => {
+                rowData = 100;
+                console.log('The dialog was closed');
+            });
+        }else{
+            const dialogRef = this.dialog.open(editComponent, {
+                width: '250px',
+                data: { 'rowData': rowData[colName],'component':rowData, 'colName': this.getHeaderCellValue(colName) }
+            });
+            const subscribedDialog = dialogRef.componentInstance.formSubmit.subscribe(data=>{
+                console.log("parvez event emmitted");
+                this.editSubmit.emit({requestedvalue:data.value.fieldName, data: { 'rowData': rowData[colName],'component':rowData, 'colName': this.getHeaderCellValue(colName) }})
+            })
+    
+            dialogRef.afterClosed().subscribe(result => {
+                rowData = 100;
+                console.log('The dialog was closed');
+                subscribedDialog.unsubscribe();
+            });
+        }
         const dialogRef = this.dialog.open(editComponent, {
             width: '250px',
             data: { 'rowData': rowData, 'colName': this.getHeaderCellValue(colName).replace(/ /g, '_') }
@@ -276,6 +330,27 @@ export class NewReportsComponent implements OnInit {
             console.log(result);
         });
     }
+    onAddComponent(){
+        this.fileUpload.emit('')
+    }
+
+    // Stock Component List
+    filteredOptions: Observable<any[]>;
+
+  displayComponentName(component: any): string {
+    return component && component.Component_Name ? component.Component_Name : '';
+  }
+
+  private _filter(name: string): any[] {
+    const filterValue = name.toLowerCase();
+
+    return this.stockComponentList.filter(option => option.Component_Name.toLowerCase().indexOf(filterValue) === 0);
+  }
+
+  isArray(value){
+      console.log(value)
+      return Array.isArray(value)
+  }
 }
 
 @NgModule({
