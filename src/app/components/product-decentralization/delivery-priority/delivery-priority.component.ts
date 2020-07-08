@@ -20,103 +20,6 @@ export class DeliveryPriorityComponent implements OnInit {
   upload_method:string[]=['excel upload','sku paste'] //'copy paste' for copy paste from excel file
   selected_view_or_download_by="sku";
 
-  // constructor(
-  // ) { }
-
-  // ngOnInit() {
-  // }
-
-  onUploadFieldChange(){
-    console.log(this.selectedFieldForUpload)
-    this.excelFile.nativeElement.value=""
-    this.dataSource.data=[];
-    this.tableHeaders=[];
-  }
-
-  onUploadFileChange(event){
-    this.readExcel(event)
-  }
-
-  valid_excel_flag=true;
-  // readExcel(event) {
-	// 	const workbook = new Excel.Workbook();
-	// 	const target: DataTransfer = <DataTransfer>(event.target);
-	// 	let _this = this;
-  //   let tableData = [];
-  //   let selected_field = _this.selectedFieldForUpload==='city'?'city':'pin code';
-	// 	if (target.files.length !== 1) {
-	// 		throw new Error('Cannot use multiple files');
-	// 	}
-  //   _this.valid_excel_flag=true;
-	// 	const arryBuffer = new Response(target.files[0]).arrayBuffer();
-	// 	arryBuffer.then(function (data) {
-	// 		workbook.xlsx.load(data)
-	// 			.then(function () {
-	// 				// play with workbook and worksheet now
-	// 				// console.log(workbook);
-  //         const worksheet = workbook.getWorksheet(1);
-  //         console.log('rowCount: ', worksheet.rowCount);
-	// 				worksheet.eachRow(function (row, rowNumber) {
-  //           if(rowNumber===1 && (row.values[1].toLowerCase()!=='sku' || row.values[2].toLowerCase()!=='warehouse' || row.values[3].toLowerCase()!==selected_field ||row.values[4].toLowerCase()!=='priority')){
-  //             _this.valid_excel_flag=false;
-  //             return;
-  //           }
-  //           let obj_value={}
-  //           obj_value['sku']=row.values[1];
-  //           obj_value['warehouse']=row.values[2];
-  //           obj_value[selected_field]=row.values[3];
-  //           obj_value['priority']=row.values[4];
-  //           obj_value['edit_flag']=false;
-  //           // console.log('Row: ' + rowNumber + ' Value: ' + row.values);
-	// 					tableData.push(obj_value)
-  //         });
-  //         if(_this.valid_excel_flag){
-  //           tableData.shift();
-  //           _this.displayedColumns=Object.keys(tableData[1]);
-  //           _this.displayedColumns.push('actions')
-  //           _this.displayedColumns.unshift('select');
-  //           _this.dataSource.data=[...tableData]
-  //         }else{
-  //           alert("Excel Columns should be in following sequence sku,warehouse,"+_this.selectedFieldForUpload+",priority")
-  //           tableData=[];
-  //           _this.excelFile.nativeElement.value="";
-  //         }
-	// 			});
-	// 	});
-  // }
-  
-  // table
-  // displayedColumns = ['select', 'position', 'name', 'weight', 'symbol'];
-  // dataSource = new MatTableDataSource<Element>([]);
-  // selection = new SelectionModel<Element>(true, []);
-
-  /** Whether the number of selected elements matches the total number of rows. */
-  // isAllSelected() {
-  //   const numSelected = this.selection.selected.length;
-  //   const numRows = this.dataSource.data.length;
-  //   return numSelected === numRows;
-  // }
-
-  /** Selects all rows if they are not all selected; otherwise clear selection. */
-  // masterToggle() {
-  //   this.isAllSelected() ?
-  //       this.selection.clear() :
-  //       this.dataSource.data.forEach(row => this.selection.select(row));
-  // }
-
-  onEditRow(element){
-    element.edit_flat=true;
-  }
-
-  onUploadClick(){
-    console.log(this.selection)
-  }
-
-
-
-
-
-
   @ViewChild("sidenav") sidenav: MatSidenav;
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -172,6 +75,28 @@ export class DeliveryPriorityComponent implements OnInit {
       this.searchForm.get('source').setValue(this.warehouseList[0])
     }
   }
+
+
+  onEditRow(element){
+    element.edit_flat=true;
+  }
+
+  onUploadClick(){
+    console.log(this.selection)
+  }
+
+
+  onUploadFieldChange(){
+    console.log(this.selectedFieldForUpload)
+    this.excelFile.nativeElement.value=""
+    this.dataSource.data=[];
+    this.tableHeaders=[];
+  }
+
+  onUploadFileChange(event){
+    this.readExcel(event)
+  }
+  
   sidenavClose(reason: string) {
     this.sidenav.close();
   }
