@@ -80,14 +80,10 @@
 							</div>
 							<div class="width100 r-buttons">
 								<button class="btnRadius" id="update" type="submit" mat-raised-button color="accent"
-									(click)="btnType = 'update'">Update</button>
+									(click)="btnType = 'update'" [disabled]="getValidation()">Update</button>
 								<button class="btnRadius" id="cancel" type="submit" mat-raised-button color="warn"
 									(click)="btnType = 'cancel'">Clear</button>
-
 							</div>
-							<!-- <div class="width50 d-flex">
-							
-						</div> -->
 						</div>
 					</div>
 				</form>
@@ -96,8 +92,11 @@
 						<ng-container [matColumnDef]="column" *ngFor="let column of tableHeaders">
 							<mat-header-cell *matHeaderCellDef> {{getHeader(column)}} </mat-header-cell>
 							<mat-cell *matCellDef="let element">
-								<ng-container>
+								<ng-container *ngIf="column != 'Actions'">
 									{{element[column] || '-'}}
+								</ng-container>
+								<ng-container *ngIf="column == 'Actions'">
+									<button mat-button (click)="editRowData(element)">Edit</button>
 								</ng-container>
 							</mat-cell>
 						</ng-container>
@@ -116,11 +115,3 @@
 
 	</mat-sidenav-content>
 </mat-sidenav-container>
-
-
-
-
-<!-- <ng-container> 
-  <app-new-reports [reportsHeader]="tableHeaders" [orginalReportData]="dataSource"
-	 [tableDataAction]="orginalReportData?.tableDataAction"></app-new-reports>
-</ng-container> -->

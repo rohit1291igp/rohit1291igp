@@ -636,6 +636,7 @@
 
 
         <div class="col-sm-12 col-md-12 table-area table-cont m-top-1" id="table-section">
+                <button *ngIf="reportType == 'getVendorReport' && (environment.userType && environment.userType === 'admin')" class="reportDwld pull-right btn btn-primary" (click)="openDownloadStockedComp()">Stocked Component Download <span class="glyphicon glyphicon-download-alt" title="Download Report"></span></button>
                 <div class="reportDwld pull-right btn btn-primary" (click)="downLoadCSV($event, reportType)" [ngClass]="{'disableBtn' : !reportData.tableData.length}" *ngIf="reportType !== 'getbarcodestoverify'">
                   Download <span class="glyphicon glyphicon-download-alt" title="Download Report"></span>
                 </div>

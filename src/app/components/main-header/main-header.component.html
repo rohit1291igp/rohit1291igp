@@ -63,7 +63,7 @@
                     </ul>
                 </div>
             </li>
-            <ng-container *ngIf="environment.userType == 'warehouse'">
+            <ng-container *ngIf="environment.userType == 'warehouse' || environment.userType == 'merchandise' ">
                 <li class="fullHeightLi" [ngClass]="{'selected' : selectedTopTab === 'HolidayCalendarManagement'}">
                     <p><a ng-href="#/HolidayCalendarManagement" routerLink="/HolidayCalendarManagement">Holiday Calendar</a></p>
                 </li>
