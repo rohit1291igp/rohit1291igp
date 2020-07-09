@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, Inject } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, AfterViewChecked, ChangeDetectorRef,} from '@angular/core';
 
 import * as Excel from 'exceljs/dist/exceljs.min.js';
 import { MatTableDataSource, MatSidenav, MatSort, MatPaginator, } from '@angular/material';
@@ -11,7 +11,7 @@ import { BackendService } from 'app/services/backend.service';
   templateUrl: './delivery-priority.component.html',
   styleUrls: ['./delivery-priority.component.css']
 })
-export class DeliveryPriorityComponent implements OnInit {
+export class DeliveryPriorityComponent implements OnInit,AfterViewChecked {
   @ViewChild('excelFile') excelFile: ElementRef;
 
   selectedFieldForUpload:string="city"
@@ -27,10 +27,12 @@ export class DeliveryPriorityComponent implements OnInit {
   dataSource: MatTableDataSource<any>;
   tableHeaders: string[];
   searchForm: FormGroup;
+  openEdits = 0;
 
   constructor(
     private fb: FormBuilder,
     private BackendService: BackendService,
+    private cdRef: ChangeDetectorRef
   ) {
     this.tableform = this.fb.group({
       tableEntries: this.fb.array([])
@@ -249,19 +251,59 @@ export class DeliveryPriorityComponent implements OnInit {
   getHeader(str) {
     return str.replace(/_/g, " ").replace(/( [a-z])/g, function (str) { return str.toUpperCase(); });
   }
-  saveDomain(domain: any, index: any) {
+  saveRowEdit(domain: any, index: any) {
     console.log(index);
     let tableIndex=index+this.paginator.pageIndex*this.paginator.pageSize;
     console.log(this.tableform.get("tableEntries")["controls"][index].value.priority);
     this.dataSource.data[tableIndex].priority = this.tableform.get("tableEntries")["controls"][tableIndex].value.priority;
     domain.editable = !domain.editable;
+    this.openEdits--;
   }
-  cancelDomain(domain: any, i: number) {
-    domain.editable = !domain.editable;
+  cancelRowEdit(row: any, index: number) {
+		let tableIndex = index + this.paginator.pageIndex * this.paginator.pageSize;
+		this.tableform.get("tableEntries")["controls"][tableIndex].get('priority').setValue(this.dataSource.data[tableIndex].priority);
+		row.editable = !row.editable;
+		this.openEdits--;
+	}
+
+  enableRowEdit(row: any) {
+		row.editable = !row.editable;
+		this.openEdits++;
   }
 
-  editDomain(domain: any) {
-    domain.editable = !domain.editable;
+  deleteSelectedRows() {
+		console.log(this.selection.selected);
+	}
+  
+  saveAllChanges() {
+		let confirmation = confirm("Would you like to proceed with changes?");
+		if (confirmation) {
+			this.dataSource.data.forEach((row, index) => {
+				if (row.editable) {
+					this.dataSource.data[index].priority = this.tableform.get("tableEntries")["controls"][index].value.priority;
+					row.editable = !row.editable;
+					this.openEdits--;
+				}
+			});
+		}
+  }
+  
+  cancelAllChanges() {
+		let confirmation = confirm("Would you like to cancel all changes?");
+		if (confirmation) {
+			this.dataSource.data.forEach((row, index) => {
+				if (row.editable) {
+					this.tableform.get("tableEntries")["controls"][index].get('priority').setValue(this.dataSource.data[index].priority);
+					this.dataSource.data[index].editable = !this.dataSource.data[index].editable;
+					this.openEdits--;
+				}
+			})
+		}
+  }
+  
+  ngAfterViewChecked(){
+    this.cdRef.detectChanges();
+
   }
 
 

@@ -12,7 +12,8 @@
       <mat-card>
         <form [formGroup]="searchForm" (ngSubmit)="onSubmit(searchForm)">
           <div class="searchField">
-            <div class="width50" style="border:1px solid #ccc">
+            <div class="width50">
+              <mat-card>
               <div class="form-container">
                 <div class="d-flex">
                   <div class="width50">
@@ -38,9 +39,11 @@
                     (click)="btnType = 'add'">Add</button>
                 </div>
               </div>
+              </mat-card>
             </div>
 
-            <div class="width50" style="border:1px solid #ccc">
+            <div class="width50">
+              <mat-card>
               <div class="form-container">
                 <div class="d-flex">
                   <div class="width50">
@@ -68,6 +71,7 @@
                     (click)="btnType = 'clear'">Clear</button>
                 </div>
               </div>
+              </mat-card>
             </div>
           </div>
         </form>

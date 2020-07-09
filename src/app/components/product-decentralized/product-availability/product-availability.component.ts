@@ -248,6 +248,9 @@ export class ProductAvailabilityComponent implements OnInit {
 	getHeader(str) {
 		return str.replace(/_/g, " ").replace(/( [a-z])/g, function (str) { return str.toUpperCase(); });
 	}
+	deleteSelectedRows() {
+		console.log(this.selection.selected);
+	  }
 	saveRowEdit(row: any, index: any) {
 		console.log(index);
 		let tableIndex = index + this.paginator.pageIndex * this.paginator.pageSize
