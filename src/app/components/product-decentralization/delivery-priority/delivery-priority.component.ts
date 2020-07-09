@@ -60,9 +60,24 @@ export class DeliveryPriorityComponent implements OnInit,AfterViewChecked {
       source: [{ key: null, value: null }],
     });
 
+    this.a = [
+			{ "sku": "HD1006698", "warehouse": "Lucknow", "city": "Mumbai", "priority": "low", "id": "1", "editable": false },
+			{ "sku": "HD1004765", "warehouse": "Mumbai", "city": "Jaipur", "priority": "high", "id": "1", "editable": false },
+			{ "sku": "HD1004770", "warehouse": "Jaipur", "city": "Mumbai", "priority": "very low", "id": "1", "editable": false },
+      { "sku": "HD1006721", "warehouse": "Mumbai", "city": "Chennai", "priority": "high", "id": "1", "editable": false }, 
+      { "sku": "HD1006742", "warehouse": "Jaipur", "city": "Jaipur", "priority": "low", "id": "1", "editable": false },
+			{ "sku": "HD1006757", "warehouse": "Lucknow", "city": "Kanpur", "priority": "very high", "id": "1", "editable": false }
+		];
+		this.a.forEach((ele) => {
+			const control = this.fb.group({
+				priority: [ele.priority]
+			});
+			(<FormArray>this.tableform.get("tableEntries")).push(control);
+		});
+
 
     this.selection.clear()
-    this.dataSource = new MatTableDataSource([]);
+    this.dataSource = new MatTableDataSource(this.a);
     this.tableHeaders = ["select", "sku", "warehouse", this.selectedFieldForUpload,"priority", "actions"];
     setTimeout(() => {
       this.dataSource.sort = this.sort;
