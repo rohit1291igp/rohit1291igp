@@ -238,10 +238,10 @@ export class DeliveryTimeManagementComponent implements OnInit {
 		}
 		console.log('reqObj');
 		console.log(reqObj);
-		let confirmation = confirm("Would you like to procedd with changes?");
+		let confirmation = confirm("Would you like to proceed with changes?");
 		if (!confirmation) {
-		  return
-		} 
+			return
+		}
 
 		_this.BackendService.makeAjax(reqObj, function (err, response, headers) {
 			if (err || response.error) {
@@ -273,10 +273,12 @@ export class DeliveryTimeManagementComponent implements OnInit {
 	extractArrayFromTextArea(text) {
 		if (text) {
 			let arr = text.split(/\n/g);
-			let arr1 = arr.filter(el => {
-				return (el != null && el != '')
-			});
-			return arr1
+			arr = arr.map(el => el.trim())
+				.filter(el => {
+					el = el.trim();
+					return (el != null && el != '')
+				});
+			return arr
 		}
 		return "";
 	}
