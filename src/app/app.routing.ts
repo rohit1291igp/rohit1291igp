@@ -13,7 +13,11 @@ import { AuthGuard } from './services/auth-guard.service';
 import { ProductReportComponent } from './components/product-report/product-report.component';
 import { HolidayCalenderManagementComponent } from './components/holiday-calender-management/holiday-calender-management.component';
 import { DeliveryTimeManagementComponent } from './components/delivery-time-management/delivery-time-management.component';
+import { ProductAvailabilityComponent } from './components/product-decentralized/product-availability/product-availability.component';
+import { ProductBarcodeComponent } from "./components/product-decentralized/product-barcode/product-barcode.component";
 import { DailyOpsReportComponent } from './components/daily-ops-report/daily-ops-report.component';
+import { ProductDecentralizationComponent } from './components/product-decentralization/product-decentralization.component';
+
 
 
 const route: Routes = [
@@ -122,6 +126,20 @@ const route: Routes = [
   {
     path: 'payout-dashboard',
     component: PayoutDashboardComponent
+  },
+  {
+
+    path: 'availability',
+    component: ProductAvailabilityComponent
+
+  },
+  {
+    path: 'barcode',
+    component: ProductBarcodeComponent
+  },{
+    path: 'productDecentralization',
+    component:  ProductDecentralizationComponent
+
   },
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
   // otherwise redirect to home

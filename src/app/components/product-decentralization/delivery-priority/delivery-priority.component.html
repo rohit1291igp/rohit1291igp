@@ -1,0 +1,240 @@
+<div class="container" style="min-height: 60vh;">
+  <div class="row m-top-1">
+    <div class="col-sm-4">
+      <div class="row">
+        <div class="">
+          <mat-card class="card-h-1">
+            <!-- <mat-form-field class="width-100">
+                <mat-label>Method</mat-label>
+                <mat-select [(ngModel)]="addDataBy">
+                  <mat-option *ngFor="let add_method of upload_method" [value]="add_method">
+                    {{add_method | titlecase}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field> -->
+            <mat-form-field class="width-100">
+              <mat-label>Upload Excel By</mat-label>
+              <mat-select (change)="onUploadFieldChange()" [(ngModel)]="selectedFieldForUpload"
+                [ngModelOptions]="{standalone: true}">
+                <mat-option *ngFor="let uploadSelect of ['city','pin code']" [value]="uploadSelect">
+                  {{uploadSelect | titlecase}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <ng-container *ngIf="addDataBy==='excel upload'">
+              <mat-card-content>
+                <br>
+                <input type="file" #excelFile (change)="onUploadFileChange($event)" accept=".xlsx">
+                <br><br>
+                <button class="btnRadius" mat-raised-button (click)="onUploadClick()">Add</button>
+              </mat-card-content>
+              <mat-card-actions>
+              </mat-card-actions>
+            </ng-container>
+            <ng-container *ngIf="addDataBy==='copy paste'">
+              <mat-card-content>
+                <mat-form-field fxFlex class="width-100">
+                  <textarea matInput matTextareaAutosize
+                    placeholder="SKU, WH, Priority, {{selectedFieldForUpload | titlecase}}" [matAutosizeMinRows]="8"
+                    [matAutosizeMaxRows]="8" required></textarea>
+                </mat-form-field>
+                <button class="btnRadius" mat-raised-button>Add</button>
+              </mat-card-content>
+              <mat-card-actions>
+              </mat-card-actions>
+            </ng-container>
+          </mat-card>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-4">
+      <mat-card class="card-h-1">
+        <mat-form-field class="width-100">
+          <mat-label>View/Download By</mat-label>
+          <mat-select [(ngModel)]="selected_view_or_download_by">
+            <mat-option *ngFor="let view_or_download_by of ['sku','warehouse']" [value]="view_or_download_by">
+              {{view_or_download_by | titlecase}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <ng-container *ngIf="selected_view_or_download_by==='warehouse'">
+          <mat-card-content>
+            <mat-form-field class="width-100">
+              <mat-label>Select Warehouse</mat-label>
+              <mat-select [(ngModel)]="selectedWarehouse">
+                <mat-option *ngFor="let warehouse of ['kanpur','mumbai','jaipur','chennai']" [value]="warehouse">
+                  {{warehouse | titlecase}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <button class="btnRadius" mat-raised-button>View</button>
+            <button class="btnRadius" mat-raised-button>Download</button>
+          </mat-card-content>
+          <mat-card-actions>
+          </mat-card-actions>
+        </ng-container>
+        <ng-container *ngIf="selected_view_or_download_by==='sku'">
+          <mat-card-content>
+            <mat-form-field fxFlex class="width-100">
+              <textarea matInput matTextareaAutosize placeholder="Paste SKU Here" [matAutosizeMinRows]="8"
+                [matAutosizeMaxRows]="8" required></textarea>
+            </mat-form-field>
+            <button class="btnRadius" mat-raised-button>View</button>
+            <button class="btnRadius" mat-raised-button>Download</button>
+          </mat-card-content>
+          <mat-card-actions>
+          </mat-card-actions>
+        </ng-container>
+      </mat-card>
+    </div>
+  </div>
+</div>
+
+<!-- <div *ngIf="dataSource?.data.length else notable" class="example-container mat-elevation-z8">
+  <mat-table #table [dataSource]="dataSource">
+    <ng-container matColumnDef="select">
+      <mat-header-cell *matHeaderCellDef>
+        <mat-checkbox (change)="$event ? masterToggle() : null"
+                      [checked]="selection.hasValue() && isAllSelected()"
+                      [indeterminate]="selection.hasValue() && !isAllSelected()">
+        </mat-checkbox>
+      </mat-header-cell>
+      <mat-cell *matCellDef="let row">
+        <mat-checkbox (click)="$event.stopPropagation()"
+                      (change)="$event ? selection.toggle(row) : null"
+                      [checked]="selection.isSelected(row)">
+        </mat-checkbox>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container *ngFor="let table_header of displayedColumns">
+      <ng-container *ngIf="table_header!=='select'" [matColumnDef]="table_header">
+        <mat-header-cell *matHeaderCellDef> {{table_header | titlecase}}</mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          <ng-container *ngIf="table_header==='actions' else noActions">
+             <button mat-button (click)="onEditRow(element)">Edit</button> 
+          </ng-container>
+          <ng-template #noActions>
+            <ng-container *ngIf="table_header==='priority' && element.edit_flag else noEdit">
+              <mat-form-field>
+                <mat-select [(ngModel)]="selectedWarehouse">
+                  <mat-option *ngFor="let warehouse of ['high','low']" [value]="warehouse">
+                    {{warehouse | titlecase}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </ng-container>
+            <ng-template #noEdit>
+              {{element[table_header]}}
+            </ng-template>
+          </ng-template>  
+        </mat-cell>
+      </ng-container>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"
+             (click)="selection.toggle(row)">
+    </mat-row>
+  </mat-table>
+  <mat-paginator [pageSizeOptions]="[5, 10, 20]" length="{{dataSource?.length}}" showFirstLastButtons>
+  </mat-paginator>
+</div>
+<ng-template #notable>
+  <mat-card style="color: #C3404E;">
+    <mat-card-content>
+      No Record
+    </mat-card-content>
+  </mat-card>
+</ng-template> -->
+
+<div class="mat-elevation-z8" *ngIf="dataSource?.data?.length > 0 else noRecord">
+  <div style="border-bottom:1px solid #ccc" class="btnRadius">
+    <button class="btnRadius" id="search" mat-raised-button color="warn" (click)="deleteSelectedRows()"
+      [disabled]="!selection?._selected?.length>0">
+      Delete Selected
+      <span class="badge badge-warn" *ngIf="selection?._selected?.length>0">{{selection?._selected?.length}}</span>
+    </button>
+    <div style="float:right;display:inline">
+      <button class="btnRadius" mat-raised-button (click)="saveAllChanges()" [disabled]="!openEdits>0"> Save
+        Changes
+        <span class="badge badge-warn" *ngIf="openEdits>0">{{openEdits}}</span>
+      </button>
+      <button class="btnRadius" mat-raised-button (click)="cancelAllChanges()" [disabled]="!openEdits>0"> Cancel
+        Changes
+      </button>
+    </div>
+  </div>
+  <form [formGroup]="tableform">
+    <mat-table #table [dataSource]="dataSource" formArrayName="tableEntries" matSort>
+      <ng-container matColumnDef="select">
+        <mat-header-cell *matHeaderCellDef>
+          <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()"
+            [indeterminate]="selection.hasValue() && !isAllSelected()">
+          </mat-checkbox>
+        </mat-header-cell>
+        <mat-cell *matCellDef="let row,let index=index">
+          <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
+            [checked]="selection.isSelected(row)">
+          </mat-checkbox>
+        </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="sku">
+        <mat-header-cell *matHeaderCellDef> SKU </mat-header-cell>
+        <mat-cell *matCellDef="let row; let index = index" [formGroupName]="index">
+          {{row.sku||'-'}}
+        </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="warehouse">
+        <mat-header-cell *matHeaderCellDef> Warehouse </mat-header-cell>
+        <mat-cell *matCellDef="let row; let index = index" [formGroupName]="index">
+          {{row.warehouse||'-'}}
+        </mat-cell>
+      </ng-container>
+      <ng-container [matColumnDef]="selectedFieldForUpload">
+        <mat-header-cell *matHeaderCellDef> {{selectedFieldForUpload | titlecase}} </mat-header-cell>
+        <mat-cell *matCellDef="let row; let index = index" [formGroupName]="index">
+          {{row[selectedFieldForUpload]||'-'}}
+        </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="priority">
+        <mat-header-cell *matHeaderCellDef> Priority </mat-header-cell>
+        <mat-cell *matCellDef="let row; let index = index"
+          [formGroupName]="index+paginator?.pageIndex*paginator?.pageSize">
+          <span *ngIf="!row.editable">
+            {{row.priority||'-'}}
+          </span>
+          <mat-form-field *ngIf="row.editable">
+            <mat-label>Priority</mat-label>
+            <mat-select formControlName="priority">
+              <mat-option *ngFor="let priority of ['very high','high','low','very low']" [value]="priority">
+                {{priority | titlecase}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="actions">
+        <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
+        <mat-cell *matCellDef="let row; let index = index">
+          <button mat-button *ngIf="!row.editable" (click)="enableRowEdit(row)">
+            Edit
+          </button>
+          <button mat-button color="primary" *ngIf="row.editable" (click)="saveRowEdit(row,index)">Save</button>
+          <button mat-button color="warn" *ngIf="row.editable"
+            (click)="cancelRowEdit(row,index)">Cancel</button>
+
+        </mat-cell>
+      </ng-container>
+      <mat-header-row *matHeaderRowDef="tableHeaders"></mat-header-row>
+      <mat-row *matRowDef="let row; let i = index; columns: tableHeaders;"></mat-row>
+    </mat-table>
+    <mat-paginator [pageSizeOptions]="[5, 10, 20]" length="{{dataSource?.length}}" showFirstLastButtons>
+    </mat-paginator>
+    <!-- <button type="button" (click)="addRow()">Add row</button> -->
+  </form>
+  <ng-template #noRecord>
+    <mat-card style="color: #C3404E;">No Record</mat-card>
+  </ng-template>
+</div>

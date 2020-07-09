@@ -1,0 +1,21 @@
+.border-right{
+    border-right: 1px solid rgb(105, 105, 105);
+}
+
+.card-h-1{
+    min-height: 50vh;
+}
+
+.width-100{
+    width: 100%;
+}
+
+.btnRadius {
+    margin: 10px;
+    border-radius: 5px;
+}
+
+.badge {
+    position: absolute;
+    background-color: #c3404e;
+}
