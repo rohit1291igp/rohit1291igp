@@ -73,7 +73,7 @@ export class DailyOpsReportComponent implements OnInit {
                 if (line !== '') line += ',';
                 line += array[i][index];
             }
-
+            line = line.replace(/;/g, " | ");
             str += line + '\r\n';
         }
 
