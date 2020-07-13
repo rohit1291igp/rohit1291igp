@@ -235,7 +235,7 @@ public onClick(targetElement) {
   }
 
   selectStatusChanges(value) {
-    if (value == 'Released' || value == 'Shipped' || value == 'Delivered') {
+    if (value == 'Released' || value == 'Dispatched' || value == 'Delivered') {
       this.showFiller = true;
       this.infoDrawer.open();
     } else {

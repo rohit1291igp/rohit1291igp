@@ -2,9 +2,9 @@
   <mat-drawer #drawer class="example-sidenav" mode="side" style="width: 25%">
     <div style="width: 100%;margin: 0 auto;margin-top: 2%;">
       <ng-container [ngSwitch]="_data.selectedStatus">
-        <ng-container *ngSwitchCase="'confirmed'">
+        <ng-container *ngSwitchCase="'Confirmed'">
           <mat-card style="padding:0">
-            <h3>Information To keep In Mind</h3>
+            <h3>Info To keep in Mind</h3>
             <ol style="padding-left: 24px;">
               <li>Only OrderIds which are in Processed state need to put</li>
               <li>Only oderIds belonging to ur warehouse</li>
@@ -15,7 +15,7 @@
         </ng-container>
         <ng-container *ngSwitchCase="'Released'">
           <mat-card>
-            <h3>Information To keep In Mind</h3>
+            <h3>Info To keep in Mind</h3>
             <ol style="padding-left: 24px;">
               <li>Only OrderIds which have been released have to be put.</li>
               <li>Only oderIds belonging to ur warehouse</li>
@@ -23,9 +23,9 @@
             </ol>
           </mat-card>
         </ng-container>
-        <ng-container *ngSwitchCase="'Shipped'">
+        <ng-container *ngSwitchCase="'Dispatched'">
           <mat-card>
-            <h3>Information To keep In Mind</h3>
+            <h3>Info To keep in Mind</h3>
             <ol style="padding-left: 24px;">
               <li>Only Awbs which are Dispatched today need to put.</li>
               <li>Only Awbs belonging to ur warehouse.</li>
@@ -36,7 +36,7 @@
         </ng-container>
         <ng-container *ngSwitchCase="'Delivered'">
           <mat-card>
-            <h3>Information To keep In Mind</h3>
+            <h3>Info To keep in Mind</h3>
             <ol style="padding-left: 24px;">
               <li>Only Awbs which are Delivered today need to put</li>
               <li>Only Awbs belonging to ur warehouse</li>
@@ -72,7 +72,7 @@
 
                   <ng-container *ngIf="_data.selectedStatus != 'Select Status'">
                     <ng-container
-                      *ngIf="_data.selectedStatus == 'Released' || _data.selectedStatus == 'Shipped' || _data.selectedStatus == 'Delivered'">
+                      *ngIf="_data.selectedStatus == 'Confirmed' || _data.selectedStatus == 'Released' || _data.selectedStatus == 'Dispatched' || _data.selectedStatus == 'Delivered'">
                       <br />
                       <select id="selectedCourier" name="selectedCourier" class="form-control"
                         [(ngModel)]="_data.selectedCourier" #selectedCourier="ngModel" required>
@@ -91,7 +91,7 @@
                   <div class="m-top-1 left-align" *ngIf="isUploading">
                     <h3 style="text-align: center;">Upload File...</h3>
                   </div>
-                  <div class="checkbox" style="text-align: left;margin-top: 5%;margin-bottom: 1px;">
+                  <div class="checkbox" *ngIf="_data.selectedStatus == 'Dispatched' || _data.selectedStatus == 'Delivered'" style="text-align: left;margin-top: 5%;margin-bottom: 1px;">
                     <label>
                       <input type="checkbox" name="isFeatured" [(ngModel)]="_data.sendEmail"
                         #isFeatured="ngModel" />Send
@@ -99,7 +99,7 @@
                     </label>
                   </div>
                   <ng-container
-                    *ngIf="!isUploading && _data.selectedStatus == 'released' || _data.selectedStatus == 'shipped' || _data.selectedStatus == 'delivered' else anotherBtn">
+                    *ngIf="!isUploading && (_data.selectedStatus == 'Confirmed' || _data.selectedStatus == 'Released' || _data.selectedStatus == 'Dispatched' || _data.selectedStatus == 'Delivered') else anotherBtn">
                     <button class="btn btn-primary m-top-1"
                       *ngIf="!isUploading && _data.selectedCourier != 'Select Courier'">Upload</button>
                   </ng-container>
