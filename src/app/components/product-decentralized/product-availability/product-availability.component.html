@@ -14,63 +14,63 @@
           <div class="searchField">
             <div class="width50">
               <mat-card>
-              <div class="form-container">
-                <div class="d-flex">
-                  <div class="width50">
-                    <mat-form-field class="width100">
-                      <mat-label class="mat-label">Enter SKU, WH,Stock, Priority </mat-label>
-                      <textarea matInput formControlName="excelData"
-                        placeholder="{{'\n'}} You can copy-paste from excelsheet" rows="10" col='20'></textarea>
-                    </mat-form-field>
-                    <mat-hint></mat-hint>
-                  </div>
-                  <div style="width:1px; border-left:2px #ccc dotted"></div>
-                  <div class="width50">
-                    <div style="margin-top: 25%; text-align: center;">
-                      <input type="file" id="file" (change)="readExcel($event)" />
-                      <label for="file" class="btn-2" (change)="readExcel($event)">Upload Excel</label>
+                <div class="form-container">
+                  <div class="d-flex">
+                    <div class="width50">
+                      <mat-form-field class="width100">
+                        <mat-label class="mat-label">Enter SKU, WH,Stock, Priority </mat-label>
+                        <textarea matInput formControlName="excelData"
+                          placeholder="{{'\n'}} You can copy-paste from excelsheet" rows="10" col='20'></textarea>
+                      </mat-form-field>
+                      <mat-hint></mat-hint>
+                    </div>
+                    <div style="width:1px; border-left:2px #ccc dotted"></div>
+                    <div class="width50">
+                      <div style="margin-top: 25%; text-align: center;">
+                        <input type="file" id="file" (change)="readExcel($event)" />
+                        <label for="file" class="btn-2" (change)="readExcel($event)">Upload Excel</label>
+                      </div>
                     </div>
                   </div>
+                  <div class="d-flex;" style="text-align: center; ">
+                    <button class="btnRadius" id="view" type="submit" mat-raised-button
+                      (click)="btnType = 'view'">View</button>
+                    <button class="btnRadius" id="add" type="submit" mat-raised-button
+                      (click)="btnType = 'add'">Add</button>
+                  </div>
                 </div>
-                <div class="d-flex;" style="text-align: center; ">
-                  <button class="btnRadius" id="view" type="submit" mat-raised-button
-                    (click)="btnType = 'view'">View</button>
-                  <button class="btnRadius" id="add" type="submit" mat-raised-button
-                    (click)="btnType = 'add'">Add</button>
-                </div>
-              </div>
               </mat-card>
             </div>
 
             <div class="width50">
               <mat-card>
-              <div class="form-container">
-                <div class="d-flex">
-                  <div class="width50">
-                    <mat-form-field>
-                      <mat-label>Enter SKU IDs</mat-label>
-                      <textarea matInput formControlName="sku_id" placeholder="You can enter multiple SKU IDs" rows="10"
-                        col='20'></textarea>
-                    </mat-form-field>
+                <div class="form-container">
+                  <div class="d-flex">
+                    <div class="width50">
+                      <mat-form-field>
+                        <mat-label>Enter SKU IDs</mat-label>
+                        <textarea matInput formControlName="sku_id" placeholder="You can enter multiple SKU IDs"
+                          rows="10" col='20'></textarea>
+                      </mat-form-field>
+                    </div>
+                    <div class="width50">
+                      <mat-form-field>
+                        <mat-label>Source</mat-label>
+                        <mat-select formControlName="source" [(value)]='searchForm.value.source'>
+                          <mat-option *ngFor="let option of warehouseList" [value]="option">
+                            {{option.value}}
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
                   </div>
-                  <div class="width50">
-                    <mat-form-field>
-                      <mat-label>Source</mat-label>
-                      <mat-select formControlName="source" [(value)]='searchForm.value.source'>
-                        <mat-option *ngFor="let option of warehouseList" [value]="option">
-                          {{option.value}}
-                        </mat-option>
-                      </mat-select>
-                    </mat-form-field>
+                  <div class="d-flex;  r-buttons">
+                    <button class="btnRadius" id="search" type="submit" mat-raised-button
+                      (click)="btnType = 'search'">Search</button>
+                    <button class="btnRadius" id="clear" type="submit" mat-raised-button
+                      (click)="btnType = 'clear'">Clear</button>
                   </div>
                 </div>
-                <div class="d-flex;  r-buttons">
-                  <button class="btnRadius" id="search" type="submit" mat-raised-button
-                    (click)="btnType = 'search'">Search</button>
-                  <button class="btnRadius" id="clear" type="submit" mat-raised-button
-                    (click)="btnType = 'clear'">Clear</button>
-                </div>
-              </div>
               </mat-card>
             </div>
           </div>
@@ -78,13 +78,13 @@
         <!-- Table Contents -->
         <div class="mat-elevation-z8" *ngIf="dataSource?.data?.length > 0 else noRecord">
           <div style="border-bottom:1px solid #ccc" class="btnRadius">
-            <button class="btnRadius" id="search" mat-raised-button (click)="deleteSelectedRows()"
+            <button class="btnRadius" color="warn" id="search" mat-raised-button (click)="deleteSelectedRows()"
               [disabled]="!selection?._selected?.length>0">
               Delete Selected
               <span class="badge" *ngIf="selection?._selected?.length>0">{{selection?._selected?.length}}</span>
             </button>
             <div style="float:right;display:inline">
-              <button class="btnRadius" mat-raised-button (click)="saveAllChanges()" [disabled]="!openEdits>0"> Save
+              <button class="btnRadius saveButton" mat-raised-button (click)="saveAllChanges()" [disabled]="!openEdits>0"> Save
                 Changes
                 <span class="badge" *ngIf="openEdits>0">{{openEdits}}</span>
               </button>
@@ -148,7 +148,7 @@
                     Edit
                   </button>
                   <button mat-button color="primary" *ngIf="row.editable" (click)="saveRowEdit(row,index)">Save</button>
-                  <button mat-button color="warn" *ngIf="row.editable" class="btn btn-primary"
+                  <button mat-button color="warn" *ngIf="row.editable"
                     (click)="cancelRowEdit(row,index)">Cancel</button>
 
                 </mat-cell>
@@ -158,7 +158,6 @@
             </mat-table>
             <mat-paginator [pageSizeOptions]="[5, 10, 20]" length="{{dataSource?.length}}" showFirstLastButtons>
             </mat-paginator>
-            <!-- <button type="button" (click)="addRow()">Add row</button> -->
           </form>
         </div>
         <ng-template #noRecord>

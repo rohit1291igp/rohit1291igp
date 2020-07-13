@@ -157,7 +157,7 @@
       <span class="badge badge-warn" *ngIf="selection?._selected?.length>0">{{selection?._selected?.length}}</span>
     </button>
     <div style="float:right;display:inline">
-      <button class="btnRadius" mat-raised-button (click)="saveAllChanges()" [disabled]="!openEdits>0"> Save
+      <button class="btnRadius saveButton" mat-raised-button (click)="saveAllChanges()" [disabled]="!openEdits>0"> Save
         Changes
         <span class="badge badge-warn" *ngIf="openEdits>0">{{openEdits}}</span>
       </button>
