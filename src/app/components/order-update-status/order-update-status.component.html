@@ -1,0 +1,150 @@
+<mat-drawer-container class="example-container" autosize>
+  <mat-drawer #drawer class="example-sidenav" mode="side" style="width: 25%">
+    <div style="width: 100%;margin: 0 auto;margin-top: 2%;">
+      <ng-container [ngSwitch]="_data.selectedStatus">
+        <ng-container *ngSwitchCase="'Confirmed'">
+          <mat-card style="padding:0">
+            <h3>Info To keep in Mind</h3>
+            <ol style="padding-left: 24px;">
+              <li>Only OrderIds which are in Processed state need to put</li>
+              <li>Only oderIds belonging to ur warehouse</li>
+              <li>These OrderIds will be marked As Confirmed</li>
+              <li>The file needs to be CSV Format and the orderIds need to be in the first coloum</li>
+            </ol>
+          </mat-card>
+        </ng-container>
+        <ng-container *ngSwitchCase="'Released'">
+          <mat-card>
+            <h3>Info To keep in Mind</h3>
+            <ol style="padding-left: 24px;">
+              <li>Only OrderIds which have been released have to be put.</li>
+              <li>Only oderIds belonging to ur warehouse</li>
+              <li>The file needs to be CSV Format and the orderIds need to be in the first coloum</li>
+            </ol>
+          </mat-card>
+        </ng-container>
+        <ng-container *ngSwitchCase="'Dispatched'">
+          <mat-card>
+            <h3>Info To keep in Mind</h3>
+            <ol style="padding-left: 24px;">
+              <li>Only Awbs which are Dispatched today need to put.</li>
+              <li>Only Awbs belonging to ur warehouse.</li>
+              <li>The corresponding Orderproducts will be marked As Dispatched.</li>
+              <li>The file needs to be CSV Format and the Awbs need to be in the first coloum.</li>
+            </ol>
+          </mat-card>
+        </ng-container>
+        <ng-container *ngSwitchCase="'Delivered'">
+          <mat-card>
+            <h3>Info To keep in Mind</h3>
+            <ol style="padding-left: 24px;">
+              <li>Only Awbs which are Delivered today need to put</li>
+              <li>Only Awbs belonging to ur warehouse</li>
+              <li>The corresponding Orders will be marked As Delivered</li>
+              <li>The file needs to be CSV Format and the Awbs need to be in the first coloum</li>
+            </ol>
+          </mat-card>
+        </ng-container>
+      </ng-container>
+    </div>
+    <!-- <button (click)="showFiller = !showFiller" mat-raised-button>
+      Toggle extra text
+    </button> -->
+  </mat-drawer>
+
+  <div class="example-sidenav-content">
+      <div class="" style="height:85vh;">
+        <div class="" style="display: block; overflow:scroll; background: transparent;">
+          <div class="modal-dialog modal-lg">
+            <div class="modal-content" style="margin-left:25%; width:50%;">
+              <div class="modal-header" style="border-bottom:none;">
+                <div class="caption">Order Update</div>
+              </div>
+              <div class="modal-body center-align">
+                <form (ngSubmit)="f.form.valid && uploadExcel($event)" #f="ngForm" nonvalidate>
+                  <select id="selectedStatus" name="selectedStatus" class="form-control"
+                    [(ngModel)]="_data.selectedStatus" #selectedStatus="ngModel" required (ngModelChange)="selectStatusChanges($event)">
+                    <option selected disabled>Select Status</option>
+                    <option *ngFor="let issue of _data.statuslist" [ngValue]="issue">
+                      <span class="capitalize">{{issue}}</span>
+                    </option>
+                  </select>
+
+                  <ng-container *ngIf="_data.selectedStatus != 'Select Status'">
+                    <ng-container
+                      *ngIf="_data.selectedStatus == 'Confirmed' || _data.selectedStatus == 'Released' || _data.selectedStatus == 'Dispatched' || _data.selectedStatus == 'Delivered'">
+                      <br />
+                      <select id="selectedCourier" name="selectedCourier" class="form-control"
+                        [(ngModel)]="_data.selectedCourier" #selectedCourier="ngModel" required>
+                        <option selected disabled>Select Courier</option>
+                        <option *ngFor="let issue of _data.courierlist" [ngValue]="issue">
+                          <span class="capitalize">{{issue}}</span>
+                        </option>
+                      </select>
+                    </ng-container>
+                  </ng-container>
+
+                  <div class="m-top-1 left-align">
+                    <input id="excelFile" class="form-control custom-control m-top-1" type="file" name="file"
+                      (change)="fileChange($event)" accept=".xls, .xlsx, .csv" required>
+                  </div>
+                  <div class="m-top-1 left-align" *ngIf="isUploading">
+                    <h3 style="text-align: center;">Upload File...</h3>
+                  </div>
+                  <div class="checkbox" *ngIf="_data.selectedStatus == 'Dispatched' || _data.selectedStatus == 'Delivered'" style="text-align: left;margin-top: 5%;margin-bottom: 1px;">
+                    <label>
+                      <input type="checkbox" name="isFeatured" [(ngModel)]="_data.sendEmail"
+                        #isFeatured="ngModel" />Send
+                      Email
+                    </label>
+                  </div>
+                  <ng-container
+                    *ngIf="!isUploading && (_data.selectedStatus == 'Confirmed' || _data.selectedStatus == 'Released' || _data.selectedStatus == 'Dispatched' || _data.selectedStatus == 'Delivered') else anotherBtn">
+                    <button class="btn btn-primary m-top-1"
+                      *ngIf="!isUploading && _data.selectedCourier != 'Select Courier'">Upload</button>
+                  </ng-container>
+                  <ng-template #anotherBtn>
+                    <button class="btn btn-primary m-top-1"
+                      *ngIf="!isUploading && _data.selectedStatus != 'Select Status'">Upload</button>
+                  </ng-template>
+
+                  <!-- <div class="help-block theme-red" *ngIf="f.submitted && selectedStatus != 'Select Status'">Please
+                    select a
+                    Status.</div> -->
+                  <div class="help-block theme-red" *ngIf="_flags.emptyFileValidation">Please choose a Csv file.</div>
+                  <div class="m-top-1 text-bold text-green" *ngIf="_flags.uploadSuccessFlag">All orders are uploaded
+                    successfully
+                    from {{_data.uploadFileName}}!</div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    <div class="error-section"
+      [ngClass]="{'show-error-section': _data.uploadErrorList.length, 'hide-error-section': !_data.uploadErrorList.length}">
+      <div class="colInline col-sm-1 col-md-1" style="top: 1em; right: 1em; position: absolute;">
+        <a href="#/sendemail" (click)="closeErrorSection($event)" style="color:#000;">
+          <i class="glyphicon glyphicon-remove close-tray"></i>
+        </a>
+      </div>
+
+      <h3 style="text-decoration:underline;">{{_data.uploadFileName}}</h3>
+      <div class="count text-green" *ngIf="_data.uploadErrorCount && _data.uploadErrorCount.correct">
+        Success - {{_data.uploadErrorCount.correct}}
+      </div>
+
+      <div>
+        <div class="count text-igp" *ngIf="_data.uploadErrorCount && _data.uploadErrorCount.fail">Failed -
+          {{_data.uploadErrorCount.fail}}</div>
+        <button class="btn btn-primary m-top-1" (click)="downloadErrorList()">Download</button>
+
+        <div class="caption m-top-1">List:-</div>
+        <div class="errorCont" *ngFor="let err of _data.uploadErrorList">
+          <div>row: {{err.row}}</div>
+          <div>message: {{err.msg}}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</mat-drawer-container>
