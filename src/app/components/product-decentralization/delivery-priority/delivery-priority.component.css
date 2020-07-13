@@ -19,3 +19,8 @@
     position: absolute;
     background-color: #c3404e;
 }
+
+.saveButton {
+    background-color: #28a745;
+    color: #fff
+}
