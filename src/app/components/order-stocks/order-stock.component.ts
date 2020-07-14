@@ -45,10 +45,10 @@ import { environment } from "../../../environments/environment";
                 url: `orderVendorComponentStocked`,
                 method: "post",
                 payload: {
-                    Vendor_Id: this.VendorId,
-                    Component_Name: data.itemName,
-                    Component_Id: this.data.Component_Id,
-                    Component_Cost_Vendor: data.ComponentCostVendor,
+                    Vendor_Id: _this.VendorId,
+                    Component_Name: _this.data.Component_Name,
+                    Component_Id: _this.data.Component_Id,
+                    Component_Cost_Vendor: _this.data.Component_Cost_Vendor.value,
                     Stock_Quantity: data.StockQuantity
                 } 
             };
