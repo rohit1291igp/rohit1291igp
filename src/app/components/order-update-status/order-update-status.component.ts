@@ -73,6 +73,7 @@ public onClick(targetElement) {
 
   fileChange(e) {
     console.log('file changed');
+    this._flags.emptyFileValidation = false;
   }
 
   uploadExcel(event) {
@@ -198,8 +199,7 @@ public onClick(targetElement) {
   }
 
   closeErrorSection(e?) {
-    let _this = this;
-    _this._data.uploadErrorList = [];
+    this._data.uploadErrorList = [];
   }
 
   getStatusList() {
@@ -235,7 +235,7 @@ public onClick(targetElement) {
   }
 
   selectStatusChanges(value) {
-    if (value == 'Released' || value == 'Dispatched' || value == 'Delivered') {
+    if (value == 'Released' || value == 'Confirmed' || value == 'Dispatched' || value == 'Delivered') {
       this.showFiller = true;
       this.infoDrawer.open();
     } else {
