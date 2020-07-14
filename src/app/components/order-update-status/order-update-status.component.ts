@@ -73,6 +73,7 @@ public onClick(targetElement) {
 
   fileChange(e) {
     console.log('file changed');
+    this._flags.emptyFileValidation = false;
   }
 
   uploadExcel(event) {
@@ -198,8 +199,7 @@ public onClick(targetElement) {
   }
 
   closeErrorSection(e?) {
-    let _this = this;
-    _this._data.uploadErrorList = [];
+    this._data.uploadErrorList = [];
   }
 
   getStatusList() {
