@@ -72,7 +72,7 @@
 
                   <ng-container *ngIf="_data.selectedStatus != 'Select Status'">
                     <ng-container
-                      *ngIf="_data.selectedStatus == 'Confirmed' || _data.selectedStatus == 'Released' || _data.selectedStatus == 'Dispatched' || _data.selectedStatus == 'Delivered'">
+                      *ngIf="_data.selectedStatus == 'Released' || _data.selectedStatus == 'Dispatched' || _data.selectedStatus == 'Delivered'">
                       <br />
                       <select id="selectedCourier" name="selectedCourier" class="form-control"
                         [(ngModel)]="_data.selectedCourier" #selectedCourier="ngModel" required>
@@ -99,7 +99,7 @@
                     </label>
                   </div>
                   <ng-container
-                    *ngIf="!isUploading && (_data.selectedStatus == 'Confirmed' || _data.selectedStatus == 'Released' || _data.selectedStatus == 'Dispatched' || _data.selectedStatus == 'Delivered') else anotherBtn">
+                    *ngIf="!isUploading && (_data.selectedStatus == 'Released' || _data.selectedStatus == 'Dispatched' || _data.selectedStatus == 'Delivered') else anotherBtn">
                     <button class="btn btn-primary m-top-1"
                       *ngIf="!isUploading && _data.selectedCourier != 'Select Courier'">Upload</button>
                   </ng-container>
@@ -122,11 +122,11 @@
         </div>
       </div>
     <div class="error-section"
-      [ngClass]="{'show-error-section': _data.uploadErrorList.length, 'hide-error-section': !_data.uploadErrorList.length}">
+      [ngClass]="{'show-error-section': _data.uploadErrorList.length, 'hide-error-section':!_data.uploadErrorList.length}">
       <div class="colInline col-sm-1 col-md-1" style="top: 1em; right: 1em; position: absolute;">
-        <a href="#/sendemail" (click)="closeErrorSection($event)" style="color:#000;">
+        <span (click)="closeErrorSection($event)" style="color:#000;cursor: pointer;">
           <i class="glyphicon glyphicon-remove close-tray"></i>
-        </a>
+        </span>
       </div>
 
       <h3 style="text-decoration:underline;">{{_data.uploadFileName}}</h3>
