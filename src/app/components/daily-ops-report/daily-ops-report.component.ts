@@ -125,7 +125,6 @@ export class DailyOpsReportComponent implements OnInit {
             url += `downloadCSVPart2?releasedDateFrom=${datefrom}&releasedDateTo=${dateto}`;
         }
         
-        //adminapi.igp.com/v1/admin/warehouseops/downloadCSVPart1?purchaseDateFrom=${datefrom}&purchaseDateTo=${dateto}
         const reqObj = {
             url: url,
             method: 'get'
