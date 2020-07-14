@@ -1,0 +1,63 @@
+<div class="row m-all-1">
+  <div class="col-sm-5 col-sm-offset-1">
+    <mat-card class="card-min-5">
+      <form class="example-form">
+        <mat-form-field class="example-full-width">
+          <mat-label>Select Coupon Code</mat-label>
+          <input type="text" class="ng-trim-ignore" style="text-transform: uppercase;" matInput [formControl]="myControl" [matAutocomplete]="auto">
+          <mat-autocomplete (optionSelected)='onCouponSelect($event.option.value)' #auto="matAutocomplete"
+            [displayWith]="displayFn">
+            <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+              {{option.coupon_code}}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+        <button mat-raised-button (click)="onFetchVoucherDetail()">Fetch</button>
+        <button *ngIf="selected_coupon.id" mat-raised-button (click)="onEditClick()">{{edit_flag? 'Cancel':'Edit'}}</button>
+        <br>
+        <div *ngIf="selected_coupon.id">
+          <h4>{{selected_coupon.coupon_code}}</h4>
+          <mat-slide-toggle 
+          [checked]="selected_coupon.enabled"
+          (change)="onToggleCoupon($event)">{{selected_coupon.enabled?'Enabled':'Disabled'}}</mat-slide-toggle>
+        </div>
+      </form>
+      <br>
+      <div *ngIf="edit_flag" class="">
+        <hr>
+        <mat-form-field class="width-60">
+          <mat-label>Coupon Code</mat-label>
+          <input matInput type="text" oninput="this.value = this.value.toUpperCase()" [(ngModel)]="selected_coupon.coupon_code" autocomplete="off">
+        </mat-form-field><br>
+        <mat-form-field class="width-60">
+          <mat-label>Coupon Title</mat-label>
+          <textarea matInput [(ngModel)]="selected_coupon.title"></textarea>
+        </mat-form-field><br>
+        <mat-form-field class="width-60">
+          <mat-label>Coupon Description</mat-label>
+          <textarea matInput [(ngModel)]="selected_coupon.desc" rows="6" placeholder="Coupon Description"></textarea>
+        </mat-form-field>
+        <br>
+        <mat-form-field class="width-60">
+          <mat-label>Expiry Date</mat-label>
+          <input matInput [min]="minDate" [max]="maxDate" [matDatepicker]="expiryDate" [(ngModel)]="selected_coupon.expiry_date"
+            autocomplete="off" class="ng-trim-ignore">
+          <mat-datepicker-toggle matSuffix [for]="expiryDate"></mat-datepicker-toggle>
+          <mat-datepicker #expiryDate></mat-datepicker>
+        </mat-form-field>
+        <br>
+        <button mat-raised-button (click)="updateSubmit()">{{selected_coupon_code===selected_coupon.coupon_code?'Update':'Add'}}</button>
+      </div>
+    </mat-card>
+  </div>
+  <div *ngIf="voucher_details['vouchercode']" class="col-sm-5">
+    <mat-card class="card-min-h">
+      <h4>Voucher Details</h4>
+      <hr>
+      <h5>Voucher ID    : {{voucher_details['id']}}</h5>
+      <h5>Voucher Code  : {{voucher_details['vouchercode']}}</h5>
+      <h5>Voucher Value : {{voucher_details['vouchervalue']}}</h5>
+      <h5>Expiry Date   : {{voucher_details['expirydate']|date:'dd/MM/yyyy'}}</h5>
+    </mat-card>
+  </div>
+</div>

@@ -206,6 +206,8 @@ export class HolidayCalenderManagementComponent implements OnInit, AfterViewChec
 
   onClearAll() {
     this.holidayCalenderForm.patchValue({
+      "skus":[],
+      "duplicatesFlag":false,
       "holidayDateFrom": '',
       "holidayDateTo": '',
       "singleDateFrom": '',
@@ -215,7 +217,6 @@ export class HolidayCalenderManagementComponent implements OnInit, AfterViewChec
       "clearHoliday": false,
       "clearSingleTimeslot": false
     })
-    this.holidayCalenderForm.get('skus').markAsPristine();
   }
 
   OnfetchSkuData() {
