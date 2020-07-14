@@ -10,6 +10,7 @@ import { PayoutDashboardComponent } from './components/payout-dashboard/payout-d
 import { PerformanceReportComponent } from './components/performance-report/performance-report.component';
 import { AuthGuard } from './services/auth-guard.service';
 import { DailyOpsReportComponent } from './components/daily-ops-report/daily-ops-report.component';
+import { PaymentReconciliationComponent } from './components/payment-reconciliation/payment-reconciliation.component';
 
 
 const route: Routes = [
