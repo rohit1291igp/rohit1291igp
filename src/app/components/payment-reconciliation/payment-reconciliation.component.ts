@@ -30,10 +30,6 @@ export class PaymentReconciliationComponent implements OnInit {
       correct: '',
       fail: ''
     },
-    statuslist: [],
-    courierlist: [],
-    selectedStatus: '',
-    selectedCourier: '',
     sendEmail: false,
     errorMessage:''
   };
@@ -125,11 +121,6 @@ export class PaymentReconciliationComponent implements OnInit {
   ngOnInit() {
     // this.tableData = this.tableData.map(x => x.userOrderListWrtEmailID) as any;
     this.fkAssociateId = localStorage.getItem('fkAssociateId');
-
-    this._data.selectedStatus = 'Select Status';
-    this._data.selectedCourier = 'Select Courier';
-    this.getStatusList();
-    this.getCourierList();
   }
 
   /*@HostListener('document:click', ['$event.target'])
@@ -187,14 +178,7 @@ public onClick(targetElement) {
       //headers.append('Content-Type', 'multipart/form-data');
       //headers.append('Accept', 'application/json');
       let options = new RequestOptions({ headers: headers });
-      console.log('Upload File - formData =============>', formData, options);
-      let elObj = _this._elementRef.nativeElement.querySelector('#selectedStatus');
-      // let fkAssociateId = localStorage.getItem('fkAssociateId');
-      let sendEmail = _this._data.sendEmail ? 1 : 0;
-      let courier = '';
-      if (_this._data.selectedCourier != 'Select Courier') {
-        courier = _this._data.selectedCourier;
-      }
+     
       let reqObj = {
         url: `reconciliation/payment`,
         method: 'post',
@@ -259,8 +243,6 @@ public onClick(targetElement) {
     
         if (response && response.status == 'Success' && response.data.length > 0) {
             _this.tableData = response.data;
-          // _this._data.uploadErrorList = response.result;
-          // _this._data.uploadErrorCount = response.result.length;
           _this._flags.uploadSuccessFlag = true;
 
         } else{
@@ -278,63 +260,5 @@ public onClick(targetElement) {
   closeErrorSection(e?) {
     let _this = this;
     _this._data.uploadErrorList = [];
-  }
-
-  getStatusList() {
-    var _this = this;
-    const reqObj = {
-      url: `neworderstatus/getActionList?fkAsId=${_this.fkAssociateId}`,
-      method: 'get'
-    };
-    _this.BackendService.makeAjax(reqObj, function (err, response, headers) {
-      if (err || response.error) {
-        console.log('Error=============>', err);
-      }
-      if (response && response.result) {
-        _this._data.statuslist = response.result;
-      }
-    });
-  }
-
-  getCourierList() {
-    var _this = this;
-    const reqObj = {
-      url: `neworderstatus/getCourierList?fkAsId=${_this.fkAssociateId}`,
-      method: 'get'
-    };
-    _this.BackendService.makeAjax(reqObj, function (err, response, headers) {
-      if (err || response.error) {
-        console.log('Error=============>', err);
-      }
-      if (response && response.result) {
-        _this._data.courierlist = response.result;
-      }
-    });
-  }
-
-  selectStatusChanges(value) {
-    if (value == 'Released' || value == 'Dispatched' || value == 'Delivered') {
-      this.showFiller = true;
-      this.infoDrawer.open();
-    } else {
-      this._data.selectedCourier = 'Select Courier';
-      this.showFiller = false;
-      this.infoDrawer.close();
-    }
-  }
-
-  downloadErrorList() {
-    let pipe = new DatePipe('en-US');
-    const currentDate = new Date();
-    const datefrom = pipe.transform(currentDate, 'yyyy-MM-dd-h:mm:ss a');
-    const fileName = 'Order-Error-List' + '_' + datefrom;
-    var options = {
-      showLabels: true,
-      showTitle: false,
-      headers: ['id', 'Error Message'],
-      nullToEmptyString: false,
-    };
-
-    let download = new Angular5Csv(this._data.uploadErrorList, fileName, options);
   }
 }

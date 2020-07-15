@@ -1,52 +1,5 @@
 <mat-drawer-container class="example-container" autosize>
   <mat-drawer #drawer class="example-sidenav" mode="side" style="width: 25%">
-    <div style="width: 100%;margin: 0 auto;margin-top: 2%;">
-      <ng-container [ngSwitch]="_data.selectedStatus">
-        <ng-container *ngSwitchCase="'Confirmed'">
-          <mat-card style="padding:0">
-            <h3>Info To keep in Mind</h3>
-            <ol style="padding-left: 24px;">
-              <li>Only OrderIds which are in Processed state need to put</li>
-              <li>Only oderIds belonging to ur warehouse</li>
-              <li>These OrderIds will be marked As Confirmed</li>
-              <li>The file needs to be CSV Format and the orderIds need to be in the first coloum</li>
-            </ol>
-          </mat-card>
-        </ng-container>
-        <ng-container *ngSwitchCase="'Released'">
-          <mat-card>
-            <h3>Info To keep in Mind</h3>
-            <ol style="padding-left: 24px;">
-              <li>Only OrderIds which have been released have to be put.</li>
-              <li>Only oderIds belonging to ur warehouse</li>
-              <li>The file needs to be CSV Format and the orderIds need to be in the first coloum</li>
-            </ol>
-          </mat-card>
-        </ng-container>
-        <ng-container *ngSwitchCase="'Dispatched'">
-          <mat-card>
-            <h3>Info To keep in Mind</h3>
-            <ol style="padding-left: 24px;">
-              <li>Only Awbs which are Dispatched today need to put.</li>
-              <li>Only Awbs belonging to ur warehouse.</li>
-              <li>The corresponding Orderproducts will be marked As Dispatched.</li>
-              <li>The file needs to be CSV Format and the Awbs need to be in the first coloum.</li>
-            </ol>
-          </mat-card>
-        </ng-container>
-        <ng-container *ngSwitchCase="'Delivered'">
-          <mat-card>
-            <h3>Info To keep in Mind</h3>
-            <ol style="padding-left: 24px;">
-              <li>Only Awbs which are Delivered today need to put</li>
-              <li>Only Awbs belonging to ur warehouse</li>
-              <li>The corresponding Orders will be marked As Delivered</li>
-              <li>The file needs to be CSV Format and the Awbs need to be in the first coloum</li>
-            </ol>
-          </mat-card>
-        </ng-container>
-      </ng-container>
-    </div>
     <!-- <button (click)="showFiller = !showFiller" mat-raised-button>
       Toggle extra text
     </button> -->
@@ -92,14 +45,14 @@
                 <div class="m-top-1 left-align" *ngIf="isUploading">
                   <h3 style="text-align: center;">Upload File...</h3>
                 </div>
-                <div class="checkbox"
+                <!-- <div class="checkbox"
                   *ngIf="_data.selectedStatus == 'Dispatched' || _data.selectedStatus == 'Delivered'"
                   style="text-align: left;margin-top: 5%;margin-bottom: 1px;">
                   <label>
                     <input type="checkbox" name="isFeatured" [(ngModel)]="_data.sendEmail" #isFeatured="ngModel" />Send
                     Email
                   </label>
-                </div>
+                </div> -->
                 <ng-container *ngIf="!isUploading">
                   <button class="btn btn-primary m-top-1" *ngIf="!isUploading">Upload</button>
                 </ng-container>
@@ -107,7 +60,7 @@
                 <!-- <div class="help-block theme-red" *ngIf="f.submitted && selectedStatus != 'Select Status'">Please
                     select a
                     Status.</div> -->
-                <div class="help-block theme-red" *ngIf="_flags.emptyFileValidation">Please choose a Csv file.</div>
+                <div class="help-block theme-red" *ngIf="_flags.emptyFileValidation">Please choose a xlsx file.</div>
                 <div class="help-block theme-red" *ngIf="_data.errorMessage && !_flags.uploadSuccessFlag">{{_data.errorMessage}}</div>
 
                 <div class="m-top-1 text-bold text-green" *ngIf="_flags.uploadSuccessFlag">All orders are uploaded
@@ -160,7 +113,7 @@
       </ng-container>
     </mat-card>
 
-    <div class="error-section"
+    <!-- <div class="error-section"
       [ngClass]="{'show-error-section': _data.uploadErrorList.length, 'hide-error-section': !_data.uploadErrorList.length}">
       <div class="colInline col-sm-1 col-md-1" style="top: 1em; right: 1em; position: absolute;">
         <a href="#/sendemail" (click)="closeErrorSection($event)" style="color:#000;">
@@ -184,6 +137,6 @@
           <div>message: {{err.msg}}</div>
         </div>
       </div>
-    </div>
+    </div> -->
   </div>
 </mat-drawer-container>
