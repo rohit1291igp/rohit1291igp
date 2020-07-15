@@ -76,7 +76,7 @@
     <mat-card style="margin: 0 auto;width: 70%;
     margin-bottom: 18px;padding: 0">
       <ng-container *ngFor="let userData of tableData; index as i">
-        <mat-card style="margin: 0 auto;width: 100%;margin-bottom: 18px;">
+        <mat-card style="margin: 0 auto;width: 100%;margin-bottom: 18px;overflow-x:auto;">
           <ng-container *ngIf="userData.userOrderListWrtEmailID.length > 0">
             <table class="customers" style="margin-bottom: 10px;">
               <thead>
