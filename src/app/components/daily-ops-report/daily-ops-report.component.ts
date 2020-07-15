@@ -121,8 +121,15 @@ export class DailyOpsReportComponent implements OnInit {
             }else{
                 url += `&fkAsID=${this.myForm.value.warehousename}`
             }
-        }else{
+        }else if(this.myForm.value.warehouseopsreport == 2){
             url += `downloadCSVPart2?releasedDateFrom=${datefrom}&releasedDateTo=${dateto}`;
+        }else{
+            url += `downloadCSVPart1?purchaseDateFrom=${datefrom}&purchaseDateTo=${dateto}&flagIncludeDelivered=true`;
+            if(this.myForm.value.warehousename == 0){
+                url += `&fkAsID=0`
+            }else{
+                url += `&fkAsID=${this.myForm.value.warehousename}`
+            }
         }
         
         const reqObj = {
