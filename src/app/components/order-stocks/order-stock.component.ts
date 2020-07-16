@@ -48,7 +48,7 @@ import { environment } from "../../../environments/environment";
                     Vendor_Id: _this.VendorId,
                     Component_Name: _this.data.Component_Name,
                     Component_Id: _this.data.Component_Id,
-                    Component_Cost_Vendor: _this.data.Component_Cost_Vendor.value,
+                    Component_Cost_Vendor: _this.data.Component_Cost_Vendor,
                     Stock_Quantity: data.StockQuantity
                 } 
             };
