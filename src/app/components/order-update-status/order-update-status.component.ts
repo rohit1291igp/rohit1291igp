@@ -188,6 +188,7 @@ public onClick(targetElement) {
         }
 
         if (response.result) {
+          _this._flags.uploadSuccessFlag = true;
           _this._data.uploadErrorList = response.result.errorList;
           _this._data.uploadErrorCount = response.result.count;
           if(_this._data.uploadErrorCount.correct == 0 || _this._data.uploadErrorCount.correct < 0){
