@@ -125,6 +125,7 @@ public onClick(targetElement) {
       console.log('Upload File - formData =============>', formData, options);
 
       _this.BackendService.makeAjax(reqObj, function (err, response, headers) {
+      
         if (!response) {
           err = null;
           response = {
@@ -178,16 +179,10 @@ public onClick(targetElement) {
           _this._data.uploadFileName = '';
         }
 
-        if (response.result && response.error && response.result.length > 0) {
-          _this._data.uploadErrorList = response.result;
-          _this._data.uploadErrorCount = response.result.length;
+        if (response.result) {
+          _this._data.uploadErrorList = response.result.errorList;
+          _this._data.uploadErrorCount = response.result.count;
         } else {
-          // if (response.data) {
-          //   _this._data.uploadErrorList = response.data;
-          //   console.log(_this._data.uploadErrorList);
-          // } else {
-          //   _this._data.uploadErrorList = [];
-          // }
           _this._flags.uploadSuccessFlag = true;
         }
 
