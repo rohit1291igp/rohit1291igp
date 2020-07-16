@@ -80,6 +80,7 @@ public onClick(targetElement) {
     var _this = this;
     _this.showFiller = false;
     _this.infoDrawer.close();
+    _this._data.uploadErrorList = [];
     var fileInput = event.target.querySelector('#excelFile') || {};
     var fileOverSizeFlag = false;
     let fileList: FileList = event.target.querySelector('#excelFile').files;
