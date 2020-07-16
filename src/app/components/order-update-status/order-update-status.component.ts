@@ -27,14 +27,15 @@ export class OrderUpdateStatusComponent implements OnInit {
     sentCount: 0,
     notSentCount: 0,
     uploadErrorCount: {
-      correct: '',
-      fail: ''
+      correct: 0,
+      fail: 0
     },
     statuslist: [],
     courierlist: [],
     selectedStatus: '',
     selectedCourier: '',
-    sendEmail: false
+    sendEmail: false,
+    forceUpdate:false
   };
   fkAssociateId;
   showFiller = false;
@@ -112,12 +113,19 @@ public onClick(targetElement) {
       let elObj = _this._elementRef.nativeElement.querySelector('#selectedStatus');
       // let fkAssociateId = localStorage.getItem('fkAssociateId');
       let sendEmail = _this._data.sendEmail ? 1 : 0;
+      let forceUpdate = _this._data.forceUpdate ? 1 : 0;
       let courier = '';
       if (_this._data.selectedCourier != 'Select Courier') {
         courier = _this._data.selectedCourier;
       }
+      let url;
+      if(_this._data.selectedStatus == 'Released' && _this._data.forceUpdate){
+        url = `neworderstatusupdate/actionwise?fkAsId=${this.fkAssociateId}&status=${_this._data.selectedStatus}&flagemail=${sendEmail}&courier=${courier}&forceUpdate=1`
+      }else{
+        url = `neworderstatusupdate/actionwise?fkAsId=${this.fkAssociateId}&status=${_this._data.selectedStatus}&flagemail=${sendEmail}&courier=${courier}`
+      }
       let reqObj = {
-        url: `neworderstatusupdate/actionwise?fkAsId=${this.fkAssociateId}&status=${_this._data.selectedStatus}&flagemail=${sendEmail}&courier=${courier}`,
+        url: url,
         method: 'post',
         payload: formData,
         options: options
@@ -182,6 +190,9 @@ public onClick(targetElement) {
         if (response.result) {
           _this._data.uploadErrorList = response.result.errorList;
           _this._data.uploadErrorCount = response.result.count;
+          if(_this._data.uploadErrorCount.correct == 0 || _this._data.uploadErrorCount.correct < 0){
+            _this._data.uploadErrorCount.correct = 0;
+          }
         } else {
           _this._flags.uploadSuccessFlag = true;
         }
@@ -231,7 +242,7 @@ public onClick(targetElement) {
   }
 
   selectStatusChanges(value) {
-    if (value == 'Released' || value == 'Confirmed' || value == 'Dispatched' || value == 'Delivered') {
+    if (value == 'Released' || value == 'Confirmed' || value == 'Dispatched' || value == 'Delivered' || value == 'onHold' || value == 'Packed' || value == 'Released' || value == 'RTO' ) {
       this.showFiller = true;
       this.infoDrawer.open();
     } else {
