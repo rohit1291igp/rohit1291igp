@@ -1,17 +1,15 @@
 import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
-import { Headers, RequestOptions } from '@angular/http';
+import { Headers, RequestOptions, Response } from '@angular/http';
 //import { UtilityService } from '../../services/utility.service';
 import { environment } from '../../../environments/environment';
 import { BackendService } from '../../services/backend.service';
-import { Angular5Csv } from 'angular5-csv/dist/Angular5-csv';
-import { DatePipe } from '@angular/common';
-
 @Component({
   selector: 'app-payment-reconciliation',
   templateUrl: './payment-reconciliation.component.html',
   styleUrls: ['./payment-reconciliation.component.css']
 })
 export class PaymentReconciliationComponent implements OnInit {
+
   isMobile = environment.isMobile;
   environment = environment;
   isUploading = false;
@@ -31,7 +29,15 @@ export class PaymentReconciliationComponent implements OnInit {
       fail: ''
     },
     sendEmail: false,
-    errorMessage:''
+    errorMessage: '',
+    paymentGatewayList: [
+      'PayU',
+      'PayTM',
+      'Stripe',
+      'RazorPay',
+      'ccAvenue'
+    ],
+    enableOrderGenerateBtn: []
   };
   fkAssociateId;
   showFiller = false;
@@ -115,10 +121,11 @@ export class PaymentReconciliationComponent implements OnInit {
   @ViewChild('drawer') infoDrawer: any;
   constructor(
     private _elementRef: ElementRef,
-    public BackendService: BackendService //public UtilityService: UtilityService
+    public BackendService: BackendService, //public UtilityService: UtilityService
   ) { }
 
   ngOnInit() {
+
     // this.tableData = this.tableData.map(x => x.userOrderListWrtEmailID) as any;
     this.fkAssociateId = localStorage.getItem('fkAssociateId');
   }
@@ -178,7 +185,7 @@ public onClick(targetElement) {
       //headers.append('Content-Type', 'multipart/form-data');
       //headers.append('Accept', 'application/json');
       let options = new RequestOptions({ headers: headers });
-     
+
       let reqObj = {
         url: `reconciliation/payment`,
         method: 'post',
@@ -240,13 +247,13 @@ public onClick(targetElement) {
         } else {
           _this._data.uploadFileName = '';
         }
-    
+
         if (response && response.status == 'Success' && response.data.length > 0) {
-            _this.tableData = response.data;
+          _this.tableData = response.data;
           _this._flags.uploadSuccessFlag = true;
 
-        } else{
-          _this._data.errorMessage = response.message +" "+ response.data;
+        } else {
+          _this._data.errorMessage = response.message + " " + response.data;
         }
 
         if (fileInput && 'value' in fileInput) fileInput.value = '';
@@ -261,4 +268,28 @@ public onClick(targetElement) {
     let _this = this;
     _this._data.uploadErrorList = [];
   }
+
+  generateOrder(data, paymentMethod, index) {
+    var _this = this;
+    // _this._data.enableOrderGenerateBtn[index] = 'failed';
+    const reqObj = {
+      url: `reconciliation/payment/order?paymentGateway=${paymentMethod}&orderTempId=${data.tempOrderID}`,
+      method: 'get'
+    };
+    _this.BackendService.makeAjax(reqObj, function (err, response, headers) {
+      if (err || response.error) {
+        console.log('Error=============>', err);
+      }
+      if (response && response.status == 'Success') {
+        _this._data.enableOrderGenerateBtn[index] = 'done';
+      }else{
+        _this._data.enableOrderGenerateBtn[index] = 'failed';
+      }
+    });
+  }
+
+  selectPaymentGateway(e) {
+    console.log(e.target.value)
+  }
+
 }
