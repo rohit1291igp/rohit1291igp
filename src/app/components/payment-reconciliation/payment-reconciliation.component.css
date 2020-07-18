@@ -65,7 +65,7 @@ mat-drawer-content {
     background-color: #f2f2f2;
 }
 
-.customers tr:hover {
+.customers tr>td:hover {
     background-color: #ddd;
 }
 

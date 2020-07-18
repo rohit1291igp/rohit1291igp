@@ -61,7 +61,8 @@
                     select a
                     Status.</div> -->
                 <div class="help-block theme-red" *ngIf="_flags.emptyFileValidation">Please choose a xlsx file.</div>
-                <div class="help-block theme-red" *ngIf="_data.errorMessage && !_flags.uploadSuccessFlag">{{_data.errorMessage}}</div>
+                <div class="help-block theme-red" *ngIf="_data.errorMessage && !_flags.uploadSuccessFlag">
+                  {{_data.errorMessage}}</div>
 
                 <div class="m-top-1 text-bold text-green" *ngIf="_flags.uploadSuccessFlag">All orders are uploaded
                   successfully
@@ -100,11 +101,34 @@
               <ng-container *ngFor="let HeaderText of objectKeys(userData.userTempOrdeDetailWrtTempID)">
                 <th>{{ HeaderText }}</th>
               </ng-container>
+              <th>Generate Order</th>
             </thead>
             <tbody>
               <tr>
                 <td *ngFor="let dataText of objectKeys(userData.userTempOrdeDetailWrtTempID)">
                   {{userData.userTempOrdeDetailWrtTempID[dataText]}}
+                </td>
+                <td class="text-align-center">
+                  <ng-container *ngIf="_data.enableOrderGenerateBtn[i] == 'failed'">
+                    <span class="theme-red">Failed</span>
+                  </ng-container>
+                  <ng-container *ngIf="_data.enableOrderGenerateBtn[i] != 'done' else orderGenerated">
+                    <select id="selectedPaymentGateway" name="selectedPaymentGateway" class="form-control" required
+                      (change)="selectPaymentGateway($event); _data.enableOrderGenerateBtn[i] = $event.target.value ">
+                      <option selected disabled>Select Payment Gateway</option>
+                      <option *ngFor="let issue of _data.paymentGatewayList" [ngValue]="issue">
+                        <span class="capitalize">{{issue}}</span>
+                      </option>
+                    </select>
+                    <br>
+                    <button *ngIf="_data.enableOrderGenerateBtn[i]" class="btn btn-primary"
+                      (click)="generateOrder(userData.userTempOrdeDetailWrtTempID, _data.enableOrderGenerateBtn[i], i)">Submit</button>
+                  </ng-container>
+
+                  <ng-template #orderGenerated>
+                    <span class="text-green">Order Generated</span>
+                  </ng-template>
+
                 </td>
               </tr>
             </tbody>
