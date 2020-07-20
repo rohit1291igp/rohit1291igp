@@ -39,7 +39,7 @@ export class HolidayCalenderManagementComponent implements OnInit, AfterViewChec
   holidayFromDate = new Date();
   ngOnInit() {
     this.holidayCalenderForm = this.fb.group({
-      skus: [''],
+      skus: ['',Validators.required],
       duplicatesFlag: [false],
       holidayDateFrom: [''],
       holidayDateTo: [''],
@@ -122,7 +122,7 @@ export class HolidayCalenderManagementComponent implements OnInit, AfterViewChec
     }
   }
 
-  onSubmit(form) {
+  onSubmit() {
     let finalObj = {};
     finalObj['SKU'] = this.holidayCalenderForm.get('skus').value.split('\n');
     finalObj['Fixed_Date_Delivery'] = this.holidayCalenderForm.get('fixedDateDelivery').value
@@ -151,7 +151,7 @@ export class HolidayCalenderManagementComponent implements OnInit, AfterViewChec
       finalObj['Single_Timeslot_To'] = "";
     }
     this.updateData(finalObj)
-
+    
   }
   updateError = [];
   updateData(payload) {
@@ -170,7 +170,6 @@ export class HolidayCalenderManagementComponent implements OnInit, AfterViewChec
       } else {
         if (!response.error) {
           this.openSnackBar("Updated Successfully")
-          this.onClearAll();
           this.OnfetchSkuData();
           if (Array.isArray(response.result)) {
             this.updateError = response.result;
@@ -179,6 +178,8 @@ export class HolidayCalenderManagementComponent implements OnInit, AfterViewChec
         } else {
           this.openSnackBar(response.result)
         }
+        // Reset Form
+        this.onClearAll();
       }
 
     })
@@ -217,7 +218,9 @@ export class HolidayCalenderManagementComponent implements OnInit, AfterViewChec
       "clearHoliday": false,
       "clearSingleTimeslot": false,
     })
-    //  this.holidayCalenderForm.get('skus').markAsPristine();
+    this.holidayCalenderForm.markAsPristine();
+    this.holidayCalenderForm.markAsUntouched();
+
   }
 
   OnfetchSkuData() {
