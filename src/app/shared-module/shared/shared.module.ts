@@ -81,6 +81,7 @@ import { AutoSelectionComponent } from 'app/components/autoselection/auto-select
     MatSelectModule,
     AutoSelectionComponent,
     MatAutocompleteModule,
+    AutoSelectionComponent,
     MatSidenavModule
   ],
 })

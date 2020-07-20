@@ -18,7 +18,7 @@ import { ProductBarcodeComponent } from "./components/product-decentralized/prod
 import { DailyOpsReportComponent } from './components/daily-ops-report/daily-ops-report.component';
 import { ProductDecentralizationComponent } from './components/product-decentralization/product-decentralization.component';
 import { OfferPageManagementComponent } from './components/offer-page-management/offer-page-management.component';
-
+import { PaymentReconciliationComponent } from './components/payment-reconciliation/payment-reconciliation.component';
 
 
 const route: Routes = [
