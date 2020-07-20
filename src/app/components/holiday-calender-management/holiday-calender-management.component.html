@@ -16,7 +16,7 @@
 
   <div style="min-height:80vh;" class="m-top-2">
     <div class="container">
-      <form [formGroup]="holidayCalenderForm" name="HolidayCalender" #f="ngForm" (ngSubmit)="onSubmit($event)">
+      <form [formGroup]="holidayCalenderForm" name="HolidayCalender" #f="ngForm">
         <div class="row">
           <div class="col-sm-3 col-md-3">
             <div class="row">
@@ -128,7 +128,7 @@
               <mat-checkbox formControlName="fixedDateDelivery">Fixed Date Delivery</mat-checkbox>
             </div>
             <div class="row mar-top">
-                <button type="submit" color="primary" [disabled]="submitValidation()" mat-button mat-raised-button mat-success>
+                <button type="button" (click)="onSubmit()" color="primary" [disabled]="submitValidation()" mat-button mat-raised-button mat-success>
                   Submit 
                 </button>
                 <button (click)="onClearAll()" type="button" mat-button mat-raised-button mat-success>

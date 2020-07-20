@@ -17,6 +17,7 @@ import { ProductAvailabilityComponent } from './components/product-decentralized
 import { ProductBarcodeComponent } from "./components/product-decentralized/product-barcode/product-barcode.component";
 import { DailyOpsReportComponent } from './components/daily-ops-report/daily-ops-report.component';
 import { ProductDecentralizationComponent } from './components/product-decentralization/product-decentralization.component';
+import { OfferPageManagementComponent } from './components/offer-page-management/offer-page-management.component';
 
 
 
@@ -136,10 +137,14 @@ const route: Routes = [
   {
     path: 'barcode',
     component: ProductBarcodeComponent
-  },{
+  },
+  {
     path: 'productDecentralization',
     component:  ProductDecentralizationComponent
-
+  },
+  {
+    path: 'offerpagemanagement',
+    component:  OfferPageManagementComponent
   },
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
   // otherwise redirect to home
