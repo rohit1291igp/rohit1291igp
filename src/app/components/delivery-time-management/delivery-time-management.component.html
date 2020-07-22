@@ -35,7 +35,8 @@
 								<div class="d-flex">
 									<mat-form-field>
 										<mat-label>Product Delivery Days</mat-label>
-										<input matInput type="number" formControlName="productDeliveryDays">
+										<input matInput type="number" onkeydown="javascript: return event.keyCode === 8 ||
+										event.keyCode === 46 ? true : !isNaN(Number(event.key))" formControlName="productDeliveryDays">
 
 									</mat-form-field>
 								</div>
@@ -71,7 +72,8 @@
 									<div class="p-absolute width50">
 										<mat-form-field>
 											<mat-label>Delivery Days</mat-label>
-											<input matInput type="number" formControlName="deliveryDays">
+											<input matInput type="number" onkeydown="javascript: return event.keyCode === 8 ||
+											event.keyCode === 46 ? true : !isNaN(Number(event.key))" formControlName="deliveryDays">
 
 										</mat-form-field>
 									</div>
