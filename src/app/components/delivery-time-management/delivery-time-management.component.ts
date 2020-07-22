@@ -238,7 +238,7 @@ export class DeliveryTimeManagementComponent implements OnInit {
 		}
 		console.log('reqObj');
 		console.log(reqObj);
-		let confirmation = confirm("Would you like to proceed with changes?");
+		let confirmation = confirm("Would you like to proceed with the changes?");
 		if (!confirmation) {
 			return
 		}
