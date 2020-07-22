@@ -818,7 +818,7 @@ getDeliveryBoyList(){
       }
   }
 
-  searchReportSubmit(e, searchFields2?, formdata?:FormGroup){
+  searchReportSubmit(e, searchFields2?, formdata?:FormGroup, isDownload?:boolean){
         var _this=this;
         _this.BackendService.abortLastHttpCall();//abort  other  api calls
         console.log('Search report form submitted ---->', _this.searchResultModel);
@@ -944,6 +944,11 @@ getDeliveryBoyList(){
             _this.searchResultModel["startLimit"] = 0;
             _this.searchResultModel["endLimit"] = 100;
         } 
+
+        if(isDownload){
+            _this.searchResultModel["startLimit"] = 0;
+            _this.searchResultModel["endLimit"] = 1000000;
+        }
         
         _this.queryString = _this.generateQueryString(_this.searchResultModel);
         console.log('searchReportSubmit =====> queryString ====>', _this.queryString);
@@ -1862,7 +1867,7 @@ getDeliveryBoyList(){
 
     downLoadCSV(e, fileName){
         this.isDownload = true;
-        this.searchReportSubmit(null, null, this.myForm);
+        this.searchReportSubmit(null, null, this.myForm, true);
         // if(this.orginalReportData.tableData.length > 0){
         //     let data = this.orginalReportData.tableData;
         //     let download = new Angular5Csv(data, fileName);
