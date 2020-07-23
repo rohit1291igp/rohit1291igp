@@ -133,7 +133,7 @@ public onClick(targetElement) {
       console.log('Upload File - formData =============>', formData, options);
 
       _this.BackendService.makeAjax(reqObj, function (err, response, headers) {
-      
+      // response = {"error":false,"errorCode":"NO_ERROR","errorMessage":null,"errorParams":[],"result":{"errorList":[],"count":{"correct":50,"fail":0}}};
         if (!response) {
           err = null;
           response = {
@@ -193,6 +193,9 @@ public onClick(targetElement) {
           _this._data.uploadErrorCount = response.result.count;
           if(_this._data.uploadErrorCount.correct == 0 || _this._data.uploadErrorCount.correct < 0){
             _this._data.uploadErrorCount.correct = 0;
+          }
+          if(response.result.count.correct > 0 && response.result.count.fail == 0){
+            _this._data.uploadErrorList = [{row:'', msg:''}];
           }
         } else {
           _this._flags.uploadSuccessFlag = true;
