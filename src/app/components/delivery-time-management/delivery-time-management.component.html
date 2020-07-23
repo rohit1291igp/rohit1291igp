@@ -2,8 +2,8 @@
 	<mat-sidenav #sidenav (keydown.escape)="sidenavClose('escape')" disableClose>
 		<!-- Sidebar Errors -->
 		<!-- <p><button mat-button (click)="sidenavClose('toggle button')">Close</button></p> -->
-		<mat-card *ngFor="let ele of responseDataPut?.data?.error">
-			{{ele.msg}} in Row: {{ele.row}}
+		<mat-card *ngFor="let ele of responseDataPut?.result">
+			Row: {{ele.row}} -  {{ele.msg}} 
 		</mat-card>
 	</mat-sidenav>
 
