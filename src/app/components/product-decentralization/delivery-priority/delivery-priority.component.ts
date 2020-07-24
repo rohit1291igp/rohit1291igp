@@ -93,6 +93,24 @@ export class DeliveryPriorityComponent implements OnInit,AfterViewChecked {
     }
   }
 
+  onViewClick(){
+    console.log("onviewclick")
+    if(this.selected_view_or_download_by==='warehouse'){
+      this.getDeliveryPriorityList(this.selected_view_or_download_by,4)
+    }
+  }
+
+  getDeliveryPriorityList(fetchBy,reqData){
+    const reqObj = {
+      url: `warehouse/decentralized/getDeliveryPriorityList?source=4`,
+      method: 'post',
+      payload: {}
+    }
+    this.BackendService.makeAjax(reqObj,(err,response,body)=>{
+      console.log(response);
+    })
+  }
+
 
   onEditRow(element){
     element.edit_flat=true;
