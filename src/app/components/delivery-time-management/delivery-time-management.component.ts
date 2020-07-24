@@ -153,6 +153,7 @@ export class DeliveryTimeManagementComponent implements OnInit {
 			if (err || response.error) {
 				alert('Something went wrong.');
 				console.log('Error=============>', err, response.errorCode);
+
 				return;
 			}
 			_this.dataSource = new MatTableDataSource(response.tableData);
@@ -238,15 +239,17 @@ export class DeliveryTimeManagementComponent implements OnInit {
 		}
 		console.log('reqObj');
 		console.log(reqObj);
-		let confirmation = confirm("Would you like to proceed with changes?");
+		let confirmation = confirm("Would you like to proceed with the changes?");
 		if (!confirmation) {
 			return
 		}
 
 		_this.BackendService.makeAjax(reqObj, function (err, response, headers) {
 			if (err || response.error) {
-				alert('Something went wrong.');
+				alert(response.errorMessage);
 				console.log('Error=============>', err, response.errorCode);
+				_this.responseDataPut = response;
+				_this.sidenav.open()
 				return;
 			}
 			_this.responseDataPut = response;
