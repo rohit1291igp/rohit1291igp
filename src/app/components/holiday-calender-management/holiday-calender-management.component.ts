@@ -4,6 +4,7 @@ import { BackendService } from "../../services/backend.service"
 import { MatDatepickerInput, MatSnackBar } from '@angular/material';
 import { DatePipe } from '@angular/common';
 import { NotificationComponent } from '../notification/notification.component';
+import { t } from '@angular/core/src/render3';
 
 
 @Component({
@@ -186,22 +187,37 @@ export class HolidayCalenderManagementComponent implements OnInit, AfterViewChec
   }
 
   onEditClick(skuRow) {
+    console.log("skuRow",skuRow)
     this.onClearAll();
     if (this.selectedFieldForUpdate === 'holiday') {
       this.holidayCalenderForm.patchValue({
         "skus": `${skuRow['SKU']}`,
-        "holidayDateFrom": `${skuRow['Holiday_From']}`,
-        "holidayDateTo": `${skuRow['Holiday_To']}`,
         "fixedDateDelivery": skuRow['Fixed_Date_Delivery'],
         "deliveryTypes": skuRow['Holiday_type'],
-      })
+      });
+
+      if(skuRow['Holiday_From'] && skuRow['Holiday_To']){
+        let from = skuRow['Holiday_From'].split('-');
+        let to = skuRow['Holiday_To'].split('-');
+        this.holidayCalenderForm.patchValue({
+          "holidayDateFrom": new Date(from[2], from[1] - 1, from[0]),
+          "holidayDateTo": new Date(to[2], to[1] - 1, to[0]),
+        });
+      }
+
     } else if (this.selectedFieldForUpdate === 'singletimeslot') {
       this.holidayCalenderForm.patchValue({
         "skus": `${skuRow['SKU']}`,
-        "singleDateFrom": `${skuRow['Single_Timeslot_From']}`,
-        "singleDateTo": `${skuRow['Single_Timeslot_To']}`,
         "fixedDateDelivery": skuRow['Fixed_Date_Delivery'],
       })
+      if(skuRow['Single_Timeslot_From'] && skuRow['Single_Timeslot_To']){
+        let from = skuRow['Single_Timeslot_From'].split('-');
+        let to = skuRow['Single_Timeslot_To'].split('-');
+        this.holidayCalenderForm.patchValue({
+          "singleDateFrom": new Date(from[2], from[1] - 1, from[0]),
+          "singleDateTo": new Date(to[2], to[1] - 1, to[0]),
+        })  
+      }
     }
   }
 
