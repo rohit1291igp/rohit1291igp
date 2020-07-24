@@ -104,7 +104,7 @@ export class DeliveryPriorityComponent implements OnInit,AfterViewChecked {
     const reqObj = {
       url: `warehouse/decentralized/getDeliveryPriorityList?source=4`,
       method: 'post',
-      payload: {}
+      payload: []
     }
     this.BackendService.makeAjax(reqObj,(err,response,body)=>{
       console.log(response);
