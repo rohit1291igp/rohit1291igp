@@ -172,12 +172,12 @@
       <div>
         <div class="count text-igp" *ngIf="_data.uploadErrorCount && _data.uploadErrorCount.fail">Failed -
           {{_data.uploadErrorCount.fail}}</div>
-        <button class="btn btn-primary m-top-1" (click)="downloadErrorList()">Download</button>
+        <button *ngIf="_data.uploadErrorList[0]?.row || _data.uploadErrorList[0]?.msg" class="btn btn-primary m-top-1" (click)="downloadErrorList()">Download</button>
 
-        <div class="caption m-top-1">List:-</div>
+        <div *ngIf="_data.uploadErrorList[0]?.row || _data.uploadErrorList[0]?.msg" class="caption m-top-1">List:-</div>
         <div class="errorCont" *ngFor="let err of _data.uploadErrorList">
-          <div>row: {{err.row}}</div>
-          <div>message: {{err.msg}}</div>
+          <div *ngIf="err?.row">row: {{err.row}}</div>
+          <div *ngIf="err?.msg">message: {{err.msg}}</div>
         </div>
       </div>
     </div>
