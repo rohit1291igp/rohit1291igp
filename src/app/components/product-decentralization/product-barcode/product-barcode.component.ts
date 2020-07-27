@@ -25,6 +25,7 @@ export class ProductBarcodeComponent implements OnInit, AfterViewChecked {
 	tableHeaders: string[];
 	searchForm: FormGroup;
 	errorList = [];
+	dataFromDB = false;
 
 	constructor(
 		private fb: FormBuilder,
@@ -165,7 +166,8 @@ export class ProductBarcodeComponent implements OnInit, AfterViewChecked {
 				});
 				(<FormArray>_this.tableform.get("tableEntries")).push(control);
 			});
-			_this.selection.clear()
+			_this.selection.clear();
+			_this.dataFromDB = true;
 			_this.dataSource = new MatTableDataSource(response.tableData);
 			_this.tableHeaders = ["select", "o_barcode", "wh", "d_barcode", "actions"];
 			//_this.responseDataPut = response;
@@ -209,12 +211,12 @@ export class ProductBarcodeComponent implements OnInit, AfterViewChecked {
 						})
 					}
 				});
-				_this.selection.clear()
+				_this.selection.clear();
+				_this.dataFromDB = false;
 				_this.tableform.get("tableEntries")['controls'] = []
 				tableData.forEach((ele) => {
 					const control = _this.fb.group({
-						d_barcode: [ele.d_barcode],
-						//priority: [ele.priority]
+						d_barcode: [ele.d_barcode]
 					});
 					(<FormArray>_this.tableform.get("tableEntries")).push(control);
 				});
@@ -243,6 +245,7 @@ export class ProductBarcodeComponent implements OnInit, AfterViewChecked {
 		});
 		_this.dataSource = new MatTableDataSource(dataSource);
 		_this.tableHeaders = ["select", "o_barcode", "wh", "d_barcode", "actions"];
+		_this.dataFromDB = false;
 		setTimeout(() => {
 			_this.dataSource.sort = _this.sort;
 			_this.dataSource.paginator = _this.paginator;
@@ -326,6 +329,12 @@ export class ProductBarcodeComponent implements OnInit, AfterViewChecked {
 
 		let _this = this;
 		let tableIndex = index + this.paginator.pageIndex * this.paginator.pageSize;
+		if (!_this.dataFromDB) {
+			_this.dataSource.data[tableIndex].d_barcode = _this.tableform.get("tableEntries")["controls"][tableIndex].value.d_barcode;
+			row.editable = !row.editable;
+			_this.openEdits--;
+			return;
+		}
 		///v1/admin/warehouse/decentralized/updateProductList:
 		let reqObj: any = {
 			url: 'warehouse/decentralized/updateDecentBarcode',
@@ -372,7 +381,17 @@ export class ProductBarcodeComponent implements OnInit, AfterViewChecked {
 	deleteSelectedRows() {
 		console.log(this.selection.selected);
 		console.log(this.selection.selected);
-		let _this = this
+		let _this = this;
+		if (!_this.dataFromDB) {
+			_this.dataSource.data = _this.dataSource.data.filter(ele => {
+				if (_this.selection.selected.indexOf(ele) != -1) {
+					return false
+				}
+				return true
+			})
+			_this.selection.clear();
+			return
+		}
 		///v1/admin/warehouse/decentralized/removeDecentBarcode
 		let reqObj: any = {
 			url: 'warehouse/decentralized/removeDecentBarcode',
@@ -430,6 +449,15 @@ export class ProductBarcodeComponent implements OnInit, AfterViewChecked {
 	saveAllChanges() {
 		let editRows = [];
 		let _this = this;
+		if (!_this.dataFromDB) {
+			_this.dataSource.data.forEach((row, index) => {
+				if (row.editable) {
+					_this.dataSource.data[index].d_barcode = _this.tableform.get("tableEntries")["controls"][index].value.d_barcode;
+					row.editable = !row.editable;
+					_this.openEdits--;
+				}
+			});
+		}
 		let confirmation = confirm("Would you like to proceed with the changes?");
 		if (confirmation) {
 			_this.dataSource.data.forEach((row, index) => {
