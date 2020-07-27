@@ -6,6 +6,9 @@ import { MicroSiteDasboardComponent } from 'app/components/micro-site/micro-site
 import { SendEmailComponent } from 'app/components/send-email/send-email.component';
 import { MyDatePickerModule } from 'mydatepicker';
 import { NewExcelUploadComponent } from 'app/components/new-excel-upload/new-excel-upload.component';
+import { OrderUpdateStatusComponent } from 'app/components/order-update-status/order-update-status.component';
+import { SharedModule } from 'app/shared-module/shared/shared.module';
+import { PaymentReconciliationComponent } from 'app/components/payment-reconciliation/payment-reconciliation.component';
 
 const routes: Routes = [
   {
@@ -15,6 +18,14 @@ const routes: Routes = [
   {
     path: 'uploadtemplate',
     component: NewExcelUploadComponent
+  },
+  {
+    path: 'orderupdatestatus',
+    component: OrderUpdateStatusComponent
+  },
+  {
+    path:'payment-reconciliation',
+    component: PaymentReconciliationComponent
   }
 ];
 
@@ -24,11 +35,14 @@ const routes: Routes = [
     RouterModule.forChild(routes),
     FormsModule,
     ReactiveFormsModule,
-    MyDatePickerModule
+    MyDatePickerModule,
+    SharedModule
   ],
   declarations: [
     SendEmailComponent,
-    NewExcelUploadComponent
+    NewExcelUploadComponent,
+    OrderUpdateStatusComponent,
+    PaymentReconciliationComponent
   ]
 })
 export class SendEmailModule { }

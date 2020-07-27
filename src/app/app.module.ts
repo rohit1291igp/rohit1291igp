@@ -4,7 +4,7 @@ import { DatePipe } from '@angular/common';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { HttpModule } from '@angular/http';
-import { MatButtonModule, MatCardModule, MatCheckboxModule, MatDatepickerModule, MatDialogModule, MatDialogRef, MatFormFieldModule, MatIconModule, MatInputModule, MatListModule, MatMenuModule, MatNativeDateModule, MatPaginatorModule, MatProgressBarModule, MatProgressSpinnerModule, MatRadioModule, MatSelectModule, MatSnackBarModule, MatSortModule, MatTableModule, MAT_DIALOG_DATA, MatSidenavModule,MatAutocompleteModule, MatTabsModule, MAT_DATE_LOCALE } from '@angular/material';
+import { MatButtonModule, MatCardModule, MatCheckboxModule, MatDatepickerModule, MatDialogModule, MatDialogRef, MatFormFieldModule, MatIconModule, MatInputModule, MatListModule, MatMenuModule, MatNativeDateModule, MatPaginatorModule, MatProgressBarModule, MatProgressSpinnerModule, MatRadioModule, MatSelectModule, MatSnackBarModule, MatSortModule, MatTableModule, MAT_DIALOG_DATA, MatSidenavModule,MatAutocompleteModule, MatTabsModule, MAT_DATE_LOCALE, MatSlideToggleModule } from '@angular/material';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
@@ -72,6 +72,8 @@ import { ProductReportComponent } from './components/product-report/product-repo
 import { HolidayCalenderManagementComponent } from './components/holiday-calender-management/holiday-calender-management.component';
 import { ProductDecentralizationComponent } from './components/product-decentralization/product-decentralization.component';
 import { DeliveryPriorityComponent } from './components/product-decentralization/delivery-priority/delivery-priority.component';
+import { OfferPageManagementComponent } from './components/offer-page-management/offer-page-management.component';
+import { VoucherService } from './services/voucher.service';
 
 
 
@@ -116,6 +118,7 @@ export function ConfigLoader(envConfig: envConfig) {
     ProductBarcodeComponent,
     ProductDecentralizationComponent,
     DeliveryPriorityComponent,
+    OfferPageManagementComponent,
     // AutoSelectionComponent
   ],
   imports: [
@@ -147,6 +150,7 @@ export function ConfigLoader(envConfig: envConfig) {
     MatSidenavModule,
     MatAutocompleteModule,
     MatTabsModule,
+    MatSlideToggleModule,
     routing,
     SelectModule,
     MyDatePickerModule,
@@ -194,7 +198,8 @@ export function ConfigLoader(envConfig: envConfig) {
     // ReplacePipe,
     ObjectKeyValuePipe,
     S3UploadService,
-    Ng2ImgMaxService
+    Ng2ImgMaxService,
+    VoucherService
   ],
   entryComponents:[UploadExcelComponent,NotificationComponent, ImgPreviewComponent, SelectItemForDelivered, OrderStockComponent,editComponent, DownloadStockedComponent],
   bootstrap: [AppComponent],

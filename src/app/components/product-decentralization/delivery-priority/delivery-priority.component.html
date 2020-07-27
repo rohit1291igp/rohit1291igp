@@ -12,7 +12,7 @@
                   </mat-option>
                 </mat-select>
               </mat-form-field> -->
-            <mat-form-field class="width-100">
+            <!-- <mat-form-field class="width-100">
               <mat-label>Upload Excel By</mat-label>
               <mat-select (change)="onUploadFieldChange()" [(ngModel)]="selectedFieldForUpload"
                 [ngModelOptions]="{standalone: true}">
@@ -20,7 +20,11 @@
                   {{uploadSelect | titlecase}}
                 </mat-option>
               </mat-select>
-            </mat-form-field>
+            </mat-form-field> -->
+            <mat-radio-group [(ngModel)]="selectedFieldForUpload" aria-label="Upload By">
+              <mat-radio-button style="margin-right: 20px;" value="city">City</mat-radio-button>
+              <mat-radio-button style="margin-right: 20px;" value="pin code">Pin Code</mat-radio-button>
+            </mat-radio-group>
             <ng-container *ngIf="addDataBy==='excel upload'">
               <mat-card-content>
                 <br>
@@ -50,14 +54,18 @@
 
     <div class="col-sm-4">
       <mat-card class="card-h-1">
-        <mat-form-field class="width-100">
+        <mat-radio-group [(ngModel)]="selected_view_or_download_by" aria-label="View/Download By">
+          <mat-radio-button style="margin-right: 20px;" value="sku">SKU</mat-radio-button>
+          <mat-radio-button style="margin-right: 20px;" value="warehouse">Warehouse</mat-radio-button>
+        </mat-radio-group>
+        <!-- <mat-form-field class="width-100">
           <mat-label>View/Download By</mat-label>
           <mat-select [(ngModel)]="selected_view_or_download_by">
             <mat-option *ngFor="let view_or_download_by of ['sku','warehouse']" [value]="view_or_download_by">
               {{view_or_download_by | titlecase}}
             </mat-option>
           </mat-select>
-        </mat-form-field>
+        </mat-form-field> -->
         <ng-container *ngIf="selected_view_or_download_by==='warehouse'">
           <mat-card-content>
             <mat-form-field class="width-100">
@@ -68,7 +76,7 @@
                 </mat-option>
               </mat-select>
             </mat-form-field>
-            <button class="btnRadius" mat-raised-button>View</button>
+            <button class="btnRadius" (click)="onViewClick()" mat-raised-button>View</button>
             <button class="btnRadius" mat-raised-button>Download</button>
           </mat-card-content>
           <mat-card-actions>
@@ -77,8 +85,8 @@
         <ng-container *ngIf="selected_view_or_download_by==='sku'">
           <mat-card-content>
             <mat-form-field fxFlex class="width-100">
-              <textarea matInput matTextareaAutosize placeholder="Paste SKU Here" [matAutosizeMinRows]="8"
-                [matAutosizeMaxRows]="8" required></textarea>
+              <textarea matInput matTextareaAutosize placeholder="Paste SKU Here" [matAutosizeMinRows]="7"
+                [matAutosizeMaxRows]="7" required></textarea>
             </mat-form-field>
             <button class="btnRadius" mat-raised-button>View</button>
             <button class="btnRadius" mat-raised-button>Download</button>
