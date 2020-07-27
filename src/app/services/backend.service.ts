@@ -57,7 +57,7 @@ export class BackendService {
               }
           }
       }
-      // console.log("prvz",reqObj)
+
       _this.lastHttpCall = this.httpClient[reqObj.method](reqObj.url, reqObj.payload)
           .subscribe(
           response => {

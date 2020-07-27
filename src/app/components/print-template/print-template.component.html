@@ -103,7 +103,9 @@
                         <div class="" *ngIf="orderProduct.orderProductExtraInfo">{{orderProduct.orderProductExtraInfo.deliveryDate | date : 'dd-MM-yy'}}</div>
                     </div>
                     <div class="t-col-4 display-inline ">{{orderProduct.productName}}<span *ngIf="orderProduct.cakemessage"><br/><strong>Message on Cake:</strong> {{orderProduct.cakemessage}}</span><br>
-                     <span *ngIf="orderProduct?.orderProductExtraInfo?.attributes">{{orderProduct?.orderProductExtraInfo?.attributes.replace("[", "").replace("]", "")}}</span>   
+                     <span *ngIf="orderProduct?.orderProductExtraInfo?.attributes">{{orderProduct?.orderProductExtraInfo?.attributes.replace("[", "").replace("]", "")}}<br/>
+                        (<ng-container *ngFor="let compName of orderProduct.componentList; index as i ">{{compName.componentName}} x {{compName.quantity}}<ng-container *ngIf="orderProduct.componentList.length > 1 && i != (orderProduct.componentList.length - 1)">, </ng-container></ng-container>)
+                    </span>   
                     </div>
                     <div class= "t-col-5 display-inline ">{{orderProduct.productQuantity}}</div>
 
