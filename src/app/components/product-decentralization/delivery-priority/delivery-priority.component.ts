@@ -59,38 +59,6 @@ export class DeliveryPriorityComponent implements OnInit,AfterViewChecked {
     });
 
     this.getWarehouseList()
-
-    // this.a = [
-		// 	{ "sku": "HD1006698", "warehouse": "Lucknow", "city": "Mumbai", "priority": "low", "id": "1", "editable": false },
-		// 	{ "sku": "HD1004765", "warehouse": "Mumbai", "city": "Jaipur", "priority": "high", "id": "1", "editable": false },
-		// 	{ "sku": "HD1004770", "warehouse": "Jaipur", "city": "Mumbai", "priority": "very low", "id": "1", "editable": false },
-    //   { "sku": "HD1006721", "warehouse": "Mumbai", "city": "Chennai", "priority": "high", "id": "1", "editable": false }, 
-    //   { "sku": "HD1006742", "warehouse": "Jaipur", "city": "Jaipur", "priority": "low", "id": "1", "editable": false },
-		// 	{ "sku": "HD1006757", "warehouse": "Lucknow", "city": "Kanpur", "priority": "very high", "id": "1", "editable": false }
-		// ];
-		this.a.forEach((ele) => {
-			const control = this.fb.group({
-				priority: [ele.priority]
-			});
-			(<FormArray>this.tableform.get("tableEntries")).push(control);
-		});
-
-
-    this.selection.clear()
-    this.dataSource = new MatTableDataSource(this.a);
-    this.tableHeaders = ["select", "sku", "warehouse", this.selectedFieldForUpload,"priority", "actions"];
-    setTimeout(() => {
-      this.dataSource.sort = this.sort;
-      this.dataSource.paginator = this.paginator;
-    }, 100)
-    const toSelect = this.warehouseList.find(c => c.key == localStorage.fkAssociateId);
-    this.searchForm.get('source').setValue(toSelect);
-    if (toSelect && toSelect.key != 0) {
-      this.searchForm.get('source').disable();
-    }
-    else {
-      this.searchForm.get('source').setValue(this.warehouseList[0])
-    }
   }
 
   
@@ -190,7 +158,7 @@ export class DeliveryPriorityComponent implements OnInit,AfterViewChecked {
         }else{
           console.log(response);
           if(response.error){
-            this.uploadErrors=response['result']
+            this.uploadErrors=response['result']['errorList']
             this.sidenav.open();
           }
         }
@@ -281,7 +249,7 @@ export class DeliveryPriorityComponent implements OnInit,AfterViewChecked {
             console.log(_this.selectedFieldForUpload,row)
           }
           if (rowNumber == 1 && !((row.values[1].toLowerCase() == 'sku') && (row.values[2].toLowerCase() == 'warehouse') && (row.values[3] == _this.selectedFieldForUpload ) && (row.values[4].toLowerCase() == "priority"))) {
-            alert('Invalid excel sheet format! Columns must be in following sequence : sku,warehouse,'+_this.selectedFieldForUpload+",priority");
+            alert('Invalid excel sheet format! Columns must be in following sequence : Sku,Warehouse,'+_this.selectedFieldForUpload+",Priority");
             validExcel = false;
             event.target.value=""
             return;
@@ -301,7 +269,7 @@ export class DeliveryPriorityComponent implements OnInit,AfterViewChecked {
         _this.tableform.get("tableEntries")['controls'] = []
         tableData.forEach((ele) => {
           const control = _this.fb.group({
-            priority: [ele.priority]
+            priority: [ele.Priority]
           });
           (<FormArray>_this.tableform.get("tableEntries")).push(control);
         });
@@ -461,6 +429,10 @@ export class DeliveryPriorityComponent implements OnInit,AfterViewChecked {
         _this.openSnackBar('Something Went Wrong');
       }else{
         console.log(response);
+        if(response.error){
+          _this.uploadErrors=response.result['errorList'];
+          _this.sidenav.open();
+        }
 
 			_this.dataSource.data.forEach((row, index) => {
 				if (row.editable) {
