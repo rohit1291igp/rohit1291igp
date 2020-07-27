@@ -64,9 +64,9 @@ import { DailyOpsReportComponent } from './components/daily-ops-report/daily-ops
 import {StockComponentsReportsComponent} from './components/stock-components-reports/stock-components-reports.component';
 import { DeliveryTimeManagementComponent } from './components/delivery-time-management/delivery-time-management.component';
 
-import { ProductAvailabilityComponent } from './components/product-decentralized/product-availability/product-availability.component';
+import { ProductAvailabilityComponent } from './components/product-decentralization/product-availability/product-availability.component';
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { ProductBarcodeComponent } from './components/product-decentralized/product-barcode/product-barcode.component';
+import { ProductBarcodeComponent } from './components/product-decentralization/product-barcode/product-barcode.component';
 
 import { ProductReportComponent } from './components/product-report/product-report.component';
 import { HolidayCalenderManagementComponent } from './components/holiday-calender-management/holiday-calender-management.component';

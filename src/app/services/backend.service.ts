@@ -57,6 +57,7 @@ export class BackendService {
               }
           }
       }
+
       _this.lastHttpCall = this.httpClient[reqObj.method](reqObj.url, reqObj.payload)
           .subscribe(
           response => {
