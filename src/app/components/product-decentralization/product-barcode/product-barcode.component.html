@@ -1,7 +1,5 @@
 <mat-sidenav-container (backdropClick)="sidenavClose('backdrop')">
   <mat-sidenav #sidenav position="end" (keydown.escape)="sidenavClose('escape')" style="width: 50%;" disableClose>
-    <!-- Sidebar Errors -->
-    <!-- <p><button mat-button (click)="sidenavClose('toggle button')">Close</button></p> -->
     <mat-card *ngFor="let ele of errorList">
       {{ele}}
     </mat-card>
@@ -92,6 +90,9 @@
             <i class="fa fa-download" aria-hidden="true"></i>
             Download
           </button>
+          <span *ngIf="!dataFromDB">
+            Changes will not saved on system.
+          </span>
           <div style="float:right; display:inline">
             <button class="btnRadius saveButton" mat-raised-button (click)="saveAllChanges()" [disabled]="!openEdits>0">
               <i class="fa fa-floppy-o" aria-hidden="true"></i>
