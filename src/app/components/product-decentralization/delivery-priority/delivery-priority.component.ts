@@ -1,10 +1,12 @@
 import { Component, OnInit, ViewChild, ElementRef, AfterViewChecked, ChangeDetectorRef,} from '@angular/core';
 
 import * as Excel from 'exceljs/dist/exceljs.min.js';
-import { MatTableDataSource, MatSidenav, MatSort, MatPaginator, } from '@angular/material';
+import { MatTableDataSource, MatSidenav, MatSort, MatPaginator, MatSnackBar } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
 import { FormGroup, FormBuilder, FormArray } from '@angular/forms';
 import { BackendService } from 'app/services/backend.service';
+import { NotificationComponent } from 'app/components/notification/notification.component';
+import * as fs from 'file-saver';
 
 @Component({
   selector: 'app-delivery-priority',
@@ -14,7 +16,7 @@ import { BackendService } from 'app/services/backend.service';
 export class DeliveryPriorityComponent implements OnInit,AfterViewChecked {
   @ViewChild('excelFile') excelFile: ElementRef;
 
-  selectedFieldForUpload:string="city"
+  selectedFieldForUpload:string="City"
   addDataBy:string="excel upload"
   excel_file;
   upload_method:string[]=['excel upload','sku paste'] //'copy paste' for copy paste from excel file
@@ -32,7 +34,8 @@ export class DeliveryPriorityComponent implements OnInit,AfterViewChecked {
   constructor(
     private fb: FormBuilder,
     private BackendService: BackendService,
-    private cdRef: ChangeDetectorRef
+    private cdRef: ChangeDetectorRef,
+    private _snackBar: MatSnackBar,
   ) {
     this.tableform = this.fb.group({
       tableEntries: this.fb.array([])
@@ -43,12 +46,7 @@ export class DeliveryPriorityComponent implements OnInit,AfterViewChecked {
   tableform: FormGroup;
   editIndex: number;
   responseDataPut;
-  warehouseList = [
-    { key: 0, value: 'All' },
-    { key: 4, value: 'Lucknow WH' },
-    { key: 354, value: 'Mumbai WH' },
-    { key: 318, value: 'Jaipur WH' }
-  ];
+  warehouseList = [];
   a = [];
   destinationTypeOptions: string[] = ['City', 'Pincode', 'Country'];
   selection = new SelectionModel<any>(true, []);
@@ -60,14 +58,16 @@ export class DeliveryPriorityComponent implements OnInit,AfterViewChecked {
       source: [{ key: null, value: null }],
     });
 
-    this.a = [
-			{ "sku": "HD1006698", "warehouse": "Lucknow", "city": "Mumbai", "priority": "low", "id": "1", "editable": false },
-			{ "sku": "HD1004765", "warehouse": "Mumbai", "city": "Jaipur", "priority": "high", "id": "1", "editable": false },
-			{ "sku": "HD1004770", "warehouse": "Jaipur", "city": "Mumbai", "priority": "very low", "id": "1", "editable": false },
-      { "sku": "HD1006721", "warehouse": "Mumbai", "city": "Chennai", "priority": "high", "id": "1", "editable": false }, 
-      { "sku": "HD1006742", "warehouse": "Jaipur", "city": "Jaipur", "priority": "low", "id": "1", "editable": false },
-			{ "sku": "HD1006757", "warehouse": "Lucknow", "city": "Kanpur", "priority": "very high", "id": "1", "editable": false }
-		];
+    this.getWarehouseList()
+
+    // this.a = [
+		// 	{ "sku": "HD1006698", "warehouse": "Lucknow", "city": "Mumbai", "priority": "low", "id": "1", "editable": false },
+		// 	{ "sku": "HD1004765", "warehouse": "Mumbai", "city": "Jaipur", "priority": "high", "id": "1", "editable": false },
+		// 	{ "sku": "HD1004770", "warehouse": "Jaipur", "city": "Mumbai", "priority": "very low", "id": "1", "editable": false },
+    //   { "sku": "HD1006721", "warehouse": "Mumbai", "city": "Chennai", "priority": "high", "id": "1", "editable": false }, 
+    //   { "sku": "HD1006742", "warehouse": "Jaipur", "city": "Jaipur", "priority": "low", "id": "1", "editable": false },
+		// 	{ "sku": "HD1006757", "warehouse": "Lucknow", "city": "Kanpur", "priority": "very high", "id": "1", "editable": false }
+		// ];
 		this.a.forEach((ele) => {
 			const control = this.fb.group({
 				priority: [ele.priority]
@@ -93,21 +93,81 @@ export class DeliveryPriorityComponent implements OnInit,AfterViewChecked {
     }
   }
 
+  
+  getWarehouseList(){
+    const _this=this;
+    const reqObj = {
+      url: `warehouse/decentralized/getWareHouseList`,
+      method: 'get',
+    }
+    this.BackendService.makeAjax(reqObj,(err,response,headers)=>{
+      if(err){
+        console.log(err)
+      }else{
+        Object.keys(response.data).forEach(attr => {
+          _this.warehouseList.push(
+            {
+              value:response.data[attr], 
+              key: attr,
+            })
+        })
+      }
+    })
+  }
+
+  selectedWarehouse=""
+  requestedSkus=""
   onViewClick(){
     console.log("onviewclick")
-    if(this.selected_view_or_download_by==='warehouse'){
-      this.getDeliveryPriorityList(this.selected_view_or_download_by,4)
+    if(this.selected_view_or_download_by==='warehouse' && this.selectedWarehouse!==""){
+      this.getDeliveryPriorityList(this.selected_view_or_download_by,this.selectedWarehouse);
+    }else if(this.selected_view_or_download_by==='sku' && this.requestedSkus){
+      this.getDeliveryPriorityList(this.selected_view_or_download_by,this.requestedSkus.split('\n'))
     }
   }
 
   getDeliveryPriorityList(fetchBy,reqData){
-    const reqObj = {
-      url: `warehouse/decentralized/getDeliveryPriorityList?source=4`,
-      method: 'post',
-      payload: []
+    let _this = this;
+    _this.openEdits=0;
+    let payload=[];
+    let source=""
+    if(fetchBy==='warehouse'){
+      source="?source="+reqData;
+    }else if(fetchBy==='sku'){
+      payload=reqData;
     }
-    this.BackendService.makeAjax(reqObj,(err,response,body)=>{
-      console.log(response);
+    const reqObj = {
+      url: `warehouse/decentralized/getDeliveryPriorityList${source}`,
+      method: 'post',
+      payload: payload
+    }
+    _this.BackendService.makeAjax(reqObj,(err,response,body)=>{
+      if(err){
+        _this.openSnackBar('Something went wrong')
+      }else{
+        let tableData=response['tableData']
+        if(tableData.length===0){
+          _this.openSnackBar("No Data Found")
+        }
+        _this.selection.clear()
+          _this.tableform.get("tableEntries")['controls'] = []
+          tableData.forEach((ele) => {
+            const control = _this.fb.group({
+              priority: [ele.Priority]
+            });
+            (<FormArray>_this.tableform.get("tableEntries")).push(control);
+          });
+        _this.dataSource = new MatTableDataSource(tableData);
+        _this.tableHeaders = response['tableHeaders']
+        _this.tableHeaders.unshift('select')
+        _this.tableHeaders.push('Actions')
+        
+        setTimeout(() => {
+          _this.dataSource.sort = _this.sort;
+          _this.dataSource.paginator = _this.paginator;
+        }, 100)
+        console.log(response); 
+      }
     })
   }
 
@@ -116,8 +176,27 @@ export class DeliveryPriorityComponent implements OnInit,AfterViewChecked {
     element.edit_flat=true;
   }
 
+  uploadErrors=[];
   onUploadClick(){
-    console.log(this.selection)
+    if(this.excel_data_json.length){
+      const reqObj = {
+        url: `warehouse/decentralized/addDeliveryPriorityList?locationType=${this.selectedFieldForUpload}`,
+        method: 'post',
+        payload: this.excel_data_json
+      }
+      this.BackendService.makeAjax(reqObj,(err,response,header)=>{
+        if(err){
+          console.log("Error",err)
+        }else{
+          console.log(response);
+          if(response.error){
+            this.uploadErrors=response['result']
+            this.sidenav.open();
+          }
+        }
+      })
+      console.log(reqObj)
+    }
   }
 
 
@@ -181,6 +260,7 @@ export class DeliveryPriorityComponent implements OnInit,AfterViewChecked {
   }
 
 
+  excel_data_json=[];
   readExcel(event) {
     const workbook = new Excel.Workbook();
     const target: DataTransfer = <DataTransfer>(event.target);
@@ -200,32 +280,33 @@ export class DeliveryPriorityComponent implements OnInit,AfterViewChecked {
           if(rowNumber===1){
             console.log(_this.selectedFieldForUpload,row)
           }
-          if (rowNumber == 1 && !((row.values[1].toLowerCase() == 'sku') && (row.values[2].toLowerCase() == 'warehouse') && (row.values[3].toLowerCase() == _this.selectedFieldForUpload ) && (row.values[4].toLowerCase() == "priority"))) {
+          if (rowNumber == 1 && !((row.values[1].toLowerCase() == 'sku') && (row.values[2].toLowerCase() == 'warehouse') && (row.values[3] == _this.selectedFieldForUpload ) && (row.values[4].toLowerCase() == "priority"))) {
             alert('Invalid excel sheet format! Columns must be in following sequence : sku,warehouse,'+_this.selectedFieldForUpload+",priority");
             validExcel = false;
+            event.target.value=""
             return;
           }
           //["select", "orgBarCode", "warehouse", "mappedBarCode", "actions"];
           if (rowNumber != 1 && validExcel) {
             let obj_value={}
-                obj_value['sku']=row.values[1];
-                obj_value['warehouse']=row.values[2];
+                obj_value['SKU']=row.values[1];
+                obj_value['WareHouse']=row.values[2];
                 obj_value[_this.selectedFieldForUpload]=row.values[3];
-                obj_value['priority']=row.values[4];
+                obj_value['Priority']=row.values[4];
             tableData.push(obj_value)
           }
         });
+        _this.excel_data_json=tableData;
         _this.selection.clear()
         _this.tableform.get("tableEntries")['controls'] = []
         tableData.forEach((ele) => {
           const control = _this.fb.group({
-            // mappedBarCode: [ele.mappedBarCode],
             priority: [ele.priority]
           });
           (<FormArray>_this.tableform.get("tableEntries")).push(control);
         });
         _this.dataSource = new MatTableDataSource(tableData);
-        _this.tableHeaders = ["select", "sku", "warehouse",_this.selectedFieldForUpload, "priority", "actions"];
+        _this.tableHeaders = ["select", "SKU", "WareHouse",_this.selectedFieldForUpload, "Priority", "Actions"];
         setTimeout(() => {
           _this.dataSource.sort = _this.sort;
           _this.dataSource.paginator = _this.paginator;
@@ -288,9 +369,18 @@ export class DeliveryPriorityComponent implements OnInit,AfterViewChecked {
     console.log(index);
     let tableIndex=index+this.paginator.pageIndex*this.paginator.pageSize;
     console.log(this.tableform.get("tableEntries")["controls"][index].value.priority);
-    this.dataSource.data[tableIndex].priority = this.tableform.get("tableEntries")["controls"][tableIndex].value.priority;
-    domain.editable = !domain.editable;
-    this.openEdits--;
+    // this.dataSource.data[tableIndex].Priority = this.tableform.get("tableEntries")["controls"][tableIndex].value.priority;
+    // domain.editable = !domain.editable;
+    // this.openEdits--;
+    let updatedEntry={
+      "SKU":domain['SKU'],
+      "WareHouse":domain['WareHouse'],
+      "City":domain['City'],
+      "Pincode":domain['Pincode'],
+      "Priority":this.tableform.get("tableEntries")["controls"][index].value.priority
+    }
+    this.updatePriorityList([updatedEntry])
+
   }
   cancelRowEdit(row: any, index: number) {
 		let tableIndex = index + this.paginator.pageIndex * this.paginator.pageSize;
@@ -305,21 +395,84 @@ export class DeliveryPriorityComponent implements OnInit,AfterViewChecked {
   }
 
   deleteSelectedRows() {
-		console.log(this.selection.selected);
-	}
+    let _this=this;
+    console.log(this.selection.selected);
+    this.deletePriorityList(this.selection.selected)
+  }
+  
+  deletePriorityList(list){
+    const _this=this;
+    const reqObj = {
+      url: `warehouse/decentralized/deleteDeliveryPriorityList`,
+      method: 'post',
+      payload:list
+    }
+
+    this.BackendService.makeAjax(reqObj,(err,response,headers)=>{
+      if(err){
+        console.log(err)
+        _this.openSnackBar("Something Went Wrong")
+      }else{
+        console.log(response);
+        _this.dataSource.data = _this.dataSource.data.filter(ele => {
+          if (_this.selection.selected.indexOf(ele) != -1) {
+            return false
+          }
+          return true
+        })
+        _this.selection.clear();
+        _this.openSnackBar(response.errorMessage)
+      }
+
+    })
+
+  }
   
   saveAllChanges() {
 		let confirmation = confirm("Would you like to proceed with changes?");
 		if (confirmation) {
-			this.dataSource.data.forEach((row, index) => {
+      let updatedList=[];
+
+      this.dataSource.data.forEach((row, index) => {
 				if (row.editable) {
-					this.dataSource.data[index].priority = this.tableform.get("tableEntries")["controls"][index].value.priority;
-					row.editable = !row.editable;
-					this.openEdits--;
+          updatedList.push({
+            "SKU":row['SKU'],
+            "WareHouse":row['WareHouse'],
+            "City":row['City'],
+            "Pincode":row['Pincode'],
+            "Priority":this.tableform.get("tableEntries")["controls"][index].value.priority
+          });
 				}
-			});
+      });
+      this.updatePriorityList(updatedList)
 		}
   }
+
+  updatePriorityList(list){
+    const _this=this;
+    const reqObj = {
+      url: `warehouse/decentralized/updateDeliveryPriorityList`,
+      method: 'put',
+      payload:list
+    }
+    _this.BackendService.makeAjax(reqObj,(err,response,headers)=>{
+      if(err){
+        console.log(err);
+        _this.openSnackBar('Something Went Wrong');
+      }else{
+        console.log(response);
+
+			_this.dataSource.data.forEach((row, index) => {
+				if (row.editable) {
+					_this.dataSource.data[index].Priority = _this.tableform.get("tableEntries")["controls"][index].value.priority;
+					row.editable = false;
+          _this.openEdits--;
+				}
+      });
+      }
+    }) 
+  }
+  
   
   cancelAllChanges() {
 		let confirmation = confirm("Would you like to cancel all changes?");
@@ -333,10 +486,42 @@ export class DeliveryPriorityComponent implements OnInit,AfterViewChecked {
 			})
 		}
   }
+
+  downloadExcel() {
+    alert('hello')
+		let workbook = new Excel.Workbook();
+		let worksheet = workbook.addWorksheet('Report');
+		let titleRow = worksheet.addRow(["SKU", "Warehouse", "City","Pincode", "Priority"]);
+
+		this.dataSource.data.forEach(row => {
+			let line = [];
+			line.push(row.SKU);
+			line.push(row.WareHouse);
+      line.push(row.City);
+      line.push(row.Pincode);
+			line.push(row.Priority);
+			worksheet.addRow(line)
+		})
+
+		workbook.xlsx.writeBuffer().then((data) => {
+			let blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+			fs.saveAs(blob, 'report.xlsx');
+		});
+	}
+
+  openSnackBar(data) {
+    this._snackBar.openFromComponent(NotificationComponent, {
+      data: data,
+      duration: 5 * 1000,
+      panelClass: ['snackbar-success'],
+      verticalPosition: "top"
+    });
+  }
   
+
+
   ngAfterViewChecked(){
     this.cdRef.detectChanges();
-
   }
 
 
