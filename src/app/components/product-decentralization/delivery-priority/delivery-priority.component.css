@@ -24,3 +24,27 @@
     background-color: #28a745;
     color: #fff
 }
+
+.mat-cell {
+    text-align: center;
+    justify-content: center;
+}
+.mat-header-cell {
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+}
+
+.mat-column-select {
+    word-wrap: break-word !important;
+    white-space: unset !important;
+    flex: 0 0 5% !important;
+    width: 10% !important;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    word-break: break-word;
+    -ms-hyphens: auto;
+    -moz-hyphens: auto;
+    -webkit-hyphens: auto;
+    hyphens: auto;
+}
