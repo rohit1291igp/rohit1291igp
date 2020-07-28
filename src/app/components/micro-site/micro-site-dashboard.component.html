@@ -46,11 +46,11 @@
             </form>
         </mat-card>
         <mat-card class="d-flex align-items-center justify-content-center text-align-center">
-            <div [ngClass]="displayUplaodFormFlag ? 'hide-form' : 'show-form'">
+            <div *ngIf="fksId != '895' && vendorName != 'itcinfotech'" [ngClass]="displayUplaodFormFlag ? 'hide-form' : 'show-form'">
                 <button mat-stroked-button color="primary" (click)="displayUploadForm(true)"
                     class="btn-color">Upload</button>
             </div>
-            <mat-card [ngClass]="displayUplaodFormFlag ? 'show-form' : 'hide-form'">
+            <mat-card *ngIf="fksId != '895' && vendorName != 'itcinfotech'" [ngClass]="displayUplaodFormFlag ? 'show-form' : 'hide-form'">
                 <div>
                     <i class="fa fa-times" style="float: right; cursor:pointer;color:#C3404E"
                         (click)="displayUploadForm(false)"></i>

@@ -11,6 +11,7 @@ import { PerformanceReportComponent } from './components/performance-report/perf
 import { StockComponentsReportsComponent } from './components/stock-components-reports/stock-components-reports.component';
 import { AuthGuard } from './services/auth-guard.service';
 import { DailyOpsReportComponent } from './components/daily-ops-report/daily-ops-report.component';
+import { PaymentReconciliationComponent } from './components/payment-reconciliation/payment-reconciliation.component';
 
 
 

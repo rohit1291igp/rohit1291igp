@@ -73,7 +73,7 @@ export class DailyOpsReportComponent implements OnInit {
                 if (line !== '') line += ',';
                 line += array[i][index];
             }
-
+            line = line.replace(/;/g, " | ");
             str += line + '\r\n';
         }
 
@@ -117,15 +117,21 @@ export class DailyOpsReportComponent implements OnInit {
         if(this.myForm.value.warehouseopsreport == 1){
             url += `downloadCSVPart1?purchaseDateFrom=${datefrom}&purchaseDateTo=${dateto}`;
             if(this.myForm.value.warehousename == 0){
-                url += `&fkAsID=${_this.fkasid}`
+                url += `&fkAsID=0`
             }else{
                 url += `&fkAsID=${this.myForm.value.warehousename}`
             }
-        }else{
+        }else if(this.myForm.value.warehouseopsreport == 2){
             url += `downloadCSVPart2?releasedDateFrom=${datefrom}&releasedDateTo=${dateto}`;
+        }else{
+            url += `downloadCSVPart1?purchaseDateFrom=${datefrom}&purchaseDateTo=${dateto}&flagIncludeDelivered=true`;
+            if(this.myForm.value.warehousename == 0){
+                url += `&fkAsID=0`
+            }else{
+                url += `&fkAsID=${this.myForm.value.warehousename}`
+            }
         }
         
-        //adminapi.igp.com/v1/admin/warehouseops/downloadCSVPart1?purchaseDateFrom=${datefrom}&purchaseDateTo=${dateto}
         const reqObj = {
             url: url,
             method: 'get'

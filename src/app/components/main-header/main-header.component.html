@@ -6,7 +6,7 @@
           <ng-container *ngIf="!vendorName">Indian Gifts Portal (IGP) - Admin Panel</ng-container>
           <ng-container *ngIf="vendorName">IGP</ng-container>
           <ng-container *ngIf="!environment.userType && vendorName">- Handels</ng-container>
-          <ng-container *ngIf="vendorName && environment.userType == 'vendor'">- {{vendorName}}</ng-container>
+          <ng-container *ngIf="vendorName && environment.userType == 'vendor' || environment.userType == 'warehouse'">- {{vendorName}}</ng-container>
           <ng-container *ngIf="deliveryBoyName && environment.userType == 'deliveryboy'">- {{deliveryBoyName}}</ng-container></span>
         <span  class="logout pull-right" (click)="logout($event)" *ngIf="isMobile && vendorName" style="margin-right: 0.5em;">
             <i class="icon glyphicon glyphicon-off"></i>
@@ -16,14 +16,20 @@
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse navRight" id="bs-example-navbar-collapse-1" *ngIf="!isMobile && vendorName">
       <ul class="nav navbar-nav navbar-right">
-        <li  *ngIf="environment.userType == 'root'" class="fullHeightLi" [ngClass]="{'selected' : selectedTopTab === 'sendemail/uploadtemplate'}">
-            <p><a ng-href="#/sendemail/uploadtemplate" routerLink="/sendemail/uploadtemplate">Upload</a></p>
+        <li  *ngIf="environment.userType == 'root' || environment.userType == 'warehouse'" [routerLinkActive]="'is-active'" class="fullHeightLi" [ngClass]="{'selected' : selectedTopTab === 'sendemail/uploadtemplate'}">
+            <p><a ng-href="#/sendemail/uploadtemplate" routerLink="/sendemail/uploadtemplate" [routerLinkActive]="'is-active'">Upload</a></p>
+        </li>
+        <li  *ngIf="environment.userType == 'warehouse'" class="fullHeightLi" [routerLinkActive]="'is-active'" [ngClass]="{'selected' : selectedTopTab === 'sendemail/orderupdatestatus'}">
+            <p><a ng-href="#/sendemail/orderupdatestatus" routerLink="/sendemail/orderupdatestatus" [routerLinkActive]="'is-active'">Order Update Status</a></p>
+        </li>
+        <li  *ngIf="environment.userType == 'warehouse'" class="fullHeightLi" [routerLinkActive]="'is-active'" [ngClass]="{'selected' : selectedTopTab === 'sendemail/payment-reconciliation'}">
+            <p><a ng-href="#/sendemail/payment-reconciliation" routerLink="/sendemail/payment-reconciliation" [routerLinkActive]="'is-active'">Payment Reconciliation</a></p>
         </li>
         <ng-container *ngIf="(environment.userType !== 'root' && environment.userType !== 'blogger')">
             <li  *ngIf="environment.userType == 'admin'" class="fullHeightLi" [ngClass]="{'selected' : selectedTopTab === 'payout-dashboard'}">
                     <p><a ng-href="#/payout-dashboard" routerLink="/payout-dashboard">Payout Dashboard</a></p>
             </li>
-            <li  *ngIf="environment.userType != 'microsite' && environment.userType != 'microsite-zeapl'" class="fullHeightLi" [ngClass]="{'selected' : selectedTopTab === 'dashboard'}">
+            <li  *ngIf="environment.userType != 'microsite' && environment.userType != 'microsite-zeapl' && environment.userType != 'warehouse'" class="fullHeightLi" [ngClass]="{'selected' : selectedTopTab === 'dashboard'}">
                 <p><a ng-href="#/dashboard" routerLink="/dashboard">Dashboard</a></p>
             </li>
             <li  *ngIf="environment.userType == 'microsite' || environment.userType == 'microsite-zeapl'" class="fullHeightLi" [ngClass]="{'selected' : selectedTopTab === 'dashboard'}">
