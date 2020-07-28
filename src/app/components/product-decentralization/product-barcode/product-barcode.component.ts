@@ -314,7 +314,7 @@ export class ProductBarcodeComponent implements OnInit, AfterViewChecked {
 			return data
 		}
 		catch{
-			_this.openSnackBar('Invalid copy-paste');
+			this.openSnackBar('Invalid copy-paste');
 		}
 	}
 
