@@ -1,6 +1,6 @@
 <div class="main-container">
     <!-- Filter Form -->
-    <mat-card>
+    <mat-card *ngIf="SearchForm?.show">
         <form [formGroup]="myForm" (ngSubmit)="onSubmit(myForm)">
             <div class="form-container">
                 <div class="d-flex">
@@ -46,7 +46,7 @@
                     <mat-form-field *ngIf="SearchForm?.formFields?.componentSelection?.show" class="m-8">
                         <mat-label>{{SearchForm?.formFields?.componentSelection?.placeholder}}</mat-label>
                         <input type="text" matInput [formControl]="myComponentControl" [matAutocomplete]="auto">
-                        <mat-autocomplete #auto="matAutocomplete" (optionSelected)='getComponents($event.option.value)' [displayWith]="displayFn">
+                        <mat-autocomplete #auto="matAutocomplete" (optionSelected)='getComponents($event.option.value)' [displayWith]="componenetDisplayFn">
                             <mat-option *ngFor="let option of filteredComponentsOptions | async" [value]="option">
                                 {{option.Component_Name}}</mat-option>
                         </mat-autocomplete>
@@ -61,13 +61,35 @@
                             </mat-option>
                         </mat-select>
                     </mat-form-field>
-
+                    <mat-form-field [style.width.px]="300" *ngIf="SearchForm?.formFields?.stockComponentList?.show && stockComponentList && stockComponentList.length > 0" class="m-8">
+                        <mat-label>{{SearchForm?.formFields?.stockComponentList?.placeholder}}</mat-label>
+                        <!-- <mat-select formControlName="vendorDetail" [(ngModel)]="selected_stock_comp">
+                            <mat-option *ngFor="let stock_comp of stockComponentList" [value]="stock_comp">{{stock_comp.Component_Name}}
+                            </mat-option>
+                        </mat-select> -->
+                        <input type="text" matInput formControlName="stockComponent" [matAutocomplete]="auto">
+                        <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayComponentName">
+                        <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+                            {{option.Component_Name}}
+                        </mat-option>
+                        </mat-autocomplete>
+                    </mat-form-field>
+                    <mat-form-field *ngIf="SearchForm?.formFields?.procList?.show && procList && procList.length > 0" class="m-8">
+                        <mat-label>{{SearchForm?.formFields?.procList?.placeholder}}</mat-label>
+                        <mat-select formControlName="procDetail" [(ngModel)]="selected">
+                            <mat-option *ngFor="let proc of procList" [value]="proc">{{proc}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    
                 </div>
                 <div class="d-flex">
                     <button style="margin: 5px;" id="search" type="submit" mat-raised-button class="btn-color"
                         (click)="btnType = 'search'">Search</button>
                     <button style="margin: 5px;" id="download" type="submit" mat-raised-button class="btn-color"
                         (click)="btnType = 'download'">Download</button>
+                    <button *ngIf="env.userType==='admin'" style="margin: 5px;" id="upload" type="button" mat-raised-button class="btn-color"
+                        (click)="onAddComponent()">Add Component</button>
                 </div>
             </div>
         </form>
@@ -82,18 +104,21 @@
 
                 <ng-container matColumnDef="{{col.id}}" *ngFor="let col of columnNames">
                     <mat-header-cell class="mat-header-row" *matHeaderCellDef>
-                        {{ getHeaderCellValue(col.value) | capitalize }}
+                        {{ getHeaderCellValue(col.value) | uppercase }}
                     </mat-header-cell>
                     <mat-cell *matCellDef="let element; let i = index">
                         <ng-container
                             *ngIf="getRowCellValue(element[col.id]) != 'img' && getRowCellValue(element[col.id]) != 'menu'">
+                            <span *ngIf="col.id==='Fixed_Date_Delivery'">&nbsp;&nbsp;</span>
                             {{ getRowCellValue(element[col.id]) | dateformatter:dateFormat:col.id}} <i
-                                *ngIf="getEditTableCell(col.id)" class="fa fa-edit" style="cursor: pointer;"
+                                *ngIf="getEditTableCell(col.id) && col.id!=='Proc_Type_Vendor'" class="fa fa-edit" style="cursor: pointer;"
                                 (click)="openEditWindow(element, col.id, i)"></i>
                         </ng-container>
-                        <ng-container *ngIf="getRowCellValue(element[col.id]) == 'img'"><img
-                                src="{{componentImageUrl+element[col.id]}}" width="50" height="50"
-                                alt="{{element[col.id]}}">
+                        <ng-container *ngIf="col.id==='actions'">
+                            <button mat-button (click)="onEditAction(element)" >Edit</button>
+                        </ng-container>
+                        <ng-container *ngIf="getRowCellValue(element[col.id]) === 'img'"><img
+                                src="{{env?.componentImageUrl+element[col.id]}}" alt="{{element[col.id]}}" width="50" height="50">
                         </ng-container>
                         <ng-container *ngIf="getRowCellValue(element[col.id]) == 'menu' && element[col.id].length > 0">
                             <ng-container *ngIf="col?.id.includes('image') else noImg">
@@ -102,8 +127,8 @@
                                         (click)="imgPreview(env?.componentImageUrl+x)"></div>
                             </ng-container>
                             <ng-template #noImg>
-                                <button mat-button [matMenuTriggerFor]="menu"><i class="fa fa-caret-down"
-                                        aria-hidden="true"></i>{{element[col.id]}}</button>
+                                <span style="cursor: pointer;" mat-button [matMenuTriggerFor]="menu"><i class="fa fa-caret-down"
+                                        aria-hidden="true"></i>{{element[col.id]}}</span>
                                 <mat-menu #menu="matMenu">
                                     <button mat-menu-item *ngFor="let x of element[col.id]">{{x}}</button>
                                 </mat-menu>

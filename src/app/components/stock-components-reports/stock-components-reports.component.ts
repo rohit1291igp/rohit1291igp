@@ -6,6 +6,7 @@ import { BackendService } from '../../services/backend.service';
 import { AddDeliveryBoyComponent } from '../add-deliveryboy/add-deliveryboy.component';
 import { NotificationComponent } from '../notification/notification.component';
 import { ActivatedRoute } from '@angular/router';
+import { UtilityService } from '../../services/utility.service';
 import { ReportsService } from 'app/services/reports.service';
 import { DatePipe } from '@angular/common';
 import { Angular5Csv } from 'angular5-csv/dist/Angular5-csv';
@@ -28,9 +29,12 @@ export class StockComponentsReportsComponent implements OnInit {
     userType;
     fkasid;
     vendorList: any;
+    editTableCellObj: any;
+
     constructor(
         private BackendService: BackendService,
         public addDeliveryBoyDialog: MatDialog,
+        public UtilityService: UtilityService,
         private _snackBar: MatSnackBar,
         private route: ActivatedRoute,
         private reportsService: ReportsService
@@ -38,7 +42,7 @@ export class StockComponentsReportsComponent implements OnInit {
 
 
     ngOnInit() {
-        
+
         var _this = this;
         _this.userType = localStorage.getItem('userType') ? localStorage.getItem('userType') : null;
         _this.fkasid = localStorage.getItem('fkAssociateId') ? localStorage.getItem('fkAssociateId') : null;
@@ -79,13 +83,14 @@ export class StockComponentsReportsComponent implements OnInit {
         var _this = this;
         const dateToday = pipe.transform(Date.now(), 'yyyy-MM-dd');
         console.log(event);
-        let url: string;
-        if (event.componentSelection.Component_Id && event.componentSelection.Component_Id != 'All') {
-            url = "startLimit=0&endLimit=100&Component_Id=" + event.componentSelection.Component_Id;
+        let url = 'startLimit=0&endLimit=100';
+        if (event.vendorDetail.Vendor_Id && event.vendorDetail.Vendor_Id != 0) {
+            url += "&Vendor_Id=" + event.vendorDetail.Vendor_Id;
         }
-        else {
-            url = "startLimit=0&endLimit=100";
+        if (event.componentSelected && event.componentSelected.Component_Id != 'All') {
+            url += "&Component_Id=" + event.componentSelected.Component_Id;
         }
+
 
         var _this = this;
 
@@ -125,7 +130,7 @@ export class StockComponentsReportsComponent implements OnInit {
                             }
                         }
                     }).then((data) => {
-                        
+
                         let download = new Angular5Csv(data, 'StockComponentReport-' + dateToday, options);
                     })
                 } else {
@@ -138,6 +143,30 @@ export class StockComponentsReportsComponent implements OnInit {
                 console.log(err, 'rrrrrrrr')
             }
         });
+    }
+
+
+    editRowData(event) {
+        var _this = this;
+        var apiURLPath = "";
+        apiURLPath = "orderedVendorComponentStocked";
+        let paramsObj = event.data.rowData;
+        event.data.colName = event.data.colName.replace(/ /g, '_');
+        paramsObj[event.data.colName] = event.value.fieldName;
+        var paramsStr = _this.UtilityService.formatParams(paramsObj);
+        let reqObj = {
+            url: apiURLPath + paramsStr,
+            method: "put"
+        };
+        _this.BackendService.makeAjax(reqObj, function (err, response, headers) {
+            if (err || response.error) {
+                console.log('Error=============>', err, response.errorCode);
+                alert('Something went wrong.');
+                return;
+            }
+            alert('Updated Succesfully.');
+            console.log('sidePanel Response --->', response.result);
+        })
     }
 
     getVendor() {
@@ -166,8 +195,9 @@ export class StockComponentsReportsComponent implements OnInit {
 
     getComponentList() {
         var _this = this;
+        
+        let reqObj = {};
         if (_this.userType == 'vendor') {
-            let reqObj = {};
             if (_this.fkasid) {
                 reqObj = {
                     url: 'getListOfVendorComponents?startLimit=0&endLimit=5000&fkAssociateId=' + _this.fkasid,
@@ -183,21 +213,28 @@ export class StockComponentsReportsComponent implements OnInit {
                 }
 
             }
-            _this.BackendService.makeAjax(reqObj, function (err, response, headers) {
-                if (err || response.error == true) {
-                    if (response) {
-                        console.log('Error=============>', err, response.errorCode);
-                    } else {
-                        alert("Error Occurred while trying to get list of components.");
-                    }
-                    return;
-                }
-                console.log("response----->list of components loaded");
-                _this.listOfComponents = response.result;
-                _this.listOfComponents.unshift({ Component_Id: 'All', Component_Name: 'All Components' });
-
-            });
         }
+        else if (_this.userType == 'admin') {
+            reqObj = {
+                url: 'getListOfComponents?startLimit=0&endLimit=5000',
+                method: "get",
+                payload: {}
+            }
+        }
+        _this.BackendService.makeAjax(reqObj, function (err, response, headers) {
+            if (err || response.error == true) {
+                if (response) {
+                    console.log('Error=============>', err, response.errorCode);
+                } else {
+                    alert("Error Occurred while trying to get list of components.");
+                }
+                return;
+            }
+            console.log("response----->list of components loaded");
+            _this.listOfComponents = response.result;
+            _this.listOfComponents.unshift({ Component_Id: 'All', Component_Name: 'All Components' });
+
+        });
     }
 }
 
