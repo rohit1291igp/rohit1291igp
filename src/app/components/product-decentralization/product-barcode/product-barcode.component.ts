@@ -1,6 +1,6 @@
 import { Component, OnInit, NgModule, ViewChild, ChangeDetectorRef, AfterViewChecked } from '@angular/core';
 import { FormControl, FormGroup, FormBuilder, FormArray, FormsModule } from '@angular/forms';
-import { MatDialog, MatPaginator, MatSort, MatTableDataSource, MatDatepickerInputEvent, MatAutocompleteModule, MatIcon, MatSidenavModule, MatTableModule } from '@angular/material';
+import { MatDialog, MatPaginator, MatSort, MatTableDataSource, MatDatepickerInputEvent, MatAutocompleteModule, MatIcon, MatSidenavModule, MatTableModule, MatSnackBar } from '@angular/material';
 import { BackendService } from '../../../services/backend.service';
 import { DatePipe, CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
@@ -9,6 +9,7 @@ import * as Excel from 'exceljs/dist/exceljs.min.js';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatSidenav } from "@angular/material/sidenav";
 import * as fs from 'file-saver';
+import { NotificationComponent } from 'app/components/notification/notification.component';
 
 @Component({
 	selector: 'app-product-barcode',
@@ -30,7 +31,8 @@ export class ProductBarcodeComponent implements OnInit, AfterViewChecked {
 	constructor(
 		private fb: FormBuilder,
 		private BackendService: BackendService,
-		private cdRef: ChangeDetectorRef
+		private cdRef: ChangeDetectorRef,		
+		private _snackBar: MatSnackBar
 	) {
 		this.tableform = this.fb.group({
 			tableEntries: this.fb.array([])
@@ -84,6 +86,14 @@ export class ProductBarcodeComponent implements OnInit, AfterViewChecked {
 	sidenavClose(reason: string) {
 		this.sidenav.close();
 	}
+	openSnackBar(data) {
+		this._snackBar.openFromComponent(NotificationComponent, {
+		  data: data,
+		  duration: 5 * 1000,
+		  panelClass: ['snackbar-success'],
+		  verticalPosition: "top"
+		});
+	  }
 	// getEdit(data) {
 	// 	alert("clicked" + data);
 	// 	console.log();
@@ -156,7 +166,7 @@ export class ProductBarcodeComponent implements OnInit, AfterViewChecked {
 
 		_this.BackendService.makeAjax(reqObj, function (err, response, httpOptions) {
 			if (err || response.error) {
-				alert('Something went wrong.');
+				_this.openSnackBar('Something went wrong.');
 				console.log('Error=============>', err, response.errorCode);
 				return;
 			}
@@ -198,7 +208,7 @@ export class ProductBarcodeComponent implements OnInit, AfterViewChecked {
 				console.log('rowCount: ', worksheet.rowCount);
 				worksheet.eachRow(function (row, rowNumber) {
 					if (rowNumber == 1 && !((row.values[1].toLowerCase() == 'o_barcode') && (row.values[2].toLowerCase() == 'wh') && (row.values[3].toLowerCase() == 'd_barcode'))) {
-						alert('Invalid excelsheet format');
+						_this.openSnackBar('Invalid excelsheet format');
 						validExcel = false;
 						return;
 					}
@@ -276,7 +286,7 @@ export class ProductBarcodeComponent implements OnInit, AfterViewChecked {
 				_this.sidenav.open()
 			}
 			if (err || response.error) {
-				alert('Something went wrong.');
+				_this.openSnackBar('Something went wrong.');
 				console.log('Error=============>', err, response.errorCode);
 				return;
 			}
@@ -304,7 +314,7 @@ export class ProductBarcodeComponent implements OnInit, AfterViewChecked {
 			return data
 		}
 		catch{
-			alert('Invalid copy-paste');
+			_this.openSnackBar('Invalid copy-paste');
 		}
 	}
 
@@ -348,7 +358,7 @@ export class ProductBarcodeComponent implements OnInit, AfterViewChecked {
 		}]
 		_this.BackendService.makeAjax(reqObj, function (err, response, headers) {
 			if (err || response.error) {
-				alert('Something went wrong.');
+				_this.openSnackBar('Something went wrong.');
 				if (response.result.errorList.length) {
 					_this.errorList = response.result.errorList;
 					_this.sidenav.open()
@@ -406,7 +416,7 @@ export class ProductBarcodeComponent implements OnInit, AfterViewChecked {
 				_this.sidenav.open()
 			}
 			if (err || response.error) {
-				alert('Something went wrong.');
+				_this.openSnackBar('Something went wrong.');
 
 				console.log('Error=============>', err, response.errorCode);
 				return;
@@ -428,14 +438,14 @@ export class ProductBarcodeComponent implements OnInit, AfterViewChecked {
 	downloadExcel() {
 		let workbook = new Excel.Workbook();
 		let worksheet = workbook.addWorksheet('Report');
-		let titleRow = worksheet.addRow(["SKU", "Warehouse", "Quantity", "Priority"]);
+		let titleRow = worksheet.addRow(["Original Barcode", "Warehouse", "Mapped Barcode"]);
 
 		this.dataSource.data.forEach(row => {
 			let line = [];
-			line.push(row.SKU);
-			line.push(row.WareHouse);
-			line.push(row.Quantity);
-			line.push(row.Priority);
+			line.push(row.o_barcode);
+			line.push(row.wh);
+			line.push(row.d_barcode);
+			// line.push(row.Priority);
 			worksheet.addRow(line)
 		})
 
@@ -483,7 +493,7 @@ export class ProductBarcodeComponent implements OnInit, AfterViewChecked {
 
 		_this.BackendService.makeAjax(reqObj, function (err, response, headers) {
 			if (err || response.error) {
-				alert('Something went wrong.');
+				_this.openSnackBar('Something went wrong.');
 				if (response.result.errorList.length) {
 					_this.errorList = response.result.errorList;
 					_this.sidenav.open()

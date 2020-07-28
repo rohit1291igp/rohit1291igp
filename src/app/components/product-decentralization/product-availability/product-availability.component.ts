@@ -1,6 +1,6 @@
 import { Component, OnInit, NgModule, ViewChild, AfterViewChecked, ChangeDetectorRef } from '@angular/core';
 import { FormControl, FormGroup, FormBuilder, FormArray, FormsModule } from '@angular/forms';
-import { MatDialog, MatPaginator, MatSort, MatTableDataSource, MatDatepickerInputEvent, MatAutocompleteModule, MatIcon, MatSidenavModule, MatTableModule } from '@angular/material';
+import { MatDialog, MatPaginator, MatSort, MatTableDataSource, MatDatepickerInputEvent, MatAutocompleteModule, MatIcon, MatSidenavModule, MatTableModule, MatSnackBar } from '@angular/material';
 import { BackendService } from '../../../services/backend.service';
 import { DatePipe, CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
@@ -9,6 +9,7 @@ import * as Excel from 'exceljs/dist/exceljs.min.js';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatSidenav } from "@angular/material/sidenav";
 import * as fs from 'file-saver';
+import { NotificationComponent } from 'app/components/notification/notification.component';
 
 interface ProductStock {
 	sku: string;
@@ -39,7 +40,8 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 	constructor(
 		private fb: FormBuilder,
 		private BackendService: BackendService,
-		private cdRef: ChangeDetectorRef
+		private cdRef: ChangeDetectorRef,
+		private _snackBar: MatSnackBar,
 	) {
 		this.tableform = this.fb.group({
 			tableEntries: this.fb.array([])
@@ -100,6 +102,15 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 		alert("clicked" + data);
 		console.log();
 	}
+
+	openSnackBar(data) {
+		this._snackBar.openFromComponent(NotificationComponent, {
+		  data: data,
+		  duration: 5 * 1000,
+		  panelClass: ['snackbar-success'],
+		  verticalPosition: "top"
+		});
+	  }
 
 	isAllSelected() {
 		const numSelected = this.selection.selected.length;
@@ -167,7 +178,7 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 
 		_this.BackendService.makeAjax(reqObj, function (err, response, httpOptions) {
 			if (err || response.error) {
-				alert('Something went wrong.');
+				_this.openSnackBar('Something went wrong.');
 				console.log('Error=============>', err, response.errorCode);
 				return;
 			}
@@ -209,7 +220,7 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 				console.log('rowCount: ', worksheet.rowCount);
 				worksheet.eachRow(function (row, rowNumber) {
 					if (rowNumber == 1 && !((row.values[1].toLowerCase() == 'sku') && (row.values[2].toLowerCase() == 'warehouse') && (row.values[3].toLowerCase() == 'quantity') && (row.values[4].toLowerCase() == 'priority'))) {
-						alert('Invalid excelsheet format');
+						_this.openSnackBar('Invalid excelsheet format');
 						validExcel = false;
 						return;
 					}
@@ -282,7 +293,7 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 		reqObj.payload = _this.dataSource.data;
 		_this.BackendService.makeAjax(reqObj, function (err, response, headers) {
 			if (err || response.error) {
-				alert('Something went wrong.');
+				_this.openSnackBar('Something went wrong.');
 				if (response.result.errorList.length) {
 					_this.errorList = response.result.errorList;
 					_this.sidenav.open()
@@ -323,8 +334,8 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 				let temp = element.split(/\t/g);
 				if (temp[0] && temp[1]) {
 					data.push({
-						sku: temp[0],
-						warehouse: temp[1],
+						SKU: temp[0],
+						WareHouse: temp[1],
 						Quantity: temp[2],
 						Priority: temp[3]
 					})
@@ -334,7 +345,7 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 			return data
 		}
 		catch{
-			alert('Invalid copy-paste');
+			this.openSnackBar('Invalid copy-paste');
 		}
 	}
 
@@ -358,7 +369,7 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 	deleteSelectedRows() {
 		console.log(this.selection.selected);
 		let _this = this;
-		if(_this.dataFromDB){
+		if(!_this.dataFromDB){
 			_this.dataSource.data = _this.dataSource.data.filter(ele => {
 				if (_this.selection.selected.indexOf(ele) != -1) {
 					return false
@@ -382,7 +393,7 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 				_this.sidenav.open()
 			}
 			if (err || response.error) {
-				alert('Something went wrong.');
+				_this.openSnackBar('Something went wrong.');
 				console.log('Error=============>', err, response.errorCode);
 				return;
 			}
@@ -425,7 +436,7 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 		}]
 		_this.BackendService.makeAjax(reqObj, function (err, response, headers) {
 			if (err || response.error) {
-				alert('Something went wrong.');
+				_this.openSnackBar('Something went wrong.');
 				console.log('Error=============>', err, response.errorCode);
 				if (response.result.errorList.length) {
 					_this.errorList = response.result.errorList;
@@ -497,7 +508,7 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 
 		_this.BackendService.makeAjax(reqObj, function (err, response, headers) {
 			if (err || response.error) {
-				alert('Something went wrong.');
+				_this.openSnackBar('Something went wrong.');
 				console.log('Error=============>', err, response.errorCode);
 				if (response.result.errorList.length) {
 					_this.errorList = response.result.errorList;
