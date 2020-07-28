@@ -113,6 +113,7 @@ export function ConfigLoader(envConfig: envConfig) {
     StockComponentsReportsComponent,
     DeliveryTimeManagementComponent,
     DailyOpsReportComponent,
+    StockComponentsReportsComponent,
     DownloadStockedComponent,
     ProductAvailabilityComponent,
     ProductBarcodeComponent,

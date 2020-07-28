@@ -35,7 +35,8 @@ export class PaymentReconciliationComponent implements OnInit {
       'PayTM',
       'Stripe',
       'RazorPay',
-      'ccAvenue'
+      'ccAvenue',
+      'Paypal'
     ],
     enableOrderGenerateBtn: []
   };
