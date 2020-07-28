@@ -121,7 +121,7 @@ export class DeliveryPriorityComponent implements OnInit,AfterViewChecked {
           _this.tableform.get("tableEntries")['controls'] = []
           tableData.forEach((ele) => {
             const control = _this.fb.group({
-              priority: [ele.Priority]
+              Priority: [ele.Priority]
             });
             (<FormArray>_this.tableform.get("tableEntries")).push(control);
           });
@@ -160,7 +160,15 @@ export class DeliveryPriorityComponent implements OnInit,AfterViewChecked {
           if(response.error){
             this.uploadErrors=response['result']['errorList']
             this.sidenav.open();
+          }else{
+            this.openSnackBar("Data Uploaded Successfully");
           }
+          let skus = this.excel_data_json.map(ele=>ele.SKU)
+          this.excel_data_json=[];
+          this.excelFile.nativeElement.value=""
+          // this.dataSource.data=[];
+          this.tableHeaders=[];
+          this.getDeliveryPriorityList('sku',skus)
         }
       })
       console.log(reqObj)
@@ -265,20 +273,20 @@ export class DeliveryPriorityComponent implements OnInit,AfterViewChecked {
           }
         });
         _this.excel_data_json=tableData;
-        _this.selection.clear()
-        _this.tableform.get("tableEntries")['controls'] = []
-        tableData.forEach((ele) => {
-          const control = _this.fb.group({
-            priority: [ele.Priority]
-          });
-          (<FormArray>_this.tableform.get("tableEntries")).push(control);
-        });
-        _this.dataSource = new MatTableDataSource(tableData);
-        _this.tableHeaders = ["select", "SKU", "WareHouse",_this.selectedFieldForUpload, "Priority", "Actions"];
-        setTimeout(() => {
-          _this.dataSource.sort = _this.sort;
-          _this.dataSource.paginator = _this.paginator;
-        }, 100)
+        // _this.selection.clear()
+        // _this.tableform.get("tableEntries")['controls'] = []
+        // tableData.forEach((ele) => {
+        //   const control = _this.fb.group({
+        //     priority: [ele.Priority]
+        //   });
+        //   (<FormArray>_this.tableform.get("tableEntries")).push(control);
+        // });
+        // _this.dataSource = new MatTableDataSource(tableData);
+        // _this.tableHeaders = ["select", "SKU", "WareHouse",_this.selectedFieldForUpload, "Priority", "Actions"];
+        // setTimeout(() => {
+        //   _this.dataSource.sort = _this.sort;
+        //   _this.dataSource.paginator = _this.paginator;
+        // }, 100)
       });
     });
   }
@@ -293,7 +301,7 @@ export class DeliveryPriorityComponent implements OnInit,AfterViewChecked {
     dataSource.forEach((ele) => {
       const control = _this.fb.group({
         // mappedBarCode: [ele.mappedBarCode],
-        priority: [ele.priority]
+        Priority: [ele.Priority]
       });
       (<FormArray>_this.tableform.get("tableEntries")).push(control);
     });
@@ -336,7 +344,7 @@ export class DeliveryPriorityComponent implements OnInit,AfterViewChecked {
   saveRowEdit(domain: any, index: any) {
     console.log(index);
     let tableIndex=index+this.paginator.pageIndex*this.paginator.pageSize;
-    console.log(this.tableform.get("tableEntries")["controls"][index].value.priority);
+    console.log(this.tableform.get("tableEntries")["controls"][index].value.Priority);
     // this.dataSource.data[tableIndex].Priority = this.tableform.get("tableEntries")["controls"][tableIndex].value.priority;
     // domain.editable = !domain.editable;
     // this.openEdits--;
@@ -345,14 +353,14 @@ export class DeliveryPriorityComponent implements OnInit,AfterViewChecked {
       "WareHouse":domain['WareHouse'],
       "City":domain['City'],
       "Pincode":domain['Pincode'],
-      "Priority":this.tableform.get("tableEntries")["controls"][index].value.priority
+      "Priority":this.tableform.get("tableEntries")["controls"][index].value.Priority
     }
     this.updatePriorityList([updatedEntry])
 
   }
   cancelRowEdit(row: any, index: number) {
 		let tableIndex = index + this.paginator.pageIndex * this.paginator.pageSize;
-		this.tableform.get("tableEntries")["controls"][tableIndex].get('priority').setValue(this.dataSource.data[tableIndex].priority);
+		this.tableform.get("tableEntries")["controls"][tableIndex].get('Priority').setValue(this.dataSource.data[tableIndex].Priority);
 		row.editable = !row.editable;
 		this.openEdits--;
 	}
@@ -408,7 +416,7 @@ export class DeliveryPriorityComponent implements OnInit,AfterViewChecked {
             "WareHouse":row['WareHouse'],
             "City":row['City'],
             "Pincode":row['Pincode'],
-            "Priority":this.tableform.get("tableEntries")["controls"][index].value.priority
+            "Priority":this.tableform.get("tableEntries")["controls"][index].value.Priority
           });
 				}
       });
@@ -436,7 +444,7 @@ export class DeliveryPriorityComponent implements OnInit,AfterViewChecked {
 
 			_this.dataSource.data.forEach((row, index) => {
 				if (row.editable) {
-					_this.dataSource.data[index].Priority = _this.tableform.get("tableEntries")["controls"][index].value.priority;
+					_this.dataSource.data[index].Priority = _this.tableform.get("tableEntries")["controls"][index].value.Priority;
 					row.editable = false;
           _this.openEdits--;
 				}
@@ -451,7 +459,7 @@ export class DeliveryPriorityComponent implements OnInit,AfterViewChecked {
 		if (confirmation) {
 			this.dataSource.data.forEach((row, index) => {
 				if (row.editable) {
-					this.tableform.get("tableEntries")["controls"][index].get('priority').setValue(this.dataSource.data[index].priority);
+					this.tableform.get("tableEntries")["controls"][index].get('Priority').setValue(this.dataSource.data[index].Priority);
 					this.dataSource.data[index].editable = !this.dataSource.data[index].editable;
 					this.openEdits--;
 				}
@@ -460,7 +468,6 @@ export class DeliveryPriorityComponent implements OnInit,AfterViewChecked {
   }
 
   downloadExcel() {
-    alert('hello')
 		let workbook = new Excel.Workbook();
 		let worksheet = workbook.addWorksheet('Report');
 		let titleRow = worksheet.addRow(["SKU", "Warehouse", "City","Pincode", "Priority"]);
