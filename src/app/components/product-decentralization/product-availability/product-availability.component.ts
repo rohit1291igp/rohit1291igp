@@ -158,16 +158,17 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 	getSearchResults(data) {
 
 		let _this = this;
-		let headers = new HttpHeaders({
-			'Accept': 'application/x-www-form-urlencoded',
-			'Content-Type': 'application/json'
-		})
+		const httpOptions = {
+			headers: new HttpHeaders({
+				'Content-Type': 'application/json'
+			})
+		};
 
 		let reqObj: any = {
 			url: 'warehouse/decentralized/getProductList',
 			method: "post",
 			payload: <any>{},
-			options: headers
+			options1: httpOptions
 		};
 		let sku = _this.extractArrayFromTextAreaSingleColumn(data.value.sku_id);
 		reqObj.payload = sku;
@@ -212,6 +213,7 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 			throw new Error('Cannot use multiple files');
 		}
 		let validExcel = true;
+		_this.errorList = [];
 		const arryBuffer = new Response(target.files[0]).arrayBuffer();
 		arryBuffer.then(function (data) {
 			workbook.xlsx.load(data).then(function () {
@@ -225,14 +227,23 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 						return;
 					}
 					if (rowNumber != 1 && validExcel) {
-						tableData.push({
-							SKU: row.values[1],
-							WareHouse: row.values[2] || 0,
-							Quantity: row.values[3] || 0,
-							Priority: row.values[4] || 0
-						})
+						if (row.values[1] && row.values[2]) {
+							tableData.push({
+								SKU: row.values[1],
+								WareHouse: row.values[2],
+								Quantity: row.values[3] || 0,
+								Priority: row.values[4] || 0
+							})
+						}
+						else {
+							_this.errorList.push("SKU and Warehouse cannot be empty for:SKU " + row.values[1] + " and Warehouse: " + row.values[2])
+						}
+
 					}
 				});
+				if (_this.errorList.length) {
+					_this.sidenav.open();
+				}
 				_this.selection.clear()
 				_this.tableform.get("tableEntries")['controls'] = []
 				tableData.forEach((ele) => {
@@ -289,7 +300,7 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 			method: "post",
 			payload: <any>[]
 		};
-		
+
 		_this.dataSource.data.forEach(ele => {
 			reqObj.payload.push({
 				"WareHouse": ele.WareHouse,
@@ -334,6 +345,8 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 	}
 
 	extractArrayFromTextArea(text) {
+		let _this = this;
+		_this.errorList = [];
 		try {
 			let arr = text.split(/\n/g);
 			let data = [];
@@ -347,8 +360,14 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 						Priority: temp[3]
 					})
 				}
+				else {
+					_this.errorList.push("SKU and Warehouse cannot be empty for:SKU " + temp[0] + " and Warehouse: " + temp[1])
+				}
 
 			});
+			if (_this.errorList.length) {
+				_this.sidenav.open();
+			}
 			return data
 		}
 		catch{
@@ -393,7 +412,14 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 			payload: <any>[]
 		};
 
-		reqObj.payload = this.selection.selected;
+		 this.selection.selected.forEach(ele=>{
+			reqObj.payload.push({
+				"WareHouse": ele.WareHouse,
+				"Priority": ele.Priority,
+				"SKU": ele.SKU,
+				"Quantity": ele.Quantity
+			})
+		 });
 		_this.BackendService.makeAjax(reqObj, function (err, response, headers) {
 			if (response.result.errorList.length) {
 				_this.errorList = response.result.errorList;
