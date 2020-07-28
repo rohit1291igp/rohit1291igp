@@ -1,6 +1,6 @@
 import { Component, OnInit, NgModule, ViewChild, ChangeDetectorRef, AfterViewChecked } from '@angular/core';
 import { FormControl, FormGroup, FormBuilder, FormArray, FormsModule } from '@angular/forms';
-import { MatDialog, MatPaginator, MatSort, MatTableDataSource, MatDatepickerInputEvent, MatAutocompleteModule, MatIcon, MatSidenavModule, MatTableModule } from '@angular/material';
+import { MatDialog, MatPaginator, MatSort, MatTableDataSource, MatDatepickerInputEvent, MatAutocompleteModule, MatIcon, MatSidenavModule, MatTableModule, MatSnackBar } from '@angular/material';
 import { BackendService } from '../../../services/backend.service';
 import { DatePipe, CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
@@ -9,6 +9,7 @@ import * as Excel from 'exceljs/dist/exceljs.min.js';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatSidenav } from "@angular/material/sidenav";
 import * as fs from 'file-saver';
+import { NotificationComponent } from 'app/components/notification/notification.component';
 
 @Component({
 	selector: 'app-product-barcode',
@@ -25,11 +26,13 @@ export class ProductBarcodeComponent implements OnInit, AfterViewChecked {
 	tableHeaders: string[];
 	searchForm: FormGroup;
 	errorList = [];
+	dataFromDB = false;
 
 	constructor(
 		private fb: FormBuilder,
 		private BackendService: BackendService,
-		private cdRef: ChangeDetectorRef
+		private cdRef: ChangeDetectorRef,		
+		private _snackBar: MatSnackBar
 	) {
 		this.tableform = this.fb.group({
 			tableEntries: this.fb.array([])
@@ -83,6 +86,14 @@ export class ProductBarcodeComponent implements OnInit, AfterViewChecked {
 	sidenavClose(reason: string) {
 		this.sidenav.close();
 	}
+	openSnackBar(data) {
+		this._snackBar.openFromComponent(NotificationComponent, {
+		  data: data,
+		  duration: 5 * 1000,
+		  panelClass: ['snackbar-success'],
+		  verticalPosition: "top"
+		});
+	  }
 	// getEdit(data) {
 	// 	alert("clicked" + data);
 	// 	console.log();
@@ -155,7 +166,7 @@ export class ProductBarcodeComponent implements OnInit, AfterViewChecked {
 
 		_this.BackendService.makeAjax(reqObj, function (err, response, httpOptions) {
 			if (err || response.error) {
-				alert('Something went wrong.');
+				_this.openSnackBar('Something went wrong.');
 				console.log('Error=============>', err, response.errorCode);
 				return;
 			}
@@ -165,7 +176,8 @@ export class ProductBarcodeComponent implements OnInit, AfterViewChecked {
 				});
 				(<FormArray>_this.tableform.get("tableEntries")).push(control);
 			});
-			_this.selection.clear()
+			_this.selection.clear();
+			_this.dataFromDB = true;
 			_this.dataSource = new MatTableDataSource(response.tableData);
 			_this.tableHeaders = ["select", "o_barcode", "wh", "d_barcode", "actions"];
 			//_this.responseDataPut = response;
@@ -196,7 +208,7 @@ export class ProductBarcodeComponent implements OnInit, AfterViewChecked {
 				console.log('rowCount: ', worksheet.rowCount);
 				worksheet.eachRow(function (row, rowNumber) {
 					if (rowNumber == 1 && !((row.values[1].toLowerCase() == 'o_barcode') && (row.values[2].toLowerCase() == 'wh') && (row.values[3].toLowerCase() == 'd_barcode'))) {
-						alert('Invalid excelsheet format');
+						_this.openSnackBar('Invalid excelsheet format');
 						validExcel = false;
 						return;
 					}
@@ -209,12 +221,12 @@ export class ProductBarcodeComponent implements OnInit, AfterViewChecked {
 						})
 					}
 				});
-				_this.selection.clear()
+				_this.selection.clear();
+				_this.dataFromDB = false;
 				_this.tableform.get("tableEntries")['controls'] = []
 				tableData.forEach((ele) => {
 					const control = _this.fb.group({
-						d_barcode: [ele.d_barcode],
-						//priority: [ele.priority]
+						d_barcode: [ele.d_barcode]
 					});
 					(<FormArray>_this.tableform.get("tableEntries")).push(control);
 				});
@@ -243,6 +255,7 @@ export class ProductBarcodeComponent implements OnInit, AfterViewChecked {
 		});
 		_this.dataSource = new MatTableDataSource(dataSource);
 		_this.tableHeaders = ["select", "o_barcode", "wh", "d_barcode", "actions"];
+		_this.dataFromDB = false;
 		setTimeout(() => {
 			_this.dataSource.sort = _this.sort;
 			_this.dataSource.paginator = _this.paginator;
@@ -259,10 +272,15 @@ export class ProductBarcodeComponent implements OnInit, AfterViewChecked {
 		let reqObj: any = {
 			url: 'warehouse/decentralized/addDecentBarcode',
 			method: "post",
-			payload: <any>{}
+			payload: <any>[]
 		};
-
-		reqObj.payload = _this.dataSource.data;
+		_this.dataSource.data.forEach(ele => {
+			reqObj.payload.push({
+				"o_barcode": ele.o_barcode,
+				"wh": ele.wh,
+				"d_barcode": ele.d_barcode
+			})
+		});
 		let confirmation = confirm('Would you like to upload data?');
 		if (!confirmation)
 			return;
@@ -273,7 +291,7 @@ export class ProductBarcodeComponent implements OnInit, AfterViewChecked {
 				_this.sidenav.open()
 			}
 			if (err || response.error) {
-				alert('Something went wrong.');
+				_this.openSnackBar('Something went wrong.');
 				console.log('Error=============>', err, response.errorCode);
 				return;
 			}
@@ -301,7 +319,7 @@ export class ProductBarcodeComponent implements OnInit, AfterViewChecked {
 			return data
 		}
 		catch{
-			alert('Invalid copy-paste');
+			this.openSnackBar('Invalid copy-paste');
 		}
 	}
 
@@ -326,6 +344,12 @@ export class ProductBarcodeComponent implements OnInit, AfterViewChecked {
 
 		let _this = this;
 		let tableIndex = index + this.paginator.pageIndex * this.paginator.pageSize;
+		if (!_this.dataFromDB) {
+			_this.dataSource.data[tableIndex].d_barcode = _this.tableform.get("tableEntries")["controls"][tableIndex].value.d_barcode;
+			row.editable = !row.editable;
+			_this.openEdits--;
+			return;
+		}
 		///v1/admin/warehouse/decentralized/updateProductList:
 		let reqObj: any = {
 			url: 'warehouse/decentralized/updateDecentBarcode',
@@ -339,7 +363,7 @@ export class ProductBarcodeComponent implements OnInit, AfterViewChecked {
 		}]
 		_this.BackendService.makeAjax(reqObj, function (err, response, headers) {
 			if (err || response.error) {
-				alert('Something went wrong.');
+				_this.openSnackBar('Something went wrong.');
 				if (response.result.errorList.length) {
 					_this.errorList = response.result.errorList;
 					_this.sidenav.open()
@@ -372,7 +396,17 @@ export class ProductBarcodeComponent implements OnInit, AfterViewChecked {
 	deleteSelectedRows() {
 		console.log(this.selection.selected);
 		console.log(this.selection.selected);
-		let _this = this
+		let _this = this;
+		if (!_this.dataFromDB) {
+			_this.dataSource.data = _this.dataSource.data.filter(ele => {
+				if (_this.selection.selected.indexOf(ele) != -1) {
+					return false
+				}
+				return true
+			})
+			_this.selection.clear();
+			return
+		}
 		///v1/admin/warehouse/decentralized/removeDecentBarcode
 		let reqObj: any = {
 			url: 'warehouse/decentralized/removeDecentBarcode',
@@ -387,7 +421,7 @@ export class ProductBarcodeComponent implements OnInit, AfterViewChecked {
 				_this.sidenav.open()
 			}
 			if (err || response.error) {
-				alert('Something went wrong.');
+				_this.openSnackBar('Something went wrong.');
 
 				console.log('Error=============>', err, response.errorCode);
 				return;
@@ -409,14 +443,14 @@ export class ProductBarcodeComponent implements OnInit, AfterViewChecked {
 	downloadExcel() {
 		let workbook = new Excel.Workbook();
 		let worksheet = workbook.addWorksheet('Report');
-		let titleRow = worksheet.addRow(["SKU", "Warehouse", "Quantity", "Priority"]);
+		let titleRow = worksheet.addRow(["Original Barcode", "Warehouse", "Mapped Barcode"]);
 
 		this.dataSource.data.forEach(row => {
 			let line = [];
-			line.push(row.SKU);
-			line.push(row.WareHouse);
-			line.push(row.Quantity);
-			line.push(row.Priority);
+			line.push(row.o_barcode);
+			line.push(row.wh);
+			line.push(row.d_barcode);
+			// line.push(row.Priority);
 			worksheet.addRow(line)
 		})
 
@@ -430,6 +464,15 @@ export class ProductBarcodeComponent implements OnInit, AfterViewChecked {
 	saveAllChanges() {
 		let editRows = [];
 		let _this = this;
+		if (!_this.dataFromDB) {
+			_this.dataSource.data.forEach((row, index) => {
+				if (row.editable) {
+					_this.dataSource.data[index].d_barcode = _this.tableform.get("tableEntries")["controls"][index].value.d_barcode;
+					row.editable = !row.editable;
+					_this.openEdits--;
+				}
+			});
+		}
 		let confirmation = confirm("Would you like to proceed with the changes?");
 		if (confirmation) {
 			_this.dataSource.data.forEach((row, index) => {
@@ -455,7 +498,7 @@ export class ProductBarcodeComponent implements OnInit, AfterViewChecked {
 
 		_this.BackendService.makeAjax(reqObj, function (err, response, headers) {
 			if (err || response.error) {
-				alert('Something went wrong.');
+				_this.openSnackBar('Something went wrong.');
 				if (response.result.errorList.length) {
 					_this.errorList = response.result.errorList;
 					_this.sidenav.open()

@@ -255,16 +255,18 @@ public onClick(targetElement) {
       this.infoDrawer.close();
     }
   }
-
   downloadErrorList() {
     let pipe = new DatePipe('en-US');
     const currentDate = new Date();
     const datefrom = pipe.transform(currentDate, 'yyyy-MM-dd-h:mm:ss a');
     const fileName = 'Order-Error-List' + '_' + datefrom;
+    var header = JSON.stringify(this._data.uploadErrorList[0]);
+    header = header.replace(/row/g, 'id');
+    header = header.replace(/msg/g, 'Error Message');
     var options = {
       showLabels: true,
       showTitle: false,
-      headers: ['id','Error Message'],
+      headers: Object.keys(JSON.parse(header)).map(m => m.charAt(0).toUpperCase() + m.slice(1)),//['id','Error Message']
       nullToEmptyString: false,
     };
 

@@ -6,7 +6,7 @@
           <ng-container *ngIf="!vendorName">Indian Gifts Portal (IGP) - Admin Panel</ng-container>
           <ng-container *ngIf="vendorName">IGP</ng-container>
           <ng-container *ngIf="!environment.userType && vendorName">- Handels</ng-container>
-          <ng-container *ngIf="vendorName && environment.userType == 'vendor'">- {{vendorName}}</ng-container>
+          <ng-container *ngIf="vendorName && environment.userType == 'vendor' || environment.userType == 'warehouse'">- {{vendorName}}</ng-container>
           <ng-container *ngIf="deliveryBoyName && environment.userType == 'deliveryboy'">- {{deliveryBoyName}}</ng-container></span>
         <span  class="logout pull-right" (click)="logout($event)" *ngIf="isMobile && vendorName" style="margin-right: 0.5em;">
             <i class="icon glyphicon glyphicon-off"></i>

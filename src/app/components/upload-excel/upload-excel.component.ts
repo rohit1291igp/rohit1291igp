@@ -49,7 +49,8 @@ export class UploadExcelComponent implements OnInit {
             {user:"Zifiti", value:"ZIFIT"},
             {user:"Interflora corporate", value:"INCORP"},
             {user:"Personal Orders", value:"PERSONAL"},
-            {user:"DesiClick", value:"desiclik"}
+            {user:"DesiClick", value:"desiclik"},
+            {user:"DTDC", value:"dtdc"}
         ],
         selectedVendor:""
     };
