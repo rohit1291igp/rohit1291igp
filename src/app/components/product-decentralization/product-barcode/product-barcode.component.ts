@@ -272,10 +272,15 @@ export class ProductBarcodeComponent implements OnInit, AfterViewChecked {
 		let reqObj: any = {
 			url: 'warehouse/decentralized/addDecentBarcode',
 			method: "post",
-			payload: <any>{}
+			payload: <any>[]
 		};
-
-		reqObj.payload = _this.dataSource.data;
+		_this.dataSource.data.forEach(ele => {
+			reqObj.payload.push({
+				"o_barcode": ele.o_barcode,
+				"wh": ele.wh,
+				"d_barcode": ele.d_barcode
+			})
+		});
 		let confirmation = confirm('Would you like to upload data?');
 		if (!confirmation)
 			return;

@@ -105,12 +105,12 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 
 	openSnackBar(data) {
 		this._snackBar.openFromComponent(NotificationComponent, {
-		  data: data,
-		  duration: 5 * 1000,
-		  panelClass: ['snackbar-success'],
-		  verticalPosition: "top"
+			data: data,
+			duration: 5 * 1000,
+			panelClass: ['snackbar-success'],
+			verticalPosition: "top"
 		});
-	  }
+	}
 
 	isAllSelected() {
 		const numSelected = this.selection.selected.length;
@@ -287,10 +287,17 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 		let reqObj: any = {
 			url: 'warehouse/decentralized/addProductAvailability',
 			method: "post",
-			payload: <any>{}
+			payload: <any>[]
 		};
-
-		reqObj.payload = _this.dataSource.data;
+		
+		_this.dataSource.data.forEach(ele => {
+			reqObj.payload.push({
+				"WareHouse": ele.WareHouse,
+				"Priority": ele.Priority,
+				"SKU": ele.SKU,
+				"Quantity": ele.Quantity
+			})
+		});
 		_this.BackendService.makeAjax(reqObj, function (err, response, headers) {
 			if (err || response.error) {
 				_this.openSnackBar('Something went wrong.');
@@ -369,7 +376,7 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 	deleteSelectedRows() {
 		console.log(this.selection.selected);
 		let _this = this;
-		if(!_this.dataFromDB){
+		if (!_this.dataFromDB) {
 			_this.dataSource.data = _this.dataSource.data.filter(ele => {
 				if (_this.selection.selected.indexOf(ele) != -1) {
 					return false

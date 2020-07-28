@@ -1,5 +1,11 @@
 <mat-sidenav-container (backdropClick)="sidenavClose('backdrop')">
   <mat-sidenav #sidenav position="end" (keydown.escape)="sidenavClose('escape')" style="width: 50%;" disableClose>
+    <mat-card>
+      <div class="row">
+        <span style="float: right; font-size: 1.8em; cursor: pointer;" (click)="sidenav.close()">&times;</span>
+        <h4 class="col-sm-6" style="color:rgb(195, 64, 78)">Errors : {{errorList.length}}</h4>
+      </div>
+    </mat-card>
     <mat-card *ngFor="let ele of errorList">
       {{ele}}
     </mat-card>
@@ -27,7 +33,7 @@
                       <input type="file" id="file" (change)="readExcel($event)" />
                       <label for="file" class="btn-2" (change)="readExcel($event)">
                         <i class="fa fa-upload" aria-hidden="true"></i>
-                        Upload Excel
+                        Import Excel
                       </label>
                     </div>
                   </div>
@@ -48,14 +54,14 @@
                 <div class="d-flex">
                   <div class="width50">
                     <mat-form-field>
-                      <mat-label>Enter SKU IDs</mat-label>
+                      <mat-label>Enter Barcodes</mat-label>
                       <textarea matInput formControlName="sku_id" placeholder="You can enter multiple SKU IDs" rows="10"
                         col='20'></textarea>
                     </mat-form-field>
                   </div>
                   <div class="width50">
                     <mat-form-field>
-                      <mat-label>Source</mat-label>
+                      <mat-label>Warehouse</mat-label>
                       <mat-select formControlName="source" [(value)]='searchForm.value.source'>
                         <mat-option *ngFor="let option of warehouseList" [value]="option">
                           {{option.value}}
@@ -90,8 +96,9 @@
             <i class="fa fa-download" aria-hidden="true"></i>
             Download
           </button>
-          <span *ngIf="!dataFromDB">
-            Changes will not saved on system.
+          <span *ngIf="!dataFromDB" style="color:#ccc; margin-left:5px">
+            <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
+            To save the changes, click 'Add' button after edit.
           </span>
           <div style="float:right; display:inline">
             <button class="btnRadius saveButton" mat-raised-button (click)="saveAllChanges()" [disabled]="!openEdits>0">
