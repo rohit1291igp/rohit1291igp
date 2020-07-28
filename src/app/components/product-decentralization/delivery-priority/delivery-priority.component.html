@@ -37,7 +37,7 @@
                 </mat-option>
               </mat-select>
             </mat-form-field> -->
-            <mat-radio-group [(ngModel)]="selectedFieldForUpload" aria-label="Upload By">
+            <mat-radio-group (change)="onUploadFieldChange()" [(ngModel)]="selectedFieldForUpload" aria-label="Upload By">
               <mat-radio-button style="margin-right: 20px;" value="City">City</mat-radio-button>
               <mat-radio-button style="margin-right: 20px;" value="Pincode">Pin Code</mat-radio-button>
             </mat-radio-group>
@@ -246,7 +246,7 @@
             {{row.Priority}}
           </span>
           <mat-form-field *ngIf="row.editable" style="width: 70%;">
-            <input matInput formControlName="priority" type="number" min="0" max="100">
+            <input matInput formControlName="Priority" type="number" min="0" max="100">
           </mat-form-field>
         </mat-cell>
       </ng-container>
