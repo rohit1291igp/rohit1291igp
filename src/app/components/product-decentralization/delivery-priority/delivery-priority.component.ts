@@ -179,8 +179,7 @@ export class DeliveryPriorityComponent implements OnInit,AfterViewChecked {
   onUploadFieldChange(){
     console.log(this.selectedFieldForUpload)
     this.excelFile.nativeElement.value=""
-    this.dataSource.data=[];
-    this.tableHeaders=[];
+    this.excel_data_json=[];
   }
 
   onUploadFileChange(event){
@@ -378,6 +377,7 @@ export class DeliveryPriorityComponent implements OnInit,AfterViewChecked {
   
   deletePriorityList(list){
     const _this=this;
+    list = list.map(ele=>{delete ele['editable']; return ele})
     const reqObj = {
       url: `warehouse/decentralized/deleteDeliveryPriorityList`,
       method: 'post',
