@@ -178,6 +178,7 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 		}
 
 		_this.BackendService.makeAjax(reqObj, function (err, response, httpOptions) {
+			
 			if (err || response.error) {
 				_this.openSnackBar('Something went wrong.');
 				console.log('Error=============>', err, response.errorCode);
@@ -317,11 +318,12 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 
 		_this.BackendService.makeAjax(reqObj, function (err, response, headers) {
 			_this.openSnackBar(response.errorMessage);
+			if (response.result.errorList.length) {
+				_this.errorList = response.result.errorList;
+				_this.sidenav.open()
+			}
 			if (err || response.error) {
-				if (response.result.errorList.length) {
-					_this.errorList = response.result.errorList;
-					_this.sidenav.open()
-				}
+				
 				console.log('Error=============>', err, response.errorCode);
 				return;
 			}
@@ -437,12 +439,12 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 			})
 		});
 		_this.BackendService.makeAjax(reqObj, function (err, response, headers) {
+			_this.openSnackBar(response.errorMessage);
 			if (response.result.errorList.length) {
 				_this.errorList = response.result.errorList;
 				_this.sidenav.open()
 			}
 			if (err || response.error) {
-				_this.openSnackBar('Something went wrong.');
 				console.log('Error=============>', err, response.errorCode);
 				return;
 			}
@@ -494,13 +496,14 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 			Priority: _this.tableform.get("tableEntries")["controls"][tableIndex].value.Priority
 		}]
 		_this.BackendService.makeAjax(reqObj, function (err, response, headers) {
+			_this.openSnackBar(response.errorMessage);
+			if (response.result.errorList.length) {
+				_this.errorList = response.result.errorList;
+				_this.sidenav.open()
+			}
 			if (err || response.error) {
-				_this.openSnackBar('Something went wrong.');
 				console.log('Error=============>', err, response.errorCode);
-				if (response.result.errorList.length) {
-					_this.errorList = response.result.errorList;
-					_this.sidenav.open()
-				}
+				
 				return;
 			}
 			_this.dataSource.data[tableIndex].Quantity = _this.tableform.get("tableEntries")["controls"][tableIndex].value.Quantity;
@@ -566,13 +569,13 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 		reqObj.payload = editRows
 
 		_this.BackendService.makeAjax(reqObj, function (err, response, headers) {
-			if (err || response.error) {
-				_this.openSnackBar('Something went wrong.');
+			_this.openSnackBar(response.errorMessage);
+			if (response.result.errorList.length) {
+				_this.errorList = response.result.errorList;
+				_this.sidenav.open()
+			}
+			if (err || response.error) {				
 				console.log('Error=============>', err, response.errorCode);
-				if (response.result.errorList.length) {
-					_this.errorList = response.result.errorList;
-					_this.sidenav.open()
-				}
 				return;
 			}
 			_this.dataSource.data.forEach((row, index) => {
