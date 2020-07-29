@@ -31,7 +31,7 @@ export class ProductBarcodeComponent implements OnInit, AfterViewChecked {
 	constructor(
 		private fb: FormBuilder,
 		private BackendService: BackendService,
-		private cdRef: ChangeDetectorRef,		
+		private cdRef: ChangeDetectorRef,
 		private _snackBar: MatSnackBar
 	) {
 		this.tableform = this.fb.group({
@@ -88,12 +88,12 @@ export class ProductBarcodeComponent implements OnInit, AfterViewChecked {
 	}
 	openSnackBar(data) {
 		this._snackBar.openFromComponent(NotificationComponent, {
-		  data: data,
-		  duration: 5 * 1000,
-		  panelClass: ['snackbar-success'],
-		  verticalPosition: "top"
+			data: data,
+			duration: 5 * 1000,
+			panelClass: ['snackbar-success'],
+			verticalPosition: "top"
 		});
-	  }
+	}
 	// getEdit(data) {
 	// 	alert("clicked" + data);
 	// 	console.log();
@@ -140,20 +140,15 @@ export class ProductBarcodeComponent implements OnInit, AfterViewChecked {
 	}
 	getSearchResults(data) {
 		let _this = this;
-		let headers = new HttpHeaders({
-			'Accept': 'application/x-www-form-urlencoded',
-			'Content-Type': 'application/json'
-		})
 
 		let reqObj: any = {
 			url: 'warehouse/decentralized/getBarcodeList',
 			method: "post",
-			payload: [],
-			options: headers
+			payload: []
 		};
-		if (data.value.source.key) {
-			reqObj.url += "?source=" + data.value.source.key
-		}
+		// if (data.value.source.key) {
+		// 	reqObj.url += "?source=" + data.value.source.key
+		// }
 
 		let sku = _this.extractArrayFromTextAreaSingleColumn(data.value.sku_id);
 		if (sku) {
@@ -214,13 +209,22 @@ export class ProductBarcodeComponent implements OnInit, AfterViewChecked {
 					}
 					//["select", "o_barcode", "wh", "d_barcode", "actions"];
 					if (rowNumber != 1 && validExcel) {
-						tableData.push({
-							o_barcode: row.values[1],
-							wh: row.values[2],
-							d_barcode: row.values[3],
-						})
+
+						if (row.values[1] && row.values[2]) {
+							tableData.push({
+								o_barcode: row.values[1],
+								wh: row.values[2],
+								d_barcode: row.values[3],
+							})
+						}
+						else {
+							_this.errorList.push("Original Barcode and Warehouse cannot be empty:O_Barcode" + row.values[1] + "Warehouse:" + row.values[2])
+						}
 					}
 				});
+				if (_this.errorList.length) {
+					_this.sidenav.open();
+				}
 				_this.selection.clear();
 				_this.dataFromDB = false;
 				_this.tableform.get("tableEntries")['controls'] = []
@@ -303,6 +307,8 @@ export class ProductBarcodeComponent implements OnInit, AfterViewChecked {
 	}
 
 	extractArrayFromTextArea(text) {
+		let _this = this;
+		_this.errorList = [];
 		try {
 			let arr = text.split(/\n/g);
 			let data = [];
@@ -314,8 +320,14 @@ export class ProductBarcodeComponent implements OnInit, AfterViewChecked {
 						wh: temp[1],
 						d_barcode: temp[2]
 					})
+				} else {
+					_this.errorList.push("SKU and Warehouse cannot be empty for:SKU " + temp[0] + " and Warehouse: " + temp[1])
 				}
+
 			});
+			if (_this.errorList.length) {
+				_this.sidenav.open();
+			}
 			return data
 		}
 		catch{
@@ -413,7 +425,13 @@ export class ProductBarcodeComponent implements OnInit, AfterViewChecked {
 			method: "post",
 			payload: <any>[]
 		};
-		reqObj.payload = this.selection.selected
+		this.selection.selected.forEach(ele => {
+			reqObj.payload.push({
+				"o_barcode": ele.o_barcode,
+				"wh": ele.wh,
+				"d_barcode": ele.d_barcode
+			})
+		});
 		_this.BackendService.makeAjax(reqObj, function (err, response, headers) {
 
 			if (response.result.errorList.length) {

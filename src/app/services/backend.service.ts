@@ -58,7 +58,7 @@ export class BackendService {
           }
       }
 
-      _this.lastHttpCall = this.httpClient[reqObj.method](reqObj.url, reqObj.payload)
+      _this.lastHttpCall = this.httpClient[reqObj.method](reqObj.url, reqObj.payload, reqObj.options1)
           .subscribe(
           response => {
               if(document.getElementById("cLoader")) document.getElementById("cLoader").classList.add("hide");
