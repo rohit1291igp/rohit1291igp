@@ -377,7 +377,13 @@ export class DeliveryPriorityComponent implements OnInit,AfterViewChecked {
   
   deletePriorityList(list){
     const _this=this;
-    list = list.map(ele=>{delete ele['editable']; return ele})
+    list = list.map(ele=>{
+      if(ele['editable']){
+        _this.openEdits--;
+      }
+      delete ele['editable']; 
+      return ele
+    })
     const reqObj = {
       url: `warehouse/decentralized/deleteDeliveryPriorityList`,
       method: 'post',
