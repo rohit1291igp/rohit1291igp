@@ -389,19 +389,28 @@ export class DeliveryPriorityComponent implements OnInit,AfterViewChecked {
       method: 'post',
       payload:list
     }
-
-    this.BackendService.makeAjax(reqObj,(err,response,headers)=>{
+    
+    _this.BackendService.makeAjax(reqObj,(err,response,headers)=>{
       if(err){
         console.log(err)
         _this.openSnackBar("Something Went Wrong")
       }else{
         console.log(response);
+        _this.tableform.get('tableEntries')['controls']=[];
         _this.dataSource.data = _this.dataSource.data.filter(ele => {
           if (_this.selection.selected.indexOf(ele) != -1) {
             return false
           }
+            const control = _this.fb.group({
+              Priority: [ele.Priority]
+            });
+            (<FormArray>_this.tableform.get("tableEntries")).push(control);
           return true
         })
+        if(response.error){
+          _this.uploadErrors=response.result['errorList'];
+          _this.sidenav.open();
+        }
         _this.selection.clear();
         _this.openSnackBar(response.errorMessage)
       }
@@ -446,6 +455,8 @@ export class DeliveryPriorityComponent implements OnInit,AfterViewChecked {
         if(response.error){
           _this.uploadErrors=response.result['errorList'];
           _this.sidenav.open();
+        }else{
+          _this.openSnackBar(response.errorMessage)
         }
 
 			_this.dataSource.data.forEach((row, index) => {
