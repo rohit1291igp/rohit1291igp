@@ -183,6 +183,7 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 				console.log('Error=============>', err, response.errorCode);
 				return;
 			}
+			_this.tableform.get("tableEntries")['controls'] = [];
 			response.tableData.forEach((ele) => {
 				const control = _this.fb.group({
 					Quantity: [ele.Quantity],
@@ -309,9 +310,14 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 				"Quantity": ele.Quantity
 			})
 		});
+
+		let confirmation = confirm('Would you like to upload data?');
+		if (!confirmation)
+			return;
+
 		_this.BackendService.makeAjax(reqObj, function (err, response, headers) {
+			_this.openSnackBar(response.errorMessage);
 			if (err || response.error) {
-				_this.openSnackBar('Something went wrong.');
 				if (response.result.errorList.length) {
 					_this.errorList = response.result.errorList;
 					_this.sidenav.open()
@@ -396,13 +402,20 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 		console.log(this.selection.selected);
 		let _this = this;
 		if (!_this.dataFromDB) {
-			_this.dataSource.data = _this.dataSource.data.filter(ele => {
-				if (ele.editable) {
-					_this.openEdits--
-				}
+
+			_this.tableform.get("tableEntries")['controls'] = [];
+			_this.dataSource.data = _this.dataSource.data.filter((ele) => {
 				if (_this.selection.selected.indexOf(ele) != -1) {
+					if (ele.editable) {
+						_this.openEdits--
+					}	
 					return false
 				}
+				const control = _this.fb.group({
+					Quantity: [ele.Quantity],
+					Priority: [ele.Priority]
+				});
+				(<FormArray>_this.tableform.get("tableEntries")).push(control);
 				return true
 			})
 			_this.selection.clear();
@@ -433,13 +446,20 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 				console.log('Error=============>', err, response.errorCode);
 				return;
 			}
+			_this.tableform.get("tableEntries")['controls'] = [];
 			_this.dataSource.data = _this.dataSource.data.filter(ele => {
-				if (ele.editable) {
-					_this.openEdits--
-				}
 				if (_this.selection.selected.indexOf(ele) != -1) {
+					if (ele.editable) {
+						_this.openEdits--
+					}
 					return false
 				}
+				
+				const control = _this.fb.group({
+					Quantity: [ele.Quantity],
+					Priority: [ele.Priority]
+				});
+				(<FormArray>_this.tableform.get("tableEntries")).push(control);
 				return true
 			})
 			_this.selection.clear();

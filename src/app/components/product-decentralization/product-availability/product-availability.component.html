@@ -43,7 +43,7 @@
                     <button class="btnRadius" id="view" type="submit" mat-raised-button
                       (click)="btnType = 'view'">View</button>
                     <button class="btnRadius" id="add" type="submit" mat-raised-button
-                      (click)="btnType = 'add'">Add</button>
+                      (click)="btnType = 'add'" [disabled]="!dataSource?.data?.length||dataFromDB">Add</button>
                   </div>
                 </div>
               </mat-card>
