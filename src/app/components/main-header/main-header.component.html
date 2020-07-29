@@ -63,9 +63,9 @@
                             <a class="" routerLink="/reports/getOrderFileUploadReport"><li [ngClass]="{'selected' : selectedReportTab === 'getOrderFileUploadReport'}">Uploaded Image</li></a>
                             <a class="" routerLink="/reports/getComponentReport"><li [ngClass]="{'selected' : selectedReportTab === 'getComponentReport'}">Component Report</li></a>
                         </ng-container>
-                        <ng-container *ngIf="environment.userType == 'warehouse'">
+                        <!-- <ng-container *ngIf="environment.userType == 'warehouse'">
                             <a routerLink="/dailywarehouseOpsReport"><li [ngClass]="{'selected' : selectedReportTab === 'dailywarehouseOpsReport'}">Daily Ops Report</li></a>
-                        </ng-container>
+                        </ng-container> -->
                     </ul>
                 </div>
             </li>
