@@ -149,7 +149,7 @@
                   <span *ngIf="!row.editable">
                     {{row.Priority||'-'}}
                   </span>
-                  <input *ngIf="row.editable" type="text" formControlName="Priority">
+                  <input *ngIf="row.editable" type="number" formControlName="Priority">
                 </mat-cell>
               </ng-container>
               <ng-container matColumnDef="Quantity">
@@ -159,7 +159,7 @@
                   <span *ngIf="!row.editable">
                     {{row.Quantity||'-'}}
                   </span>
-                  <input *ngIf="row.editable" type="text" formControlName="Quantity">
+                  <input *ngIf="row.editable" type="number" formControlName="Quantity">
                 </mat-cell>
               </ng-container>
               <ng-container matColumnDef="actions">

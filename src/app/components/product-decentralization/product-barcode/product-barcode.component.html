@@ -146,7 +146,7 @@
                 <span *ngIf="!row.editable">
                   {{row.d_barcode||'-'}}
                 </span>
-                <input *ngIf="row.editable" type="text" formControlName="d_barcode">
+                <input *ngIf="row.editable" type="number" formControlName="d_barcode">
               </mat-cell>
             </ng-container>
             <ng-container matColumnDef="actions">

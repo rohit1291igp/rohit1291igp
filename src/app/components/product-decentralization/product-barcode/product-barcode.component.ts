@@ -160,8 +160,10 @@ export class ProductBarcodeComponent implements OnInit, AfterViewChecked {
 		}
 
 		_this.BackendService.makeAjax(reqObj, function (err, response, httpOptions) {
+			
+			
 			if (err || response.error) {
-				_this.openSnackBar('Something went wrong.');
+				_this.openSnackBar("Something Went Wrong");
 				console.log('Error=============>', err, response.errorCode);
 				return;
 			}
@@ -208,7 +210,6 @@ export class ProductBarcodeComponent implements OnInit, AfterViewChecked {
 						validExcel = false;
 						return;
 					}
-					//["select", "o_barcode", "wh", "d_barcode", "actions"];
 					if (rowNumber != 1 && validExcel) {
 
 						if (row.values[1] && row.values[2]) {
@@ -298,7 +299,6 @@ export class ProductBarcodeComponent implements OnInit, AfterViewChecked {
 				_this.sidenav.open()
 			}
 			if (err || response.error) {
-				_this.openSnackBar('Something went wrong.');
 				console.log('Error=============>', err, response.errorCode);
 				return;
 			}
@@ -377,12 +377,12 @@ export class ProductBarcodeComponent implements OnInit, AfterViewChecked {
 			d_barcode: this.tableform.get("tableEntries")["controls"][tableIndex].value.d_barcode
 		}]
 		_this.BackendService.makeAjax(reqObj, function (err, response, headers) {
+			_this.openSnackBar(response.errorMessage);
+			if (response.result.errorList.length) {
+				_this.errorList = response.result.errorList;
+				_this.sidenav.open()
+			}
 			if (err || response.error) {
-				_this.openSnackBar('Something went wrong.');
-				if (response.result.errorList.length) {
-					_this.errorList = response.result.errorList;
-					_this.sidenav.open()
-				}
 				console.log('Error=============>', err, response.errorCode);
 				return;
 			}
@@ -446,14 +446,12 @@ export class ProductBarcodeComponent implements OnInit, AfterViewChecked {
 			})
 		});
 		_this.BackendService.makeAjax(reqObj, function (err, response, headers) {
-
+			_this.openSnackBar(response.errorMessage);
 			if (response.result.errorList.length) {
 				_this.errorList = response.result.errorList;
 				_this.sidenav.open()
 			}
 			if (err || response.error) {
-				_this.openSnackBar('Something went wrong.');
-
 				console.log('Error=============>', err, response.errorCode);
 				return;
 			}
@@ -464,8 +462,7 @@ export class ProductBarcodeComponent implements OnInit, AfterViewChecked {
 						_this.openEdits--
 					}
 					return false
-				}
-				
+				}				
 				const control = _this.fb.group({
 					d_barcode: [ele.d_barcode]
 				});
@@ -480,6 +477,8 @@ export class ProductBarcodeComponent implements OnInit, AfterViewChecked {
 			}, 100)
 		})
 	}
+
+
 	downloadExcel() {
 		let workbook = new Excel.Workbook();
 		let worksheet = workbook.addWorksheet('Report');
@@ -537,12 +536,12 @@ export class ProductBarcodeComponent implements OnInit, AfterViewChecked {
 		reqObj.payload = editRows
 
 		_this.BackendService.makeAjax(reqObj, function (err, response, headers) {
+			_this.openSnackBar(response.errorMessage);
+			if (response.result.errorList.length) {
+				_this.errorList = response.result.errorList;
+				_this.sidenav.open()
+			}
 			if (err || response.error) {
-				_this.openSnackBar('Something went wrong.');
-				if (response.result.errorList.length) {
-					_this.errorList = response.result.errorList;
-					_this.sidenav.open()
-				}
 				console.log('Error=============>', err, response.errorCode);
 				return;
 			}
