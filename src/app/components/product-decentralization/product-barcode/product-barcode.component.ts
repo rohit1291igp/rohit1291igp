@@ -202,7 +202,7 @@ export class ProductBarcodeComponent implements OnInit, AfterViewChecked {
 				const worksheet = workbook.getWorksheet(1);
 				console.log('rowCount: ', worksheet.rowCount);
 				worksheet.eachRow(function (row, rowNumber) {
-					if (rowNumber == 1 && !((row.values[1].toLowerCase() == 'o_barcode') && (row.values[2].toLowerCase() == 'wh') && (row.values[3].toLowerCase() == 'd_barcode'))) {
+					if (rowNumber == 1 && !((row.values[1].toLowerCase() == 'original barcode') && (row.values[2].toLowerCase() == 'warehouse') && (row.values[3].toLowerCase() == 'mapped barcode'))) {
 						_this.openSnackBar('Invalid excelsheet format');
 						validExcel = false;
 						return;
@@ -411,6 +411,9 @@ export class ProductBarcodeComponent implements OnInit, AfterViewChecked {
 		let _this = this;
 		if (!_this.dataFromDB) {
 			_this.dataSource.data = _this.dataSource.data.filter(ele => {
+				if(ele.editable){
+					_this.openEdits--
+				}
 				if (_this.selection.selected.indexOf(ele) != -1) {
 					return false
 				}
@@ -445,6 +448,9 @@ export class ProductBarcodeComponent implements OnInit, AfterViewChecked {
 				return;
 			}
 			_this.dataSource.data = _this.dataSource.data.filter(ele => {
+				if(ele.editable){
+					_this.openEdits--
+				}
 				if (_this.selection.selected.indexOf(ele) != -1) {
 					return false
 				}

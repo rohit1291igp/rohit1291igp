@@ -397,6 +397,9 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 		let _this = this;
 		if (!_this.dataFromDB) {
 			_this.dataSource.data = _this.dataSource.data.filter(ele => {
+				if (ele.editable) {
+					_this.openEdits--
+				}
 				if (_this.selection.selected.indexOf(ele) != -1) {
 					return false
 				}
@@ -412,14 +415,14 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 			payload: <any>[]
 		};
 
-		 this.selection.selected.forEach(ele=>{
+		this.selection.selected.forEach(ele => {
 			reqObj.payload.push({
 				"WareHouse": ele.WareHouse,
 				"Priority": ele.Priority,
 				"SKU": ele.SKU,
 				"Quantity": ele.Quantity
 			})
-		 });
+		});
 		_this.BackendService.makeAjax(reqObj, function (err, response, headers) {
 			if (response.result.errorList.length) {
 				_this.errorList = response.result.errorList;
@@ -431,6 +434,9 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 				return;
 			}
 			_this.dataSource.data = _this.dataSource.data.filter(ele => {
+				if (ele.editable) {
+					_this.openEdits--
+				}
 				if (_this.selection.selected.indexOf(ele) != -1) {
 					return false
 				}
