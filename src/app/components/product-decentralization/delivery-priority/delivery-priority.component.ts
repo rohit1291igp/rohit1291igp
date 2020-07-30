@@ -341,6 +341,7 @@ export class DeliveryPriorityComponent implements OnInit,AfterViewChecked {
     return str.replace(/_/g, " ").replace(/( [a-z])/g, function (str) { return str.toUpperCase(); });
   }
   saveRowEdit(domain: any, index: any) {
+    let _this = this;
     console.log(index);
     let tableIndex=index+this.paginator.pageIndex*this.paginator.pageSize;
     console.log(this.tableform.get("tableEntries")["controls"][index].value.Priority);
@@ -354,7 +355,11 @@ export class DeliveryPriorityComponent implements OnInit,AfterViewChecked {
       "Pincode":domain['Pincode'],
       "Priority":this.tableform.get("tableEntries")["controls"][index].value.Priority
     }
-    this.updatePriorityList([updatedEntry])
+    this.updatePriorityList([updatedEntry]).then(resolve=>{
+			_this.dataSource.data[tableIndex].Priority = _this.tableform.get("tableEntries")["controls"][tableIndex].value.Priority;
+      domain.editable = !domain.editable;
+      _this.openEdits--;
+    })
 
   }
   cancelRowEdit(row: any, index: number) {
@@ -420,22 +425,31 @@ export class DeliveryPriorityComponent implements OnInit,AfterViewChecked {
   }
   
   saveAllChanges() {
+    let _this=this;
 		let confirmation = confirm("Would you like to proceed with changes?");
 		if (confirmation) {
       let updatedList=[];
 
-      this.dataSource.data.forEach((row, index) => {
+      _this.dataSource.data.forEach((row, index) => {
 				if (row.editable) {
           updatedList.push({
             "SKU":row['SKU'],
             "WareHouse":row['WareHouse'],
             "City":row['City'],
             "Pincode":row['Pincode'],
-            "Priority":this.tableform.get("tableEntries")["controls"][index].value.Priority
+            "Priority":_this.tableform.get("tableEntries")["controls"][index].value.Priority
           });
 				}
       });
-      this.updatePriorityList(updatedList)
+      _this.updatePriorityList(updatedList).then(resolve=>{
+        _this.dataSource.data.forEach((row, index) => {
+          if (row.editable) {
+            _this.dataSource.data[index].Priority = _this.tableform.get("tableEntries")["controls"][index].value.Priority;
+            row.editable = false;
+            _this.openEdits--;
+          }
+        });
+      })
 		}
   }
 
@@ -446,27 +460,24 @@ export class DeliveryPriorityComponent implements OnInit,AfterViewChecked {
       method: 'put',
       payload:list
     }
-    _this.BackendService.makeAjax(reqObj,(err,response,headers)=>{
-      if(err){
-        console.log(err);
-        _this.openSnackBar('Something Went Wrong');
-      }else{
-        console.log(response);
-        if(response.error){
-          _this.uploadErrors=response.result['errorList'];
-          _this.sidenav.open();
+    return new Promise((resolve,reject)=>{
+      _this.BackendService.makeAjax(reqObj,(err,response,headers)=>{
+        if(err){
+          console.log(err);
+          _this.openSnackBar('Something Went Wrong');
+          reject(false)
         }else{
-          _this.openSnackBar(response.errorMessage)
+          console.log(response);
+          if(response.error){
+            _this.uploadErrors=response.result['errorList'];
+            _this.sidenav.open();
+            reject(false)
+          }else{
+            _this.openSnackBar(response.errorMessage)
+            resolve(true)
+          }
         }
-
-			_this.dataSource.data.forEach((row, index) => {
-				if (row.editable) {
-					_this.dataSource.data[index].Priority = _this.tableform.get("tableEntries")["controls"][index].value.Priority;
-					row.editable = false;
-          _this.openEdits--;
-				}
-      });
-      }
+      })
     }) 
   }
   
