@@ -160,11 +160,14 @@ export class ProductBarcodeComponent implements OnInit, AfterViewChecked {
 		}
 
 		_this.BackendService.makeAjax(reqObj, function (err, response, httpOptions) {
+			
+			
 			if (err || response.error) {
-				_this.openSnackBar('Something went wrong.');
+				_this.openSnackBar("Something Went Wrong");
 				console.log('Error=============>', err, response.errorCode);
 				return;
 			}
+			_this.tableform.get("tableEntries")['controls'] = [];
 			response.tableData.forEach((ele) => {
 				const control = _this.fb.group({
 					d_barcode: [ele.d_barcode],
@@ -202,12 +205,11 @@ export class ProductBarcodeComponent implements OnInit, AfterViewChecked {
 				const worksheet = workbook.getWorksheet(1);
 				console.log('rowCount: ', worksheet.rowCount);
 				worksheet.eachRow(function (row, rowNumber) {
-					if (rowNumber == 1 && !((row.values[1].toLowerCase() == 'o_barcode') && (row.values[2].toLowerCase() == 'wh') && (row.values[3].toLowerCase() == 'd_barcode'))) {
+					if (rowNumber == 1 && !((row.values[1].toLowerCase() == 'original barcode') && (row.values[2].toLowerCase() == 'warehouse') && (row.values[3].toLowerCase() == 'mapped barcode'))) {
 						_this.openSnackBar('Invalid excelsheet format');
 						validExcel = false;
 						return;
 					}
-					//["select", "o_barcode", "wh", "d_barcode", "actions"];
 					if (rowNumber != 1 && validExcel) {
 
 						if (row.values[1] && row.values[2]) {
@@ -218,7 +220,7 @@ export class ProductBarcodeComponent implements OnInit, AfterViewChecked {
 							})
 						}
 						else {
-							_this.errorList.push("Original Barcode and Warehouse cannot be empty:O_Barcode" + row.values[1] + "Warehouse:" + row.values[2])
+							_this.errorList.push("Original Barcode and Warehouse cannot be empty: Original Barcode " + row.values[1] + " Warehouse: " + row.values[2] + " in Row: " + rowNumber)
 						}
 					}
 				});
@@ -227,6 +229,7 @@ export class ProductBarcodeComponent implements OnInit, AfterViewChecked {
 				}
 				_this.selection.clear();
 				_this.dataFromDB = false;
+
 				_this.tableform.get("tableEntries")['controls'] = []
 				tableData.forEach((ele) => {
 					const control = _this.fb.group({
@@ -290,12 +293,12 @@ export class ProductBarcodeComponent implements OnInit, AfterViewChecked {
 			return;
 
 		_this.BackendService.makeAjax(reqObj, function (err, response, headers) {
+			_this.openSnackBar(response.errorMessage);
 			if (response.result.errorList.length) {
 				_this.errorList = response.result.errorList;
 				_this.sidenav.open()
 			}
 			if (err || response.error) {
-				_this.openSnackBar('Something went wrong.');
 				console.log('Error=============>', err, response.errorCode);
 				return;
 			}
@@ -321,7 +324,7 @@ export class ProductBarcodeComponent implements OnInit, AfterViewChecked {
 						d_barcode: temp[2]
 					})
 				} else {
-					_this.errorList.push("SKU and Warehouse cannot be empty for:SKU " + temp[0] + " and Warehouse: " + temp[1])
+					_this.errorList.push("Original Barcode and Warehouse cannot be empty for: Original Barcode: " + temp[0] + " and Warehouse: " + temp[1])
 				}
 
 			});
@@ -374,12 +377,12 @@ export class ProductBarcodeComponent implements OnInit, AfterViewChecked {
 			d_barcode: this.tableform.get("tableEntries")["controls"][tableIndex].value.d_barcode
 		}]
 		_this.BackendService.makeAjax(reqObj, function (err, response, headers) {
+			_this.openSnackBar(response.errorMessage);
+			if (response.result.errorList.length) {
+				_this.errorList = response.result.errorList;
+				_this.sidenav.open()
+			}
 			if (err || response.error) {
-				_this.openSnackBar('Something went wrong.');
-				if (response.result.errorList.length) {
-					_this.errorList = response.result.errorList;
-					_this.sidenav.open()
-				}
 				console.log('Error=============>', err, response.errorCode);
 				return;
 			}
@@ -410,10 +413,20 @@ export class ProductBarcodeComponent implements OnInit, AfterViewChecked {
 		console.log(this.selection.selected);
 		let _this = this;
 		if (!_this.dataFromDB) {
+			_this.tableform.get("tableEntries")['controls'] = [];
 			_this.dataSource.data = _this.dataSource.data.filter(ele => {
+
 				if (_this.selection.selected.indexOf(ele) != -1) {
+					if (ele.editable) {
+						_this.openEdits--
+					}
 					return false
 				}
+				
+				const control = _this.fb.group({
+					d_barcode: [ele.d_barcode]
+				});
+				(<FormArray>_this.tableform.get("tableEntries")).push(control);
 				return true
 			})
 			_this.selection.clear();
@@ -433,21 +446,27 @@ export class ProductBarcodeComponent implements OnInit, AfterViewChecked {
 			})
 		});
 		_this.BackendService.makeAjax(reqObj, function (err, response, headers) {
-
+			_this.openSnackBar(response.errorMessage);
 			if (response.result.errorList.length) {
 				_this.errorList = response.result.errorList;
 				_this.sidenav.open()
 			}
 			if (err || response.error) {
-				_this.openSnackBar('Something went wrong.');
-
 				console.log('Error=============>', err, response.errorCode);
 				return;
 			}
+			_this.tableform.get("tableEntries")['controls'] = [];
 			_this.dataSource.data = _this.dataSource.data.filter(ele => {
 				if (_this.selection.selected.indexOf(ele) != -1) {
+					if (ele.editable) {
+						_this.openEdits--
+					}
 					return false
-				}
+				}				
+				const control = _this.fb.group({
+					d_barcode: [ele.d_barcode]
+				});
+				(<FormArray>_this.tableform.get("tableEntries")).push(control);
 				return true
 			})
 			_this.selection.clear();
@@ -458,6 +477,8 @@ export class ProductBarcodeComponent implements OnInit, AfterViewChecked {
 			}, 100)
 		})
 	}
+
+
 	downloadExcel() {
 		let workbook = new Excel.Workbook();
 		let worksheet = workbook.addWorksheet('Report');
@@ -515,12 +536,12 @@ export class ProductBarcodeComponent implements OnInit, AfterViewChecked {
 		reqObj.payload = editRows
 
 		_this.BackendService.makeAjax(reqObj, function (err, response, headers) {
+			_this.openSnackBar(response.errorMessage);
+			if (response.result.errorList.length) {
+				_this.errorList = response.result.errorList;
+				_this.sidenav.open()
+			}
 			if (err || response.error) {
-				_this.openSnackBar('Something went wrong.');
-				if (response.result.errorList.length) {
-					_this.errorList = response.result.errorList;
-					_this.sidenav.open()
-				}
 				console.log('Error=============>', err, response.errorCode);
 				return;
 			}

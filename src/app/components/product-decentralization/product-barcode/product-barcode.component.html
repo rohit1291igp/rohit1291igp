@@ -42,7 +42,7 @@
                   <button class="btnRadius" id="view" type="submit" mat-raised-button
                     (click)="btnType = 'view'">View</button>
                   <button class="btnRadius" id="add" type="submit" mat-raised-button
-                    (click)="btnType = 'add'">Add</button>
+                    (click)="btnType = 'add'" [disabled]="!dataSource?.data?.length||dataFromDB">Add</button>
                 </div>
               </div>
             </mat-card>
@@ -146,7 +146,7 @@
                 <span *ngIf="!row.editable">
                   {{row.d_barcode||'-'}}
                 </span>
-                <input *ngIf="row.editable" type="text" formControlName="d_barcode">
+                <input *ngIf="row.editable" type="number" formControlName="d_barcode">
               </mat-cell>
             </ng-container>
             <ng-container matColumnDef="actions">
