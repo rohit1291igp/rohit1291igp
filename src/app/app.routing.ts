@@ -96,10 +96,10 @@ const route: Routes = [
     path:'payout-dashboard',
     component: PayoutDashboardComponent
   },
-  // {
-  //   path:'dailywarehouseOpsReport',
-  //   component: DailyOpsReportComponent
-  // },
+  {
+    path:'dailywarehouseOpsReport',
+    component: DailyOpsReportComponent
+  },
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
   // otherwise redirect to home
   { path: '**', redirectTo: 'dashboard' }
