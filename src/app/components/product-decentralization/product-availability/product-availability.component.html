@@ -45,6 +45,8 @@
                       (click)="btnType = 'view'">View</button>
                     <button class="btnRadius" id="add" type="submit" mat-raised-button (click)="btnType = 'add'"
                       [disabled]="!dataSource?.data?.length||dataFromDB">Add</button>
+                    <button class="btnRadius" id="update" type="submit" mat-raised-button (click)="btnType = 'update'"
+                      [disabled]="!dataSource?.data?.length||dataFromDB">Update</button>
                   </div>
                 </div>
               </mat-card>
@@ -150,7 +152,7 @@
                   <span *ngIf="!row.editable">
                     {{row.Priority||'-'}}
                   </span>
-                  <mat-form-field  *ngIf="row.editable">
+                  <mat-form-field *ngIf="row.editable">
                     <input matInput type="number" formControlName="Priority">
                   </mat-form-field>
                 </mat-cell>
@@ -162,7 +164,7 @@
                   <span *ngIf="!row.editable">
                     {{row.Quantity||'-'}}
                   </span>
-                  <mat-form-field  *ngIf="row.editable">
+                  <mat-form-field *ngIf="row.editable">
                     <input matInput type="number" formControlName="Quantity">
                   </mat-form-field>
                 </mat-cell>
