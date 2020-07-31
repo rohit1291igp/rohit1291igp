@@ -70,7 +70,7 @@
             <mat-datepicker #expiryDate></mat-datepicker>
           </mat-form-field>
           <br>
-          <button type="submit" [disabled]="f.invalid || !voucher_details['vouchervalue']"
+          <button type="submit" [disabled]="!voucher_details['id']||f.invalid"
             mat-raised-button>{{form_method==='edit'?'Update':'Add'}}</button>
         </form>
       </div>

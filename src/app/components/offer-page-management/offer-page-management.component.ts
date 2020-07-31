@@ -18,7 +18,7 @@ export class OfferPageManagementComponent implements OnInit, AfterViewChecked {
   options: any[];
   filteredOptions: Observable<any[]>;
   selected_coupon = {
-    "id": null,
+    "id": 0,
     "coupon_code": null,
     "webstore": null,
     "expiry_date": null,
@@ -198,7 +198,7 @@ export class OfferPageManagementComponent implements OnInit, AfterViewChecked {
 
   resetSelectedCoupon() {
     this.selected_coupon = {
-      "id": null,
+      "id": 0,
       "coupon_code": null,
       "webstore": null,
       "expiry_date": null,
@@ -215,6 +215,10 @@ export class OfferPageManagementComponent implements OnInit, AfterViewChecked {
     this.myControl.setValue({});
   }
 
+  test(f){
+    console.log(f)
+  }
+
   voucher_details = {};
   coupon_type={
     0:'value based',
@@ -224,8 +228,11 @@ export class OfferPageManagementComponent implements OnInit, AfterViewChecked {
     if (voucher_code) {
       this.voucherService.getVoucherDetails(voucher_code).subscribe(res => {
         if (res['status'].toLowerCase() === "Success".toLowerCase()) {
+          console.log(res)
           this.voucher_details = res['data']['vouchermodellist'][0]
           this.offer_management_form.patchValue({
+            id:0,
+            enabled:false,
             discount: this.voucher_details['vouchervalue'],
             coupon_type:this.coupon_type[this.voucher_details['vouchertype']]
           });
