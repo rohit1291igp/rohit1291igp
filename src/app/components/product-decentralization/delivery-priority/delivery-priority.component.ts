@@ -377,7 +377,10 @@ export class DeliveryPriorityComponent implements OnInit,AfterViewChecked {
   deleteSelectedRows() {
     let _this=this;
     console.log(this.selection.selected);
-    this.deletePriorityList(this.selection.selected)
+    let confirmDelete = confirm(`Are you sure want delete selected entries ?` )
+    if (confirmDelete) {
+      this.deletePriorityList(this.selection.selected) 
+    }
   }
   
   deletePriorityList(list){
