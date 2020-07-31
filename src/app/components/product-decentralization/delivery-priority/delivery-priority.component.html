@@ -37,7 +37,12 @@
                 </mat-option>
               </mat-select>
             </mat-form-field> -->
-            <mat-radio-group (change)="onUploadFieldChange()" [(ngModel)]="selectedFieldForUpload" aria-label="Upload By">
+            <mat-radio-group (change)="onExcelActionChange()" [(ngModel)]="excelAction" aria-label="Upload By">
+              <mat-radio-button style="margin-right: 20px;" value="add">Add</mat-radio-button>
+              <mat-radio-button style="margin-right: 20px;" value="update">Update</mat-radio-button>
+            </mat-radio-group>
+            <hr>
+            <mat-radio-group *ngIf="excelAction==='add'" (change)="onUploadFieldChange()" [(ngModel)]="selectedFieldForUpload" aria-label="Upload By">
               <mat-radio-button style="margin-right: 20px;" value="City">City</mat-radio-button>
               <mat-radio-button style="margin-right: 20px;" value="Pincode">Pin Code</mat-radio-button>
             </mat-radio-group>
@@ -46,11 +51,15 @@
                 <br>
                 <input type="file" #excelFile (change)="onUploadFileChange($event)" accept=".xlsx">
                 <br>
-                <div style="color: #6c757d;">
+                <div *ngIf="excelAction==='add'" style="color: #6c757d;">
                   Columns : Sku, Warehouse, {{selectedFieldForUpload}}, Priority 
                 </div>
+                <div *ngIf="excelAction==='update'" style="color: #6c757d;">
+                  Columns : Sku, Warehouse, City, Pincode, Priority 
+                </div>
                 <br><br>
-                <button type="button" class="btnRadius" mat-raised-button (click)="onUploadClick()" [disabled]="excel_data_json.length?false:true">Add</button>
+                <button *ngIf="excelAction==='add'" type="button" class="btnRadius" mat-raised-button (click)="onUploadClick()" [disabled]="excel_data_json.length?false:true">Add</button>
+                <button *ngIf="excelAction==='update'" type="button" class="btnRadius" mat-raised-button (click)="onBulkUpdateClick()" [disabled]="excel_data_json.length?false:true">Update</button>
               </mat-card-content>
               <mat-card-actions>
               </mat-card-actions>
