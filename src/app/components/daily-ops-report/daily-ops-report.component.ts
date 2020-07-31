@@ -109,7 +109,18 @@ export class DailyOpsReportComponent implements OnInit {
 
         console.log(pipe.transform('2020-04-26 08:59:53.0', 'h:mm:ss a'))
 
-        const fileFor = this.myForm.value.warehouseopsreport == 1 ? 'warehouseOps' : 'CourierOps';
+        let fileFor = ''; //= this.myForm.value.warehouseopsreport == 1 ? 'warehouseOps' : 'CourierOps';
+        switch (this.myForm.value.warehouseopsreport) {
+            case '1':
+                fileFor = 'warehouseOps';
+                break;
+            case '2':
+                fileFor = 'CourierOps';
+                break;
+            case '3':
+                fileFor = 'AllOrders';
+                break;
+        }
         const filedate = datefrom;
         const fileName = fileFor + '_' + filedate + '_' + '.csv';
         // let filePresent = false;
@@ -159,5 +170,10 @@ export class DailyOpsReportComponent implements OnInit {
         });
     }
     
+    wareHouseNameSelection(data){
+        // if(data.value == '2' ){
+            this.myForm.controls['warehousename'].setValue(0);
+        // }
+    }
 }
 
