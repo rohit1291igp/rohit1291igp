@@ -175,6 +175,41 @@ export class DeliveryPriorityComponent implements OnInit,AfterViewChecked {
     }
   }
 
+  onBulkUpdateClick(){
+    if(this.excel_data_json.length){
+      const reqObj = {
+        url: `warehouse/decentralized/updateDeliveryPriorityList`,
+        method: 'put',
+        payload: this.excel_data_json
+      }
+      this.BackendService.makeAjax(reqObj,(err,response,header)=>{
+        if(err){
+          console.log("Error",err)
+        }else{
+          console.log(response);
+          if(response.error){
+            this.uploadErrors=response['result']['errorList']
+            this.sidenav.open();
+          }else{
+            this.openSnackBar("Data Updated Successfully");
+          }
+          let skus = this.excel_data_json.map(ele=>ele.SKU)
+          this.excel_data_json=[];
+          this.excelFile.nativeElement.value=""
+          // this.dataSource.data=[];
+          this.tableHeaders=[];
+          this.getDeliveryPriorityList('sku',skus)
+        }
+      })
+      console.log(reqObj)
+    }
+  }
+
+  excelAction='add'
+  onExcelActionChange(){
+
+  }
+
 
   onUploadFieldChange(){
     console.log(this.selectedFieldForUpload)
@@ -255,20 +290,39 @@ export class DeliveryPriorityComponent implements OnInit,AfterViewChecked {
           if(rowNumber===1){
             console.log(_this.selectedFieldForUpload,row)
           }
-          if (rowNumber == 1 && !((row.values[1].toLowerCase() == 'sku') && (row.values[2].toLowerCase() == 'warehouse') && (row.values[3] == _this.selectedFieldForUpload ) && (row.values[4].toLowerCase() == "priority"))) {
-            alert('Invalid excel sheet format! Columns must be in following sequence : Sku,Warehouse,'+_this.selectedFieldForUpload+",Priority");
-            validExcel = false;
-            event.target.value=""
-            return;
-          }
-          //["select", "orgBarCode", "warehouse", "mappedBarCode", "actions"];
-          if (rowNumber != 1 && validExcel) {
-            let obj_value={}
-                obj_value['SKU']=row.values[1];
-                obj_value['WareHouse']=row.values[2];
-                obj_value[_this.selectedFieldForUpload]=row.values[3];
-                obj_value['Priority']=row.values[4];
-            tableData.push(obj_value)
+          if(_this.excelAction==='add'){
+            if (rowNumber == 1 && !((row.values[1].toLowerCase() == 'sku') && (row.values[2].toLowerCase() == 'warehouse') && (row.values[3] == _this.selectedFieldForUpload ) && (row.values[4].toLowerCase() == "priority"))) {
+              alert('Invalid excel sheet format! Columns must be in following sequence : Sku,Warehouse,'+_this.selectedFieldForUpload+",Priority");
+              validExcel = false;
+              event.target.value=""
+              return;
+            }
+            //["select", "orgBarCode", "warehouse", "mappedBarCode", "actions"];
+            if (rowNumber != 1 && validExcel) {
+              let obj_value={}
+                  obj_value['SKU']=row.values[1];
+                  obj_value['WareHouse']=row.values[2];
+                  obj_value[_this.selectedFieldForUpload]=row.values[3];
+                  obj_value['Priority']=row.values[4];
+              tableData.push(obj_value)
+            }
+          }else if(_this.excelAction=='update'){
+            if (rowNumber == 1 && !((row.values[1].toLowerCase() == 'sku') && (row.values[2].toLowerCase() == 'warehouse') && (row.values[3] == 'City' ) && (row.values[4] == 'Pincode' ) && (row.values[5].toLowerCase() == "priority"))) {
+              alert('Invalid excel sheet format! Columns must be in following sequence : Sku,Warehouse,'+_this.selectedFieldForUpload+",Priority");
+              validExcel = false;
+              event.target.value=""
+              return;
+            }
+            //["select", "orgBarCode", "warehouse", "mappedBarCode", "actions"];
+            if (rowNumber != 1 && validExcel) {
+              let obj_value={}
+                  obj_value['SKU']=row.values[1];
+                  obj_value['WareHouse']=row.values[2];
+                  obj_value['City']=row.values[3];
+                  obj_value['Pincode']=row.values[4];
+                  obj_value['Priority']=row.values[5];
+              tableData.push(obj_value)
+            }
           }
         });
         _this.excel_data_json=tableData;
