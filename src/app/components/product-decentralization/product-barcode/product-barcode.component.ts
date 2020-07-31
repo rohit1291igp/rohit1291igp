@@ -180,6 +180,7 @@ export class ProductBarcodeComponent implements OnInit, AfterViewChecked {
 			_this.tableHeaders = ["select", "o_barcode", "wh", "d_barcode", "actions"];
 			//_this.responseDataPut = response;
 			//_this.getSearchResults(data);
+			_this.openEdits = 0;
 			console.log('sidePanel Response --->', response);
 			setTimeout(() => {
 				_this.dataSource.paginator = _this.paginator;
@@ -198,6 +199,7 @@ export class ProductBarcodeComponent implements OnInit, AfterViewChecked {
 			throw new Error('Cannot use multiple files');
 		}
 		let validExcel = true;
+		_this.errorList = [];
 		const arryBuffer = new Response(target.files[0]).arrayBuffer();
 		arryBuffer.then(function (data) {
 			workbook.xlsx.load(data).then(function () {
@@ -239,6 +241,7 @@ export class ProductBarcodeComponent implements OnInit, AfterViewChecked {
 				});
 				_this.dataSource = new MatTableDataSource(tableData);
 				_this.tableHeaders = ["select", "o_barcode", "wh", "d_barcode", "actions"];
+				_this.openEdits = 0;
 				setTimeout(() => {
 					_this.dataSource.sort = _this.sort;
 					_this.dataSource.paginator = _this.paginator;
@@ -263,6 +266,7 @@ export class ProductBarcodeComponent implements OnInit, AfterViewChecked {
 		_this.dataSource = new MatTableDataSource(dataSource);
 		_this.tableHeaders = ["select", "o_barcode", "wh", "d_barcode", "actions"];
 		_this.dataFromDB = false;
+		_this.openEdits = 0;
 		setTimeout(() => {
 			_this.dataSource.sort = _this.sort;
 			_this.dataSource.paginator = _this.paginator;
@@ -404,7 +408,6 @@ export class ProductBarcodeComponent implements OnInit, AfterViewChecked {
 	}
 
 	enableRowEdit(row: any) {
-
 		row.editable = !row.editable;
 		this.openEdits++;
 	}
@@ -433,6 +436,9 @@ export class ProductBarcodeComponent implements OnInit, AfterViewChecked {
 			return
 		}
 		///v1/admin/warehouse/decentralized/removeDecentBarcode
+		if(!confirm("Are you sure to delete selected items?")){
+			return;
+		}
 		let reqObj: any = {
 			url: 'warehouse/decentralized/removeDecentBarcode',
 			method: "post",
