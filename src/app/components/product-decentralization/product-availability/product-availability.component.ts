@@ -239,7 +239,7 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 							})
 						}
 						else {
-							_this.errorList.push("SKU and Warehouse cannot be empty for:SKU " + row.values[1] + " and Warehouse: " + row.values[2])
+							_this.errorList.push("SKU and Warehouse cannot be empty for:SKU " + row.values[1] + " and Warehouse: " + row.values[2] + " in Row: " + rowNumber)
 						}
 
 					}
