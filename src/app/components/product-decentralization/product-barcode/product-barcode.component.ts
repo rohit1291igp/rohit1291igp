@@ -136,6 +136,10 @@ export class ProductBarcodeComponent implements OnInit, AfterViewChecked {
 				this.addExcel(data)
 				break;
 			}
+			case 'update': {
+				this.updateExcel(data)
+				break;
+			}
 		}
 	}
 	getSearchResults(data) {
@@ -160,8 +164,8 @@ export class ProductBarcodeComponent implements OnInit, AfterViewChecked {
 		}
 
 		_this.BackendService.makeAjax(reqObj, function (err, response, httpOptions) {
-			
-			
+
+
 			if (err || response.error) {
 				_this.openSnackBar("Something Went Wrong");
 				console.log('Error=============>', err, response.errorCode);
@@ -312,6 +316,42 @@ export class ProductBarcodeComponent implements OnInit, AfterViewChecked {
 			}, 100)
 		})
 	}
+	updateExcel(data) {
+		let _this = this;
+		if (_this.dataSource.data.length == 0) {
+			return
+		}
+
+		let reqObj: any = {
+			url: 'warehouse/decentralized/updateDecentBarcode',
+			method: "put",
+			payload: <any>[]
+		};
+		_this.dataSource.data.forEach(ele => {
+			reqObj.payload.push({
+				"o_barcode": ele.o_barcode,
+				"wh": ele.wh,
+				"d_barcode": ele.d_barcode
+			})
+		});
+		let confirmation = confirm('Would you like to upload data?');
+		if (!confirmation)
+			return;
+
+		_this.BackendService.makeAjax(reqObj, function (err, response, headers) {
+			if (err || response.error) {
+				_this.openSnackBar("Something Went Wrong");
+				console.log('Error=============>', err, response.errorCode);
+				return;
+			}
+			if (response.result.errorList.length) {
+				_this.errorList = response.result.errorList;
+				_this.sidenav.open()
+			} else {
+				_this.openSnackBar("Updated Successfully");
+			}
+		})
+	}
 
 	extractArrayFromTextArea(text) {
 		let _this = this;
@@ -425,7 +465,7 @@ export class ProductBarcodeComponent implements OnInit, AfterViewChecked {
 					}
 					return false
 				}
-				
+
 				const control = _this.fb.group({
 					d_barcode: [ele.d_barcode]
 				});
@@ -436,7 +476,7 @@ export class ProductBarcodeComponent implements OnInit, AfterViewChecked {
 			return
 		}
 		///v1/admin/warehouse/decentralized/removeDecentBarcode
-		if(!confirm("Are you sure to delete selected items?")){
+		if (!confirm("Are you sure to delete selected items?")) {
 			return;
 		}
 		let reqObj: any = {
@@ -468,7 +508,7 @@ export class ProductBarcodeComponent implements OnInit, AfterViewChecked {
 						_this.openEdits--
 					}
 					return false
-				}				
+				}
 				const control = _this.fb.group({
 					d_barcode: [ele.d_barcode]
 				});

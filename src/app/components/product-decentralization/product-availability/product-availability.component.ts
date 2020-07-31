@@ -148,8 +148,8 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 				this.addExcel(data)
 				break;
 			}
-			case 'download': {
-				this.downloadExcel()
+			case 'update': {
+				this.updateExcel(data)
 				break;
 			}
 		}
@@ -330,6 +330,50 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 				console.log('Error=============>', err, response.errorCode);
 				return;
 			}
+			console.log('sidePanel Response --->', response);
+
+		})
+	}
+
+	updateExcel(data) {
+		// "WareHouse", "Priority", "SKU", "Quantity"
+		let _this = this;
+		if (_this.dataSource.data.length == 0) {
+			return
+		}
+
+		let reqObj: any = {
+			url: 'warehouse/decentralized/updateProductList',
+			method: "put",
+			payload: <any>[]
+		};
+
+		_this.dataSource.data.forEach(ele => {
+			reqObj.payload.push({
+				"WareHouse": ele.WareHouse,
+				"Priority": ele.Priority,
+				"SKU": ele.SKU,
+				"Quantity": ele.Quantity
+			})
+		});
+
+
+		if (!confirm('Would you like to update data?')) {
+			return;
+		}
+
+		_this.BackendService.makeAjax(reqObj, function (err, response, headers) {
+			if (err || response.error) {
+				_this.openSnackBar("Something Went Wrong");
+				console.log('Error=============>', err, response.errorCode);
+				return;
+			}
+			if (response.result.errorList.length) {
+				_this.errorList = response.result.errorList;
+				_this.sidenav.open()
+			}else{
+				_this.openSnackBar("Updated Successfully");
+			}		
 			console.log('sidePanel Response --->', response);
 
 		})
