@@ -334,7 +334,7 @@ export class ProductBarcodeComponent implements OnInit, AfterViewChecked {
 				"d_barcode": ele.d_barcode
 			})
 		});
-		let confirmation = confirm('Would you like to upload data?');
+		let confirmation = confirm('Would you like to update data?');
 		if (!confirmation)
 			return;
 
