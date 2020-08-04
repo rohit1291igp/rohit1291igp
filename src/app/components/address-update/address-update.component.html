@@ -1,0 +1,84 @@
+<div class="main-card-container">
+  <mat-card style="width: fit-content;margin: 0 auto;padding: 16px 16px 7px 16px;">
+    <h5>Please type or paste Order Id</h5>
+    <form>
+      <div class="d-flex">
+        <mat-form-field class="m-8" style="width: 88%;margin: 0 auto;">
+          <input matInput name="orderId" placeholder="Order Id" [(ngModel)]="orderId" (input)="getOrderDetail(orderId)"
+            autocomplete="off">
+        </mat-form-field>
+      </div>
+      <!-- <button style="margin: 5px;" type="submit" mat-raised-button class="btn-color">Download</button> -->
+    </form>
+  </mat-card>
+  <mat-card *ngIf="tableData && tableData.actualAddress"
+    style="margin: 0 auto;width: 70%;margin-top:30px;margin-bottom: 18px;overflow-x:auto;padding: 14px 22px;">
+    <h5>Actual Address</h5>
+    <div *ngIf="tableData.flagSameAsAddressBook">
+      <mat-checkbox [(ngModel)]="updateAddressFlag">Update Address Book</mat-checkbox>
+    </div>
+    <table class="customers" style="margin-bottom: 10px;">
+      <thead>
+        <ng-container *ngFor="let HeaderText of objectKeys(addressDetails[0])">
+          <th>{{ HeaderText }}</th>
+        </ng-container>
+        <th>Update Address</th>
+
+      </thead>
+      <tbody>
+        <ng-container>
+          <tr>
+            <td *ngFor="let innerDataText of objectKeys(addressDetails[0])">
+              <ng-container *ngIf="innerDataText == 'couName' else otherFields">
+                <select type="text" name="couName" #couName="ngModel" [(ngModel)]="newAddressDetails['couName']"
+                  class="form-control" [compareWith]="compareFn">
+                  <option *ngFor="let data of countryList" [ngValue]="data">
+                    <span class="capitalize">{{data.couName}}</span>
+                  </option>
+                </select>
+              </ng-container>
+              <ng-template #otherFields>
+                <input matInput name="{{innerDataText}}" placeholder="{{tableData.actualAddress[innerDataText]}}"
+                  autocomplete="off" [(ngModel)]="newAddressDetails[innerDataText]"
+                  value="{{tableData.actualAddress[innerDataText]}}"
+                  (click)="newAddressDetails[innerDataText] = addressDetails[0][innerDataText]">
+              </ng-template>
+            </td>
+            <td>
+              <ng-container *ngIf="!apiResponseMsg else updated">
+                <button class="btn btn-primary" (click)="updateAddress()">Update</button>
+              </ng-container>
+              <ng-template #updated>
+                <span class="text-green">Address Update Successfully</span>
+              </ng-template>
+            </td>
+          </tr>
+        </ng-container>
+      </tbody>
+    </table>
+
+    <ng-container *ngIf="tableData.suggestedAddress">
+      <h5 style="margin-top: 31px;">Suggested Address</h5>
+      <table class="customers" style="margin-bottom: 10px;">
+        <thead>
+          <ng-container *ngFor="let HeaderText of objectKeys(tableData.suggestedAddress[0])">
+            <th>{{ HeaderText }}</th>
+          </ng-container>
+        </thead>
+        <tbody>
+          <ng-container>
+            <tr>
+              <ng-container *ngFor="let innerDataText of objectKeys(tableData.suggestedAddress[0])">
+                <!-- <td (click)="copyText(innerDataText+'Id')" id="{{innerDataText+'Id'}}">{{tableData.actualAddress[innerDataText]}}
+                  </td> -->
+                <td>{{tableData.actualAddress[innerDataText]}}
+                </td>
+              </ng-container>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+    </ng-container>
+
+  </mat-card>
+</div>
