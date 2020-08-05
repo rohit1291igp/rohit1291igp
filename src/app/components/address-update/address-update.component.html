@@ -46,7 +46,8 @@
                   (click)="newAddressDetails[innerDataText] = addressDetails[0][innerDataText]">
               </ng-template>
             </td>
-            <td>
+            <td> 
+                <div *ngIf="apiErrorMsg" class="theme-red">{{apiErrorMsg}}</div>
               <ng-container *ngIf="!apiResponseMsg else updated">
                 <button class="btn btn-primary" (click)="updateAddress()">Update</button>
               </ng-container>
