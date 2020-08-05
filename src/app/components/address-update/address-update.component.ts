@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, OnInit, ViewChild, Pipe, PipeTransform } from '@angular/core';
 import { Headers, RequestOptions, Response } from '@angular/http';
 //import { UtilityService } from '../../services/utility.service';
 import { environment } from '../../../environments/environment';
@@ -67,6 +67,7 @@ export class AddressUpdateComponent implements OnInit {
         if (response && response.status == 'Success') {
           this$.wrongOrderId = false;
           this$.tableData = response.data;
+
           this$.addressDetails = [this$.tableData.actualAddress].map(function (item) {
             return {
               couName: item.couName,
@@ -79,7 +80,9 @@ export class AddressUpdateComponent implements OnInit {
               email: item.email
             }
           });
-
+          for (let x in this$.addressDetails[0]) {
+            this$.newAddressDetails[x] = this$.addressDetails[0][x];
+          }
           this$.newAddressDetails['couName'] = { "cid": this$.tableData.actualAddress.cid, "couName": this$.addressDetails[0].couName };
           if (this$.tableData.suggestedAddress) {
             this$.tableData.suggestedAddress = [this$.tableData.suggestedAddress].map(function (item) {
@@ -123,7 +126,7 @@ export class AddressUpdateComponent implements OnInit {
     _this.apiErrorMsg = '';
 
     for (let x in _this.newAddressDetails) {
-      if(_this.newAddressDetails[x] == "" && x != 'email'){
+      if (_this.newAddressDetails[x] == "" && x != 'email' && x != 'saddr2') {
         _this.apiErrorMsg = "Required fields can't be empty";
         return false;
       }
@@ -207,3 +210,30 @@ export class AddressUpdateComponent implements OnInit {
     this.apiErrorMsg = '';
   }
 }
+
+@Pipe({ name: 'AddressUpdateHeader' })
+
+export class AddressUpdateHeaderPipe implements PipeTransform {
+  transform(data): any {
+    return data.map(m => {
+      switch (m) {
+        case 'couName':
+          m = "Country Name"
+          break;
+        case 'pcode':
+          m = "Pincode"
+          break;
+        case 'saddr':
+          m = "Address 1"
+          break;
+        case 'saddr2':
+          m = "Address 2"
+          break;
+        case 'mob':
+          m = "Phone"
+          break;
+      }
+      return m;
+    })
+  }
+} 
