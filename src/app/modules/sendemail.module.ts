@@ -9,7 +9,7 @@ import { NewExcelUploadComponent } from 'app/components/new-excel-upload/new-exc
 import { OrderUpdateStatusComponent } from 'app/components/order-update-status/order-update-status.component';
 import { SharedModule } from 'app/shared-module/shared/shared.module';
 import { PaymentReconciliationComponent } from 'app/components/payment-reconciliation/payment-reconciliation.component';
-import { AddressUpdateComponent } from 'app/components/address-update/address-update.component';
+import { AddressUpdateComponent, AddressUpdateHeaderPipe } from 'app/components/address-update/address-update.component';
 
 const routes: Routes = [
   {
@@ -48,7 +48,8 @@ const routes: Routes = [
     NewExcelUploadComponent,
     OrderUpdateStatusComponent,
     PaymentReconciliationComponent,
-    AddressUpdateComponent
+    AddressUpdateComponent,
+    AddressUpdateHeaderPipe
   ]
 })
 export class SendEmailModule { }
