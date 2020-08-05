@@ -8,6 +8,8 @@
             autocomplete="off">
         </mat-form-field>
       </div>
+      <div *ngIf="wrongOrderId" class="theme-red">Please enter Valid OrderId</div>
+
       <!-- <button style="margin: 5px;" type="submit" mat-raised-button class="btn-color">Download</button> -->
     </form>
   </mat-card>
@@ -28,7 +30,7 @@
       <tbody>
         <ng-container>
           <tr>
-            <td *ngFor="let innerDataText of objectKeys(addressDetails[0])">
+            <td *ngFor="let innerDataText of objectKeys(addressDetails[0])" (input)="editDataListner()" (change)="editDataListner()">
               <ng-container *ngIf="innerDataText == 'couName' else otherFields">
                 <select type="text" name="couName" #couName="ngModel" [(ngModel)]="newAddressDetails['couName']"
                   class="form-control" [compareWith]="compareFn">
