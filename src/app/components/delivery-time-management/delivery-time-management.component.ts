@@ -36,7 +36,8 @@ export class DeliveryTimeManagementComponent implements OnInit {
 		{ key: 0, value: 'All' },
 		{ key: 4, value: 'Lucknow WH' },
 		{ key: 354, value: 'Mumbai WH' },
-		{ key: 318, value: 'Jaipur WH' }
+		{ key: 318, value: 'Jaipur WH' },
+    { key: 72, value: 'Handels' }
 	];
 
 	destinationTypeOptions: string[] = ['City', 'Pincode', 'Country'];

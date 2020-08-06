@@ -210,6 +210,7 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 	readExcel(event) {
 		const workbook = new Excel.Workbook();
 		const target: DataTransfer = <DataTransfer>(event.target);
+		
 		let _this = this;
 		let tableData = [];
 		if (target.files.length !== 1) {
@@ -247,7 +248,8 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 				if (_this.errorList.length) {
 					_this.sidenav.open();
 				}
-				_this.selection.clear()
+				_this.selection.clear();
+				
 				_this.tableform.get("tableEntries")['controls'] = []
 				tableData.forEach((ele) => {
 					const control = _this.fb.group({
@@ -266,6 +268,7 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 				}, 100)
 			});
 		});
+		event.target.value='';
 	}
 
 	viewExcel(data) {
