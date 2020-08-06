@@ -252,6 +252,7 @@ export class ProductBarcodeComponent implements OnInit, AfterViewChecked {
 				}, 100)
 			});
 		});
+		event.target.value='';
 	}
 
 	viewExcel(data) {
@@ -316,6 +317,7 @@ export class ProductBarcodeComponent implements OnInit, AfterViewChecked {
 			}, 100)
 		})
 	}
+	
 	updateExcel(data) {
 		let _this = this;
 		if (_this.dataSource.data.length == 0) {

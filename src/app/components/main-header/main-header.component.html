@@ -74,6 +74,13 @@
                     <p><a ng-href="#/HolidayCalendarManagement" routerLink="/HolidayCalendarManagement">Holiday Calendar</a></p>
                 </li>
             </ng-container>
+            <ng-container *ngIf="environment.userType == 'warehouse' || environment.userType == 'merchandise' ">
+                <li class="fullHeightLi"
+                    [ngClass]="{'selected' : selectedTopTab === 'productDecentralization'}">
+                    <p><a ng-href="#/productDecentralization" routerLink="/productDecentralization">Product Decentralization</a></p>
+                </li>
+            </ng-container>
+        </ng-container>
         </ng-container>
         <ng-container *ngIf="environment.userType === 'blogger'">
             <li>
