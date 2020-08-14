@@ -10,10 +10,15 @@ import { OrderUpdateStatusComponent } from 'app/components/order-update-status/o
 import { SharedModule } from 'app/shared-module/shared/shared.module';
 import { PaymentReconciliationComponent } from 'app/components/payment-reconciliation/payment-reconciliation.component';
 import { AddressUpdateComponent } from 'app/components/address-update/address-update.component';
+import { NewDasboardComponent } from 'app/components/new-dashboard/new-dashboard.component';
+import { NavService } from 'app/services/NewService';
+import { MenuListItemComponent } from 'app/components/menu-list-item/menu-list-item.component';
 
-const routes: Routes = [
-  {
-    path: '',
+const routes: Routes = [{
+  path: '',
+  component: NewDasboardComponent,
+  children: [{
+    path: 'sendemail',
     component: SendEmailComponent
   },
   {
@@ -25,13 +30,14 @@ const routes: Routes = [
     component: OrderUpdateStatusComponent
   },
   {
-    path:'payment-reconciliation',
+    path: 'payment-reconciliation',
     component: PaymentReconciliationComponent
   },
   {
-    path:'addressUpdate',
+    path: 'addressUpdate',
     component: AddressUpdateComponent
-  }
+  }]
+}
 ];
 
 @NgModule({
@@ -44,11 +50,14 @@ const routes: Routes = [
     SharedModule
   ],
   declarations: [
+    NewDasboardComponent,
     SendEmailComponent,
     NewExcelUploadComponent,
     OrderUpdateStatusComponent,
     PaymentReconciliationComponent,
-    AddressUpdateComponent
-  ]
+    AddressUpdateComponent,
+    MenuListItemComponent
+  ],
+  providers:[NavService]
 })
 export class SendEmailModule { }

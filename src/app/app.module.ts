@@ -74,6 +74,8 @@ import { ProductDecentralizationComponent } from './components/product-decentral
 import { DeliveryPriorityComponent } from './components/product-decentralization/delivery-priority/delivery-priority.component';
 import { OfferPageManagementComponent } from './components/offer-page-management/offer-page-management.component';
 import { VoucherService } from './services/voucher.service';
+import { NewDasboardComponent } from './components/new-dashboard/new-dashboard.component';
+import { NavService } from './services/NewService';
 
 
 
@@ -120,6 +122,7 @@ export function ConfigLoader(envConfig: envConfig) {
     ProductDecentralizationComponent,
     DeliveryPriorityComponent,
     OfferPageManagementComponent,
+    // NewDasboardComponent
     // AutoSelectionComponent
   ],
   imports: [
@@ -200,7 +203,8 @@ export function ConfigLoader(envConfig: envConfig) {
     ObjectKeyValuePipe,
     S3UploadService,
     Ng2ImgMaxService,
-    VoucherService
+    VoucherService,
+    NavService
   ],
   entryComponents:[UploadExcelComponent,NotificationComponent, ImgPreviewComponent, SelectItemForDelivered, OrderStockComponent,editComponent, DownloadStockedComponent],
   bootstrap: [AppComponent],

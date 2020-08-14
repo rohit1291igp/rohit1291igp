@@ -1,0 +1,37 @@
+nav {
+    background: #c3404e;
+    color: #fff;
+    padding: 8px;
+    cursor: pointer;
+}
+
+.page-view {
+    width: 25%;
+    margin: 0px 8px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.img-hover-zoom {
+    /* height: 300px; */
+    /* [1.1] Set it as per your need */
+    overflow: hidden;
+    border: 1px solid #ccc;
+    height: 200px;
+    /* [1.2] Hide the overflowing of child elements */
+}
+
+.img-hover-zoom img {
+    transition: transform .5s ease;
+}
+
+/* [3] Finally, transforming the image when container gets hovered */
+
+.img-hover-zoom:hover img {
+    transform: scale(1.5);
+}
+
+.responsive-img {
+    width: 100%;
+    height: auto;
+}

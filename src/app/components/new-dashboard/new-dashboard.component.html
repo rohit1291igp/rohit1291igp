@@ -1,0 +1,74 @@
+<nav>
+    <i class="fa fa-bars" aria-hidden="true" (click)="drawer.toggle()" style="cursor: pointer"></i>
+    <div class="d-flex align-items-baseline" style="float: right;">
+        <p style="margin-right: 12px;">Hi Sandip
+        </p>
+        <i class="fa fa-sign-out" aria-hidden="true"></i>
+    </div>
+</nav>
+<mat-drawer-container class="example-container" autosize style="width: 100%;height: 100vh;">
+    <mat-drawer #drawer #appDrawer class="example-sidenav" mode="side">
+        <!-- <p>Auto-resizing sidenav</p>
+        <button (click)="navigate('menu')" mat-raised-button>
+            Toggle extra text
+        </button> -->
+        <a routerLink="/sendemail" style="text-decoration: none;">
+            <mat-icon aria-hidden="false" aria-label="Example home icon">home
+                </mat-icon>
+        </a>
+        
+        <app-menu-list-item *ngFor="let item of navItems" [item]="item"></app-menu-list-item>
+        <p (click)="navigate('menu')">Module</p>
+
+    </mat-drawer>
+
+    <div class="example-sidenav-content">
+        <!-- <button type="button" mat-button (click)="drawer.toggle()">
+            Toggle sidenav
+        </button> -->
+        <h2 *ngIf="!openPage" class="center-align">Pages</h2>
+        <div *ngIf="openPage">
+            <router-outlet></router-outlet>
+        </div>
+        <div *ngIf="!openPage" class="d-flex justify-content-center flex-wrap-wrap" style="padding: 10px;">
+            <a class="page-view" routerLink="/sendemail" (click)="navigate('page')">
+                <div class="img-hover-zoom">
+                    <img src="/assets/images/sendemail.png" class="responsive-img" />
+                </div>
+                <p>Send Email</p>
+            </a>
+            <a class="page-view" routerLink="/sendemail/uploadtemplate" (click)="navigate('page')">
+                <div class="img-hover-zoom">
+                    <img src="/assets/images/uploadExcelFile.png" class="responsive-img" />
+                </div>
+                <p>Excel Upload</p>
+            </a>
+            <a class="page-view" routerLink="/sendemail/orderupdatestatus" (click)="navigate('page')">
+                <div class="img-hover-zoom">
+                    <img src="/assets/images/orderUpdate.png" class="responsive-img" />
+                </div>
+                <p>Order Update Status</p>
+            </a>
+            <a class="page-view" routerLink="/sendemail/payment-reconciliation" (click)="navigate('page')">
+                <div class="img-hover-zoom">
+                    <img src="/assets/images/uploadExcelFile.png" class="responsive-img" />
+                </div>
+                <p>Payment Reconciliation</p>
+            </a>
+            <a class="page-view" routerLink="/sendemail/addressUpdate" (click)="navigate('page')">
+                <div class="img-hover-zoom">
+                    <img src="/assets/images/addressUpdate.png" class="responsive-img" />
+                </div>
+                <p>Address Update</p>
+            </a>
+            <a class="page-view" routerLink="/dailywarehouseOpsReport" (click)="navigate('page')">
+                <div class="img-hover-zoom">
+                    <img src="/assets/images/dailywarehouseReport.png" class="responsive-img" />
+                </div>
+                <p>Address Update</p>
+            </a>
+        </div>
+
+    </div>
+
+</mat-drawer-container>
