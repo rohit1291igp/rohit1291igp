@@ -4,7 +4,7 @@ import { DatePipe } from '@angular/common';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { HttpModule } from '@angular/http';
-import { MatButtonModule, MatCardModule, MatCheckboxModule, MatDatepickerModule, MatDialogModule, MatDialogRef, MatFormFieldModule, MatIconModule, MatInputModule, MatListModule, MatMenuModule, MatNativeDateModule, MatPaginatorModule, MatProgressBarModule, MatProgressSpinnerModule, MatRadioModule, MatSelectModule, MatSnackBarModule, MatSortModule, MatTableModule, MAT_DIALOG_DATA } from '@angular/material';
+import { MatButtonModule, MatCardModule, MatCheckboxModule, MatDatepickerModule, MatDialogModule, MatDialogRef, MatFormFieldModule, MatIconModule, MatInputModule, MatListModule, MatMenuModule, MatNativeDateModule, MatPaginatorModule, MatProgressBarModule, MatProgressSpinnerModule, MatRadioModule, MatSelectModule, MatSnackBarModule, MatSortModule, MatTableModule, MAT_DIALOG_DATA, MatSidenavModule,MatAutocompleteModule, MatTabsModule, MAT_DATE_LOCALE, MatSlideToggleModule } from '@angular/material';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
@@ -61,6 +61,22 @@ import { PayoutDashboardComponent, PayoutDashboardModule } from './components/pa
 import { MomentDateAdapter, MatMomentDateModule } from '@angular/material-moment-adapter';
 import { editComponent, DownloadStockedComponent } from './components/reports/reports.component';
 import { DailyOpsReportComponent } from './components/daily-ops-report/daily-ops-report.component';
+import {StockComponentsReportsComponent} from './components/stock-components-reports/stock-components-reports.component';
+import { DeliveryTimeManagementComponent } from './components/delivery-time-management/delivery-time-management.component';
+
+import { ProductAvailabilityComponent } from './components/product-decentralization/product-availability/product-availability.component';
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { ProductBarcodeComponent } from './components/product-decentralization/product-barcode/product-barcode.component';
+
+import { ProductReportComponent } from './components/product-report/product-report.component';
+import { HolidayCalenderManagementComponent } from './components/holiday-calender-management/holiday-calender-management.component';
+import { ProductDecentralizationComponent } from './components/product-decentralization/product-decentralization.component';
+import { DeliveryPriorityComponent } from './components/product-decentralization/delivery-priority/delivery-priority.component';
+import { OfferPageManagementComponent } from './components/offer-page-management/offer-page-management.component';
+import { VoucherService } from './services/voucher.service';
+import { NewDasboardComponent } from './components/new-dashboard/new-dashboard.component';
+import { NavService } from './services/NewService';
+
 
 
 
@@ -93,8 +109,20 @@ export function ConfigLoader(envConfig: envConfig) {
     testComponent,
     editComponent,
     PerformanceReportComponent,
+    ProductReportComponent,
+    HolidayCalenderManagementComponent,
     DailyOpsReportComponent,
-    DownloadStockedComponent
+    StockComponentsReportsComponent,
+    DeliveryTimeManagementComponent,
+    DailyOpsReportComponent,
+    StockComponentsReportsComponent,
+    DownloadStockedComponent,
+    ProductAvailabilityComponent,
+    ProductBarcodeComponent,
+    ProductDecentralizationComponent,
+    DeliveryPriorityComponent,
+    OfferPageManagementComponent,
+    // NewDasboardComponent
     // AutoSelectionComponent
   ],
   imports: [
@@ -123,6 +151,10 @@ export function ConfigLoader(envConfig: envConfig) {
     MatSelectModule,
     MatDatepickerModule,
     MatNativeDateModule,
+    MatSidenavModule,
+    MatAutocompleteModule,
+    MatTabsModule,
+    MatSlideToggleModule,
     routing,
     SelectModule,
     MyDatePickerModule,
@@ -134,7 +166,9 @@ export function ConfigLoader(envConfig: envConfig) {
     NewReportsComponentModule,
     CapitalizePipeModule,
     DateFormatterPipeModule,
-    PayoutDashboardModule
+    PayoutDashboardModule,
+    FormsModule, 
+    ReactiveFormsModule
     // RouterModule
   ],
   providers: [
@@ -148,6 +182,7 @@ export function ConfigLoader(envConfig: envConfig) {
      },
      { provide: MAT_DIALOG_DATA, useValue: {} },
     { provide: MatDialogRef, useValue: {} },
+    {provide: MAT_DATE_LOCALE, useValue: 'en-GB'},
     /*  envConfig,
     {
       provide: APP_INITIALIZER,
@@ -167,7 +202,9 @@ export function ConfigLoader(envConfig: envConfig) {
     // ReplacePipe,
     ObjectKeyValuePipe,
     S3UploadService,
-    Ng2ImgMaxService
+    Ng2ImgMaxService,
+    VoucherService,
+    NavService
   ],
   entryComponents:[UploadExcelComponent,NotificationComponent, ImgPreviewComponent, SelectItemForDelivered, OrderStockComponent,editComponent, DownloadStockedComponent],
   bootstrap: [AppComponent],

@@ -118,6 +118,16 @@ export class MainHeaderComponent implements OnInit {
         _this.selectedReportTab="";
         _this.reportDropdownOpen=false;
     }
+    if(currentRoute === "/HolidayCalendarManagement"){
+        _this.selectedTopTab = "HolidayCalendarManagement";
+        _this.selectedReportTab="";
+        _this.reportDropdownOpen=false;
+    }
+    if(currentRoute === "/productDecentralization"){
+        _this.selectedTopTab = "productDecentralization";
+        _this.selectedReportTab="";
+        _this.reportDropdownOpen=false;
+    }
 
       if(/^\/reports/.test(currentRoute)){
           _this.selectedTopTab = "reports";
