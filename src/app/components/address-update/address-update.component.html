@@ -4,31 +4,31 @@
     <form>
       <div class="d-flex">
         <mat-form-field class="m-8" style="width: 88%;margin: 0 auto;">
-          <input matInput name="orderId" placeholder="Order Id" [(ngModel)]="orderId" (input)="getOrderDetail(orderId)"
-            autocomplete="off">
+          <input matInput name="orderId" placeholder="Order Id" [(ngModel)]="orderId" (input)="getOrderDetail(orderId)" autocomplete="off">
         </mat-form-field>
       </div>
+      <div *ngIf="wrongOrderId" class="theme-red">Please enter Valid OrderId</div>
+
       <!-- <button style="margin: 5px;" type="submit" mat-raised-button class="btn-color">Download</button> -->
     </form>
   </mat-card>
   <mat-card *ngIf="tableData && tableData.actualAddress"
-    style="margin: 0 auto;width: 70%;margin-top:30px;margin-bottom: 18px;overflow-x:auto;padding: 14px 22px;">
+    style="margin: 0 auto;width: 80%;margin-top:30px;margin-bottom: 18px;overflow-x:auto;padding: 14px 22px;">
     <h5>Actual Address</h5>
     <div *ngIf="tableData.flagSameAsAddressBook">
       <mat-checkbox [(ngModel)]="updateAddressFlag">Update Address Book</mat-checkbox>
     </div>
     <table class="customers" style="margin-bottom: 10px;">
       <thead>
-        <ng-container *ngFor="let HeaderText of objectKeys(addressDetails[0])">
+        <ng-container *ngFor="let HeaderText of objectKeys(addressDetails[0]) | AddressUpdateHeader">
           <th>{{ HeaderText }}</th>
         </ng-container>
         <th>Update Address</th>
-
       </thead>
       <tbody>
         <ng-container>
           <tr>
-            <td *ngFor="let innerDataText of objectKeys(addressDetails[0])">
+            <td *ngFor="let innerDataText of objectKeys(addressDetails[0])" (input)="editDataListner()" (change)="editDataListner()">
               <ng-container *ngIf="innerDataText == 'couName' else otherFields">
                 <select type="text" name="couName" #couName="ngModel" [(ngModel)]="newAddressDetails['couName']"
                   class="form-control" [compareWith]="compareFn">
@@ -38,13 +38,14 @@
                 </select>
               </ng-container>
               <ng-template #otherFields>
-                <input matInput name="{{innerDataText}}" placeholder="{{tableData.actualAddress[innerDataText]}}"
+                <input matInput name="{{innerDataText}}"
                   autocomplete="off" [(ngModel)]="newAddressDetails[innerDataText]"
-                  value="{{tableData.actualAddress[innerDataText]}}"
-                  (click)="newAddressDetails[innerDataText] = addressDetails[0][innerDataText]">
+                  >
+                  <!-- (click)="newAddressDetails[innerDataText] = addressDetails[0][innerDataText]"> -->
               </ng-template>
             </td>
-            <td>
+            <td> 
+                <div *ngIf="apiErrorMsg" class="theme-red">{{apiErrorMsg}}</div>
               <ng-container *ngIf="!apiResponseMsg else updated">
                 <button class="btn btn-primary" (click)="updateAddress()">Update</button>
               </ng-container>
@@ -61,7 +62,7 @@
       <h5 style="margin-top: 31px;">Suggested Address</h5>
       <table class="customers" style="margin-bottom: 10px;">
         <thead>
-          <ng-container *ngFor="let HeaderText of objectKeys(tableData.suggestedAddress[0])">
+          <ng-container *ngFor="let HeaderText of objectKeys(tableData.suggestedAddress[0]) | AddressUpdateHeader">
             <th>{{ HeaderText }}</th>
           </ng-container>
         </thead>

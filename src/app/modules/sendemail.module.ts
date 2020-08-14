@@ -9,10 +9,10 @@ import { NewExcelUploadComponent } from 'app/components/new-excel-upload/new-exc
 import { OrderUpdateStatusComponent } from 'app/components/order-update-status/order-update-status.component';
 import { SharedModule } from 'app/shared-module/shared/shared.module';
 import { PaymentReconciliationComponent } from 'app/components/payment-reconciliation/payment-reconciliation.component';
-import { AddressUpdateComponent } from 'app/components/address-update/address-update.component';
 import { NewDasboardComponent } from 'app/components/new-dashboard/new-dashboard.component';
 import { NavService } from 'app/services/NewService';
 import { MenuListItemComponent } from 'app/components/menu-list-item/menu-list-item.component';
+import { AddressUpdateComponent, AddressUpdateHeaderPipe } from 'app/components/address-update/address-update.component';
 
 const routes: Routes = [{
   path: '',
@@ -56,6 +56,7 @@ const routes: Routes = [{
     OrderUpdateStatusComponent,
     PaymentReconciliationComponent,
     AddressUpdateComponent,
+    AddressUpdateHeaderPipe,
     MenuListItemComponent
   ],
   providers:[NavService]
