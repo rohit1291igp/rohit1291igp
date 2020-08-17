@@ -25,6 +25,9 @@
         <li  *ngIf="environment.userType == 'warehouse'" class="fullHeightLi" [routerLinkActive]="'is-active'" [ngClass]="{'selected' : selectedTopTab === 'sendemail/payment-reconciliation'}">
             <p><a ng-href="#/sendemail/payment-reconciliation" routerLink="/sendemail/payment-reconciliation" [routerLinkActive]="'is-active'">Payment Reconciliation</a></p>
         </li>
+        <li  *ngIf="environment.userType == 'warehouse'" class="fullHeightLi" [routerLinkActive]="'is-active'" [ngClass]="{'selected' : selectedTopTab === 'sendemail/addressUpdate'}">
+            <p><a ng-href="#/sendemail/addressUpdate" routerLink="/sendemail/addressUpdate" [routerLinkActive]="'is-active'">Address Update</a></p>
+        </li>
         <ng-container *ngIf="(environment.userType !== 'root' && environment.userType !== 'blogger')">
             <li  *ngIf="environment.userType == 'admin'" class="fullHeightLi" [ngClass]="{'selected' : selectedTopTab === 'payout-dashboard'}">
                     <p><a ng-href="#/payout-dashboard" routerLink="/payout-dashboard">Payout Dashboard</a></p>
@@ -74,6 +77,13 @@
                     <p><a ng-href="#/HolidayCalendarManagement" routerLink="/HolidayCalendarManagement">Holiday Calendar</a></p>
                 </li>
             </ng-container>
+            <ng-container *ngIf="environment.userType == 'warehouse' || environment.userType == 'merchandise' ">
+                <li class="fullHeightLi"
+                    [ngClass]="{'selected' : selectedTopTab === 'productDecentralization'}">
+                    <p><a ng-href="#/productDecentralization" routerLink="/productDecentralization">Product Decentralization</a></p>
+                </li>
+            </ng-container>
+       
         </ng-container>
         <ng-container *ngIf="environment.userType === 'blogger'">
             <li>

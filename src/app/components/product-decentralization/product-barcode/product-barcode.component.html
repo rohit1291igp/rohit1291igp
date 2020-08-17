@@ -41,8 +41,10 @@
                 <div class="d-flex;" style="text-align: center; ">
                   <button class="btnRadius" id="view" type="submit" mat-raised-button
                     (click)="btnType = 'view'">View</button>
-                  <button class="btnRadius" id="add" type="submit" mat-raised-button
-                    (click)="btnType = 'add'" [disabled]="!dataSource?.data?.length||dataFromDB">Add</button>
+                  <button class="btnRadius" id="add" type="submit" mat-raised-button (click)="btnType = 'add'"
+                    [disabled]="!dataSource?.data?.length||dataFromDB">Add</button>
+                  <button class="btnRadius" id="update" type="submit" mat-raised-button (click)="btnType = 'update'"
+                    [disabled]="!dataSource?.data?.length||dataFromDB">Update</button>
                 </div>
               </div>
             </mat-card>
@@ -146,7 +148,9 @@
                 <span *ngIf="!row.editable">
                   {{row.d_barcode||'-'}}
                 </span>
-                <input *ngIf="row.editable" type="number" formControlName="d_barcode">
+                <mat-form-field *ngIf="row.editable">
+                  <input matInput type="text" formControlName="d_barcode">
+                </mat-form-field>
               </mat-cell>
             </ng-container>
             <ng-container matColumnDef="actions">
@@ -167,7 +171,6 @@
           </mat-table>
           <mat-paginator [pageSizeOptions]="[5, 10, 20]" length="{{dataSource?.length}}" showFirstLastButtons>
           </mat-paginator>
-          <!-- <button type="button" (click)="addRow()">Add row</button> -->
         </form>
       </div>
       <ng-template #noRecord>

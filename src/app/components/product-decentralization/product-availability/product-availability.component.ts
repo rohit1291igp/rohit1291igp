@@ -148,8 +148,8 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 				this.addExcel(data)
 				break;
 			}
-			case 'download': {
-				this.downloadExcel()
+			case 'update': {
+				this.updateExcel(data)
 				break;
 			}
 		}
@@ -178,7 +178,7 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 		}
 
 		_this.BackendService.makeAjax(reqObj, function (err, response, httpOptions) {
-			
+
 			if (err || response.error) {
 				_this.openSnackBar('Something went wrong.');
 				console.log('Error=============>', err, response.errorCode);
@@ -194,6 +194,7 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 			});
 			_this.selection.clear();
 			_this.dataFromDB = true;
+			_this.openEdits = 0;
 			_this.dataSource = new MatTableDataSource(response.tableData);
 			_this.tableHeaders = ["select", "SKU", "WareHouse", "Quantity", "Priority", "actions"];
 
@@ -209,6 +210,7 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 	readExcel(event) {
 		const workbook = new Excel.Workbook();
 		const target: DataTransfer = <DataTransfer>(event.target);
+		
 		let _this = this;
 		let tableData = [];
 		if (target.files.length !== 1) {
@@ -238,7 +240,7 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 							})
 						}
 						else {
-							_this.errorList.push("SKU and Warehouse cannot be empty for:SKU " + row.values[1] + " and Warehouse: " + row.values[2])
+							_this.errorList.push("SKU and Warehouse cannot be empty for:SKU " + row.values[1] + " and Warehouse: " + row.values[2] + " in Row: " + rowNumber)
 						}
 
 					}
@@ -246,7 +248,8 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 				if (_this.errorList.length) {
 					_this.sidenav.open();
 				}
-				_this.selection.clear()
+				_this.selection.clear();
+				
 				_this.tableform.get("tableEntries")['controls'] = []
 				tableData.forEach((ele) => {
 					const control = _this.fb.group({
@@ -258,12 +261,14 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 				_this.dataSource = new MatTableDataSource(tableData);
 				_this.tableHeaders = ["select", "SKU", "WareHouse", "Quantity", "Priority", "actions"];
 				_this.dataFromDB = false;
+				_this.openEdits = 0;
 				setTimeout(() => {
 					_this.dataSource.sort = _this.sort;
 					_this.dataSource.paginator = _this.paginator;
 				}, 100)
 			});
 		});
+		event.target.value='';
 	}
 
 	viewExcel(data) {
@@ -283,6 +288,7 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 		_this.dataSource = new MatTableDataSource(dataSource);
 		_this.tableHeaders = ["select", "SKU", "WareHouse", "Quantity", "Priority", "actions"];
 		_this.dataFromDB = false;
+		_this.openEdits = 0;
 		setTimeout(() => {
 			_this.dataSource.sort = _this.sort;
 			_this.dataSource.paginator = _this.paginator;
@@ -323,10 +329,54 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 				_this.sidenav.open()
 			}
 			if (err || response.error) {
-				
+
 				console.log('Error=============>', err, response.errorCode);
 				return;
 			}
+			console.log('sidePanel Response --->', response);
+
+		})
+	}
+
+	updateExcel(data) {
+		// "WareHouse", "Priority", "SKU", "Quantity"
+		let _this = this;
+		if (_this.dataSource.data.length == 0) {
+			return
+		}
+
+		let reqObj: any = {
+			url: 'warehouse/decentralized/updateProductList',
+			method: "put",
+			payload: <any>[]
+		};
+
+		_this.dataSource.data.forEach(ele => {
+			reqObj.payload.push({
+				"WareHouse": ele.WareHouse,
+				"Priority": ele.Priority,
+				"SKU": ele.SKU,
+				"Quantity": ele.Quantity
+			})
+		});
+
+
+		if (!confirm('Would you like to update data?')) {
+			return;
+		}
+
+		_this.BackendService.makeAjax(reqObj, function (err, response, headers) {
+			if (err || response.error) {
+				_this.openSnackBar("Something Went Wrong");
+				console.log('Error=============>', err, response.errorCode);
+				return;
+			}
+			if (response.result.errorList.length) {
+				_this.errorList = response.result.errorList;
+				_this.sidenav.open()
+			}else{
+				_this.openSnackBar("Updated Successfully");
+			}		
 			console.log('sidePanel Response --->', response);
 
 		})
@@ -403,14 +453,14 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 	deleteSelectedRows() {
 		console.log(this.selection.selected);
 		let _this = this;
-		if (!_this.dataFromDB) {
 
+		if (!_this.dataFromDB) {
 			_this.tableform.get("tableEntries")['controls'] = [];
 			_this.dataSource.data = _this.dataSource.data.filter((ele) => {
 				if (_this.selection.selected.indexOf(ele) != -1) {
 					if (ele.editable) {
 						_this.openEdits--
-					}	
+					}
 					return false
 				}
 				const control = _this.fb.group({
@@ -423,7 +473,9 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 			_this.selection.clear();
 			return
 		}
-
+		if (!confirm("Are you sure to delete selected items?")) {
+			return;
+		}
 		let reqObj: any = {
 			url: 'warehouse/decentralized/deleteProductAvailability',
 			method: "post",
@@ -456,7 +508,7 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 					}
 					return false
 				}
-				
+
 				const control = _this.fb.group({
 					Quantity: [ele.Quantity],
 					Priority: [ele.Priority]
@@ -503,7 +555,7 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 			}
 			if (err || response.error) {
 				console.log('Error=============>', err, response.errorCode);
-				
+
 				return;
 			}
 			_this.dataSource.data[tableIndex].Quantity = _this.tableform.get("tableEntries")["controls"][tableIndex].value.Quantity;
@@ -574,7 +626,7 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 				_this.errorList = response.result.errorList;
 				_this.sidenav.open()
 			}
-			if (err || response.error) {				
+			if (err || response.error) {
 				console.log('Error=============>', err, response.errorCode);
 				return;
 			}

@@ -31,8 +31,8 @@
                     <div style="width:1px; border-left:2px #ccc dotted"></div>
                     <div class="width50">
                       <div style="margin-top: 25%; text-align: center;">
-                        <input type="file" id="file" (change)="readExcel($event)"  (click)="$event.target.value='null'" accept=".xlsx"/>
-                        <label for="file" class="btn-2" >
+                        <input type="file" id="file" (change)="readExcel($event)" accept=".xlsx" />
+                        <label for="file" class="btn-2">
                           <i class="fa fa-upload" aria-hidden="true"></i>
                           Import Excel
                         </label>
@@ -42,8 +42,10 @@
                   <div class="d-flex;" style="text-align: center; ">
                     <button class="btnRadius" id="view" type="submit" mat-raised-button
                       (click)="btnType = 'view'">View</button>
-                    <button class="btnRadius" id="add" type="submit" mat-raised-button
-                      (click)="btnType = 'add'" [disabled]="!dataSource?.data?.length||dataFromDB">Add</button>
+                    <button class="btnRadius" id="add" type="submit" mat-raised-button (click)="btnType = 'add'"
+                      [disabled]="!dataSource?.data?.length||dataFromDB">Add</button>
+                    <button class="btnRadius" id="update" type="submit" mat-raised-button (click)="btnType = 'update'"
+                      [disabled]="!dataSource?.data?.length||dataFromDB">Update</button>
                   </div>
                 </div>
               </mat-card>
@@ -149,7 +151,9 @@
                   <span *ngIf="!row.editable">
                     {{row.Priority||'-'}}
                   </span>
-                  <input *ngIf="row.editable" type="number" formControlName="Priority">
+                  <mat-form-field *ngIf="row.editable">
+                    <input matInput type="number" formControlName="Priority">
+                  </mat-form-field>
                 </mat-cell>
               </ng-container>
               <ng-container matColumnDef="Quantity">
@@ -159,7 +163,9 @@
                   <span *ngIf="!row.editable">
                     {{row.Quantity||'-'}}
                   </span>
-                  <input *ngIf="row.editable" type="number" formControlName="Quantity">
+                  <mat-form-field *ngIf="row.editable">
+                    <input matInput type="number" formControlName="Quantity">
+                  </mat-form-field>
                 </mat-cell>
               </ng-container>
               <ng-container matColumnDef="actions">

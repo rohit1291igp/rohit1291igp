@@ -36,7 +36,8 @@ export class DeliveryTimeManagementComponent implements OnInit {
 		{ key: 0, value: 'All' },
 		{ key: 4, value: 'Lucknow WH' },
 		{ key: 354, value: 'Mumbai WH' },
-		{ key: 318, value: 'Jaipur WH' }
+		{ key: 318, value: 'Jaipur WH' },
+    { key: 72, value: 'Handels' }
 	];
 
 	destinationTypeOptions: string[] = ['City', 'Pincode', 'Country'];
@@ -48,7 +49,8 @@ export class DeliveryTimeManagementComponent implements OnInit {
 			source: [{ key: null, value: null }],
 			destinationType: [''],
 			destinations: [''],
-			deliveryDays: ['']
+			deliveryDays: [''],
+			duplicatesFlag: [false]
 
 		});
 
@@ -77,6 +79,7 @@ export class DeliveryTimeManagementComponent implements OnInit {
 			this.searchForm.get('source').setValue(this.warehouseList[0])
 		}
 		this.searchForm.get('destinationType').setValue("");
+		this.searchForm.get('duplicatesFlag').setValue(false);
 	}
 
 	onSubmit(data) {
@@ -106,7 +109,7 @@ export class DeliveryTimeManagementComponent implements OnInit {
 		let destinationKey = data.value.destinationType;
 		let destinationList = _this.extractArrayFromTextArea(data.value.destinations);
 		let reqObj: any = {
-			url: 'warehousedt/skuwisedeliverytime?startLimit=0&endLimit=1000',
+			url: 'warehousedt/skuwisedeliverytime?startLimit=0&endLimit=1000&flagDuplicate=' + data.value.duplicatesFlag,
 			method: "post",
 			payload: <any>{}
 		};

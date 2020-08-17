@@ -136,6 +136,10 @@ export class ProductBarcodeComponent implements OnInit, AfterViewChecked {
 				this.addExcel(data)
 				break;
 			}
+			case 'update': {
+				this.updateExcel(data)
+				break;
+			}
 		}
 	}
 	getSearchResults(data) {
@@ -160,8 +164,8 @@ export class ProductBarcodeComponent implements OnInit, AfterViewChecked {
 		}
 
 		_this.BackendService.makeAjax(reqObj, function (err, response, httpOptions) {
-			
-			
+
+
 			if (err || response.error) {
 				_this.openSnackBar("Something Went Wrong");
 				console.log('Error=============>', err, response.errorCode);
@@ -180,6 +184,7 @@ export class ProductBarcodeComponent implements OnInit, AfterViewChecked {
 			_this.tableHeaders = ["select", "o_barcode", "wh", "d_barcode", "actions"];
 			//_this.responseDataPut = response;
 			//_this.getSearchResults(data);
+			_this.openEdits = 0;
 			console.log('sidePanel Response --->', response);
 			setTimeout(() => {
 				_this.dataSource.paginator = _this.paginator;
@@ -198,6 +203,7 @@ export class ProductBarcodeComponent implements OnInit, AfterViewChecked {
 			throw new Error('Cannot use multiple files');
 		}
 		let validExcel = true;
+		_this.errorList = [];
 		const arryBuffer = new Response(target.files[0]).arrayBuffer();
 		arryBuffer.then(function (data) {
 			workbook.xlsx.load(data).then(function () {
@@ -239,12 +245,14 @@ export class ProductBarcodeComponent implements OnInit, AfterViewChecked {
 				});
 				_this.dataSource = new MatTableDataSource(tableData);
 				_this.tableHeaders = ["select", "o_barcode", "wh", "d_barcode", "actions"];
+				_this.openEdits = 0;
 				setTimeout(() => {
 					_this.dataSource.sort = _this.sort;
 					_this.dataSource.paginator = _this.paginator;
 				}, 100)
 			});
 		});
+		event.target.value='';
 	}
 
 	viewExcel(data) {
@@ -263,6 +271,7 @@ export class ProductBarcodeComponent implements OnInit, AfterViewChecked {
 		_this.dataSource = new MatTableDataSource(dataSource);
 		_this.tableHeaders = ["select", "o_barcode", "wh", "d_barcode", "actions"];
 		_this.dataFromDB = false;
+		_this.openEdits = 0;
 		setTimeout(() => {
 			_this.dataSource.sort = _this.sort;
 			_this.dataSource.paginator = _this.paginator;
@@ -306,6 +315,43 @@ export class ProductBarcodeComponent implements OnInit, AfterViewChecked {
 			setTimeout(() => {
 				_this.dataSource.paginator = _this.paginator;
 			}, 100)
+		})
+	}
+	
+	updateExcel(data) {
+		let _this = this;
+		if (_this.dataSource.data.length == 0) {
+			return
+		}
+
+		let reqObj: any = {
+			url: 'warehouse/decentralized/updateDecentBarcode',
+			method: "put",
+			payload: <any>[]
+		};
+		_this.dataSource.data.forEach(ele => {
+			reqObj.payload.push({
+				"o_barcode": ele.o_barcode,
+				"wh": ele.wh,
+				"d_barcode": ele.d_barcode
+			})
+		});
+		let confirmation = confirm('Would you like to update data?');
+		if (!confirmation)
+			return;
+
+		_this.BackendService.makeAjax(reqObj, function (err, response, headers) {
+			if (err || response.error) {
+				_this.openSnackBar("Something Went Wrong");
+				console.log('Error=============>', err, response.errorCode);
+				return;
+			}
+			if (response.result.errorList.length) {
+				_this.errorList = response.result.errorList;
+				_this.sidenav.open()
+			} else {
+				_this.openSnackBar("Updated Successfully");
+			}
 		})
 	}
 
@@ -404,7 +450,6 @@ export class ProductBarcodeComponent implements OnInit, AfterViewChecked {
 	}
 
 	enableRowEdit(row: any) {
-
 		row.editable = !row.editable;
 		this.openEdits++;
 	}
@@ -422,7 +467,7 @@ export class ProductBarcodeComponent implements OnInit, AfterViewChecked {
 					}
 					return false
 				}
-				
+
 				const control = _this.fb.group({
 					d_barcode: [ele.d_barcode]
 				});
@@ -433,6 +478,9 @@ export class ProductBarcodeComponent implements OnInit, AfterViewChecked {
 			return
 		}
 		///v1/admin/warehouse/decentralized/removeDecentBarcode
+		if (!confirm("Are you sure to delete selected items?")) {
+			return;
+		}
 		let reqObj: any = {
 			url: 'warehouse/decentralized/removeDecentBarcode',
 			method: "post",
@@ -462,7 +510,7 @@ export class ProductBarcodeComponent implements OnInit, AfterViewChecked {
 						_this.openEdits--
 					}
 					return false
-				}				
+				}
 				const control = _this.fb.group({
 					d_barcode: [ele.d_barcode]
 				});
