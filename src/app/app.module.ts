@@ -68,7 +68,7 @@ import { ProductAvailabilityComponent } from './components/product-decentralizat
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { ProductBarcodeComponent } from './components/product-decentralization/product-barcode/product-barcode.component';
 
-import { ProductReportComponent } from './components/product-report/product-report.component';
+import { ProductReportComponent, DownloadStockedComponentProduct } from './components/product-report/product-report.component';
 import { HolidayCalenderManagementComponent } from './components/holiday-calender-management/holiday-calender-management.component';
 import { ProductDecentralizationComponent } from './components/product-decentralization/product-decentralization.component';
 import { DeliveryPriorityComponent } from './components/product-decentralization/delivery-priority/delivery-priority.component';
@@ -115,6 +115,7 @@ export function ConfigLoader(envConfig: envConfig) {
     DailyOpsReportComponent,
     StockComponentsReportsComponent,
     DownloadStockedComponent,
+    DownloadStockedComponentProduct,
     ProductAvailabilityComponent,
     ProductBarcodeComponent,
     ProductDecentralizationComponent,
@@ -202,7 +203,7 @@ export function ConfigLoader(envConfig: envConfig) {
     Ng2ImgMaxService,
     VoucherService
   ],
-  entryComponents:[UploadExcelComponent,NotificationComponent, ImgPreviewComponent, SelectItemForDelivered, OrderStockComponent,editComponent, DownloadStockedComponent],
+  entryComponents:[UploadExcelComponent,NotificationComponent, ImgPreviewComponent, SelectItemForDelivered, OrderStockComponent,editComponent, DownloadStockedComponent,DownloadStockedComponentProduct],
   bootstrap: [AppComponent],
   exports: [RouterModule]
 })

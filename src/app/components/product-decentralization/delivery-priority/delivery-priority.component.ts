@@ -308,7 +308,7 @@ export class DeliveryPriorityComponent implements OnInit,AfterViewChecked {
             }
           }else if(_this.excelAction=='update'){
             if (rowNumber == 1 && !((row.values[1].toLowerCase() == 'sku') && (row.values[2].toLowerCase() == 'warehouse') && (row.values[3] == 'City' ) && (row.values[4] == 'Pincode' ) && (row.values[5].toLowerCase() == "priority"))) {
-              alert('Invalid excel sheet format! Columns must be in following sequence : Sku,Warehouse,'+_this.selectedFieldForUpload+",Priority");
+              alert('Invalid excel sheet format! Columns must be in following sequence : Sku,Warehouse,'+"City"+"Pincode"+",Priority");
               validExcel = false;
               event.target.value=""
               return;

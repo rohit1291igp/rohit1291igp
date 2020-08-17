@@ -1,5 +1,5 @@
-import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
-import { MatDialog, MatSnackBar, MatPaginator } from '@angular/material';
+import { Component, OnInit, ViewChild, AfterViewInit, Inject, OnDestroy } from '@angular/core';
+import { MatDialog, MatSnackBar, MatPaginator, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { BackendService } from '../../services/backend.service';
@@ -12,12 +12,13 @@ import { DatePipe } from '@angular/common';
 import { Angular5Csv } from 'angular5-csv/dist/Angular5-csv';
 import { environment } from "../../../environments/environment"
 import { Headers, RequestOptions } from "@angular/http";
+import { env } from 'process';
 @Component({
   selector: 'app-product-report',
   templateUrl: './product-report.component.html',
   styleUrls: ['./product-report.component.css']
 })
-export class ProductReportComponent implements OnInit {
+export class ProductReportComponent implements OnInit, OnDestroy {
   environment=environment
 
   displayedColumns = [];
@@ -31,13 +32,15 @@ export class ProductReportComponent implements OnInit {
     userType;
     fkasid;
     vendorList: any;
+    reportSummary=[];
     constructor(
         private backendService: BackendService,
         public addDeliveryBoyDialog: MatDialog,
         private _snackBar: MatSnackBar,
         private route: ActivatedRoute,
         private reportsService: ReportsService,
-        private utilityService: UtilityService
+        private utilityService: UtilityService,
+        private dialog: MatDialog,
     ) { }
 
 
@@ -56,12 +59,12 @@ export class ProductReportComponent implements OnInit {
 
         let url;
         if (_this.userType == 'admin') {
-            url = `action=all&sdate=${dateto}&edate=${datefrom}`;
+            url = `flag_count=1&action=all&sdate=${dateto}&edate=${datefrom}`;
             //Get vendor List
             _this.getVendor();
             _this.getComponentsList()
         } else {
-            url = ``;
+            url = `flag_count=1`;
             _this.getStockComponent()
         }
         _this.reportsService.getReportData('getVendorReport', url, function (error, _reportData) {
@@ -73,6 +76,7 @@ export class ProductReportComponent implements OnInit {
             /* report label states - start */
             try {
                 /* report label states - end */
+                _this.reportSummary = _reportData.summary ? _reportData.summary : [];
                 _this.dataSource = _reportData.tableData ? _reportData.tableData : [];
                 _this.tableHeaders = _reportData.tableHeaders ? _reportData.tableHeaders : [];
                 _this.orginalReportData = JSON.parse(JSON.stringify(_reportData));
@@ -84,6 +88,10 @@ export class ProductReportComponent implements OnInit {
             _this.showMoreTableData(null)
         });
 
+        if(environment.userType==='admin'){
+            this.getDashboardFiltersOptions();
+        }
+
     }
 
     searchResultModel:any={}
@@ -91,10 +99,15 @@ export class ProductReportComponent implements OnInit {
 
     newFormSubmit(event) {
         console.log(event)
+        if(event==='stocked_download'){
+            this.openDownloadStockedComp();
+        }
+
         let pipe = new DatePipe('en-US');
-  
+        
 
         var _this = this;
+        _this.reportSummary = [];
         _this.searchResultModel= {};
         _this.searchResultModel.status= "";
         _this.queryString
@@ -130,6 +143,7 @@ export class ProductReportComponent implements OnInit {
               _this.searchResultModel["Proc_Type_Vendor"] = event.procTypeVendor;
           }
         }
+        url+="flag_count=1"
         _this.reportsService.getReportData('getVendorReport', url, function (error, _reportData) {
             console.log("prvz product report data",_reportData)
             if (error) {
@@ -167,6 +181,7 @@ export class ProductReportComponent implements OnInit {
                     _this.dataSource = _reportData.tableData ? _reportData.tableData : [];
                     _this.tableHeaders = _reportData.tableHeaders ? _reportData.tableHeaders : [];
                     _this.orginalReportData = JSON.parse(JSON.stringify(_reportData));
+                    _this.reportSummary = _reportData.summary ? _reportData.summary : [];
 
                 }
 
@@ -182,12 +197,11 @@ export class ProductReportComponent implements OnInit {
     //pagination
     isDownload=false;
     showMoreTableData(e){
-      console.log("I am being called")
       var _this=this;
       // if(_this.reportType === "getPincodeReport"){return;} // pagination issue
 
-      if(_this.orginalReportData && _this.orginalReportData.summary.length > 0){
-          var totalOrders= (_this.orginalReportData.summary && _this.orginalReportData.summary[0]) ? Number(_this.orginalReportData.summary[0].value) : 0;
+      if(_this.orginalReportData && _this.reportSummary.length > 0){
+          var totalOrders= (_this.reportSummary && _this.reportSummary[0]) ? Number(_this.reportSummary[0].value) : 0;
           console.log('show more clicked');
         console.log(this.orginalReportData)
           if(_this.orginalReportData.tableData.length < totalOrders){
@@ -197,7 +211,11 @@ export class ProductReportComponent implements OnInit {
                   var queryStrObj = Object.assign({}, _this.searchResultModel);
                   queryStrObj.startLimit = startLimit;
                   _this.queryString = _this.generateQueryString(queryStrObj);
-      
+                  if(!this.reportSummary.length){
+                    _this.queryString+='&flag_count=1'
+                  }else{
+                    _this.queryString+='&flag_count=0'
+                  }
                   _this.reportsService.getReportData('getVendorReport', _this.queryString, function(error, _reportData){
                       if(error || !_reportData.tableData.length){
                           console.log('searchReportSubmit _reportData Error=============>', error);
@@ -213,7 +231,7 @@ export class ProductReportComponent implements OnInit {
                       //_this.orginalReportData = Object.assign({}, _this.reportData);
       
                       /* need to handle filter - start */
-                      _this.orginalReportData.summary = _reportData.summary;
+                    //   _this.orginalReportData.summary = _reportData.summary;
                       _this.orginalReportData.tableData = _this.orginalReportData.tableData.concat(_reportData.tableData);
                       _this.dataSource = _reportData.tableData ? _this.dataSource.concat(_reportData.tableData) : [];
 
@@ -379,7 +397,7 @@ export class ProductReportComponent implements OnInit {
 
 
     onEditSubmit(data){
-        console.log("prvz prod edit",data)
+        console.log("prod edit",data)
         this.productReportEditSubmit(data)
     }
 
@@ -389,7 +407,7 @@ export class ProductReportComponent implements OnInit {
         let payload={}
         let method = 'put'
         apiUrl = environment.userType==='admin' ? "handleVendorComponentChange" : "handleComponentChange" 
-        apiUrl+="?ComponentId="+data.data['component']['Component_Id']
+        apiUrl+="?componentId="+data.data['component']['Component_Id']
         apiUrl+="&fkAssociateId="+localStorage.getItem('fkAssociateId');
 
         if(data.data.colName==="Price"){
@@ -397,18 +415,19 @@ export class ProductReportComponent implements OnInit {
         }else if(data.data.colName==="Component Cost Vendor"){
             apiUrl+="&reqPrice="+data.requestedvalue+'&oldCost='+data.data.rowData.value;
         }else if(data.data.colName==='Stock Quantity'){
-            apiUrl="orderVendorComponentStocked"
-            payload={
-                Component_Id: data.data.component.Component_Id,
-                Stock_Quantity: data.requestedvalue,
-                Vendor_Id: data.data.component.Vendor_Id,
+            if(environment.userType==='admin'){
+                apiUrl+="&Stock_Quantity="+data.requestedvalue
             }
-            method='post'
+            method='put'
+        }else if(data.data.colName==='Proc Type Vendor'){
+            let valueMap={"Stocked":1,"JIT":2}
+            apiUrl+="&Proc_Type_Vendor"+valueMap[data.requestedvalue]
+        }else if(data.data.colName==='InStock'){
+            
         }else {
             return
         }
 
-        
         let reqObj =  {
             url : apiUrl,
             method : method,
@@ -455,6 +474,7 @@ export class ProductReportComponent implements OnInit {
         console.log("hello")
         let _this=this;
         _this.reportAddAction.reportAddActionFlag=true;
+        this.backendService.abortLastHttpCall();
     }
 
     addActionSubmit(e){
@@ -608,4 +628,111 @@ export class ProductReportComponent implements OnInit {
         }
     }
 
+    vendorsGroupList=[];
+    getDashboardFiltersOptions(){
+      var _this=this;
+  
+      const reqObj = {
+        url: `getDashboardFilters`,
+        method: "get"
+    };
+    this.backendService.makeAjax(reqObj, function (err, response, headers) {
+        if (err || response.error) {
+          console.log('Error=============>', err);
+          return;
+      }
+      if (response.result) {
+          _this.vendorsGroupList.push({id : "0", value:"All Vendor's Group"});
+  
+          for (var prop in response.result) {
+              var item = {id : prop, value:response.result[prop]};
+              _this.vendorsGroupList.push(item);
+          }
+      }
+    });
+    }  
+  
+    openDownloadStockedComp() {
+      var $this = this;
+      let pipe = new DatePipe('en-US');
+      const now = Date.now();
+      const currentdate = pipe.transform(now, 'dd-MM-yyyy-h:mm:ss:a');
+      const dialogRef = $this.dialog.open(DownloadStockedComponentProduct, {
+          width: '250px',
+          data: {'vendorsGroupList':$this.vendorsGroupList}
+      });
+      console.log('prvz prvz',$this.vendorsGroupList)
+      dialogRef.afterClosed().subscribe(vendorGrpId => {
+          if(vendorGrpId != undefined){
+              const reqObj = {
+                  url: `getVendorStokedQuantity?filterId=${vendorGrpId}`,
+                  method: "get"
+              };
+              $this.backendService.makeAjax(reqObj, function (err, response, headers) {
+                  if (err || response.error) {
+                    console.log('Error=============>', err);
+                    return;
+                }
+                if (response.result) {
+                    let header = Object.keys(response.result[0]);
+                     header = header.map(x => {
+                          if (x.includes('_')) {
+                                  return x.replace(/_|_/g, ' ');
+                          } else {
+                              return x;
+                          }
+                      })
+                  var options = {
+                      showLabels: true, 
+                      showTitle: false,
+                      headers: header.map(m => m.charAt(0).toUpperCase() + m.slice(1)),
+                      nullToEmptyString: true,
+                    };
+                      let download = new Angular5Csv(response.result, `Stocked-component-${currentdate}`, options);
+                }
+              });
+          }
+      });
+  
+    }
+
+    ngOnDestroy(){
+        this.backendService.abortLastHttpCall();
+    }
+}
+
+@Component({
+    selector: 'app-download-stocked-comp',
+    template: `
+    <i class="fa fa-times" style="float: right; cursor:pointer;" (click)="dialogRef.close()"></i>
+
+        <div>
+        <h5>Please Select Vendor group</h5>
+        <div class="form-group">
+            <select name="vendorGroupId" class="form-control" [(ngModel)]="selectedVendor">
+                <option [value]="undefined" disabled selected>Select a vendor group</option>
+                <option *ngFor="let x of vendorsGroupList" [value]="x.id">{{x.value}}</option>
+            </select>
+        </div>    
+        </div>
+        <div class="form-row" >
+            <button *ngIf="selectedVendor" type="submit" mat-raised-button class="bg-igp" (click)="onSubmit()" style="color: #fff;">Submit</button>
+        </div>
+    `
+})
+export class DownloadStockedComponentProduct{
+    vendorsGroupList
+    selectedVendor;
+    constructor(
+        public dialogRef: MatDialogRef<DownloadStockedComponentProduct>,
+        @Inject(MAT_DIALOG_DATA) public data: any) {
+
+    }
+    ngOnInit() {
+       this.vendorsGroupList = this.data.vendorsGroupList;
+    }
+
+    onSubmit(){
+        this.dialogRef.close(this.selectedVendor);
+    }
 }

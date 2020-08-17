@@ -88,6 +88,7 @@
                         (click)="btnType = 'search'">Search</button>
                     <button style="margin: 5px;" id="download" type="submit" mat-raised-button class="btn-color"
                         (click)="btnType = 'download'">Download</button>
+                        <button type="button" *ngIf="isStockedDowloadButton()" style="margin: 5px;" mat-raised-button class="pull-right btn-color" (click)="openStockedDownload()">Stocked Component Download</button>
                     <button *ngIf="env.userType==='admin'" style="margin: 5px;" id="upload" type="button" mat-raised-button class="btn-color"
                         (click)="onAddComponent()">Add Component</button>
                 </div>
@@ -106,17 +107,32 @@
                     <mat-header-cell class="mat-header-row" *matHeaderCellDef>
                         {{ getHeaderCellValue(col.value) | uppercase }}
                     </mat-header-cell>
-                    <mat-cell *matCellDef="let element; let i = index">
+                    <mat-cell class="table-cell" *matCellDef="let element; let i = index">
                         <ng-container
                             *ngIf="getRowCellValue(element[col.id]) != 'img' && getRowCellValue(element[col.id]) != 'menu'">
                             <span *ngIf="col.id==='Fixed_Date_Delivery'">&nbsp;&nbsp;</span>
-                            {{ getRowCellValue(element[col.id]) | dateformatter:dateFormat:col.id}} <i
-                                *ngIf="getEditTableCell(col.id) && col.id!=='Proc_Type_Vendor'" class="fa fa-edit" style="cursor: pointer;"
+                            {{ getRowCellValue(element[col.id]) | dateformatter:dateFormat:col.id}} 
+                            <i *ngIf="getEditTableCell(col.id) && showEditFlag(element,col.id)" class="fa fa-edit" style="cursor: pointer;"
                                 (click)="openEditWindow(element, col.id, i)"></i>
+                                <div *ngIf="env.userType==='admin' && element[col.id]['requestValue'] && element[col.id]['requestValue']!=='-1'">New Price: {{element[col.id]['requestValue']}}</div>
                         </ng-container>
-                        <ng-container *ngIf="col.id==='actions'">
+                        <ng-container *ngIf="isInStockColumn(col.id)">
+                            <i (click)="openEditWindow(element, col.id, i)" class="fa fa-edit" style="cursor: pointer;" ></i>
+                        </ng-container>
+                        <ng-container *ngIf="checkApproveBtn(element[col.id])">
+                            <div class="tableDataActionBtn">
+                                <div class="tableactBtn" (click)="approveReject($event, 1, col.id, element)">
+                                    <span class="tableactBtntxt"><i class="fa fa-check"></i></span>  &nbsp; |
+                                </div>
+
+                                <div class="tableactBtn" (click)="approveReject($event, 0, col.id, element)">
+                                    <span class="tableactBtntxt"><i class="fa fa-ban"></i></span>
+                                </div>
+                            </div>
+                    </ng-container>
+                        <!-- <ng-container *ngIf="col.id==='actions'">
                             <button mat-button (click)="onEditAction(element)" >Edit</button>
-                        </ng-container>
+                        </ng-container> -->
                         <ng-container *ngIf="getRowCellValue(element[col.id]) === 'img'"><img
                                 src="{{env?.componentImageUrl+element[col.id]}}" alt="{{element[col.id]}}" width="50" height="50">
                         </ng-container>
