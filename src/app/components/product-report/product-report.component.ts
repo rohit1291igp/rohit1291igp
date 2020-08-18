@@ -143,7 +143,7 @@ export class ProductReportComponent implements OnInit, OnDestroy {
               _this.searchResultModel["Proc_Type_Vendor"] = event.procTypeVendor;
           }
         }
-        url+="flag_count=1"
+        url+="&flag_count=1"
         _this.reportsService.getReportData('getVendorReport', url, function (error, _reportData) {
             console.log("prvz product report data",_reportData)
             if (error) {
