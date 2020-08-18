@@ -50,7 +50,8 @@ export class DeliveryTimeManagementComponent implements OnInit {
 			destinationType: [''],
 			destinations: [''],
 			deliveryDays: [''],
-			duplicatesFlag: [false]
+			duplicatesFlag: [false],
+			comment: ['']
 
 		});
 
@@ -178,6 +179,7 @@ export class DeliveryTimeManagementComponent implements OnInit {
 		let productDeliveryDay = data.value.productDeliveryDays;
 		let deliveryDays = data.value.deliveryDays;
 		let destinationKey = data.value.destinationType;
+		let comment = data.value.comment;
 		let destinationList = _this.extractArrayFromTextArea(data.value.destinations);
 		let reqObj: any = {
 			url: 'warehousedt/updateskudelivertime',
@@ -200,6 +202,10 @@ export class DeliveryTimeManagementComponent implements OnInit {
 				alert("Sorry, update fields are missing");
 				return;
 			}
+		}
+		if (!comment) {
+			alert("Please Enter Comment.")
+			return;
 		}
 		let validFkaid = false;
 		_this.warehouseList.forEach(ele => {
@@ -232,7 +238,7 @@ export class DeliveryTimeManagementComponent implements OnInit {
 		}
 		reqObj.payload.productDeliveryDay = productDeliveryDay;
 		reqObj.payload.deliveryDays = deliveryDays;
-
+		reqObj.payload.comment = comment;
 
 		if (destinationKey) {
 			reqObj.payload.destinationKey = destinationKey;
@@ -294,9 +300,9 @@ export class DeliveryTimeManagementComponent implements OnInit {
 		let sku_id = _this.extractArrayFromTextArea(this.searchForm.get('sku_id').value);
 		let fkaid;
 		let productDeliveryDay = this.searchForm.get('productDeliveryDays').value;
-		let deliveryDays = this.searchForm.get('deliveryDays').value
-
+		let deliveryDays = this.searchForm.get('deliveryDays').value;
 		let destinationList = _this.extractArrayFromTextArea(this.searchForm.get('destinations').value);
+		let comment = this.searchForm.get('comment').value;
 		if (productDeliveryDay < 0) {
 			return true;
 		}
@@ -309,6 +315,9 @@ export class DeliveryTimeManagementComponent implements OnInit {
 			if (!(destinationList.length && deliveryDays)) {
 				return true;
 			}
+		}
+		if (!comment) {
+			return true;
 		}
 		return false;
 	}

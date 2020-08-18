@@ -2345,11 +2345,19 @@ getDeliveryBoyList(){
     <form [formGroup]="myForm" (ngSubmit)="onSubmit(myForm)">
         <div class="form-row">
             <div class="input-container">
-                <mat-form-field>
+                <mat-form-field *ngIf="!showDropdown()">
                     <input [ngClass]="{
                         'has-danger': myForm.controls.fieldName.invalid && myForm.controls.fieldName.dirty,
                         'has-success': myForm.controls.fieldName.valid && myForm.controls.fieldName.dirty
                       }" formControlName="fieldName" matInput placeholder="{{data.colName}}">
+                </mat-form-field>
+                <mat-form-field *ngIf="showDropdown()" appearance="fill">
+                <mat-label>Select {{data.colName}}</mat-label>
+                <mat-select formControlName="fieldName">
+                    <mat-option *ngFor="let option of dropdownOption" [value]="option">
+                    {{option}}
+                    </mat-option>
+                </mat-select>
                 </mat-form-field>
             </div>
         </div>
@@ -2368,24 +2376,39 @@ export class editComponent implements OnInit {
         @Inject(MAT_DIALOG_DATA) public data: any,private fb: FormBuilder,
         private backendService:BackendService
         ) {
-
     }
     ngOnInit() {
-        console.log("prvz before edit",this.data)
+        console.log("before edit",this.data)
         if(typeof this.data.rowData == 'object' && this.data.rowData != null){
+            console.log(this.data.rowData['value'])
             this.myForm = this.fb.group({
-                fieldName: [this.data.rowData[this.data.colName], Validators.required]
+                fieldName: [this.data.rowData['value'], Validators.required]
             });
         } else {
+            console.log(this.data.rowData)
             this.myForm = this.fb.group({
                 fieldName: [this.data.rowData, Validators.required]
             });
         }
+        
+        if(this.data.colName==='Proc Type Vendor'){
+            this.dropdownOption=['JIT','Stocked']
+        }else if(this.data.colName==='InStock'){
+            this.dropdownOption=['InStock','Out of Stock']
+        }
+    }
 
+    dropdownOption=[]
+    showDropdown(){
+        if(this.data.colName==='InStock'||this.data.colName==='Proc Type Vendor'){
+            return true
+        }else{
+            return false;
+        }
     }
 
     onSubmit(data){
-        console.log("prvz edit submit",data)
+        console.log("edit submit",data)
         this.formSubmit.emit(data);
         data.data = this.data;
         this.dialogRef.close(data);
