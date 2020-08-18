@@ -131,15 +131,21 @@ export class OfferPageManagementComponent implements OnInit, AfterViewChecked {
 
   updateSubmit() {
     if (this.offer_management_form.get('coupon_code').value === this.selected_coupon_code) {
+      // Set Date Format
+      this.offer_management_form.patchValue({
+        expiry_date:this.datePipe.transform(this.offer_management_form.value.expiry_date,"yyyy-MM-dd")
+      })
       console.log(this.offer_management_form.value)
       this.updateCoupon(this.offer_management_form.value)
     } else {
       let confirm_coupon_change = confirm('Are You Sure Want To Add New Coupon Code ?')
       if (confirm_coupon_change) {
+        // Set Date Format
+        this.offer_management_form.patchValue({
+          expiry_date:this.datePipe.transform(this.offer_management_form.value.expiry_date,"yyyy-MM-dd")
+        })
         console.log(this.offer_management_form.value)
-        // this.addNewCoupon(this.offer_management_form.value)
-        this.is_form_open = false;
-        this.offer_management_form.reset();
+        this.addNewCoupon(this.offer_management_form.value)
       }
     }
   }
@@ -162,9 +168,11 @@ export class OfferPageManagementComponent implements OnInit, AfterViewChecked {
         console.log(response)
         if (!response["error"]) {
           this.resetSelectedCoupon();
-          this.openSnackBar(response['result'], '')
+          this.openSnackBar(response['result'], '');
+          this.getWebsiteCouponList()
         } else {
-          this.openSnackBar(response['errorMessage'], '')
+          this.openSnackBar(response['errorMessage'], '');
+          this.resetSelectedCoupon();
         }
       }
     })
@@ -189,8 +197,9 @@ export class OfferPageManagementComponent implements OnInit, AfterViewChecked {
         if (!response["error"]) {
           this.resetSelectedCoupon();
           this.openSnackBar(response['result'], '')
+          this.getWebsiteCouponList()
         } else {
-          this.openSnackBar(response['errorMessage'], '')
+          this.openSnackBar(response['errorMessage'], '');
         }
       }
     })
@@ -213,10 +222,8 @@ export class OfferPageManagementComponent implements OnInit, AfterViewChecked {
     this.is_form_open = false;
     this.voucher_details = {};
     this.myControl.setValue({});
-  }
-
-  test(f){
-    console.log(f)
+    this.form_method=""
+    this.offer_management_form.reset()
   }
 
   voucher_details = {};
@@ -230,12 +237,14 @@ export class OfferPageManagementComponent implements OnInit, AfterViewChecked {
         if (res['status'].toLowerCase() === "Success".toLowerCase()) {
           console.log(res)
           this.voucher_details = res['data']['vouchermodellist'][0]
-          this.offer_management_form.patchValue({
-            id:0,
-            enabled:false,
-            discount: this.voucher_details['vouchervalue'],
-            coupon_type:this.coupon_type[this.voucher_details['vouchertype']]
-          });
+          if(this.form_method==='add'){
+            this.offer_management_form.patchValue({
+              id:0,
+              enabled:false,
+              discount: this.voucher_details['vouchervalue'],
+              coupon_type:this.coupon_type[this.voucher_details['vouchertype']]
+            });
+          }
         } else {
           this.openSnackBar('Invalid Coupon Code', '')
           this.voucher_details = {};
