@@ -530,7 +530,7 @@ table {
 
 .mat-table {
     overflow: auto;
-    max-height: 700px;
+    max-height: 500px;
 }
 
 .mat-header-cell .mat-sort-header-sorted {
@@ -574,4 +574,30 @@ mat-row:nth-child(odd) {
     margin: 3px;
     max-width: 50px;
     max-height: 30px;
+}
+
+.tableactBtn {
+    display: none;
+    /*display: inline-block;*/
+    padding: 0.4em 0.5em;
+    cursor: pointer;
+    border: none;
+    font-weight: 600;
+    background: transparent;
+    color: #000;
+    white-space: nowrap;
+    /*margin-top: 0.5em;*/
+    /* box-shadow: 0 1px 3px #888; */
+}
+
+.table-cell:hover .tableactBtn {
+    display: inline-block;
+}
+
+.reporTableRow:hover .tableactBtn {
+    display: inline-block;
+}
+
+.tableactBtn:hover .tableactBtntxt {
+    color: #C3404E;
 }

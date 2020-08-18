@@ -1,4 +1,4 @@
-import { animate, Component, ElementRef, HostListener, Inject, OnInit, sequence, style, transition, trigger, ViewChild } from '@angular/core';
+import { animate, Component, ElementRef, HostListener, Inject, OnInit, sequence, style, transition, trigger, ViewChild, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { Headers, RequestOptions } from "@angular/http";
 import { MatDialog, MatDialogRef, MatSnackBar, MAT_DIALOG_DATA, MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
@@ -13,6 +13,7 @@ import { UtilityService } from '../../services/utility.service';
 import { OrdersActionTrayComponent } from '../orders-action-tray/orders-action-tray.component';
 import { OrderStockComponent } from '../order-stocks/order-stock.component';
 import { HttpHeaders } from '@angular/common/http';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-reports',
@@ -817,7 +818,7 @@ getDeliveryBoyList(){
       }
   }
 
-  searchReportSubmit(e, searchFields2?, formdata?:FormGroup){
+  searchReportSubmit(e, searchFields2?, formdata?:FormGroup, isDownload?:boolean){
         var _this=this;
         _this.BackendService.abortLastHttpCall();//abort  other  api calls
         console.log('Search report form submitted ---->', _this.searchResultModel);
@@ -943,6 +944,11 @@ getDeliveryBoyList(){
             _this.searchResultModel["startLimit"] = 0;
             _this.searchResultModel["endLimit"] = 100;
         } 
+
+        if(isDownload){
+            _this.searchResultModel["startLimit"] = 0;
+            _this.searchResultModel["endLimit"] = 1000000;
+        }
         
         _this.queryString = _this.generateQueryString(_this.searchResultModel);
         console.log('searchReportSubmit =====> queryString ====>', _this.queryString);
@@ -1698,7 +1704,6 @@ getDeliveryBoyList(){
                     paramsObj['componentId'] = rowData.Component_Id;
                     paramsObj['Component_Id'] = rowData.Component_Id;
                     paramsObj['Proc_Type_Vendor'] = (rowData.Proc_Type_Vendor == 'Stocked') ? 1 : 2;
-
                 }
             }else{
                 paramsObj['fkAssociateId'] =  localStorage.getItem('fkAssociateId');
@@ -1716,6 +1721,10 @@ getDeliveryBoyList(){
                 paramsObj['Proc_Type_Vendor'] = paramsObj['Proc_Type'];
                 delete paramsObj['Proc_Type'];
             }
+        }
+        if(environment.userType == 'admin' && apiURLPath == 'handleVendorComponentChange' && header == 'Stock_Quantity'){
+            paramsObj['Stock_Quantity'] = _this.editTableCellObj.value;
+            delete paramsObj['Proc_Type_Vendor'];
         }
         var paramsStr = _this.UtilityService.formatParams(paramsObj);
 
@@ -1858,7 +1867,7 @@ getDeliveryBoyList(){
 
     downLoadCSV(e, fileName){
         this.isDownload = true;
-        this.searchReportSubmit(null, null, this.myForm);
+        this.searchReportSubmit(null, null, this.myForm, true);
         // if(this.orginalReportData.tableData.length > 0){
         //     let data = this.orginalReportData.tableData;
         //     let download = new Angular5Csv(data, fileName);
@@ -2282,6 +2291,50 @@ getDeliveryBoyList(){
         }
       });
       }  
+
+    openDownloadStockedComp() {
+        var $this = this;
+        let pipe = new DatePipe('en-US');
+        const now = Date.now();
+        const currentdate = pipe.transform(now, 'dd-MM-yyyy-h:mm:ss:a');
+        const dialogRef = $this.dialog.open(DownloadStockedComponent, {
+            width: '250px',
+            data: {'vendorsGroupList':$this.vendorsGroupList}
+        });
+
+        dialogRef.afterClosed().subscribe(vendorGrpId => {
+            if(vendorGrpId != undefined){
+                const reqObj = {
+                    url: `getVendorStokedQuantity?filterId=${vendorGrpId}`,
+                    method: "get"
+                };
+                $this.BackendService.makeAjax(reqObj, function (err, response, headers) {
+                    if (err || response.error) {
+                      console.log('Error=============>', err);
+                      return;
+                  }
+                  if (response.result) {
+                      let header = Object.keys(response.result[0]);
+                       header = header.map(x => {
+                            if (x.includes('_')) {
+                                    return x.replace(/_|_/g, ' ');
+                            } else {
+                                return x;
+                            }
+                        })
+                    var options = {
+                        showLabels: true, 
+                        showTitle: false,
+                        headers: header.map(m => m.charAt(0).toUpperCase() + m.slice(1)),
+                        nullToEmptyString: true,
+                      };
+                        let download = new Angular5Csv(response.result, `Stocked-component-${currentdate}`, options);
+                  }
+                });
+            }
+        });
+
+    }
 }
 
 @Component({
@@ -2292,48 +2345,114 @@ getDeliveryBoyList(){
     <form [formGroup]="myForm" (ngSubmit)="onSubmit(myForm)">
         <div class="form-row">
             <div class="input-container">
-                <mat-form-field>
+                <mat-form-field *ngIf="!showDropdown()">
                     <input [ngClass]="{
                         'has-danger': myForm.controls.fieldName.invalid && myForm.controls.fieldName.dirty,
                         'has-success': myForm.controls.fieldName.valid && myForm.controls.fieldName.dirty
                       }" formControlName="fieldName" matInput placeholder="{{data.colName}}">
                 </mat-form-field>
+                <mat-form-field *ngIf="showDropdown()" appearance="fill">
+                <mat-label>Select {{data.colName}}</mat-label>
+                <mat-select formControlName="fieldName">
+                    <mat-option *ngFor="let option of dropdownOption" [value]="option">
+                    {{option}}
+                    </mat-option>
+                </mat-select>
+                </mat-form-field>
             </div>
         </div>
       
         <div class="form-row">
-            <button type="submit" mat-raised-button [disabled]="myForm.invalid">Submit</button>
+            <button type="submit" mat-raised-button class="bg-igp">Submit</button>
         </div>
     </form>
     `
 })
 export class editComponent implements OnInit {
+    @Output() formSubmit = new EventEmitter()
     myForm: FormGroup;
     constructor(
         public dialogRef: MatDialogRef<editComponent>,
-        @Inject(MAT_DIALOG_DATA) public data: any, private fb: FormBuilder) {
-
+        @Inject(MAT_DIALOG_DATA) public data: any,private fb: FormBuilder,
+        private backendService:BackendService
+        ) {
     }
     ngOnInit() {
-        if (typeof this.data.rowData == 'object' && this.data.rowData != null) {
+        console.log("before edit",this.data)
+        if(typeof this.data.rowData == 'object' && this.data.rowData != null){
+            console.log(this.data.rowData['value'])
             this.myForm = this.fb.group({
-                fieldName: [this.data.rowData[this.data.colName], Validators.required]
+                fieldName: [this.data.rowData['value'], Validators.required]
             });
         } else {
+            console.log(this.data.rowData)
             this.myForm = this.fb.group({
                 fieldName: [this.data.rowData, Validators.required]
             });
         }
-
+        
+        if(this.data.colName==='Proc Type Vendor'){
+            this.dropdownOption=['JIT','Stocked']
+        }else if(this.data.colName==='InStock'){
+            this.dropdownOption=['InStock','Out of Stock']
+        }
     }
 
-    onSubmit(data) {
+    dropdownOption=[]
+    showDropdown(){
+        if(this.data.colName==='InStock'||this.data.colName==='Proc Type Vendor'){
+            return true
+        }else{
+            return false;
+        }
+    }
+
+    onSubmit(data){
+        console.log("edit submit",data)
+        this.formSubmit.emit(data);
         data.data = this.data;
         this.dialogRef.close(data);
     }
 
     onNoClick(): void {
         this.dialogRef.close();
+    }
+}
+
+
+@Component({
+    selector: 'app-download-stocked-comp',
+    template: `
+    <i class="fa fa-times" style="float: right; cursor:pointer;" (click)="dialogRef.close()"></i>
+
+        <div>
+        <h5>Please Select Vendor group</h5>
+        <div class="form-group">
+            <select name="vendorGroupId" class="form-control" [(ngModel)]="selectedVendor">
+                <option [value]="undefined" disabled selected>Select a vendor group</option>
+                <option *ngFor="let x of vendorsGroupList" [value]="x.id">{{x.value}}</option>
+            </select>
+        </div>    
+        </div>
+        <div class="form-row" >
+            <button *ngIf="selectedVendor" type="submit" mat-raised-button class="bg-igp" (click)="onSubmit()" style="color: #fff;">Submit</button>
+        </div>
+    `
+})
+export class DownloadStockedComponent{
+    vendorsGroupList
+    selectedVendor;
+    constructor(
+        public dialogRef: MatDialogRef<DownloadStockedComponent>,
+        @Inject(MAT_DIALOG_DATA) public data: any) {
+
+    }
+    ngOnInit() {
+       this.vendorsGroupList = this.data.vendorsGroupList;
+    }
+
+    onSubmit(){
+        this.dialogRef.close(this.selectedVendor);
     }
 }
 

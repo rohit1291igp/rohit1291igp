@@ -1,0 +1,124 @@
+<mat-sidenav-container (backdropClick)="sidenavClose('backdrop')">
+	<mat-sidenav #sidenav (keydown.escape)="sidenavClose('escape')" disableClose>
+		<!-- Sidebar Errors -->
+		<!-- <p><button mat-button (click)="sidenavClose('toggle button')">Close</button></p> -->
+		<mat-card *ngFor="let ele of responseDataPut?.result">
+			Row: {{ele.row}} -  {{ele.msg}} 
+		</mat-card>
+	</mat-sidenav>
+
+	<mat-sidenav-content>
+		<!-- Main Body -->
+
+		<div class="main-container">
+			<mat-card>
+				<form [formGroup]="searchForm" (ngSubmit)="onSubmit(searchForm)">
+					<div class="searchFiled">
+
+						<div class="form-container">
+							<div class="d-flex">
+								<mat-form-field class="m-12">
+									<mat-label>Enter SKU IDs</mat-label>
+									<textarea matInput formControlName="sku_id"
+										placeholder="You can enter multiple SKU IDs" rows="10"></textarea>
+								</mat-form-field>
+								
+							</div>
+							<div class="d-flex" style="margin:10px">
+								<mat-checkbox formControlName="duplicatesFlag">Include Duplicates</mat-checkbox>
+							</div>
+							<div class="d-flex">
+								<button class="btnRadius" id="search" type="submit" mat-raised-button class="btn-color"
+									(click)="btnType = 'search'">Search</button>
+							</div>
+						</div>
+					</div>
+					<div class="updateField p-absolute">
+						<div class="form-container">
+							<div class="width33">
+								<div class="d-flex">
+									<mat-form-field>
+										<mat-label>Product Delivery Days</mat-label>
+										<input matInput type="number" onkeydown="javascript: return event.keyCode === 8 ||
+										event.keyCode === 46 ? true : !isNaN(Number(event.key))" formControlName="productDeliveryDays">
+
+									</mat-form-field>
+								</div>
+								<div class="d-flex">
+									<mat-form-field>
+										<mat-label>Source</mat-label>
+										<mat-select formControlName="source" [(value)]='searchForm.value.source'>
+											<mat-option *ngFor="let option of warehouseList" [value]="option">
+												{{option.value}}
+											</mat-option>
+										</mat-select>
+									</mat-form-field>
+								</div>
+								
+							</div>
+							<div class="width50 p-absolute d-flex">
+								<div class="width33">
+									<mat-radio-group class="destination-radio-group" formControlName="destinationType">
+										<mat-radio-button class="destination-radio-button"
+											*ngFor="let option of destinationTypeOptions" [value]="option">
+											{{option}}
+										</mat-radio-button>
+									</mat-radio-group>
+
+								</div>
+								<div class="width100 p-absolute">
+									<div class="width50">
+										<mat-form-field class="m-12">
+											<mat-label>Enter Destinations</mat-label>
+											<textarea matInput formControlName="destinations"
+												placeholder="You can enter multiple destinations" rows="5"></textarea>
+										</mat-form-field>
+									</div>
+									<div class="p-absolute width50">
+										<mat-form-field>
+											<mat-label>Delivery Days</mat-label>
+											<input matInput type="number" onkeydown="javascript: return event.keyCode === 8 ||
+											event.keyCode === 46 ? true : !isNaN(Number(event.key))" formControlName="deliveryDays">
+
+										</mat-form-field>
+									</div>
+								</div>
+
+							</div>
+							<div class="width100 r-buttons">
+								<button class="btnRadius" id="update" type="submit" mat-raised-button color="accent"
+									(click)="btnType = 'update'" [disabled]="getValidation()">Update</button>
+								<button class="btnRadius" id="cancel" type="submit" mat-raised-button color="warn"
+									(click)="btnType = 'cancel'">Clear</button>
+							</div>
+						</div>
+					</div>
+				</form>
+				<div class="mat-elevation-z8" *ngIf="dataSource?.data?.length > 0 else noRecord">
+					<mat-table [dataSource]="dataSource">
+						<ng-container [matColumnDef]="column" *ngFor="let column of tableHeaders">
+							<mat-header-cell *matHeaderCellDef> {{getHeader(column)}} </mat-header-cell>
+							<mat-cell *matCellDef="let element">
+								<ng-container *ngIf="column != 'Actions'">
+									{{element[column] || '-'}}
+								</ng-container>
+								<ng-container *ngIf="column == 'Actions'">
+									<button mat-button (click)="editRowData(element)">Edit</button>
+								</ng-container>
+							</mat-cell>
+						</ng-container>
+						<mat-header-row *matHeaderRowDef="tableHeaders"></mat-header-row>
+						<mat-row *matRowDef="let row; columns: tableHeaders;"></mat-row>
+					</mat-table>
+					<mat-paginator [pageSizeOptions]="[5, 10, 20]" length="{{dataSource?.length}}" showFirstLastButtons>
+					</mat-paginator>
+				</div>
+				<ng-template #noRecord>
+					<mat-card style="color: #C3404E;">No Record</mat-card>
+				</ng-template>
+
+			</mat-card>
+		</div>
+
+	</mat-sidenav-content>
+</mat-sidenav-container>

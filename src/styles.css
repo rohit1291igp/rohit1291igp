@@ -897,3 +897,7 @@ body .dashboard-content, body .orders-button{
 .flex-wrap-wrap{
     flex-wrap: wrap;
 }
+.is-active {
+    background: #fff;
+    color: #C3404E !important;
+}
