@@ -93,11 +93,12 @@
                 (click)="btnType = 'search'">Search</button>
             </span>
             <span *ngIf="updateRecord" style="margin:0 20px">
-              <button class="btnRadius" id="add" type="submit" mat-raised-button
-                (click)="btnType = 'update'">Update</button>
+              <button class="btnRadius" id="add" type="submit" mat-raised-button (click)="btnType = 'update'"
+                [disabled]='getValidations()'>Update</button>
             </span>
             <span *ngIf="!updateRecord" style="margin:0 20px">
-              <button class="btnRadius" id="add" type="submit" mat-raised-button (click)="btnType = 'new'">Create
+              <button class="btnRadius" id="add" type="submit" mat-raised-button (click)="btnType = 'new'"
+                [disabled]='getValidations()'>Create
                 New</button>
             </span>
             <span style="margin:0 20px">
@@ -119,7 +120,7 @@
         </div>
       </div>
     </form>
-    
+
     <div class="mat-elevation-z8" *ngIf="dataSource?.data?.length > 0 else noRecord">
       <mat-form-field style="margin:0 20px">
         <mat-label>Filter</mat-label>

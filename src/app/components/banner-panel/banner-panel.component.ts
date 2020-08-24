@@ -1,12 +1,13 @@
 import { Component, OnInit, NgModule, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, FormBuilder } from '@angular/forms';
 import { BackendService } from '../../services/backend.service';
-import { MatDatepickerInput, MatAutocompleteModule, MatAutocomplete, MatPaginator, MatTableDataSource, MatSort } from '@angular/material';
+import { MatDatepickerInput, MatAutocompleteModule, MatAutocomplete, MatPaginator, MatTableDataSource, MatSort, MatSnackBar } from '@angular/material';
 import { startWith, map } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import 'rxjs/add/operator/toPromise';
 import { HttpHeaders } from '@angular/common/http';
 import { DatePipe } from '@angular/common';
+import { NotificationComponent } from 'app/components/notification/notification.component';
 
 
 @Component({
@@ -41,6 +42,7 @@ export class BannerPanelComponent implements OnInit {
 	constructor(
 		private fb: FormBuilder,
 		private BackendService: BackendService,
+		private _snackBar: MatSnackBar,
 	) { }
 
 	ngOnInit() {
@@ -48,7 +50,6 @@ export class BannerPanelComponent implements OnInit {
 			slot: [''],
 			webstore: [''],
 			location: [{ key: null, value: null }],
-			channel: [{ key: null, value: null }],
 			event: [''],
 			redirectLink: [''],
 			expiryDate: [''],
@@ -78,7 +79,7 @@ export class BannerPanelComponent implements OnInit {
 		return new Promise((resolve, reject) => {
 			_this.BackendService.makeAjax(reqObj, function (err, response, headers) {
 				if (err) {
-					alert('Something went wrong.');
+					_this.openSnackBar('Something went wrong.');
 					console.log('Error=============>', err);
 					reject([])
 				}
@@ -99,6 +100,15 @@ export class BannerPanelComponent implements OnInit {
 	addEventFrom(event: MatDatepickerInput<Date>) {
 		this.searchForm.patchValue({
 			expiryDate: event.value
+		});
+	}
+
+	openSnackBar(data) {
+		this._snackBar.openFromComponent(NotificationComponent, {
+			data: data,
+			duration: 5 * 1000,
+			panelClass: ['snackbar-success'],
+			verticalPosition: "top"
 		});
 	}
 
@@ -159,78 +169,50 @@ export class BannerPanelComponent implements OnInit {
 			method: "post",
 			payload: <any>{}
 		};
-		let reqImgObj: any = {
-			url: 'banner/imageUpload',
-			method: 'post',
-			payload: <any>{}
-		};
-		// if (data.value.channel) {
-		// 	reqObj.url += '?imagetype=' + data.value.channel;
-		// }
-
+		if (!_this.deskImage) {
+			_this.openSnackBar('Please select a desktop banner image.');
+			return;
+		}
+		if (!_this.mobImage) {
+			_this.openSnackBar('Please select a mobile banner image.');
+			return;
+		}
 		let deskformData = new FormData();
-		//console.log(this.image);
-		deskformData.append(_this.deskImage.name.slice(0, -4), _this.deskImage);
 
+		deskformData.append(_this.deskImage.name.slice(0, -4), _this.deskImage);
+		let deskS3image = '';
 
 		_this.uploadImageToS3(deskformData, 'desktop', _this.deskImage.name.slice(0, -4))
 			.then((responseDesk) => {
-				// console.log('then func 1 ' + responseDesk);
 				let mobformData = new FormData();
-				//console.log(this.image);
-				mobformData.append(responseDesk['result'].uploadedFilePath.banners[0].slice(25, -4)
-					, _this.mobImage);
+				deskS3image = responseDesk['result'].uploadedFilePath.banners[0].slice(25, -4);
+				mobformData.append(deskS3image, _this.mobImage);
+
 				return _this.uploadImageToS3(mobformData, 'mobile', responseDesk['result'].uploadedFilePath.banners[0].slice(25, -4))
-					.then((responseMob) => {
-						reqObj.payload = {
-							"id": 0,
-							"location": _this.searchForm.value.location.key,
-							"slot": _this.searchForm.value.slot,
-							"hover_text": _this.searchForm.value.hoverText,
-							"desktop_image": responseDesk['result'].uploadedFilePath.banners[0].slice(25, -4),
-							"mobile_image": responseMob['result'].uploadedFilePath.banners[0].slice(25, -4),
-							"expiry_date": datenow,
-							"event": _this.searchForm.value.event,
-							"redirect_url": _this.searchForm.value.redirectLink,
-							"webstore": _this.searchForm.value.webstore,
-							"active": _this.searchForm.value.activeFlag
-						}
-						console.log(responseMob);
-						_this.createBanner(reqObj);
-					});
-			}).catch((err) => {
+
+			}).then((responseMob) => {
+				reqObj.payload = {
+					"id": 0,
+					"location": _this.searchForm.value.location.key,
+					"slot": _this.searchForm.value.slot,
+					"hover_text": _this.searchForm.value.hoverText,
+					"desktop_image": deskS3image,
+					"mobile_image": responseMob['result'].uploadedFilePath.banners[0].slice(25, -4),
+					"expiry_date": datenow,
+					"event": _this.searchForm.value.event,
+					"redirect_url": _this.searchForm.value.redirectLink,
+					"webstore": _this.searchForm.value.webstore,
+					"active": _this.searchForm.value.activeFlag
+				}
+				console.log(responseMob);
+				return _this.createBanner(reqObj);
+			}).then(response => {
+				_this.openSnackBar('Succesfully created.');
+			})
+			.catch((err) => {
+				_this.openSnackBar(err.errorMessage);
 				console.log(err);
 			});
-
-
-		// console.log(reqObj);
-
-		// alert("uploaded");
-		// reqObj.payload = {
-		// 	"id": 0,
-		// 	"location": _this.searchForm.value.location.key,
-		// 	"slot": _this.searchForm.value.slot,
-		// 	"hover_text": _this.searchForm.value.hoverText,
-		// 	//"desktop_image": response.result.uploadedFilePath.s3commonupload[0],
-		// 	// "mobile_image": "m-" +
-		// 	"expiry_date": datenow,
-		// 	"event": _this.searchForm.value.event,
-		// 	"redirect_url": _this.searchForm.value.redirectLink,
-		// 	"webstore": _this.searchForm.value.webstore
-		// }
-		// //_this.updateRecord = false;
-		// //_this.getSearchResults(data);
-		// _this.BackendService.makeAjax(reqObj, function (err, response, headers) {
-		// 	if (err || response.error) {
-		// 		alert('Something went wrong.');
-		// 		console.log('Error=============>', err);
-		// 		return
-		// 	}
-		// 	alert('Uploaded');
-		// });
-
-
-
 	}
 
 	uploadImageToS3(payload, imgType, imgName) {
@@ -246,7 +228,7 @@ export class BannerPanelComponent implements OnInit {
 			reqImgObj.url += '&imageName=' + imgName;
 			_this.BackendService.makeAjax(reqImgObj, function (err, response, headers) {
 				if (err) {
-					alert('Something went wrong.');
+					_this.openSnackBar('Something went wrong.');
 					console.log('Error=============>', err);
 					reject(err);
 				}
@@ -262,7 +244,7 @@ export class BannerPanelComponent implements OnInit {
 		return new Promise((resolve, reject) => {
 			_this.BackendService.makeAjax(reqObj, function (err, response, headers) {
 				if (err || response.error) {
-					alert('Something went wrong.');
+					_this.openSnackBar('Something went wrong.');
 					console.log('Error=============>', err);
 					reject(err)
 				}
@@ -278,7 +260,7 @@ export class BannerPanelComponent implements OnInit {
 			url: 'banner/getBannerList/',
 			method: "get",
 		};
-		if( this.searchForm.value.searchActiveFlag){
+		if (this.searchForm.value.searchActiveFlag) {
 			reqObj.url += '?active=' + this.searchForm.value.searchActiveFlag;
 		}
 		if (this.searchForm.value.location.key && this.searchForm.value.location.key != 'all') {
@@ -289,7 +271,7 @@ export class BannerPanelComponent implements OnInit {
 		}
 		_this.BackendService.makeAjax(reqObj, function (err, response, headers) {
 			if (err) {
-				alert('Something went wrong.');
+				_this.openSnackBar('Something went wrong.');
 				console.log('Error=============>', err);
 				return
 			}
@@ -329,11 +311,11 @@ export class BannerPanelComponent implements OnInit {
 		console.log(reqObj);
 		_this.BackendService.makeAjax(reqObj, function (err, response, headers) {
 			if (err) {
-				alert('Something went wrong.');
+				_this.openSnackBar('Something went wrong.');
 				console.log('Error=============>', err);
 				return
 			}
-			alert("Updated");
+			_this.openSnackBar('Updated.');
 			//_this.updateRecord = false;
 			_this.getSearchResults(data);
 
@@ -381,5 +363,46 @@ export class BannerPanelComponent implements OnInit {
 		if (this.dataSource.paginator) {
 			this.dataSource.paginator.firstPage();
 		}
+	}
+
+	getValidations() {
+		// this.searchForm = this.fb.group({
+		// 	slot: [''],
+		// 	webstore: [''],
+		// 	location: [{ key: null, value: null }],
+		// 	event: [''],
+		// 	redirectLink: [''],
+		// 	expiryDate: [''],
+		// 	hoverText: [''],
+		// 	editId: ['0'],
+		// 	searchActiveFlag: false,
+		// 	activeFlag: false,
+		// });
+		if (!this.searchForm.get('slot').value) {
+			return true;
+		}
+		if (!this.searchForm.get('location').value.key) {
+			return true;
+		}
+		if (!this.searchForm.get('webstore').value) {
+			return true;
+		}
+		if (!this.searchForm.get('event').value) {
+			return true;
+		}
+		if (!this.searchForm.get('redirectLink').value) {
+			return true;
+		}
+		if (!this.searchForm.get('hoverText').value) {
+			return true;
+		}
+		if (!this.deskImage) {
+			return true;
+		}
+		if (!this.mobImage) {
+			return true;
+		}
+
+		return false;
 	}
 }
