@@ -1,7 +1,7 @@
 import { Component, OnInit, NgModule, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, FormBuilder } from '@angular/forms';
 import { BackendService } from '../../services/backend.service';
-import { MatDatepickerInput, MatAutocompleteModule, MatAutocomplete, MatPaginator, MatTableDataSource } from '@angular/material';
+import { MatDatepickerInput, MatAutocompleteModule, MatAutocomplete, MatPaginator, MatTableDataSource, MatSort } from '@angular/material';
 import { startWith, map } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import 'rxjs/add/operator/toPromise';
@@ -22,6 +22,7 @@ export class BannerPanelComponent implements OnInit {
 	deskImage: File;
 	mobImage: File;
 	@ViewChild(MatPaginator) paginator: MatPaginator;
+	@ViewChild(MatSort) sort: MatSort;
 	dataSource: MatTableDataSource<any>;
 	tableHeaders;
 	btnType = '';
@@ -31,68 +32,6 @@ export class BannerPanelComponent implements OnInit {
 	webStoreSelected;
 	webStoreControl = new FormControl();
 	webstoreList;
-	//  = [
-	// 	"Intermesh Shopping Network",
-	// 	"Ferns N Petals (Pvt) Ltd.",
-	// 	"InterMESH Shopping Network Pvt. Ltd (Tokenz) ",
-	// 	"Indian Gifts Portal",
-	// 	"Galatta",
-	// 	"Indiaserver",
-	// 	"Theholidayspot",
-	// 	"Mantraonline",
-	// 	"Zee News Shopping",
-	// 	"Cinechance",
-	// 	"Sangamamerica",
-	// 	"Namasthenri",
-	// 	"Indiaheritage",
-	// 	"Virtual Rakhi Gifts",
-	// 	"Express India",
-	// 	"Jagran Shopping",
-	// 	"Royal Leathers",
-	// 	"Phoolwala",
-	// 	"Jagran Prakashan Pvt. Ltd.",
-	// 	"Birthday Gifts",
-	// 	"Anniversary Gifts",
-	// 	"Rakhi Gifts",
-	// 	"Send Flowers India",
-	// 	"Diwali Gifts",
-	// 	"Send Valentine Gifts",
-	// 	"Bhaidooj Gifts",
-	// 	"Konasth",
-	// 	"Gift Across India",
-	// 	"Divali Gifts",
-	// 	"Zee News Shopping",
-	// 	"HDFC Bank",
-	// ];
-
-	getresponse = {
-		"summary": null,
-		"tableHeaders": [
-			"location",
-			"slot",
-			"hover_text",
-			"desktop_image",
-			"mobile_image",
-			"event",
-			"redirect_url",
-			"webstore"
-		],
-		"tableData": [
-			{
-				"id": 8,
-				"location": "home_delet",
-				"slot": 2,
-				"hover_text": "Maha Valentine Mela",
-				"desktop_image": "valentines-sale-homepage.jpg",
-				"mobile_image": "mvalentines-sale-homepage.jpg",
-				"expiry_date": "2017-02-15",
-				"event": "Valentine",
-				"redirect_url": "/valentines-day/sale?source=HPTB2",
-				"webstore": "IGP"
-			}
-		],
-		"tableDataAction": []
-	}
 
 	locationList = [
 		{ key: 'all', value: 'All' },
@@ -336,9 +275,12 @@ export class BannerPanelComponent implements OnInit {
 		let _this = this;
 		//?event=Valentine&location=home_delet
 		let reqObj: any = {
-			url: 'banner/getBannerList/?active=' + this.searchForm.value.searchActiveFlag,
+			url: 'banner/getBannerList/',
 			method: "get",
 		};
+		if( this.searchForm.value.searchActiveFlag){
+			reqObj.url += '?active=' + this.searchForm.value.searchActiveFlag;
+		}
 		if (this.searchForm.value.location.key && this.searchForm.value.location.key != 'all') {
 			reqObj.url += "&location=" + this.searchForm.value.location.key
 		}
@@ -357,6 +299,7 @@ export class BannerPanelComponent implements OnInit {
 			_this.tableHeaders.push('Actions');
 			setTimeout(() => {
 				_this.dataSource.paginator = _this.paginator;
+				_this.dataSource.sort = _this.sort;
 			}, 100)
 		})
 
@@ -429,5 +372,14 @@ export class BannerPanelComponent implements OnInit {
 		this.searchForm.get('location').setValue(toSelect);
 		this.deskImageUrl = environment.bannerImageUrl + data['desktop_image'];
 		this.mobImageUrl = environment.bannerImageUrl + data['mobile_image'];
+	}
+
+	applyFilter(event: Event) {
+		const filterValue = (event.target as HTMLInputElement).value;
+		this.dataSource.filter = filterValue.trim().toLowerCase();
+
+		if (this.dataSource.paginator) {
+			this.dataSource.paginator.firstPage();
+		}
 	}
 }
