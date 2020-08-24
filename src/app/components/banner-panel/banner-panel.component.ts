@@ -234,8 +234,7 @@ export class BannerPanelComponent implements OnInit {
 				}
 				resolve(response);
 			});
-			// console.log(payload);
-			// resolve(payload)
+			
 		});
 	}
 
@@ -255,7 +254,6 @@ export class BannerPanelComponent implements OnInit {
 
 	getSearchResults(data) {
 		let _this = this;
-		//?event=Valentine&location=home_delet
 		let reqObj: any = {
 			url: 'banner/getBannerList/',
 			method: "get",
@@ -316,7 +314,6 @@ export class BannerPanelComponent implements OnInit {
 				return
 			}
 			_this.openSnackBar('Updated.');
-			//_this.updateRecord = false;
 			_this.getSearchResults(data);
 
 		});
@@ -366,19 +363,10 @@ export class BannerPanelComponent implements OnInit {
 	}
 
 	getValidations() {
-		// this.searchForm = this.fb.group({
-		// 	slot: [''],
-		// 	webstore: [''],
-		// 	location: [{ key: null, value: null }],
-		// 	event: [''],
-		// 	redirectLink: [''],
-		// 	expiryDate: [''],
-		// 	hoverText: [''],
-		// 	editId: ['0'],
-		// 	searchActiveFlag: false,
-		// 	activeFlag: false,
-		// });
 		if (!this.searchForm.get('slot').value) {
+			return true;
+		}
+		if (!this.searchForm.get('location').value) {
 			return true;
 		}
 		if (!this.searchForm.get('location').value.key) {
@@ -390,19 +378,6 @@ export class BannerPanelComponent implements OnInit {
 		if (!this.searchForm.get('event').value) {
 			return true;
 		}
-		if (!this.searchForm.get('redirectLink').value) {
-			return true;
-		}
-		if (!this.searchForm.get('hoverText').value) {
-			return true;
-		}
-		if (!this.deskImage) {
-			return true;
-		}
-		if (!this.mobImage) {
-			return true;
-		}
-
 		return false;
 	}
 }
