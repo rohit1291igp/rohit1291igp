@@ -21,10 +21,11 @@ export const environment = {
   s3SecretKey : '', 
   // s3AccessKey : 'AKIAIYVR3IZCNZG4TU4Q',
   // s3SecretKey : '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',
-  blogBucketName : 'blogcreatives',
-  componentBucketName : 'handelscomponents',
-  igpBlogCDN : 'https://cdn.igp.com/f_auto,q_auto,t_blogimage/blogs/',
-  interfloraBlogCDN : 'https://res.cloudinary.com/interflora/f_auto,q_auto,t_blogimage/blogs/',
-  componentImageUrl : 'https://handelscomponents.s3.amazonaws.com/',
-  blogsAcl : 'public-read'
+  blogBucketName: 'blogcreatives',
+  componentBucketName: 'handelscomponents',
+  igpBlogCDN: 'https://cdn.igp.com/f_auto,q_auto,t_blogimage/blogs/',
+  interfloraBlogCDN: 'https://res.cloudinary.com/interflora/f_auto,q_auto,t_blogimage/blogs/',
+  componentImageUrl: 'https://handelscomponents.s3.amazonaws.com/',
+  blogsAcl: 'public-read',
+  bannerImageUrl : 'https://cdn.igp.com/f_auto,q_auto/banners/'
 };
