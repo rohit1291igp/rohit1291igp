@@ -76,11 +76,13 @@
           </div>
           <div class="col-md-12">
             <span style="margin:0 20px">
-              <input [disabled]="updateRecord" type="file" id="deskImagefile" (change)="onImageUpload($event,'desktop')" accept=" image/*" />
+              <input [disabled]="updateRecord" type="file" id="deskImagefile" (change)="onImageUpload($event,'desktop')"
+                accept=" image/*" />
               <label for="deskImagefile" class="btn-2">Upload Desktop Banner</label>
             </span>
             <span style="margin:0 20px">
-              <input [disabled]="updateRecord" type="file" id="mobImagefile" (change)="onImageUpload($event,'mobile')" accept=" image/*" />
+              <input [disabled]="updateRecord" type="file" id="mobImagefile" (change)="onImageUpload($event,'mobile')"
+                accept=" image/*" />
               <label for="mobImagefile" class="btn-2">Upload Mobile Banner</label>
             </span>
           </div>
@@ -117,15 +119,26 @@
         </div>
       </div>
     </form>
+    
     <div class="mat-elevation-z8" *ngIf="dataSource?.data?.length > 0 else noRecord">
-      <mat-table [dataSource]="dataSource">
+      <mat-form-field style="margin:0 20px">
+        <mat-label>Filter</mat-label>
+        <input matInput (keyup)="applyFilter($event)" placeholder="Rakhi" #input>
+      </mat-form-field>
+      <mat-table [dataSource]="dataSource" matSort>
         <ng-container [matColumnDef]="column" *ngFor="let column of tableHeaders">
-          <mat-header-cell *matHeaderCellDef> {{getHeader(column)}} </mat-header-cell>
+          <mat-header-cell mat-sort-header *matHeaderCellDef> {{getHeader(column)}} </mat-header-cell>
           <mat-cell *matCellDef="let element">
-            <ng-container *ngIf="column != 'Actions'">
+            <ng-container *ngIf="column != 'Actions' && column != 'active'">
               {{element[column] || '-'}}
             </ng-container>
-            <ng-container *ngIf="column == 'Actions' && !element['location'].includes('del')">
+            <ng-container *ngIf="column == 'active'">
+
+              <span *ngIf="element[column]"><i class="fa fa-check" aria-hidden="true"></i></span>
+              <span *ngIf="!element[column]"><i class="fa fa-times" aria-hidden="true"></i></span>
+              <!-- <span *ngIf="element[column]==''">{{element[column] || '-'}}</span> -->
+            </ng-container>
+            <ng-container *ngIf="column == 'Actions'">
               <button mat-button (click)="editRowData(element)">Edit</button>
             </ng-container>
           </mat-cell>
