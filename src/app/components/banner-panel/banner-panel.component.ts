@@ -128,10 +128,10 @@ export class BannerPanelComponent implements OnInit {
 			}
 			reader.onload = (event) => { // called once readAsDataURL is completed
 				if (imgType == 'desktop') {
-					this.deskImageUrl = event.target.result.toString();
+					this.deskImageUrl = event['target'].result.toString();
 				}
 				else if (imgType == 'mobile') {
-					this.mobImageUrl = event.target.result.toString();
+					this.mobImageUrl =  event['target'].result.toString();
 				}
 
 			}
