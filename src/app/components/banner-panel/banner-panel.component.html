@@ -1,0 +1,158 @@
+<div class="main-container">
+  <mat-card>
+    <form [formGroup]="searchForm" (ngSubmit)="onSubmit(searchForm)">
+      <div class="row" style="margin:20px 0">
+        <div class="col-md-8">
+          <div class="col-md-12">
+            <span style="margin:0 20px">
+              <mat-form-field>
+                <mat-label>Location</mat-label>
+                <mat-select formControlName="location" [(value)]='searchForm.value.location'>
+                  <mat-option *ngFor="let option of locationList" [value]="option">
+                    {{option.value}}
+                  </mat-option>
+                </mat-select>
+                <!-- <mat-label>{{SearchForm?.formFields?.componentSelection?.placeholder}}</mat-label> -->
+                <!-- <input class="ng-trim-ignore" type="text" matInput formControlName="location"
+                  [matAutocomplete]="locationauto">
+                <mat-autocomplete #locationauto="matAutocomplete" (optionSelected)='getLocation($event.option.value)'>
+                  <mat-option *ngFor="let option of filteredLocation | async" [value]="option">
+                    {{option}}</mat-option>
+                </mat-autocomplete> -->
+              </mat-form-field>
+            </span>
+            <span style="margin:0 20px">
+              <mat-form-field>
+                <mat-label>Slot</mat-label>
+                <input matInput type="text" formControlName="slot">
+              </mat-form-field>
+            </span>
+            <span style="margin:0 20px">
+              <mat-form-field>
+                <mat-label>Events</mat-label>
+                <input matInput type="text" formControlName="event">
+              </mat-form-field>
+            </span>
+          </div>
+          <div class="col-md-12">
+            <span style="margin:0 20px">
+              <mat-form-field>
+                <mat-label>Webstore</mat-label>
+                <input class="ng-trim-ignore" type="text" matInput formControlName="webstore"
+                  [matAutocomplete]="webStoreauto">
+                <mat-autocomplete #webStoreauto="matAutocomplete" (optionSelected)='getWebStore($event.option.value)'>
+                  <mat-option *ngFor="let option of filteredWebStore | async" [value]="option">
+                    {{option}}</mat-option>
+                </mat-autocomplete>
+              </mat-form-field>
+            </span>
+            <span style="margin:0 20px">
+              <mat-form-field>
+                <mat-label> Hover Text</mat-label>
+                <input matInput type="text" formControlName="hoverText">
+              </mat-form-field>
+            </span>
+            <span style="margin:0 20px">
+              <mat-checkbox formControlName="activeFlag">Set Active</mat-checkbox>
+            </span>
+          </div>
+          <div class="col-md-12">
+            <span style="margin:0 20px">
+              <mat-form-field>
+                <mat-label> Redirect Link</mat-label>
+                <input matInput type="text" formControlName="redirectLink">
+              </mat-form-field>
+            </span>
+            <span style="margin:0 20px">
+              <mat-form-field class="example-full-width">
+                <mat-label>Expiry Date</mat-label>
+                <input matInput [matDatepicker]="expiryDatePicker" (dateInput)="addEventFrom( $event)"
+                  (dateChange)="addEventFrom( $event)" [value]="searchForm.get('expiryDate').value" autocomplete="off"
+                  disabled>
+                <mat-datepicker-toggle matSuffix [for]="expiryDatePicker"></mat-datepicker-toggle>
+                <mat-datepicker #expiryDatePicker></mat-datepicker>
+              </mat-form-field>
+            </span>
+          </div>
+          <div class="col-md-12">
+            <span style="margin:0 20px">
+              <input [disabled]="updateRecord" type="file" id="deskImagefile" (change)="onImageUpload($event,'desktop')"
+                accept=" image/*" />
+              <label for="deskImagefile" class="btn-2">Upload Desktop Banner</label>
+            </span>
+            <span style="margin:0 20px">
+              <input [disabled]="updateRecord" type="file" id="mobImagefile" (change)="onImageUpload($event,'mobile')"
+                accept=" image/*" />
+              <label for="mobImagefile" class="btn-2">Upload Mobile Banner</label>
+            </span>
+          </div>
+
+          <div class="col-md-12">
+            <span style="margin:0 20px">
+              <button class="btnRadius" id="view" type="submit" mat-raised-button
+                (click)="btnType = 'search'">Search</button>
+            </span>
+            <span *ngIf="updateRecord" style="margin:0 20px">
+              <button class="btnRadius" id="add" type="submit" mat-raised-button (click)="btnType = 'update'"
+                [disabled]='getValidations()'>Update</button>
+            </span>
+            <span *ngIf="!updateRecord" style="margin:0 20px">
+              <button class="btnRadius" id="add" type="submit" mat-raised-button (click)="btnType = 'new'"
+                [disabled]='getValidations()'>Create
+                New</button>
+            </span>
+            <span style="margin:0 20px">
+              <button class="btnRadius" id="clear" type="submit" mat-raised-button
+                (click)="btnType = 'clear'">Clear</button>
+            </span>
+          </div>
+          <div class="col-md-12">
+            <span style="margin:20px">
+              <mat-checkbox formControlName="searchActiveFlag">Search only active banners</mat-checkbox>
+            </span>
+          </div>
+        </div>
+        <div class="col-md-4" style="max-height:300px; overflow:auto">
+          <span *ngIf="deskImageUrl"> Image selected for Desktop Banner:</span>
+          <img [src]="deskImageUrl" *ngIf="deskImageUrl" style="max-width: 100%;border:1px solid black">
+          <span *ngIf="mobImageUrl"> Image selected for Mobile Banner:</span>
+          <img [src]="mobImageUrl" *ngIf="mobImageUrl" style="max-width: 100%;border:1px solid black">
+        </div>
+      </div>
+    </form>
+
+    <div class="mat-elevation-z8" *ngIf="dataSource?.data?.length > 0 else noRecord">
+      <mat-form-field style="margin:0 20px">
+        <mat-label>Filter</mat-label>
+        <input matInput (keyup)="applyFilter($event)" placeholder="Rakhi" #input>
+      </mat-form-field>
+      <mat-table [dataSource]="dataSource" matSort>
+        <ng-container [matColumnDef]="column" *ngFor="let column of tableHeaders">
+          <mat-header-cell mat-sort-header *matHeaderCellDef> {{getHeader(column)}} </mat-header-cell>
+          <mat-cell *matCellDef="let element">
+            <ng-container *ngIf="column != 'Actions' && column != 'active'">
+              {{element[column] || '-'}}
+            </ng-container>
+            <ng-container *ngIf="column == 'active'">
+
+              <span *ngIf="element[column]"><i class="fa fa-check" aria-hidden="true"></i></span>
+              <span *ngIf="!element[column]"><i class="fa fa-times" aria-hidden="true"></i></span>
+              <!-- <span *ngIf="element[column]==''">{{element[column] || '-'}}</span> -->
+            </ng-container>
+            <ng-container *ngIf="column == 'Actions'">
+              <button mat-button (click)="editRowData(element)">Edit</button>
+            </ng-container>
+          </mat-cell>
+        </ng-container>
+        <mat-header-row *matHeaderRowDef="tableHeaders"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: tableHeaders;"></mat-row>
+      </mat-table>
+      <mat-paginator [pageSizeOptions]="[5, 10, 20]" length="{{dataSource?.length}}" showFirstLastButtons>
+      </mat-paginator>
+    </div>
+    <ng-template #noRecord>
+      <mat-card style="color: #C3404E;">No Record</mat-card>
+    </ng-template>
+
+  </mat-card>
+</div>
