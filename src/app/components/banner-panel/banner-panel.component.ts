@@ -126,7 +126,7 @@ export class BannerPanelComponent implements OnInit {
 			else if (imgType == 'mobile') {
 				this.mobImage = event.target.files[0];
 			}
-			reader.onload = (event) => { // called once readAsDataURL is completed
+			reader.onload = (event:any) => { // called once readAsDataURL is completed
 				if (imgType == 'desktop') {
 					this.deskImageUrl = event['target'].result.toString();
 				}
