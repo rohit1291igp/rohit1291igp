@@ -128,10 +128,10 @@ export class BannerPanelComponent implements OnInit {
 			}
 			reader.onload = (event) => { // called once readAsDataURL is completed
 				if (imgType == 'desktop') {
-					this.deskImageUrl = event['target'].result.toString();
+					this.deskImageUrl = event['target']['result'].toString();
 				}
 				else if (imgType == 'mobile') {
-					this.mobImageUrl =  event['target'].result.toString();
+					this.mobImageUrl =  event['target']['result'].toString();
 				}
 
 			}
@@ -185,10 +185,10 @@ export class BannerPanelComponent implements OnInit {
 		_this.uploadImageToS3(deskformData, 'desktop', _this.deskImage.name.slice(0, -4))
 			.then((responseDesk) => {
 				let mobformData = new FormData();
-				deskS3image = responseDesk['result'].uploadedFilePath.banners[0].slice(25, -4);
-				mobformData.append(deskS3image, _this.mobImage);
+				deskS3image = responseDesk['result'].uploadedFilePath.banners[0].slice(25);
+				mobformData.append(deskS3image.slice(0,-4), _this.mobImage);
 
-				return _this.uploadImageToS3(mobformData, 'mobile', responseDesk['result'].uploadedFilePath.banners[0].slice(25, -4))
+				return _this.uploadImageToS3(mobformData, 'mobile', deskS3image.slice(0,-4))
 
 			}).then((responseMob) => {
 				reqObj.payload = {
@@ -197,7 +197,7 @@ export class BannerPanelComponent implements OnInit {
 					"slot": _this.searchForm.value.slot,
 					"hover_text": _this.searchForm.value.hoverText,
 					"desktop_image": deskS3image,
-					"mobile_image": responseMob['result'].uploadedFilePath.banners[0].slice(25, -4),
+					"mobile_image": responseMob['result'].uploadedFilePath.banners[0].slice(25),
 					"expiry_date": datenow,
 					"event": _this.searchForm.value.event,
 					"redirect_url": _this.searchForm.value.redirectLink,
@@ -255,17 +255,17 @@ export class BannerPanelComponent implements OnInit {
 	getSearchResults(data) {
 		let _this = this;
 		let reqObj: any = {
-			url: 'banner/getBannerList/',
+			url: 'banner/getBannerList/?',
 			method: "get",
 		};
 		if (this.searchForm.value.searchActiveFlag) {
-			reqObj.url += '?active=' + this.searchForm.value.searchActiveFlag;
+			reqObj.url += 'active=' + this.searchForm.value.searchActiveFlag+'&';
 		}
 		if (this.searchForm.value.location.key && this.searchForm.value.location.key != 'all') {
-			reqObj.url += "&location=" + this.searchForm.value.location.key
+			reqObj.url += "location=" + this.searchForm.value.location.key+'&'
 		}
 		if (this.searchForm.value.event) {
-			reqObj.url += "&event=" + this.searchForm.value.event;
+			reqObj.url += "event=" + this.searchForm.value.event;
 		}
 		_this.BackendService.makeAjax(reqObj, function (err, response, headers) {
 			if (err) {
@@ -292,24 +292,25 @@ export class BannerPanelComponent implements OnInit {
 			url: 'banner/UpdateBanner',
 			method: "put",
 			payload: <any>{}
-		};
+		}; 
 
 		reqObj.payload = {
 			"id": this.searchForm.value.editId,
 			"location": this.searchForm.value.location.key,
 			"slot": this.searchForm.value.slot,
 			"hover_text": this.searchForm.value.hoverText,
-			"desktop_image": this.deskImageUrl,
-			"mobile_image": "m-" + this.deskImageUrl,
+			"desktop_image": this.deskImageUrl.slice(environment.bannerImageUrl.length),
+			"mobile_image":  this.mobImageUrl.slice(environment.bannerImageUrl.length),
 			"expiry_date": this.searchForm.value.expiryDate,
+			"active": this.searchForm.value.activeFlag,
 			"event": this.searchForm.value.event,
 			"redirect_url": this.searchForm.value.redirectLink,
 			"webstore": this.searchForm.value.webstore
 		}
 		console.log(reqObj);
 		_this.BackendService.makeAjax(reqObj, function (err, response, headers) {
-			if (err) {
-				_this.openSnackBar('Something went wrong.');
+			if (err || response.error) {
+				_this.openSnackBar(response.errorMessage);
 				console.log('Error=============>', err);
 				return
 			}
