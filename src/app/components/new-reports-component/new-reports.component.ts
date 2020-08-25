@@ -1,6 +1,6 @@
-import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ChangeDetectionStrategy, SimpleChanges, IterableDiffers, DoCheck, AfterViewChecked, AfterViewInit, NgModule } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ChangeDetectionStrategy, SimpleChanges, IterableDiffers, DoCheck, AfterViewChecked, AfterViewInit, NgModule, Inject } from '@angular/core';
 import { FormControl, FormGroup, FormBuilder } from '@angular/forms';
-import { MatDialog, MatPaginator, MatSort, MatTableDataSource, MatDatepickerInputEvent, MatAutocompleteModule } from '@angular/material';
+import { MatDialog, MatPaginator, MatSort, MatTableDataSource, MatDatepickerInputEvent, MatAutocompleteModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { editComponent } from '../reports/reports.component';
 import { DatePipe, CommonModule } from '@angular/common';
 import { SharedModule } from 'app/shared-module/shared/shared.module';
@@ -12,6 +12,10 @@ import { ImgPreviewComponent } from '../img-preview/img-preview.component';
 import { Observable } from 'rxjs';
 import { startWith,map } from 'rxjs/operators';
 import { OrderStockComponent } from '../order-stocks/order-stock.component';
+import { BackendService } from 'app/services/backend.service';
+import { Angular5Csv } from 'angular5-csv/dist/Angular5-csv';
+import { Router } from '@angular/router';
+import { UtilityService } from 'app/services/utility.service';
 
 interface Field {
     show: boolean,
@@ -85,6 +89,9 @@ export class NewReportsComponent implements OnInit {
         private dialog: MatDialog,
         private _differs: IterableDiffers,
         private fb: FormBuilder,
+        private backendService:BackendService,
+        public UtilityService: UtilityService,
+        private router:Router
     ) {
 
     }
@@ -140,7 +147,6 @@ export class NewReportsComponent implements OnInit {
         map(value => typeof value === 'string' ? value : value['Component_Name']),
         map(name => name ? this._filter(name) : this.stockComponentList.slice())
       );
-
     }
 
     componenetDisplayFn(component: any): string {
@@ -247,8 +253,12 @@ export class NewReportsComponent implements OnInit {
         }
     }
 
+    isInStockColumn(col,element){
+        return col==='InStock'
+    }
+
     openEditWindow(rowData, colName, index) {
-        console.log("prvz rowdata",rowData)
+        console.log("Edit rowdata",rowData)
         if(colName==='Stock_Quantity' && environment.userType==='vendor'){
             const dialogRef = this.dialog.open(OrderStockComponent, {
                 width: '500px',
@@ -269,7 +279,7 @@ export class NewReportsComponent implements OnInit {
                 data: { 'rowData': rowData[colName],'component':rowData, 'colName': this.getHeaderCellValue(colName) }
             });
             const subscribedDialog = dialogRef.componentInstance.formSubmit.subscribe(data=>{
-                console.log("parvez event emmitted");
+                console.log("EditSubmit event emmitted");
                 this.editSubmit.emit({requestedvalue:data.value.fieldName, data: { 'rowData': rowData[colName],'component':rowData, 'colName': this.getHeaderCellValue(colName) }})
             })
     
@@ -279,17 +289,17 @@ export class NewReportsComponent implements OnInit {
                 subscribedDialog.unsubscribe();
             });
         }
-        const dialogRef = this.dialog.open(editComponent, {
-            width: '250px',
-            data: { 'rowData': rowData, 'colName': this.getHeaderCellValue(colName).replace(/ /g, '_') }
-        });
+        // const dialogRef = this.dialog.open(editComponent, {
+        //     width: '250px',
+        //     data: { 'rowData': rowData, 'colName': this.getHeaderCellValue(colName).replace(/ /g, '_') }
+        // });
 
-        dialogRef.afterClosed().subscribe(result => {
-            rowData = 100;
-            console.log('The dialog was closed');
-            console.log(result);
-            this.editData.emit(result);
-        });
+        // dialogRef.afterClosed().subscribe(result => {
+        //     rowData = 100;
+        //     console.log('The dialog was closed');
+        //     console.log(result);
+        //     this.editData.emit(result);
+        // });
 
     }
 
@@ -322,6 +332,22 @@ export class NewReportsComponent implements OnInit {
         this.submitForm.emit(data.value);
     }
 
+    openStockedDownload(){
+        this.submitForm.emit('stocked_download');
+    }
+
+    checkApproveBtn(cellValue){
+        if(cellValue && typeof(cellValue) === "object"){
+            if(cellValue['requestType'] == 'approve'){
+                return true;
+            }else{
+                return false;
+            }
+        }else{
+            return false;
+        }
+    }
+    
     imgPreview(imgSrc) {
         const dialogRef = this.dialog.open(ImgPreviewComponent, {
             width: '50%',
@@ -350,10 +376,70 @@ export class NewReportsComponent implements OnInit {
     return this.stockComponentList.filter(option => option.Component_Name.toLowerCase().indexOf(filterValue) === 0);
   }
 
+  showEditFlag(element,col){
+    // Product Report Edit Button  
+    if(this.router.url.includes('productReport')){
+        if(environment.userType!=='admin' && element['Proc_Type_Vendor']==='Stocked'){
+            return false;
+        }
+        if(environment.userType!=='admin' && col==='Proc_Type_Vendor'){
+            return false
+        }else if(environment.userType!=='admin' && col==='Proc_Type_Vendor'){
+            return false;
+        }else if(element['Component_Delivery_Status']=='Delivered' || element['Component_Delivery_Status']=='Rejected'){
+            return false;
+        }else{
+            return true
+        }
+    }else {
+        return false;
+    }
+  }
+
+  approveReject(e, approveReject, colName, rowData){
+    let _this=this;
+    if(!localStorage.getItem('fkAssociateId')){
+        alert('Select vendor!'); return;
+    }
+    rowData=rowData || {};
+    let url="approveAndReject";
+    let paramsObj={
+        approveReject:approveReject,
+        reportType:'getVendorReport',
+        colName:colName,
+        fkAssociateId:localStorage.getItem('fkAssociateId'),
+        object:JSON.stringify(rowData)
+    };
+    let method='post';
+    let paramsStr = _this.UtilityService.formatParams(paramsObj);
+    let reqObj =  {
+        url : url+paramsStr,
+        method : method
+    };
+
+    _this.backendService.makeAjax(reqObj, function(err, response, headers){
+        //if(!response) response={result:[]};
+        if(err || response.error) {
+            console.log('Error=============>', err);
+            return;
+        }
+        console.log('admin action Response --->', response.result);
+        if(response.result){
+            alert('The request was successful.');
+        }
+    });
+}
+
   isArray(value){
       console.log(value)
       return Array.isArray(value)
   }
+
+  isStockedDowloadButton(){
+    return (this.router.url.includes('productReport') && environment.userType==='admin')
+  }
+
+ 
 }
 
 @NgModule({

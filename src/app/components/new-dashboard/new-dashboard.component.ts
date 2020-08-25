@@ -4,6 +4,10 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { BehaviorSubject } from 'rxjs';
 import { Router, NavigationEnd, NavigationStart, ActivatedRoute } from '@angular/router';
 import { NavService } from 'app/services/NewService';
+import { environment } from 'environments/environment';
+import { DashboardComponent } from '../dashboard/dashboard.component';
+import { BackendService } from '../../services/backend.service';
+
 export interface NavItem {
     displayName: string;
     disabled?: boolean;
@@ -19,6 +23,8 @@ export interface NavItem {
 })
 export class NewDasboardComponent implements OnInit, AfterViewInit {
     openPage = false;
+    username;
+
     @ViewChild('appDrawer') appDrawer: ElementRef;
     navItems: NavItem[] = [
         {
@@ -55,7 +61,7 @@ export class NewDasboardComponent implements OnInit, AfterViewInit {
         }
     ];
     
-    constructor(private navService: NavService, private router: Router, private activatedRoute: ActivatedRoute) {
+    constructor(private navService: NavService, private router: Router, private activatedRoute: ActivatedRoute,public BackendService: BackendService) {
         router.events.subscribe((val: any) => {
             //On change check router
             if (val instanceof NavigationStart) {
@@ -70,6 +76,7 @@ export class NewDasboardComponent implements OnInit, AfterViewInit {
     }
 
     ngOnInit() {
+        this.username = localStorage.getItem('vendorName') ? localStorage.getItem('vendorName') : '';
         const bodyEle = document.getElementsByTagName('body');
         bodyEle[0].style.paddingTop = '0px';
         console.log(this.activatedRoute)
@@ -91,6 +98,38 @@ export class NewDasboardComponent implements OnInit, AfterViewInit {
             this.openPage = false;
         } else {
             this.openPage = true;
+        }
+    }
+
+    logout(e){
+        let _this = this;
+  
+            let reqObj = {
+                //url : "?responseType=json&scopeId=1&token="+localStorage.getItem('currentUserToken')+"&method=igp.auth.doLogOut",
+                url : "doLogOut?responseType=json&scopeId=1&token="+localStorage.getItem('currentUserToken'),
+                method : "post",
+                payload : {}
+            };
+  
+            this.BackendService.makeAjax(reqObj, function(err, response, headers){
+                if(err) {
+                    console.log(err)
+                    return;
+                }
+  
+                localStorage.clear();
+                sessionStorage.clear();
+                environment.mockAPI="";
+                environment.userType="";
+                _this.router.navigate(['/login']);
+            })
+  
+  
+        for (var i in _this.router.config) {
+            if (_this.router.config[i].path == "dashboard") {
+                _this.router.config[i].component = DashboardComponent;
+                break;
+            }
         }
     }
 }

@@ -68,13 +68,14 @@ import { ProductAvailabilityComponent } from './components/product-decentralizat
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { ProductBarcodeComponent } from './components/product-decentralization/product-barcode/product-barcode.component';
 
-import { ProductReportComponent } from './components/product-report/product-report.component';
+import { ProductReportComponent, DownloadStockedComponentProduct } from './components/product-report/product-report.component';
 import { HolidayCalenderManagementComponent } from './components/holiday-calender-management/holiday-calender-management.component';
 import { ProductDecentralizationComponent } from './components/product-decentralization/product-decentralization.component';
 import { DeliveryPriorityComponent } from './components/product-decentralization/delivery-priority/delivery-priority.component';
 import { OfferPageManagementComponent } from './components/offer-page-management/offer-page-management.component';
 import { VoucherService } from './services/voucher.service';
 import { NewDasboardComponent } from './components/new-dashboard/new-dashboard.component';
+import { BannerPanelComponent } from './components/banner-panel/banner-panel.component';
 import { NavService } from './services/NewService';
 
 
@@ -117,12 +118,14 @@ export function ConfigLoader(envConfig: envConfig) {
     DailyOpsReportComponent,
     StockComponentsReportsComponent,
     DownloadStockedComponent,
+    DownloadStockedComponentProduct,
     ProductAvailabilityComponent,
     ProductBarcodeComponent,
     ProductDecentralizationComponent,
     DeliveryPriorityComponent,
     OfferPageManagementComponent,
-    // NewDasboardComponent
+    NewDasboardComponent,
+    BannerPanelComponent
     // AutoSelectionComponent
   ],
   imports: [
@@ -206,7 +209,7 @@ export function ConfigLoader(envConfig: envConfig) {
     VoucherService,
     NavService
   ],
-  entryComponents:[UploadExcelComponent,NotificationComponent, ImgPreviewComponent, SelectItemForDelivered, OrderStockComponent,editComponent, DownloadStockedComponent],
+  entryComponents:[UploadExcelComponent,NotificationComponent, ImgPreviewComponent, SelectItemForDelivered, OrderStockComponent,editComponent, DownloadStockedComponent,DownloadStockedComponentProduct],
   bootstrap: [AppComponent],
   exports: [RouterModule]
 })

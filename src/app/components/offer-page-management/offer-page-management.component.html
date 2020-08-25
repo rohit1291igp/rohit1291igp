@@ -35,7 +35,7 @@
             <div *ngIf="offer_management_form.get('coupon_code').dirty && !offer_management_form.get('coupon_code').valid" class="error-text">Invalid Coupon Code</div>
           <mat-form-field appearance="fill" class="width-100">
             <mat-label>Webstore</mat-label>
-            <mat-select formControlName="webstore" required>
+            <mat-select formControlName="webstore" [disabled]="form_method=='edit'" required>
               <mat-option *ngFor="let webstore of web_store_list" [value]="webstore">
                 {{webstore}}
               </mat-option>
@@ -63,7 +63,7 @@
           </mat-form-field>
           <br>
           <mat-form-field class="width-100">
-            <mat-label>Expiry Date</mat-label>
+            <mat-label>Expiry Date (Offer)</mat-label>
             <input matInput [min]="minDate" [max]="maxDate" [matDatepicker]="expiryDate" formControlName="expiry_date"
               autocomplete="off" class="ng-trim-ignore" required>
             <mat-datepicker-toggle matSuffix [for]="expiryDate"></mat-datepicker-toggle>
@@ -83,7 +83,7 @@
       <h5>Voucher ID : {{voucher_details['id']}}</h5>
       <h5>Voucher Code : {{voucher_details['vouchercode']}}</h5>
       <h5>Voucher Value : {{voucher_details['vouchervalue']}}</h5>
-      <h5>Expiry Date : {{voucher_details['expirydate']|date:'dd/MM/yyyy'}}</h5>
+      <h5>Expiry Date (Voucher) : {{voucher_details['expirydate']|date:'dd/MM/yyyy'}}</h5>
     </mat-card>
   </div>
 </div>
