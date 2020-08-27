@@ -17,6 +17,7 @@ import { DailyOpsReportComponent } from './components/daily-ops-report/daily-ops
 import { ProductDecentralizationComponent } from './components/product-decentralization/product-decentralization.component';
 import { OfferPageManagementComponent } from './components/offer-page-management/offer-page-management.component';
 import { PaymentReconciliationComponent } from './components/payment-reconciliation/payment-reconciliation.component';
+import { UploadedImageReportComponent } from './components/uploaded-image-report/uploaded-image-report.component';
 
 
 const route: Routes = [
@@ -134,6 +135,10 @@ const route: Routes = [
   {
     path: 'offerpagemanagement',
     component:  OfferPageManagementComponent
+  },
+  {
+    path:'uploaded-image',
+    component:UploadedImageReportComponent
   },
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
   // otherwise redirect to home

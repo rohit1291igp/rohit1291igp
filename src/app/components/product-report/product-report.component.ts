@@ -175,7 +175,7 @@ export class ProductReportComponent implements OnInit, OnDestroy {
                         }
                     }).then((data) => {
                         let filedate = datefrom + '-' + dateto;
-                        // let download = new Angular5Csv(data, 'ProductReport-' + filedate, options);
+                        let download = new Angular5Csv(data, 'ProductReport-' + filedate, options);
                     })
                 } else {
                     _this.dataSource = _reportData.tableData ? _reportData.tableData : [];
