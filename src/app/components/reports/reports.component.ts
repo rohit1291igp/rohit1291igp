@@ -2395,12 +2395,14 @@ export class editComponent implements OnInit {
             this.dropdownOption=['JIT','Stocked']
         }else if(this.data.colName==='InStock'){
             this.dropdownOption=['InStock','Out of Stock']
+        }else if(this.data.colName==='Component Delivery Status'){
+            this.dropdownOption=['Delivered','Processing', 'Rejected']
         }
     }
 
     dropdownOption=[]
     showDropdown(){
-        if(this.data.colName==='InStock'||this.data.colName==='Proc Type Vendor'){
+        if(this.data.colName==='InStock'||this.data.colName==='Proc Type Vendor'||this.data.colName==='Component Delivery Status'){
             return true
         }else{
             return false;

@@ -366,35 +366,41 @@ export class NewReportsComponent implements OnInit {
     // Stock Component List
     filteredOptions: Observable<any[]>;
 
-  displayComponentName(component: any): string {
-    return component && component.Component_Name ? component.Component_Name : '';
-  }
-
-  private _filter(name: string): any[] {
-    const filterValue = name.toLowerCase();
-
-    return this.stockComponentList.filter(option => option.Component_Name.toLowerCase().indexOf(filterValue) === 0);
-  }
-
-  showEditFlag(element,col){
-    // Product Report Edit Button  
-    if(this.router.url.includes('productReport')){
-        if(environment.userType!=='admin' && element['Proc_Type_Vendor']==='Stocked'){
-            return false;
-        }
-        if(environment.userType!=='admin' && col==='Proc_Type_Vendor'){
-            return false
-        }else if(environment.userType!=='admin' && col==='Proc_Type_Vendor'){
-            return false;
-        }else if(element['Component_Delivery_Status']=='Delivered' || element['Component_Delivery_Status']=='Rejected'){
-            return false;
-        }else{
-            return true
-        }
-    }else {
-        return false;
+    displayComponentName(component: any): string {
+        return component && component.Component_Name ? component.Component_Name : '';
     }
-  }
+
+    private _filter(name: string): any[] {
+        const filterValue = name.toLowerCase();
+
+        return this.stockComponentList.filter(option => option.Component_Name.toLowerCase().indexOf(filterValue) === 0);
+    }
+
+    showEditFlag(element, col) {
+        // Product Report Edit Button  
+        if (this.router.url.includes('productReport')) {
+            if (environment.userType !== 'admin' && element['Proc_Type_Vendor'] === 'Stocked') {
+                return false;
+            }
+            if (environment.userType !== 'admin' && col === 'Proc_Type_Vendor') {
+                return false
+            } else if (environment.userType !== 'admin' && col === 'Proc_Type_Vendor') {
+                return false;
+            } else if (element['Component_Delivery_Status'] == 'Delivered' || element['Component_Delivery_Status'] == 'Rejected') {
+                return false;
+            } else {
+                return true
+            }
+        } else if (this.router.url.includes('stockReport')) {
+            if (element['Component_Delivery_Status'] == 'Delivered' || element['Component_Delivery_Status'] == 'Rejected') {
+                return false;
+            } else {
+                return true
+            }
+        } else {
+            return false;
+        }
+    }
 
   approveReject(e, approveReject, colName, rowData){
     let _this=this;
