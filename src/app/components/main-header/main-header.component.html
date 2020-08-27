@@ -56,6 +56,8 @@
                         <a *ngIf="environment.userType === 'vendor' || environment.userType === 'admin'" class="" routerLink="/uploaded-image"><li [ngClass]="{'selected' : router.url.includes('uploaded-image')}">Uploaded Image</li></a>
                         <a *ngIf="environment.userType === 'vendor'" class="" routerLink="/reports/getComponentOrderReport"><li [ngClass]="{'selected' : selectedReportTab === 'getComponentOrderReport'}">Stock Component Report</li></a>
                         <a *ngIf="environment.userType === 'admin'" class="" routerLink="/reports/getComponentOrderReport"><li [ngClass]="{'selected' : selectedReportTab === 'getComponentOrderReport'}">Stocked Component Orders</li></a>
+                        <a *ngIf="environment.userType === 'vendor'" class="" routerLink="/stockReport"><li [ngClass]="{'selected' : selectedReportTab === 'getComponentOrderReport'}">Stock Component Report</li></a>
+                        <a *ngIf="environment.userType === 'admin'" class="" routerLink="/stockReport"><li [ngClass]="{'selected' : selectedReportTab === 'getComponentOrderReport'}">Stocked Component Orders</li></a>
                         <a *ngIf="environment.userType === 'admin' || environment.userType === 'vendor'" class="" routerLink="/performanceReport"><li [ngClass]="{'selected' : selectedReportTab === 'performanceReport'}">Performance Report</li></a>
                         </ng-container>
                         <a *ngIf="(environment.userType == 'microsite')" class="" routerLink="/reports/itcReport" ><li [ngClass]="{'selected' : selectedReportTab === 'report'}">Current Balances</li></a>

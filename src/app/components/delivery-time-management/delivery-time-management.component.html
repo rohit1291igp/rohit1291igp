@@ -85,6 +85,13 @@
 								</div>
 
 							</div>
+							<div>
+								<mat-form-field style="width:80%;margin-top:20px">
+									<mat-label>Comment:</mat-label>
+									<input matInput type="text" formControlName="comment">
+
+								</mat-form-field>
+							</div>
 							<div class="width100 r-buttons">
 								<button class="btnRadius" id="update" type="submit" mat-raised-button color="accent"
 									(click)="btnType = 'update'" [disabled]="getValidation()">Update</button>

@@ -64,13 +64,12 @@ export class UploadedImageReportComponent implements OnInit {
     console.log(this.queryString)
     this.reportService.getReportData('getOrderFileUploadReport', this.queryString, (error, imageData) => {
       if (error) {
-        console.log(error)
+        this.openSnackBar("Something Went Wrong",'');
       } else {
         if(!this.summaryCount){
           this.summaryCount=imageData.summary[0];
         }
         this.uploadedImageData = imageData;
-        this.openSnackBar("Successfully Fetched Data",'');
         this.displayedColumns = imageData['tableHeaders']
         this.dataSource.data=this.dataSource.data.concat(imageData['tableData']);
       }

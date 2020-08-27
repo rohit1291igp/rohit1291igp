@@ -152,7 +152,7 @@ export class OfferPageManagementComponent implements OnInit, AfterViewChecked {
 
   addNewCoupon(coupon) {
     Object.keys(coupon).forEach(ele => {
-      if (coupon[ele] === "") {
+      if (coupon[ele] === "" && ele!=='redirect_url') {
         this.openSnackBar("Fill all fields properly", "")
       }
     })
@@ -180,7 +180,7 @@ export class OfferPageManagementComponent implements OnInit, AfterViewChecked {
 
   updateCoupon(coupon) {
     Object.keys(coupon).forEach(ele => {
-      if (coupon[ele] === "") {
+      if (coupon[ele] === ""&& ele!=='redirect_url') {
         this.openSnackBar("Fill all fields properly", "")
       }
     })
