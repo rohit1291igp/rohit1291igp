@@ -30,6 +30,10 @@ export class StockComponentsReportsComponent implements OnInit {
     fkasid;
     vendorList: any;
     editTableCellObj: any;
+    reportSummary = [];
+    isDownload = false;
+    searchResultModel: any = {};
+    queryString = "";
 
     constructor(
         private BackendService: BackendService,
@@ -51,11 +55,11 @@ export class StockComponentsReportsComponent implements OnInit {
         _this.getComponentList();
         let url;
         if (_this.userType == 'admin') {
-            url = ``;
+            url = `flag_count=1`;
             //Get vendor List
             _this.getVendor();
         } else {
-            url = ``;
+            url = `flag_count=1`;
         }
         _this.reportsService.getReportData('getComponentOrderReport', url, function (error, _reportData) {
             if (error) {
@@ -66,6 +70,7 @@ export class StockComponentsReportsComponent implements OnInit {
             /* report label states - start */
             try {
                 /* report label states - end */
+                _this.reportSummary = _reportData.summary ? _reportData.summary : [];
                 _this.dataSource = _reportData.tableData ? _reportData.tableData : [];
                 _this.tableHeaders = _reportData.tableHeaders ? _reportData.tableHeaders : [];
                 _this.orginalReportData = JSON.parse(JSON.stringify(_reportData));
@@ -74,8 +79,111 @@ export class StockComponentsReportsComponent implements OnInit {
             catch (err) {
                 console.log(err, 'rrrrrrrr')
             }
+            _this.showMoreTableData(null)
         });
 
+    }
+
+
+    showMoreTableData(e) {
+        var _this = this;
+        // if(_this.reportType === "getPincodeReport"){return;} // pagination issue
+
+        if (_this.orginalReportData && _this.reportSummary.length > 0) {
+            var totalOrders = (_this.reportSummary && _this.reportSummary[0]) ? Number(_this.reportSummary[0].value) : 0;
+            console.log('show more clicked');
+            console.log(this.orginalReportData)
+            if (_this.orginalReportData.tableData.length < totalOrders) {
+                _this.BackendService.abortLastHttpCall();
+                // if(_this.reportData){
+                var startLimit = _this.orginalReportData.tableData.length;
+                var queryStrObj = Object.assign({}, _this.searchResultModel);
+                queryStrObj.startLimit = startLimit;
+                _this.queryString = _this.generateQueryString(queryStrObj);
+                if (!this.reportSummary.length) {
+                    _this.queryString += '&flag_count=1'
+                } else {
+                    _this.queryString += '&flag_count=0'
+                }
+                _this.reportsService.getReportData('getComponentOrderReport', _this.queryString, function (error, _reportData) {
+                    if (error || !_reportData.tableData.length) {
+                        console.log('searchReportSubmit _reportData Error=============>', error);
+                        return;
+                    }
+                    console.log('searchReportSubmit _reportData=============>', _reportData);
+                    /*if(_reportData.tableData.length < 1){
+                        _this.showMoreBtn=false;
+                    }*/
+
+                    //_this.reportData.summary = _reportData.summary;
+                    //_this.reportData.tableData = _this.reportData.tableData.concat(_reportData.tableData);
+                    //_this.orginalReportData = Object.assign({}, _this.reportData);
+
+                    /* need to handle filter - start */
+                    //   _this.orginalReportData.summary = _reportData.summary;
+                    _this.orginalReportData.tableData = _this.orginalReportData.tableData.concat(_reportData.tableData);
+                    _this.dataSource = _reportData.tableData ? _this.dataSource.concat(_reportData.tableData) : [];
+
+                    // _this.dataSource = new MatTableDataSource(_this.orginalReportData.tableData);
+                    // _this.dataSource.paginator = _this.paginator;
+                    // _this.dataSource.sort = _this.sort;
+                    // _this.columnFilterSubmit(e);
+                    _this.showMoreTableData(e);
+                });
+                // }
+
+            }
+            if (_this.orginalReportData.tableData.length == totalOrders && _this.isDownload) {
+                var options = {
+                    showLabels: true,
+                    showTitle: false,
+                    headers: Object.keys(_this.orginalReportData.tableData[0]).map(m => m.charAt(0).toUpperCase() + m.slice(1)),
+                    nullToEmptyString: true,
+                };
+                let data = [];
+                new Promise((resolve) => {
+                    for (let pi = 0; pi < _this.orginalReportData.tableData.length; pi++) {
+                        for (let k in _this.orginalReportData.tableData[pi]) {
+                            if (typeof _this.orginalReportData.tableData[pi][k] == 'object' && _this.orginalReportData.tableData[pi][k] != null) {
+                                _this.orginalReportData.tableData[pi][k] = _this.orginalReportData.tableData[pi][k].value ? _this.orginalReportData.tableData[pi][k].value : '';
+                            }
+                        }
+                        if (pi == (_this.orginalReportData.tableData.length - 1)) {
+                            resolve(_this.orginalReportData.tableData);
+                        }
+                    }
+                }).then((data) => {
+                    // data = _this.orginalReportData.tableData;
+                    let download = new Angular5Csv(data, 'getComponentOrderReport', options);
+                    _this.isDownload = false;
+                })
+
+
+            }
+        }
+
+    }
+    generateQueryString(queryObj) {
+        var generatedQuertString = "";
+        for (var prop in queryObj) {
+            if (queryObj[prop] && queryObj[prop] !== null) {
+                if (generatedQuertString === "") {
+                    if (typeof queryObj[prop] === 'object' && 'date' in queryObj[prop]) {
+                        generatedQuertString += prop + "=" + queryObj[prop].date.year + "/" + queryObj[prop].date.month + "/" + queryObj[prop].date.day;
+                    } else {
+                        generatedQuertString += prop + "=" + queryObj[prop];
+                    }
+                } else {
+                    if (typeof queryObj[prop] === 'object' && 'date' in queryObj[prop]) {
+                        generatedQuertString += "&" + prop + "=" + queryObj[prop].date.year + "/" + queryObj[prop].date.month + "/" + queryObj[prop].date.day;
+                    } else {
+                        generatedQuertString += "&" + prop + "=" + queryObj[prop];
+                    }
+                }
+            }
+        }
+
+        return generatedQuertString;
     }
 
     newFormSubmit(event) {
@@ -90,7 +198,7 @@ export class StockComponentsReportsComponent implements OnInit {
         if (event.componentSelected && event.componentSelected.Component_Id != 'All') {
             url += "&Component_Id=" + event.componentSelected.Component_Id;
         }
-
+        url += `&flag_count=1`;
 
         var _this = this;
 
@@ -137,11 +245,13 @@ export class StockComponentsReportsComponent implements OnInit {
                     _this.dataSource = _reportData.tableData ? _reportData.tableData : [];
                     _this.tableHeaders = _reportData.tableHeaders ? _reportData.tableHeaders : [];
                     _this.orginalReportData = JSON.parse(JSON.stringify(_reportData));
+                    _this.reportSummary = _reportData.summary ? _reportData.summary : [];
                 }
             }
             catch (err) {
                 console.log(err, 'rrrrrrrr')
             }
+            _this.showMoreTableData(null)
         });
     }
 
@@ -195,7 +305,7 @@ export class StockComponentsReportsComponent implements OnInit {
 
     getComponentList() {
         var _this = this;
-        
+
         let reqObj = {};
         if (_this.userType == 'vendor') {
             if (_this.fkasid) {
