@@ -89,7 +89,7 @@
                     <button style="margin: 5px;" id="download" type="submit" mat-raised-button class="btn-color"
                         (click)="btnType = 'download'">Download</button>
                         <button type="button" *ngIf="isStockedDowloadButton()" style="margin: 5px;" mat-raised-button class="pull-right btn-color" (click)="openStockedDownload()">Stocked Component Download</button>
-                    <button *ngIf="env.userType==='admin'" style="margin: 5px;" id="upload" type="button" mat-raised-button class="btn-color"
+                    <button *ngIf="isStockedDowloadButton()" style="margin: 5px;" id="upload" type="button" mat-raised-button class="btn-color"
                         (click)="onAddComponent()">Add Component</button>
                 </div>
             </div>
