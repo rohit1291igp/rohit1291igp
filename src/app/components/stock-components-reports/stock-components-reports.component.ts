@@ -133,33 +133,33 @@ export class StockComponentsReportsComponent implements OnInit {
                 // }
 
             }
-            if (_this.orginalReportData.tableData.length == totalOrders && _this.isDownload) {
-                var options = {
-                    showLabels: true,
-                    showTitle: false,
-                    headers: Object.keys(_this.orginalReportData.tableData[0]).map(m => m.charAt(0).toUpperCase() + m.slice(1)),
-                    nullToEmptyString: true,
-                };
-                let data = [];
-                new Promise((resolve) => {
-                    for (let pi = 0; pi < _this.orginalReportData.tableData.length; pi++) {
-                        for (let k in _this.orginalReportData.tableData[pi]) {
-                            if (typeof _this.orginalReportData.tableData[pi][k] == 'object' && _this.orginalReportData.tableData[pi][k] != null) {
-                                _this.orginalReportData.tableData[pi][k] = _this.orginalReportData.tableData[pi][k].value ? _this.orginalReportData.tableData[pi][k].value : '';
-                            }
-                        }
-                        if (pi == (_this.orginalReportData.tableData.length - 1)) {
-                            resolve(_this.orginalReportData.tableData);
-                        }
-                    }
-                }).then((data) => {
-                    // data = _this.orginalReportData.tableData;
-                    let download = new Angular5Csv(data, 'getComponentOrderReport', options);
-                    _this.isDownload = false;
-                })
+            // if (_this.orginalReportData.tableData.length == totalOrders && _this.isDownload) {
+            //     var options = {
+            //         showLabels: true,
+            //         showTitle: false,
+            //         headers: Object.keys(_this.orginalReportData.tableData[0]).map(m => m.charAt(0).toUpperCase() + m.slice(1)),
+            //         nullToEmptyString: true,
+            //     };
+            //     let data = [];
+            //     new Promise((resolve) => {
+            //         for (let pi = 0; pi < _this.orginalReportData.tableData.length; pi++) {
+            //             for (let k in _this.orginalReportData.tableData[pi]) {
+            //                 if (typeof _this.orginalReportData.tableData[pi][k] == 'object' && _this.orginalReportData.tableData[pi][k] != null) {
+            //                     _this.orginalReportData.tableData[pi][k] = _this.orginalReportData.tableData[pi][k].value ? _this.orginalReportData.tableData[pi][k].value : '';
+            //                 }
+            //             }
+            //             if (pi == (_this.orginalReportData.tableData.length - 1)) {
+            //                 resolve(_this.orginalReportData.tableData);
+            //             }
+            //         }
+            //     }).then((data) => {
+            //         // data = _this.orginalReportData.tableData;
+            //         let download = new Angular5Csv(data, 'getComponentOrderReport', options);
+            //         _this.isDownload = false;
+            //     })
 
 
-            }
+            // }
         }
 
     }
@@ -191,14 +191,16 @@ export class StockComponentsReportsComponent implements OnInit {
         var _this = this;
         const dateToday = pipe.transform(Date.now(), 'yyyy-MM-dd');
         console.log(event);
-        let url = 'startLimit=0&endLimit=100';
+        _this.searchResultModel = {};
+        let url = '';
         if (event.vendorDetail.Vendor_Id && event.vendorDetail.Vendor_Id != 0) {
             url += "&Vendor_Id=" + event.vendorDetail.Vendor_Id;
+            _this.searchResultModel.Vendor_Id = event.vendorDetail.Vendor_Id;
         }
         if (event.componentSelected && event.componentSelected.Component_Id != 'All') {
             url += "&Component_Id=" + event.componentSelected.Component_Id;
+            _this.searchResultModel.Component_Id = event.componentSelected.Component_Id;
         }
-        url += `&flag_count=1`;
 
         var _this = this;
 
@@ -208,51 +210,66 @@ export class StockComponentsReportsComponent implements OnInit {
 
         if (event.vendorDetail.Vendor_Id != 0) {
             url += `&fkAssociateId=${_this.fkasid}`;
+            _this.searchResultModel.fkAssociateId = _this.fkasid;
         }
-        _this.reportsService.getReportData('getComponentOrderReport', url, function (error, _reportData) {
-            if (error) {
-                console.log('_reportData Error=============>', error);
-                return;
-            }
-            console.log('_reportData=============>', _reportData);
-            /* report label states - start */
-            try {
-
-                if (event.btnType == 'download') {
-                    var options = {
-                        showLabels: true,
-                        showTitle: false,
-                        headers: Object.keys(_reportData.tableData[0]).map(m => m.charAt(0).toUpperCase() + m.slice(1)),
-                        nullToEmptyString: true,
-                    };
-                    let data = [];
-                    new Promise((resolve) => {
-                        for (let pi = 0; pi < _reportData.tableData.length; pi++) {
-                            for (let k in _reportData.tableData[pi]) {
-                                if (typeof _reportData.tableData[pi][k] == 'object' && _reportData.tableData[pi][k] != null) {
-                                    _reportData.tableData[pi][k] = _reportData.tableData[pi][k].value ? _reportData.tableData[pi][k].value : '';
-                                }
-                            }
-                            if (pi == (_reportData.tableData.length - 1)) {
-                                resolve(_reportData.tableData);
+        if (event.btnType == 'download') {
+            _this.isDownload = true;
+            let reqObj: any = {
+                url: 'getComponentOrderReport?',
+                method: "get",
+            };
+            reqObj.url += url;
+            _this.BackendService.makeAjax(reqObj, function (error, _reportData) {
+                var options = {
+                    showLabels: true,
+                    showTitle: false,
+                    headers: Object.keys(_reportData.tableData[0]).map(m => m.charAt(0).toUpperCase() + m.slice(1)),
+                    nullToEmptyString: true,
+                };
+                let data = [];
+                new Promise((resolve) => {
+                    for (let pi = 0; pi < _reportData.tableData.length; pi++) {
+                        for (let k in _reportData.tableData[pi]) {
+                            if (typeof _reportData.tableData[pi][k] == 'object' && _reportData.tableData[pi][k] != null) {
+                                _reportData.tableData[pi][k] = _reportData.tableData[pi][k].value ? _reportData.tableData[pi][k].value : '';
                             }
                         }
-                    }).then((data) => {
+                        if (pi == (_reportData.tableData.length - 1)) {
+                            resolve(_reportData.tableData);
+                        }
+                    }
+                }).then((data) => {
 
-                        let download = new Angular5Csv(data, 'StockComponentReport-' + dateToday, options);
-                    })
-                } else {
+                    let download = new Angular5Csv(data, 'StockComponentReport-' + dateToday, options);
+                })
+            })
+
+        }
+        else {
+            url += '&startLimit=0&endLimit=100';
+            url += `&flag_count=1`;
+            _this.reportsService.getReportData('getComponentOrderReport', url, function (error, _reportData) {
+                if (error) {
+                    console.log('_reportData Error=============>', error);
+                    return;
+                }
+                console.log('_reportData=============>', _reportData);
+                /* report label states - start */
+                try {
+
+
                     _this.dataSource = _reportData.tableData ? _reportData.tableData : [];
                     _this.tableHeaders = _reportData.tableHeaders ? _reportData.tableHeaders : [];
                     _this.orginalReportData = JSON.parse(JSON.stringify(_reportData));
                     _this.reportSummary = _reportData.summary ? _reportData.summary : [];
+
                 }
-            }
-            catch (err) {
-                console.log(err, 'rrrrrrrr')
-            }
-            _this.showMoreTableData(null)
-        });
+                catch (err) {
+                    console.log(err, 'rrrrrrrr')
+                }
+                _this.showMoreTableData(null)
+            });
+        }
     }
 
 
