@@ -74,6 +74,7 @@ import { ProductDecentralizationComponent } from './components/product-decentral
 import { DeliveryPriorityComponent } from './components/product-decentralization/delivery-priority/delivery-priority.component';
 import { OfferPageManagementComponent } from './components/offer-page-management/offer-page-management.component';
 import { VoucherService } from './services/voucher.service';
+import { UploadedImageReportComponent } from './components/uploaded-image-report/uploaded-image-report.component';
 import { BannerPanelComponent} from './components/banner-panel/banner-panel.component';
 
 
@@ -122,6 +123,7 @@ export function ConfigLoader(envConfig: envConfig) {
     ProductDecentralizationComponent,
     DeliveryPriorityComponent,
     OfferPageManagementComponent,
+    UploadedImageReportComponent,
     BannerPanelComponent
     // AutoSelectionComponent
   ],
