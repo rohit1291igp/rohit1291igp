@@ -77,6 +77,7 @@ import { VoucherService } from './services/voucher.service';
 import { NewDasboardComponent } from './components/new-dashboard/new-dashboard.component';
 import { BannerPanelComponent } from './components/banner-panel/banner-panel.component';
 import { NavService } from './services/NewService';
+import { MenuListItemComponent } from './components/menu-list-item/menu-list-item.component';
 
 
 
@@ -124,8 +125,7 @@ export function ConfigLoader(envConfig: envConfig) {
     ProductDecentralizationComponent,
     DeliveryPriorityComponent,
     OfferPageManagementComponent,
-    NewDasboardComponent,
-    BannerPanelComponent
+    BannerPanelComponent,
     // AutoSelectionComponent
   ],
   imports: [

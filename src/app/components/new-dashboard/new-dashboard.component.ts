@@ -28,34 +28,34 @@ export class NewDasboardComponent implements OnInit, AfterViewInit {
     @ViewChild('appDrawer') appDrawer: ElementRef;
     navItems: NavItem[] = [
         {
-            displayName: 'DevFestFL',
+            displayName: 'Send Email Module',
             iconName: 'recent_actors',
             route: 'devfestfl',
             children: [
                 {
                     displayName: 'Send Email',
                     iconName: 'attach_email',
-                    route: '/sendemail/sendemail',
+                    route: '/new-dashboard/sendemail/sendemail',
                 },
                 {
                     displayName: 'Excel Upload',
                     iconName: 'attach_email',
-                    route: '/sendemail/uploadtemplate'
+                    route: '/new-dashboard/sendemail/uploadtemplate'
                 },
                 {
                     displayName: 'Order Update',
                     iconName: 'analytics',
-                    route: '/sendemail/orderupdatestatus'
+                    route: '/new-dashboard/sendemail/orderupdatestatus'
                 },
                 {
                     displayName: 'Payment Reconciliation',
                     iconName: 'payments',
-                    route: '/sendemail/payment-reconciliation'
+                    route: '/new-dashboard/sendemail/payment-reconciliation'
                 },
                 {
                     displayName: 'Address Update',
                     iconName: 'location_on',
-                    route: '/sendemail/addressUpdate'
+                    route: '/new-dashboard/sendemail/addressUpdate'
                 }
             ]
         }
@@ -102,7 +102,7 @@ export class NewDasboardComponent implements OnInit, AfterViewInit {
     }
 
     logout(e){
-        let _this = this;
+        let $this = this;
   
             let reqObj = {
                 //url : "?responseType=json&scopeId=1&token="+localStorage.getItem('currentUserToken')+"&method=igp.auth.doLogOut",
@@ -111,7 +111,7 @@ export class NewDasboardComponent implements OnInit, AfterViewInit {
                 payload : {}
             };
   
-            this.BackendService.makeAjax(reqObj, function(err, response, headers){
+            $this.BackendService.makeAjax(reqObj, function(err, response, headers){
                 if(err) {
                     console.log(err)
                     return;
@@ -121,13 +121,13 @@ export class NewDasboardComponent implements OnInit, AfterViewInit {
                 sessionStorage.clear();
                 environment.mockAPI="";
                 environment.userType="";
-                _this.router.navigate(['/login']);
+                $this.router.navigate(['/login']);
             })
   
   
-        for (var i in _this.router.config) {
-            if (_this.router.config[i].path == "dashboard") {
-                _this.router.config[i].component = DashboardComponent;
+        for (var i in $this.router.config) {
+            if ($this.router.config[i].path == "dashboard") {
+                $this.router.config[i].component = DashboardComponent;
                 break;
             }
         }

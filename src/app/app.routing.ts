@@ -17,11 +17,8 @@ import { DailyOpsReportComponent } from './components/daily-ops-report/daily-ops
 import { ProductDecentralizationComponent } from './components/product-decentralization/product-decentralization.component';
 import { OfferPageManagementComponent } from './components/offer-page-management/offer-page-management.component';
 import { PaymentReconciliationComponent } from './components/payment-reconciliation/payment-reconciliation.component';
-<<<<<<< HEAD
 import { NewDasboardComponent } from './components/new-dashboard/new-dashboard.component';
-=======
 import { BannerPanelComponent} from './components/banner-panel/banner-panel.component';
->>>>>>> upstream/master-copy
 
 
 const route: Routes = [
@@ -66,11 +63,6 @@ const route: Routes = [
   {
     path: 'voucher',
     loadChildren: './modules/voucher.module#VoucherModule',
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'sendemail',
-    loadChildren: './modules/sendemail.module#SendEmailModule',
     canActivate: [AuthGuard]
   },
   {
@@ -142,6 +134,11 @@ const route: Routes = [
   },{
     path: 'banner',
     component:  BannerPanelComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'new-dashboard',
+    loadChildren:  './modules/newDashboard.module#NewDashboardModule',
     canActivate: [AuthGuard]
   },
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },

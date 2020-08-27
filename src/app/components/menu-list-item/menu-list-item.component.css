@@ -11,3 +11,11 @@ app-menu-list-item {
 .routeIcon {
     margin-right: 40px;
 }
+a{
+    color: #fff;
+    text-decoration: none;
+    cursor: pointer;
+}
+.mat-icon {
+    color: #fff;
+}
