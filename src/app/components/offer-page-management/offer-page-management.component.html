@@ -51,7 +51,7 @@
           </mat-form-field> -->
           <mat-form-field class="width-100">
             <mat-label>Redirect Url</mat-label>
-            <input matInput placeholder="Redirect Url" formControlName="redirect_url" required>
+            <input matInput placeholder="Redirect Url" formControlName="redirect_url">
           </mat-form-field>
           <mat-form-field class="width-100">
             <mat-label>Coupon Title</mat-label>
@@ -82,7 +82,7 @@
       <hr>
       <h5>Voucher ID : {{voucher_details['id']}}</h5>
       <h5>Voucher Code : {{voucher_details['vouchercode']}}</h5>
-      <h5>Voucher Value : {{voucher_details['vouchervalue']}}</h5>
+      <h5>Voucher Value : {{voucher_details['vouchervalue']}} ({{voucher_details['vouchertype']===0?'% based':'value based'}})</h5>
       <h5>Expiry Date (Voucher) : {{voucher_details['expirydate']|date:'dd/MM/yyyy'}}</h5>
     </mat-card>
   </div>
