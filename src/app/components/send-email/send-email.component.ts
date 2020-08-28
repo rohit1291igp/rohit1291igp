@@ -52,21 +52,7 @@ export class SendEmailComponent implements OnInit {
       correct: '',
       fail: ''
     },
-    issuelist: [
-      { issue: 'Select Issue', value: '' },
-      { issue: 'Address Related', value: 'AddressRelated'},
-      { issue: 'Customer Not Found', value: 'CustomerNotFound'},
-      { issue: 'EGV E-Mails and SMS', value: 'egvmails'},
-      { issue: 'Dispatch Status', value: 'dispatchStatus'},
-      { issue: 'In Transit', value: 'inTransit'},
-      { issue: 'Incomplete Details', value: 'incompleteDetails'},
-      { issue: 'Refund Initiated', value: 'refundInitiated'},
-      { issue: 'Generic Mail', value: 'genericmail'},
-      { issue: 'ITC Vouchers', value: 'itcvouchers'},
-      { issue: 'Shipment returned as undelivered', value: 'undelivered'},
-      { issue: 'Out of Delivery area', value: 'outOfDeliveryArea'},
-      { issue: 'Need Department name and extension', value: 'departmentNameNeeded'}
-    ],
+    issuelist: [{ issue: 'Select Issue', value: '' }],
     selectedIssue: ''
   };
   constructor(
@@ -76,6 +62,7 @@ export class SendEmailComponent implements OnInit {
 
   ngOnInit() {
     this._data.selectedIssue = '';
+    this.getIssuesList();
   }
 
   /*@HostListener('document:click', ['$event.target'])
@@ -227,5 +214,26 @@ public onClick(targetElement) {
   closeErrorSection(e?) {
     let _this = this;
     _this._data.uploadErrorList = [];
+  }
+
+  getIssuesList(){
+    var _this = this
+        const reqObj = {
+            url: `getEmailIssueList`,
+            method: "get",
+            payload: {}
+        };
+        _this.BackendService.makeAjax(reqObj, function (err, response, headers) {
+            
+            if (err || response.error) {
+                console.log('Error=============>', err);
+                return;
+            }
+            if (response && response.status == 'Success') {
+              for(let x in response.data){
+                _this._data.issuelist.push({issue:response.data[x],value:x})
+              }
+            }
+        });
   }
 }
