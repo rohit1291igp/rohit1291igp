@@ -277,8 +277,8 @@ table.fixed-header th {
 /* fixed header - end */
 
 .tableactBtn {
-    display: none;
-    /*display: inline-block;*/
+    /* display: none; */
+    display: inline-block;
     padding: 0.4em 0.5em;
     cursor: pointer;
     border: none;
@@ -535,6 +535,7 @@ table {
 
 .mat-header-cell .mat-sort-header-sorted {
     color: #0A0A0A;
+    padding: 8px 5px;
 }
 
 mat-pagination-wrapper {
@@ -549,7 +550,7 @@ mat-row:nth-child(odd) {
     background-color: #FDFDFB;
 }
 .mat-cell{
-    padding: 8px 0px;
+    padding: 8px 5px;
 }
 .mat-header-row {
     position: sticky;
