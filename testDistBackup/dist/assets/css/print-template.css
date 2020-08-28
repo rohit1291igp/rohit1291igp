@@ -1,0 +1,794 @@
+@font-face {
+    font-family: message;
+    src: url(/assets/fonts/Quicksand-LightItalic.otf);
+}
+
+@font-face {
+    font-family: message2;
+    src: url(/assets/fonts/Quicksand-Italic.otf);
+}
+body {
+    width: 21cm;
+    /*background: rgb(204,204,204);*/
+    margin: 0 auto;
+    box-shadow: 0;
+    padding-bottom: 16px;
+    -webkit-print-color-adjust: exact;
+    height: 14.8cm;
+}
+
+.message-txt{
+    font-family: message2, Papyrus, fantasy, cursive;
+}
+
+.pagebreak { page-break-before: always; }
+
+page {
+    background: white;
+    display: block;
+    margin: 0 auto;
+    margin-top: 0.5cm;
+    margin-bottom: 0.5cm;
+    box-shadow: 0 0 0.5cm rgba(0,0,0,0.5);
+}
+page[size="A4"] {
+    width: 21cm;
+    height: 29.7cm;
+}
+page[size="A4"][layout="portrait"] {
+    width: 29.7cm;
+    height: 21cm;
+}
+page[size="A3"] {
+    width: 29.7cm;
+    height: 42cm;
+}
+page[size="A3"][layout="portrait"] {
+    width: 42cm;
+    height: 29.7cm;
+}
+page[size="A5"] {
+    width: 14.8cm;
+    height: 21cm;
+}
+page[size="A5"][layout="portrait"] {
+    width: 21cm;
+    height: 14.8cm;
+}
+@media print {
+    @font-face {
+        font-family: message;
+        src: url(/assets/fonts/Quicksand-LightItalic.otf);
+    }
+
+    @font-face {
+        font-family: message2;
+        src: url(/assets/fonts/Quicksand-Italic.otf);
+    }
+
+    body, page {
+        /*background: rgb(204,204,204);*/
+        width: 21cm;
+        margin: 0 auto;
+        box-shadow: 0;
+        padding-bottom: 16px;
+        -webkit-print-color-adjust: exact;
+        height: 14.8cm;
+    }
+    .message-txt{
+        font-family: message2, Papyrus, fantasy, cursive;
+    }
+
+    .pagebreak { page-break-before: always; }
+
+    @page {
+        background: white;
+        display: block;
+        margin: 0 auto;
+        margin-top: 0.5cm;
+        margin-bottom: 0.5cm;
+        box-shadow: 0 0 0.5cm rgba(0,0,0,0.5);
+    }
+    @page[size="A4"] {
+        width: 21cm;
+        height: 29.7cm;
+    }
+    @page[size="A4"][layout="portrait"] {
+        width: 29.7cm;
+        height: 21cm;
+    }
+
+    .upper-txt{
+        text-transform: uppercase;
+    }
+    .w100{
+        width:100%;
+    }
+
+    .w-section{
+        width:49%;
+    }
+
+    .w50{
+        width:50%;
+    }
+
+    .w10{
+        width:10%;
+    }
+
+    .w20{
+        width:20%;
+    }
+
+    .w30{
+        width:30%;
+    }
+
+    .w40{
+        width:40%;
+    }
+
+    .w45{
+        width:45%;
+    }
+
+    .bold{
+        font-weight:600;
+    }
+
+    .display-inline{
+        display:inline-block;
+    }
+
+    .semi-dark{
+        color:#eee;
+    }
+
+    .border-right{
+        border-right:1px solid #a7a7a7;
+    }
+
+    .border-bottom{
+        padding-bottom: 1px solid #a7a7a7;
+    }
+
+    .header{
+        padding:1em 48px;
+        box-shadow: 0 0 0.5cm rgba(0,0,0,0.5);
+        border-bottom:1px solid #a7a7a7;
+    }
+
+    .order-main-body{
+        margin-top: 0.5em;
+        padding:0 48px;
+    }
+
+    .igp-logo{
+
+    }
+
+    .print-caption{
+        padding-bottom: 16px;
+    }
+
+    .print-caption .print-caption-text{
+        float: right;
+        font-size: 32px;
+    }
+
+    .messgae-box-cont{
+        height:335px;
+        /*border-bottom: 2px dotted #757575;*/
+        background: #fff;
+        /*padding: 80px 0;*/
+        width: 100%;
+        /*text-align: center;*/
+        /*display: table;*/
+    }
+
+    .messgae-box-cont2{
+        height:400px;
+        /*border-bottom: 2px dotted #757575;*/
+        background: #fff;
+        /*padding: 160px 0;*/
+        width: 100%;
+        /*text-align: center;*/
+        /*display: table;*/
+    }
+
+
+    .messgae-box{
+        display: table-cell;
+        margin: 0 auto;
+        vertical-align: middle;
+    }
+
+    .messgae-box .message-caption{
+        letter-spacing: 5px;
+        font-size: 24px;
+    }
+
+    .message-txt{
+
+    }
+
+    .order-body{
+        background: #fff;
+    }
+
+    .order-body-header{
+        padding: 8px 0;
+    }
+
+    .order-body-header .col1{
+        padding-top: 24px;
+        height: 24px;
+        width: 35%;
+
+    }
+
+    .order-body-header .col2{
+        margin-left: 32px;
+        width: 58%;
+    }
+
+    .order-body-deliveryDetails{
+
+    }
+
+    .order-body-deliveryDetails .col1{
+        width:50%;
+    }
+
+    .order-body-deliveryDetails .col2{
+        top: 50%;
+        position: absolute;
+        border-left: 1px solid #a7a7a7;
+        padding: 0 16px;
+    }
+
+    .order-body-deliveryDetails .clo2 div{
+
+    }
+
+    .order-body-senderDetails{
+
+    }
+
+    .order-body-productDetails{
+        padding: 16px 0 ! important;
+    }
+
+    .order-body-productDetails-head{
+        padding: 5px 32px;
+    }
+
+    .order-body-productDetails-body{
+        width: 100%;
+        display: table;
+    }
+
+    .order-body-footer{
+        padding: 16px 0 16px 32px !important;
+    }
+
+    .order-body-footer .col1{
+        width: 44%;
+        padding: 4.8px 8px 4.8px 0;
+    }
+
+    .order-body-footer .col2{
+        margin-left: 32px;
+    }
+
+    .sign-box{
+        width: 50%;
+        margin-top: -16px;
+        margin-left: 136px;
+    }
+
+    .sign-box.right-sign-box{
+        margin-left: 160px;
+    }
+
+    .product-image{
+        width: 96px;
+    }
+
+    .t-col-1,.t-col-2, .t-col-3, .t-col-4, .t-col-5{
+        padding: 8px 16px;
+        text-align: center;
+        vertical-align: middle;
+        display: table-cell;
+    }
+
+    .t-col-1{
+        width:2%;
+
+    }
+
+    .t-col-2{
+        width:20%;
+    }
+
+    .t-col-3{
+        width:20%;
+    }
+
+    .t-col-4{
+        width:45%;
+    }
+
+    .t-col-5{
+        width:10%;
+    }
+
+    .order-body-feedback{
+        padding: 16px 32px;
+    }
+
+    .feedback-check-box{
+        margin-left: 25px;
+        display: inline-block;
+    }
+
+    .order-body-header, .order-body-deliveryDetails, .order-body-senderDetails, .order-body-productDetails, .order-body-feedback, .order-body-footer{
+        padding:5px 32px;
+    }
+
+
+    .prod-bg{
+        /*background:#f3f8f9;*/
+    }
+
+    .order-body-productDetails-body:last-child{
+        border-bottom:0;
+        margin-bottom: -15px;
+    }
+
+    .fd-option{
+        /*margin-left:5em;*/
+    }
+
+    .fd-option:first-child{
+        /*margin-left:1em;*/
+    }
+
+    .recipient-addr {
+        line-height: 20.8px;
+    }
+
+    .img-logo{
+        width: 176px;
+    }
+
+    .messgae-box pre{
+        margin: 0 auto;
+        width: 640px;
+        white-space: -moz-pre-wrap; /* Mozilla */
+        white-space: -hp-pre-wrap; /* HP printers */
+        white-space: -o-pre-wrap; /* Opera 7 */
+        white-space: -pre-wrap; /* Opera 4-6 */
+        white-space: pre-wrap; /* CSS 2.1 */
+        white-space: pre-line; /* CSS 3 (and 2.1 as well, actually) */
+        word-wrap: break-word; /* IE */
+        word-break: break-all;
+    }
+
+    .product-row-cont{
+        padding: 2px 32px;
+    }
+
+    .mb1{
+        height:100%;
+        width:49%;
+        display:inline-block;
+        position:relative;
+
+    }
+
+    .mb2{
+        width: 46%;
+        display: inline-block;
+        padding: 0 2%;
+    }
+
+    .messgae-box-cont .mb2 .mb{
+        text-align: left;
+        display: table;
+        height: 335px;
+    }
+
+    .messgae-box-cont2 .mb2 .mb{
+        text-align: left;
+        display: table;
+        height: 400px;
+    }
+
+    .imgCenter {
+        width:65%;
+    }
+
+    .messBgCont1{
+        width: 100%;
+        /*height: 335px;*/
+        height:100%;
+        text-align: center;
+        display: table;
+    }
+
+    .messBgCont2{
+        display: table-cell;
+        margin: auto auto;
+        vertical-align: middle;
+    }
+
+    .scaled .product-image{
+        width: 70px;
+    }
+
+    .scaled .t-col-1, .scaled .t-col-2, .scaled .t-col-3, .scaled .t-col-4, .scaled .t-col-5{
+        padding: 5px 16px;
+    }
+
+    .scaled2 .t-col-1, .scaled2 .t-col-2, .scaled2 .t-col-3, .scaled2 .t-col-4, .scaled2 .t-col-5{
+        padding: 2px 16px;
+    }
+
+    .scaled .pagebreak, .scaled2 .pagebreak{
+        page-break-before: avoid;
+    }
+
+    .scaled2 .product-image{
+        width: 60px;
+    }
+
+}
+
+/*----------*/
+.upper-txt{
+    text-transform: uppercase;
+}
+.w100{
+    width:100%;
+}
+
+.w-section{
+    width:49%;
+}
+
+.w50{
+    width:50%;
+}
+
+.w10{
+    width:10%;
+}
+
+.w20{
+    width:20%;
+}
+
+.w30{
+    width:30%;
+}
+
+.w40{
+    width:40%;
+}
+
+.w45{
+    width:45%;
+}
+
+.bold{
+    font-weight:600;
+}
+
+.display-inline{
+    display:inline-block;
+}
+
+.semi-dark{
+    color:#eee;
+}
+
+.border-right{
+    border-right:1px solid #a7a7a7;
+}
+
+.border-bottom{
+    border-bottom:1px solid #a7a7a7;
+}
+
+.header{
+    padding:1em 48px;
+    box-shadow: 0 0 0.5cm rgba(0,0,0,0.5);
+    border-bottom:1px solid #a7a7a7;
+}
+
+.order-main-body{
+    margin-top: 0.5em;
+    padding:0 48px;
+}
+
+.igp-logo{
+
+}
+
+.print-caption{
+    padding-bottom: 16px;
+}
+
+.print-caption .print-caption-text{
+    float: right;
+    font-size: 32px;
+}
+
+.messgae-box-cont{
+    height:335px;
+    /*border-bottom: 2px dotted #757575;*/
+    background: #fff;
+    /*padding: 80px 0;*/
+    width: 100%;
+    /*text-align: center;*/
+    /*display: table;*/
+}
+
+.messgae-box-cont2{
+    height:400px;
+    /*border-bottom: 2px dotted #757575;*/
+    background: #fff;
+    /*padding: 160px 0;*/
+    width: 100%;
+    /*text-align: center;*/
+    /*display: table;*/
+}
+
+
+.messgae-box{
+    display: table-cell;
+    margin: 0 auto;
+    vertical-align: middle;
+}
+
+.messgae-box .message-caption{
+    letter-spacing: 5px;
+    font-size: 24px;
+}
+
+.message-txt{
+
+}
+
+.order-body{
+    background: #fff;
+}
+
+.order-body-header{
+    padding: 8px 0;
+}
+
+.order-body-header .col1{
+    padding-top: 24px;
+    height: 24px;
+    width: 35%;
+
+}
+
+.order-body-header .col2{
+    margin-left:32px;
+    width: 58%;
+}
+
+.order-body-deliveryDetails{
+
+}
+
+.order-body-deliveryDetails .col1{
+    width:50%;
+}
+
+.order-body-deliveryDetails .col2{
+    top: 50%;
+    position: absolute;
+    border-left: 1px solid #a7a7a7;
+    padding: 0 16px;
+}
+
+.order-body-deliveryDetails .clo2 div{
+
+}
+
+.order-body-senderDetails{
+
+}
+
+.order-body-productDetails{
+    padding: 16px 0 ! important;
+}
+
+.order-body-productDetails-head{
+    padding: 5px 32px;
+}
+
+.order-body-productDetails-body{
+    width: 100%;
+    display: table;
+}
+
+.order-body-footer{
+    padding: 16px 0 16px 32px !important;
+}
+
+.order-body-footer .col1{
+    width: 44%;
+    padding: 4.8px 8px 4.8px 0;
+}
+
+.order-body-footer .col2{
+    margin-left: 32px;
+}
+
+.sign-box{
+    width: 50%;
+    margin-top: -16px;
+    margin-left: 136px;
+}
+
+.sign-box.right-sign-box{
+    margin-left: 160px;
+}
+
+.product-image{
+    width: 96px;
+}
+
+.t-col-1,.t-col-2, .t-col-3, .t-col-4, .t-col-5{
+    padding: 8px 16px;
+    text-align: center;
+    vertical-align: middle;
+    display: table-cell;
+}
+
+.t-col-1{
+    width:2%;
+
+}
+
+.t-col-2{
+    width:20%;
+}
+
+.t-col-3{
+    width:20%;
+}
+
+.t-col-4{
+    width:45%;
+}
+
+.t-col-5{
+    width:10%;
+}
+
+.order-body-feedback{
+    padding: 16px 32px;
+}
+
+.feedback-check-box{
+    margin-left: 25px;
+    display: inline-block;
+}
+
+.order-body-header, .order-body-deliveryDetails, .order-body-senderDetails, .order-body-productDetails, .order-body-feedback, .order-body-footer{
+    padding:5px 32px;
+}
+
+
+.prod-bg{
+    /*background:#f3f8f9;*/
+}
+
+.order-body-productDetails-body:last-child{
+    border-bottom:0;
+    margin-bottom: -15px;
+}
+
+.fd-option{
+    /*margin-left:5em;*/
+}
+
+.fd-option:first-child{
+    /*margin-left:1em;*/
+}
+
+.recipient-addr {
+    line-height: 20.8px;
+}
+
+.img-logo{
+    width: 176px;
+}
+
+.messgae-box pre{
+    margin: 0 auto;
+    width: 640px;
+    white-space: -moz-pre-wrap; /* Mozilla */
+    white-space: -hp-pre-wrap; /* HP printers */
+    white-space: -o-pre-wrap; /* Opera 7 */
+    white-space: -pre-wrap; /* Opera 4-6 */
+    white-space: pre-wrap; /* CSS 2.1 */
+    white-space: pre-line; /* CSS 3 (and 2.1 as well, actually) */
+    word-wrap: break-word; /* IE */
+    word-break: break-all;
+}
+
+.product-row-cont{
+    padding: 2px 32px;
+}
+
+.mb1{
+    height:100%;
+    width:49%;
+    display:inline-block;
+    position:relative;
+}
+
+.mb2{
+    width: 46%;
+    display: inline-block;
+    padding: 0 2%;
+}
+
+.messgae-box-cont .mb2 .mb{
+    text-align: left;
+    display: table;
+    height: 335px;
+}
+
+.messgae-box-cont2 .mb2 .mb{
+    text-align: left;
+    display: table;
+    height: 400px;
+}
+
+.imgCenter {
+    width:65%;
+}
+
+.messBgCont1{
+    width: 100%;
+    /*height: 335px;*/
+    height:100%;
+    text-align: center;
+    display: table;
+}
+
+.messBgCont2{
+    display: table-cell;
+    margin: auto auto;
+    vertical-align: middle;
+}
+
+.scaled .product-image{
+    width: 70px;
+}
+
+.scaled .t-col-1, .scaled .t-col-2, .scaled .t-col-3, .scaled .t-col-4, .scaled .t-col-5{
+    padding: 5px 16px;
+}
+
+.scaled2 .t-col-1, .scaled2 .t-col-2, .scaled2 .t-col-3, .scaled2 .t-col-4, .scaled2 .t-col-5{
+    padding: 2px 16px;
+}
+
+.scaled .pagebreak, .scaled2 .pagebreak{
+    page-break-before: avoid;
+}
+
+.scaled2 .product-image{
+    width: 60px;
+}
+

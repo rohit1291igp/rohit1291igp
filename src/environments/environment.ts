@@ -10,6 +10,7 @@ export const environment = {
   //  origin: 'http://34.229.23.111:8081/',
   origin:'http://18.233.106.34:8081/',
   // origin:'http://adminapi.igp.com/',
+  // origin:'http://adminapi.igp.com/',
   originMock: 'https://5a43a511342c490012f3fca2.mockapi.io/',
   productsURL : 'https://d1xs5fw35mbn8b.cloudfront.net/p/',
   productsCompURL : 'http://admin.indiangiftsportal.com/handelscomponents/',
@@ -28,4 +29,5 @@ export const environment = {
   componentImageUrl: 'https://handelscomponents.s3.amazonaws.com/',
   blogsAcl: 'public-read',
   bannerImageUrl : 'https://handelscomponents.s3.amazonaws.com/'
+
 };

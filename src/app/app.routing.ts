@@ -17,6 +17,8 @@ import { DailyOpsReportComponent } from './components/daily-ops-report/daily-ops
 import { ProductDecentralizationComponent } from './components/product-decentralization/product-decentralization.component';
 import { OfferPageManagementComponent } from './components/offer-page-management/offer-page-management.component';
 import { PaymentReconciliationComponent } from './components/payment-reconciliation/payment-reconciliation.component';
+import { UploadedImageReportComponent } from './components/uploaded-image-report/uploaded-image-report.component';
+import { BannerPanelComponent} from './components/banner-panel/banner-panel.component';
 
 
 const route: Routes = [
@@ -134,6 +136,14 @@ const route: Routes = [
   {
     path: 'offerpagemanagement',
     component:  OfferPageManagementComponent
+  },{
+    path: 'banner',
+    component:  BannerPanelComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path:'uploaded-image',
+    component:UploadedImageReportComponent
   },
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
   // otherwise redirect to home

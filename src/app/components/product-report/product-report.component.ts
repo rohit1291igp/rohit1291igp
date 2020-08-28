@@ -98,9 +98,8 @@ export class ProductReportComponent implements OnInit, OnDestroy {
     queryString = "";
 
     newFormSubmit(event) {
-        console.log(event)
         if (event === 'stocked_download') {
-            this.openDownloadStockedComp();
+            return this.openDownloadStockedComp();
         }
 
         let pipe = new DatePipe('en-US');
