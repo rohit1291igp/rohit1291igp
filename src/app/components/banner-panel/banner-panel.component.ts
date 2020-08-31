@@ -185,7 +185,7 @@ export class BannerPanelComponent implements OnInit {
 		_this.uploadImageToS3(deskformData, 'desktop', _this.deskImage.name.slice(0, -4))
 			.then((responseDesk) => {
 				let mobformData = new FormData();
-				deskS3image = responseDesk['result'].uploadedFilePath.banners[0].slice(25);
+				deskS3image = responseDesk['result'].uploadedFilePath.banners[0].slice(environment.bannerImageUrl.length);
 				mobformData.append(deskS3image.slice(0,-4), _this.mobImage);
 
 				return _this.uploadImageToS3(mobformData, 'mobile', deskS3image.slice(0,-4))
@@ -197,7 +197,7 @@ export class BannerPanelComponent implements OnInit {
 					"slot": _this.searchForm.value.slot,
 					"hover_text": _this.searchForm.value.hoverText,
 					"desktop_image": deskS3image,
-					"mobile_image": responseMob['result'].uploadedFilePath.banners[0].slice(25),
+					"mobile_image": responseMob['result'].uploadedFilePath.banners[0].slice(environment.bannerImageUrl.length),
 					"expiry_date": datenow,
 					"event": _this.searchForm.value.event,
 					"redirect_url": _this.searchForm.value.redirectLink,
