@@ -46,7 +46,7 @@
                 <div class="reportDropdown abs" [ngClass]="{'slideropen' : reportDropdownOpen, 'sliderclosed': !reportDropdownOpen}">
                     <ul class="reportsdropdownMenu no-padding">
                         <ng-container *ngIf="(environment.userType != 'microsite' && environment.userType != 'microsite-zeapl' && environment.userType != 'warehouse')">
-                        <a routerLink="/reports/getOrderReport"><li [ngClass]="{'selected' : selectedReportTab === 'getOrderReport'}">Order Report</li></a>
+                        <a routerLink="/orderReport"><li [ngClass]="{'selected' : selectedReportTab === 'getOrderReport'}">Order Report</li></a>
                         <!-- <a routerLink="/reports/getVendorReport"><li [ngClass]="{'selected' : selectedReportTab === 'getVendorReport'}">Product Report</li></a> -->
                         <a routerLink="/productReport"><li [ngClass]="{'selected' : selectedReportTab === 'getVendorReport'}">Product Report</li></a>
                         <a routerLink="/reports/getPincodeReport"><li [ngClass]="{'selected' : selectedReportTab === 'getPincodeReport'}">Pincode Report</li></a>
@@ -87,6 +87,13 @@
                     <p><a ng-href="#/productDecentralization" routerLink="/productDecentralization">Product Decentralization</a></p>
                 </li>
             </ng-container>
+            <ng-container *ngIf="environment.userType == 'warehouse'">
+                <li class="fullHeightLi"
+                    [ngClass]="{'selected' : selectedTopTab === 'banner'}">
+                    <p><a ng-href="#/banner" routerLink="/banner">Banner Panel</a></p>
+                </li>
+            </ng-container>
+            
        
         </ng-container>
         <ng-container *ngIf="environment.userType === 'blogger'">
