@@ -3,8 +3,9 @@ import { CdkTableModule } from '@angular/cdk/table';
 import { DatePipe } from '@angular/common';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { HttpModule } from '@angular/http';
-import { MatButtonModule, MatCardModule, MatCheckboxModule, MatDatepickerModule, MatDialogModule, MatDialogRef, MatFormFieldModule, MatIconModule, MatInputModule, MatListModule, MatMenuModule, MatNativeDateModule, MatPaginatorModule, MatProgressBarModule, MatProgressSpinnerModule, MatRadioModule, MatSelectModule, MatSnackBarModule, MatSortModule, MatTableModule, MAT_DIALOG_DATA, MatSidenavModule,MatAutocompleteModule, MatTabsModule, MAT_DATE_LOCALE, MatSlideToggleModule } from '@angular/material';
+import { MatAutocompleteModule, MatButtonModule, MatCardModule, MatCheckboxModule, MatDatepickerModule, MatDialogModule, MatDialogRef, MatFormFieldModule, MatIconModule, MatInputModule, MatListModule, MatMenuModule, MatNativeDateModule, MatPaginatorModule, MatProgressBarModule, MatProgressSpinnerModule, MatRadioModule, MatSelectModule, MatSidenavModule, MatSlideToggleModule, MatSnackBarModule, MatSortModule, MatTableModule, MatTabsModule, MAT_DATE_LOCALE, MAT_DIALOG_DATA } from '@angular/material';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
@@ -21,20 +22,38 @@ import { routing } from "./app.routing";
 import { AddDeliveryBoyComponent } from './components/add-deliveryboy/add-deliveryboy.component';
 // Components
 import { AppComponent, testComponent } from './components/app.component';
+import { BannerPanelComponent } from './components/banner-panel/banner-panel.component';
 import { BlogCreateComponent } from './components/blog-create/blog-create.component';
 import { BlogListComponent } from './components/blog-list/blog-list.component';
 import { BlogViewComponent } from './components/blog-view/blog-view.component';
+import { DailyOpsReportComponent } from './components/daily-ops-report/daily-ops-report.component';
+import { DeliveryTimeManagementComponent } from './components/delivery-time-management/delivery-time-management.component';
 import { DeliveryBoyDetailsComponent } from './components/deliveryboy-details/deliveryboy-details.component';
 import { DownloadEmailComponent } from './components/download-email/download-email.component';
 import { FooterComponent } from './components/footer/footer.component';
+import { HolidayCalenderManagementComponent } from './components/holiday-calender-management/holiday-calender-management.component';
 import { HomeComponent } from './components/home/home.component';
 import { ImgPreviewComponent } from './components/img-preview/img-preview.component';
 import { LoginComponent } from './components/login/login.component';
 import { MainHeaderComponent } from './components/main-header/main-header.component';
+import { NewReportsComponentModule } from './components/new-reports-component/new-reports.component';
 import { NotificationComponent } from './components/notification/notification.component';
+import { OfferPageManagementComponent } from './components/offer-page-management/offer-page-management.component';
 import { OrderStockComponent } from './components/order-stocks/order-stock.component';
+import { PayoutDashboardModule } from './components/payout-dashboard/payout-dashboard.component';
+import { PerformanceReportComponent } from './components/performance-report/performance-report.component';
+import { DeliveryPriorityComponent } from './components/product-decentralization/delivery-priority/delivery-priority.component';
+import { ProductAvailabilityComponent } from './components/product-decentralization/product-availability/product-availability.component';
+import { ProductBarcodeComponent } from './components/product-decentralization/product-barcode/product-barcode.component';
+import { ProductDecentralizationComponent } from './components/product-decentralization/product-decentralization.component';
+import { DownloadStockedComponentProduct, ProductReportComponent } from './components/product-report/product-report.component';
+import { DownloadStockedComponent, editComponent } from './components/reports/reports.component';
 import { SelectItemForDelivered } from './components/select-item/select-item.component';
+import { StockComponentsReportsComponent } from './components/stock-components-reports/stock-components-reports.component';
 import { UploadExcelComponent } from './components/upload-excel/upload-excel.component';
+import { UploadedImageReportComponent } from './components/uploaded-image-report/uploaded-image-report.component';
+import { CapitalizePipeModule } from './customPipes/capitalze.pipe';
+import { DateFormatterPipeModule } from './customPipes/date-formatter';
 import { ObjectKeyValuePipe } from './customPipes/object-key-value.pipe';
 import { Time12Pipe } from './customPipes/time12.pipe';
 import { DashboardModule } from './modules/dashboard.module';
@@ -44,45 +63,13 @@ import { AuthenticationService } from './services/authentication.service';
 import { BackendService } from './services/backend.service';
 import { DashboardService } from './services/dashboard.service';
 import { Logger } from './services/logger.service';
+import { NavService } from './services/NewService';
 import { ReportsService } from './services/reports.service';
 import { S3UploadService } from './services/s3Upload.service';
 import { UserService } from './services/user.service';
 import { UtilityService } from './services/utility.service';
-import { SharedModule } from './shared-module/shared/shared.module';
-import { AutoSelectionComponent } from './components/autoselection/auto-selection.component';
-import { GvComponent } from './components/gv/gv.component';
-import { VoucherComponent } from './components/voucher/voucher.component';
-import { VoucherModelComponent } from './components/voucher-model/voucher-model.component';
-import { PerformanceReportComponent } from './components/performance-report/performance-report.component';
-import { NewReportsComponentModule } from './components/new-reports-component/new-reports.component';
-import { CapitalizePipeModule } from './customPipes/capitalze.pipe';
-import { DateFormatterPipeModule } from './customPipes/date-formatter';
-import { PayoutDashboardComponent, PayoutDashboardModule } from './components/payout-dashboard/payout-dashboard.component';
-import { MomentDateAdapter, MatMomentDateModule } from '@angular/material-moment-adapter';
-import { editComponent, DownloadStockedComponent } from './components/reports/reports.component';
-import { DailyOpsReportComponent } from './components/daily-ops-report/daily-ops-report.component';
-import {StockComponentsReportsComponent} from './components/stock-components-reports/stock-components-reports.component';
-import { DeliveryTimeManagementComponent } from './components/delivery-time-management/delivery-time-management.component';
-
-import { ProductAvailabilityComponent } from './components/product-decentralization/product-availability/product-availability.component';
-import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { ProductBarcodeComponent } from './components/product-decentralization/product-barcode/product-barcode.component';
-
-import { ProductReportComponent, DownloadStockedComponentProduct } from './components/product-report/product-report.component';
-import { HolidayCalenderManagementComponent } from './components/holiday-calender-management/holiday-calender-management.component';
-import { ProductDecentralizationComponent } from './components/product-decentralization/product-decentralization.component';
-import { DeliveryPriorityComponent } from './components/product-decentralization/delivery-priority/delivery-priority.component';
-import { OfferPageManagementComponent } from './components/offer-page-management/offer-page-management.component';
 import { VoucherService } from './services/voucher.service';
-import { NewDasboardComponent } from './components/new-dashboard/new-dashboard.component';
-import { BannerPanelComponent } from './components/banner-panel/banner-panel.component';
-import { NavService } from './services/NewService';
-import { MenuListItemComponent } from './components/menu-list-item/menu-list-item.component';
-
-
-
-
-
+import { SharedModule } from './shared-module/shared/shared.module';
 //env config
 /*import {envConfig} from "./others/env.config";
 export function ConfigLoader(envConfig: envConfig) {
@@ -125,7 +112,8 @@ export function ConfigLoader(envConfig: envConfig) {
     ProductDecentralizationComponent,
     DeliveryPriorityComponent,
     OfferPageManagementComponent,
-    BannerPanelComponent,
+    UploadedImageReportComponent,
+    BannerPanelComponent
     // AutoSelectionComponent
   ],
   imports: [

@@ -68,6 +68,8 @@ export class NewReportsComponent implements OnInit {
     @Output() editSubmit = new EventEmitter();
     // fileUpload modal
     @Output() fileUpload = new EventEmitter();
+    // page change
+    @Output() pageChange = new EventEmitter();
     //Date format
     @Input() dateFormat: string;
     columnNames = [];
@@ -179,8 +181,6 @@ export class NewReportsComponent implements OnInit {
                 this.displayedColumns = data.map(x => x.id);
             }
         })
-
-
     }
 
     ngOnChanges(changes: SimpleChanges) {
@@ -228,6 +228,9 @@ export class NewReportsComponent implements OnInit {
         }
         if (typeof rowData == 'object') {
             if (rowData.value) {
+                if (rowData.requestValue != - 1) {
+                    return 'Old Value =' + rowData.value + ' / New Value =' + rowData.requestValue;
+                }
                 return rowData.value;
             } else {
                 if (Array.isArray(rowData)) {
@@ -400,6 +403,10 @@ export class NewReportsComponent implements OnInit {
         } else {
             return false;
         }
+    }
+
+    matTablePageChange(event){
+        this.pageChange.emit(event)
     }
 
   approveReject(e, approveReject, colName, rowData){

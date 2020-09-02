@@ -1,24 +1,23 @@
 import { RouterModule, Routes } from '@angular/router';
 import { AddDeliveryBoyComponent } from './components/add-deliveryboy/add-deliveryboy.component';
+import { BannerPanelComponent } from './components/banner-panel/banner-panel.component';
 import { BlogCreateComponent } from './components/blog-create/blog-create.component';
 import { BlogListComponent } from './components/blog-list/blog-list.component';
 import { BlogViewComponent } from './components/blog-view/blog-view.component';
+import { DailyOpsReportComponent } from './components/daily-ops-report/daily-ops-report.component';
+import { DeliveryTimeManagementComponent } from './components/delivery-time-management/delivery-time-management.component';
 import { DeliveryBoyDetailsComponent } from './components/deliveryboy-details/deliveryboy-details.component';
 import { DownloadEmailComponent } from './components/download-email/download-email.component';
+import { HolidayCalenderManagementComponent } from './components/holiday-calender-management/holiday-calender-management.component';
 import { LoginComponent } from './components/login/login.component';
+import { OfferPageManagementComponent } from './components/offer-page-management/offer-page-management.component';
 import { PayoutDashboardComponent } from './components/payout-dashboard/payout-dashboard.component';
 import { PerformanceReportComponent } from './components/performance-report/performance-report.component';
-import { StockComponentsReportsComponent } from './components/stock-components-reports/stock-components-reports.component';
-import { AuthGuard } from './services/auth-guard.service';
-import { ProductReportComponent } from './components/product-report/product-report.component';
-import { HolidayCalenderManagementComponent } from './components/holiday-calender-management/holiday-calender-management.component';
-import { DeliveryTimeManagementComponent } from './components/delivery-time-management/delivery-time-management.component';
-import { DailyOpsReportComponent } from './components/daily-ops-report/daily-ops-report.component';
 import { ProductDecentralizationComponent } from './components/product-decentralization/product-decentralization.component';
-import { OfferPageManagementComponent } from './components/offer-page-management/offer-page-management.component';
-import { PaymentReconciliationComponent } from './components/payment-reconciliation/payment-reconciliation.component';
-import { NewDasboardComponent } from './components/new-dashboard/new-dashboard.component';
-import { BannerPanelComponent} from './components/banner-panel/banner-panel.component';
+import { ProductReportComponent } from './components/product-report/product-report.component';
+import { StockComponentsReportsComponent } from './components/stock-components-reports/stock-components-reports.component';
+import { UploadedImageReportComponent } from './components/uploaded-image-report/uploaded-image-report.component';
+import { AuthGuard } from './services/auth-guard.service';
 
 
 const route: Routes = [
@@ -125,21 +124,24 @@ const route: Routes = [
   },
   {
     path: 'productDecentralization',
-    component:  ProductDecentralizationComponent,
+    component: ProductDecentralizationComponent,
     canActivate: [AuthGuard]
   },
   {
     path: 'offerpagemanagement',
-    component:  OfferPageManagementComponent
-  },{
+    component: OfferPageManagementComponent
+  }, {
     path: 'banner',
-    component:  BannerPanelComponent,
+    component: BannerPanelComponent,
     canActivate: [AuthGuard]
   },
   {
     path: 'new-dashboard',
-    loadChildren:  './modules/newDashboard.module#NewDashboardModule',
+    loadChildren: './modules/newDashboard.module#NewDashboardModule',
     canActivate: [AuthGuard]
+  }, {
+    path: 'uploaded-image',
+    component: UploadedImageReportComponent
   },
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
   // otherwise redirect to home
