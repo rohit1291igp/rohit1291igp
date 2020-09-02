@@ -111,58 +111,16 @@ export class StockComponentsReportsComponent implements OnInit {
                         return;
                     }
                     console.log('searchReportSubmit _reportData=============>', _reportData);
-                    /*if(_reportData.tableData.length < 1){
-                        _this.showMoreBtn=false;
-                    }*/
-
-                    //_this.reportData.summary = _reportData.summary;
-                    //_this.reportData.tableData = _this.reportData.tableData.concat(_reportData.tableData);
-                    //_this.orginalReportData = Object.assign({}, _this.reportData);
-
-                    /* need to handle filter - start */
-                    //   _this.orginalReportData.summary = _reportData.summary;
+                    
                     _this.orginalReportData.tableData = _this.orginalReportData.tableData.concat(_reportData.tableData);
                     _this.dataSource = _reportData.tableData ? _this.dataSource.concat(_reportData.tableData) : [];
 
-                    // _this.dataSource = new MatTableDataSource(_this.orginalReportData.tableData);
-                    // _this.dataSource.paginator = _this.paginator;
-                    // _this.dataSource.sort = _this.sort;
-                    // _this.columnFilterSubmit(e);
-                    _this.showMoreTableData(e);
+                    // _this.showMoreTableData(e);
                 });
-                // }
-
-            }
-            // if (_this.orginalReportData.tableData.length == totalOrders && _this.isDownload) {
-            //     var options = {
-            //         showLabels: true,
-            //         showTitle: false,
-            //         headers: Object.keys(_this.orginalReportData.tableData[0]).map(m => m.charAt(0).toUpperCase() + m.slice(1)),
-            //         nullToEmptyString: true,
-            //     };
-            //     let data = [];
-            //     new Promise((resolve) => {
-            //         for (let pi = 0; pi < _this.orginalReportData.tableData.length; pi++) {
-            //             for (let k in _this.orginalReportData.tableData[pi]) {
-            //                 if (typeof _this.orginalReportData.tableData[pi][k] == 'object' && _this.orginalReportData.tableData[pi][k] != null) {
-            //                     _this.orginalReportData.tableData[pi][k] = _this.orginalReportData.tableData[pi][k].value ? _this.orginalReportData.tableData[pi][k].value : '';
-            //                 }
-            //             }
-            //             if (pi == (_this.orginalReportData.tableData.length - 1)) {
-            //                 resolve(_this.orginalReportData.tableData);
-            //             }
-            //         }
-            //     }).then((data) => {
-            //         // data = _this.orginalReportData.tableData;
-            //         let download = new Angular5Csv(data, 'getComponentOrderReport', options);
-            //         _this.isDownload = false;
-            //     })
-
-
-            // }
+            }           
         }
-
     }
+
     generateQueryString(queryObj) {
         var generatedQuertString = "";
         for (var prop in queryObj) {
@@ -272,6 +230,12 @@ export class StockComponentsReportsComponent implements OnInit {
         }
     }
 
+    onPageChange(page: any) {
+        if (page.length - (page.pageIndex * page.pageSize) <= page.pageSize && this.dataSource.length < this.reportSummary[0].value) {
+            this.showMoreTableData(null);
+        }
+    }
+
 
     editRowData(event) {
         var _this = this;
@@ -298,13 +262,6 @@ export class StockComponentsReportsComponent implements OnInit {
 
     getVendor() {
         let _this = this;
-        /*
-        let paramsObj={
-            pincode:"",
-            shippingType:""
-        };
-        let paramsStr = _this.UtilityService.formatParams(paramsObj);
-        */
         let reqObj = {
             url: 'getVendorList',
             method: 'get'
