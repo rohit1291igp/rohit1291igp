@@ -68,6 +68,8 @@ export class NewReportsComponent implements OnInit {
     @Output() editSubmit = new EventEmitter();
     // fileUpload modal
     @Output() fileUpload = new EventEmitter();
+    // page change
+    @Output() pageChange = new EventEmitter();
     //Date format
     @Input() dateFormat: string;
     columnNames = [];
@@ -179,8 +181,6 @@ export class NewReportsComponent implements OnInit {
                 this.displayedColumns = data.map(x => x.id);
             }
         })
-
-
     }
 
     ngOnChanges(changes: SimpleChanges) {
@@ -403,6 +403,10 @@ export class NewReportsComponent implements OnInit {
         } else {
             return false;
         }
+    }
+
+    matTablePageChange(event){
+        this.pageChange.emit(event)
     }
 
   approveReject(e, approveReject, colName, rowData){

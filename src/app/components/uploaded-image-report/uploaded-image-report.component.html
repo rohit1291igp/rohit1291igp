@@ -41,7 +41,7 @@
             <div class="col-sm-4 col-md-4">
               <mat-form-field class="w-150">
                 <mat-label>Order No.</mat-label>
-                <input matInput placeholder="Order No." [value]="orderNumber">
+                <input matInput placeholder="Order No." name="orderNo" [(ngModel)]="orderNumber">
               </mat-form-field>
               <button mat-raised-button (click)="onSearchFilterClick()">Search All Parameters</button>
             </div>
@@ -71,6 +71,10 @@
     <div class="col-sm-12 col-md-12">
       <mat-card>
         <div class="">
+          <mat-form-field class="padding1">
+            <mat-label>Filter</mat-label>
+            <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Cake" #input>
+          </mat-form-field>
           <mat-table *ngIf="dataSource.data.length" #table [dataSource]="dataSource">
             <ng-container *ngFor="let column of displayedColumns; let i=index;" matColumnDef="{{column}}">
               <mat-header-cell *matHeaderCellDef> {{removeUnderscore(column)}} </mat-header-cell>
@@ -100,7 +104,7 @@
             <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
           </mat-table>
 
-          <mat-paginator #paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="true">
+          <mat-paginator #paginator (page)="matTablePageChange($event)"  [pageSize]="50" [pageSizeOptions]="[50]" [showFirstLastButtons]="true">
           </mat-paginator>
         </div>
       </mat-card>
