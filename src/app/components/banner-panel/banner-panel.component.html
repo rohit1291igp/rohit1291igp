@@ -124,7 +124,7 @@
     <div class="mat-elevation-z8" *ngIf="dataSource?.data?.length > 0 else noRecord">
       <mat-form-field style="margin:0 20px">
         <mat-label>Filter</mat-label>
-        <input matInput (keyup)="applyFilter($event)" placeholder="Rakhi" #input>
+        <input matInput (keyup)="applyFilter($event)" placeholder="Eg. Rakhi" #input>
       </mat-form-field>
       <mat-table [dataSource]="dataSource" matSort>
         <ng-container [matColumnDef]="column" *ngFor="let column of tableHeaders">

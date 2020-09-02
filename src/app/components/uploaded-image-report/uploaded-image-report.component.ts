@@ -27,64 +27,65 @@ export class UploadedImageReportComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.summaryCount=null;
-    this.dataSource.data=[];
+    this.summaryCount = null;
+    this.dataSource.data = [];
     this.onSearchFilterClick()
   }
 
-  summaryCount=null;
+  summaryCount = null;
   uploadedImageData: any;
   deliveryDateFrom = new Date();
-  deliveryDateTo:any = "";
-  orderDateFrom:any = "";
-  orderDateTo:any = "";
-  orderNumber:any = "";
+  deliveryDateTo: any = "";
+  orderDateFrom: any = "";
+  orderDateTo: any = "";
+  orderNumber: any = "";
 
-  imagePreviewFlag=false;
-  imagePreviewSrc="";
+  imagePreviewFlag = false;
+  imagePreviewSrc = "";
 
-  imagePreview(e, imgSrc){
+  imagePreview(e, imgSrc) {
     e.stopPropagation();
-    if(imgSrc){
-        if(imgSrc === "ignore") return;
-        this.imagePreviewFlag = true;
-        this.imagePreviewSrc = imgSrc;
-    }else{
-        this.imagePreviewFlag = false;
+    if (imgSrc) {
+      if (imgSrc === "ignore") return;
+      this.imagePreviewFlag = true;
+      this.imagePreviewSrc = imgSrc;
+    } else {
+      this.imagePreviewFlag = false;
     }
-}
+  }
 
   queryString = ""
   fetchTableData() {
     var startLimit = this.dataSource.data.length;
     var queryStrObj: any = Object.assign({}, this.formatQueryObject());
     queryStrObj.startLimit = startLimit;
-    queryStrObj['flag_count']=this.summaryCount? '0':'1'
+    queryStrObj.endLimit = 200;
+    queryStrObj['flag_count'] = this.summaryCount ? '0' : '1'
     this.queryString = this.generateQueryString(queryStrObj);
     console.log(this.queryString)
     this.reportService.getReportData('getOrderFileUploadReport', this.queryString, (error, imageData) => {
       if (error) {
-        this.openSnackBar("Something Went Wrong",'');
+        this.openSnackBar("Something Went Wrong", '');
       } else {
-        if(!this.summaryCount){
-          this.summaryCount=imageData.summary[0];
+        if (!this.summaryCount) {
+          this.summaryCount = imageData.summary[0];
         }
         this.uploadedImageData = imageData;
         this.displayedColumns = imageData['tableHeaders']
-        this.dataSource.data=this.dataSource.data.concat(imageData['tableData']);
+        this.dataSource.data = this.dataSource.data.concat(imageData['tableData']);
       }
-      if(this.dataSource.data.length<this.summaryCount.value){
-        this.fetchTableData()
+      if (this.dataSource.data.length < this.summaryCount.value) {
+        // this.fetchTableData()
       }
     })
   }
 
-  removeUnderscore(str:string){
+  removeUnderscore(str: string) {
     return str.replace(/_/g, ' ');
   }
 
-  displayedColumns = ['position', 'name', 'weight', 'symbol'];
-  dataSource = new MatTableDataSource<any>(ELEMENT_DATA);
+  displayedColumns = [];
+  dataSource = new MatTableDataSource<any>();
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
@@ -96,41 +97,49 @@ export class UploadedImageReportComponent implements OnInit {
     this.dataSource.paginator = this.paginator;
   }
   onSearchFilterClick() {
-    this.summaryCount=null;
-    this.dataSource.data=[];
+    this.summaryCount = null;
+    this.dataSource.data = [];
     this.fetchTableData();
     // console.log(this.datePipe.transform(this.searchResultModel.deliveryDateFrom.value,'yyyy/MM/dd'))
   }
 
 
   // Order Preivew
-  viewOrderDetail(e, orderId){
+  viewOrderDetail(e, orderId) {
     console.log('viewOrderDetail-------->', orderId);
-    if(e.event){
-        this.child.toggleTray(e.event, "", e.orderId, null);
-    }else{
-        this.child.toggleTray(e, "", orderId, null);
+    if (e.event) {
+      this.child.toggleTray(e.event, "", e.orderId, null);
+    } else {
+      this.child.toggleTray(e, "", orderId, null);
     }
-}
+  }
 
-  getDatePickerValue(date_filter,event:MatDatepickerInput<Date>){
+  applyFilter(filterValue: any) {
+    // this.myForm.controls['filter'].setValue(filterValue);
+    this.dataSource.filter = filterValue.target.value.trim().toLowerCase();
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
+  }
+
+  getDatePickerValue(date_filter, event: MatDatepickerInput<Date>) {
     switch (date_filter) {
       case 'delivery_from':
-        this.deliveryDateFrom=event.value;
+        this.deliveryDateFrom = event.value;
         break;
       case 'delivery_to':
-        this.deliveryDateTo=event.value;
+        this.deliveryDateTo = event.value;
         break;
       case 'order_from':
-        this.orderDateFrom=event.value;
+        this.orderDateFrom = event.value;
         break;
       case 'order_to':
-        this.orderDateTo=event.value;
+        this.orderDateTo = event.value;
         break;
       default:
         break;
     }
-    console.log(this.deliveryDateFrom,this.deliveryDateTo,this.orderDateFrom,this.orderDateTo)
+    console.log(this.deliveryDateFrom, this.deliveryDateTo, this.orderDateFrom, this.orderDateTo)
   }
 
   formatQueryObject() {
@@ -167,6 +176,15 @@ export class UploadedImageReportComponent implements OnInit {
     return generatedQuertString;
   }
 
+  matTablePageChange(page) {
+    console.log("paginator", page)
+
+    if (page.length - (page.pageIndex * page.pageSize) <= page.pageSize && this.dataSource.data.length < this.summaryCount.value) {
+      this.fetchTableData();
+    }
+
+  }
+
   openSnackBar(message: string, action: string) {
     this._snackBar.open(message, action, {
       duration: 4000,
@@ -174,26 +192,3 @@ export class UploadedImageReportComponent implements OnInit {
     });
   }
 }
-
-const ELEMENT_DATA: any[] = [
-  { position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H' },
-  { position: 2, name: 'Helium', weight: 4.0026, symbol: 'He' },
-  { position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li' },
-  { position: 4, name: 'Beryllium', weight: 9.0122, symbol: 'Be' },
-  { position: 5, name: 'Boron', weight: 10.811, symbol: 'B' },
-  { position: 6, name: 'Carbon', weight: 12.0107, symbol: 'C' },
-  { position: 7, name: 'Nitrogen', weight: 14.0067, symbol: 'N' },
-  { position: 8, name: 'Oxygen', weight: 15.9994, symbol: 'O' },
-  { position: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F' },
-  { position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne' },
-  { position: 11, name: 'Sodium', weight: 22.9897, symbol: 'Na' },
-  { position: 12, name: 'Magnesium', weight: 24.305, symbol: 'Mg' },
-  { position: 13, name: 'Aluminum', weight: 26.9815, symbol: 'Al' },
-  { position: 14, name: 'Silicon', weight: 28.0855, symbol: 'Si' },
-  { position: 15, name: 'Phosphorus', weight: 30.9738, symbol: 'P' },
-  { position: 16, name: 'Sulfur', weight: 32.065, symbol: 'S' },
-  { position: 17, name: 'Chlorine', weight: 35.453, symbol: 'Cl' },
-  { position: 18, name: 'Argon', weight: 39.948, symbol: 'Ar' },
-  { position: 19, name: 'Potassium', weight: 39.0983, symbol: 'K' },
-  { position: 20, name: 'Calcium', weight: 40.078, symbol: 'Ca' },
-];

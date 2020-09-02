@@ -76,12 +76,12 @@
                             </mat-option>
                         </mat-select>
                     </mat-form-field>
-                    <mat-form-field class="m-8">
+                    <!-- <mat-form-field class="m-8">
                         <mat-label>Filter</mat-label>
                         <input formControlName="filter" matInput
                             placeholder="{{SearchForm?.formFields?.textSearch?.placeholder||'Eg. Cake'}} "
                             (keyup)="applyFilter($event)" autocomplete="@@@&&&&9986345678">
-                    </mat-form-field>
+                    </mat-form-field> -->
 
 
                 </div>
@@ -102,7 +102,10 @@
     <!-- New Table-->
     <div class="mat-elevation-z8" *ngIf="dataSource?.data?.length > 0 else noRecord">
         <div class="example-container mat-elevation-z8">
-
+            <mat-form-field class="padding1">
+                <mat-label>Filter</mat-label>
+                <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Cake" #input>
+              </mat-form-field>
             <mat-table #table mat-table [dataSource]="dataSource" matSort (matSortChange)="test($event)">
 
                 <ng-container matColumnDef="{{col.id}}" *ngFor="let col of columnNames">
@@ -168,7 +171,7 @@
                 <mat-row *matRowDef="let row; columns: displayedColumns;">
                 </mat-row>
             </mat-table>
-            <mat-paginator [pageSizeOptions]="[5, 10, 20, 50]" length="{{dataSource?.length}}" showFirstLastButtons>
+            <mat-paginator [pageSizeOptions]="[50]" (page)="matTablePageChange($event)" length="{{dataSource?.length}}" showFirstLastButtons>
             </mat-paginator>
         </div>
     </div>

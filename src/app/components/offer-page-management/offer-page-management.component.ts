@@ -151,6 +151,9 @@ export class OfferPageManagementComponent implements OnInit, AfterViewChecked {
   }
 
   addNewCoupon(coupon) {
+    if(!coupon['redirect_url']){
+      coupon['redirect_url']=""
+    }
     Object.keys(coupon).forEach(ele => {
       if (coupon[ele] === "" && ele!=='redirect_url') {
         this.openSnackBar("Fill all fields properly", "")
@@ -211,7 +214,7 @@ export class OfferPageManagementComponent implements OnInit, AfterViewChecked {
       "coupon_code": null,
       "webstore": null,
       "expiry_date": null,
-      "redirect_url": null,
+      "redirect_url": "",
       "discount": null,
       "coupon_type": null,
       "desc": null,

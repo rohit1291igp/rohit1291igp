@@ -143,8 +143,9 @@ export class ProductReportComponent implements OnInit, OnDestroy {
             }
         }
 
-
-        url += "&flag_count=1"
+        if(this.userType==="admin"){
+            url += "&flag_count=1"
+        }
         _this.reportsService.getReportData('getVendorReport', url, function (error, _reportData) {
             if (event.btnType == 'download') {
                 //'getVendorReport',
@@ -257,7 +258,7 @@ export class ProductReportComponent implements OnInit, OnDestroy {
                     // _this.dataSource.paginator = _this.paginator;
                     // _this.dataSource.sort = _this.sort;
                     // _this.columnFilterSubmit(e);
-                    _this.showMoreTableData(e);
+                    // _this.showMoreTableData(e);
                 });
                 // }
 
@@ -314,6 +315,12 @@ export class ProductReportComponent implements OnInit, OnDestroy {
         }
 
         return generatedQuertString;
+    }
+
+    onPageChange(page:any){
+        if(page.length-(page.pageIndex*page.pageSize)<=page.pageSize && this.dataSource.length<this.reportSummary[0].value){
+            this.showMoreTableData(null);
+          }
     }
 
 
@@ -439,7 +446,7 @@ export class ProductReportComponent implements OnInit, OnDestroy {
             method = 'put'
         } else if (data.data.colName === 'Proc Type Vendor') {
             let valueMap = { "Stocked": 1, "JIT": 2 }
-            apiUrl += "&Proc_Type_Vendor" + valueMap[data.requestedvalue]
+            apiUrl += "&Proc_Type_Vendor=" + valueMap[data.requestedvalue]
         } else if (data.data.colName === 'InStock') {
 
         } else {
