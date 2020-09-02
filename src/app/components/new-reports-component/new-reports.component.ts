@@ -228,6 +228,9 @@ export class NewReportsComponent implements OnInit {
         }
         if (typeof rowData == 'object') {
             if (rowData.value) {
+                if (rowData.requestValue != - 1) {
+                    return 'Old Value =' + rowData.value + ' / New Value =' + rowData.requestValue;
+                }
                 return rowData.value;
             } else {
                 if (Array.isArray(rowData)) {

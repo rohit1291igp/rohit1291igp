@@ -25,11 +25,6 @@
                         </mat-form-field>
                     </ng-container>
 
-                    <mat-form-field *ngIf="SearchForm?.formFields?.textSearch?.show" class="m-8">
-                        <mat-label>{{SearchForm?.formFields?.textSearch?.placeholder}}</mat-label>
-                        <input formControlName="filter" matInput (keyup)="applyFilter($event)"
-                            autocomplete="@@@&&&&9986345678">
-                    </mat-form-field>
 
                     <mat-form-field *ngIf="SearchForm?.formFields?.multipleSelection?.show" class="m-8">
                         <mat-label>{{SearchForm?.formFields?.multipleSelection?.placeholder}}</mat-label>
@@ -81,7 +76,14 @@
                             </mat-option>
                         </mat-select>
                     </mat-form-field>
-                    
+                    <!-- <mat-form-field class="m-8">
+                        <mat-label>Filter</mat-label>
+                        <input formControlName="filter" matInput
+                            placeholder="{{SearchForm?.formFields?.textSearch?.placeholder||'Eg. Cake'}} "
+                            (keyup)="applyFilter($event)" autocomplete="@@@&&&&9986345678">
+                    </mat-form-field> -->
+
+
                 </div>
                 <div class="d-flex">
                     <button style="margin: 5px;" id="search" type="submit" mat-raised-button class="btn-color"
@@ -114,13 +116,16 @@
                         <ng-container
                             *ngIf="getRowCellValue(element[col.id]) != 'img' && getRowCellValue(element[col.id]) != 'menu'">
                             <span *ngIf="col.id==='Fixed_Date_Delivery'">&nbsp;&nbsp;</span>
-                            {{ getRowCellValue(element[col.id]) | dateformatter:dateFormat:col.id}} 
-                            <i *ngIf="getEditTableCell(col.id) && showEditFlag(element,col.id)" class="fa fa-edit" style="cursor: pointer;"
-                                (click)="openEditWindow(element, col.id, i)"></i>
-                                <div *ngIf="env.userType==='admin' && element[col.id]['requestValue'] && element[col.id]['requestValue']!=='-1'">New Price: {{element[col.id]['requestValue']}}</div>
+                            {{ getRowCellValue(element[col.id]) | dateformatter:dateFormat:col.id}}
+                            <i *ngIf="getEditTableCell(col.id) && showEditFlag(element,col.id)" class="fa fa-edit"
+                                style="cursor: pointer;" (click)="openEditWindow(element, col.id, i)"></i>
+                            <!-- <div
+                                *ngIf="env.userType==='admin' && element[col.id]['requestValue'] && element[col.id]['requestValue']!=='-1'">
+                                New Price: {{element[col.id]['requestValue']}}</div> -->
                         </ng-container>
                         <ng-container *ngIf="isInStockColumn(col.id)">
-                            <i (click)="openEditWindow(element, col.id, i)" class="fa fa-edit" style="cursor: pointer;" ></i>
+                            <i (click)="openEditWindow(element, col.id, i)" class="fa fa-edit"
+                                style="cursor: pointer;"></i>
                         </ng-container>
                         <ng-container *ngIf="checkApproveBtn(element[col.id])">
                             <div class="tableDataActionBtn">
@@ -132,12 +137,13 @@
                                     <span class="tableactBtntxt"><i class="fa fa-ban"></i></span>
                                 </div>
                             </div>
-                    </ng-container>
+                        </ng-container>
                         <!-- <ng-container *ngIf="col.id==='actions'">
                             <button mat-button (click)="onEditAction(element)" >Edit</button>
                         </ng-container> -->
                         <ng-container *ngIf="getRowCellValue(element[col.id]) === 'img'"><img
-                                src="{{env?.componentImageUrl+element[col.id]}}" alt="{{element[col.id]}}" width="50" height="50">
+                                src="{{env?.componentImageUrl+element[col.id]}}" alt="{{element[col.id]}}" width="50"
+                                height="50">
                         </ng-container>
                         <ng-container *ngIf="getRowCellValue(element[col.id]) == 'menu' && element[col.id].length > 0">
                             <ng-container *ngIf="col?.id.includes('image') else noImg">
@@ -146,8 +152,8 @@
                                         (click)="imgPreview(env?.componentImageUrl+x)"></div>
                             </ng-container>
                             <ng-template #noImg>
-                                <span style="cursor: pointer;" mat-button [matMenuTriggerFor]="menu"><i class="fa fa-caret-down"
-                                        aria-hidden="true"></i>{{element[col.id]}}</span>
+                                <span style="cursor: pointer;" mat-button [matMenuTriggerFor]="menu"><i
+                                        class="fa fa-caret-down" aria-hidden="true"></i>{{element[col.id]}}</span>
                                 <mat-menu #menu="matMenu">
                                     <button mat-menu-item *ngFor="let x of element[col.id]">{{x}}</button>
                                 </mat-menu>
