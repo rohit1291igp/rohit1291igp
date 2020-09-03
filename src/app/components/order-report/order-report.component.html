@@ -9,7 +9,7 @@
           <div style='margin-bottom: 20px;'>
             <mat-form-field class="filterElement">
               <mat-label>Delivery From Date</mat-label>
-              <input matInput [min]="minDate" [max]="maxDate" [matDatepicker]="deliveryFrom"
+              <input matInput [matDatepicker]="deliveryFrom"
                 (dateInput)="addEventFrom('input','deliveryFrom', $event)"
                 (dateChange)="addEventFrom('change','deliveryFrom', $event)"
                 [value]="searchForm.get('deliveryFrom').value" autocomplete="off">
@@ -19,7 +19,7 @@
 
             <mat-form-field class="filterElement">
               <mat-label>Delivery To Date</mat-label>
-              <input matInput [min]="minDate" [max]="maxDate" [matDatepicker]="deliveryTo"
+              <input matInput [matDatepicker]="deliveryTo"
                 (dateInput)="addEventFrom('input','deliveryTo', $event)"
                 (dateChange)="addEventFrom('change','deliveryTo', $event)" [value]="searchForm.get('deliveryTo').value"
                 autocomplete="off">
@@ -29,7 +29,7 @@
 
             <mat-form-field class="filterElement">
               <mat-label>Order From Date</mat-label>
-              <input matInput [min]="minDate" [max]="maxDate" [matDatepicker]="orderFrom"
+              <input matInput [matDatepicker]="orderFrom"
                 (dateInput)="addEventFrom('input','orderFrom', $event)"
                 (dateChange)="addEventFrom('change','orderFrom', $event)" [value]="searchForm.get('orderFrom').value"
                 autocomplete="off">
@@ -39,7 +39,7 @@
 
             <mat-form-field class="filterElement">
               <mat-label>Order To Date</mat-label>
-              <input matInput [min]="minDate" [max]="maxDate" [matDatepicker]="orderTo"
+              <input matInput [matDatepicker]="orderTo"
                 (dateInput)="addEventFrom('input','orderTo', $event)"
                 (dateChange)="addEventFrom('change','orderTo', $event)" [value]="searchForm.get('orderTo').value"
                 autocomplete="off">
