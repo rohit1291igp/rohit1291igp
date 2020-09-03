@@ -76,6 +76,7 @@ import { OfferPageManagementComponent } from './components/offer-page-management
 import { VoucherService } from './services/voucher.service';
 import { UploadedImageReportComponent } from './components/uploaded-image-report/uploaded-image-report.component';
 import { BannerPanelComponent} from './components/banner-panel/banner-panel.component';
+import { OrderReportComponent} from './components/order-report/order-report.component';
 
 
 
@@ -124,7 +125,8 @@ export function ConfigLoader(envConfig: envConfig) {
     DeliveryPriorityComponent,
     OfferPageManagementComponent,
     UploadedImageReportComponent,
-    BannerPanelComponent
+    BannerPanelComponent,
+    OrderReportComponent
     // AutoSelectionComponent
   ],
   imports: [
