@@ -35,7 +35,7 @@ export class BackendService {
               }
           }else{
               if(environment.userType && environment.userType != 'vendor' && !(reqObj.url.includes('login')) && !(reqObj.url.includes('doLogOut')) ){
-                  if(environment.userType === 'root' || environment.userType === 'warehouse') {
+                  if(environment.userType === 'root' || environment.userType==='warehouse' || environment.userType==='merchandise') {
                     reqObj.url = environment.origin + 'v1/admin/' + reqObj.url;
                   }else if (environment.userType === 'blogger') {
                     reqObj.url = environment.origin + 'v1/' + reqObj.url;
@@ -57,7 +57,8 @@ export class BackendService {
               }
           }
       }
-      _this.lastHttpCall = this.httpClient[reqObj.method](reqObj.url, reqObj.payload)
+
+      _this.lastHttpCall = this.httpClient[reqObj.method](reqObj.url, reqObj.payload, reqObj.options1)
           .subscribe(
           response => {
               if(document.getElementById("cLoader")) document.getElementById("cLoader").classList.add("hide");

@@ -1,0 +1,65 @@
+nav {
+    background: #c3404e;
+    color: #fff;
+    padding: 8px;
+    cursor: pointer;
+    font-size: 1.2em;
+}
+
+.page-view {
+    width: 25%;
+    /* margin: 0px 8px; */
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.page-view:hover {
+    background: #ccc;
+}
+
+.img-hover-zoom {
+    /* height: 300px; */
+    /* [1.1] Set it as per your need */
+    overflow: hidden;
+    border: 1px solid #ccc;
+    height: 200px;
+    position: relative;
+    /* [1.2] Hide the overflowing of child elements */
+}
+.mat-icon {
+    color: #c3404e;
+}
+
+.icon-title-container>.mat-icon {
+    color: #c3404e;
+    font-size: 5em;
+}
+
+.img-hover-zoom img {
+    transition: transform .5s ease;
+}
+
+/* [3] Finally, transforming the image when container gets hovered */
+
+.img-hover-zoom:hover img {
+    transform: scale(1.5);
+}
+
+.responsive-img {
+    width: 100%;
+    height: auto;
+}
+
+.icon-title-container {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    left: 0;
+    right: 0;
+    width: fit-content;
+    height: fit-content;
+}
+.mat-drawer.mat-drawer-side{
+    background: #c3404e;
+}

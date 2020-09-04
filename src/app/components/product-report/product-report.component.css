@@ -1,0 +1,22 @@
+/* Upload Excel css */
+
+.error-section {
+    width: 30%;
+    height: 100%;
+    overflow-y: auto;
+    z-index: 999;
+    position: fixed;
+    top: 0;
+    background-color: #F2F2F2;
+    border-left: 6px solid rgba(224, 224, 224, .5);
+    transition: all 0.7s ease;
+    padding: 0.5em 1em;
+}
+
+.show-error-section {
+    right: -30%;
+}
+
+.hide-error-section {
+    right: -70%;
+}
