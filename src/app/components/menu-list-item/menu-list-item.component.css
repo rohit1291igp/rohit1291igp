@@ -9,12 +9,13 @@ app-menu-list-item {
 }
 
 .routeIcon {
-    margin-right: 40px;
+    margin-right: 15px;
 }
 a{
     color: #fff;
     text-decoration: none;
     cursor: pointer;
+    margin: 15px;
 }
 .mat-icon {
     color: #fff;

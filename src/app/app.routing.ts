@@ -100,11 +100,6 @@ const route: Routes = [
     canActivate: [AuthGuard]
   },
   {
-    path: 'HolidayCalendarManagement',
-    component: HolidayCalenderManagementComponent,
-    canActivate: [AuthGuard]
-  },
-  {
     path: 'deliveryTimeManagement',
     component: DeliveryTimeManagementComponent,
     canActivate: [AuthGuard]
@@ -123,17 +118,8 @@ const route: Routes = [
     component: PayoutDashboardComponent
   },
   {
-    path: 'productDecentralization',
-    component: ProductDecentralizationComponent,
-    canActivate: [AuthGuard]
-  },
-  {
     path: 'offerpagemanagement',
     component: OfferPageManagementComponent
-  }, {
-    path: 'banner',
-    component: BannerPanelComponent,
-    canActivate: [AuthGuard]
   },
   {
     path: 'new-dashboard',

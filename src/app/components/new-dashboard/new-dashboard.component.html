@@ -1,5 +1,5 @@
 <nav>
-    <i class="fa fa-bars" aria-hidden="true" (click)="drawer.toggle()" style="cursor: pointer"></i>
+    <i class="fa fa-bars" aria-hidden="true" (click)="drawer.toggle()" (mouseover)="drawer.open()" style="cursor: pointer"></i>
     <div class="d-flex align-items-baseline" style="float: right;">
         <p *ngIf="username" style="margin-right: 12px;text-transform: capitalize;">Hi {{username}}
         </p>
@@ -8,25 +8,16 @@
 </nav>
 <mat-drawer-container class="example-container" autosize style="width: 100%;height: 100vh;">
     <mat-drawer #drawer #appDrawer class="example-sidenav" mode="side">
-        <!-- <p>Auto-resizing sidenav</p>
-        <button (click)="navigate('menu')" mat-raised-button>
-            Toggle extra text
-        </button> -->
-        <a routerLink="/new-dashboard" style="text-decoration: none;">
+        <!-- <a routerLink="/new-dashboard" style="text-decoration: none;">
             <mat-icon aria-hidden="false" aria-label="Example home icon" style="color: #fff;">home
             </mat-icon>
-        </a>
+        </a> -->
         <ng-container *ngFor="let item of navItems">
             <app-menu-list-item [item]="item"></app-menu-list-item>
         </ng-container>
-        <!-- <p (click)="navigate('menu')">Module</p> -->
-
     </mat-drawer>
 
     <div class="example-sidenav-content">
-        <!-- <button type="button" mat-button (click)="drawer.toggle()">
-            Toggle sidenav
-        </button> -->
         <h2 *ngIf="!openPage" class="center-align">Pages</h2>
         <div *ngIf="openPage">
             <router-outlet></router-outlet>
@@ -34,53 +25,17 @@
         <ng-container *ngIf="navItems[0]">
             <div *ngIf="!openPage" class="d-flex justify-content-left flex-wrap-wrap" style="padding: 10px;width: 70%;
             margin: auto;">
-                <ng-container *ngFor="let x of navItems[0].children">
+                <ng-container *ngFor="let x of pages">
                     <a class="page-view" routerLink="{{x.route}}" (click)="navigate('page')">
                         <div class="img-hover-zoom">
                             <div class="icon-title-container">
                                 <mat-icon aria-hidden="false" aria-label="Example home icon">{{x.iconName}}</mat-icon>
                                 <p>{{x.displayName}}</p>
                             </div>
-
-                            <!-- <img src="/assets/images/sendemail.png" class="responsive-img" /> -->
                         </div>
                     </a>
                 </ng-container>
-
-                <!-- <a class="page-view" routerLink="/new-dashboard/sendemail/uploadtemplate" (click)="navigate('page')">
-                            <div class="img-hover-zoom">
-                                <img src="/assets/images/uploadExcelFile.png" class="responsive-img" />
-                            </div>
-                            <p>Excel Upload</p>
-                        </a>
-                        <a class="page-view" routerLink="/new-dashboard/sendemail/orderupdatestatus" (click)="navigate('page')">
-                            <div class="img-hover-zoom">
-                                <img src="/assets/images/orderUpdate.png" class="responsive-img" />
-                            </div>
-                            <p>Order Update Status</p>
-                        </a>
-                        <a class="page-view" routerLink="/new-dashboard/sendemail/payment-reconciliation" (click)="navigate('page')">
-                            <div class="img-hover-zoom">
-                                <img src="/assets/images/uploadExcelFile.png" class="responsive-img" />
-                            </div>
-                            <p>Payment Reconciliation</p>
-                        </a>
-                        <a class="page-view" routerLink="/new-dashboard/sendemail/addressUpdate" (click)="navigate('page')">
-                            <div class="img-hover-zoom">
-                                <img src="/assets/images/addressUpdate.png" class="responsive-img" />
-                            </div>
-                            <p>Address Update</p>
-                        </a>
-                        <a class="page-view" routerLink="/dailywarehouseOpsReport" (click)="navigate('page')">
-                            <div class="img-hover-zoom">
-                                <img src="/assets/images/dailywarehouseReport.png" class="responsive-img" />
-                            </div>
-                            <p>Address Update</p>
-                        </a> -->
             </div>
         </ng-container>
-
-
     </div>
-
 </mat-drawer-container>

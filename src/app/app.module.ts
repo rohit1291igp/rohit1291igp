@@ -22,7 +22,6 @@ import { routing } from "./app.routing";
 import { AddDeliveryBoyComponent } from './components/add-deliveryboy/add-deliveryboy.component';
 // Components
 import { AppComponent, testComponent } from './components/app.component';
-import { BannerPanelComponent } from './components/banner-panel/banner-panel.component';
 import { BlogCreateComponent } from './components/blog-create/blog-create.component';
 import { BlogListComponent } from './components/blog-list/blog-list.component';
 import { BlogViewComponent } from './components/blog-view/blog-view.component';
@@ -31,7 +30,6 @@ import { DeliveryTimeManagementComponent } from './components/delivery-time-mana
 import { DeliveryBoyDetailsComponent } from './components/deliveryboy-details/deliveryboy-details.component';
 import { DownloadEmailComponent } from './components/download-email/download-email.component';
 import { FooterComponent } from './components/footer/footer.component';
-import { HolidayCalenderManagementComponent } from './components/holiday-calender-management/holiday-calender-management.component';
 import { HomeComponent } from './components/home/home.component';
 import { ImgPreviewComponent } from './components/img-preview/img-preview.component';
 import { LoginComponent } from './components/login/login.component';
@@ -42,10 +40,6 @@ import { OfferPageManagementComponent } from './components/offer-page-management
 import { OrderStockComponent } from './components/order-stocks/order-stock.component';
 import { PayoutDashboardModule } from './components/payout-dashboard/payout-dashboard.component';
 import { PerformanceReportComponent } from './components/performance-report/performance-report.component';
-import { DeliveryPriorityComponent } from './components/product-decentralization/delivery-priority/delivery-priority.component';
-import { ProductAvailabilityComponent } from './components/product-decentralization/product-availability/product-availability.component';
-import { ProductBarcodeComponent } from './components/product-decentralization/product-barcode/product-barcode.component';
-import { ProductDecentralizationComponent } from './components/product-decentralization/product-decentralization.component';
 import { DownloadStockedComponentProduct, ProductReportComponent } from './components/product-report/product-report.component';
 import { DownloadStockedComponent, editComponent } from './components/reports/reports.component';
 import { SelectItemForDelivered } from './components/select-item/select-item.component';
@@ -70,6 +64,7 @@ import { UserService } from './services/user.service';
 import { UtilityService } from './services/utility.service';
 import { VoucherService } from './services/voucher.service';
 import { SharedModule } from './shared-module/shared/shared.module';
+import { CookieService } from './services/cookie.service';
 //env config
 /*import {envConfig} from "./others/env.config";
 export function ConfigLoader(envConfig: envConfig) {
@@ -99,7 +94,6 @@ export function ConfigLoader(envConfig: envConfig) {
     editComponent,
     PerformanceReportComponent,
     ProductReportComponent,
-    HolidayCalenderManagementComponent,
     DailyOpsReportComponent,
     StockComponentsReportsComponent,
     DeliveryTimeManagementComponent,
@@ -107,13 +101,8 @@ export function ConfigLoader(envConfig: envConfig) {
     StockComponentsReportsComponent,
     DownloadStockedComponent,
     DownloadStockedComponentProduct,
-    ProductAvailabilityComponent,
-    ProductBarcodeComponent,
-    ProductDecentralizationComponent,
-    DeliveryPriorityComponent,
     OfferPageManagementComponent,
-    UploadedImageReportComponent,
-    BannerPanelComponent
+    UploadedImageReportComponent
     // AutoSelectionComponent
   ],
   imports: [
@@ -195,7 +184,8 @@ export function ConfigLoader(envConfig: envConfig) {
     S3UploadService,
     Ng2ImgMaxService,
     VoucherService,
-    NavService
+    NavService,
+    CookieService
   ],
   entryComponents:[UploadExcelComponent,NotificationComponent, ImgPreviewComponent, SelectItemForDelivered, OrderStockComponent,editComponent, DownloadStockedComponent,DownloadStockedComponentProduct],
   bootstrap: [AppComponent],
