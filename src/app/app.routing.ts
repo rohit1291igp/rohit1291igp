@@ -1,6 +1,5 @@
 import { RouterModule, Routes } from '@angular/router';
 import { AddDeliveryBoyComponent } from './components/add-deliveryboy/add-deliveryboy.component';
-import { BannerPanelComponent } from './components/banner-panel/banner-panel.component';
 import { BlogCreateComponent } from './components/blog-create/blog-create.component';
 import { BlogListComponent } from './components/blog-list/blog-list.component';
 import { BlogViewComponent } from './components/blog-view/blog-view.component';
@@ -8,12 +7,11 @@ import { DailyOpsReportComponent } from './components/daily-ops-report/daily-ops
 import { DeliveryTimeManagementComponent } from './components/delivery-time-management/delivery-time-management.component';
 import { DeliveryBoyDetailsComponent } from './components/deliveryboy-details/deliveryboy-details.component';
 import { DownloadEmailComponent } from './components/download-email/download-email.component';
-import { HolidayCalenderManagementComponent } from './components/holiday-calender-management/holiday-calender-management.component';
 import { LoginComponent } from './components/login/login.component';
 import { OfferPageManagementComponent } from './components/offer-page-management/offer-page-management.component';
+import { OrderReportComponent } from './components/order-report/order-report.component';
 import { PayoutDashboardComponent } from './components/payout-dashboard/payout-dashboard.component';
 import { PerformanceReportComponent } from './components/performance-report/performance-report.component';
-import { ProductDecentralizationComponent } from './components/product-decentralization/product-decentralization.component';
 import { ProductReportComponent } from './components/product-report/product-report.component';
 import { StockComponentsReportsComponent } from './components/stock-components-reports/stock-components-reports.component';
 import { UploadedImageReportComponent } from './components/uploaded-image-report/uploaded-image-report.component';
@@ -128,6 +126,10 @@ const route: Routes = [
   }, {
     path: 'uploaded-image',
     component: UploadedImageReportComponent
+  },  
+  {
+    path:'orderReport',
+    component:OrderReportComponent
   },
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
   // otherwise redirect to home
