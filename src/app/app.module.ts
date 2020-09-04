@@ -65,6 +65,13 @@ import { UtilityService } from './services/utility.service';
 import { VoucherService } from './services/voucher.service';
 import { SharedModule } from './shared-module/shared/shared.module';
 import { CookieService } from './services/cookie.service';
+import { BannerPanelComponent} from './components/banner-panel/banner-panel.component';
+import { OrderReportComponent} from './components/order-report/order-report.component';
+
+
+
+
+
 //env config
 /*import {envConfig} from "./others/env.config";
 export function ConfigLoader(envConfig: envConfig) {
@@ -102,7 +109,9 @@ export function ConfigLoader(envConfig: envConfig) {
     DownloadStockedComponent,
     DownloadStockedComponentProduct,
     OfferPageManagementComponent,
-    UploadedImageReportComponent
+    UploadedImageReportComponent,
+    BannerPanelComponent,
+    OrderReportComponent
     // AutoSelectionComponent
   ],
   imports: [
