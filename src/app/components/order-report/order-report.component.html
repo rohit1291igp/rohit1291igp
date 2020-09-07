@@ -9,8 +9,7 @@
           <div style='margin-bottom: 20px;'>
             <mat-form-field class="filterElement">
               <mat-label>Delivery From Date</mat-label>
-              <input matInput [matDatepicker]="deliveryFrom"
-                (dateInput)="addEventFrom('input','deliveryFrom', $event)"
+              <input matInput [matDatepicker]="deliveryFrom" (dateInput)="addEventFrom('input','deliveryFrom', $event)"
                 (dateChange)="addEventFrom('change','deliveryFrom', $event)"
                 [value]="searchForm.get('deliveryFrom').value" autocomplete="off">
               <mat-datepicker-toggle matSuffix [for]="deliveryFrom"></mat-datepicker-toggle>
@@ -19,8 +18,7 @@
 
             <mat-form-field class="filterElement">
               <mat-label>Delivery To Date</mat-label>
-              <input matInput [matDatepicker]="deliveryTo"
-                (dateInput)="addEventFrom('input','deliveryTo', $event)"
+              <input matInput [matDatepicker]="deliveryTo" (dateInput)="addEventFrom('input','deliveryTo', $event)"
                 (dateChange)="addEventFrom('change','deliveryTo', $event)" [value]="searchForm.get('deliveryTo').value"
                 autocomplete="off">
               <mat-datepicker-toggle matSuffix [for]="deliveryTo"></mat-datepicker-toggle>
@@ -29,8 +27,7 @@
 
             <mat-form-field class="filterElement">
               <mat-label>Order From Date</mat-label>
-              <input matInput [matDatepicker]="orderFrom"
-                (dateInput)="addEventFrom('input','orderFrom', $event)"
+              <input matInput [matDatepicker]="orderFrom" (dateInput)="addEventFrom('input','orderFrom', $event)"
                 (dateChange)="addEventFrom('change','orderFrom', $event)" [value]="searchForm.get('orderFrom').value"
                 autocomplete="off">
               <mat-datepicker-toggle matSuffix [for]="orderFrom"></mat-datepicker-toggle>
@@ -39,8 +36,7 @@
 
             <mat-form-field class="filterElement">
               <mat-label>Order To Date</mat-label>
-              <input matInput [matDatepicker]="orderTo"
-                (dateInput)="addEventFrom('input','orderTo', $event)"
+              <input matInput [matDatepicker]="orderTo" (dateInput)="addEventFrom('input','orderTo', $event)"
                 (dateChange)="addEventFrom('change','orderTo', $event)" [value]="searchForm.get('orderTo').value"
                 autocomplete="off">
               <mat-datepicker-toggle matSuffix [for]="orderTo"></mat-datepicker-toggle>
@@ -71,7 +67,7 @@
               </mat-autocomplete>
             </mat-form-field>
 
-            <mat-form-field class="filterElement">
+            <mat-form-field *ngIf="env.userType=='admin'" class="filterElement">
               <mat-label>Select Vendor Group</mat-label>
               <mat-select formControlName="vendorGroup" [(value)]='searchForm.value.vendorGroup'>
                 <mat-option *ngFor="let option of vendorGroupList" [value]="option">
@@ -117,54 +113,53 @@
   </div>
 </div>
 
-<div>
 
-  <div class="mat-elevation-z8" *ngIf="dataSource?.data?.length > 0 else noRecord">
-    <mat-form-field style="margin:0 20px">
-      <mat-label>Filter</mat-label>
-      <input matInput (keyup)="applyFilter($event)" placeholder="Eg. Rakhi" #input>
-    </mat-form-field>
-    <mat-table [dataSource]="dataSource" matSort>
-      <ng-container [matColumnDef]="column" *ngFor="let column of tableHeaders">
-        <mat-header-cell mat-sort-header *matHeaderCellDef> {{getHeader(column)}} </mat-header-cell>
-        <mat-cell *matCellDef="let element">
-          <!-- Order_No -->
-          <ng-container *ngIf="column != 'Vendor_List' && column != 'Order_No'">
-            {{element[column] || '-'}}
-          </ng-container>
 
-          <ng-container *ngIf="column == 'Order_No'">
-            {{element[column] || '-'}}
-            <span (click)="viewOrderDetail($event,element[column])">
-              <img src="assets/images/icons/view.svg" width='25px' alt="view">
-            </span>
-          </ng-container>
+<div class="col-md-12 mat-elevation-z8  m-top-1" *ngIf="dataSource?.data?.length > 0 else noRecord">
+  <mat-form-field style="margin:0 20px">
+    <mat-label>Filter</mat-label>
+    <input matInput (keyup)="applyFilter($event)" placeholder="Eg. Rakhi" #input>
+  </mat-form-field>
+  <mat-table [dataSource]="dataSource" matSort>
+    <ng-container [matColumnDef]="column" *ngFor="let column of tableHeaders">
+      <mat-header-cell mat-sort-header *matHeaderCellDef> {{getHeader(column)}} </mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        <!-- Order_No -->
+        <ng-container *ngIf="column != 'Vendor_List' && column != 'Order_No'">
+          {{element[column] || '-'}}
+        </ng-container>
 
-          <ng-container *ngIf="column == 'Vendor_List' && element[column].length>0">
-            <mat-form-field style="width:100%">
-              <!-- {{getListViewName(element[column])}} -->
-              <mat-label>Select Vendor</mat-label>
-              <mat-select (change)="addVendorToOrderMap($event, element['Order_No'], element['Order_Product_Id'])">
-                <mat-option selected value="">Select Vendor</mat-option>
-                <mat-option *ngFor="let option of element[column]" value="{{option.Vendor_Id}}">
-                  {{option.Vendor_Name}}
-                </mat-option>
-              </mat-select>
-            </mat-form-field>
-          </ng-container>
-        </mat-cell>
-      </ng-container>
-      <mat-header-row *matHeaderRowDef="tableHeaders"></mat-header-row>
-      <mat-row *matRowDef="let row; columns: tableHeaders;"></mat-row>
-    </mat-table>
-    <mat-paginator [pageSizeOptions]="[50,100]" (page)="matTablePageChange($event)" length="{{dataSource?.length}}" showFirstLastButtons>
-    </mat-paginator>
-  </div>
-  <ng-template #noRecord>
-    <mat-card style="color: #C3404E;">No Record</mat-card>
-  </ng-template>
+        <ng-container *ngIf="column == 'Order_No'">
+          {{element[column] || '-'}}
+          <span (click)="viewOrderDetail($event,element[column])">
+            <img src="assets/images/icons/view.svg" width='25px' alt="view">
+          </span>
+        </ng-container>
+
+        <ng-container *ngIf="column == 'Vendor_List' && element[column].length>0">
+          <mat-form-field style="width:100%">
+            <!-- {{getListViewName(element[column])}} -->
+            <mat-label>Select Vendor</mat-label>
+            <mat-select (change)="addVendorToOrderMap($event, element['Order_No'], element['Order_Product_Id'])">
+              <mat-option selected value="">Select Vendor</mat-option>
+              <mat-option *ngFor="let option of element[column]" value="{{option.Vendor_Id}}">
+                {{option.Vendor_Name}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </ng-container>
+      </mat-cell>
+    </ng-container>
+    <mat-header-row *matHeaderRowDef="tableHeaders"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: tableHeaders;"></mat-row>
+  </mat-table>
+  <mat-paginator [pageSizeOptions]="[50,100]" (page)="matTablePageChange($event)" length="{{dataSource?.length}}"
+    showFirstLastButtons>
+  </mat-paginator>
 </div>
-
+<ng-template #noRecord>
+  <div class="col-md-12 m-top-1" style="padding:15px;color: #C3404E;"> No Record </div>
+</ng-template>
 
 
 <app-orders-action-tray></app-orders-action-tray>
