@@ -176,13 +176,20 @@ export class UploadedImageReportComponent implements OnInit {
     return generatedQuertString;
   }
 
+  onClearClick(){
+    this.deliveryDateFrom=null;
+    this.deliveryDateTo=null;
+    this.orderDateFrom=null;
+    this.orderDateTo=null;
+    this.orderNumber="";
+  }
+
   matTablePageChange(page) {
     console.log("paginator", page)
 
     if (page.length - (page.pageIndex * page.pageSize) <= page.pageSize && this.dataSource.data.length < this.summaryCount.value) {
       this.fetchTableData();
     }
-
   }
 
   openSnackBar(message: string, action: string) {
