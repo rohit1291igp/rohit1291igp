@@ -397,7 +397,6 @@ export class ProductReportComponent implements OnInit, OnDestroy {
         // this.listOfStockItems = JSON.parse(localStorage.getItem('stockItem')).tableData;  
         var _this = this;
         if (environment.userType && environment.userType === "admin") {
-            console.log("prvz I am bieng called")
             let reqObj = {
                 url: `getListOfComponents?startLimit=0&endLimit=5000`,
                 method: "get",
@@ -433,7 +432,8 @@ export class ProductReportComponent implements OnInit, OnDestroy {
         let method = 'put'
         apiUrl = environment.userType === 'admin' ? "handleVendorComponentChange" : "handleComponentChange"
         apiUrl += "?componentId=" + data.data['component']['Component_Id']
-        apiUrl += "&fkAssociateId=" + localStorage.getItem('fkAssociateId');
+        var fkAssId=data.data.component['Vendor_Id'] || data.data.component['fkAssociate_Id'] || data.data.component['fkAssociate Id'];
+        apiUrl += "&fkAssociateId=" + fkAssId;
 
         if (data.data.colName === "Price") {
             apiUrl += "&reqPrice=" + data.requestedvalue + '&oldPrice=' + data.data.rowData.value;
@@ -461,9 +461,13 @@ export class ProductReportComponent implements OnInit, OnDestroy {
 
         this.backendService.makeAjax(reqObj, (err, res) => {
             if (err) {
-                console.log("prvz edit", err);
+                this.openSnackBar("Something Went Wrong")
             } else {
-                console.log("prvz edit success", res);
+                if(res.error){
+                    this.openSnackBar("Something Went Wrong")    
+                }else{
+                    this.openSnackBar("Updated Successfully")
+                }
             }
         })
     }
@@ -720,6 +724,14 @@ export class ProductReportComponent implements OnInit, OnDestroy {
         });
 
     }
+
+    openSnackBar(data) {
+        this._snackBar.openFromComponent(NotificationComponent, {
+          data: data,
+          duration: 5 * 1000,
+          panelClass: ['snackbar-background']
+        });
+      }
 
     ngOnDestroy() {
         this.backendService.abortLastHttpCall();
