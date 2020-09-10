@@ -143,9 +143,6 @@ export class ProductReportComponent implements OnInit, OnDestroy {
             }
         }
 
-        if(this.userType==="admin"){
-            url += "&flag_count=1"
-        }
         _this.reportsService.getReportData('getVendorReport', url, function (error, _reportData) {
             if (event.btnType == 'download') {
                 //'getVendorReport',
@@ -153,10 +150,11 @@ export class ProductReportComponent implements OnInit, OnDestroy {
                     url: 'getVendorReport?',
                     method: "get",
                 };
-                reqObj.url += 'flag_count=1'
-                reqObj.url += '&fkAssociateId=' + localStorage.getItem('fkAssociateId');
+                if(environment.userType!=='admin'){
+                    reqObj.url += '&fkAssociateId=' + localStorage.getItem('fkAssociateId');
+                }
                 reqObj.url += '&'+ url;
-                reqObj.url += '&startLimit=0&endLimit='+_reportData.summary[0].value;
+                reqObj.url += '&startLimit=0&endLimit='+(_reportData.summary[0].value<10000?_reportData.summary[0].value:10000);
 
                 _this.backendService.makeAjax(reqObj, function (error, _reportData) {
                     _this.isDownload = true;

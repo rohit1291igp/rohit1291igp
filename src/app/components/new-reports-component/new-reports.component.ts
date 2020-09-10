@@ -435,6 +435,7 @@ export class NewReportsComponent implements OnInit {
         //if(!response) response={result:[]};
         if(err || response.error) {
             console.log('Error=============>', err);
+            alert('Request Failed')
             return;
         }
         console.log('admin action Response --->', response.result);
