@@ -415,12 +415,13 @@ export class NewReportsComponent implements OnInit {
         alert('Select vendor!'); return;
     }
     rowData=rowData || {};
+    var fkAssId=rowData['Vendor_Id'] || rowData['fkAssociate Id'] || rowData['fkAssociate_Id'];
     let url="approveAndReject";
     let paramsObj={
         approveReject:approveReject,
         reportType:'getVendorReport',
         colName:colName,
-        fkAssociateId:localStorage.getItem('fkAssociateId'),
+        fkAssociateId:fkAssId,
         object:JSON.stringify(rowData)
     };
     let method='post';
