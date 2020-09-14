@@ -11,6 +11,15 @@ export class MyHttpInterceptor implements HttpInterceptor {
 
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 
+        let logoutOnce = localStorage.getItem('logoutOnce') ? localStorage.getItem('logoutOnce') : null;
+        if(!logoutOnce){
+            localStorage.setItem('logoutOnce', 'true');
+            let logoutBtn = document.getElementsByClassName("logout") as any;
+            if(logoutBtn.length > 0){
+                logoutBtn[0].click();
+            }
+        }
+
         console.log("intercepted request ... ");
         // Clone the request to add the new header.
         var _headers=req.headers;
