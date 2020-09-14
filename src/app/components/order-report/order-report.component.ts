@@ -298,9 +298,6 @@ export class OrderReportComponent implements OnInit {
 
   cancelForm() {
     this.searchForm.reset();
-    this.searchForm.patchValue({
-      'deliveryFrom': new Date()
-    })
     this.vendorSelected = {};
   }
 
