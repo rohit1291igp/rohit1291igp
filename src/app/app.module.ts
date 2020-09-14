@@ -66,6 +66,7 @@ import { VoucherService } from './services/voucher.service';
 import { SharedModule } from './shared-module/shared/shared.module';
 import { CookieService } from './services/cookie.service';
 import { OrderReportComponent} from './components/order-report/order-report.component';
+import { EgvwalletComponent } from './components/egvwallet/egvwallet.component';
 
 
 

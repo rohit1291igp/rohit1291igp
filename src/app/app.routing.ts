@@ -128,8 +128,13 @@ const route: Routes = [
     component: UploadedImageReportComponent
   },  
   {
-    path:'orderReport',
-    component:OrderReportComponent
+    path: 'orderReport',
+    component: OrderReportComponent
+  },
+  {
+    path: 'egv',
+    loadChildren: './modules/egvpanel.module#EgvpanelModule',
+    canActivate: [AuthGuard]
   },
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
   // otherwise redirect to home
