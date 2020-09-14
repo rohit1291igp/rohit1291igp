@@ -2,8 +2,8 @@
 	<mat-sidenav #sidenav (keydown.escape)="sidenavClose('escape')" disableClose>
 		<!-- Sidebar Errors -->
 		<!-- <p><button mat-button (click)="sidenavClose('toggle button')">Close</button></p> -->
-		<mat-card *ngFor="let ele of responseDataPut?.data?.error">
-			{{ele.msg}} in Row: {{ele.row}}
+		<mat-card *ngFor="let ele of responseDataPut?.result">
+			Row: {{ele.row}} -  {{ele.msg}} 
 		</mat-card>
 	</mat-sidenav>
 
@@ -22,6 +22,10 @@
 									<textarea matInput formControlName="sku_id"
 										placeholder="You can enter multiple SKU IDs" rows="10"></textarea>
 								</mat-form-field>
+								
+							</div>
+							<div class="d-flex" style="margin:10px">
+								<mat-checkbox formControlName="duplicatesFlag">Include Duplicates</mat-checkbox>
 							</div>
 							<div class="d-flex">
 								<button class="btnRadius" id="search" type="submit" mat-raised-button class="btn-color"
@@ -35,7 +39,8 @@
 								<div class="d-flex">
 									<mat-form-field>
 										<mat-label>Product Delivery Days</mat-label>
-										<input matInput type="number" formControlName="productDeliveryDays">
+										<input matInput type="number" onkeydown="javascript: return event.keyCode === 8 ||
+										event.keyCode === 46 ? true : !isNaN(Number(event.key))" formControlName="productDeliveryDays">
 
 									</mat-form-field>
 								</div>
@@ -49,6 +54,7 @@
 										</mat-select>
 									</mat-form-field>
 								</div>
+								
 							</div>
 							<div class="width50 p-absolute d-flex">
 								<div class="width33">
@@ -71,23 +77,27 @@
 									<div class="p-absolute width50">
 										<mat-form-field>
 											<mat-label>Delivery Days</mat-label>
-											<input matInput type="number" formControlName="deliveryDays">
+											<input matInput type="number" onkeydown="javascript: return event.keyCode === 8 ||
+											event.keyCode === 46 ? true : !isNaN(Number(event.key))" formControlName="deliveryDays">
 
 										</mat-form-field>
 									</div>
 								</div>
 
 							</div>
+							<div>
+								<mat-form-field style="width:80%;margin-top:20px">
+									<mat-label>Comment:</mat-label>
+									<input matInput type="text" formControlName="comment">
+
+								</mat-form-field>
+							</div>
 							<div class="width100 r-buttons">
 								<button class="btnRadius" id="update" type="submit" mat-raised-button color="accent"
-									(click)="btnType = 'update'">Update</button>
+									(click)="btnType = 'update'" [disabled]="getValidation()">Update</button>
 								<button class="btnRadius" id="cancel" type="submit" mat-raised-button color="warn"
 									(click)="btnType = 'cancel'">Clear</button>
-
 							</div>
-							<!-- <div class="width50 d-flex">
-							
-						</div> -->
 						</div>
 					</div>
 				</form>
@@ -96,8 +106,11 @@
 						<ng-container [matColumnDef]="column" *ngFor="let column of tableHeaders">
 							<mat-header-cell *matHeaderCellDef> {{getHeader(column)}} </mat-header-cell>
 							<mat-cell *matCellDef="let element">
-								<ng-container>
+								<ng-container *ngIf="column != 'Actions'">
 									{{element[column] || '-'}}
+								</ng-container>
+								<ng-container *ngIf="column == 'Actions'">
+									<button mat-button (click)="editRowData(element)">Edit</button>
 								</ng-container>
 							</mat-cell>
 						</ng-container>
@@ -116,11 +129,3 @@
 
 	</mat-sidenav-content>
 </mat-sidenav-container>
-
-
-
-
-<!-- <ng-container> 
-  <app-new-reports [reportsHeader]="tableHeaders" [orginalReportData]="dataSource"
-	 [tableDataAction]="orginalReportData?.tableDataAction"></app-new-reports>
-</ng-container> -->

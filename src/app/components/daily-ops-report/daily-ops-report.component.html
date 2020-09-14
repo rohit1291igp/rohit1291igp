@@ -3,17 +3,20 @@
         <div class="d-flex">
             <mat-form-field class="m-8" [ngClass]="{'full-width': showWarehouseDropdown && myForm.value.warehouseopsreport == 1}">
                 <mat-label>Choose Warehouse Ops Report</mat-label>
-                <mat-select formControlName="warehouseopsreport">
+                <mat-select formControlName="warehouseopsreport" (change)="wareHouseNameSelection(myForm.value.warehouseopsreport)">
                     <mat-option value="1">Warehouse Ops</mat-option>
                     <mat-option value="2">Courier Ops</mat-option>
+                    <mat-option value="3">All Orders</mat-option>
                 </mat-select>
             </mat-form-field>
-            <mat-form-field *ngIf="showWarehouseDropdown && myForm.value.warehouseopsreport == 1" class="m-8 full-width">
+            <mat-form-field *ngIf="showWarehouseDropdown && myForm.value.warehouseopsreport == 1 || showWarehouseDropdown && myForm.value.warehouseopsreport == 3" class="m-8 full-width">
                 <mat-label>Choose Warehouse Name</mat-label>
                 <mat-select formControlName="warehousename">
                     <mat-option value="4">Lucknow</mat-option>
                     <mat-option value="354">Mumbai</mat-option>
                     <mat-option value="318">Jaipur</mat-option>
+                    <mat-option value="969,970,971,972,973,974,975,976">All RDCs</mat-option>
+                    <mat-option value="965">Total Fulfil</mat-option>
                     <mat-option value="0">All</mat-option>
                 </mat-select>
             </mat-form-field>

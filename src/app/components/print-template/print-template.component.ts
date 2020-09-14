@@ -15,7 +15,7 @@ export class PrintTemplateComponent implements OnInit {
     productsCompURL = environment.productsCompURL;
     messageBgImage = 'assets/images/IGP-logo-for-order-sheet.png';
     messageBgImageInterflora = 'assets/images/Order-Sheet-Creative-interflora.png';
-
+    math = Math;
   constructor(
       public UtilityService: UtilityService,
       public datePipe: DatePipe,

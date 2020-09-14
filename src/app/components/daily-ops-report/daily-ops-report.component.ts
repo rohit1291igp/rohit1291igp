@@ -73,7 +73,7 @@ export class DailyOpsReportComponent implements OnInit {
                 if (line !== '') line += ',';
                 line += array[i][index];
             }
-
+            line = line.replace(/;/g, " | ");
             str += line + '\r\n';
         }
 
@@ -109,7 +109,18 @@ export class DailyOpsReportComponent implements OnInit {
 
         console.log(pipe.transform('2020-04-26 08:59:53.0', 'h:mm:ss a'))
 
-        const fileFor = this.myForm.value.warehouseopsreport == 1 ? 'warehouseOps' : 'CourierOps';
+        let fileFor = ''; //= this.myForm.value.warehouseopsreport == 1 ? 'warehouseOps' : 'CourierOps';
+        switch (this.myForm.value.warehouseopsreport) {
+            case '1':
+                fileFor = 'warehouseOps';
+                break;
+            case '2':
+                fileFor = 'CourierOps';
+                break;
+            case '3':
+                fileFor = 'AllOrders';
+                break;
+        }
         const filedate = datefrom;
         const fileName = fileFor + '_' + filedate + '_' + '.csv';
         // let filePresent = false;
@@ -121,11 +132,17 @@ export class DailyOpsReportComponent implements OnInit {
             }else{
                 url += `&fkAsID=${this.myForm.value.warehousename}`
             }
-        }else{
+        }else if(this.myForm.value.warehouseopsreport == 2){
             url += `downloadCSVPart2?releasedDateFrom=${datefrom}&releasedDateTo=${dateto}`;
+        }else{
+            url += `downloadCSVPart1?purchaseDateFrom=${datefrom}&purchaseDateTo=${dateto}&flagIncludeDelivered=true`;
+            if(this.myForm.value.warehousename == 0){
+                url += `&fkAsID=0`
+            }else{
+                url += `&fkAsID=${this.myForm.value.warehousename}`
+            }
         }
         
-        //adminapi.igp.com/v1/admin/warehouseops/downloadCSVPart1?purchaseDateFrom=${datefrom}&purchaseDateTo=${dateto}
         const reqObj = {
             url: url,
             method: 'get'
@@ -153,5 +170,10 @@ export class DailyOpsReportComponent implements OnInit {
         });
     }
     
+    wareHouseNameSelection(data){
+        // if(data.value == '2' ){
+            this.myForm.controls['warehousename'].setValue(0);
+        // }
+    }
 }
 

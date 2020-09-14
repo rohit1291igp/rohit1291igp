@@ -1,0 +1,45 @@
+.headerUnderLine{
+    font-size: 14px;
+    font-weight: 600;
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 15px;
+}
+
+.borderRadius{
+    border-radius: 10px;
+}
+
+.filterElement{
+    width:22%;
+    margin-right: 15px;
+}
+
+.summaryBox{    
+    width: 48%;
+    text-align: center;
+    display: inline-block;
+    font-size: 18px;
+    /* font-weight: 600; */
+    margin-top: 30px;
+}
+ 
+.imgIcon{
+    width:3em;
+}
+
+.textIgp{
+    color: #c3404e !important;
+
+}
+
+/* .mat-header-cell {
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+  } */
+  
+  .mat-cell {
+    text-align: center;
+    justify-content:center;
+  }
+  
