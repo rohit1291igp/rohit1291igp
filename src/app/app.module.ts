@@ -66,6 +66,10 @@ import { VoucherService } from './services/voucher.service';
 import { SharedModule } from './shared-module/shared/shared.module';
 import { CookieService } from './services/cookie.service';
 import { OrderReportComponent} from './components/order-report/order-report.component';
+import { UserManagementComponent } from './components/egv/user-management/user-management.component';
+import { NewUserFormComponent } from './components/egv/user-management/new-user-form/new-user-form.component';
+import { EgvGuard } from './services/egv.guard';
+import { EgvService } from './services/egv.service';
 
 
 
@@ -109,7 +113,9 @@ export function ConfigLoader(envConfig: envConfig) {
     DownloadStockedComponentProduct,
     OfferPageManagementComponent,
     UploadedImageReportComponent,
-    OrderReportComponent
+    OrderReportComponent,
+    UserManagementComponent,
+    NewUserFormComponent
     // AutoSelectionComponent
   ],
   imports: [
@@ -181,6 +187,7 @@ export function ConfigLoader(envConfig: envConfig) {
     Logger,
     AuthenticationService,
     AuthGuard,
+    EgvGuard,
     UserService,
     DashboardService,
     ReportsService,
@@ -191,10 +198,11 @@ export function ConfigLoader(envConfig: envConfig) {
     S3UploadService,
     Ng2ImgMaxService,
     VoucherService,
+    EgvService,
     NavService,
     CookieService
   ],
-  entryComponents:[UploadExcelComponent,NotificationComponent, ImgPreviewComponent, SelectItemForDelivered, OrderStockComponent,editComponent, DownloadStockedComponent,DownloadStockedComponentProduct],
+  entryComponents:[UploadExcelComponent,NotificationComponent, ImgPreviewComponent, SelectItemForDelivered, OrderStockComponent,editComponent, DownloadStockedComponent,DownloadStockedComponentProduct,NewUserFormComponent],
   bootstrap: [AppComponent],
   exports: [RouterModule]
 })

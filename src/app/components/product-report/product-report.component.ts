@@ -446,7 +446,12 @@ export class ProductReportComponent implements OnInit, OnDestroy {
             let valueMap = { "Stocked": 1, "JIT": 2 }
             apiUrl += "&Proc_Type_Vendor=" + valueMap[data.requestedvalue]
         } else if (data.data.colName === 'InStock') {
-
+            console.log(data)
+            if(data.requestedvalue==='Out of Stock'||data.requestedvalue!=='InStock'){
+                apiUrl += "&inStock=0" 
+            }else{
+                apiUrl += "&inStock=1"
+            }
         } else {
             return
         }
