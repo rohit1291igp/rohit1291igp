@@ -3,11 +3,11 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
 import { MyDatePickerModule } from 'mydatepicker';
+import { MatFormFieldModule, MatAutocompleteModule, MatInputModule, MatTableModule, MatCardModule, MatButtonModule, MatMenuModule, MatDialogModule, MatSnackBarModule, MatPaginatorModule, MatSortModule, MatDatepickerModule, MatRadioModule, MatSelectModule } from '@angular/material';
+import { EgvService } from '../services/egv.service';
+
+import { EgvStatementComponent, transactionReportDialog } from 'app/components/egvpanels/egv-statement/egv-statement.component';
 import { EgvwalletComponent } from 'app/components/egvwallet/egvwallet.component';
-import { MatDatepickerInput, MatAutocompleteModule, MatAutocomplete, MatPaginator, MatTableDataSource, MatSort, MatSnackBar } from '@angular/material';
-import { MatFormFieldModule, MatInputModule, MatTableModule, MatCardModule, MatButtonModule, MatMenuModule, MatDialogModule, MatSnackBarModule, MatPaginatorModule, MatSortModule, MatDatepickerModule, MatRadioModule, MatSelectModule } from '@angular/material';
-import { EgvService} from '../services/egv.service';
-import { HttpClient } from "@angular/common/http";
 
 
 const routes: Routes = [
@@ -15,6 +15,10 @@ const routes: Routes = [
   {
     path: 'wallet',
     component: EgvwalletComponent
+  },
+  {
+    path: 'statement',
+    component: EgvStatementComponent
   }
 ];
 
@@ -40,8 +44,10 @@ const routes: Routes = [
     MatDatepickerModule,
     MatRadioModule,
     MatSelectModule,
+
   ],
-  declarations: [EgvwalletComponent],
-  providers : [EgvService]
+  declarations: [EgvwalletComponent, EgvStatementComponent, transactionReportDialog],
+  providers: [EgvService],
+  entryComponents: [transactionReportDialog]
 })
 export class EgvpanelModule { }

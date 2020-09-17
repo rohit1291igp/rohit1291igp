@@ -134,7 +134,7 @@ const route: Routes = [
   {
     path: 'egv',
     loadChildren: './modules/egvpanel.module#EgvpanelModule',
-    canActivate: [AuthGuard]
+    // canActivate: [AuthGuard]
   },
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
   // otherwise redirect to home

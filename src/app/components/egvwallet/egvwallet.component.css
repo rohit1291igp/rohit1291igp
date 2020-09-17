@@ -21,8 +21,9 @@
     height: 40px;
     font-size: 16px;
     color: #555;
+    /* top:12px !important; */
     border-radius: 3px;    
-    border: 1px solid #c3404e;
+    /* border: 1px solid #c3404e; */
     font-family: Open Sans,Helvetica,Arial;
     margin-right:15px
 }
@@ -32,6 +33,9 @@
     border: 1px solid #c3404e;    
     outline-color: #c3404e;
 
+}
+.is-invalid{
+    border: 1px solid red
 }
 
 .addMoneyButton{
@@ -46,8 +50,12 @@
     width:30%
 }
 
-.width{
-    width:15%
+.width15{
+    width:15%;
+    display:inline-block;
+}
+.width75{
+    width:78%
 }
 
 .summaryBox{
@@ -56,12 +64,24 @@
     border-radius:5px;
     height:120px;
     font-weight: 600;
-    font-size: 16px;
+    font-size: 35px;
     color: #c3404e;
-    padding: 15px
+    padding: 15px;
+    
 }
 
 .summaryIcon{
-    font-size: 40px;
+    font-size: 16px;
     margin-bottom: 10px;
+    color:#aaa;
 }
+
+@media (min-width: 992px){
+
+    .summaryBox.col-md-3 {
+        width:20%
+}
+}
+/* ::ng-deep .mat-input-underline {
+    display: none;
+} */

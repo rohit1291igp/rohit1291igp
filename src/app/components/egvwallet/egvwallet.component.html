@@ -1,67 +1,113 @@
 <div class="main-container">
   <mat-card>
     <div class="row">
-      <div class="balance col-md-12 marginB20">
-        <div class='headerUnderLine addMoney col-md-12'>
-          Summary
+      <form [formGroup]="addMoneyForm" (ngSubmit)="addMoneyToWallet(addMoneyForm)">
+        
+        <div class="balance col-md-12 marginB20"  *ngIf="env.userType =='egv_manager' || env.userType == 'egv_executive'">
+          <div class='headerUnderLine addMoney col-md-12'>
+            Summary
+          </div>
+          <div style="margin-bottom:20px">
+            <mat-form-field class="addMoneyInput width15" *ngIf="env.userType==' egv_admin'">
+              <mat-label>Select a user</mat-label>
+              <input type="text" matInput placeholder='Select a user' formControlName="selectedUser"
+                [matAutocomplete]="auto">
+              <mat-autocomplete #auto="matAutocomplete" (optionSelected)='getUserSelected($event.option.value)'
+                [displayWith]="userDisplayFn">
+                <mat-option *ngFor="let option of filteredUserList | async" [value]="option">
+                  {{option.associateName}}</mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+          </div>
+          <div *ngIf="loadingSummary else loaded">
+            Select a Corporate User to view Summary.
+          </div>
+
+          <ng-template #loaded>
+            <div class="col-md-12">
+
+              <div class="col-md-3 col-sm-12 summaryBox">
+                <div>&#8377; {{walletSummary.balance}}</div>
+                <div class="summaryIcon"> <i class="fa fa-balance-scale "></i> Balance</div>
+              </div>
+
+              <div class="col-md-3 col-sm-12 summaryBox">
+                <div>&#8377; {{walletSummary.dailyTransLimit}}</div>
+                <div class="summaryIcon"> <i class="fa fa-percent"></i> Daily Limit </div>
+              </div>
+
+              <div class="col-md-3  col-sm-12 summaryBox">
+                <div>&#8377; {{walletSummary.creditLimit}}</div>
+                <div class="summaryIcon"> <i class="fa fa-credit-card "></i> Credit Limit </div>
+              </div>
+              <div class="col-md-3 col-sm-12 summaryBox">
+
+                <div>&#8377; {{walletSummary.creditLimitDays}}</div>
+                <div class="summaryIcon"> <i class="fa fa-credit-card "></i> Credit Days Limit </div>
+              </div>
+
+              <div class="col-md-3 col-sm-12 summaryBox">
+
+                <div>{{walletSummary.active?'Active':'Inactive'}}</div>
+                <div class="summaryIcon">
+                  <i class="fa fa-check" *ngIf=" walletSummary.active"></i>
+                  <i class="fa fa-times" *ngIf=" !walletSummary.active"></i> Status
+                </div>
+              </div>
+
+            </div>
+          </ng-template>
         </div>
+        <div class="col-md-12">
+          <div class='addMoney headerUnderLine col-md-12'>
+            Add Money To Wallet
+          </div>
+          <div class="col-md-12 marginB20">
 
-        <div *ngIf="loadingSummary else loaded">
-          Select a Corporate User to view Summary.
-        </div>
+            <div>
 
-        <ng-template #loaded>
-          <div class="col-md-12">
-            <div class="col-md-3 summaryBox">
-              <i class="fa fa-balance-scale summaryIcon"></i>
-              <div>&#8377; {{walletSummary.balance}}</div>
-              <div>Balance</div>
+
+              <mat-form-field class="addMoneyInput width30">
+                <mat-label> Enter Amount</mat-label>
+                <input matInput name='amount' type="number" placeholder="Enter Amount" formControlName="addMoneyAmount">
+              </mat-form-field>
+
+              <mat-form-field class="addMoneyInput width30">
+                <mat-label> Enter UTR</mat-label>
+                <input matInput name="utr" type="text" placeholder="Enter UTR" formControlName="addMoneyTransactionId">
+              </mat-form-field>
+
+              <button mat-flat-button class="addMoneyButton" type="submit">Add Money</button>
+            </div>
+            <div class="marginB20">
+              <mat-form-field class="addMoneyInput width75">
+                <mat-label> Comments</mat-label>
+                <input matInput name="comments" type="text" placeholder="Comments" formControlName="comments">
+              </mat-form-field>
+            </div>
+            <div *ngIf="env.userType==' egv_admin'">
+              <div class="width15 addMoney">
+                Change Limit
+              </div>
+              <mat-form-field class="addMoneyInput">
+                <mat-label>Select Limit Type</mat-label>
+                <mat-select formControlName="limitType">
+                  <mat-option *ngFor="let option of limitTypeList" [value]="option">{{option.value}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field class="addMoneyInput width30">
+                <mat-label> Enter New Value</mat-label>
+                <input matInput name='limitValue' type="number" placeholder="Enter New Value"
+                  formControlName="limitValue">
+              </mat-form-field>
+              <button mat-flat-button type="button" class="addMoneyButton" (click)="updateLimit()">Update Limit</button>
             </div>
 
-            <div class="col-md-3 summaryBox">
-              <i class="fa fa-percent summaryIcon"></i>
-              <div>&#8377; {{walletSummary.dailyTransLimit}}</div>
-              <div>Daily Limit </div>
-            </div>
-
-            <div class="col-md-3 summaryBox">
-              <i class="fa fa-credit-card summaryIcon"></i>
-              <div>&#8377; {{walletSummary.creditLimit}}</div>
-              <div>Credit Limit </div>
-            </div>
-
-            <div class="col-md-3 summaryBox">
-              <i class="fa fa-check summaryIcon" *ngIf=" walletSummary.active"></i>
-              <i class="fa fa-times summaryIcon" *ngIf=" !walletSummary.active"></i>
-              <div>{{walletSummary.active?'Active':'Inactive'}}</div>
-              <div>Status</div>
-            </div>
 
           </div>
-        </ng-template>
-      </div>
-      <div class="col-md-12">
-        <div class='addMoney headerUnderLine col-md-12'>
-          Add Money To Wallet
         </div>
-        <div class="col-md-12 marginB20">
-          <form>
-            <input type="text" class="ng-trim-ignore addMoneyInput width15" placeholder='Select a user'
-              [formControl]="selectedUser" [matAutocomplete]="auto">
-            <mat-autocomplete #auto="matAutocomplete"  (optionSelected)='getUserSelected($event.option.value)'
-              [displayWith]="userDisplayFn">
-              <mat-option *ngFor="let option of filteredUserList | async" [value]="option">
-                {{option.associateName}}</mat-option>
-            </mat-autocomplete>
-
-            <input class="addMoneyInput width30" matInput name='amount' type="number" placeholder="Enter Amount"
-              [(ngModel)]="addMoneyAmount">
-            <input class="addMoneyInput width30" matInput name="utr" type="text" placeholder="Enter UTR"
-              [(ngModel)]="addMoneyTransactionId">
-            <button mat-flat-button class="addMoneyButton " (click)="addMoneyToWallet()">Add Money</button>
-          </form>
-        </div>
-      </div>
+      </form>
     </div>
   </mat-card>
 </div>
