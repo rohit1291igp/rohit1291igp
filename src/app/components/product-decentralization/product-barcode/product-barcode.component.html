@@ -1,0 +1,181 @@
+<mat-sidenav-container (backdropClick)="sidenavClose('backdrop')">
+  <mat-sidenav #sidenav position="end" (keydown.escape)="sidenavClose('escape')" style="width: 50%;" disableClose>
+    <mat-card>
+      <div class="row">
+        <span style="float: right; font-size: 1.8em; cursor: pointer;" (click)="sidenav.close()">&times;</span>
+        <h4 class="col-sm-6" style="color:rgb(195, 64, 78)">Errors : {{errorList.length}}</h4>
+      </div>
+    </mat-card>
+    <mat-card *ngFor="let ele of errorList">
+      {{ele}}
+    </mat-card>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <div>
+      <form [formGroup]="searchForm" (ngSubmit)="onSubmit(searchForm)">
+        <div class="searchField">
+          <div class="width50">
+            <mat-card>
+              <div class="form-container">
+                <div class="d-flex">
+                  <div class="width50">
+                    <mat-form-field class="width100">
+                      <mat-label class="mat-label">Enter Original Barcode, Warehouse, Mapped Barcode </mat-label>
+                      <textarea matInput formControlName="excelData"
+                        placeholder="{{'\n'}} You can copy-paste from excelsheet" rows="10" col='20'></textarea>
+                    </mat-form-field>
+                    <mat-hint></mat-hint>
+                  </div>
+                  <div style="width:1px; border-left:2px #ccc dotted"></div>
+                  <div class="width50">
+                    <div style="margin-top: 25%; text-align: center;">
+                      <input type="file" id="file" (change)="readExcel($event)" />
+                      <label for="file" class="btn-2" (change)="readExcel($event)">
+                        <i class="fa fa-upload" aria-hidden="true"></i>
+                        Import Excel
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <div class="d-flex;" style="text-align: center; ">
+                  <button class="btnRadius" id="view" type="submit" mat-raised-button
+                    (click)="btnType = 'view'">View</button>
+                  <button class="btnRadius" id="add" type="submit" mat-raised-button (click)="btnType = 'add'"
+                    [disabled]="!dataSource?.data?.length||dataFromDB">Add</button>
+                  <button class="btnRadius" id="update" type="submit" mat-raised-button (click)="btnType = 'update'"
+                    [disabled]="!dataSource?.data?.length||dataFromDB">Update</button>
+                </div>
+              </div>
+            </mat-card>
+          </div>
+
+          <div class="width50">
+            <mat-card>
+              <div class="form-container">
+                <div class="d-flex">
+                  <div class="width50">
+                    <mat-form-field>
+                      <mat-label>Enter Barcodes</mat-label>
+                      <textarea matInput formControlName="sku_id" placeholder="You can enter multiple SKU IDs" rows="10"
+                        col='20'></textarea>
+                    </mat-form-field>
+                  </div>
+                  <div class="width50">
+                    <mat-form-field>
+                      <mat-label>Warehouse</mat-label>
+                      <mat-select formControlName="source" [(value)]='searchForm.value.source'>
+                        <mat-option *ngFor="let option of warehouseList" [value]="option">
+                          {{option.value}}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="d-flex;  r-buttons">
+                  <button class="btnRadius" id="search" type="submit" mat-raised-button
+                    (click)="btnType = 'search'">Search</button>
+                  <button class="btnRadius" id="clear" type="submit" mat-raised-button
+                    (click)="btnType = 'clear'">Clear</button>
+                </div>
+              </div>
+            </mat-card>
+          </div>
+        </div>
+      </form>
+      <!-- Table Contents -->
+      <!--  ">orgBarCode", "warehouse", "mappedBarCode" -->
+      <div class="mat-elevation-z4 btnRadius" style="border:1px solid #ccc"
+        *ngIf="dataSource?.data?.length > 0 else noRecord">
+        <div clss="mat-elevation-z8" style="border-bottom:1px solid #ddd" class="btnRadius">
+          <button class="btnRadius" color="warn" id="search" mat-raised-button (click)="deleteSelectedRows()"
+            [disabled]="!selection?._selected?.length>0">
+            <i class="fa fa-trash" aria-hidden="true"></i>
+            Delete Selected
+            <span class="badge" *ngIf="selection?._selected?.length>0">{{selection?._selected?.length}}</span>
+          </button>
+          <button class="btnRadius saveButton" color="warn" id="download" mat-raised-button (click)="downloadExcel()">
+            <i class="fa fa-download" aria-hidden="true"></i>
+            Download
+          </button>
+          <span *ngIf="!dataFromDB" style="color:#ccc; margin-left:5px">
+            <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
+            To save the changes, click 'Add' button after edit.
+          </span>
+          <div style="float:right; display:inline">
+            <button class="btnRadius saveButton" mat-raised-button (click)="saveAllChanges()" [disabled]="!openEdits>0">
+              <i class="fa fa-floppy-o" aria-hidden="true"></i>
+              Save Changes
+              <span class="badge" *ngIf="openEdits>0">{{openEdits}}</span>
+            </button>
+            <button class="btnRadius" mat-raised-button (click)="cancelAllChanges()" [disabled]="!openEdits>0">
+              <i class="fa fa-times" aria-hidden="true"></i>
+              Cancel Changes
+            </button>
+          </div>
+        </div>
+        <form [formGroup]="tableform">
+          <mat-table #table [dataSource]="dataSource" formArrayName="tableEntries">
+            <ng-container matColumnDef="select">
+              <mat-header-cell *matHeaderCellDef>
+                <mat-checkbox (change)="$event ? masterToggle() : null"
+                  [checked]="selection.hasValue() && isAllSelected()"
+                  [indeterminate]="selection.hasValue() && !isAllSelected()">
+                </mat-checkbox>
+              </mat-header-cell>
+              <mat-cell *matCellDef="let row,let index=index">
+                <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
+                  [checked]="selection.isSelected(row)">
+                </mat-checkbox>
+              </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="o_barcode">
+              <mat-header-cell *matHeaderCellDef> Original Barcode </mat-header-cell>
+              <mat-cell *matCellDef="let row; let index = index">
+                {{row.o_barcode||'-'}}
+              </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="wh">
+              <mat-header-cell *matHeaderCellDef> Warehouse </mat-header-cell>
+              <mat-cell *matCellDef="let row; let index = index">
+                {{row.wh||'-'}}
+              </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="d_barcode">
+              <mat-header-cell *matHeaderCellDef> Decentralised Barcode </mat-header-cell>
+              <mat-cell *matCellDef="let row; let index = index"
+                [formGroupName]="index + paginator?.pageIndex * paginator?.pageSize">
+                <span *ngIf="!row.editable">
+                  {{row.d_barcode||'-'}}
+                </span>
+                <mat-form-field *ngIf="row.editable">
+                  <input matInput type="text" formControlName="d_barcode">
+                </mat-form-field>
+              </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="actions">
+              <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
+              <mat-cell *matCellDef="let row; let index = index">
+                <button mat-button class="btnRadius" *ngIf="!row.editable" (click)="enableRowEdit(row)">
+                  Edit
+                </button>
+                <button mat-button class="btnRadius" color="primary" *ngIf="row.editable"
+                  (click)="saveRowEdit(row,index)">Save</button>
+                <button mat-button class="btnRadius" color="warn" *ngIf="row.editable"
+                  (click)="cancelRowEdit(row,index)">Cancel</button>
+
+              </mat-cell>
+            </ng-container>
+            <mat-header-row *matHeaderRowDef="tableHeaders"></mat-header-row>
+            <mat-row *matRowDef="let row; let i = index; columns: tableHeaders;"></mat-row>
+          </mat-table>
+          <mat-paginator [pageSizeOptions]="[5, 10, 20]" length="{{dataSource?.length}}" showFirstLastButtons>
+          </mat-paginator>
+        </form>
+      </div>
+      <ng-template #noRecord>
+        <mat-card style="color: #C3404E;">No Record</mat-card>
+      </ng-template>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

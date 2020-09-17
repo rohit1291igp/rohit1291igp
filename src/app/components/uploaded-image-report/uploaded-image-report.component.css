@@ -1,0 +1,19 @@
+.w-150{
+    width: 173px;
+}
+
+.summaryBlockCont{
+    text-align: center;
+}
+
+.icon, .l img {
+    width: 3em;
+}
+
+.card-h-25{
+    height: 25vh;
+}
+
+.mar-all-10{
+    margin: 10px;
+}

@@ -268,22 +268,22 @@
                                 </div>
                         <form *ngIf="reportType !== 'getVendorReport' && reportType !== 'getPincodeReport' && reportType !== 'getBarcodeToComponentReport'" (ngSubmit)="f.form.valid && addActionSubmit($event)" #f="ngForm" nonvalidate>
                             <!--<input type="hidden" name="fkAssociateId" [(ngModel)]="reportAddAction.reportAddActionModel.fkAssociateId" #fkAssociateId="ngModel" >-->
-                            <input name="componentCode" class="form-control custom-control m-top-1" [(ngModel)]="reportAddAction.reportAddActionModel.componentCode" #componentCode="ngModel" placeholder="component Code" required>
+                            <input name="componentCode" class="form-control custom-control m-top-1" [(ngModel)]="reportAddAction.reportAddActionModel.componentCode" #componentCode="ngModel"  placeholder="component Code" required>
                             <input name="componentName" class="form-control custom-control m-top-1" [(ngModel)]="reportAddAction.reportAddActionModel.componentName" #componentName="ngModel" placeholder="component Name" required>
-                            <input name="componentDesc" class="form-control custom-control m-top-1" [(ngModel)]="reportAddAction.reportAddActionModel.componentDesc" #componentDesc="ngModel" placeholder="component Description" required>
+                            <input name="componentDesc" class="form-control custom-control m-top-1" [(ngModel)]="reportAddAction.reportAddActionModel.componentDesc" #componentDesc="ngModel"  placeholder="component Description" required>
 
                             <select *ngIf="reportType === 'getComponentReport'" name="componentType" class="form-control m-top-1" [(ngModel)]="reportAddAction.reportAddActionModel.componentType"  #componentType="ngModel" (ngModelChange)="selectComponentType($event)"required>
                                 <option [ngValue]="undefined" disabled selected>Select a Component Type</option>
                                 <option *ngFor="let componentType of componentTypes" [ngValue]="componentType.name">{{componentType.name}}</option>
                             </select>
                             
-                            <select *ngIf="reportType === 'getComponentReport'" name="procTypeVendor" class="form-control m-top-1" [(ngModel)]="reportAddAction.reportAddActionModel.procTypeVendor" #procTypeVendor="ngModel" required>
+                            <select *ngIf="reportType === 'getComponentReport'" name="procTypeVendor" class="form-control m-top-1" [(ngModel)]="reportAddAction.reportAddActionModel.procTypeVendor"  #procTypeVendor="ngModel" required>
                                 <option [ngValue]="undefined" disabled selected>Select a Proc Type</option>
                                 <ng-container *ngFor="let componentType of ProcTypeOption">
                                     <option [ngStyle]="{'display':(reportAddAction.reportAddActionModel.componentType && reportAddAction.reportAddActionModel.componentType == 'Cake Only' && componentType.name == 'Stocked' ) ? 'none' : 'block'}" [ngValue]="componentType.name">{{componentType.name}}</option>
                                 </ng-container>
                             </select>
-                            <select *ngIf="reportType === 'getVendorReport'" name="componentType" class="form-control m-top-1" [(ngModel)]="reportAddAction.reportAddActionModel.componentType" #componentType="ngModel" required>
+                            <select *ngIf="reportType === 'getVendorReport'" name="componentType" class="form-control m-top-1" [(ngModel)]="reportAddAction.reportAddActionModel.componentType"  #componentType="ngModel"  required>
                                 <option *ngFor="let componentType of componentTypesVendor" [ngValue]="componentType.value">{{componentType.name}}</option>
                             </select>
                             <br>

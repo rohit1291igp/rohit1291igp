@@ -1,4 +1,4 @@
-import { animate, Component, ElementRef, HostListener, Inject, OnInit, sequence, style, transition, trigger, ViewChild } from '@angular/core';
+import { animate, Component, ElementRef, HostListener, Inject, OnInit, sequence, style, transition, trigger, ViewChild, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { Headers, RequestOptions } from "@angular/http";
 import { MatDialog, MatDialogRef, MatSnackBar, MAT_DIALOG_DATA, MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
@@ -2345,11 +2345,19 @@ getDeliveryBoyList(){
     <form [formGroup]="myForm" (ngSubmit)="onSubmit(myForm)">
         <div class="form-row">
             <div class="input-container">
-                <mat-form-field>
+                <mat-form-field *ngIf="!showDropdown()">
                     <input [ngClass]="{
                         'has-danger': myForm.controls.fieldName.invalid && myForm.controls.fieldName.dirty,
                         'has-success': myForm.controls.fieldName.valid && myForm.controls.fieldName.dirty
                       }" formControlName="fieldName" matInput placeholder="{{data.colName}}">
+                </mat-form-field>
+                <mat-form-field *ngIf="showDropdown()" appearance="fill">
+                <mat-label>Select {{data.colName}}</mat-label>
+                <mat-select formControlName="fieldName">
+                    <mat-option *ngFor="let option of dropdownOption" [value]="option">
+                    {{option}}
+                    </mat-option>
+                </mat-select>
                 </mat-form-field>
             </div>
         </div>
@@ -2361,26 +2369,50 @@ getDeliveryBoyList(){
     `
 })
 export class editComponent implements OnInit {
+    @Output() formSubmit = new EventEmitter()
     myForm: FormGroup;
     constructor(
         public dialogRef: MatDialogRef<editComponent>,
-        @Inject(MAT_DIALOG_DATA) public data: any,private fb: FormBuilder) {
-
+        @Inject(MAT_DIALOG_DATA) public data: any,private fb: FormBuilder,
+        private backendService:BackendService
+        ) {
     }
     ngOnInit() {
+        console.log("before edit",this.data)
         if(typeof this.data.rowData == 'object' && this.data.rowData != null){
+            console.log(this.data.rowData['value'])
             this.myForm = this.fb.group({
                 fieldName: [this.data.rowData['value'], Validators.required]
             });
-        }else{
+        } else {
+            console.log(this.data.rowData)
             this.myForm = this.fb.group({
                 fieldName: [this.data.rowData, Validators.required]
             });
         }
-       
+        
+        if(this.data.colName==='Proc Type Vendor'){
+            this.dropdownOption=['JIT','Stocked']
+        }else if(this.data.colName==='InStock'){
+            this.dropdownOption=['InStock','Out of Stock']
+        }else if(this.data.colName==='Component Delivery Status'){
+            this.dropdownOption=['Delivered','Processing', 'Rejected']
+        }
+    }
+
+    dropdownOption=[]
+    showDropdown(){
+        if(this.data.colName==='InStock'||this.data.colName==='Proc Type Vendor'||this.data.colName==='Component Delivery Status'){
+            return true
+        }else{
+            return false;
+        }
     }
 
     onSubmit(data){
+        console.log("edit submit",data)
+        this.formSubmit.emit(data);
+        data.data = this.data;
         this.dialogRef.close(data);
     }
 

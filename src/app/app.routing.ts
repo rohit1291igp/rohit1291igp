@@ -3,14 +3,21 @@ import { AddDeliveryBoyComponent } from './components/add-deliveryboy/add-delive
 import { BlogCreateComponent } from './components/blog-create/blog-create.component';
 import { BlogListComponent } from './components/blog-list/blog-list.component';
 import { BlogViewComponent } from './components/blog-view/blog-view.component';
+import { DailyOpsReportComponent } from './components/daily-ops-report/daily-ops-report.component';
+import { DeliveryTimeManagementComponent } from './components/delivery-time-management/delivery-time-management.component';
 import { DeliveryBoyDetailsComponent } from './components/deliveryboy-details/deliveryboy-details.component';
 import { DownloadEmailComponent } from './components/download-email/download-email.component';
 import { LoginComponent } from './components/login/login.component';
+import { OfferPageManagementComponent } from './components/offer-page-management/offer-page-management.component';
+import { OrderReportComponent } from './components/order-report/order-report.component';
 import { PayoutDashboardComponent } from './components/payout-dashboard/payout-dashboard.component';
 import { PerformanceReportComponent } from './components/performance-report/performance-report.component';
+import { ProductReportComponent } from './components/product-report/product-report.component';
+import { StockComponentsReportsComponent } from './components/stock-components-reports/stock-components-reports.component';
+import { UploadedImageReportComponent } from './components/uploaded-image-report/uploaded-image-report.component';
 import { AuthGuard } from './services/auth-guard.service';
-import { DailyOpsReportComponent } from './components/daily-ops-report/daily-ops-report.component';
-import { PaymentReconciliationComponent } from './components/payment-reconciliation/payment-reconciliation.component';
+import { UserManagementComponent } from './components/egv/user-management/user-management.component';
+import { EgvGuard } from './services/egv.guard';
 
 
 const route: Routes = [
@@ -58,11 +65,6 @@ const route: Routes = [
     canActivate: [AuthGuard]
   },
   {
-    path: 'sendemail',
-    loadChildren: './modules/sendemail.module#SendEmailModule',
-    canActivate: [AuthGuard]
-  },
-  {
     path: 'download/:fileFor/:filedate/:fileTime',
     component: DownloadEmailComponent,
     canActivate: [AuthGuard]
@@ -93,12 +95,48 @@ const route: Routes = [
     canActivate: [AuthGuard]
   },
   {
-    path:'payout-dashboard',
+    path: 'productReport',
+    component: ProductReportComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'deliveryTimeManagement',
+    component: DeliveryTimeManagementComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'dailywarehouseOpsReport',
+    component: DailyOpsReportComponent
+  },
+  {
+    path: 'stockReport',
+    component: StockComponentsReportsComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'payout-dashboard',
     component: PayoutDashboardComponent
   },
   {
-    path:'dailywarehouseOpsReport',
-    component: DailyOpsReportComponent
+    path: 'offerpagemanagement',
+    component: OfferPageManagementComponent
+  },
+  {
+    path: 'new-dashboard',
+    loadChildren: './modules/newDashboard.module#NewDashboardModule',
+    canActivate: [AuthGuard]
+  }, {
+    path: 'uploaded-image',
+    component: UploadedImageReportComponent
+  },  
+  {
+    path:'orderReport',
+    component:OrderReportComponent
+  },
+  {
+    path:'user-management',
+    component:UserManagementComponent,
+    canActivate:[AuthGuard,EgvGuard]
   },
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
   // otherwise redirect to home
