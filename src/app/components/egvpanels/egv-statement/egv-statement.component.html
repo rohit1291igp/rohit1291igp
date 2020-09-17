@@ -5,7 +5,7 @@
         <form [formGroup]="statementForm" (ngSubmit)="getStatement()">
           <div>
             <!-- *ngIf="env.userType=='egv_admin'" -->
-            <mat-form-field class="filterElement" >
+            <mat-form-field class="filterElement">
               <mat-label>Select a user</mat-label>
               <input type="text" matInput placeholder='Select a user' formControlName="selectedUser"
                 [matAutocomplete]="auto">
@@ -46,7 +46,8 @@
           </div>
           <div>
             <button type="submit" mat-raised-button>Get Statement</button>
-            <button type="button" (click)="downloadStatement()" mat-raised-button>Download</button>
+            <button type="button" mat-raised-button (click)="downloadStatement()"
+              *ngIf="env.userType=='egv_admin'|| env.userType=='egv_manager'">Download</button>
           </div>
         </form>
       </div>

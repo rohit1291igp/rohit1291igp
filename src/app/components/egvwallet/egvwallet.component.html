@@ -2,8 +2,9 @@
   <mat-card>
     <div class="row">
       <form [formGroup]="addMoneyForm" (ngSubmit)="addMoneyToWallet(addMoneyForm)">
-        
-        <div class="balance col-md-12 marginB20"  *ngIf="env.userType =='egv_manager' || env.userType == 'egv_executive'">
+
+        <div class="balance col-md-12 marginB20"
+          *ngIf="env.userType =='egv_manager' || env.userType == 'egv_executive'">
           <div class='headerUnderLine addMoney col-md-12'>
             Summary
           </div>
@@ -43,7 +44,7 @@
               <div class="col-md-3 col-sm-12 summaryBox">
 
                 <div>&#8377; {{walletSummary.creditLimitDays}}</div>
-                <div class="summaryIcon"> <i class="fa fa-credit-card "></i> Credit Days Limit </div>
+                <div class="summaryIcon"> <i class="fa fa-calendar"></i> Credit Days Limit </div>
               </div>
 
               <div class="col-md-3 col-sm-12 summaryBox">

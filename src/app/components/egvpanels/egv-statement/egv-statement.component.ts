@@ -287,9 +287,8 @@ export class EgvStatementComponent implements OnInit {
 
 @Component({
 	selector: 'app-transaction-report',
-	template: `	
-	
-	<button type="button" (click)="downloadStatement()" mat-raised-button *ngIf="data.dataSource?.data?.length > 0">Download</button>
+	template: `		
+	<button type="button" (click)="downloadStatement()" mat-raised-button *ngIf="data.dataSource?.data?.length > 0 && (env.userType=='egv_admin'|| env.userType=='egv_manager')">Download</button>
     <div class="mat-elevation-z8" *ngIf="data.dataSource?.data?.length > 0 else noRecord">
 	<mat-table [dataSource]="data.dataSource" matSort>
         <ng-container [matColumnDef]="column" *ngFor="let column of data.tableHeaders">
@@ -314,6 +313,7 @@ export class EgvStatementComponent implements OnInit {
 })
 export class transactionReportDialog implements OnInit {
 
+	public env = environment;
 	dataSource: MatTableDataSource<any>;
 	tableHeaders: any;
 	@ViewChild(MatPaginator) paginator: MatPaginator;
@@ -336,7 +336,7 @@ export class transactionReportDialog implements OnInit {
 		}, 100)
 	}
 	downloadStatement() {
-		
+
 		var options = {
 			showLabels: true,
 			showTitle: false,
