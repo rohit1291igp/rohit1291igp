@@ -1,0 +1,68 @@
+import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { RouterModule, Routes } from '@angular/router';
+import { MenuListItemComponent } from 'app/components/menu-list-item/menu-list-item.component';
+import { NewDasboardComponent } from 'app/components/new-dashboard/new-dashboard.component';
+import { AuthGuard } from 'app/services/auth-guard.service';
+import { NavService } from 'app/services/NewService';
+import { SharedModule } from 'app/shared-module/shared/shared.module';
+import { MyDatePickerModule } from 'mydatepicker';
+import { HolidayCalenderManagementComponent } from 'app/components/holiday-calender-management/holiday-calender-management.component';
+import { ProductDecentralizationComponent } from 'app/components/product-decentralization/product-decentralization.component';
+import { BannerPanelComponent } from 'app/components/banner-panel/banner-panel.component';
+import { NewReportsComponentModule } from 'app/components/new-reports-component/new-reports.component';
+import { ProductAvailabilityComponent } from 'app/components/product-decentralization/product-availability/product-availability.component';
+import { ProductBarcodeComponent } from 'app/components/product-decentralization/product-barcode/product-barcode.component';
+import { DeliveryPriorityComponent } from 'app/components/product-decentralization/delivery-priority/delivery-priority.component';
+
+const routes: Routes = [{
+  path: '',
+  component: NewDasboardComponent,
+  children: [{
+    path: 'sendemail',
+    loadChildren: './sendemail.module#SendEmailModule',
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'HolidayCalendarManagement',
+    component: HolidayCalenderManagementComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'productDecentralization',
+    component: ProductDecentralizationComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'banner',
+    component: BannerPanelComponent,
+    canActivate: [AuthGuard]
+  }
+  ]
+}
+];
+
+@NgModule({
+  imports: [
+    CommonModule,
+    RouterModule.forChild(routes),
+    FormsModule,
+    ReactiveFormsModule,
+    MyDatePickerModule,
+    SharedModule,
+    NewReportsComponentModule
+  ],
+  declarations: [
+    NewDasboardComponent,
+    MenuListItemComponent,
+    HolidayCalenderManagementComponent,
+    ProductDecentralizationComponent,
+    BannerPanelComponent,
+    ProductAvailabilityComponent,
+    ProductBarcodeComponent,
+    DeliveryPriorityComponent
+  ],
+  providers: [NavService]
+})
+export class NewDashboardModule { }

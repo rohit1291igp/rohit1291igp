@@ -1,0 +1,89 @@
+<div class="row m-all-1">
+  <div class="col-sm-4 col-sm-offset-2">
+    <mat-card class="card-min-5">
+      <mat-card-header>
+        <mat-card-subtitle><h4>Offer Management</h4></mat-card-subtitle>
+      </mat-card-header>
+      <button *ngIf="form_method=='' || form_method=='add'" mat-raised-button (click)="onToggleForm('add')">{{is_form_open? 'Cancel':'Add'}}</button>
+      <button *ngIf="form_method=='' || form_method=='edit'" mat-raised-button (click)="onToggleForm('edit')">{{is_form_open? 'Cancel':'Edit'}}</button>
+      <div *ngIf="is_form_open" class="">
+        <hr>
+        <mat-form-field *ngIf="form_method=='edit'" class="width-100">
+          <mat-label>Select Coupon For Edit</mat-label>
+          <input type="text" class="ng-trim-ignore" style="text-transform: uppercase;" matInput [formControl]="myControl"
+            [matAutocomplete]="auto">
+          <mat-autocomplete (optionSelected)='onCouponSelect($event.option.value)' #auto="matAutocomplete"
+            [displayWith]="displayFn">
+            <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+              {{option.coupon_code}}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+        <form [formGroup]="offer_management_form" name="offer_management_form" #f="ngForm"
+          (ngSubmit)="updateSubmit($event)" class="example-form">
+          <mat-slide-toggle formControlName="enabled">
+            {{offer_management_form.get('enabled').value?'Enabled':'Disabled'}}</mat-slide-toggle>
+          <br><br>
+          <mat-form-field class="width-70">
+            <mat-label>Coupon Code</mat-label>
+            <input matInput type="text" oninput="this.value = this.value.toUpperCase()" formControlName="coupon_code"
+              (focusout)="onFetchVoucherDetail(offer_management_form.get('coupon_code').value)" autocomplete="off"
+              required>
+          </mat-form-field>
+          <button type="button" mat-raised-button
+            (click)="onFetchVoucherDetail(offer_management_form.get('coupon_code').value)">Fetch</button><br>
+            <div *ngIf="offer_management_form.get('coupon_code').dirty && !offer_management_form.get('coupon_code').valid" class="error-text">Invalid Coupon Code</div>
+          <mat-form-field appearance="fill" class="width-100">
+            <mat-label>Webstore</mat-label>
+            <mat-select formControlName="webstore" [disabled]="form_method=='edit'" required>
+              <mat-option *ngFor="let webstore of web_store_list" [value]="webstore">
+                {{webstore}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <!-- <mat-form-field appearance="fill" class="width-60">
+            <mat-label>Coupon Type</mat-label>
+            <mat-select formControlName="coupon_type" required>
+              <mat-option *ngFor="let coupon_type of ['value based']" [value]="coupon_type">
+                {{coupon_type}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field> -->
+          <mat-form-field class="width-100">
+            <mat-label>Redirect Url</mat-label>
+            <input matInput placeholder="Redirect Url" formControlName="redirect_url">
+          </mat-form-field>
+          <mat-form-field class="width-100">
+            <mat-label>Coupon Title</mat-label>
+            <textarea matInput formControlName="title" required></textarea>
+          </mat-form-field><br>
+          <mat-form-field class="width-100">
+            <mat-label>Coupon Description</mat-label>
+            <textarea matInput formControlName="desc" rows="6" placeholder="Coupon Description" required></textarea>
+          </mat-form-field>
+          <br>
+          <mat-form-field class="width-100">
+            <mat-label>Expiry Date (Offer)</mat-label>
+            <input matInput [min]="minDate" [max]="maxDate" [matDatepicker]="expiryDate" formControlName="expiry_date"
+              autocomplete="off" class="ng-trim-ignore" required>
+            <mat-datepicker-toggle matSuffix [for]="expiryDate"></mat-datepicker-toggle>
+            <mat-datepicker #expiryDate></mat-datepicker>
+          </mat-form-field>
+          <br>
+          <button type="submit" [disabled]="!voucher_details['id']||f.invalid"
+            mat-raised-button>{{form_method==='edit'?'Update':'Add'}}</button>
+        </form>
+      </div>
+    </mat-card>
+  </div>
+  <div *ngIf="voucher_details['vouchercode']" class="col-sm-4">
+    <mat-card class="card-min-h">
+      <h4>Voucher Details</h4>
+      <hr>
+      <h5>Voucher ID : {{voucher_details['id']}}</h5>
+      <h5>Voucher Code : {{voucher_details['vouchercode']}}</h5>
+      <h5>Voucher Value : {{voucher_details['vouchervalue']}} ({{voucher_details['vouchertype']===0?'% based':'value based'}})</h5>
+      <h5>Expiry Date (Voucher) : {{voucher_details['expirydate']|date:'dd/MM/yyyy'}}</h5>
+    </mat-card>
+  </div>
+</div>
