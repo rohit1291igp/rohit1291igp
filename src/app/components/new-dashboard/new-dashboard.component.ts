@@ -82,7 +82,7 @@ export class NewDasboardComponent implements OnInit, AfterViewInit {
         },{
             displayName: 'Ops-Report',
             iconName: 'analytics',
-            route: '/dailywarehouseOpsReport',
+            route: '/new-dashboard/dailywarehouseOpsReport',
         }
     ];
     pages
