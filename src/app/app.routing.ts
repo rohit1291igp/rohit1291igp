@@ -105,10 +105,6 @@ const route: Routes = [
     canActivate: [AuthGuard]
   },
   {
-    path: 'dailywarehouseOpsReport',
-    component: DailyOpsReportComponent
-  },
-  {
     path: 'stockReport',
     component: StockComponentsReportsComponent,
     canActivate: [AuthGuard]
