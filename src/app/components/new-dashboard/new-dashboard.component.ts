@@ -79,6 +79,10 @@ export class NewDasboardComponent implements OnInit, AfterViewInit {
             displayName: 'Banner Panel',
             iconName: 'image',
             route: '/new-dashboard/banner',
+        },{
+            displayName: 'Ops-Report',
+            iconName: 'analytics',
+            route: '/new-dashboard/dailywarehouseOpsReport',
         }
     ];
     pages
