@@ -1,0 +1,22 @@
+app-menu-list-item {
+    display: flex;
+    flex-direction: column;
+}
+.mat-list-item {
+    padding: 8px 0;
+    display: flex;
+    width: auto;
+}
+
+.routeIcon {
+    margin-right: 15px;
+}
+a{
+    color: #fff;
+    text-decoration: none;
+    cursor: pointer;
+    margin: 15px;
+}
+.mat-icon {
+    color: #fff;
+}
