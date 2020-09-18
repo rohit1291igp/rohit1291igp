@@ -69,6 +69,9 @@ export class DashboardService {
             if(userType == 'microsite' || userType == 'microsite-zeapl'){
                 this.router.navigate(['/dashboard-microsite']);
             }
+            if(userType == 'warehouse'){
+                this.router.navigate(['/new-dashboard']);
+            }
             // if(userType == 'warehouse'){
             //     this.router.navigate(['/sendemail']);
             // }
