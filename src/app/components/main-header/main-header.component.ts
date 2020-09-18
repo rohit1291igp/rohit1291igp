@@ -4,6 +4,7 @@ import { BackendService } from '../../services/backend.service';
 import {environment} from "../../../environments/environment";
 import { DashboardComponent } from '../dashboard/dashboard.component';
 import { DashboardService } from '../../services/dashboard.service';
+import { CookieService } from 'app/services/cookie.service';
 
 @Component({
   selector: 'app-main-header',
@@ -24,7 +25,8 @@ export class MainHeaderComponent implements OnInit {
       public router: Router,
       public BackendService : BackendService,
       private _elementRef: ElementRef,
-      public dashboardService: DashboardService
+      public dashboardService: DashboardService,
+      private cookieService: CookieService
         ) { }
 
   @HostListener('document:click', ['$event.target'])
@@ -65,7 +67,7 @@ export class MainHeaderComponent implements OnInit {
 
           let reqObj = {
               //url : "?responseType=json&scopeId=1&token="+localStorage.getItem('currentUserToken')+"&method=igp.auth.doLogOut",
-              url : "doLogOut?responseType=json&scopeId=1&token="+localStorage.getItem('currentUserToken'),
+              url : "doLogOut?responseType=json&scopeId=1&token="+_this.cookieService.getCookie('currentUserToken'),
               method : "post",
               payload : {}
           };
@@ -75,7 +77,7 @@ export class MainHeaderComponent implements OnInit {
                   console.log(err)
                   return;
               }
-
+              _this.cookieService.deleteCookie('currentUserToken');
               localStorage.clear();
               sessionStorage.clear();
               environment.mockAPI="";

@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, OnInit, ViewChild, Pipe, PipeTransform } from '@angular/core';
 import { Headers, RequestOptions, Response } from '@angular/http';
 //import { UtilityService } from '../../services/utility.service';
 import { environment } from '../../../environments/environment';
@@ -24,7 +24,9 @@ export class AddressUpdateComponent implements OnInit {
   addressDetails;
   updateAddressFlag = true;
   apiResponseMsg: string;
-  countryList:Array<Object> = [];
+  apiErrorMsg: string;
+  countryList: Array<Object> = [];
+  wrongOrderId = false;
   constructor(
     private _elementRef: ElementRef,
     public BackendService: BackendService,
@@ -35,21 +37,23 @@ export class AddressUpdateComponent implements OnInit {
 
     this.fkAssociateId = localStorage.getItem('fkAssociateId');
     let countryList = sessionStorage.getItem('countryList') ? JSON.parse(sessionStorage.getItem('countryList')) : '';
-    if(!countryList){
+    if (!countryList) {
       this.getCountryList();
-    }else{
+    } else {
       this.countryList = countryList;
     }
   }
 
   getOrderDetail(orderId) {
-    if (orderId.length == 7) {
+
+    if (orderId.length == 7 && !isNaN(orderId)) {
       var this$ = this;
       this$.tableData = {}
 
       this$.apiResponseMsg = '';
       this$.addressDetails = [];
-
+      this$.newAddressDetails = [];
+      this$.apiErrorMsg = '';
       const reqObj = {
         url: `addresspanel/getaddress?orderId=${orderId}`,
         method: "get"
@@ -61,7 +65,9 @@ export class AddressUpdateComponent implements OnInit {
           return;
         }
         if (response && response.status == 'Success') {
+          this$.wrongOrderId = false;
           this$.tableData = response.data;
+
           this$.addressDetails = [this$.tableData.actualAddress].map(function (item) {
             return {
               couName: item.couName,
@@ -74,6 +80,9 @@ export class AddressUpdateComponent implements OnInit {
               email: item.email
             }
           });
+          for (let x in this$.addressDetails[0]) {
+            this$.newAddressDetails[x] = this$.addressDetails[0][x];
+          }
           this$.newAddressDetails['couName'] = { "cid": this$.tableData.actualAddress.cid, "couName": this$.addressDetails[0].couName };
           if (this$.tableData.suggestedAddress) {
             this$.tableData.suggestedAddress = [this$.tableData.suggestedAddress].map(function (item) {
@@ -90,12 +99,21 @@ export class AddressUpdateComponent implements OnInit {
             });
           }
 
+        } else {
+          this$.wrongOrderId = true;
         }
       });
     } else {
       this.tableData = {};
       this.apiResponseMsg = '';
+      this.apiErrorMsg = '';
       this.addressDetails = [];
+      this.newAddressDetails = [];
+      this.wrongOrderId = true;
+
+    }
+    if (orderId == '') {
+      this.wrongOrderId = false;
     }
   }
 
@@ -103,21 +121,56 @@ export class AddressUpdateComponent implements OnInit {
     console.log(this.newAddressDetails)
     var _this = this;
     // _this.tableData.actualAddress = 
+    localStorage.removeItem('newAddressDetails');
     _this.apiResponseMsg = '';
-    const payload = { ..._this.tableData.actualAddress, ...this.newAddressDetails }
+    _this.apiErrorMsg = '';
+
+    for (let x in _this.newAddressDetails) {
+      if (_this.newAddressDetails[x] == "" && x != 'email' && x != 'saddr2') {
+        _this.apiErrorMsg = "Required fields can't be empty";
+        return false;
+      }
+    }
+
+    localStorage.setItem('newAddressDetails', JSON.stringify(_this.newAddressDetails["couName"]));
+    if (_this.newAddressDetails["couName"]) {
+      _this.tableData.actualAddress.cid = _this.newAddressDetails["couName"].cid;
+      _this.tableData.actualAddress.couName = _this.newAddressDetails["couName"].couName;
+      delete _this.newAddressDetails["couName"];
+    }
+    const payload = { ..._this.tableData.actualAddress, ..._this.newAddressDetails };
+
+    _this.addressDetails = [payload].map(function (item) {
+      return {
+        couName: item.couName,
+        pcode: item.pcode,
+        state: item.state,
+        city: item.city,
+        saddr: item.saddr,
+        saddr2: item.saddr2,
+        mob: item.mob,
+        email: item.email
+      }
+    });
     const reqObj = {
       payload: payload,
       url: `addresspanel/updateaddress?orderId=${_this.orderId}&flagSameAsAddressBook=${_this.tableData.flagSameAsAddressBook}&flagUpdateAddressBook=${_this.updateAddressFlag}`,
       method: 'put'
     };
     _this.BackendService.makeAjax(reqObj, function (err, response, headers) {
+      _this.newAddressDetails["couName"] = localStorage.getItem('newAddressDetails') ? JSON.parse(localStorage.getItem('newAddressDetails')) : '';
       if (err || response.error) {
         console.log('Error=============>', err);
         return;
       }
+
       console.log('admin action Response --->', response.result);
       if (response.status == 'Success') {
         _this.apiResponseMsg = response.data.success;
+        _this.apiErrorMsg = '';
+      } else {
+        _this.apiErrorMsg = "Error";
+        _this.apiResponseMsg = '';
       }
 
     });
@@ -152,4 +205,35 @@ export class AddressUpdateComponent implements OnInit {
   compareFn(a, b) {
     return a && b && a.couName == b.couName;
   }
+  editDataListner() {
+    this.apiResponseMsg = '';
+    this.apiErrorMsg = '';
+  }
 }
+
+@Pipe({ name: 'AddressUpdateHeader' })
+
+export class AddressUpdateHeaderPipe implements PipeTransform {
+  transform(data): any {
+    return data.map(m => {
+      switch (m) {
+        case 'couName':
+          m = "Country Name"
+          break;
+        case 'pcode':
+          m = "Pincode"
+          break;
+        case 'saddr':
+          m = "Address 1"
+          break;
+        case 'saddr2':
+          m = "Address 2"
+          break;
+        case 'mob':
+          m = "Phone"
+          break;
+      }
+      return m;
+    })
+  }
+} 
