@@ -25,7 +25,6 @@ import { AppComponent, testComponent } from './components/app.component';
 import { BlogCreateComponent } from './components/blog-create/blog-create.component';
 import { BlogListComponent } from './components/blog-list/blog-list.component';
 import { BlogViewComponent } from './components/blog-view/blog-view.component';
-import { DailyOpsReportComponent } from './components/daily-ops-report/daily-ops-report.component';
 import { DeliveryTimeManagementComponent } from './components/delivery-time-management/delivery-time-management.component';
 import { DeliveryBoyDetailsComponent } from './components/deliveryboy-details/deliveryboy-details.component';
 import { DownloadEmailComponent } from './components/download-email/download-email.component';
@@ -107,10 +106,8 @@ export function ConfigLoader(envConfig: envConfig) {
     editComponent,
     PerformanceReportComponent,
     ProductReportComponent,
-    DailyOpsReportComponent,
     StockComponentsReportsComponent,
     DeliveryTimeManagementComponent,
-    DailyOpsReportComponent,
     StockComponentsReportsComponent,
     DownloadStockedComponent,
     DownloadStockedComponentProduct,

@@ -15,6 +15,8 @@ import { NewReportsComponentModule } from 'app/components/new-reports-component/
 import { ProductAvailabilityComponent } from 'app/components/product-decentralization/product-availability/product-availability.component';
 import { ProductBarcodeComponent } from 'app/components/product-decentralization/product-barcode/product-barcode.component';
 import { DeliveryPriorityComponent } from 'app/components/product-decentralization/delivery-priority/delivery-priority.component';
+import { DailyOpsReportComponent } from 'app/components/daily-ops-report/daily-ops-report.component';
+import { UserAccessService } from 'app/services/user-access.service'
 
 const routes: Routes = [{
   path: '',
@@ -22,6 +24,10 @@ const routes: Routes = [{
   children: [{
     path: 'sendemail',
     loadChildren: './sendemail.module#SendEmailModule',
+    canActivate: [AuthGuard]
+  }, {
+    path: 'egv',
+    loadChildren: './egvpanel.module#EgvpanelModule',
     canActivate: [AuthGuard]
   },
   {
@@ -37,6 +43,11 @@ const routes: Routes = [{
   {
     path: 'banner',
     component: BannerPanelComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'dailywarehouseOpsReport',
+    component: DailyOpsReportComponent,
     canActivate: [AuthGuard]
   }
   ]
@@ -61,8 +72,9 @@ const routes: Routes = [{
     BannerPanelComponent,
     ProductAvailabilityComponent,
     ProductBarcodeComponent,
-    DeliveryPriorityComponent
+    DeliveryPriorityComponent,
+    DailyOpsReportComponent
   ],
-  providers: [NavService]
+  providers: [NavService, UserAccessService]
 })
 export class NewDashboardModule { }

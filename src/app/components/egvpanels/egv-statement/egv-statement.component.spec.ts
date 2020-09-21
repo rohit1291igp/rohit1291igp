@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { NewDasboardComponent } from './new-dashboard.component';
+import { EgvStatementComponent } from './egv-statement.component';
 
-describe('NewDasboardComponent', () => {
-  let component: NewDasboardComponent;
-  let fixture: ComponentFixture<NewDasboardComponent>;
+describe('EgvStatementComponent', () => {
+  let component: EgvStatementComponent;
+  let fixture: ComponentFixture<EgvStatementComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ NewDasboardComponent ]
+      declarations: [ EgvStatementComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(NewDasboardComponent);
+    fixture = TestBed.createComponent(EgvStatementComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

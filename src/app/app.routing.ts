@@ -107,10 +107,6 @@ const route: Routes = [
     canActivate: [AuthGuard]
   },
   {
-    path: 'dailywarehouseOpsReport',
-    component: DailyOpsReportComponent
-  },
-  {
     path: 'stockReport',
     component: StockComponentsReportsComponent,
     canActivate: [AuthGuard]
@@ -132,8 +128,13 @@ const route: Routes = [
     component: UploadedImageReportComponent
   },  
   {
-    path:'orderReport',
-    component:OrderReportComponent
+    path: 'orderReport',
+    component: OrderReportComponent
+  },
+  {
+    path: 'egv',
+    loadChildren: './modules/egvpanel.module#EgvpanelModule',
+    // canActivate: [AuthGuard]
   },
   {
     path:'user-management',

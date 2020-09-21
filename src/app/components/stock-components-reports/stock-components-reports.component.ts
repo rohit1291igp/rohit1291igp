@@ -241,9 +241,9 @@ export class StockComponentsReportsComponent implements OnInit {
         var _this = this;
         var apiURLPath = "";
         apiURLPath = "orderedVendorComponentStocked";
-        let paramsObj = event.data.rowData;
+        let paramsObj = event.data.component;
         event.data.colName = event.data.colName.replace(/ /g, '_');
-        paramsObj[event.data.colName] = event.value.fieldName;
+        paramsObj[event.data.colName] = event.requestedvalue;
         var paramsStr = _this.UtilityService.formatParams(paramsObj);
         let reqObj = {
             url: apiURLPath + paramsStr,
