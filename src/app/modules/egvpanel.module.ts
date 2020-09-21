@@ -7,12 +7,17 @@ import { MatFormFieldModule, MatAutocompleteModule, MatInputModule, MatTableModu
 import { EgvService } from '../services/egv.service';
 
 import { EgvStatementComponent, transactionReportDialog } from 'app/components/egvpanels/egv-statement/egv-statement.component';
-import { EgvwalletComponent } from 'app/components/egvwallet/egvwallet.component';
-
+import { EgvwalletComponent } from 'app/components/egvpanels/egvwallet/egvwallet.component';
 import { environment } from 'environments/environment';
+import { IndianNumericPipe } from '../customPipes/indian-numeric.pipe';
+import { EgvDashboardComponent } from 'app/components/egvpanels/egv-dashboard/egv-dashboard.component';
 
 
 const routes: Routes = [
+  {
+    path:'',
+    component:EgvDashboardComponent
+  },
 
   {
     path: 'wallet',
@@ -48,7 +53,7 @@ const routes: Routes = [
     MatSelectModule,
 
   ],
-  declarations: [EgvwalletComponent, EgvStatementComponent, transactionReportDialog],
+  declarations: [EgvwalletComponent, EgvStatementComponent, transactionReportDialog, IndianNumericPipe, EgvDashboardComponent],
   providers: [EgvService],
   entryComponents: [transactionReportDialog]
 })

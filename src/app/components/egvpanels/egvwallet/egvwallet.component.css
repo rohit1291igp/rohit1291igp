@@ -9,7 +9,7 @@
     font-weight: 600;
     font-size: 16px;
     color: #1d252d;
-    
+    margin-right:15px;
     font-family: Open Sans,Helvetica,Arial;
 }
 
@@ -48,6 +48,10 @@
 
 .width30{
     width:30%
+}
+.width20{
+    width:20%;
+    display:inline-block;
 }
 
 .width15{

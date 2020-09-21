@@ -2,7 +2,7 @@ import { Component, OnInit, NgModule, ViewChild, ChangeDetectorRef } from '@angu
 import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatDatepickerInput, MatAutocompleteModule, MatAutocomplete, MatPaginator, MatTableDataSource, MatSort, MatSnackBar } from '@angular/material';
 import { startWith, map } from 'rxjs/operators';
-import { environment } from '../../../environments/environment';
+import { environment } from '../../../../environments/environment';
 import 'rxjs/add/operator/toPromise';
 import { HttpHeaders } from '@angular/common/http';
 import { DatePipe } from '@angular/common';
@@ -18,18 +18,18 @@ import { UrlHandlingStrategy } from '@angular/router';
 })
 export class EgvwalletComponent implements OnInit {
 
+  public env = environment;
   addMoneyForm: FormGroup;
   walletSummary: any;
   loadingSummary: boolean = true;
   userSelected: any;
   usersList;
   submitted: boolean = false;
-  public env = environment;
   //creditLimit,dailyTransLimit,creditLimitDays
   limitTypeList = [
+    { key: 'dailyTransLimit', value: 'Daily Limit' },
     { key: 'creditLimit', value: 'Credit Limit' },
-    { key: 'dailyTransLimit', value: 'Daily Transaction Limit' },
-    { key: 'creditLimitDays', value: 'Credit Days Limit' }]
+    { key: 'creditLimitDays', value: 'Credit Period' }]
 
   selectedUser = new FormControl();
   filteredUserList;
@@ -156,7 +156,7 @@ export class EgvwalletComponent implements OnInit {
       method: "put",
     };
     reqObj.url += "&userId=" + _this.userSelected.user_id + "&fkAssociateId=" + _this.userSelected.fkAssociateId;
-    if (environment.userType == ' egv_admin') {
+    if (environment.userType == 'egv_admin') {
       reqObj.url += "&flagApproveCredit=2&flagAdmin=1"
     }
     if (environment.userType == "egv_manager" || environment.userType == "egv_executive") {
@@ -192,7 +192,7 @@ export class EgvwalletComponent implements OnInit {
       method: "put",
     };
     reqObj.url += "&userId=" + _this.userSelected.user_id + "&fkAssociateId=" + _this.userSelected.fkAssociateId;
-    if (environment.userType == ' egv_admin') {
+    if (environment.userType == 'egv_admin') {
       reqObj.url += "&flagApproveCredit=2&flagAdmin=1"
     }
     if (environment.userType == "egv_manager" || environment.userType == "egv_executive") {

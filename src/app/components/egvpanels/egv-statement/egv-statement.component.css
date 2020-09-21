@@ -1,10 +1,38 @@
 
 .filterElement{
-    /* width:22%; */
+    width:20%;
     margin-right: 15px;
+}
+.marginB20{
+    margin-bottom:20px
 }
 
 .mat-dialog-container{
     height:90vh !important;
     width:80vw !important
+}
+
+
+::ng-deep .mat-sort-header-container {
+    display: flex;
+    /* display:flex; */
+    /* justify-content: flex-end; */
+    justify-content: center;
+    text-align: center;
+    cursor: pointer;
+}
+
+::ng-deep .mat-cell {
+    text-align: center;
+    justify-content: center;
+}
+
+.mat-column-Amount,
+::ng-deep .mat-column-Order-Value,
+::ng-deep .mat-column-TransferPrice,
+::ng-deep .mat-column-Denomination,
+::ng-deep .mat-column-Balance,
+::ng-deep .mat-column-Denomination 
+{
+    text-align: right !important;
 }

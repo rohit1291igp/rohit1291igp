@@ -260,7 +260,7 @@ export class EgvStatementComponent implements OnInit {
 		//http://18.233.106.34:8081/v1/admin/egvpanel/reconcile/gettransactionwisereport?endDate=2020-09-15&userId=882&startDate=2020-09-15
 		let newdate = element.Date.substring(0, 10).split("-").reverse().join("-");
 		let reqObj: any = {
-			url: 'reconcile/gettransactionwisereport?endDate=' + newdate + "&startDate=" + newdate + "&userId=" + element.User,
+			url: 'reconcile/gettransactionwisereport?endDate=' + newdate + "&startDate=" + newdate + "&userId=" + element.UserId,
 			method: "get",
 		};
 		this.EgvService.getEgvService(reqObj, function (err, response) {
@@ -280,23 +280,30 @@ export class EgvStatementComponent implements OnInit {
 				})
 		})
 	}
-
 }
-
-
 
 @Component({
 	selector: 'app-transaction-report',
 	template: `		
+	<mat-form-field style="margin:0 20px" *ngIf="data.dataSource?.data?.length > 0">
+      <mat-label>Search</mat-label>
+      <i matSuffix class="fa fa-search "></i>
+      <input matInput (keyup)="applyFilter($event)" #input>
+    </mat-form-field>
 	<button type="button" (click)="downloadStatement()" mat-raised-button *ngIf="data.dataSource?.data?.length > 0 && (env.userType=='egv_admin'|| env.userType=='egv_manager')">Download</button>
-    <div class="mat-elevation-z8" *ngIf="data.dataSource?.data?.length > 0 else noRecord">
+	
+	<button mat-button style="float:right" mat-dialog-close><i class="fa fa-times" aria-hidden="true"></i></button>
+	<div class="mat-elevation-z8" *ngIf="data.dataSource?.data?.length > 0 else noRecord">
 	<mat-table [dataSource]="data.dataSource" matSort>
         <ng-container [matColumnDef]="column" *ngFor="let column of data.tableHeaders">
           <mat-header-cell mat-sort-header *matHeaderCellDef> {{column}} </mat-header-cell>
           <mat-cell *matCellDef="let element">
-            <ng-container>
+		  <ng-container *ngIf="column != 'Balance'">
               {{element[column] || '-'}}
-            </ng-container>
+			</ng-container>
+			<ng-container *ngIf="column == 'Balance'">
+			{{element[column] || '-'| indianNumeric}}
+		  </ng-container>
           </mat-cell>
         </ng-container>
         <mat-header-row *matHeaderRowDef="data.tableHeaders"></mat-header-row>
@@ -329,7 +336,7 @@ export class transactionReportDialog implements OnInit {
 	}
 
 	ngOnInit() {
-		this.dialogRef.updateSize('85%', '85%');
+		this.dialogRef.updateSize('90%', '95%');
 		setTimeout(() => {
 			this.dataSource.paginator = this.paginator;
 			this.dataSource.sort = this.sort;
@@ -364,5 +371,14 @@ export class transactionReportDialog implements OnInit {
 			// console.log(data)
 			let download = new Angular5Csv(data, 'Transaction Statement', options);
 		})
+	}
+	
+	applyFilter(event: Event) {
+		const filterValue = (event.target as HTMLInputElement).value;
+		this.data.dataSource.filter = filterValue.trim().toLowerCase();
+
+		if (this.data.dataSource.paginator) {
+			this.data.dataSource.paginator.firstPage();
+		}
 	}
 }
