@@ -16,6 +16,8 @@ import { ProductReportComponent } from './components/product-report/product-repo
 import { StockComponentsReportsComponent } from './components/stock-components-reports/stock-components-reports.component';
 import { UploadedImageReportComponent } from './components/uploaded-image-report/uploaded-image-report.component';
 import { AuthGuard } from './services/auth-guard.service';
+import { UserManagementComponent } from './components/egv/user-management/user-management.component';
+import { EgvGuard } from './services/egv.guard';
 
 
 const route: Routes = [
@@ -103,10 +105,6 @@ const route: Routes = [
     canActivate: [AuthGuard]
   },
   {
-    path: 'dailywarehouseOpsReport',
-    component: DailyOpsReportComponent
-  },
-  {
     path: 'stockReport',
     component: StockComponentsReportsComponent,
     canActivate: [AuthGuard]
@@ -128,8 +126,18 @@ const route: Routes = [
     component: UploadedImageReportComponent
   },  
   {
-    path:'orderReport',
-    component:OrderReportComponent
+    path: 'orderReport',
+    component: OrderReportComponent
+  },
+  {
+    path: 'egv',
+    loadChildren: './modules/egvpanel.module#EgvpanelModule',
+    // canActivate: [AuthGuard]
+  },
+  {
+    path:'user-management',
+    component:UserManagementComponent,
+    canActivate:[AuthGuard,EgvGuard]
   },
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
   // otherwise redirect to home
