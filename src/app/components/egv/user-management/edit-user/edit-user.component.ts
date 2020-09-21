@@ -1,5 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { MatDialogRef, MAT_DIALOG_DATA, MatSnackBar } from '@angular/material';
+import { EgvService } from 'app/services/egv.service';
+import { NotificationComponent } from 'app/components/notification/notification.component';
 
 @Component({
   selector: 'app-edit-user',
@@ -13,7 +15,9 @@ export class EditUserComponent implements OnInit {
   display_name
   constructor(
     public dialogRef: MatDialogRef<EditUserComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private egvService:EgvService,
+    private _snackBar: MatSnackBar,
   ) { }
 
   user_type_map={
@@ -27,16 +31,47 @@ export class EditUserComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.display_name=this.data.user.name;
+    this.display_name=this.data.user.associateName;
     this.user_type=this.user_type_map[this.data.user.userType];
     this.account_status = this.data.user.accountEnabled;
     console.log(this.data)
   }
 
   onSubmit(){
+    let req_body={}
+    if(this.display_name){
+      req_body={
+        username:this.data.user.name,
+        fk_associate_id:this.data.user.fkAssociateId,
+        display_name:this.display_name,
+        enabled:this.account_status,
+        usertype:this.user_type
+      }
+      this.egvService.updateUser(req_body).subscribe((res:any)=>{
+        if(!res.error){
+          this.openSnackBar('Updated Successfully')
+          this.onNoClick();
+        }else{
+          this.openSnackBar('Error, Please Try Again')
+        }
+      })
+    } 
+  }
 
+  onNoClick(): void {
+    this.dialogRef.close();
   }
 
   onClear(){}
+
+
+  openSnackBar(data) {
+    this._snackBar.openFromComponent(NotificationComponent, {
+      data: data,
+      duration: 5 * 1000,
+      panelClass: ['snackbar-success'],
+      verticalPosition: "top"
+    });
+  }
 
 }

@@ -41,9 +41,9 @@ export class EgvService {
     return this.httpClient.put(url,body)
   }
 
-  updateUser(body){
+  updateUser(req_body){
     let url=environment.origin+'v1/admin/egvpanel/login/updateuser';
-    console.log(body);
+    return this.httpClient.put(url,req_body)
   }
 
   changePassword(req_body){

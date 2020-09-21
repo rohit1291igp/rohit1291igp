@@ -15,6 +15,7 @@ export class PasswordChangeComponent implements OnInit {
     private egvService:EgvService
   ) { }
 
+  old_password=""
   password=""
   confirm_password=""
   ngOnInit() {
@@ -25,7 +26,7 @@ export class PasswordChangeComponent implements OnInit {
       let req_body={
         "fk_associate_id": localStorage.getItem('fkAssociateId'),
         "password" :this.confirm_password,
-        "user_id": localStorage.getItem('fkUserId')
+        "id": localStorage.getItem('fkUserId')
       }
       this.egvService.changePassword(req_body).subscribe((res:any)=>{
         if(!res.error){
@@ -43,6 +44,9 @@ export class PasswordChangeComponent implements OnInit {
   }
 
   isValidePassword(){
+    if(!this.old_password){
+      return false;
+    }
     if(this.password && this.confirm_password){
       return this.password===this.confirm_password;
     }

@@ -65,13 +65,12 @@ import { VoucherService } from './services/voucher.service';
 import { SharedModule } from './shared-module/shared/shared.module';
 import { CookieService } from './services/cookie.service';
 import { OrderReportComponent} from './components/order-report/order-report.component';
-import { UserManagementComponent } from './components/egv/user-management/user-management.component';
-import { NewUserFormComponent } from './components/egv/user-management/new-user-form/new-user-form.component';
+// import { NewUserFormComponent } from './components/egv/user-management/new-user-form/new-user-form.component';
 import { EgvGuard } from './services/egv.guard';
 import { EgvService } from './services/egv.service';
-import { AlertManagementComponent } from './components/egv/alert-management/alert-management.component';
-import { EditUserComponent } from './components/egv/user-management/edit-user/edit-user.component';
-import { PasswordChangeComponent } from './components/egv/user-management/password-change/password-change.component';
+// import { AlertManagementComponent } from './components/egv/alert-management/alert-management.component';
+// import { EditUserComponent } from './components/egv/user-management/edit-user/edit-user.component';
+// import { PasswordChangeComponent } from './components/egv/user-management/password-change/password-change.component';
 
 
 
@@ -114,11 +113,10 @@ export function ConfigLoader(envConfig: envConfig) {
     OfferPageManagementComponent,
     UploadedImageReportComponent,
     OrderReportComponent,
-    UserManagementComponent,
-    NewUserFormComponent,
-    AlertManagementComponent,
-    EditUserComponent,
-    PasswordChangeComponent
+    // NewUserFormComponent,
+    // AlertManagementComponent,
+    // EditUserComponent,
+    // PasswordChangeComponent
     // AutoSelectionComponent
   ],
   imports: [
@@ -206,7 +204,7 @@ export function ConfigLoader(envConfig: envConfig) {
     NavService,
     CookieService
   ],
-  entryComponents:[UploadExcelComponent,NotificationComponent, ImgPreviewComponent, SelectItemForDelivered, OrderStockComponent,editComponent, DownloadStockedComponent,DownloadStockedComponentProduct,NewUserFormComponent,EditUserComponent],
+  entryComponents:[UploadExcelComponent,NotificationComponent, ImgPreviewComponent, SelectItemForDelivered, OrderStockComponent,editComponent, DownloadStockedComponent,DownloadStockedComponentProduct],
   bootstrap: [AppComponent],
   exports: [RouterModule]
 })

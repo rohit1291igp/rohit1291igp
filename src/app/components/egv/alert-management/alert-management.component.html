@@ -15,7 +15,7 @@
           <div style="float: right;">
             <span style="color: rgba(0,0,0,.38);">&#8377;</span><mat-form-field class="example-full-width">
               <mat-label>Threshold 1</mat-label>
-              <input type="number" matInput placeholder="Credit Warning" [(ngModel)]="alertLimit" [disabled]="isAlertAmountDisabled">
+              <input type="number" matInput placeholder="Balance Update" [(ngModel)]="alertLimit" [disabled]="isAlertAmountDisabled">
             </mat-form-field>
             <button *ngIf="!isAlertAmountDisabled" (click)="alertAmountChange()" mat-icon-button>
               <mat-icon>check_circle</mat-icon>
@@ -81,7 +81,7 @@
             <span style="color: rgba(0,0,0,.38);">&#8377;</span>
             <mat-form-field class="example-full-width">
               <mat-label>Threshold 2</mat-label>
-              <input type="number" matInput placeholder="SOS Warning" [(ngModel)]="SosLimit" [disabled]="isSosAmountDisabled">
+              <input type="number" matInput placeholder="Low Balance Alert" [(ngModel)]="SosLimit" [disabled]="isSosAmountDisabled">
             </mat-form-field>
             <button *ngIf="!isSosAmountDisabled" (click)="SosAmountChange()" mat-icon-button>
               <mat-icon>check_circle</mat-icon>

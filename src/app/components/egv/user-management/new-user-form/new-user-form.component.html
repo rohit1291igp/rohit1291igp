@@ -20,32 +20,20 @@
           </mat-error>
         </mat-form-field>
         <mat-form-field class="example-form-field">
-          <mat-label>Company Email</mat-label>
-          <input matInput type="text" formControlName="company_email" required>
-          <mat-error *ngIf="newUser.get('company_email').hasError('required')">
-            Company Email is <strong>required</strong>
-          </mat-error>
+          <mat-label>Company Email (optional)</mat-label>
+          <input matInput type="text" formControlName="company_email">
         </mat-form-field>
         <mat-form-field class="example-form-field">
-          <mat-label>Company URL</mat-label>
-          <input matInput type="text" formControlName="company_url" required>
-          <mat-error *ngIf="newUser.get('company_url').hasError('required')">
-            Company URL is <strong>required</strong>
-          </mat-error>
+          <mat-label>Company URL (optional)</mat-label>
+          <input matInput type="text" formControlName="company_url">
         </mat-form-field>
         <mat-form-field class="example-form-field">
-          <mat-label>Company Address</mat-label>
-          <input matInput type="text" formControlName="company_address" required>
-          <mat-error *ngIf="newUser.get('company_address').hasError('required')">
-            Company Address is <strong>required</strong>
-          </mat-error>
+          <mat-label>Company Address (optional)</mat-label>
+          <input matInput type="text" formControlName="company_address">
         </mat-form-field>
         <mat-form-field class="example-form-field">
-          <mat-label>Company Phone</mat-label>
-          <input matInput type="text" formControlName="company_number" required>
-          <mat-error *ngIf="newUser.get('company_number').hasError('required')">
-            Company Phone is <strong>required</strong>
-          </mat-error>
+          <mat-label>Company Phone (optional)</mat-label>
+          <input matInput type="text" formControlName="company_number">
         </mat-form-field>
       </ng-container>
     </div>

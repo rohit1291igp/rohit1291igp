@@ -25,7 +25,6 @@ export class NewUserFormComponent implements OnInit {
     console.log(this.data)
     this.setUserForm()
     if(this.env.userType==='egv_admin'){
-
       this.getAccountsList()
     }else{
       this.selectedFkid=localStorage.getItem('fkAssociateId');
@@ -45,29 +44,43 @@ export class NewUserFormComponent implements OnInit {
   }
   setCompanyForm(){
     this.newUser.addControl('company_name',this.fb.control('',[Validators.required]))
-      this.newUser.addControl('company_email',this.fb.control('',[Validators.required]))
-      this.newUser.addControl('company_url',this.fb.control('',[Validators.required]))
-      this.newUser.addControl('company_address',this.fb.control('',[Validators.required]))
-      this.newUser.addControl('company_number',this.fb.control('',[Validators.required]))
+      this.newUser.addControl('company_email',this.fb.control('',[]))
+      this.newUser.addControl('company_url',this.fb.control('',[]))
+      this.newUser.addControl('company_address',this.fb.control('',[]))
+      this.newUser.addControl('company_number',this.fb.control('',[]))
   }
 
   getAccountsList(){
     this.accounts_list=[
       {
         fkid:992,company_name:'egvtest'
-      }
+      },
+      {
+        fkid:1000,company_name:'Test EGV 1'
+      },
+      {
+        fkid:1001,company_name:'test2'
+      },
+      {
+        fkid:1002,company_name:'test3'
+      },
     ]
   }
 
   onSubmit(f:NgForm){
     console.log(f)
     if(f.valid){
-      
-      if(this.data.account_type==='manager'){
-        
-      }else if(this.data.account_type==='executive'){
-        
+      if(this.data.account_type==='client'){
         f.value.fk_associate_id=Number(localStorage.getItem('fkAssociateId'));
+      }
+      if(this.data.account_type==='manager'){
+        f.value.fk_associate_id=Number(this.selectedFkid);
+      }else if(this.data.account_type==='executive'){
+        if(this.env.userType==='egv_admin'){
+          f.value.fk_associate_id=Number(this.selectedFkid);
+        }else{
+          f.value.fk_associate_id=Number(localStorage.getItem('fkAssociateId'));
+        }
       }
       // defaul
       f.value.usertype=this.UserTypesMap[this.data.account_type]
