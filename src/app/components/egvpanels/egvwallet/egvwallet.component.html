@@ -88,10 +88,10 @@
             </div> -->
             <div *ngIf="env.userType=='egv_admin'">
               <div class="width20 addMoney">
-                Change Limit
+                Change Parameter
               </div>
               <mat-form-field class="addMoneyInput width20">
-                <mat-label>Select Limit Type</mat-label>
+                <mat-label>Select Parameter</mat-label>
                 <mat-select formControlName="limitType">
                   <mat-option *ngFor="let option of limitTypeList" [value]="option">{{option.value}}
                   </mat-option>
@@ -102,7 +102,7 @@
                 <input matInput name='limitValue' type="number" placeholder="Enter New Value"
                   formControlName="limitValue">
               </mat-form-field>
-              <button mat-flat-button type="button" class="addMoneyButton" (click)="updateLimit()">Update Limit</button>
+              <button mat-flat-button type="button" class="addMoneyButton" (click)="updateLimit()">Update</button>
             </div>
 
 
