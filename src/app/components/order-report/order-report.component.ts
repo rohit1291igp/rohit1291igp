@@ -264,7 +264,7 @@ export class OrderReportComponent implements OnInit {
         }
       }).then((data) => {
 
-        let download = new Angular5Csv(data, 'StockComponentReport-' + dateToday, options);
+        let download = new Angular5Csv(data, 'OrderReport-' + dateToday, options);
       })
     })
   }
