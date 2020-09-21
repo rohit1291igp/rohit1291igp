@@ -63,7 +63,7 @@ export class EgvStatementComponent implements OnInit {
 						map(name => name ? _this.vendorListFilter(name) : _this.usersList)
 
 					);
-				if (environment.userType == "egv_manager" || environment.userType == "egv_executive") {
+				if (environment.userType == "manager" || environment.userType == "executive") {
 					const toSelect = _this.usersList.find(c => c.fkAssociateId == localStorage.fkAssociateId);
 					_this.selectedUser.setValue(toSelect);
 					_this.statementForm.get('selectedUser').setValue(toSelect);
