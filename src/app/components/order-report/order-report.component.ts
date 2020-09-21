@@ -230,15 +230,16 @@ export class OrderReportComponent implements OnInit {
     reqObj.url += url;
     reqObj.url += "&startLimit=0&flag_count=0";
     _this.reportsService.getReportData('getOrderReport', url, function (error, _reportData) {
-      _this.queryObj.endLimit = _reportData.summary[0].value;
-      let reqObj: any = {
+      let downreqObj: any = {
         url: 'getOrderReport?',
         method: "get",
       };
-      let url = _this.generateQueryString(_this.queryObj);
-      reqObj.url += url;
-      reqObj.url += "&startLimit=0&flag_count=0";
-      _this.BackendService.makeAjax(reqObj, function (error, _reportData) {
+      _this.queryObj.endLimit = _reportData.summary[0].value;
+      let downurl = _this.generateQueryString(_this.queryObj);
+      downreqObj.url += downurl;
+      downreqObj.url += "&startLimit=0&flag_count=1";
+
+      _this.BackendService.makeAjax(downreqObj, function (error, _reportData) {
         _this.dowloadingSummary = false;
         var options = {
           showLabels: true,
@@ -258,15 +259,17 @@ export class OrderReportComponent implements OnInit {
               resolve(_reportData.tableData);
             }
           }
-          if (pi == (_reportData.tableData.length - 1)) {
-            resolve(_reportData.tableData);
-          }
-        }
-      }).then((data) => {
+        }).then((data) => {
 
-        let download = new Angular5Csv(data, 'OrderReport-' + dateToday, options);
+          let download = new Angular5Csv(data, 'OrderReport-' + dateToday, options);
+        })
       })
-    })
+
+
+
+
+    });
+
   }
 
   addVendorToOrderMap(e, orderId, orderProductId) {
