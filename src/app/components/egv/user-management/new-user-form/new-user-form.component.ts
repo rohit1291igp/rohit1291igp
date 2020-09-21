@@ -11,7 +11,10 @@ import { environment } from "environments/environment";
 })
 export class NewUserFormComponent implements OnInit {
 
+  env=environment
   newUser:FormGroup
+  selectedFkid=""
+  accounts_list=[]
   constructor(
     private fb:FormBuilder,
     private egvService:EgvService,
@@ -20,30 +23,57 @@ export class NewUserFormComponent implements OnInit {
 
   ngOnInit() {
     console.log(this.data)
+    this.setUserForm()
+    if(this.env.userType==='egv_admin'){
+
+      this.getAccountsList()
+    }else{
+      this.selectedFkid=localStorage.getItem('fkAssociateId');
+    }
+    if(this.data.account_type==='client'){
+      this.setCompanyForm();
+    }
+  }
+
+  setUserForm(){
     this.newUser=this.fb.group({
-      associateName:["",Validators.required],
-      contactPerson:["",Validators.required],
+      display_name:["",Validators.required],
       email:["",Validators.compose([Validators.required,Validators.email])],
-      address:["",Validators.required],
       username:["",Validators.required],
-      password:["",Validators.required],
-      phone:["",Validators.required]
+      mobile:["",Validators.required]
     })
+  }
+  setCompanyForm(){
+    this.newUser.addControl('company_name',this.fb.control('',[Validators.required]))
+      this.newUser.addControl('company_email',this.fb.control('',[Validators.required]))
+      this.newUser.addControl('company_url',this.fb.control('',[Validators.required]))
+      this.newUser.addControl('company_address',this.fb.control('',[Validators.required]))
+      this.newUser.addControl('company_number',this.fb.control('',[Validators.required]))
+  }
+
+  getAccountsList(){
+    this.accounts_list=[
+      {
+        fkid:992,company_name:'egvtest'
+      }
+    ]
   }
 
   onSubmit(f:NgForm){
     console.log(f)
     if(f.valid){
+      
       if(this.data.account_type==='manager'){
-        f.value.EGVManager=true;
-        f.value.EGVExecutive=false;
+        
       }else if(this.data.account_type==='executive'){
-        f.value.EGVExecutive=true;
-        f.value.EGVManager=false;
+        
         f.value.fk_associate_id=Number(localStorage.getItem('fkAssociateId'));
       }
-      f.value.status=1;
+      // defaul
+      f.value.usertype=this.UserTypesMap[this.data.account_type]
       f.value.id=0;
+
+      console.log(f.value)
       this.egvService.createEgvUser(f.value).subscribe((res:any)=>{
         if(res.error){
           alert('unable to create new user')
@@ -54,6 +84,12 @@ export class NewUserFormComponent implements OnInit {
       })
     }
   }
+
+  UserTypesMap={
+      client:0,
+      manager:1,
+      executive:2
+    }
 
   // Convert Object to Query Params
   objectToStringParams(obj){

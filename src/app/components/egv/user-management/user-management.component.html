@@ -63,11 +63,12 @@
         </div>
       </form>
       </mat-card> -->
-      <button *ngIf="env.userType==='admin'" (click)="openDialog('manager')" mat-raised-button>Create Manager Account</button>
-      <button *ngIf="env.userType==='admin'||true" (click)="openDialog('executive')" mat-raised-button>Create Executive Account</button>
+      <button *ngIf="env.userType==='egv_admin'" (click)="openDialog('client')" mat-raised-button>Add New Client</button>
+      <button *ngIf="env.userType==='egv_admin'" (click)="openDialog('manager')" mat-raised-button>Add Manager</button>
+      <button *ngIf="env.userType==='egv_admin'||env.userType==='manager'" (click)="openDialog('executive')" mat-raised-button>Add User</button>
     </div>
   </div>
-  <div class="row m-top-1">
+  <div *ngIf="dataSource.length" class="row m-top-1">
     <div class="col-sm-12 col-md-12">
       <div class="example-container mat-elevation-z8">
         <mat-table #table [dataSource]="dataSource">
@@ -77,14 +78,40 @@
       
           <!-- Position Column -->
           <ng-container *ngFor="let column of displayedColumns" matColumnDef="{{column}}">
-            <mat-header-cell *matHeaderCellDef> {{column}} </mat-header-cell>
-            <mat-cell *matCellDef="let element"> {{element[column]}} </mat-cell>
+            <mat-header-cell *matHeaderCellDef>{{columnLables[column]}}</mat-header-cell>
+            <ng-container *ngIf="column!=='accountEnabled'">
+              <mat-cell *matCellDef="let element">
+                <ng-container *ngIf="column!=='edit'">
+                  {{element[column]}}
+                </ng-container>
+                <ng-container *ngIf="column==='edit'">
+                  <button mat-icon-button (click)="editUser(element)">
+                    <mat-icon>open_in_new</mat-icon>
+                  </button>
+                </ng-container>
+              </mat-cell>
+            </ng-container>
+            <ng-container *ngIf="column==='accountEnabled'">
+              <mat-cell *matCellDef="let element">
+                <!-- <mat-slide-toggle
+                  (change)="onAccountStatusChange($event,element)"
+                  [checked]="element.accountEnabled===1">
+              </mat-slide-toggle> -->
+              {{accountEnabledStatus[element[column]]}}
+              </mat-cell>
+            </ng-container>
           </ng-container>
-      
           <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
           <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
         </mat-table>
       </div>
     </div>
+  </div>
+  <div *ngIf="!dataSource.length" class="row m-top-1">
+    <mat-card>
+      <p>
+        No Data
+      </p>
+    </mat-card>
   </div>
 </div>

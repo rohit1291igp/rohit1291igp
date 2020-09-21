@@ -138,9 +138,9 @@
                                 </div>
                             </div>
                         </ng-container>
-                        <!-- <ng-container *ngIf="col.id==='actions'">
+                        <ng-container *ngIf="col.id==='actions' && isHolidayManagement">
                             <button mat-button (click)="onEditAction(element)" >Edit</button>
-                        </ng-container> -->
+                        </ng-container>
                         <ng-container *ngIf="getRowCellValue(element[col.id]) === 'img'"><img
                                 src="{{env?.componentImageUrl+element[col.id]}}" alt="{{element[col.id]}}" width="50"
                                 height="50">

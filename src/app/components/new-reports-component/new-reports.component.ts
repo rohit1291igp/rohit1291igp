@@ -102,6 +102,7 @@ export class NewReportsComponent implements OnInit {
     filteredComponentsOptions: Observable<any[]>;
     myComponentControl = new FormControl();
     componentSelected;
+    isHolidayManagement=false;
 
     ngOnInit() {
         this.myForm = this.fb.group({
@@ -149,6 +150,8 @@ export class NewReportsComponent implements OnInit {
         map(value => typeof value === 'string' ? value : value['Component_Name']),
         map(name => name ? this._filter(name) : this.stockComponentList.slice())
       );
+
+      this.isHolidayManagement=this.router.url.includes('HolidayCalendarManagement')
     }
 
     componenetDisplayFn(component: any): string {

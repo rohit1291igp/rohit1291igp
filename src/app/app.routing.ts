@@ -18,6 +18,8 @@ import { UploadedImageReportComponent } from './components/uploaded-image-report
 import { AuthGuard } from './services/auth-guard.service';
 import { UserManagementComponent } from './components/egv/user-management/user-management.component';
 import { EgvGuard } from './services/egv.guard';
+import { AlertManagementComponent } from './components/egv/alert-management/alert-management.component';
+import { PasswordChangeComponent } from './components/egv/user-management/password-change/password-change.component';
 
 
 const route: Routes = [
@@ -136,6 +138,16 @@ const route: Routes = [
   {
     path:'user-management',
     component:UserManagementComponent,
+    canActivate:[AuthGuard,EgvGuard]
+  },
+  {
+    path:'change-password',
+    component:PasswordChangeComponent,
+    canActivate:[AuthGuard,EgvGuard]
+  },
+  {
+    path:'alert-management',
+    component:AlertManagementComponent,
     canActivate:[AuthGuard,EgvGuard]
   },
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },

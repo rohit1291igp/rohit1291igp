@@ -19,4 +19,24 @@ export class EgvService {
     return this.httpClient.get(url)
   }
 
+  getEGVAlerts(fkid){
+    let url=environment.origin+"v1/admin/egvpanel/alerts/getalertlist?fkAssociateId="+fkid;
+    return this.httpClient.get(url)
+  }
+
+  updateAlert(body){
+    let url=environment.origin+"v1/admin/egvpanel/alerts/updatealert";
+    return this.httpClient.put(url,body)
+  }
+
+  updateUser(body){
+    let url=environment.origin+'v1/admin/egvpanel/login/updateuser';
+    console.log(body);
+  }
+
+  changePassword(req_body){
+    let url=environment.origin+'v1/admin/egvpanel/login/resetPassword';
+    return this.httpClient.put(url,req_body);
+  }
+
 }
