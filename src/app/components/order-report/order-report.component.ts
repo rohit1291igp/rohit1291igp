@@ -220,7 +220,7 @@ export class OrderReportComponent implements OnInit {
     if (data.value.orderNo) {
       _this.queryObj.orderNumber = data.value.orderNo
     }
-    _this.queryObj.endLimit = _this.reportSummary[0].value;
+    _this.queryObj.endLimit = 100;
     let url = _this.generateQueryString(_this.queryObj);
     _this.dowloadingSummary = true;
     let reqObj: any = {
@@ -229,20 +229,33 @@ export class OrderReportComponent implements OnInit {
     };
     reqObj.url += url;
     reqObj.url += "&startLimit=0&flag_count=0";
-    _this.BackendService.makeAjax(reqObj, function (error, _reportData) {
-      _this.dowloadingSummary = false;
-      var options = {
-        showLabels: true,
-        showTitle: false,
-        headers: Object.keys(_reportData.tableData[0]).map(m => m.charAt(0).toUpperCase() + m.slice(1)),
-        nullToEmptyString: true,
+    _this.reportsService.getReportData('getOrderReport', url, function (error, _reportData) {
+      _this.queryObj.endLimit = _reportData.summary[0].value;
+      let reqObj: any = {
+        url: 'getOrderReport?',
+        method: "get",
       };
-      let data = [];
-      new Promise((resolve) => {
-        for (let pi = 0; pi < _reportData.tableData.length; pi++) {
-          for (let k in _reportData.tableData[pi]) {
-            if (typeof _reportData.tableData[pi][k] == 'object' && _reportData.tableData[pi][k] != null) {
-              _reportData.tableData[pi][k] = _reportData.tableData[pi][k].value ? _reportData.tableData[pi][k].value : '';
+      let url = _this.generateQueryString(_this.queryObj);
+      reqObj.url += url;
+      reqObj.url += "&startLimit=0&flag_count=0";
+      _this.BackendService.makeAjax(reqObj, function (error, _reportData) {
+        _this.dowloadingSummary = false;
+        var options = {
+          showLabels: true,
+          showTitle: false,
+          headers: Object.keys(_reportData.tableData[0]).map(m => m.charAt(0).toUpperCase() + m.slice(1)),
+          nullToEmptyString: true,
+        };
+        let data = [];
+        new Promise((resolve) => {
+          for (let pi = 0; pi < _reportData.tableData.length; pi++) {
+            for (let k in _reportData.tableData[pi]) {
+              if (typeof _reportData.tableData[pi][k] == 'object' && _reportData.tableData[pi][k] != null) {
+                _reportData.tableData[pi][k] = _reportData.tableData[pi][k].value ? _reportData.tableData[pi][k].value : '';
+              }
+            }
+            if (pi == (_reportData.tableData.length - 1)) {
+              resolve(_reportData.tableData);
             }
           }
           if (pi == (_reportData.tableData.length - 1)) {
