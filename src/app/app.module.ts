@@ -25,7 +25,6 @@ import { AppComponent, testComponent } from './components/app.component';
 import { BlogCreateComponent } from './components/blog-create/blog-create.component';
 import { BlogListComponent } from './components/blog-list/blog-list.component';
 import { BlogViewComponent } from './components/blog-view/blog-view.component';
-import { DailyOpsReportComponent } from './components/daily-ops-report/daily-ops-report.component';
 import { DeliveryTimeManagementComponent } from './components/delivery-time-management/delivery-time-management.component';
 import { DeliveryBoyDetailsComponent } from './components/deliveryboy-details/deliveryboy-details.component';
 import { DownloadEmailComponent } from './components/download-email/download-email.component';
@@ -66,6 +65,10 @@ import { VoucherService } from './services/voucher.service';
 import { SharedModule } from './shared-module/shared/shared.module';
 import { CookieService } from './services/cookie.service';
 import { OrderReportComponent} from './components/order-report/order-report.component';
+import { UserManagementComponent } from './components/egv/user-management/user-management.component';
+import { NewUserFormComponent } from './components/egv/user-management/new-user-form/new-user-form.component';
+import { EgvGuard } from './services/egv.guard';
+import { EgvService } from './services/egv.service';
 
 
 
@@ -100,16 +103,16 @@ export function ConfigLoader(envConfig: envConfig) {
     editComponent,
     PerformanceReportComponent,
     ProductReportComponent,
-    DailyOpsReportComponent,
     StockComponentsReportsComponent,
     DeliveryTimeManagementComponent,
-    DailyOpsReportComponent,
     StockComponentsReportsComponent,
     DownloadStockedComponent,
     DownloadStockedComponentProduct,
     OfferPageManagementComponent,
     UploadedImageReportComponent,
-    OrderReportComponent
+    OrderReportComponent,
+    UserManagementComponent,
+    NewUserFormComponent
     // AutoSelectionComponent
   ],
   imports: [
@@ -181,6 +184,7 @@ export function ConfigLoader(envConfig: envConfig) {
     Logger,
     AuthenticationService,
     AuthGuard,
+    EgvGuard,
     UserService,
     DashboardService,
     ReportsService,
@@ -191,10 +195,11 @@ export function ConfigLoader(envConfig: envConfig) {
     S3UploadService,
     Ng2ImgMaxService,
     VoucherService,
+    EgvService,
     NavService,
     CookieService
   ],
-  entryComponents:[UploadExcelComponent,NotificationComponent, ImgPreviewComponent, SelectItemForDelivered, OrderStockComponent,editComponent, DownloadStockedComponent,DownloadStockedComponentProduct],
+  entryComponents:[UploadExcelComponent,NotificationComponent, ImgPreviewComponent, SelectItemForDelivered, OrderStockComponent,editComponent, DownloadStockedComponent,DownloadStockedComponentProduct,NewUserFormComponent],
   bootstrap: [AppComponent],
   exports: [RouterModule]
 })
