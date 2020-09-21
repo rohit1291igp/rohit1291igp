@@ -1,60 +1,81 @@
-<h4>New {{data['account_type']|titlecase}} Account</h4>
+<h4>Add {{data['account_type']|titlecase}}</h4>
+<mat-form-field *ngIf="data.account_type!=='client' && env.userType==='egv_admin'" appearance="fill" class="example-form-field">
+  <mat-label>Select Client</mat-label>
+  <mat-select [(ngModel)]="selectedFkid">
+    <mat-option *ngFor="let account of accounts_list" [value]="account.fkid">{{account.company_name}}</mat-option>
+  </mat-select>
+</mat-form-field>
 <form [formGroup]="newUser" (ngSubmit)="onSubmit(f)" name="newUser" #f="ngForm">
-  <mat-form-field class="example-form-field">
-    <mat-label>Associate Name</mat-label>
-    <input matInput type="text" formControlName="associateName" required>
-    <mat-error *ngIf="newUser.get('associateName').hasError('required')">
-      Associate Name is <strong>required</strong>
-    </mat-error>
-  </mat-form-field>
-  <mat-form-field class="example-form-field">
-    <mat-label>Contact Person</mat-label>
-    <input matInput type="text" formControlName="contactPerson" required>
-    <mat-error *ngIf="newUser.get('contactPerson').hasError('required')">
-      Contact Person is <strong>required</strong>
-    </mat-error>
-  </mat-form-field>
-  <mat-form-field class="example-form-field">
-    <mat-label>Email</mat-label>
-    <input matInput type="text" formControlName="email" required>
-    <mat-error *ngIf="newUser.get('email').hasError('required')">
-      Email is <strong>required</strong>
-    </mat-error>
-    <mat-error *ngIf="newUser.controls['email'].hasError('email') && !newUser.controls['email'].hasError('required')">
-      Please enter a valid email address
-    </mat-error>
-  </mat-form-field>
-  <mat-form-field class="example-form-field">
-    <mat-label>Address</mat-label>
-    <input matInput type="text" formControlName="address" required>
-    <mat-error *ngIf="newUser.get('address').hasError('required')">
-      Address is <strong>required</strong>
-    </mat-error>
-  </mat-form-field>
-  <mat-form-field class="example-form-field">
-    <mat-label>Phone</mat-label>
-    <input matInput type="number" formControlName="phone" required>
-    <mat-error *ngIf="newUser.get('phone').hasError('required')">
-      Phone is <strong>required</strong>
-    </mat-error>
-  </mat-form-field>
-  <mat-form-field class="example-form-field">
-    <mat-label>Username</mat-label>
-    <input matInput type="text" formControlName="username" required>
-    <mat-error *ngIf="newUser.get('username').hasError('required')">
-      User is <strong>required</strong>
-    </mat-error>
-  </mat-form-field>
-  <mat-form-field class="example-form-field">
-    <mat-label>Password</mat-label>
-    <input matInput type="password" formControlName="password" required>
-    <mat-error *ngIf="newUser.get('password').hasError('required')">
-      Password is <strong>required</strong>
-    </mat-error>
-  </mat-form-field>
-
-  <div style="margin-top: 20px;" class="button-group">
-    <button type="submit" mat-raised-button>Submit</button>
-    <button type="button" mat-raised-button (click)="onClear(f)">Clear</button>
+  <div class="row" style="padding: 0 10px;">
+    <div *ngIf="data.account_type==='client'" class="col-sm-6">
+      <h5>
+        Company Details
+      </h5>
+      <ng-container>
+        <mat-form-field class="example-form-field">
+          <mat-label>Company Name</mat-label>
+          <input matInput type="text" formControlName="company_name" required>
+          <mat-error *ngIf="newUser.get('company_name').hasError('required')">
+            Company Name is <strong>required</strong>
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field class="example-form-field">
+          <mat-label>Company Email (optional)</mat-label>
+          <input matInput type="text" formControlName="company_email">
+        </mat-form-field>
+        <mat-form-field class="example-form-field">
+          <mat-label>Company URL (optional)</mat-label>
+          <input matInput type="text" formControlName="company_url">
+        </mat-form-field>
+        <mat-form-field class="example-form-field">
+          <mat-label>Company Address (optional)</mat-label>
+          <input matInput type="text" formControlName="company_address">
+        </mat-form-field>
+        <mat-form-field class="example-form-field">
+          <mat-label>Company Phone (optional)</mat-label>
+          <input matInput type="text" formControlName="company_number">
+        </mat-form-field>
+      </ng-container>
+    </div>
+    <div [ngClass]="{'col-sm-6':data.account_type==='client'}">
+      <h5 *ngIf="data.account_type==='client'">Manager Details</h5>
+      <mat-form-field class="example-form-field">
+        <mat-label>Name</mat-label>
+        <input matInput type="text" formControlName="display_name" required>
+        <mat-error *ngIf="newUser.get('display_name').hasError('required')">
+          Name is <strong>required</strong>
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class="example-form-field">
+        <mat-label>Email</mat-label>
+        <input matInput type="text" formControlName="email" required>
+        <mat-error *ngIf="newUser.get('email').hasError('required')">
+          Email is <strong>required</strong>
+        </mat-error>
+        <mat-error *ngIf="newUser.controls['email'].hasError('email') && !newUser.controls['email'].hasError('required')">
+          Please enter a valid email address
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class="example-form-field">
+        <mat-label>Phone</mat-label>
+        <input matInput type="number" formControlName="mobile" required>
+        <mat-error *ngIf="newUser.get('mobile').hasError('required')">
+          Phone is <strong>required</strong>
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class="example-form-field">
+        <mat-label>Username</mat-label>
+        <input matInput type="text" formControlName="username" required>
+        <mat-error *ngIf="newUser.get('username').hasError('required')">
+          User is <strong>required</strong>
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="row">
+    <div style="margin-top: 20px; margin-left: 10px;" class="button-group">
+      <button type="submit" mat-raised-button>Submit</button>
+      <button type="button" mat-raised-button (click)="onClear(f)">Clear</button>
+    </div>
   </div>
 </form>

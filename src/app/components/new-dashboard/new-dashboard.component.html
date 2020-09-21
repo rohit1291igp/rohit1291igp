@@ -1,10 +1,12 @@
 <nav>
     <i class="fa fa-bars" aria-hidden="true" (click)="drawer.toggle()" (mouseover)="drawer.open()" style="cursor: pointer"></i>
     <div class="d-flex align-items-baseline" style="float: right;">
-        <p *ngIf="username" style="margin-right: 12px;text-transform: capitalize;">Hi {{username}}
+        <p *ngIf="username" style="margin-right: 12px;text-transform: capitalize;">
+            <a style="text-decoration: none; cursor: pointer; color: white; font-weight: bold;" routerLink="/new-dashboard/egv/change-password">{{username}}</a>
         </p>
         <i (click)="logout($event)" class="fa fa-sign-out" aria-hidden="true"></i>
     </div>
+    <img src="https://cdn.igp.com/raw/upload/assets/images/igp-logo.png?v=6" width="6%" alt="igp">
 </nav>
 <mat-drawer-container class="example-container" autosize style="width: 100%;height: 100vh;">
     <mat-drawer #drawer #appDrawer class="example-sidenav" mode="side">
@@ -18,7 +20,7 @@
     </mat-drawer>
 
     <div class="example-sidenav-content">
-        <h2 *ngIf="!openPage" class="center-align">Pages</h2>
+        <h2 *ngIf="!openPage" class="center-align"></h2>
         <div *ngIf="openPage">
             <router-outlet></router-outlet>
         </div>

@@ -49,7 +49,7 @@ export class EgvwalletComponent implements OnInit {
       limitType: [''],
       limitValue: ['']
     });
-    if (environment.userType == "egv_manager" || environment.userType == "egv_executive") {
+    if (environment.userType == "manager" || environment.userType == "executive") {
       this.getAccountSummary(localStorage.fkAssociateId)
         .then((response) => {
           _this.walletSummary = response;
@@ -72,7 +72,7 @@ export class EgvwalletComponent implements OnInit {
             map(name => name ? _this.userListFilter(name) : _this.usersList)
 
           );
-        if (environment.userType == "egv_manager" || environment.userType == "egv_executive") {
+        if (environment.userType == "manager" || environment.userType == "executive") {
           const toSelect = _this.usersList.find(c => c.fkAssociateId == localStorage.fkAssociateId);
           _this.selectedUser.setValue(toSelect);
           _this.addMoneyForm.get('selectedUser').setValue(toSelect);
@@ -159,7 +159,7 @@ export class EgvwalletComponent implements OnInit {
     if (environment.userType == 'egv_admin') {
       reqObj.url += "&flagApproveCredit=2&flagAdmin=1"
     }
-    if (environment.userType == "egv_manager" || environment.userType == "egv_executive") {
+    if (environment.userType == "manager" || environment.userType == "executive") {
       reqObj.url += "&flagApproveCredit=1"
     }
     if (_this.addMoneyForm.value.comments) {
@@ -195,7 +195,7 @@ export class EgvwalletComponent implements OnInit {
     if (environment.userType == 'egv_admin') {
       reqObj.url += "&flagApproveCredit=2&flagAdmin=1"
     }
-    if (environment.userType == "egv_manager" || environment.userType == "egv_executive") {
+    if (environment.userType == "manager" || environment.userType == "executive") {
       reqObj.url += "&flagApproveCredit=1"
     }
     reqObj.url += "&" + _this.addMoneyForm.value.limitType.key + "=" + _this.addMoneyForm.value.limitValue;

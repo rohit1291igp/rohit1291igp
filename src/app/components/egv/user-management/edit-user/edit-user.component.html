@@ -1,0 +1,23 @@
+<h4>Edit User</h4>
+<mat-form-field class="example-full-width">
+  <mat-label>Name</mat-label>
+  <input [(ngModel)]="display_name" matInput value="XYZ">
+</mat-form-field>
+<mat-form-field appearance="fill">
+  <mat-label>Select an Type</mat-label>
+  <mat-select [(ngModel)]="user_type">
+    <mat-option [value]="1">Manager</mat-option>
+    <mat-option [value]="2">Executive</mat-option>
+  </mat-select>
+</mat-form-field>
+<mat-form-field appearance="fill">
+  <mat-label>Status</mat-label>
+  <mat-select [(ngModel)]="account_status">
+    <mat-option [value]="0">Disable</mat-option>
+    <mat-option [value]="1">Enable</mat-option>
+  </mat-select>
+</mat-form-field>
+<div style="margin-top: 20px;" class="button-group">
+  <button type="button" mat-raised-button (click)="onSubmit()">Submit</button>
+  <button type="button" mat-raised-button (click)="onClear()">Clear</button>
+</div>
