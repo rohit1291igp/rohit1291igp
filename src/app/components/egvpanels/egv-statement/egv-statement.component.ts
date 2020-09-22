@@ -288,7 +288,7 @@ export class EgvStatementComponent implements OnInit {
       <i matSuffix class="fa fa-search "></i>
       <input matInput (keyup)="applyFilter($event)" #input>
     </mat-form-field>
-	<button type="button" (click)="downloadStatement()" mat-raised-button *ngIf="data.dataSource?.data?.length > 0 && (env.userType=='egv_admin'|| env.userType=='egv_manager')">Download</button>
+	<button type="button" (click)="downloadStatement()" mat-raised-button *ngIf="data.dataSource?.data?.length > 0 && (env.userType=='egv_admin'|| env.userType=='manager')">Download</button>
 	
 	<button mat-button style="float:right" mat-dialog-close><i class="fa fa-times" aria-hidden="true"></i></button>
 	<div class="mat-elevation-z8" *ngIf="data.dataSource?.data?.length > 0 else noRecord">
