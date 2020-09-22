@@ -8,7 +8,7 @@ export class EgvGuard implements CanActivate {
   canActivate(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
-    if(localStorage.getItem('userType')==='admin'||localStorage.getItem('userType')==='egv_manager'||localStorage.getItem('userType')==='egv_executive'){
+    if(localStorage.getItem('userType')==='egv_admin'||localStorage.getItem('userType')==='manager'||localStorage.getItem('userType')==='executive'){
       return true;
     }
     this.router.navigate(['/'])

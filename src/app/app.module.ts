@@ -5,7 +5,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { HttpModule } from '@angular/http';
-import { MatAutocompleteModule, MatButtonModule, MatCardModule, MatCheckboxModule, MatDatepickerModule, MatDialogModule, MatDialogRef, MatFormFieldModule, MatIconModule, MatInputModule, MatListModule, MatMenuModule, MatNativeDateModule, MatPaginatorModule, MatProgressBarModule, MatProgressSpinnerModule, MatRadioModule, MatSelectModule, MatSidenavModule, MatSlideToggleModule, MatSnackBarModule, MatSortModule, MatTableModule, MatTabsModule, MAT_DATE_LOCALE, MAT_DIALOG_DATA } from '@angular/material';
+import { MatAutocompleteModule, MatButtonModule, MatCardModule, MatCheckboxModule, MatDatepickerModule, MatDialogModule, MatDialogRef, MatFormFieldModule, MatIconModule, MatInputModule, MatListModule, MatMenuModule, MatNativeDateModule, MatPaginatorModule, MatProgressBarModule, MatProgressSpinnerModule, MatRadioModule, MatSelectModule, MatSidenavModule, MatSlideToggleModule, MatSnackBarModule, MatSortModule, MatTableModule, MatTabsModule, MAT_DATE_LOCALE, MAT_DIALOG_DATA, MatChipsModule } from '@angular/material';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
@@ -65,10 +65,12 @@ import { VoucherService } from './services/voucher.service';
 import { SharedModule } from './shared-module/shared/shared.module';
 import { CookieService } from './services/cookie.service';
 import { OrderReportComponent} from './components/order-report/order-report.component';
-import { UserManagementComponent } from './components/egv/user-management/user-management.component';
-import { NewUserFormComponent } from './components/egv/user-management/new-user-form/new-user-form.component';
+// import { NewUserFormComponent } from './components/egv/user-management/new-user-form/new-user-form.component';
 import { EgvGuard } from './services/egv.guard';
 import { EgvService } from './services/egv.service';
+// import { AlertManagementComponent } from './components/egv/alert-management/alert-management.component';
+// import { EditUserComponent } from './components/egv/user-management/edit-user/edit-user.component';
+// import { PasswordChangeComponent } from './components/egv/user-management/password-change/password-change.component';
 
 
 
@@ -111,8 +113,10 @@ export function ConfigLoader(envConfig: envConfig) {
     OfferPageManagementComponent,
     UploadedImageReportComponent,
     OrderReportComponent,
-    UserManagementComponent,
-    NewUserFormComponent
+    // NewUserFormComponent,
+    // AlertManagementComponent,
+    // EditUserComponent,
+    // PasswordChangeComponent
     // AutoSelectionComponent
   ],
   imports: [
@@ -145,6 +149,7 @@ export function ConfigLoader(envConfig: envConfig) {
     MatAutocompleteModule,
     MatTabsModule,
     MatSlideToggleModule,
+    MatChipsModule,
     routing,
     SelectModule,
     MyDatePickerModule,
@@ -199,7 +204,7 @@ export function ConfigLoader(envConfig: envConfig) {
     NavService,
     CookieService
   ],
-  entryComponents:[UploadExcelComponent,NotificationComponent, ImgPreviewComponent, SelectItemForDelivered, OrderStockComponent,editComponent, DownloadStockedComponent,DownloadStockedComponentProduct,NewUserFormComponent],
+  entryComponents:[UploadExcelComponent,NotificationComponent, ImgPreviewComponent, SelectItemForDelivered, OrderStockComponent,editComponent, DownloadStockedComponent,DownloadStockedComponentProduct],
   bootstrap: [AppComponent],
   exports: [RouterModule]
 })
