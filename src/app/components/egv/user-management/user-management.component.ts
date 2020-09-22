@@ -4,19 +4,8 @@ import { MatDialog } from '@angular/material';
 import { NewUserFormComponent } from './new-user-form/new-user-form.component';
 import { environment } from 'environments/environment';
 import { EgvService } from 'app/services/egv.service';
+import { EditUserComponent } from './edit-user/edit-user.component';
 
-const ELEMENT_DATA: any[] = [
-  {position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H'},
-  {position: 2, name: 'Helium', weight: 4.0026, symbol: 'He'},
-  {position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li'},
-  {position: 4, name: 'Beryllium', weight: 9.0122, symbol: 'Be'},
-  {position: 5, name: 'Boron', weight: 10.811, symbol: 'B'},
-  {position: 6, name: 'Carbon', weight: 12.0107, symbol: 'C'},
-  {position: 7, name: 'Nitrogen', weight: 14.0067, symbol: 'N'},
-  {position: 8, name: 'Oxygen', weight: 15.9994, symbol: 'O'},
-  {position: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F'},
-  {position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne'},
-];
 
 
 
@@ -27,8 +16,8 @@ const ELEMENT_DATA: any[] = [
 })
 export class UserManagementComponent implements OnInit {
 
-  displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
-  dataSource = ELEMENT_DATA;
+  displayedColumns: string[] = [];
+  dataSource = [];
 
   public env=environment;
 
@@ -43,19 +32,19 @@ export class UserManagementComponent implements OnInit {
   }
 
   getUsers(){
-    if(environment.userType==='admin'||environment.userType==='egv_manager'){
+    if(environment.userType==='egv_admin'||environment.userType==='manager'){
       let egvUserType=""
       let fkid=null;
-      if(environment.userType==='admin'){
+      if(environment.userType==='egv_admin'){
         egvUserType='EGV_Admin';
-      }else if(environment.userType==='egv_manager'){
-        egvUserType='EGV_Manager';
+      }else if(environment.userType==='manager'){
+        egvUserType='Manager';
         fkid=localStorage.getItem('fkAssociateId');
       }
       this.egvService.getUserList(egvUserType,fkid).subscribe((res:any)=>{
         if(res.tableData.length){
-          this.displayedColumns=Object.keys(res.tableData[0]).filter(ele=>ele!=='access');
-          
+          // this.displayedColumns=Object.keys(res.tableData[0]).filter(ele=>ele!=='access');
+          this.displayedColumns=['name','associateName','userType','accountEnabled','edit']
           this.dataSource=res.tableData;
         }
       })
@@ -64,7 +53,7 @@ export class UserManagementComponent implements OnInit {
 
   openDialog(accountType): void {
     let dialogRef = this.dialog.open(NewUserFormComponent, {
-      width: '350px',
+      width: accountType==='client'?'700px':'350px',
       data: { account_type:accountType }
     });
 
@@ -72,5 +61,35 @@ export class UserManagementComponent implements OnInit {
       console.log('The dialog was closed');
       this.getUsers()
     });
+  }
+
+  editUser(element){
+    let dialogRef=this.dialog.open(EditUserComponent, {
+      width:'250px',
+      data:{user:element}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+      this.getUsers()
+    });
+  }
+
+  onAccountStatusChange(event,element){
+    console.log(event.checked,element);
+  }
+
+  columnLables={
+    user_id:"User Id",
+    name:"Username",
+    associateName:"Name",
+    userType:"User Type",
+    accountEnabled:"Enabled",
+    edit:"Edit"
+  }
+
+  accountEnabledStatus={
+    1:"Enabled",
+    0:"Disabled"
   }
 }

@@ -1,0 +1,88 @@
+<div class="main-container ">
+  <mat-card class="marginB20">
+    <div class="row">
+      <div class="col-md-12 marginB20">
+        <form [formGroup]="statementForm" (ngSubmit)="getStatement()">
+          <div>
+            <!-- *ngIf="env.userType=='egv_admin'" -->
+            <mat-form-field class="filterElement" *ngIf="env.userType =='egv_admin'">
+              <mat-label>Select a client</mat-label>
+              <input type="text" matInput placeholder='Select a client' formControlName="selectedUser"
+                [matAutocomplete]="auto">
+              <mat-autocomplete #auto="matAutocomplete" (optionSelected)='getUserSelected($event.option.value)'
+                [displayWith]="userDisplayFn">
+                <mat-option *ngFor="let option of filteredUserList | async" [value]="option">
+                  {{option.associateName}}</mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+
+            <mat-form-field class="filterElement">
+              <mat-label>Start Date</mat-label>
+              <input matInput [matDatepicker]="startDate" [max]="maxDate"
+                (dateInput)="addEventFrom('input','startDate', $event)"
+                (dateChange)="addEventFrom('change','startDate', $event)" [value]="statementForm.get('startDate').value"
+                autocomplete="off">
+              <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
+              <mat-datepicker #startDate></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field class="filterElement">
+              <mat-label>End Date</mat-label>
+              <input matInput [matDatepicker]="endDate" [max]="maxDate"
+                (dateInput)="addEventFrom('input','endDate', $event)"
+                (dateChange)="addEventFrom('change','endDate', $event)" [value]="statementForm.get('endDate').value"
+                autocomplete="off">
+              <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
+              <mat-datepicker #endDate></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field class="filterElement">
+              <mat-label>Transaction Type</mat-label>
+              <mat-select formControlName="transactionType">
+                <mat-option *ngFor="let option of transactionTypeList" [value]="option">{{option|uppercase}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div>
+            <button type="submit" mat-raised-button>Get Statement</button>
+            <button type="button" mat-raised-button (click)="downloadStatement()"
+              *ngIf="env.userType=='egv_admin'|| env.userType=='manager'">Download</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </mat-card>
+  <!-- <button (click)="openDialog()">cllick</button> -->
+  <div class="mat-elevation-z8" *ngIf="dataSource?.data?.length > 0 else noRecord">
+    <mat-form-field style="margin:0 20px" class="filterElement">
+      <mat-label>Search</mat-label>
+      <i matSuffix class="fa fa-search "></i>
+      <input matInput (keyup)="applyFilter($event)" #input>
+    </mat-form-field>
+    <mat-table [dataSource]="dataSource" matSort>
+      <ng-container [matColumnDef]="column" *ngFor="let column of tableHeaders">
+        <mat-header-cell mat-sort-header *matHeaderCellDef> {{column}} </mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          <ng-container *ngIf="column != 'UTR' && column!= 'Amount'">
+            {{element[column] || '-'}}
+          </ng-container>
+          <ng-container *ngIf="column == 'Amount'">
+            {{element[column] || '-' | indianNumeric}}
+          </ng-container>
+          <ng-container *ngIf="column == 'UTR'">
+            <a (click)="openDialog(element)">{{element[column] || '-'}}</a>
+          </ng-container>
+        </mat-cell>
+      </ng-container>
+      <mat-header-row *matHeaderRowDef="tableHeaders"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: tableHeaders;"></mat-row>
+    </mat-table>
+    <mat-paginator [pageSizeOptions]="[10, 20, 50]" length="{{dataSource?.length}}" showFirstLastButtons>
+    </mat-paginator>
+  </div>
+  <ng-template #noRecord>
+    <mat-card style="color: #C3404E;">No Record</mat-card>
+  </ng-template>
+
+</div>

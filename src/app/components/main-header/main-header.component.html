@@ -1,4 +1,4 @@
-<nav class="navbar navbar-default main-header" *ngIf="environment.userType != 'warehouse'">
+<nav class="navbar navbar-default main-header" *ngIf="environment.userType != 'warehouse' && environment.userType != 'egv_admin' && environment.userType != 'manager'&& environment.userType != 'executive' ">
   <div class="container-fluid">
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
