@@ -18,9 +18,9 @@ export class EgvService {
     return this.httpClient.post(environment.origin+'v1/admin/egvpanel/login/createuser',user)
   }
 
-  getEgvService(reqObj, callback) {
+  getEgvService(reqObj) {
     let url = environment.origin + this.egvurl + reqObj.url;
-    return callback(null, this.httpClient[reqObj.method](url, reqObj.payload, reqObj.options1));
+    return this.httpClient[reqObj.method](url, reqObj.payload, reqObj.options1);
   }
 
   getUserList(egvUserType,fkid){
