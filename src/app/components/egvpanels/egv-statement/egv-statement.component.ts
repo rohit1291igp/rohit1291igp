@@ -23,7 +23,7 @@ export class EgvStatementComponent implements OnInit {
 	usersList;
 	submitted: boolean = false;
 	filteredUserList;
-	transactionTypeList = ["All", "credit", "debit", "opening", "closing"];
+	transactionTypeList = ["All", "credit", "debit"];
 	maxDate: Date;
 	public env = environment;
 	statementForm: FormGroup;
@@ -56,15 +56,17 @@ export class EgvStatementComponent implements OnInit {
 		_this.getUserList()
 			.then((response) => {
 				_this.usersList = response;
+				// _this.usersList.push(
+				// { "user_id": 20835, "name": "879 test", "fkAssociateId": "882", "company_name": "879 test", "userType": "Manager", "accountExpired": false, "credentialExpired": false, "accountLocked": false, "accountEnabled": 1, "deliveryBoyEnabled": false, "access": [{}] })
 				_this.filteredUserList = _this.selectedUser.valueChanges
 					.pipe(
 						startWith(''),
-						map(value => typeof value === 'string' ? value : value['associateName']),
+						map(value => typeof value === 'string' ? value : value['company_name']),
 						map(name => name ? _this.vendorListFilter(name) : _this.usersList)
 
 					);
 				if (environment.userType == "manager" || environment.userType == "executive") {
-					const toSelect = _this.usersList.find(c => c.fkAssociateId == localStorage.fkAssociateId);
+					const toSelect = _this.usersList.find(c => c.fk_associate_id == localStorage.fkAssociateId);
 					_this.selectedUser.setValue(toSelect);
 					_this.statementForm.get('selectedUser').setValue(toSelect);
 					_this.userSelected = toSelect;
@@ -95,36 +97,36 @@ export class EgvStatementComponent implements OnInit {
 	}
 
 	getUserList() {
+
 		let _this = this;
 		this.submitted = true;
 		let reqObj: any = {
-			url: 'login/getUserList?egvUserType=EGV_Admin',
+			url: 'login/getCompanyList',
 			method: "get",
 		};
 		// reqObj.url += '?fkAssociateId'+fkAssociateId;
 		return new Promise((resolve, reject) => {
-			_this.EgvService.getEgvService(reqObj, function (err, response) {
-				response.subscribe(
-					result => {
-						if (result.error) {
-							// _this.openSnackBar('Something went wrong.');
-							console.log('Error=============>', result.error);
-							reject([])
-						}
-						console.log('getUserList Response --->', result.tableData);
-						resolve(result.tableData)
-					})
-			})
+			_this.EgvService.getEgvService(reqObj).subscribe(
+				result => {
+					if (result.error) {
+						// _this.openSnackBar('Something went wrong.');
+						console.log('Error=============>', result.error);
+						reject([])
+					}
+					console.log('getUserList Response --->', result);
+					resolve(result)
+				})
 		})
+
 	}
 
 	private vendorListFilter(name: string): any[] {
 		const filterValue = name.toLowerCase();
-		return this.usersList.filter(option => option.associateName.toLowerCase().indexOf(filterValue) === 0);
+		return this.usersList.filter(option => option.company_name.toLowerCase().indexOf(filterValue) === 0);
 	}
 
 	userDisplayFn(user: any): string {
-		return user && user.associateName ? user.associateName : '';
+		return user && user.company_name ? user.company_name : '';
 	}
 
 	formatDate(date, format) {
@@ -154,30 +156,28 @@ export class EgvStatementComponent implements OnInit {
 				this.showHyperlink = true;
 			}
 		}
-		if (this.userSelected) {
-			reqObj.url += '&userId=' + this.userSelected.fkAssociateId
+		if (this.userSelected && this.statementForm.value.selectedUser) {
+			reqObj.url += '&userId=' + this.userSelected.fk_associate_id
 		}
 
 		// reqObj.url += '?fkAssociateId'+fkAssociateId;
 
-		this.EgvService.getEgvService(reqObj, function (err, response) {
-			response.subscribe(
-				result => {
-					console.log("getdatewisereport result ", result)
-					if (result.error) {
-						// _this.openSnackBar('Something went wrong.');
-						console.log('Error=============>', result.error);
+		this.EgvService.getEgvService(reqObj).subscribe(
+			result => {
+				console.log("getdatewisereport result ", result)
+				if (result.error) {
+					// _this.openSnackBar('Something went wrong.');
+					console.log('Error=============>', result.error);
 
-					}
-					_this.dataSource = new MatTableDataSource(result.tableData);
-					_this.tableHeaders = result.tableHeaders;
-					// _this.tableHeaders = ["Amount", "Date", "TxnId", "UserID", "comments", "balance"]
-					setTimeout(() => {
-						_this.dataSource.paginator = _this.paginator;
-						_this.dataSource.sort = _this.sort;
-					}, 100)
-				})
-		})
+				}
+				_this.dataSource = new MatTableDataSource(result.tableData);
+				_this.tableHeaders = result.tableHeaders;
+				// _this.tableHeaders = ["Amount", "Date", "TxnId", "UserID", "comments", "balance"]
+				setTimeout(() => {
+					_this.dataSource.paginator = _this.paginator;
+					_this.dataSource.sort = _this.sort;
+				}, 100)
+			})
 
 	}
 
@@ -198,50 +198,49 @@ export class EgvStatementComponent implements OnInit {
 		if (this.statementForm.value.transactionType && this.statementForm.value.transactionType != 'All') {
 			reqObj.url += '&transactionType=' + this.statementForm.value.transactionType;
 		}
-		if (this.userSelected) {
-			reqObj.url += '&userId=' + this.userSelected.fkAssociateId
+		if (this.userSelected && this.statementForm.value.selectedUser) {
+			reqObj.url += '&userId=' + this.userSelected.fk_associate_id
 		}
 
 		// reqObj.url += '?fkAssociateId'+fkAssociateId;
 
-		this.EgvService.getEgvService(reqObj, function (err, response) {
-			response.subscribe(
-				result => {
-					console.log("getdatewisereport result ", result)
-					if (result.error) {
-						// _this.openSnackBar('Something went wrong.');
-						console.log('Error=============>', result.error);
+		this.EgvService.getEgvService(reqObj).subscribe(
+			result => {
+				console.log("getdatewisereport result ", result)
+				if (result.error) {
+					// _this.openSnackBar('Something went wrong.');
+					console.log('Error=============>', result.error);
 
-					}
-					var options = {
-						showLabels: true,
-						showTitle: false,
-						headers: result.tableHeaders,
-						nullToEmptyString: true,
-					};
+				}
+				var options = {
+					showLabels: true,
+					showTitle: false,
+					headers: result.tableHeaders,
+					nullToEmptyString: true,
+				};
 
-					let data = [];
-					let reportDownloadData = [];
-					new Promise((resolve) => {
-						for (let pi = 0; pi < result.tableData.length; pi++) {
-							let temp = {}
-							for (let k of result.tableHeaders) {
-								if (typeof result.tableData[pi][k] == 'object' && result.tableData[pi][k] != null) {
-									result.tableData[pi][k] = result.tableData[pi][k].value ? result.tableData[pi][k].value : '';
-								}
-								temp[k] = result.tableData[pi][k];
+				let data = [];
+				let reportDownloadData = [];
+				new Promise((resolve) => {
+					for (let pi = 0; pi < result.tableData.length; pi++) {
+						let temp = {}
+						for (let k of result.tableHeaders) {
+							if (typeof result.tableData[pi][k] == 'object' && result.tableData[pi][k] != null) {
+								result.tableData[pi][k] = result.tableData[pi][k].value ? result.tableData[pi][k].value : '';
 							}
-							reportDownloadData.push(temp);
-							if (pi == (result.tableData.length - 1)) {
-								resolve(reportDownloadData);
-							}
+							temp[k] = result.tableData[pi][k];
 						}
-					}).then((data) => {
-						// console.log(data)
-						let download = new Angular5Csv(data, 'Statement' + dateToday, options);
-					})
+						reportDownloadData.push(temp);
+						if (pi == (result.tableData.length - 1)) {
+							resolve(reportDownloadData);
+						}
+					}
+				}).then((data) => {
+					// console.log(data)
+					let download = new Angular5Csv(data, 'Statement' + dateToday, options);
 				})
-		})
+			})
+
 	}
 
 
@@ -263,22 +262,21 @@ export class EgvStatementComponent implements OnInit {
 			url: 'reconcile/gettransactionwisereport?endDate=' + newdate + "&startDate=" + newdate + "&userId=" + element.UserId,
 			method: "get",
 		};
-		this.EgvService.getEgvService(reqObj, function (err, response) {
-			response.subscribe(
-				result => {
-					console.log("getdatewisereport result ", result)
-					if (result.error) {
-						// _this.openSnackBar('Something went wrong.');
-						console.log('Error=============>', result.error);
+		this.EgvService.getEgvService(reqObj).subscribe(
+			result => {
+				console.log("getdatewisereport result ", result)
+				if (result.error) {
+					// _this.openSnackBar('Something went wrong.');
+					console.log('Error=============>', result.error);
 
-					}
-					let data: any = {};
-					data.dataSource = new MatTableDataSource(result.tableData);
-					data.tableHeaders = result.tableHeaders;
+				}
+				let data: any = {};
+				data.dataSource = new MatTableDataSource(result.tableData);
+				data.tableHeaders = result.tableHeaders;
 
-					_this.dialog.open(transactionReportDialog, { data });
-				})
-		})
+				_this.dialog.open(transactionReportDialog, { data });
+			})
+
 	}
 }
 
@@ -372,7 +370,7 @@ export class transactionReportDialog implements OnInit {
 			let download = new Angular5Csv(data, 'Transaction Statement', options);
 		})
 	}
-	
+
 	applyFilter(event: Event) {
 		const filterValue = (event.target as HTMLInputElement).value;
 		this.data.dataSource.filter = filterValue.trim().toLowerCase();

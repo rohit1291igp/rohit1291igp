@@ -69,12 +69,12 @@ export class EgvwalletComponent implements OnInit {
         _this.filteredUserList = _this.selectedUser.valueChanges
           .pipe(
             startWith(''),
-            map(value => typeof value === 'string' ? value : value['associateName']),
+            map(value => typeof value === 'string' ? value : value['company_name']),
             map(name => name ? _this.userListFilter(name) : _this.usersList)
 
           );
         if (environment.userType == "manager" || environment.userType == "executive") {
-          const toSelect = _this.usersList.find(c => c.fkAssociateId == localStorage.fkAssociateId);
+          const toSelect = _this.usersList.find(c => c.fk_associate_id == localStorage.fkAssociateId);
           _this.selectedUser.setValue(toSelect);
           _this.addMoneyForm.get('selectedUser').setValue(toSelect);
           if (toSelect) {
@@ -89,7 +89,7 @@ export class EgvwalletComponent implements OnInit {
 
   private userListFilter(name: string): any[] {
     const filterValue = name.toLowerCase();
-    return this.usersList.filter(option => option.associateName.toLowerCase().indexOf(filterValue) === 0);
+    return this.usersList.filter(option => option.company_name.toLowerCase().indexOf(filterValue) === 0);
   }
 
   ngAfterViewChecked() {
@@ -114,43 +114,41 @@ export class EgvwalletComponent implements OnInit {
     };
     reqObj.url += '?fkAssociateId=' + fkAssociateId;
     return new Promise((resolve, reject) => {
-      _this.EgvService.getEgvService(reqObj, function (err, response) {
-        response.subscribe(
-          result => {
-            if (result.error) {
-              _this.openSnackBar('Something went wrong.');
-              console.log('Error=============>', result.error);
-              reject([])
-            }
-            console.log('sidePanel Response --->', result.result[0]);
-            resolve(result.result[0])
-          })
-      })
+      _this.EgvService.getEgvService(reqObj).subscribe(
+        result => {
+          if (result.error) {
+            _this.openSnackBar('Something went wrong.');
+            console.log('Error=============>', result.error);
+            reject([])
+          }
+          console.log('sidePanel Response --->', result.result[0]);
+          resolve(result.result[0])
+        })
     })
+
   }
 
   getUserList() {
     let _this = this;
     this.submitted = true;
     let reqObj: any = {
-      url: 'login/getUserList?egvUserType=EGV_Admin',
+      url: 'login/getCompanyList',
       method: "get",
     };
     // reqObj.url += '?fkAssociateId'+fkAssociateId;
     return new Promise((resolve, reject) => {
-      _this.EgvService.getEgvService(reqObj, function (err, response) {
-        response.subscribe(
-          result => {
-            if (result.error) {
-              // _this.openSnackBar('Something went wrong.');
-              console.log('Error=============>', result.error);
-              reject(result)
-            }
-            console.log('getUserList Response --->', result.tableData);
-            resolve(result.tableData)
-          })
-      })
+      _this.EgvService.getEgvService(reqObj).subscribe(
+        result => {
+          if (result.error) {
+            // _this.openSnackBar('Something went wrong.');
+            console.log('Error=============>', result.error);
+            reject(result)
+          }
+          console.log('getUserList Response --->', result);
+          resolve(result)
+        })
     })
+
   }
 
   //localhost:8082/v1/admin/egvpanel/wallet/updatewallet?userId=882&amount=10000&action=Credit&transacId=hfgvuhj&comments=kjhmhbnkjnkjnljguy&fkAssociateId=882&flagAdmin=0&flagApproveCredit=1
@@ -164,35 +162,34 @@ export class EgvwalletComponent implements OnInit {
       url: 'wallet/updatewallet?action=Credit&amount=' + data.value.addMoneyAmount + "&transacId=" + data.value.addMoneyTransactionId,
       method: "put",
     };
-    reqObj.url += "&userId=" + _this.userSelected.user_id + "&fkAssociateId=" + _this.userSelected.fkAssociateId;
+    reqObj.url += "&fkAssociateId=" + _this.userSelected.fk_associate_id;
     if (environment.userType == 'egv_admin') {
       reqObj.url += "&flagApproveCredit=2&flagAdmin=1"
     }
     if (environment.userType == "manager" || environment.userType == "executive") {
-      reqObj.url += "&flagApproveCredit=1"
+      reqObj.url += "&flagApproveCredit=1"+"&userId=" + localStorage.fkUserId ;
     }
     if (_this.addMoneyForm.value.comments) {
       reqObj.url += "&comments=" + _this.addMoneyForm.value.comments
     }
     // reqObj.url += '?fkAssociateId'+fkAssociateId;
 
-    _this.EgvService.getEgvService(reqObj, function (err, response) {
-      response.subscribe(
-        result => {
-          if (result.error) {
-            _this.openSnackBar('Something went wrong.');
-            console.log('Error=============>', result.error);
+    _this.EgvService.getEgvService(reqObj).subscribe(
+      result => {
+        if (result.error) {
+          _this.openSnackBar('Something went wrong.');
+          console.log('Error=============>', result.error);
 
-          }
-          _this.openSnackBar(result.result);
-        }).then(
-          _this.getAccountSummary(_this.userSelected.fkAssociateId)
-            .then((response) => {
-              _this.walletSummary = response;
-              _this.loadingSummary = false;
-            })
-        )
-    })
+        }
+        _this.openSnackBar(result.result);
+      }).then(
+        _this.getAccountSummary(_this.userSelected.fk_associate_id)
+          .then((response) => {
+            _this.walletSummary = response;
+            _this.loadingSummary = false;
+          })
+      )
+
 
   }
 
@@ -206,40 +203,39 @@ export class EgvwalletComponent implements OnInit {
       url: 'wallet/updatewallet?flagNotAmount=true',
       method: "put",
     };
-    reqObj.url += "&userId=" + _this.userSelected.user_id + "&fkAssociateId=" + _this.userSelected.fkAssociateId;
+    reqObj.url += "&fkAssociateId=" + _this.userSelected.fk_associate_id;
     if (environment.userType == 'egv_admin') {
       reqObj.url += "&flagApproveCredit=2&flagAdmin=1"
     }
     if (environment.userType == "manager" || environment.userType == "executive") {
-      reqObj.url += "&flagApproveCredit=1"
+      return
     }
     reqObj.url += "&" + _this.addMoneyForm.value.limitType.key + "=" + _this.addMoneyForm.value.limitValue;
     // reqObj.url += '?fkAssociateId'+fkAssociateId;
 
-    _this.EgvService.getEgvService(reqObj, function (err, response) {
-      response.subscribe(
-        result => {
-          if (result.error) {
-            _this.openSnackBar('Something went wrong.');
-            console.log('Error=============>', result.error);
+    _this.EgvService.getEgvService(reqObj).subscribe(
+      result => {
+        if (result.error) {
+          _this.openSnackBar('Something went wrong.');
+          console.log('Error=============>', result.error);
 
-          }
-          _this.openSnackBar(result.result);
-          console.log('getUserList Response --->', result.tableData);
-        }).then(
-          _this.getAccountSummary(_this.userSelected.fkAssociateId)
-            .then((response) => {
-              _this.walletSummary = response;
-              _this.loadingSummary = false;
-            })
-        )
-    })
+        }
+        _this.openSnackBar(result.result);
+        console.log('getUserList Response --->', result.tableData);
+      }).then(
+        _this.getAccountSummary(_this.userSelected.fk_associate_id)
+          .then((response) => {
+            _this.walletSummary = response;
+            _this.loadingSummary = false;
+          })
+      )
+
   }
 
   getUserSelected(obj: any) {
     let _this = this;
     this.userSelected = obj;
-    _this.getAccountSummary(this.userSelected.fkAssociateId)
+    _this.getAccountSummary(this.userSelected.fk_associate_id)
       .then((response) => {
         _this.walletSummary = response;
         _this.loadingSummary = false;
@@ -248,7 +244,7 @@ export class EgvwalletComponent implements OnInit {
   }
 
   userDisplayFn(user: any): string {
-    return user && user.associateName ? user.associateName : '';
+    return user && user.company_name ? user.company_name : '';
   }
 
 

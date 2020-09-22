@@ -255,9 +255,9 @@ export class AlertManagementComponent implements OnInit {
 
   unique_accounts=[]
   getAccounts(){
-    this.unique_accounts=[
-      {fkid:992,associateName:"EGV Test"},
-    ]
+    this.egvService.getCompanyList().subscribe((res:any)=>{
+      this.unique_accounts=res;
+    })
   }
 
   onFkidSelect(){
