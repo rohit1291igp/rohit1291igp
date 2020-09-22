@@ -3,7 +3,7 @@
     <mat-form-field appearance="fill">
       <mat-label>Select Account</mat-label>
       <mat-select [(ngModel)]="fkid" (change)="onFkidSelect()">
-        <mat-option [value]="option.fkid" *ngFor="let option of unique_accounts">{{ option.associateName }}</mat-option>
+        <mat-option [value]="option.fk_associate_id" *ngFor="let option of unique_accounts">{{ option.company_name }}</mat-option>
       </mat-select>
     </mat-form-field>
   </div>

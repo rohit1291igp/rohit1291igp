@@ -28,19 +28,24 @@ export class PasswordChangeComponent implements OnInit {
         "password" :this.confirm_password,
         "id": localStorage.getItem('fkUserId')
       }
-      this.egvService.changePassword(req_body).subscribe((res:any)=>{
+      this.egvService.changePassword(req_body,this.old_password).subscribe((res:any)=>{
         if(!res.error){
           this.openSnackBar('Password Changed Successfully');
-          this.password="";
-          this.confirm_password="";
+          this.onCancel();
         }else{
-          this.openSnackBar('Unable to Change Password')
+          this.openSnackBar(res.errorCode)
         }
       })
     }else{
-      this.openSnackBar('Password did not matched')
+      this.openSnackBar('New password did not matched')
     }
     console.log(this.password,this.confirm_password)
+  }
+
+  onCancel(){
+    this.old_password=""
+    this.password="";
+    this.confirm_password="";
   }
 
   isValidePassword(){
