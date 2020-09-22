@@ -12,7 +12,7 @@
               <mat-autocomplete #auto="matAutocomplete" (optionSelected)='getUserSelected($event.option.value)'
                 [displayWith]="userDisplayFn">
                 <mat-option *ngFor="let option of filteredUserList | async" [value]="option">
-                  {{option.associateName}}</mat-option>
+                  {{option.company_name}}</mat-option>
               </mat-autocomplete>
             </mat-form-field>
 
