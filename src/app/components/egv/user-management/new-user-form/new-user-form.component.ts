@@ -51,20 +51,9 @@ export class NewUserFormComponent implements OnInit {
   }
 
   getAccountsList(){
-    this.accounts_list=[
-      {
-        fkid:992,company_name:'egvtest'
-      },
-      {
-        fkid:1000,company_name:'Test EGV 1'
-      },
-      {
-        fkid:1001,company_name:'test2'
-      },
-      {
-        fkid:1002,company_name:'test3'
-      },
-    ]
+    this.egvService.getCompanyList().subscribe((res:any)=>{
+      this.accounts_list=res;
+    })
   }
 
   onSubmit(f:NgForm){

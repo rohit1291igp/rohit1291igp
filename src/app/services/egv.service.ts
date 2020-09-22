@@ -46,9 +46,14 @@ export class EgvService {
     return this.httpClient.put(url,req_body)
   }
 
-  changePassword(req_body){
-    let url=environment.origin+'v1/admin/egvpanel/login/resetPassword';
+  changePassword(req_body,old_password){
+    let url=environment.origin+'v1/admin/egvpanel/login/resetPassword?oldPassword='+old_password;
     return this.httpClient.put(url,req_body);
+  }
+
+  getCompanyList(){
+    let url=environment.origin+'v1/admin/egvpanel/login/getCompanyList'
+    return this.httpClient.get(url)
   }
 
 }

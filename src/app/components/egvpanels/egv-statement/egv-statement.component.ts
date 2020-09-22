@@ -23,7 +23,7 @@ export class EgvStatementComponent implements OnInit {
 	usersList;
 	submitted: boolean = false;
 	filteredUserList;
-	transactionTypeList = ["All", "credit", "debit", "opening", "closing"];
+	transactionTypeList = ["All", "credit", "debit"];
 	maxDate: Date;
 	public env = environment;
 	statementForm: FormGroup;
