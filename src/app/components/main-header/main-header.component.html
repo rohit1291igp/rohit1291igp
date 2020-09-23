@@ -3,7 +3,7 @@
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
       <span class="navbar-brand">
-          <ng-container *ngIf="!vendorName">Indian Gifts Portal (IGP) - Admin Panel</ng-container>
+          <ng-container *ngIf="!vendorName"><img src="../../../assets/images/igp-logo.png" width="45%" style="margin-top: -5px ;" alt="igp"></ng-container>
           <ng-container *ngIf="vendorName">IGP</ng-container>
           <ng-container *ngIf="!environment.userType && vendorName">- Handels</ng-container>
           <ng-container *ngIf="vendorName && environment.userType == 'vendor' || environment.userType == 'warehouse'">- {{vendorName}}</ng-container>
