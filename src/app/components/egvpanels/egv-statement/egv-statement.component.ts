@@ -198,7 +198,7 @@ export class EgvStatementComponent implements OnInit {
 		if (this.statementForm.value.transactionType && this.statementForm.value.transactionType != 'All') {
 			reqObj.url += '&transactionType=' + this.statementForm.value.transactionType;
 		}
-		if (this.userSelected && this.statementForm.value.selectedUser) {
+		if (this.userSelected && (this.selectedUser.value|| this.statementForm.value.selectedUser)) {
 			reqObj.url += '&userId=' + this.userSelected.fk_associate_id
 		}
 
@@ -211,6 +211,9 @@ export class EgvStatementComponent implements OnInit {
 					// _this.openSnackBar('Something went wrong.');
 					console.log('Error=============>', result.error);
 
+				}
+				if(!result.tableData.length){
+					alert('No Records found');
 				}
 				var options = {
 					showLabels: true,
