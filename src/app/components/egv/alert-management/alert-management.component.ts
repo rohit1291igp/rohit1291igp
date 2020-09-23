@@ -161,19 +161,22 @@ export class AlertManagementComponent implements OnInit {
       this.openSnackBar('Invalid Email')
     }
   }
-  addAlertMob(mob){
-    this.alerts.alertMobNums.push(mob);
-    // this.egvService.updateAlert(this.alerts).subscribe((res:any)=>{
-    //   if(res.error){
-    //     this.openSnackBar(res.result||res.errorMessage)
-    //   }else{
-    //     this.openSnackBar(res.result);
-    //     this.addAlertMobFlag=false;
-    //     this.alertsMobile.push(mob);
-    //     this.newAlertMob=""
-    //   }
-    // })
-    console.log(mob)
+  addAlertMob(mob:string){
+    if(mob.length===10){
+      this.alerts.alertMobNums.push(mob);
+      this.egvService.updateAlert(this.alerts).subscribe((res:any)=>{
+        if(res.error){
+          this.openSnackBar(res.result||res.errorMessage)
+        }else{
+          this.openSnackBar(res.result);
+          this.addAlertMobFlag=false;
+          this.alertsMobile.push(mob);
+          this.newAlertMob=""
+        }
+      })
+    }else{
+      this.openSnackBar('Add Valid Mobile No')
+    }
   }
 
   addSosEmail(email){
@@ -194,18 +197,22 @@ export class AlertManagementComponent implements OnInit {
     }
   }
 
-  addSosMob(mob){
-    this.alerts.sosmobNums.push(mob);
-    this.egvService.updateAlert(this.alerts).subscribe((res:any)=>{
-      if(res.error){
-        this.openSnackBar(res.result||res.errorMessage)
-      }else{
-        this.openSnackBar(res.result);
-        this.addSosMobFlag=false;
-        this.sosMobile.push(mob);
-        this.newSosMob=""
-      }
-    })
+  addSosMob(mob:string){
+    if(mob.length===10){
+      this.alerts.sosmobNums.push(mob);
+      this.egvService.updateAlert(this.alerts).subscribe((res:any)=>{
+        if(res.error){
+          this.openSnackBar(res.result||res.errorMessage)
+        }else{
+          this.openSnackBar(res.result);
+          this.addSosMobFlag=false;
+          this.sosMobile.push(mob);
+          this.newSosMob=""
+        }
+      })
+    }else{
+      this.openSnackBar('Add Valid Mobile No')
+    }
   }
 
   deleteAlertMobile(mobile){
