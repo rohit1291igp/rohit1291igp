@@ -212,6 +212,9 @@ export class EgvStatementComponent implements OnInit {
 					console.log('Error=============>', result.error);
 
 				}
+				if(!result.tableData.length){
+					alert('No Records found');
+				}
 				var options = {
 					showLabels: true,
 					showTitle: false,
