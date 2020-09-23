@@ -31,8 +31,8 @@
                 <ng-container *ngFor="let x of pages">
                     <a class="page-view" routerLink="{{x.route}}" (click)="navigate('page')">
                         <div class="img-hover-zoom">
-                            <div class="icon-title-container">
-                                <mat-icon aria-hidden="false" aria-label="Example home icon">{{x.iconName}}</mat-icon>
+                            <div class="icon-title-container" style="text-align: center;">
+                                <mat-icon style="width:fit-content" aria-hidden="false" aria-label="Example home icon">{{x.iconName}}</mat-icon>
                                 <p>{{x.displayName}}</p>
                             </div>
                         </div>
