@@ -62,7 +62,7 @@
             <div *ngIf="addAlertMobFlag">
               <mat-form-field class="example-full-width">
                 <mat-label>Add Mobile No.</mat-label>
-                <input matInput placeholder="Mobile" type="number" [(ngModel)]="newAlertMob">
+                <input matInput placeholder="Mobile" (paste)="validateMob($event)" minlength=10 maxlength=10 (keypress)="validateMob($event)" type="text" [(ngModel)]="newAlertMob">
               </mat-form-field>
               <button mat-raised-button (click)="onAdd('alertMob')">Add</button>
             </div>
@@ -128,7 +128,7 @@
             <div *ngIf="addSosMobFlag">
               <mat-form-field class="example-full-width">
                 <mat-label>Add Mobile No.</mat-label>
-                <input matInput type="number" [(ngModel)]="newSosMob" placeholder="Mobile">
+                <input matInput type="text" (paste)="validateMob($event)" minlength=10 maxlength=10 (keypress)="validateMob($event)" [(ngModel)]="newSosMob" placeholder="Mobile">
               </mat-form-field>
               <button mat-raised-button (click)="onAdd('sosMob')">Add</button>
             </div>
