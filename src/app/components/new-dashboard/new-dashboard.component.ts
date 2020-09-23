@@ -25,6 +25,7 @@ export interface NavItem {
 export class NewDasboardComponent implements OnInit, AfterViewInit {
     openPage = false;
     username;
+    env=environment
 
     @ViewChild('appDrawer') appDrawer: ElementRef;
     navItems: NavItem[] = this.UserAccessService.getUserAccess();
