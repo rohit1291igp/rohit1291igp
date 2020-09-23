@@ -198,7 +198,7 @@ export class EgvStatementComponent implements OnInit {
 		if (this.statementForm.value.transactionType && this.statementForm.value.transactionType != 'All') {
 			reqObj.url += '&transactionType=' + this.statementForm.value.transactionType;
 		}
-		if (this.userSelected && this.statementForm.value.selectedUser) {
+		if (this.userSelected && (this.selectedUser.value|| this.statementForm.value.selectedUser)) {
 			reqObj.url += '&userId=' + this.userSelected.fk_associate_id
 		}
 
