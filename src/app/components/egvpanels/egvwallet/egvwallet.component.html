@@ -40,7 +40,12 @@
 
               <div class="col-md-3  col-sm-12 summaryBox">
                 <div>&#8377; {{walletSummary.creditLimit || '-'}}</div>
-                <div class="summaryIcon"> <i class="fa fa-credit-card "></i> Credit Limit </div>
+                <div class="summaryIcon">
+                  <i class="fa fa-credit-card "></i>
+                  Credit Limit
+                  <br>
+                  (in days)
+                </div>
               </div>
               <div class="col-md-3 col-sm-12 summaryBox">
 
@@ -68,16 +73,16 @@
 
             <div>
               <mat-form-field class="addMoneyInput width20 marginB20">
-                <mat-label> Enter Amount</mat-label>
+                <mat-label> Enter Amount*</mat-label>
                 <input matInput name='amount' type="number" placeholder="Enter Amount" formControlName="addMoneyAmount">
               </mat-form-field>
 
               <mat-form-field class="addMoneyInput width20">
-                <mat-label> Enter UTR</mat-label>
+                <mat-label> Enter UTR*</mat-label>
                 <input matInput name="utr" type="text" placeholder="Enter UTR" formControlName="addMoneyTransactionId">
               </mat-form-field>
               <mat-form-field class="addMoneyInput width20">
-                <mat-label> Comments</mat-label>
+                <mat-label> Comments (optional)</mat-label>
                 <input matInput name="comments" type="text" placeholder="Comments" formControlName="comments">
               </mat-form-field>
 
