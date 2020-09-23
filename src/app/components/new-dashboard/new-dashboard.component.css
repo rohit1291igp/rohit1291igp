@@ -63,3 +63,7 @@ nav {
 .mat-drawer.mat-drawer-side{
     background: #c3404e;
 }
+
+.homeLogo:focus {
+    outline: 0;
+}
