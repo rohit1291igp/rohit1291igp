@@ -156,7 +156,7 @@ export class EgvStatementComponent implements OnInit {
 				this.showHyperlink = true;
 			}
 		}
-		if (this.userSelected && this.statementForm.value.selectedUser) {
+		if (this.userSelected && (this.selectedUser.value|| this.statementForm.value.selectedUser)) {
 			reqObj.url += '&userId=' + this.userSelected.fk_associate_id
 		}
 
