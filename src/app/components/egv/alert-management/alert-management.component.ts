@@ -94,7 +94,7 @@ export class AlertManagementComponent implements OnInit {
   SosAmountChange(){
     if(this.SosLimit && this.SosLimit<this.alerts.alertLimit){
       this.alerts.sosLimit=this.SosLimit;
-      this.egvService.updateAlert(this.SosLimit).subscribe((res:any)=>{
+      this.egvService.updateAlert(this.alerts).subscribe((res:any)=>{
         if(res.err){
           this.openSnackBar(res.result||res.errorMessage)
         }else{
