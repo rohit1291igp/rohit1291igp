@@ -161,9 +161,10 @@ export class EgvStatementComponent implements OnInit {
 		}
 
 		// reqObj.url += '?fkAssociateId'+fkAssociateId;
-
+		if (document.getElementById("cLoader")) document.getElementById("cLoader").classList.remove("hide");
 		this.EgvService.getEgvService(reqObj).subscribe(
 			result => {
+				if (document.getElementById("cLoader")) document.getElementById("cLoader").classList.add("hide");
 				console.log("getdatewisereport result ", result)
 				if (result.error) {
 					// _this.openSnackBar('Something went wrong.');
@@ -203,9 +204,10 @@ export class EgvStatementComponent implements OnInit {
 		}
 
 		// reqObj.url += '?fkAssociateId'+fkAssociateId;
-
+		if (document.getElementById("cLoader")) document.getElementById("cLoader").classList.remove("hide");
 		this.EgvService.getEgvService(reqObj).subscribe(
 			result => {
+				if (document.getElementById("cLoader")) document.getElementById("cLoader").classList.add("hide");
 				console.log("getdatewisereport result ", result)
 				if (result.error) {
 					// _this.openSnackBar('Something went wrong.');
@@ -265,8 +267,10 @@ export class EgvStatementComponent implements OnInit {
 			url: 'reconcile/gettransactionwisereport?endDate=' + newdate + "&startDate=" + newdate + "&userId=" + element.UserId,
 			method: "get",
 		};
+		if (document.getElementById("cLoader")) document.getElementById("cLoader").classList.remove("hide");
 		this.EgvService.getEgvService(reqObj).subscribe(
 			result => {
+				if (document.getElementById("cLoader")) document.getElementById("cLoader").classList.add("hide");
 				console.log("getdatewisereport result ", result)
 				if (result.error) {
 					// _this.openSnackBar('Something went wrong.');
@@ -291,7 +295,7 @@ export class EgvStatementComponent implements OnInit {
       <i matSuffix class="fa fa-search "></i>
       <input matInput (keyup)="applyFilter($event)" #input>
     </mat-form-field>
-	<button type="button" (click)="downloadStatement()" mat-raised-button *ngIf="data.dataSource?.data?.length > 0 && (env.userType=='egv_admin'|| env.userType=='manager')">Download</button>
+	<button type="button" (click)="downloadStatement()" mat-raised-button *ngIf="data.dataSource?.data?.length > 0">Download</button>
 	
 	<button mat-button style="float:right" mat-dialog-close><i class="fa fa-times" aria-hidden="true"></i></button>
 	<div class="mat-elevation-z8" *ngIf="data.dataSource?.data?.length > 0 else noRecord">
@@ -299,11 +303,14 @@ export class EgvStatementComponent implements OnInit {
         <ng-container [matColumnDef]="column" *ngFor="let column of data.tableHeaders">
           <mat-header-cell mat-sort-header *matHeaderCellDef> {{column}} </mat-header-cell>
           <mat-cell *matCellDef="let element">
-		  <ng-container *ngIf="column != 'Balance'">
+		  <ng-container *ngIf="column != 'Balance' && column != 'Order Value'">
               {{element[column] || '-'}}
 			</ng-container>
 			<ng-container *ngIf="column == 'Balance'">
 			{{element[column] || '-'| indianNumeric}}
+		  </ng-container>
+		  <ng-container *ngIf="column == 'Order Value'">
+			{{element[column]|number:'1.0-2'}}
 		  </ng-container>
           </mat-cell>
         </ng-container>
