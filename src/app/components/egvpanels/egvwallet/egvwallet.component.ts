@@ -167,7 +167,7 @@ export class EgvwalletComponent implements OnInit {
       reqObj.url += "&flagApproveCredit=2&flagAdmin=1"
     }
     if (environment.userType == "manager" || environment.userType == "executive") {
-      reqObj.url += "&flagApproveCredit=1"+"&userId=" + localStorage.fkUserId ;
+      reqObj.url += "&flagApproveCredit=0&flagAdmin=0"+"&userId=" + localStorage.fkUserId ;
     }
     if (_this.addMoneyForm.value.comments) {
       reqObj.url += "&comments=" + _this.addMoneyForm.value.comments

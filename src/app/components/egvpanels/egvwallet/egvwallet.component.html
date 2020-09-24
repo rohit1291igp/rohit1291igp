@@ -39,7 +39,7 @@
                 <div class="summaryIcon"><i class="fa fa-sliders fa-rotate-90"></i> Daily Limit </div>
               </div>
 
-              <div class="col-md-3  col-sm-12 summaryBox">
+              <div class="col-md-3  col-sm-12 summaryBox"  *ngIf="env.userType=='egv_admin'">
                 <div style='margin:auto'>&#8377; {{walletSummary.creditLimit ||'-' | indianNumeric}}</div>
                 <div class="summaryIcon">
                   <i class="fa fa-credit-card "></i> Credit Limit </div>
