@@ -27,6 +27,7 @@
 
           <ng-template #loaded>
             <div class="col-md-12">
+              <div class="col-md-3 summaryBox" style="height:0;border:0" *ngIf="env.userType!='egv_admin'"></div>
 
               <div class="col-md-3 col-sm-12 summaryBox">
                 <div style='margin:auto'>&#8377; {{walletSummary.balance || '-' | indianNumeric}}</div>
@@ -43,7 +44,7 @@
                 <div class="summaryIcon">
                   <i class="fa fa-credit-card "></i> Credit Limit </div>
               </div>
-              <div class="col-md-3 col-sm-12 summaryBox">
+              <div class="col-md-3 col-sm-12 summaryBox" *ngIf="env.userType=='egv_admin'"> 
                 <div style='margin:auto'>{{walletSummary.creditLimitDays || '-'}} {{(walletSummary.creditLimitDays>1)?'days':'day'}}</div>
                 <div class="summaryIcon"> <i class="fa fa-calendar"></i> Credit Period </div>
               </div>
@@ -57,6 +58,7 @@
               </div>
 
             </div>
+            
           </ng-template>
         </div>
         <div class="col-md-12">
