@@ -70,6 +70,7 @@ export class EgvStatementComponent implements OnInit {
 					_this.selectedUser.setValue(toSelect);
 					_this.statementForm.get('selectedUser').setValue(toSelect);
 					_this.userSelected = toSelect;
+					_this.userSelected.fk_associate_id = localStorage.fkAssociateId;
 					if (toSelect) {
 						_this.selectedUser.disable();
 						_this.statementForm.get('selectedUser').disable();
@@ -258,9 +259,7 @@ export class EgvStatementComponent implements OnInit {
 		}
 	}
 	openDialog(element) {
-
 		let _this = this;
-
 		//http://18.233.106.34:8081/v1/admin/egvpanel/reconcile/gettransactionwisereport?endDate=2020-09-15&userId=882&startDate=2020-09-15
 		let newdate = element.Date.substring(0, 10).split("-").reverse().join("-");
 		let reqObj: any = {
@@ -284,6 +283,62 @@ export class EgvStatementComponent implements OnInit {
 				_this.dialog.open(transactionReportDialog, { data });
 			})
 
+	}
+
+	downloadTransactionReport(){
+		let _this = this;
+		let reqObj: any = {
+			url: 'reconcile/gettransactionwisereport?',
+			method: "get",
+		};
+		reqObj.url += "startDate=" + this.formatDate(this.statementForm.value.startDate, 'yyyy-MM-dd');
+		reqObj.url += "&endDate=" + this.formatDate(this.statementForm.value.endDate, 'yyyy-MM-dd');
+		if (this.userSelected && (this.selectedUser.value || this.statementForm.value.selectedUser)) {
+			reqObj.url += '&userId=' + this.userSelected.fk_associate_id
+		}
+
+		if (document.getElementById("cLoader")) document.getElementById("cLoader").classList.remove("hide");
+
+		this.EgvService.getEgvService(reqObj).subscribe(
+			result => {
+				if (document.getElementById("cLoader")) document.getElementById("cLoader").classList.add("hide");
+				console.log("getdatewisereport result ", result)
+				if (result.error) {
+					// _this.openSnackBar('Something went wrong.');
+					console.log('Error=============>', result.error);
+
+				}
+				if (!result.tableData.length) {
+					alert('No Records found');
+				}
+				var options = {
+					showLabels: true,
+					showTitle: false,
+					headers: result.tableHeaders,
+					nullToEmptyString: true,
+				};
+
+				let data = [];
+				let reportDownloadData = [];
+				new Promise((resolve) => {
+					for (let pi = 0; pi < result.tableData.length; pi++) {
+						let temp = {}
+						for (let k of result.tableHeaders) {
+							if (typeof result.tableData[pi][k] == 'object' && result.tableData[pi][k] != null) {
+								result.tableData[pi][k] = result.tableData[pi][k].value ? result.tableData[pi][k].value : '';
+							}
+							temp[k] = result.tableData[pi][k];
+						}
+						reportDownloadData.push(temp);
+						if (pi == (result.tableData.length - 1)) {
+							resolve(reportDownloadData);
+						}
+					}
+				}).then((data) => {
+					// console.log(data)
+					let download = new Angular5Csv(data, 'Transaction Report', options);
+				})
+			})
 	}
 }
 
