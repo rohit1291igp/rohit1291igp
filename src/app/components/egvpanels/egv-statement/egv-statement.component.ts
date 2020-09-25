@@ -70,6 +70,7 @@ export class EgvStatementComponent implements OnInit {
 					_this.selectedUser.setValue(toSelect);
 					_this.statementForm.get('selectedUser').setValue(toSelect);
 					_this.userSelected = toSelect;
+					_this.userSelected.fk_associate_id = localStorage.fkAssociateId;
 					if (toSelect) {
 						_this.selectedUser.disable();
 						_this.statementForm.get('selectedUser').disable();
@@ -161,9 +162,10 @@ export class EgvStatementComponent implements OnInit {
 		}
 
 		// reqObj.url += '?fkAssociateId'+fkAssociateId;
-
+		if (document.getElementById("cLoader")) document.getElementById("cLoader").classList.remove("hide");
 		this.EgvService.getEgvService(reqObj).subscribe(
 			result => {
+				if (document.getElementById("cLoader")) document.getElementById("cLoader").classList.add("hide");
 				console.log("getdatewisereport result ", result)
 				if (result.error) {
 					// _this.openSnackBar('Something went wrong.');
@@ -203,9 +205,10 @@ export class EgvStatementComponent implements OnInit {
 		}
 
 		// reqObj.url += '?fkAssociateId'+fkAssociateId;
-
+		if (document.getElementById("cLoader")) document.getElementById("cLoader").classList.remove("hide");
 		this.EgvService.getEgvService(reqObj).subscribe(
 			result => {
+				if (document.getElementById("cLoader")) document.getElementById("cLoader").classList.add("hide");
 				console.log("getdatewisereport result ", result)
 				if (result.error) {
 					// _this.openSnackBar('Something went wrong.');
@@ -256,17 +259,17 @@ export class EgvStatementComponent implements OnInit {
 		}
 	}
 	openDialog(element) {
-
 		let _this = this;
-
 		//http://18.233.106.34:8081/v1/admin/egvpanel/reconcile/gettransactionwisereport?endDate=2020-09-15&userId=882&startDate=2020-09-15
 		let newdate = element.Date.substring(0, 10).split("-").reverse().join("-");
 		let reqObj: any = {
 			url: 'reconcile/gettransactionwisereport?endDate=' + newdate + "&startDate=" + newdate + "&userId=" + element.UserId,
 			method: "get",
 		};
+		if (document.getElementById("cLoader")) document.getElementById("cLoader").classList.remove("hide");
 		this.EgvService.getEgvService(reqObj).subscribe(
 			result => {
+				if (document.getElementById("cLoader")) document.getElementById("cLoader").classList.add("hide");
 				console.log("getdatewisereport result ", result)
 				if (result.error) {
 					// _this.openSnackBar('Something went wrong.');
@@ -281,6 +284,62 @@ export class EgvStatementComponent implements OnInit {
 			})
 
 	}
+
+	downloadTransactionReport(){
+		let _this = this;
+		let reqObj: any = {
+			url: 'reconcile/gettransactionwisereport?',
+			method: "get",
+		};
+		reqObj.url += "startDate=" + this.formatDate(this.statementForm.value.startDate, 'yyyy-MM-dd');
+		reqObj.url += "&endDate=" + this.formatDate(this.statementForm.value.endDate, 'yyyy-MM-dd');
+		if (this.userSelected && (this.selectedUser.value || this.statementForm.value.selectedUser)) {
+			reqObj.url += '&userId=' + this.userSelected.fk_associate_id
+		}
+
+		if (document.getElementById("cLoader")) document.getElementById("cLoader").classList.remove("hide");
+
+		this.EgvService.getEgvService(reqObj).subscribe(
+			result => {
+				if (document.getElementById("cLoader")) document.getElementById("cLoader").classList.add("hide");
+				console.log("getdatewisereport result ", result)
+				if (result.error) {
+					// _this.openSnackBar('Something went wrong.');
+					console.log('Error=============>', result.error);
+
+				}
+				if (!result.tableData.length) {
+					alert('No Records found');
+				}
+				var options = {
+					showLabels: true,
+					showTitle: false,
+					headers: result.tableHeaders,
+					nullToEmptyString: true,
+				};
+
+				let data = [];
+				let reportDownloadData = [];
+				new Promise((resolve) => {
+					for (let pi = 0; pi < result.tableData.length; pi++) {
+						let temp = {}
+						for (let k of result.tableHeaders) {
+							if (typeof result.tableData[pi][k] == 'object' && result.tableData[pi][k] != null) {
+								result.tableData[pi][k] = result.tableData[pi][k].value ? result.tableData[pi][k].value : '';
+							}
+							temp[k] = result.tableData[pi][k];
+						}
+						reportDownloadData.push(temp);
+						if (pi == (result.tableData.length - 1)) {
+							resolve(reportDownloadData);
+						}
+					}
+				}).then((data) => {
+					// console.log(data)
+					let download = new Angular5Csv(data, 'Transaction Report', options);
+				})
+			})
+	}
 }
 
 @Component({
@@ -291,7 +350,7 @@ export class EgvStatementComponent implements OnInit {
       <i matSuffix class="fa fa-search "></i>
       <input matInput (keyup)="applyFilter($event)" #input>
     </mat-form-field>
-	<button type="button" (click)="downloadStatement()" mat-raised-button *ngIf="data.dataSource?.data?.length > 0 && (env.userType=='egv_admin'|| env.userType=='manager')">Download</button>
+	<button type="button" (click)="downloadStatement()" mat-raised-button *ngIf="data.dataSource?.data?.length > 0">Download</button>
 	
 	<button mat-button style="float:right" mat-dialog-close><i class="fa fa-times" aria-hidden="true"></i></button>
 	<div class="mat-elevation-z8" *ngIf="data.dataSource?.data?.length > 0 else noRecord">
@@ -299,11 +358,14 @@ export class EgvStatementComponent implements OnInit {
         <ng-container [matColumnDef]="column" *ngFor="let column of data.tableHeaders">
           <mat-header-cell mat-sort-header *matHeaderCellDef> {{column}} </mat-header-cell>
           <mat-cell *matCellDef="let element">
-		  <ng-container *ngIf="column != 'Balance'">
+		  <ng-container *ngIf="column != 'Balance' && column != 'Order Value'">
               {{element[column] || '-'}}
 			</ng-container>
 			<ng-container *ngIf="column == 'Balance'">
 			{{element[column] || '-'| indianNumeric}}
+		  </ng-container>
+		  <ng-container *ngIf="column == 'Order Value'">
+			{{element[column]|number:'1.0-2'}}
 		  </ng-container>
           </mat-cell>
         </ng-container>
