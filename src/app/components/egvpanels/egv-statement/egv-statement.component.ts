@@ -58,7 +58,7 @@ export class EgvStatementComponent implements OnInit {
 				_this.usersList = response;
 				// _this.usersList.push(
 				// { "user_id": 20835, "name": "879 test", "fkAssociateId": "882", "company_name": "879 test", "userType": "Manager", "accountExpired": false, "credentialExpired": false, "accountLocked": false, "accountEnabled": 1, "deliveryBoyEnabled": false, "access": [{}] })
-				_this.filteredUserList = _this.selectedUser.valueChanges
+				_this.filteredUserList = _this.statementForm.get('selectedUser').valueChanges
 					.pipe(
 						startWith(''),
 						map(value => typeof value === 'string' ? value : value['company_name']),
@@ -157,8 +157,8 @@ export class EgvStatementComponent implements OnInit {
 				this.showHyperlink = true;
 			}
 		}
-		if (this.userSelected && (this.selectedUser.value|| this.statementForm.value.selectedUser)) {
-			reqObj.url += '&userId=' + this.userSelected.fk_associate_id
+		if (this.userSelected && (this.selectedUser.value || this.statementForm.value.selectedUser)) {
+			reqObj.url += '&fkasid=' + this.userSelected.fk_associate_id
 		}
 
 		// reqObj.url += '?fkAssociateId'+fkAssociateId;
@@ -200,8 +200,8 @@ export class EgvStatementComponent implements OnInit {
 		if (this.statementForm.value.transactionType && this.statementForm.value.transactionType != 'All') {
 			reqObj.url += '&transactionType=' + this.statementForm.value.transactionType;
 		}
-		if (this.userSelected && (this.selectedUser.value|| this.statementForm.value.selectedUser)) {
-			reqObj.url += '&userId=' + this.userSelected.fk_associate_id
+		if (this.userSelected && (this.selectedUser.value || this.statementForm.value.selectedUser)) {
+			reqObj.url += '&fkasid=' + this.userSelected.fk_associate_id
 		}
 
 		// reqObj.url += '?fkAssociateId'+fkAssociateId;
@@ -215,7 +215,7 @@ export class EgvStatementComponent implements OnInit {
 					console.log('Error=============>', result.error);
 
 				}
-				if(!result.tableData.length){
+				if (!result.tableData.length) {
 					alert('No Records found');
 				}
 				var options = {
@@ -260,17 +260,16 @@ export class EgvStatementComponent implements OnInit {
 	}
 	openDialog(element) {
 		let _this = this;
-		//http://18.233.106.34:8081/v1/admin/egvpanel/reconcile/gettransactionwisereport?endDate=2020-09-15&userId=882&startDate=2020-09-15
 		let newdate = element.Date.substring(0, 10).split("-").reverse().join("-");
 		let reqObj: any = {
-			url: 'reconcile/gettransactionwisereport?endDate=' + newdate + "&startDate=" + newdate + "&userId=" + element.UserId,
+			url: 'reconcile/gettransactionwisereport?endDate=' + newdate + "&startDate=" + newdate + "&fkasid=" + element.fkasid,
 			method: "get",
 		};
 		if (document.getElementById("cLoader")) document.getElementById("cLoader").classList.remove("hide");
 		this.EgvService.getEgvService(reqObj).subscribe(
 			result => {
 				if (document.getElementById("cLoader")) document.getElementById("cLoader").classList.add("hide");
-				console.log("getdatewisereport result ", result)
+				console.log("gettransactionwisereport result ", result)
 				if (result.error) {
 					// _this.openSnackBar('Something went wrong.');
 					console.log('Error=============>', result.error);
@@ -285,7 +284,7 @@ export class EgvStatementComponent implements OnInit {
 
 	}
 
-	downloadTransactionReport(){
+	downloadTransactionReport() {
 		let _this = this;
 		let reqObj: any = {
 			url: 'reconcile/gettransactionwisereport?',
@@ -294,7 +293,7 @@ export class EgvStatementComponent implements OnInit {
 		reqObj.url += "startDate=" + this.formatDate(this.statementForm.value.startDate, 'yyyy-MM-dd');
 		reqObj.url += "&endDate=" + this.formatDate(this.statementForm.value.endDate, 'yyyy-MM-dd');
 		if (this.userSelected && (this.selectedUser.value || this.statementForm.value.selectedUser)) {
-			reqObj.url += '&userId=' + this.userSelected.fk_associate_id
+			reqObj.url += '&fkasid=' + this.userSelected.fk_associate_id
 		}
 
 		if (document.getElementById("cLoader")) document.getElementById("cLoader").classList.remove("hide");
@@ -302,7 +301,7 @@ export class EgvStatementComponent implements OnInit {
 		this.EgvService.getEgvService(reqObj).subscribe(
 			result => {
 				if (document.getElementById("cLoader")) document.getElementById("cLoader").classList.add("hide");
-				console.log("getdatewisereport result ", result)
+				console.log("gettransactionwisereport result ", result)
 				if (result.error) {
 					// _this.openSnackBar('Something went wrong.');
 					console.log('Error=============>', result.error);
@@ -365,7 +364,7 @@ export class EgvStatementComponent implements OnInit {
 			{{element[column] || '-'| indianNumeric}}
 		  </ng-container>
 		  <ng-container *ngIf="column == 'Order Value'">
-			{{element[column]|number:'1.0-2'}}
+			{{element[column]|number:'1.2-2'}}
 		  </ng-container>
           </mat-cell>
         </ng-container>
