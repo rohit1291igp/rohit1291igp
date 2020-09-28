@@ -134,7 +134,7 @@
         <mat-datepicker #endDate></mat-datepicker>
       </mat-form-field>
 
-      <button mat-raised-button (click)='getStatement()'>Get Approvals List</button>
+      <button mat-raised-button (click)='getPendingList()'>Get Approvals List</button>
     </div>
 
     <div class="col-md-12" *ngIf="dataSource?.data?.length > 0 else noRecord">
