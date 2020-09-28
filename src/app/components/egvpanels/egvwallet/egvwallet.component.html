@@ -114,27 +114,33 @@
     </div>
   </form>
 
-  <div class="col-md-12">
+  <div class="col-md-12" *ngIf="env.userType == 'egv_admin'">
     <div class='addMoney headerUnderLine col-md-12'>
       Pending Approvals
     </div>
     <div class="col-md-12 marginB20">
-      <mat-form-field class="addMoneyInput">
-        <mat-label>Start Date</mat-label>
-        <input matInput [matDatepicker]="startDate" [max]="maxDate" [value]="startDate.value">
-        <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
-        <mat-datepicker #startDate></mat-datepicker>
-      </mat-form-field>
+      <!-- <form>
+        <mat-form-field class="addMoneyInput">
+          <mat-label>Start Date</mat-label>
+          <input matInput [matDatepicker]="startDate" [max]="maxDate" [formControl]="startDate"
+            (dateInput)="addEventFrom('input','startDate', $event)"
+            (dateChange)="addEventFrom('change','startDate', $event)" [value]='startDate.value'>
+          <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
+          <mat-datepicker #startDate></mat-datepicker>
+        </mat-form-field>
 
 
-      <mat-form-field class="addMoneyInput">
-        <mat-label>End Date</mat-label>
-        <input matInput [matDatepicker]="endDate" [max]="maxDate" [value]="endDate.value">
-        <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
-        <mat-datepicker #endDate></mat-datepicker>
-      </mat-form-field>
+        <mat-form-field class="addMoneyInput">
+          <mat-label>End Date</mat-label>
+          <input matInput [matDatepicker]="endDate" [max]="maxDate" [formControl]="endDate"
+            (dateInput)="addEventFrom('input','endDate', $event)"
+            (dateChange)="addEventFrom('change','endDate', $event)" [value]='endDate.value'>
+          <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
+          <mat-datepicker #endDate></mat-datepicker>
+        </mat-form-field>
 
-      <button mat-raised-button (click)='getPendingList()'>Get Approvals List</button>
+        <button mat-raised-button (click)='getPendingList()'>Get Approvals List</button>
+      </form> -->
     </div>
 
     <div class="col-md-12" *ngIf="dataSource?.data?.length > 0 else noRecord">
@@ -147,7 +153,8 @@
         <ng-container [matColumnDef]="column" *ngFor="let column of tableHeaders">
           <mat-header-cell mat-sort-header *matHeaderCellDef> {{column}} </mat-header-cell>
           <mat-cell *matCellDef="let element">
-            <ng-container *ngIf="column != 'TxnDetails' && column!= 'Amount' && column!= 'Balance' && column!='Status'">
+            <ng-container
+              *ngIf="column != 'TxnDetails' && column!= 'Amount' && column!= 'Balance' && column!='Actions'">
               {{element[column] || '-'}}
             </ng-container>
             <ng-container *ngIf="column == 'Amount' || column == 'Balance' ">
@@ -160,11 +167,11 @@
                 {{(element[column] || '-' )+" - "+element['comments'].slice(0,-10)}}
               </ng-template>
             </ng-container>
-            <ng-container *ngIf="column == 'Status' && element['Status'] == 'Pending'">
-              <button mat-icon-button color="primary" (click)='approveTransaction(element,true)'
-                style="font-size: 20px;margin-right: 10px"> <i class="fa fa-check"></i></button>
-              <button mat-icon-button color="warn" (click)='approveTransaction(element,false)'
-                style="font-size: 20px;"><i class="fa fa-times"></i></button>
+            <ng-container *ngIf="column == 'Actions' && element['Status'] == 'Pending'">
+              <button mat-button color="primary" (click)='approveTransaction(element,true)'>
+                <i class="fa fa-check"></i> Approve</button>
+              <button mat-button color="warn" (click)='approveTransaction(element,false)'><i class="fa fa-times"></i>
+                Reject</button>
             </ng-container>
           </mat-cell>
         </ng-container>
