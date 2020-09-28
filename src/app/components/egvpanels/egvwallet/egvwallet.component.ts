@@ -276,24 +276,19 @@ export class EgvwalletComponent implements OnInit {
 
     reqObj.url += '&transactionType=pending'
 
-    // if (this.userSelected && (this.selectedUser.value|| this.statementForm.value.selectedUser)) {
-    // 	reqObj.url += '&userId=' + this.userSelected.fk_associate_id
-    // }
-
-    // reqObj.url += '?fkAssociateId'+fkAssociateId;
     if (document.getElementById("cLoader")) document.getElementById("cLoader").classList.remove("hide");
     this.EgvService.getEgvService(reqObj).subscribe(
       result => {
         if (document.getElementById("cLoader")) document.getElementById("cLoader").classList.add("hide");
         console.log("getdatewisereport result ", result)
         if (result.error) {
-          // _this.openSnackBar('Something went wrong.');
           console.log('Error=============>', result.error);
 
         }
-        _this.dataSource = new MatTableDataSource(result.tableData);
         _this.tableHeaders = result.tableHeaders;
-        // _this.tableHeaders = ["Amount", "Date", "TxnId", "UserID", "comments", "balance"]
+        _this.tableHeaders[7] = 'Actions';
+        _this.dataSource = new MatTableDataSource(result.tableData);
+
         setTimeout(() => {
           _this.dataSource.paginator = _this.paginator;
           _this.dataSource.sort = _this.sort;
