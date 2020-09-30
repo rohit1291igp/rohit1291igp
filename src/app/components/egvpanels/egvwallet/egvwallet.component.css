@@ -112,6 +112,10 @@
     justify-content: center;
 }
 
-.mat-column-Amount, ::ng-deep .mat-column-Order-Value, ::ng-deep .mat-column-TransferPrice, ::ng-deep .mat-column-Denomination, ::ng-deep .mat-column-Balance, ::ng-deep .mat-column-Denomination, ::ng-deep .mat-column-Status {
+::ng-deep .mat-column-Amount, ::ng-deep .mat-column-Order-Value, ::ng-deep .mat-column-TransferPrice, ::ng-deep .mat-column-Denomination, ::ng-deep .mat-column-Balance, ::ng-deep .mat-column-Denomination, ::ng-deep .mat-column-Status {
     text-align: right !important;
+}
+
+mat-cell:nth-child(8), mat-header-cell:nth-child(8){
+    flex: 0 0 15%;
 }
