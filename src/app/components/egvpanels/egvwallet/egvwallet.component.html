@@ -172,7 +172,7 @@
           </mat-cell>
         </ng-container>
         <mat-header-row *matHeaderRowDef="tableHeaders"></mat-header-row>
-        <mat-row *matRowDef="let row; columns: tableHeaders;" [class.hidden]="row['Status'] !== 'Pending'">
+        <mat-row *matRowDef="let row; columns: tableHeaders;">
         </mat-row>
       </mat-table>
       <mat-paginator [pageSizeOptions]="[10, 20, 50]" length="{{dataSource?.length}}" showFirstLastButtons>
