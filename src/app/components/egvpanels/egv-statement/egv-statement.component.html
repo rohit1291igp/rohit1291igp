@@ -12,7 +12,7 @@
               <mat-autocomplete #auto="matAutocomplete" (optionSelected)='getUserSelected($event.option.value)'
                 [displayWith]="userDisplayFn">
                 <mat-option *ngFor="let option of filteredUserList | async" [value]="option">
-                  {{option.associateName}}</mat-option>
+                  {{option.company_name}}</mat-option>
               </mat-autocomplete>
             </mat-form-field>
 
@@ -46,8 +46,8 @@
           </div>
           <div>
             <button type="submit" mat-raised-button>Get Statement</button>
-            <button type="button" mat-raised-button (click)="downloadStatement()"
-              *ngIf="env.userType=='egv_admin'|| env.userType=='manager'">Download</button>
+            <button type="button" mat-raised-button (click)="downloadStatement()">Download Statement</button>
+            <button type="button" mat-raised-button (click)="downloadTransactionReport()">Download Transaction Report</button>
           </div>
         </form>
       </div>
@@ -64,14 +64,18 @@
       <ng-container [matColumnDef]="column" *ngFor="let column of tableHeaders">
         <mat-header-cell mat-sort-header *matHeaderCellDef> {{column}} </mat-header-cell>
         <mat-cell *matCellDef="let element">
-          <ng-container *ngIf="column != 'UTR' && column!= 'Amount'">
+          <ng-container *ngIf="column != 'TxnDetails' && column!= 'Amount' && column!= 'Balance'">
             {{element[column] || '-'}}
           </ng-container>
-          <ng-container *ngIf="column == 'Amount'">
+          <ng-container *ngIf="column == 'Amount' || column == 'Balance' ">
             {{element[column] || '-' | indianNumeric}}
           </ng-container>
-          <ng-container *ngIf="column == 'UTR'">
-            <a (click)="openDialog(element)">{{element[column] || '-'}}</a>
+          <ng-container *ngIf="column == 'TxnDetails'">
+            <a (click)="openDialog(element)" style="cursor:pointer"
+              *ngIf="element['TransactionType'] == 'Debit' else noLink">{{(element[column] || '-' )+" - "+element['comments'].slice(0,-10)}}</a>
+            <ng-template #noLink>
+              {{(element[column] || '-' )+" - "+element['comments'].slice(0,-10)}}
+            </ng-template>
           </ng-container>
         </mat-cell>
       </ng-container>
