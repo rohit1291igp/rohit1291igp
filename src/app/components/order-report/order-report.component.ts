@@ -25,7 +25,7 @@ export class OrderReportComponent implements OnInit {
   @ViewChild(OrdersActionTrayComponent) child: OrdersActionTrayComponent;
 
   searchForm: FormGroup;
-  delStatus = ['All Order Status', 'Processed', 'Confirmed', 'Out For Delivery', 'Delivery', 'Rejected'];
+  delStatus = ['All Order Status', 'Processed', 'Confirmed', 'Out For Delivery', 'Delivered', 'Rejected'];
 
   queryObj: any;
   public env = environment;
