@@ -17,6 +17,8 @@ import { ProductBarcodeComponent } from 'app/components/product-decentralization
 import { DeliveryPriorityComponent } from 'app/components/product-decentralization/delivery-priority/delivery-priority.component';
 import { DailyOpsReportComponent } from 'app/components/daily-ops-report/daily-ops-report.component';
 import { UserAccessService } from 'app/services/user-access.service'
+import { OfferPageManagementComponent } from 'app/components/offer-page-management/offer-page-management.component';
+import { MatSlideToggleModule } from '@angular/material';
 
 const routes: Routes = [{
   path: '',
@@ -33,6 +35,11 @@ const routes: Routes = [{
   {
     path: 'HolidayCalendarManagement',
     component: HolidayCalenderManagementComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'offerpagemanagement',
+    component: OfferPageManagementComponent,
     canActivate: [AuthGuard]
   },
   {
@@ -62,6 +69,7 @@ const routes: Routes = [{
     ReactiveFormsModule,
     MyDatePickerModule,
     SharedModule,
+    MatSlideToggleModule,
     NewReportsComponentModule
   ],
   declarations: [
@@ -73,7 +81,8 @@ const routes: Routes = [{
     ProductAvailabilityComponent,
     ProductBarcodeComponent,
     DeliveryPriorityComponent,
-    DailyOpsReportComponent
+    DailyOpsReportComponent,
+    OfferPageManagementComponent
   ],
   providers: [NavService, UserAccessService]
 })
