@@ -35,7 +35,6 @@ import { LoginComponent } from './components/login/login.component';
 import { MainHeaderComponent } from './components/main-header/main-header.component';
 import { NewReportsComponentModule } from './components/new-reports-component/new-reports.component';
 import { NotificationComponent } from './components/notification/notification.component';
-import { OfferPageManagementComponent } from './components/offer-page-management/offer-page-management.component';
 import { OrderStockComponent } from './components/order-stocks/order-stock.component';
 import { PayoutDashboardModule } from './components/payout-dashboard/payout-dashboard.component';
 import { PerformanceReportComponent } from './components/performance-report/performance-report.component';
@@ -110,7 +109,6 @@ export function ConfigLoader(envConfig: envConfig) {
     StockComponentsReportsComponent,
     DownloadStockedComponent,
     DownloadStockedComponentProduct,
-    OfferPageManagementComponent,
     UploadedImageReportComponent,
     OrderReportComponent,
     // NewUserFormComponent,

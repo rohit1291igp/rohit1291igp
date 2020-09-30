@@ -43,15 +43,16 @@ export const userAcess = {
             route: '/new-dashboard/HolidayCalendarManagement',
         },
         {
+            displayName: 'Offer Management',
+            iconName: 'local_offer',
+            route: '/new-dashboard/offer',
+        },
+        {
             displayName: 'Product Decentralization',
             iconName: 'card_giftcard',
             route: '/new-dashboard/productDecentralization',
         },
-        {
-            displayName: 'Banner Panel',
-            iconName: 'image',
-            route: '/new-dashboard/banner',
-        }, {
+         {
             displayName: 'Ops-Report',
             iconName: 'analytics',
             route: '/new-dashboard/dailywarehouseOpsReport',
@@ -129,6 +130,19 @@ export const userAcess = {
             displayName: 'Password Reset',
             iconName: 'security',
             route: '/new-dashboard/egv/change-password',
+        }
+        
+    ],
+    marketing: [
+        {
+            displayName: 'Banner Panel',
+            iconName: 'image',
+            route: '/new-dashboard/banner',
+        },
+        {
+            displayName: 'Offer Panel',
+            iconName: 'local_offer',
+            route: '/new-dashboard/offerpagemanagement',
         }
         
     ]

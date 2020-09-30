@@ -1,4 +1,4 @@
-<nav class="navbar navbar-default main-header" *ngIf="environment.userType != 'warehouse' && environment.userType != 'egv_admin' && environment.userType != 'manager'&& environment.userType != 'executive' ">
+<nav class="navbar navbar-default main-header" *ngIf="environment.userType != 'warehouse' && environment.userType != 'marketing' && environment.userType != 'egv_admin' && environment.userType != 'manager'&& environment.userType != 'executive' ">
   <div class="container-fluid">
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
@@ -76,12 +76,12 @@
                     </ul>
                 </div>
             </li>
-            <ng-container *ngIf="environment.userType == 'warehouse' || environment.userType == 'merchandise' ">
+            <ng-container *ngIf="environment.userType == 'warehouse' || environment.userType == 'marketing' ">
                 <li class="fullHeightLi" [ngClass]="{'selected' : selectedTopTab === 'HolidayCalendarManagement'}">
                     <p><a ng-href="#/HolidayCalendarManagement" routerLink="/HolidayCalendarManagement">Holiday Calendar</a></p>
                 </li>
             </ng-container>
-            <ng-container *ngIf="environment.userType == 'warehouse' || environment.userType == 'merchandise' ">
+            <ng-container *ngIf="environment.userType == 'warehouse' || environment.userType == 'marketing' ">
                 <li class="fullHeightLi"
                     [ngClass]="{'selected' : selectedTopTab === 'productDecentralization'}">
                     <p><a ng-href="#/productDecentralization" routerLink="/productDecentralization">Product Decentralization</a></p>
