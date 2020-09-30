@@ -287,7 +287,8 @@ export class EgvwalletComponent implements OnInit {
         }
         _this.tableHeaders = result.tableHeaders;
         _this.tableHeaders[7] = 'Actions';
-        _this.dataSource = new MatTableDataSource(result.tableData);
+        let pendingtemp = result.tableData.filter(ele => { return ele['Status'] === 'Pending' })
+        _this.dataSource = new MatTableDataSource(pendingtemp);
 
         setTimeout(() => {
           _this.dataSource.paginator = _this.paginator;
