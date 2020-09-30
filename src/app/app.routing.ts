@@ -8,7 +8,6 @@ import { DeliveryTimeManagementComponent } from './components/delivery-time-mana
 import { DeliveryBoyDetailsComponent } from './components/deliveryboy-details/deliveryboy-details.component';
 import { DownloadEmailComponent } from './components/download-email/download-email.component';
 import { LoginComponent } from './components/login/login.component';
-import { OfferPageManagementComponent } from './components/offer-page-management/offer-page-management.component';
 import { OrderReportComponent } from './components/order-report/order-report.component';
 import { PayoutDashboardComponent } from './components/payout-dashboard/payout-dashboard.component';
 import { PerformanceReportComponent } from './components/performance-report/performance-report.component';
@@ -113,10 +112,6 @@ const route: Routes = [
   {
     path: 'payout-dashboard',
     component: PayoutDashboardComponent
-  },
-  {
-    path: 'offerpagemanagement',
-    component: OfferPageManagementComponent
   },
   {
     path: 'new-dashboard',
