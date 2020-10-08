@@ -25,7 +25,7 @@ export class OrderReportComponent implements OnInit {
   @ViewChild(OrdersActionTrayComponent) child: OrdersActionTrayComponent;
 
   searchForm: FormGroup;
-  delStatus = ['All Order Status', 'Processed', 'Confirmed', 'Out For Delivery', 'Delivery', 'Rejected'];
+  delStatus = ['All Order Status', 'Processed', 'Confirmed', 'Out For Delivery', 'Delivered', 'Rejected'];
 
   queryObj: any;
   public env = environment;
@@ -228,8 +228,8 @@ export class OrderReportComponent implements OnInit {
       method: "get",
     };
     reqObj.url += url;
-    reqObj.url += "&startLimit=0&flag_count=0";
-    _this.reportsService.getReportData('getOrderReport', url, function (error, _reportData) {
+    reqObj.url += "&startLimit=0&flag_count=1";
+    _this.reportsService.getReportData('getOrderReport', reqObj.url, function (error, _reportData) {
       let downreqObj: any = {
         url: 'getOrderReport?',
         method: "get",
@@ -237,7 +237,7 @@ export class OrderReportComponent implements OnInit {
       _this.queryObj.endLimit = _reportData.summary[0].value;
       let downurl = _this.generateQueryString(_this.queryObj);
       downreqObj.url += downurl;
-      downreqObj.url += "&startLimit=0&flag_count=1";
+      downreqObj.url += "&startLimit=0&flag_count=0";
 
       _this.BackendService.makeAjax(downreqObj, function (error, _reportData) {
         _this.dowloadingSummary = false;
