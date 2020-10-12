@@ -67,6 +67,7 @@ import { OrderReportComponent} from './components/order-report/order-report.comp
 // import { NewUserFormComponent } from './components/egv/user-management/new-user-form/new-user-form.component';
 import { EgvGuard } from './services/egv.guard';
 import { EgvService } from './services/egv.service';
+import { ScriptService } from './services/script.service';
 // import { AlertManagementComponent } from './components/egv/alert-management/alert-management.component';
 // import { EditUserComponent } from './components/egv/user-management/edit-user/edit-user.component';
 // import { PasswordChangeComponent } from './components/egv/user-management/password-change/password-change.component';
@@ -200,7 +201,8 @@ export function ConfigLoader(envConfig: envConfig) {
     VoucherService,
     EgvService,
     NavService,
-    CookieService
+    CookieService,
+    ScriptService,
   ],
   entryComponents:[UploadExcelComponent,NotificationComponent, ImgPreviewComponent, SelectItemForDelivered, OrderStockComponent,editComponent, DownloadStockedComponent,DownloadStockedComponentProduct],
   bootstrap: [AppComponent],
