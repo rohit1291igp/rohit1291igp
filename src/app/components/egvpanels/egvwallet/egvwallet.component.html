@@ -160,14 +160,10 @@
             <ng-container *ngIf="column == 'Amount' || column == 'Balance' ">
               {{element[column] || '-' | indianNumeric}}
             </ng-container>
-            <ng-container *ngIf="column == 'TxnDetails'">
-              <a (click)="openDialog(element)" style="cursor:pointer"
-                *ngIf="element['TransactionType'] == 'Debit' else noLink">{{(element[column] || '-' )+" - "+element['comments'].slice(0,-10)}}</a>
-              <ng-template #noLink>
-                {{(element[column] || '-' )+" - "+element['comments'].slice(0,-10)}}
-              </ng-template>
+            <ng-container *ngIf="column=='TxnDetails'">
+              {{(element[column] || '-' )+" - "+element['comments']}}
             </ng-container>
-            <ng-container *ngIf="column == 'Actions' && element['Status'] == 'Pending'">
+            <ng-container *ngIf="column == 'Actions'">
               <button mat-button color="primary" (click)='approveTransaction(element,true)'>
                 <i class="fa fa-check"></i> Approve</button>
               <button mat-button color="warn" (click)='approveTransaction(element,false)'><i class="fa fa-times"></i>
@@ -176,7 +172,8 @@
           </mat-cell>
         </ng-container>
         <mat-header-row *matHeaderRowDef="tableHeaders"></mat-header-row>
-        <mat-row *matRowDef="let row; columns: tableHeaders;"></mat-row>
+        <mat-row *matRowDef="let row; columns: tableHeaders;">
+        </mat-row>
       </mat-table>
       <mat-paginator [pageSizeOptions]="[10, 20, 50]" length="{{dataSource?.length}}" showFirstLastButtons>
       </mat-paginator>
