@@ -116,6 +116,10 @@ export class BannerPanelComponent implements OnInit {
 		console.log(event);
 		debugger;
 		if (event.target.files && event.target.files[0]) {
+			if (!RegExp(/^[a-zA-Z0-9]{0,25}$/g).test(event.target.files[0].name)) {
+				this.openSnackBar('File name should be of maximum 25 characters long with no symbols');
+				return;
+			}
 			var reader = new FileReader();
 
 			reader.readAsDataURL(event.target.files[0]); // read file as data url

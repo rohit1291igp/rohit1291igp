@@ -16,7 +16,13 @@ import { ProductAvailabilityComponent } from 'app/components/product-decentraliz
 import { ProductBarcodeComponent } from 'app/components/product-decentralization/product-barcode/product-barcode.component';
 import { DeliveryPriorityComponent } from 'app/components/product-decentralization/delivery-priority/delivery-priority.component';
 import { DailyOpsReportComponent } from 'app/components/daily-ops-report/daily-ops-report.component';
-import { UserAccessService } from 'app/services/user-access.service'
+import { UserAccessService } from 'app/services/user-access.service';
+import { OrderReportComponent } from 'app/components/order-report/order-report.component';
+import { StockComponentsReportsComponent } from 'app/components/stock-components-reports/stock-components-reports.component';
+import { DeliveryBoyDetailsComponent } from 'app/components/deliveryboy-details/deliveryboy-details.component'
+import { PerformanceReportComponent } from 'app/components/performance-report/performance-report.component';
+
+import { UploadedImageReportComponent } from 'app/components/uploaded-image-report/uploaded-image-report.component';
 
 const routes: Routes = [{
   path: '',
@@ -28,6 +34,31 @@ const routes: Routes = [{
   }, {
     path: 'egv',
     loadChildren: './egvpanel.module#EgvpanelModule',
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'reports/:type',
+    loadChildren: './report.module#ReportModule',
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'orderReport',
+    component: OrderReportComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'performanceReport',
+    component: PerformanceReportComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'deliveryBoyDetails',
+    component: DeliveryBoyDetailsComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'stockReport',
+    component: StockComponentsReportsComponent,
     canActivate: [AuthGuard]
   },
   {
@@ -49,7 +80,16 @@ const routes: Routes = [{
     path: 'dailywarehouseOpsReport',
     component: DailyOpsReportComponent,
     canActivate: [AuthGuard]
-  }
+  },
+  {
+    path: 'uploaded-image',
+    component: UploadedImageReportComponent
+  },
+  {
+    path: 'dashboard',
+    loadChildren: './dashboard.module#DashboardModule',
+    canActivate: [AuthGuard]
+  },
   ]
 }
 ];
@@ -73,7 +113,12 @@ const routes: Routes = [{
     ProductAvailabilityComponent,
     ProductBarcodeComponent,
     DeliveryPriorityComponent,
-    DailyOpsReportComponent
+    DailyOpsReportComponent,
+    OrderReportComponent,
+    PerformanceReportComponent,
+    StockComponentsReportsComponent,
+    DeliveryBoyDetailsComponent,
+    UploadedImageReportComponent
   ],
   providers: [NavService, UserAccessService]
 })
