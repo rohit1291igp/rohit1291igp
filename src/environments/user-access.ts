@@ -145,5 +145,13 @@ export const userAcess = {
             route: '/new-dashboard/offerpagemanagement',
         }
         
+    ],
+    mldatascience: [
+        {
+            displayName: 'Search Ranking',
+            iconName: 'image',
+            route: '/new-dashboard/searchRanking',
+        },
+        
     ]
 }

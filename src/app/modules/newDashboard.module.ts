@@ -19,6 +19,7 @@ import { DailyOpsReportComponent } from 'app/components/daily-ops-report/daily-o
 import { UserAccessService } from 'app/services/user-access.service'
 import { OfferPageManagementComponent } from 'app/components/offer-page-management/offer-page-management.component';
 import { MatSlideToggleModule } from '@angular/material';
+import { SearchRankingComponent } from 'app/components/search-ranking/search-ranking.component';
 
 const routes: Routes = [{
   path: '',
@@ -56,6 +57,11 @@ const routes: Routes = [{
     path: 'dailywarehouseOpsReport',
     component: DailyOpsReportComponent,
     canActivate: [AuthGuard]
+  },
+  {
+    path: 'searchRanking',
+    component: SearchRankingComponent,
+    canActivate: [AuthGuard]
   }
   ]
 }
@@ -82,7 +88,8 @@ const routes: Routes = [{
     ProductBarcodeComponent,
     DeliveryPriorityComponent,
     DailyOpsReportComponent,
-    OfferPageManagementComponent
+    OfferPageManagementComponent,
+    SearchRankingComponent,
   ],
   providers: [NavService, UserAccessService]
 })
