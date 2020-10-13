@@ -1,4 +1,4 @@
-<nav class="navbar navbar-default main-header" *ngIf="environment.userType != 'warehouse' && environment.userType != 'marketing' && environment.userType != 'egv_admin' && environment.userType != 'manager'&& environment.userType != 'executive' ">
+<nav class="navbar navbar-default main-header" *ngIf="environment.userType != 'warehouse' && environment.userType != 'marketing' && environment.userType != 'egv_admin' && environment.userType != 'manager'&& environment.userType != 'executive' && environment.userType != 'mldatascience'">
   <div class="container-fluid">
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
@@ -47,8 +47,8 @@
                     <ul class="reportsdropdownMenu no-padding">
                         <ng-container *ngIf="(environment.userType != 'microsite' && environment.userType != 'microsite-zeapl' && environment.userType != 'warehouse')">
                         <a routerLink="/orderReport"><li [ngClass]="{'selected' : selectedReportTab === 'getOrderReport'}">Order Report</li></a>
-                        <!-- <a routerLink="/reports/getVendorReport"><li [ngClass]="{'selected' : selectedReportTab === 'getVendorReport'}">Product Report</li></a> -->
-                        <a routerLink="/productReport"><li [ngClass]="{'selected' : selectedReportTab === 'getVendorReport'}">Product Report</li></a>
+                        <a routerLink="/reports/getVendorReport"><li [ngClass]="{'selected' : selectedReportTab === 'getVendorReport'}">Product Report</li></a>
+                        <!-- <a routerLink="/productReport"><li [ngClass]="{'selected' : selectedReportTab === 'getVendorReport'}">Product Report</li></a> -->
                         <a routerLink="/reports/getPincodeReport"><li [ngClass]="{'selected' : selectedReportTab === 'getPincodeReport'}">Pincode Report</li></a>
                         <a *ngIf="environment.userType === 'vendor'" routerLink="/deliveryBoyDetails"><li [ngClass]="{'selected' : selectedReportTab === 'deliveryBoyDetails'}">Delivery Boy Details</li></a>
                         <a *ngIf="environment.userType != 'vendor'" class="" routerLink="/reports/getPayoutAndTaxesReport"><li [ngClass]="{'selected' : selectedReportTab === 'getPayoutAndTaxesReport'}">Payout & Taxes</li></a>
