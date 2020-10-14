@@ -741,7 +741,7 @@
                                                 </span>
                                                 
                                                 <span *ngIf="tableCol == 'Component Image' || tableCol == 'Component_Image'" >
-                                                    <img class="clk" style="width: 4em; box-shadow: 0 1px 3px #888888;" src="{{componentImageUrl}}{{getCellValue(tableRowValue[tableCol])}}" alt="{{getCellValue(tableRowValue[tableCol])}}" (click)="imagePreview($event, componentImageUrl +(getCellValue(tableRowValue[tableCol])))">
+                                                    <img class="clk" style="width: 4em; box-shadow: 0 1px 3px #888888;" src="{{componentImageUrl}}thumb/{{getCellValue(tableRowValue[tableCol])}}" alt="{{getCellValue(tableRowValue[tableCol])}}" (click)="imagePreview($event, componentImageUrl +(getCellValue(tableRowValue[tableCol])))">
                                                 </span>
                                                 <span *ngIf="tableCol == 'Product Image' || tableCol == 'Product_Image'" >
                                                     <img class="clk" style="width: 4em; box-shadow: 0 1px 3px #888888;" src="{{productsURL}}th/{{getCellValue(tableRowValue[tableCol])}}" alt="{{getCellValue(tableRowValue[tableCol])}}" (click)="imagePreview($event, productsURL+'l/'+(getCellValue(tableRowValue[tableCol])))">

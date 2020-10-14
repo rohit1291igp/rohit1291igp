@@ -12,7 +12,7 @@ export const environment = {
   // origin:'http://adminapi.igp.com/',
   // origin:'http://adminapi.igp.com/',
   originMock: 'https://5a43a511342c490012f3fca2.mockapi.io/',
-  productsURL : 'https://d1xs5fw35mbn8b.cloudfront.net/p/',
+  productsURL : 'http://img1.igp.com/p/',
   productsCompURL : 'http://admin.indiangiftsportal.com/handelscomponents/',
   isMobile: window.screen.width < 1000,
   userType: localStorage.getItem('userType'),
