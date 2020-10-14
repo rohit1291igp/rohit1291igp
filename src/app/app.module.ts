@@ -1,4 +1,4 @@
- // Modules
+// Modules
 import { CdkTableModule } from '@angular/cdk/table';
 import { DatePipe } from '@angular/common';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -103,15 +103,6 @@ export function ConfigLoader(envConfig: envConfig) {
     DeliveryTimeManagementComponent,
     DownloadStockedComponent,
     DownloadStockedComponentProduct,
-
-    OfferPageManagementComponent,
-    // OrderReportComponent,
-
-    // NewUserFormComponent,
-    // AlertManagementComponent,
-    // EditUserComponent,
-    // PasswordChangeComponent
-    // AutoSelectionComponent
   ],
   imports: [
     BrowserModule,
