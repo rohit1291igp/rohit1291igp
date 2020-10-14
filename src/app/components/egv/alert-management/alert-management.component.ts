@@ -52,19 +52,13 @@ export class AlertManagementComponent implements OnInit {
     }
   }
   alerts= {
-    "fkAssociateId": 882,
-    "alertEmailIds": [
-        "praks",
-        "wfddsewdwe"
-    ],
-    "alertMobNums": ["0987654321","8899776655"],
-    "alertLimit": 2000000,
-    "sosLimit": 500000,
-    "sosemailIds": [
-        "praks",
-        "sdwdff"
-    ],
-    "sosmobNums": ["879876437","34532335"]
+    "fkAssociateId": null,
+    "alertEmailIds": [],
+    "alertMobNums": [],
+    "alertLimit": 0,
+    "sosLimit": 0,
+    "sosemailIds": [],
+    "sosmobNums": []
 }
   isAlertAmountDisabled=true;
   toggleAlertAmountBtn(){
@@ -100,7 +94,7 @@ export class AlertManagementComponent implements OnInit {
   SosAmountChange(){
     if(this.SosLimit && this.SosLimit<this.alerts.alertLimit){
       this.alerts.sosLimit=this.SosLimit;
-      this.egvService.updateAlert(this.SosLimit).subscribe((res:any)=>{
+      this.egvService.updateAlert(this.alerts).subscribe((res:any)=>{
         if(res.err){
           this.openSnackBar(res.result||res.errorMessage)
         }else{
@@ -151,58 +145,74 @@ export class AlertManagementComponent implements OnInit {
   }
 
   addAlertEmail(email){
-    this.alerts.alertEmailIds.push(email)
-    this.egvService.updateAlert(this.alerts).subscribe((res:any)=>{
-      if(res.error){
-        this.openSnackBar(res.result||res.errorMessage)
-      }else{
-        this.openSnackBar(res.result);
-        this.addAlertEmailFlag=false;
-        this.alertsEmails.push(email);
-        this.newAlertEmail="";
-      }
-    });
+    if(this.validateEmail(email)){
+      this.alerts.alertEmailIds.push(email)
+      this.egvService.updateAlert(this.alerts).subscribe((res:any)=>{
+        if(res.error){
+          this.openSnackBar(res.result||res.errorMessage)
+        }else{
+          this.openSnackBar(res.result);
+          this.addAlertEmailFlag=false;
+          this.alertsEmails.push(email);
+          this.newAlertEmail="";
+        }
+      });
+    }else{
+      this.openSnackBar('Invalid Email')
+    }
   }
-  addAlertMob(mob){
-    this.alerts.alertMobNums.push(mob);
-    this.egvService.updateAlert(this.alerts).subscribe((res:any)=>{
-      if(res.error){
-        this.openSnackBar(res.result||res.errorMessage)
-      }else{
-        this.openSnackBar(res.result);
-        this.addAlertMobFlag=false;
-        this.alertsMobile.push(mob);
-        this.newAlertMob=""
-      }
-    })
+  addAlertMob(mob:string){
+    if(mob.length===10){
+      this.alerts.alertMobNums.push(mob);
+      this.egvService.updateAlert(this.alerts).subscribe((res:any)=>{
+        if(res.error){
+          this.openSnackBar(res.result||res.errorMessage)
+        }else{
+          this.openSnackBar(res.result);
+          this.addAlertMobFlag=false;
+          this.alertsMobile.push(mob);
+          this.newAlertMob=""
+        }
+      })
+    }else{
+      this.openSnackBar('Add Valid Mobile No')
+    }
   }
 
   addSosEmail(email){
-    this.alerts.sosemailIds.push(email)
-    this.egvService.updateAlert(this.alerts).subscribe((res:any)=>{
-      if(res.error){
-        this.openSnackBar(res.result||res.errorMessage)
-      }else{
-        this.openSnackBar(res.result);
-        this.addSosEmailFlag=false;
-        this.sosEmails.push(email);
-        this.newSosEmail="";
-      }
-    });
+    if(this.validateEmail(email)){
+      this.alerts.sosemailIds.push(email)
+      this.egvService.updateAlert(this.alerts).subscribe((res:any)=>{
+        if(res.error){
+          this.openSnackBar(res.result||res.errorMessage)
+        }else{
+          this.openSnackBar(res.result);
+          this.addSosEmailFlag=false;
+          this.sosEmails.push(email);
+          this.newSosEmail="";
+        }
+      });
+    }else{
+      this.openSnackBar('Invalid Email')
+    }
   }
 
-  addSosMob(mob){
-    this.alerts.sosmobNums.push(mob);
-    this.egvService.updateAlert(this.alerts).subscribe((res:any)=>{
-      if(res.error){
-        this.openSnackBar(res.result||res.errorMessage)
-      }else{
-        this.openSnackBar(res.result);
-        this.addSosMobFlag=false;
-        this.sosMobile.push(mob);
-        this.newSosMob=""
-      }
-    })
+  addSosMob(mob:string){
+    if(mob.length===10){
+      this.alerts.sosmobNums.push(mob);
+      this.egvService.updateAlert(this.alerts).subscribe((res:any)=>{
+        if(res.error){
+          this.openSnackBar(res.result||res.errorMessage)
+        }else{
+          this.openSnackBar(res.result);
+          this.addSosMobFlag=false;
+          this.sosMobile.push(mob);
+          this.newSosMob=""
+        }
+      })
+    }else{
+      this.openSnackBar('Add Valid Mobile No')
+    }
   }
 
   deleteAlertMobile(mobile){
@@ -286,6 +296,19 @@ export class AlertManagementComponent implements OnInit {
 
   removeEmptyValue(arr){
     return arr.filter(ele=>ele!=="")
+  }
+
+  validateEmail(email) {
+    const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(email);
+  }
+
+  validateMob(event: any) {
+    const pattern = /[0-9\+\-\ ]/;
+    let inputChar = String.fromCharCode(event.charCode);
+    if (event.keyCode != 8 && !pattern.test(inputChar)) {
+      event.preventDefault();
+    }
   }
 
   openSnackBar(data) {

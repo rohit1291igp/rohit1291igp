@@ -124,7 +124,7 @@ export class LoginComponent implements OnInit {
                     _this.router.navigate(['/voucher/voucher']);
                 } else if (userType === 'gv') {
                     _this.router.navigate(['/voucher/gv']);
-                } else if (userType === 'warehouse') {
+                } else if (userType === 'warehouse' || userType === 'marketing' || userType === 'mldatascience' ) {
                     _this.router.navigate(['/new-dashboard']);
                 }else if (userType === 'egv_admin'||userType === 'manager'||userType === 'executive') {
                     _this.router.navigate(['/new-dashboard']);

@@ -34,7 +34,6 @@ import { LoginComponent } from './components/login/login.component';
 import { MainHeaderComponent } from './components/main-header/main-header.component';
 import { NewReportsComponentModule } from './components/new-reports-component/new-reports.component';
 import { NotificationComponent } from './components/notification/notification.component';
-import { OfferPageManagementComponent } from './components/offer-page-management/offer-page-management.component';
 import { OrderStockComponent } from './components/order-stocks/order-stock.component';
 import { PayoutDashboardModule } from './components/payout-dashboard/payout-dashboard.component';
 import { DownloadStockedComponentProduct, ProductReportComponent } from './components/product-report/product-report.component';
@@ -64,6 +63,8 @@ import { CookieService } from './services/cookie.service';
 // import { NewUserFormComponent } from './components/egv/user-management/new-user-form/new-user-form.component';
 import { EgvGuard } from './services/egv.guard';
 import { EgvService } from './services/egv.service';
+import { ScriptService } from './services/script.service';
+import { SerachRankingService } from './services/serach-ranking.service';
 // import { AlertManagementComponent } from './components/egv/alert-management/alert-management.component';
 // import { EditUserComponent } from './components/egv/user-management/edit-user/edit-user.component';
 // import { PasswordChangeComponent } from './components/egv/user-management/password-change/password-change.component';
@@ -102,8 +103,10 @@ export function ConfigLoader(envConfig: envConfig) {
     DeliveryTimeManagementComponent,
     DownloadStockedComponent,
     DownloadStockedComponentProduct,
+
     OfferPageManagementComponent,
     // OrderReportComponent,
+
     // NewUserFormComponent,
     // AlertManagementComponent,
     // EditUserComponent,
@@ -193,7 +196,9 @@ export function ConfigLoader(envConfig: envConfig) {
     VoucherService,
     EgvService,
     NavService,
-    CookieService
+    CookieService,
+    ScriptService,
+    SerachRankingService
   ],
   entryComponents: [UploadExcelComponent, NotificationComponent, ImgPreviewComponent, SelectItemForDelivered, OrderStockComponent, editComponent, DownloadStockedComponent, DownloadStockedComponentProduct],
   bootstrap: [AppComponent],

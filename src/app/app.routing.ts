@@ -7,7 +7,9 @@ import { DailyOpsReportComponent } from './components/daily-ops-report/daily-ops
 import { DeliveryTimeManagementComponent } from './components/delivery-time-management/delivery-time-management.component';
 import { DownloadEmailComponent } from './components/download-email/download-email.component';
 import { LoginComponent } from './components/login/login.component';
+
 import { OfferPageManagementComponent } from './components/offer-page-management/offer-page-management.component';
+
 import { PayoutDashboardComponent } from './components/payout-dashboard/payout-dashboard.component';
 import { ProductReportComponent } from './components/product-report/product-report.component';
 import { AuthGuard } from './services/auth-guard.service';
@@ -90,10 +92,6 @@ const route: Routes = [
   {
     path: 'payout-dashboard',
     component: PayoutDashboardComponent
-  },
-  {
-    path: 'offerpagemanagement',
-    component: OfferPageManagementComponent
   },
   {
     path: 'new-dashboard',
