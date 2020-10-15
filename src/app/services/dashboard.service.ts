@@ -66,7 +66,7 @@ export class DashboardService {
         private router: Router
         ) { 
             let userType = localStorage.getItem('userType');
-            if(userType == 'microsite' || userType == 'microsite-zeapl'){
+            if(userType == 'microsite' || userType == 'microsite-zeapl' || userType == 'microsite-loylty'){
                 this.router.navigate(['/dashboard-microsite']);
             }
             if(userType == 'warehouse' || userType == 'manager' || userType == 'egv_admin' || userType == 'executive'){

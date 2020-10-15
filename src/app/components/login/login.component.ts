@@ -118,7 +118,7 @@ export class LoginComponent implements OnInit {
                 _this.UtilityService.changeRouteComponent();
                 if (userType === 'deliveryboy') {
                     _this.router.navigate(['/delivery-app']);
-                } else if (userType === 'microsite' || userType === 'microsite-zeapl') {
+                } else if (userType === 'microsite' || userType === 'microsite-zeapl' || userType == 'microsite-loylty') {
                     _this.router.navigate(['/dashboard-microsite']);
                 } else if (userType === 'voucher') {
                     _this.router.navigate(['/voucher/voucher']);

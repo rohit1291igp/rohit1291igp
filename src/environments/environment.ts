@@ -8,8 +8,8 @@ export const environment = {
   log : true,
  // origin: 'http://35.171.85.169:8081/',54.88.211.119
   //  origin: 'http://34.229.23.111:8081/',
-  // origin:'http://18.233.106.34:8081/',
-  origin:'http://adminapi.igp.com/',
+  origin:'http://18.233.106.34:8081/',
+  // origin:'http://adminapi.igp.com/',
   // origin:'http://adminapi.igp.com/',
   originMock: 'https://5a43a511342c490012f3fca2.mockapi.io/',
   productsURL : 'https://d1xs5fw35mbn8b.cloudfront.net/p/',

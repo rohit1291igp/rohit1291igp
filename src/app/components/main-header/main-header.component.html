@@ -32,10 +32,10 @@
             <li  *ngIf="environment.userType == 'admin'" class="fullHeightLi" [ngClass]="{'selected' : selectedTopTab === 'payout-dashboard'}">
                     <p><a ng-href="#/payout-dashboard" routerLink="/payout-dashboard">Payout Dashboard</a></p>
             </li>
-            <li  *ngIf="environment.userType != 'microsite' && environment.userType != 'microsite-zeapl' && environment.userType != 'warehouse'" class="fullHeightLi" [ngClass]="{'selected' : selectedTopTab === 'dashboard'}">
+            <li  *ngIf="environment.userType != 'microsite' && environment.userType != 'microsite-zeapl' && environment.userType != 'warehouse' && environment.userType != 'microsite-loylty'" class="fullHeightLi" [ngClass]="{'selected' : selectedTopTab === 'dashboard'}">
                 <p><a ng-href="#/dashboard" routerLink="/dashboard">Dashboard</a></p>
             </li>
-            <li  *ngIf="environment.userType == 'microsite' || environment.userType == 'microsite-zeapl'" class="fullHeightLi" [ngClass]="{'selected' : selectedTopTab === 'dashboard'}">
+            <li  *ngIf="environment.userType == 'microsite' || environment.userType == 'microsite-zeapl' || environment.userType == 'microsite-loylty'" class="fullHeightLi" [ngClass]="{'selected' : selectedTopTab === 'dashboard'}">
                 <p><a ng-href="#/dashboard-microsite" routerLink="/dashboard-microsite">Dashboard</a></p>
             </li>
             <!-- <li *ngIf="environment.userType === 'vendor'" class="fullHeightLi" [ngClass]="{'selected' : selectedTopTab === 'adddeliveryboy'}">
@@ -45,7 +45,7 @@
                <p>Reports</p>
                 <div class="reportDropdown abs" [ngClass]="{'slideropen' : reportDropdownOpen, 'sliderclosed': !reportDropdownOpen}">
                     <ul class="reportsdropdownMenu no-padding">
-                        <ng-container *ngIf="(environment.userType != 'microsite' && environment.userType != 'microsite-zeapl' && environment.userType != 'warehouse')">
+                        <ng-container *ngIf="(environment.userType != 'microsite' && environment.userType != 'microsite-zeapl' && environment.userType != 'warehouse' && environment.userType != 'microsite-loylty')">
                         <a routerLink="/orderReport"><li [ngClass]="{'selected' : selectedReportTab === 'getOrderReport'}">Order Report</li></a>
                         <a routerLink="/reports/getVendorReport"><li [ngClass]="{'selected' : selectedReportTab === 'getVendorReport'}">Product Report</li></a>
                         <!-- <a routerLink="/productReport"><li [ngClass]="{'selected' : selectedReportTab === 'getVendorReport'}">Product Report</li></a> -->
@@ -61,7 +61,8 @@
                         <a *ngIf="environment.userType === 'admin' || environment.userType === 'vendor'" class="" routerLink="/performanceReport"><li [ngClass]="{'selected' : selectedReportTab === 'performanceReport'}">Performance Report</li></a>
                         </ng-container>
                         <a *ngIf="(environment.userType == 'microsite')" class="" routerLink="/reports/itcReport" ><li [ngClass]="{'selected' : selectedReportTab === 'report'}">Current Balances</li></a>
-                        <a *ngIf="(environment.userType == 'microsite-zeapl')" class="" routerLink="/reports/zeaplReport" ><li [ngClass]="{'selected' : selectedReportTab === 'report'}">Current Balances</li></a>
+                        <a *ngIf="(environment.userType == 'microsite-zeapl')" ><li [ngClass]="{'selected' : selectedReportTab === 'report'}">Current Balances</li></a>
+                        <a *ngIf="(environment.userType == 'microsite-loylty')" class="" routerLink="/reports/zeaplReport" ><li [ngClass]="{'selected' : selectedReportTab === 'report'}">Current Balances</li></a>
                         <ng-container *ngIf="(environment.userType === 'admin')">
                             <a class="" routerLink="/reports/getVendorDetails" ><li [ngClass]="{'selected' : selectedReportTab === 'getVendorDetails'}">Vendor Details</li></a>
                             <a class="" routerLink="/reports/getSlaReport" ><li [ngClass]="{'selected' : selectedReportTab === 'getSlaReport'}">SLA Report</li></a>
