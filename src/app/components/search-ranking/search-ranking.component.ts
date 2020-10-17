@@ -2,26 +2,6 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { SerachRankingService } from 'app/services/serach-ranking.service';
 import { MatPaginator, MatTableDataSource } from '@angular/material';
 
-export interface PeriodicElement {
-  name: string;
-  position: number;
-  weight: number;
-  symbol: string;
-}
-
-const ELEMENT_DATA: PeriodicElement[] = [
-  {position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H'},
-  {position: 2, name: 'Helium', weight: 4.0026, symbol: 'He'},
-  {position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li'},
-  {position: 4, name: 'Beryllium', weight: 9.0122, symbol: 'Be'},
-  {position: 5, name: 'Boron', weight: 10.811, symbol: 'B'},
-  {position: 6, name: 'Carbon', weight: 12.0107, symbol: 'C'},
-  {position: 7, name: 'Nitrogen', weight: 14.0067, symbol: 'N'},
-  {position: 8, name: 'Oxygen', weight: 15.9994, symbol: 'O'},
-  {position: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F'},
-  {position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne'},
-];
-
 
 @Component({
   selector: 'app-search-ranking',
@@ -43,6 +23,14 @@ export class SearchRankingComponent implements OnInit {
   displayedColumns: string[] = ['position', 'name', 'weight',];
   dataSource = new MatTableDataSource([]);
   totalResult=0;
+  sortOptions=[
+    {title : "Ascending by Score",value:'score%2Basc'},
+    {title : "Descending by Score",value:'score%2Bdesc'},
+    {title : "Ascending by MRP",value:'mrp%2Basc'},
+    {title : "Descending by MRP",value:'mrp%2Bdesc'},
+    {title : "Descending by Created",value:'created%2Bdesc'}, 
+  ]
+  sortBy="created%2Bdesc"
 
 
   ngOnInit() {
@@ -56,8 +44,11 @@ export class SearchRankingComponent implements OnInit {
   }
 
 
+  getSearchRandkingResultInvoked=false;
   getSearchRankingResult(skip=0,limit=100){
-    this.searchRankingService.getSearchRanking(this.searchKeyword,this.solr,this.ml,skip,limit).subscribe((res:any)=>{
+    this.getSearchRandkingResultInvoked=true;
+    this.searchRankingService.getSearchRanking(this.searchKeyword,this.solr,this.ml,skip,limit,this.sortBy).subscribe((res:any)=>{
+      this.getSearchRandkingResultInvoked=false;
       if(res.status==='Success'){
         if('products' in res.data){
           setTimeout(() => {
@@ -69,11 +60,13 @@ export class SearchRankingComponent implements OnInit {
             this.dataSource.data=res.data.products;
             this.totalResult=res.data.num;
           }
-          this.displayedColumns = ['id','image','name','url'];
+          this.displayedColumns = ['id','image','name','url','rating','price'];
         }
         console.log(this.dataSource)  
         console.log(this.totalResult)  
       }
+    },(err)=>{
+      this.getSearchRandkingResultInvoked=false;
     })
   }
 
