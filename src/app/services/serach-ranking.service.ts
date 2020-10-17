@@ -10,8 +10,8 @@ export class SerachRankingService {
     private httpClient:HttpClient
   ) { }
 
-  getSearchRanking(searchKeyword,solr,ml,skip,limit){
-    let url=`${environment.origin}v1/admin/solr/search/ranking?q=${searchKeyword}&o=${skip}&l=${limit}&s=wt_desc&solr=${solr}&ml=${ml}`
+  getSearchRanking(searchKeyword,solr,ml,skip,limit,sortBy){
+    let url=`${environment.origin}v1/admin/solr/search/ranking?q=${searchKeyword}&o=${skip}&l=${limit}&s=${sortBy}&solr=${solr}&ml=${ml}`
     return this.httpClient.get(url);
   }
 }
