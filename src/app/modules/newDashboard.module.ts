@@ -26,6 +26,7 @@ import { OfferPageManagementComponent } from 'app/components/offer-page-manageme
 import { MatSlideToggleModule } from '@angular/material';
 import { SearchRankingComponent } from 'app/components/search-ranking/search-ranking.component';
 
+
 const routes: Routes = [{
   path: '',
   component: NewDasboardComponent,
@@ -101,6 +102,10 @@ const routes: Routes = [{
   {
     path: 'searchRanking',
     component: SearchRankingComponent,
+    canActivate: [AuthGuard]
+  }, {
+    path: 'dashboard-microsite',
+    loadChildren: './microsite.module#MicroSiteModule',
     canActivate: [AuthGuard]
   }
 
