@@ -114,12 +114,12 @@ export class LoginComponent implements OnInit {
                 //   environment.userType='vendor';
                 // }
 
-
+///dashboard-microsite
                 _this.UtilityService.changeRouteComponent();
                 if (userType === 'deliveryboy') {
                     _this.router.navigate(['/delivery-app']);
                 } else if (userType === 'microsite' || userType === 'microsite-zeapl' || userType == 'microsite-loylty') {
-                    _this.router.navigate(['/dashboard-microsite']);
+                    _this.router.navigate(['/new-dashboard']);
                 } else if (userType === 'voucher') {
                     _this.router.navigate(['/voucher/voucher']);
                 } else if (userType === 'gv') {
