@@ -14,8 +14,8 @@ export class SearchRankingComponent implements OnInit {
     private searchRankingService:SerachRankingService
   ) { }
   searchKeyword:string="";
-  solr:string="";
-  ml:string="";
+  solr:string="http://solr.igp.com:8983/solr/product";
+  ml:string="http://10.0.4.168/api/v1/get_products_id?initial_query";
   imgCdn="https://cdn.igp.com/f_auto,q_auto,t_prodm/products/"
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -23,6 +23,8 @@ export class SearchRankingComponent implements OnInit {
   displayedColumns: string[] = ['position', 'name', 'weight',];
   dataSource = new MatTableDataSource([]);
   totalResult=0;
+  modified_query="";
+
   sortOptions=[
     {title : "Ascending by Score",value:'score%2Basc'},
     {title : "Descending by Score",value:'score%2Bdesc'},
@@ -30,7 +32,7 @@ export class SearchRankingComponent implements OnInit {
     {title : "Descending by MRP",value:'mrp%2Bdesc'},
     {title : "Descending by Created",value:'created%2Bdesc'}, 
   ]
-  sortBy="created%2Bdesc"
+  sortBy="score%2Bdesc"
 
 
   ngOnInit() {
@@ -59,6 +61,7 @@ export class SearchRankingComponent implements OnInit {
           }else{
             this.dataSource.data=res.data.products;
             this.totalResult=res.data.num;
+            this.modified_query=res.data.modified_query;
           }
           this.displayedColumns = ['id','image','name','url','rating','price'];
         }

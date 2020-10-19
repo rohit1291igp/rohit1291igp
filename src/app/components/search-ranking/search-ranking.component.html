@@ -1,10 +1,12 @@
 <div class="container">
   <div class="row m-top-1">
     <div class="col-sm-3">
-      <mat-form-field class="example-full-width">
+      <mat-form-field class="example-full-width m-top-1">
         <mat-label>Search Keyword</mat-label>
-        <textarea matInput placeholder="Search" [(ngModel)]="searchKeyword"></textarea>
+        <input matInput placeholder="Search" [(ngModel)]="searchKeyword">
       </mat-form-field>
+      <br>
+      <button type="button" mat-raised-button (click)="onSubmit()" [disabled]="getSearchRandkingResultInvoked">Submit</button>
     </div>
     <div class="col-sm-3">
       <mat-form-field class="example-full-width">
@@ -27,10 +29,15 @@
       </mat-select>
     </mat-form-field>
     <div  class="col-sm-1 m-top-1">
-      <button mat-raised-button (click)="onSubmit()" [disabled]="getSearchRandkingResultInvoked">Submit</button>
     </div>
   </div>
   <div *ngIf="dataSource.data.length>0" class="row m-top-1">
+    <div style="padding: 0 15px;" class="text-secondary">
+      Modified Query : <span style="font-weight: bold;">{{modified_query}}</span>
+      <br>
+      Result : <span style="font-weight: bold;">{{totalResult}}</span>
+    </div>
+
     <mat-table #table [dataSource]="dataSource">
       <ng-container *ngFor="let headerColumn of displayedColumns" matColumnDef="{{headerColumn}}">
         <mat-header-cell *matHeaderCellDef [ngClass]="{'text-right':headerColumn==='price','text-center':headerColumn==='rating'}"> {{headerColumn | titlecase}} </mat-header-cell>
