@@ -188,7 +188,8 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 			response.tableData.forEach((ele) => {
 				const control = _this.fb.group({
 					Quantity: [ele.Quantity],
-					Priority: [ele.Priority]
+					Priority: [ele.Priority],
+					RackId: [ele.RackId]
 				});
 				(<FormArray>_this.tableform.get("tableEntries")).push(control);
 			});
@@ -196,7 +197,7 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 			_this.dataFromDB = true;
 			_this.openEdits = 0;
 			_this.dataSource = new MatTableDataSource(response.tableData);
-			_this.tableHeaders = ["select", "SKU", "WareHouse", "Quantity", "Priority", "actions"];
+			_this.tableHeaders = ["select", "SKU", "WareHouse", "Quantity", "Priority", "RackId", "actions"];
 
 			console.log('sidePanel Response --->', response);
 			setTimeout(() => {
@@ -210,7 +211,7 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 	readExcel(event) {
 		const workbook = new Excel.Workbook();
 		const target: DataTransfer = <DataTransfer>(event.target);
-		
+
 		let _this = this;
 		let tableData = [];
 		if (target.files.length !== 1) {
@@ -236,7 +237,9 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 								SKU: row.values[1],
 								WareHouse: row.values[2],
 								Quantity: row.values[3] || 0,
-								Priority: row.values[4] || 0
+								Priority: row.values[4] || 0,
+								RackId: row.values[5] || 0,
+								id: 0
 							})
 						}
 						else {
@@ -249,17 +252,18 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 					_this.sidenav.open();
 				}
 				_this.selection.clear();
-				
+
 				_this.tableform.get("tableEntries")['controls'] = []
 				tableData.forEach((ele) => {
 					const control = _this.fb.group({
 						Quantity: [ele.Quantity],
-						Priority: [ele.Priority]
+						Priority: [ele.Priority],
+						RackId: [ele.RackId]
 					});
 					(<FormArray>_this.tableform.get("tableEntries")).push(control);
 				});
 				_this.dataSource = new MatTableDataSource(tableData);
-				_this.tableHeaders = ["select", "SKU", "WareHouse", "Quantity", "Priority", "actions"];
+				_this.tableHeaders = ["select", "SKU", "WareHouse", "Quantity", "Priority", "RackId", "actions"];
 				_this.dataFromDB = false;
 				_this.openEdits = 0;
 				setTimeout(() => {
@@ -268,7 +272,7 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 				}, 100)
 			});
 		});
-		event.target.value='';
+		event.target.value = '';
 	}
 
 	viewExcel(data) {
@@ -281,12 +285,13 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 		dataSource.forEach((ele) => {
 			const control = _this.fb.group({
 				Quantity: [ele.Quantity],
-				Priority: [ele.Priority]
+				Priority: [ele.Priority],
+				RackId: [ele.RackId]
 			});
 			(<FormArray>_this.tableform.get("tableEntries")).push(control);
 		});
 		_this.dataSource = new MatTableDataSource(dataSource);
-		_this.tableHeaders = ["select", "SKU", "WareHouse", "Quantity", "Priority", "actions"];
+		_this.tableHeaders = ["select", "SKU", "WareHouse", "Quantity", "Priority", "RackId", "actions"];
 		_this.dataFromDB = false;
 		_this.openEdits = 0;
 		setTimeout(() => {
@@ -314,7 +319,8 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 				"WareHouse": ele.WareHouse,
 				"Priority": ele.Priority,
 				"SKU": ele.SKU,
-				"Quantity": ele.Quantity
+				"Quantity": ele.Quantity,
+				"RackId": ele.RackId
 			})
 		});
 
@@ -346,7 +352,7 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 		}
 
 		let reqObj: any = {
-			url: 'warehouse/decentralized/updateProductList',
+			url: 'warehouse/decentralized/updateProductList?isBulkUpload=true',
 			method: "put",
 			payload: <any>[]
 		};
@@ -356,7 +362,8 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 				"WareHouse": ele.WareHouse,
 				"Priority": ele.Priority,
 				"SKU": ele.SKU,
-				"Quantity": ele.Quantity
+				"Quantity": ele.Quantity,
+				"RackId": ele.RackId
 			})
 		});
 
@@ -374,9 +381,9 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 			if (response.result.errorList.length) {
 				_this.errorList = response.result.errorList;
 				_this.sidenav.open()
-			}else{
+			} else {
 				_this.openSnackBar("Updated Successfully");
-			}		
+			}
 			console.log('sidePanel Response --->', response);
 
 		})
@@ -385,7 +392,7 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 	downloadExcel() {
 		let workbook = new Excel.Workbook();
 		let worksheet = workbook.addWorksheet('Report');
-		let titleRow = worksheet.addRow(["SKU", "Warehouse", "Quantity", "Priority"]);
+		let titleRow = worksheet.addRow(["SKU", "Warehouse", "Quantity", "Priority", "RackId"]);
 
 		this.dataSource.data.forEach(row => {
 			let line = [];
@@ -393,6 +400,7 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 			line.push(row.WareHouse);
 			line.push(row.Quantity);
 			line.push(row.Priority);
+			line.push(row.RackId);
 			worksheet.addRow(line)
 		})
 
@@ -415,7 +423,9 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 						SKU: temp[0],
 						WareHouse: temp[1],
 						Quantity: temp[2],
-						Priority: temp[3]
+						Priority: temp[3],
+						RackId: temp[4],
+						id: 0
 					})
 				}
 				else {
@@ -428,7 +438,7 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 			}
 			return data
 		}
-		catch{
+		catch {
 			this.openSnackBar('Invalid copy-paste');
 		}
 	}
@@ -465,7 +475,8 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 				}
 				const control = _this.fb.group({
 					Quantity: [ele.Quantity],
-					Priority: [ele.Priority]
+					Priority: [ele.Priority],
+					RackId: [ele.RackId]
 				});
 				(<FormArray>_this.tableform.get("tableEntries")).push(control);
 				return true
@@ -487,7 +498,8 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 				"WareHouse": ele.WareHouse,
 				"Priority": ele.Priority,
 				"SKU": ele.SKU,
-				"Quantity": ele.Quantity
+				"Quantity": ele.Quantity,
+				"RackId": ele.RackId
 			})
 		});
 		_this.BackendService.makeAjax(reqObj, function (err, response, headers) {
@@ -511,7 +523,8 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 
 				const control = _this.fb.group({
 					Quantity: [ele.Quantity],
-					Priority: [ele.Priority]
+					Priority: [ele.Priority],
+					RackId: [ele.RackId]
 				});
 				(<FormArray>_this.tableform.get("tableEntries")).push(control);
 				return true
@@ -532,20 +545,24 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 		if (!_this.dataFromDB) {
 			_this.dataSource.data[tableIndex].Quantity = _this.tableform.get("tableEntries")["controls"][tableIndex].value.Quantity;
 			_this.dataSource.data[tableIndex].Priority = _this.tableform.get("tableEntries")["controls"][tableIndex].value.Priority;
+			_this.dataSource.data[tableIndex].RackId = _this.tableform.get("tableEntries")["controls"][tableIndex].value.RackId;
 			row.editable = !row.editable;
 			_this.openEdits--;
 			return;
 		}
 		let reqObj: any = {
-			url: 'warehouse/decentralized/updateProductList',
+			url: 'warehouse/decentralized/updateProductList?isBulkUpload=false',
 			method: "put",
 			payload: <any>[]
 		};
 		reqObj.payload = [{
+			id: _this.dataSource.data[index].id,
 			SKU: _this.dataSource.data[tableIndex].SKU,
 			WareHouse: _this.dataSource.data[tableIndex].WareHouse,
 			Quantity: _this.tableform.get("tableEntries")["controls"][tableIndex].value.Quantity,
-			Priority: _this.tableform.get("tableEntries")["controls"][tableIndex].value.Priority
+			Priority: _this.tableform.get("tableEntries")["controls"][tableIndex].value.Priority,
+			RackId: _this.tableform.get("tableEntries")["controls"][tableIndex].value.RackId
+
 		}]
 		_this.BackendService.makeAjax(reqObj, function (err, response, headers) {
 			_this.openSnackBar(response.errorMessage);
@@ -560,6 +577,7 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 			}
 			_this.dataSource.data[tableIndex].Quantity = _this.tableform.get("tableEntries")["controls"][tableIndex].value.Quantity;
 			_this.dataSource.data[tableIndex].Priority = _this.tableform.get("tableEntries")["controls"][tableIndex].value.Priority;
+			_this.dataSource.data[tableIndex].RackId = _this.tableform.get("tableEntries")["controls"][tableIndex].value.RackId;
 			row.editable = !row.editable;
 			_this.openEdits--;
 			console.log('sidePanel Response --->', response);
@@ -572,6 +590,7 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 	cancelRowEdit(row: any, index: number) {
 		let tableIndex = index + this.paginator.pageIndex * this.paginator.pageSize;
 		this.tableform.get("tableEntries")["controls"][tableIndex].get('Priority').setValue(this.dataSource.data[tableIndex].Priority);
+		this.tableform.get("tableEntries")["controls"][tableIndex].get('RackId').setValue(this.dataSource.data[tableIndex].RackId);
 		this.tableform.get("tableEntries")["controls"][tableIndex].get('Quantity').setValue(this.dataSource.data[tableIndex].Quantity);
 		row.editable = !row.editable;
 		this.openEdits--;
@@ -590,6 +609,7 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 				if (row.editable) {
 					_this.dataSource.data[index].Quantity = _this.tableform.get("tableEntries")["controls"][index].value.Quantity;
 					_this.dataSource.data[index].Priority = _this.tableform.get("tableEntries")["controls"][index].value.Priority;
+					_this.dataSource.data[index].RackId = _this.tableform.get("tableEntries")["controls"][index].value.RackId;
 					row.editable = !row.editable;
 					_this.openEdits--;
 				}
@@ -601,17 +621,20 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 			_this.dataSource.data.forEach((row, index) => {
 				if (row.editable) {
 					editRows.push({
+						id: _this.dataSource.data[index].id,
 						SKU: _this.dataSource.data[index].SKU,
 						WareHouse: _this.dataSource.data[index].WareHouse,
 						Quantity: _this.tableform.get("tableEntries")["controls"][index].value.Quantity,
-						Priority: _this.tableform.get("tableEntries")["controls"][index].value.Priority
+						Priority: _this.tableform.get("tableEntries")["controls"][index].value.Priority,
+						RackId: _this.tableform.get("tableEntries")["controls"][index].value.RackId
+
 					})
 
 				}
 			});
 		}
 		let reqObj: any = {
-			url: 'warehouse/decentralized/updateProductList',
+			url: 'warehouse/decentralized/updateProductList?isBulkUpload=false',
 			method: "put",
 			payload: <any>[]
 		};
@@ -634,6 +657,7 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 				if (row.editable) {
 					_this.dataSource.data[index].Quantity = _this.tableform.get("tableEntries")["controls"][index].value.Quantity;
 					_this.dataSource.data[index].Priority = _this.tableform.get("tableEntries")["controls"][index].value.Priority;
+					_this.dataSource.data[index].RackId = _this.tableform.get("tableEntries")["controls"][index].value.RackId;
 					row.editable = !row.editable;
 					_this.openEdits--;
 				}
@@ -653,6 +677,7 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 			this.dataSource.data.forEach((row, index) => {
 				if (row.editable) {
 					this.tableform.get("tableEntries")["controls"][index].get('Priority').setValue(this.dataSource.data[index].Priority);
+					this.tableform.get("tableEntries")["controls"][index].get('RackId').setValue(this.dataSource.data[index].RackId);
 					this.tableform.get("tableEntries")["controls"][index].get('Quantity').setValue(this.dataSource.data[index].Quantity);
 					this.dataSource.data[index].editable = !this.dataSource.data[index].editable;
 					this.openEdits--;

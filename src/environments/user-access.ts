@@ -279,5 +279,29 @@ export const userAcess = {
         },
         
 
-    ]
+
+    ],
+
+    microsite: [{
+        displayName: 'Dashboard',
+        iconName: 'home',
+        route: '/new-dashboard/dashboard-microsite',
+    },
+
+    {
+        displayName: 'Current Balance',
+        iconName: 'account_balance_wallet',
+        route: '/new-dashboard/reports/itcReport',
+    }],
+    "microsite-zeapl": [{
+        displayName: 'Dashboard',
+        iconName: 'home',
+        route: '/new-dashboard/dashboard-microsite',
+    },
+
+    {
+        displayName: 'Current Balance',
+        iconName: 'account_balance_wallet',
+        route: '/new-dashboard/reports/itcReport',
+    }]
 }
