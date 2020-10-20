@@ -503,6 +503,7 @@ export class ProductBarcodeComponent implements OnInit, AfterViewChecked {
 		};
 		this.selection.selected.forEach(ele => {
 			reqObj.payload.push({
+				"id":ele.id,
 				"o_barcode": ele.o_barcode,
 				"wh": ele.wh,
 				"d_barcode": ele.d_barcode,

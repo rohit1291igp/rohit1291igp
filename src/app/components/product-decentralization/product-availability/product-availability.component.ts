@@ -495,6 +495,7 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 
 		this.selection.selected.forEach(ele => {
 			reqObj.payload.push({
+				"id":ele.id,
 				"WareHouse": ele.WareHouse,
 				"Priority": ele.Priority,
 				"SKU": ele.SKU,
