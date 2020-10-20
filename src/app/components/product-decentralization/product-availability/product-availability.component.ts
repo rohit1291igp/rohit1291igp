@@ -188,8 +188,7 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 			response.tableData.forEach((ele) => {
 				const control = _this.fb.group({
 					Quantity: [ele.Quantity],
-					Priority: [ele.Priority],
-					RackId: [ele.RackId]
+					Priority: [ele.Priority]
 				});
 				(<FormArray>_this.tableform.get("tableEntries")).push(control);
 			});
@@ -197,7 +196,7 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 			_this.dataFromDB = true;
 			_this.openEdits = 0;
 			_this.dataSource = new MatTableDataSource(response.tableData);
-			_this.tableHeaders = ["select", "SKU", "WareHouse", "Quantity", "Priority", "RackId", "actions"];
+			_this.tableHeaders = ["select", "SKU", "WareHouse", "RackId", "Quantity", "Priority", "actions"];
 
 			console.log('sidePanel Response --->', response);
 			setTimeout(() => {
@@ -226,7 +225,7 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 				const worksheet = workbook.getWorksheet(1);
 				console.log('rowCount: ', worksheet.rowCount);
 				worksheet.eachRow(function (row, rowNumber) {
-					if (rowNumber == 1 && !((row.values[1].toLowerCase() == 'sku') && (row.values[2].toLowerCase() == 'warehouse') && (row.values[3].toLowerCase() == 'quantity') && (row.values[4].toLowerCase() == 'priority'))) {
+					if (rowNumber == 1 && !((row.values[1].toLowerCase() == 'sku') && (row.values[2].toLowerCase() == 'warehouse') && (row.values[3].toLowerCase() == 'rackid') && (row.values[4].toLowerCase() == 'quantity')&& (row.values[5].toLowerCase() == 'priority'))) {
 						_this.openSnackBar('Invalid excelsheet format');
 						validExcel = false;
 						return;
@@ -236,9 +235,9 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 							tableData.push({
 								SKU: row.values[1],
 								WareHouse: row.values[2],
-								Quantity: row.values[3] || 0,
-								Priority: row.values[4] || 0,
-								RackId: row.values[5] || 0,
+								RackId: row.values[3] || 0,
+								Quantity: row.values[4] || 0,
+								Priority: row.values[5] || 0,
 								id: 0
 							})
 						}
@@ -257,13 +256,12 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 				tableData.forEach((ele) => {
 					const control = _this.fb.group({
 						Quantity: [ele.Quantity],
-						Priority: [ele.Priority],
-						RackId: [ele.RackId]
+						Priority: [ele.Priority]
 					});
 					(<FormArray>_this.tableform.get("tableEntries")).push(control);
 				});
 				_this.dataSource = new MatTableDataSource(tableData);
-				_this.tableHeaders = ["select", "SKU", "WareHouse", "Quantity", "Priority", "RackId", "actions"];
+				_this.tableHeaders = ["select", "SKU", "WareHouse", "RackId", "Quantity", "Priority", "actions"];
 				_this.dataFromDB = false;
 				_this.openEdits = 0;
 				setTimeout(() => {
@@ -285,13 +283,12 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 		dataSource.forEach((ele) => {
 			const control = _this.fb.group({
 				Quantity: [ele.Quantity],
-				Priority: [ele.Priority],
-				RackId: [ele.RackId]
+				Priority: [ele.Priority]
 			});
 			(<FormArray>_this.tableform.get("tableEntries")).push(control);
 		});
 		_this.dataSource = new MatTableDataSource(dataSource);
-		_this.tableHeaders = ["select", "SKU", "WareHouse", "Quantity", "Priority", "RackId", "actions"];
+		_this.tableHeaders = ["select", "SKU", "WareHouse", "RackId", "Quantity", "Priority", "actions"];
 		_this.dataFromDB = false;
 		_this.openEdits = 0;
 		setTimeout(() => {
@@ -392,15 +389,15 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 	downloadExcel() {
 		let workbook = new Excel.Workbook();
 		let worksheet = workbook.addWorksheet('Report');
-		let titleRow = worksheet.addRow(["SKU", "Warehouse", "Quantity", "Priority", "RackId"]);
+		let titleRow = worksheet.addRow(["SKU", "Warehouse", "RackId", "Quantity", "Priority"]);
 
 		this.dataSource.data.forEach(row => {
 			let line = [];
 			line.push(row.SKU);
 			line.push(row.WareHouse);
+			line.push(row.RackId);
 			line.push(row.Quantity);
 			line.push(row.Priority);
-			line.push(row.RackId);
 			worksheet.addRow(line)
 		})
 
@@ -422,9 +419,9 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 					data.push({
 						SKU: temp[0],
 						WareHouse: temp[1],
-						Quantity: temp[2],
-						Priority: temp[3],
-						RackId: temp[4],
+						RackId: temp[2],
+						Quantity: temp[3],
+						Priority: temp[4],
 						id: 0
 					})
 				}
@@ -475,8 +472,7 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 				}
 				const control = _this.fb.group({
 					Quantity: [ele.Quantity],
-					Priority: [ele.Priority],
-					RackId: [ele.RackId]
+					Priority: [ele.Priority]
 				});
 				(<FormArray>_this.tableform.get("tableEntries")).push(control);
 				return true
@@ -495,7 +491,7 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 
 		this.selection.selected.forEach(ele => {
 			reqObj.payload.push({
-				"id":ele.id,
+				"id": ele.id,
 				"WareHouse": ele.WareHouse,
 				"Priority": ele.Priority,
 				"SKU": ele.SKU,
@@ -524,8 +520,7 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 
 				const control = _this.fb.group({
 					Quantity: [ele.Quantity],
-					Priority: [ele.Priority],
-					RackId: [ele.RackId]
+					Priority: [ele.Priority]
 				});
 				(<FormArray>_this.tableform.get("tableEntries")).push(control);
 				return true
@@ -546,7 +541,6 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 		if (!_this.dataFromDB) {
 			_this.dataSource.data[tableIndex].Quantity = _this.tableform.get("tableEntries")["controls"][tableIndex].value.Quantity;
 			_this.dataSource.data[tableIndex].Priority = _this.tableform.get("tableEntries")["controls"][tableIndex].value.Priority;
-			_this.dataSource.data[tableIndex].RackId = _this.tableform.get("tableEntries")["controls"][tableIndex].value.RackId;
 			row.editable = !row.editable;
 			_this.openEdits--;
 			return;
@@ -560,10 +554,9 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 			id: _this.dataSource.data[index].id,
 			SKU: _this.dataSource.data[tableIndex].SKU,
 			WareHouse: _this.dataSource.data[tableIndex].WareHouse,
+			RackId: _this.dataSource.data[index].RackId,
 			Quantity: _this.tableform.get("tableEntries")["controls"][tableIndex].value.Quantity,
-			Priority: _this.tableform.get("tableEntries")["controls"][tableIndex].value.Priority,
-			RackId: _this.tableform.get("tableEntries")["controls"][tableIndex].value.RackId
-
+			Priority: _this.tableform.get("tableEntries")["controls"][tableIndex].value.Priority
 		}]
 		_this.BackendService.makeAjax(reqObj, function (err, response, headers) {
 			_this.openSnackBar(response.errorMessage);
@@ -578,7 +571,6 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 			}
 			_this.dataSource.data[tableIndex].Quantity = _this.tableform.get("tableEntries")["controls"][tableIndex].value.Quantity;
 			_this.dataSource.data[tableIndex].Priority = _this.tableform.get("tableEntries")["controls"][tableIndex].value.Priority;
-			_this.dataSource.data[tableIndex].RackId = _this.tableform.get("tableEntries")["controls"][tableIndex].value.RackId;
 			row.editable = !row.editable;
 			_this.openEdits--;
 			console.log('sidePanel Response --->', response);
@@ -591,7 +583,6 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 	cancelRowEdit(row: any, index: number) {
 		let tableIndex = index + this.paginator.pageIndex * this.paginator.pageSize;
 		this.tableform.get("tableEntries")["controls"][tableIndex].get('Priority').setValue(this.dataSource.data[tableIndex].Priority);
-		this.tableform.get("tableEntries")["controls"][tableIndex].get('RackId').setValue(this.dataSource.data[tableIndex].RackId);
 		this.tableform.get("tableEntries")["controls"][tableIndex].get('Quantity').setValue(this.dataSource.data[tableIndex].Quantity);
 		row.editable = !row.editable;
 		this.openEdits--;
@@ -610,7 +601,6 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 				if (row.editable) {
 					_this.dataSource.data[index].Quantity = _this.tableform.get("tableEntries")["controls"][index].value.Quantity;
 					_this.dataSource.data[index].Priority = _this.tableform.get("tableEntries")["controls"][index].value.Priority;
-					_this.dataSource.data[index].RackId = _this.tableform.get("tableEntries")["controls"][index].value.RackId;
 					row.editable = !row.editable;
 					_this.openEdits--;
 				}
@@ -624,10 +614,11 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 					editRows.push({
 						id: _this.dataSource.data[index].id,
 						SKU: _this.dataSource.data[index].SKU,
+						RackId: _this.dataSource.data[index].RackId,
 						WareHouse: _this.dataSource.data[index].WareHouse,
 						Quantity: _this.tableform.get("tableEntries")["controls"][index].value.Quantity,
-						Priority: _this.tableform.get("tableEntries")["controls"][index].value.Priority,
-						RackId: _this.tableform.get("tableEntries")["controls"][index].value.RackId
+						Priority: _this.tableform.get("tableEntries")["controls"][index].value.Priority
+
 
 					})
 
@@ -658,7 +649,6 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 				if (row.editable) {
 					_this.dataSource.data[index].Quantity = _this.tableform.get("tableEntries")["controls"][index].value.Quantity;
 					_this.dataSource.data[index].Priority = _this.tableform.get("tableEntries")["controls"][index].value.Priority;
-					_this.dataSource.data[index].RackId = _this.tableform.get("tableEntries")["controls"][index].value.RackId;
 					row.editable = !row.editable;
 					_this.openEdits--;
 				}
@@ -678,7 +668,6 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 			this.dataSource.data.forEach((row, index) => {
 				if (row.editable) {
 					this.tableform.get("tableEntries")["controls"][index].get('Priority').setValue(this.dataSource.data[index].Priority);
-					this.tableform.get("tableEntries")["controls"][index].get('RackId').setValue(this.dataSource.data[index].RackId);
 					this.tableform.get("tableEntries")["controls"][index].get('Quantity').setValue(this.dataSource.data[index].Quantity);
 					this.dataSource.data[index].editable = !this.dataSource.data[index].editable;
 					this.openEdits--;
