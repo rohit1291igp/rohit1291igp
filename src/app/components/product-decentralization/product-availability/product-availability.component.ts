@@ -406,7 +406,7 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 
 		workbook.xlsx.writeBuffer().then((data) => {
 			let blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-			fs.saveAs(blob, 'report.xlsx');
+			fs.saveAs(blob, 'Product_Availability_report.xlsx');
 		});
 	}
 

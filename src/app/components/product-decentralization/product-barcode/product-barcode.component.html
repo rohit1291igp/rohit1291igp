@@ -21,7 +21,8 @@
                 <div class="d-flex">
                   <div class="width50">
                     <mat-form-field class="width100">
-                      <mat-label class="mat-label">Enter Original Barcode, Warehouse, Mapped Barcode </mat-label>
+                      <mat-label class="mat-label">Enter Original Barcode, Warehouse, Mapped Barcode, Quantity
+                      </mat-label>
                       <textarea matInput formControlName="excelData"
                         placeholder="{{'\n'}} You can copy-paste from excelsheet" rows="10" col='20'></textarea>
                     </mat-form-field>
@@ -142,7 +143,7 @@
               </mat-cell>
             </ng-container>
             <ng-container matColumnDef="d_barcode">
-              <mat-header-cell *matHeaderCellDef> Decentralised Barcode </mat-header-cell>
+              <mat-header-cell *matHeaderCellDef> Mapped Barcode </mat-header-cell>
               <mat-cell *matCellDef="let row; let index = index"
                 [formGroupName]="index + paginator?.pageIndex * paginator?.pageSize">
                 <span *ngIf="!row.editable">
@@ -150,6 +151,18 @@
                 </span>
                 <mat-form-field *ngIf="row.editable">
                   <input matInput type="text" formControlName="d_barcode">
+                </mat-form-field>
+              </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="quantity">
+              <mat-header-cell *matHeaderCellDef> Quantity</mat-header-cell>
+              <mat-cell *matCellDef="let row; let index = index"
+                [formGroupName]="index + paginator?.pageIndex * paginator?.pageSize">
+                <span *ngIf="!row.editable">
+                  {{row.quantity||'-'}}
+                </span>
+                <mat-form-field *ngIf="row.editable">
+                  <input matInput type="text" formControlName="quantity">
                 </mat-form-field>
               </mat-cell>
             </ng-container>
