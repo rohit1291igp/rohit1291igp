@@ -225,7 +225,7 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 				const worksheet = workbook.getWorksheet(1);
 				console.log('rowCount: ', worksheet.rowCount);
 				worksheet.eachRow(function (row, rowNumber) {
-					if (rowNumber == 1 && !((row.values[1].toLowerCase() == 'sku') && (row.values[2].toLowerCase() == 'warehouse') && (row.values[3].toLowerCase() == 'rackid') && (row.values[4].toLowerCase() == 'quantity')&& (row.values[5].toLowerCase() == 'priority'))) {
+					if (rowNumber == 1 && !((row.values[1].toLowerCase() == 'sku') && (row.values[2].toLowerCase() == 'warehouse') && (row.values[3].toLowerCase() == 'rackid') && (row.values[4].toLowerCase() == 'quantity') && (row.values[5].toLowerCase() == 'priority'))) {
 						_this.openSnackBar('Invalid excelsheet format');
 						validExcel = false;
 						return;
@@ -313,6 +313,7 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 
 		_this.dataSource.data.forEach(ele => {
 			reqObj.payload.push({
+				"id": 0,
 				"WareHouse": ele.WareHouse,
 				"Priority": ele.Priority,
 				"SKU": ele.SKU,
@@ -356,6 +357,7 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 
 		_this.dataSource.data.forEach(ele => {
 			reqObj.payload.push({
+				"id": 0,
 				"WareHouse": ele.WareHouse,
 				"Priority": ele.Priority,
 				"SKU": ele.SKU,
