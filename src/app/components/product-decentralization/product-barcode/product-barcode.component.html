@@ -154,15 +154,15 @@
                 </mat-form-field>
               </mat-cell>
             </ng-container>
-            <ng-container matColumnDef="quantity">
+            <ng-container matColumnDef="Quantity">
               <mat-header-cell *matHeaderCellDef> Quantity</mat-header-cell>
               <mat-cell *matCellDef="let row; let index = index"
                 [formGroupName]="index + paginator?.pageIndex * paginator?.pageSize">
                 <span *ngIf="!row.editable">
-                  {{row.quantity||'-'}}
+                  {{row.Quantity||'-'}}
                 </span>
                 <mat-form-field *ngIf="row.editable">
-                  <input matInput type="text" formControlName="quantity">
+                  <input matInput type="text" formControlName="Quantity">
                 </mat-form-field>
               </mat-cell>
             </ng-container>
