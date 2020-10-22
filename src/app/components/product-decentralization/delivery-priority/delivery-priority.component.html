@@ -16,7 +16,7 @@
 <mat-sidenav-content>
 <div class="container" style="min-height: 60vh;">
   <div class="row m-top-1">
-    <div class="col-sm-4">
+    <div class="col-sm-5">
       <div class="row">
         <div class="">
           <mat-card class="card-h-1">
@@ -37,29 +37,36 @@
                 </mat-option>
               </mat-select>
             </mat-form-field> -->
-            <mat-radio-group (change)="onExcelActionChange()" [(ngModel)]="excelAction" aria-label="Upload By">
+
+            <!-- <mat-radio-group (change)="onExcelActionChange()" [(ngModel)]="excelAction" aria-label="Upload By">
               <mat-radio-button style="margin-right: 20px;" value="add">Add</mat-radio-button>
               <mat-radio-button style="margin-right: 20px;" value="update">Update</mat-radio-button>
-            </mat-radio-group>
-            <hr>
-            <mat-radio-group *ngIf="excelAction==='add'" (change)="onUploadFieldChange()" [(ngModel)]="selectedFieldForUpload" aria-label="Upload By">
+            </mat-radio-group> -->
+            
+            <!-- <mat-radio-group *ngIf="excelAction==='add'" (change)="onUploadFieldChange()" [(ngModel)]="selectedFieldForUpload" aria-label="Upload By">
               <mat-radio-button style="margin-right: 20px;" value="City">City</mat-radio-button>
               <mat-radio-button style="margin-right: 20px;" value="Pincode">Pin Code</mat-radio-button>
-            </mat-radio-group>
+            </mat-radio-group> -->
             <ng-container *ngIf="addDataBy==='excel upload'">
               <mat-card-content>
                 <br>
-                <input type="file" #excelFile (change)="onUploadFileChange($event)" accept=".xlsx">
-                <br>
-                <div *ngIf="excelAction==='add'" style="color: #6c757d;">
-                  Columns : Sku, Warehouse, {{selectedFieldForUpload}}, Priority 
+                <div class="width50">
+                  <div style="text-align: center;">
+                    <input type="file" id="file" (change)="readExcel($event)" />
+                    <label for="file" class="btn-2" (change)="readExcel($event)">
+                      <i class="fa fa-upload" aria-hidden="true"></i>
+                      Import Excel
+                    </label>
+                  </div>
                 </div>
-                <div *ngIf="excelAction==='update'" style="color: #6c757d;">
-                  Columns : Sku, Warehouse, City, Pincode, Priority 
+                <div style="color: #6c757d; text-align: center;">
+                  Columns : Sku, Warehouse, Country, City, Pincode, Priority 
                 </div>
                 <br><br>
-                <button *ngIf="excelAction==='add'" type="button" class="btnRadius" mat-raised-button (click)="onUploadClick()" [disabled]="excel_data_json.length?false:true">Add</button>
-                <button *ngIf="excelAction==='update'" type="button" class="btnRadius" mat-raised-button (click)="onBulkUpdateClick()" [disabled]="excel_data_json.length?false:true">Update</button>
+                <div style="text-align: center;">
+                  <button  type="button" class="btnRadius" mat-raised-button (click)="onUploadClick()" [disabled]="excel_data_json.length?false:true">Add</button>
+                  <button  type="button" class="btnRadius" mat-raised-button (click)="onBulkUpdateClick()" [disabled]="excel_data_json.length?false:true">Update</button>
+                </div>
               </mat-card-content>
               <mat-card-actions>
               </mat-card-actions>
@@ -81,12 +88,20 @@
       </div>
     </div>
 
-    <div class="col-sm-4">
+    <div class="col-sm-5">
       <mat-card class="card-h-1">
-        <mat-radio-group [(ngModel)]="selected_view_or_download_by" aria-label="View/Download By">
+        <mat-form-field class="width-100">
+          <mat-label>Select</mat-label>
+          <mat-select [(ngModel)]="selected_view_or_download_by">
+            <mat-option *ngFor="let option of ['sku','warehouse']" [value]="option">
+              {{option | titlecase}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <!-- <mat-radio-group [(ngModel)]="selected_view_or_download_by" aria-label="View/Download By">
           <mat-radio-button style="margin-right: 20px;" value="sku">SKU</mat-radio-button>
           <mat-radio-button style="margin-right: 20px;" value="warehouse">Warehouse</mat-radio-button>
-        </mat-radio-group>
+        </mat-radio-group> -->
         <!-- <mat-form-field class="width-100">
           <mat-label>View/Download By</mat-label>
           <mat-select [(ngModel)]="selected_view_or_download_by">
@@ -233,6 +248,12 @@
         <mat-header-cell *matHeaderCellDef> Warehouse </mat-header-cell>
         <mat-cell *matCellDef="let row; let index = index" [formGroupName]="index">
           {{row.WareHouse||'-'}}
+        </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="Country">
+        <mat-header-cell *matHeaderCellDef> Country </mat-header-cell>
+        <mat-cell *matCellDef="let row; let index = index" [formGroupName]="index">
+          {{row.Country||'-'}}
         </mat-cell>
       </ng-container>
       <ng-container matColumnDef="City">
