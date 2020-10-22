@@ -87,10 +87,11 @@ export class DeliveryPriorityComponent implements OnInit,AfterViewChecked {
   requestedSkus=""
   onViewClick(){
     console.log("onviewclick")
-    if(this.selected_view_or_download_by==='warehouse' && this.selectedWarehouse!==""){
+    if(this.selected_view_or_download_by==='warehouse'){
       this.getDeliveryPriorityList(this.selected_view_or_download_by,this.selectedWarehouse);
-    }else if(this.selected_view_or_download_by==='sku' && this.requestedSkus){
-      this.getDeliveryPriorityList(this.selected_view_or_download_by,this.requestedSkus.split('\n'))
+    }else if(this.selected_view_or_download_by==='sku'){
+      let sku = this.requestedSkus.length>0?this.requestedSkus.split('\n'):[]
+      this.getDeliveryPriorityList(this.selected_view_or_download_by,sku)
     }
   }
 
