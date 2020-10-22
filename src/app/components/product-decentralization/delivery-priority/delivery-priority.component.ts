@@ -127,6 +127,7 @@ export class DeliveryPriorityComponent implements OnInit,AfterViewChecked {
           });
         _this.dataSource = new MatTableDataSource(tableData);
         _this.tableHeaders = response['tableHeaders']
+        _this.tableHeaders.splice(_this.tableHeaders.indexOf("Id"),1)
         _this.tableHeaders.unshift('select')
         _this.tableHeaders.push('Actions')
         
@@ -148,7 +149,7 @@ export class DeliveryPriorityComponent implements OnInit,AfterViewChecked {
   onUploadClick(){
     if(this.excel_data_json.length){
       const reqObj = {
-        url: `warehouse/decentralized/addDeliveryPriorityList?locationType=${this.selectedFieldForUpload}`,
+        url: `warehouse/decentralized/addDeliveryPriorityList`,
         method: 'post',
         payload: this.excel_data_json
       }
@@ -178,7 +179,7 @@ export class DeliveryPriorityComponent implements OnInit,AfterViewChecked {
   onBulkUpdateClick(){
     if(this.excel_data_json.length){
       const reqObj = {
-        url: `warehouse/decentralized/updateDeliveryPriorityList`,
+        url: `warehouse/decentralized/updateDeliveryPriorityList?isBulkUpload=true`,
         method: 'put',
         payload: this.excel_data_json
       }
@@ -276,6 +277,7 @@ export class DeliveryPriorityComponent implements OnInit,AfterViewChecked {
     const target: DataTransfer = <DataTransfer>(event.target);
     let _this = this;
     let tableData = [];
+    _this.uploadErrors.length=0;
     if (target.files.length !== 1) {
       throw new Error('Cannot use multiple files');
     }
@@ -291,23 +293,30 @@ export class DeliveryPriorityComponent implements OnInit,AfterViewChecked {
             console.log(_this.selectedFieldForUpload,row)
           }
           if(_this.excelAction==='add'){
-            if (rowNumber == 1 && !((row.values[1].toLowerCase() == 'sku') && (row.values[2].toLowerCase() == 'warehouse') && (row.values[3] == _this.selectedFieldForUpload ) && (row.values[4].toLowerCase() == "priority"))) {
-              alert('Invalid excel sheet format! Columns must be in following sequence : Sku,Warehouse,'+_this.selectedFieldForUpload+",Priority");
+            if (rowNumber == 1 && !((row.values[1].toLowerCase() == 'sku') && (row.values[2].toLowerCase() == 'warehouse') && (row.values[3].toLowerCase() == "country" ) && (row.values[4].toLowerCase() == "city" ) && (row.values[5].toLowerCase() == "pincode" ) && (row.values[6].toLowerCase() == "priority"))) {
+              alert('Invalid excel sheet format! Columns must be in following sequence : Sku, Warehouse, Country, City, Pincode, Priority');
               validExcel = false;
               event.target.value=""
               return;
             }
             //["select", "orgBarCode", "warehouse", "mappedBarCode", "actions"];
             if (rowNumber != 1 && validExcel) {
-              let obj_value={}
-                  obj_value['SKU']=row.values[1];
-                  obj_value['WareHouse']=row.values[2];
-                  obj_value[_this.selectedFieldForUpload]=row.values[3];
-                  obj_value['Priority']=row.values[4];
-              tableData.push(obj_value)
+              if(!row.values[3]){
+                _this.uploadErrors.push(`Row ${rowNumber-1}: Invalid Country `);
+              }else{
+                let obj_value={}
+                    obj_value['id']=0;
+                    obj_value['SKU']=row.values[1];
+                    obj_value['WareHouse']=row.values[2];
+                    obj_value['Country']=row.values[3];
+                    obj_value['City']=row.values[4];
+                    obj_value["Pincode"]=row.values[5];
+                    obj_value['Priority']=row.values[6];
+                tableData.push(obj_value)
+              }
             }
           }else if(_this.excelAction=='update'){
-            if (rowNumber == 1 && !((row.values[1].toLowerCase() == 'sku') && (row.values[2].toLowerCase() == 'warehouse') && (row.values[3] == 'City' ) && (row.values[4] == 'Pincode' ) && (row.values[5].toLowerCase() == "priority"))) {
+            if (rowNumber == 1 && !((row.values[1].toLowerCase() == 'sku') && (row.values[2].toLowerCase() == 'warehouse') && (row.values[3] == "country" ) && (row.values[4] == "city" ) && (row.values[5] == "pincode" ) && (row.values[6].toLowerCase() == "priority"))) {
               alert('Invalid excel sheet format! Columns must be in following sequence : Sku,Warehouse,'+"City"+"Pincode"+",Priority");
               validExcel = false;
               event.target.value=""
@@ -325,6 +334,9 @@ export class DeliveryPriorityComponent implements OnInit,AfterViewChecked {
             }
           }
         });
+        if(_this.uploadErrors.length){
+          _this.sidenav.open();
+        }
         _this.excel_data_json=tableData;
         // _this.selection.clear()
         // _this.tableform.get("tableEntries")['controls'] = []
@@ -342,6 +354,7 @@ export class DeliveryPriorityComponent implements OnInit,AfterViewChecked {
         // }, 100)
       });
     });
+    event.target.value=null;
   }
 
   viewExcel(data) {
@@ -403,12 +416,15 @@ export class DeliveryPriorityComponent implements OnInit,AfterViewChecked {
     // domain.editable = !domain.editable;
     // this.openEdits--;
     let updatedEntry={
+      "id":domain['id'],
+      "Country":domain['Country'],
       "SKU":domain['SKU'],
       "WareHouse":domain['WareHouse'],
       "City":domain['City'],
       "Pincode":domain['Pincode'],
       "Priority":this.tableform.get("tableEntries")["controls"][index].value.Priority
     }
+    console.log(updatedEntry)
     this.updatePriorityList([updatedEntry]).then(resolve=>{
 			_this.dataSource.data[tableIndex].Priority = _this.tableform.get("tableEntries")["controls"][tableIndex].value.Priority;
       domain.editable = !domain.editable;
@@ -490,8 +506,10 @@ export class DeliveryPriorityComponent implements OnInit,AfterViewChecked {
       _this.dataSource.data.forEach((row, index) => {
 				if (row.editable) {
           updatedList.push({
+            "id":row['id'],
             "SKU":row['SKU'],
             "WareHouse":row['WareHouse'],
+            "Country":row['Country'],
             "City":row['City'],
             "Pincode":row['Pincode'],
             "Priority":_this.tableform.get("tableEntries")["controls"][index].value.Priority
@@ -513,7 +531,7 @@ export class DeliveryPriorityComponent implements OnInit,AfterViewChecked {
   updatePriorityList(list){
     const _this=this;
     const reqObj = {
-      url: `warehouse/decentralized/updateDeliveryPriorityList`,
+      url: `warehouse/decentralized/updateDeliveryPriorityList?isBulkUpload=false`,
       method: 'put',
       payload:list
     }
