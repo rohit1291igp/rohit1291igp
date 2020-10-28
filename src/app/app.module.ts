@@ -35,7 +35,7 @@ import { MainHeaderComponent } from './components/main-header/main-header.compon
 import { NewReportsComponentModule } from './components/new-reports-component/new-reports.component';
 import { NotificationComponent } from './components/notification/notification.component';
 import { OrderStockComponent } from './components/order-stocks/order-stock.component';
-import { PayoutDashboardModule } from './components/payout-dashboard/payout-dashboard.component';
+// import { PayoutDashboardModule } from './components/payout-dashboard/payout-dashboard.component';
 import { DownloadStockedComponentProduct, ProductReportComponent } from './components/product-report/product-report.component';
 import { DownloadStockedComponent, editComponent } from './components/reports/reports.component';
 import { SelectItemForDelivered } from './components/select-item/select-item.component';
@@ -102,7 +102,7 @@ export function ConfigLoader(envConfig: envConfig) {
     ProductReportComponent,
     DeliveryTimeManagementComponent,
     DownloadStockedComponent,
-    DownloadStockedComponentProduct,
+    DownloadStockedComponentProduct
   ],
   imports: [
     BrowserModule,
@@ -146,7 +146,7 @@ export function ConfigLoader(envConfig: envConfig) {
     NewReportsComponentModule,
     CapitalizePipeModule,
     DateFormatterPipeModule,
-    PayoutDashboardModule,
+    // PayoutDashboardModule,
     FormsModule,
     ReactiveFormsModule
     // RouterModule
