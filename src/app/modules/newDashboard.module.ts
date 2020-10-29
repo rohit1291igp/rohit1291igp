@@ -25,6 +25,7 @@ import { UploadedImageReportComponent } from 'app/components/uploaded-image-repo
 import { OfferPageManagementComponent } from 'app/components/offer-page-management/offer-page-management.component';
 import { MatSlideToggleModule } from '@angular/material';
 import { SearchRankingComponent } from 'app/components/search-ranking/search-ranking.component';
+import { PayoutDashboardComponent, PayoutDashboardModule } from 'app/components/payout-dashboard/payout-dashboard.component';
 
 
 const routes: Routes = [{
@@ -100,6 +101,10 @@ const routes: Routes = [{
     canActivate: [AuthGuard]
   },
   {
+    path: 'payout-dashboard',
+    component: PayoutDashboardComponent
+  },
+  {
     path: 'searchRanking',
     component: SearchRankingComponent,
     canActivate: [AuthGuard]
@@ -122,7 +127,8 @@ const routes: Routes = [{
     MyDatePickerModule,
     SharedModule,
     MatSlideToggleModule,
-    NewReportsComponentModule
+    NewReportsComponentModule,
+    PayoutDashboardModule
   ],
   declarations: [
     NewDasboardComponent,
@@ -140,7 +146,7 @@ const routes: Routes = [{
     DeliveryBoyDetailsComponent,
     UploadedImageReportComponent,
     OfferPageManagementComponent,
-    SearchRankingComponent,
+    SearchRankingComponent
   ],
   providers: [NavService, UserAccessService]
 })

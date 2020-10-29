@@ -9,8 +9,6 @@ import { DownloadEmailComponent } from './components/download-email/download-ema
 import { LoginComponent } from './components/login/login.component';
 
 import { OfferPageManagementComponent } from './components/offer-page-management/offer-page-management.component';
-
-import { PayoutDashboardComponent } from './components/payout-dashboard/payout-dashboard.component';
 import { ProductReportComponent } from './components/product-report/product-report.component';
 import { AuthGuard } from './services/auth-guard.service';
 // import { EgvGuard } from './services/egv.guard';
@@ -87,11 +85,6 @@ const route: Routes = [
     path: 'deliveryTimeManagement',
     component: DeliveryTimeManagementComponent,
     canActivate: [AuthGuard]
-  },
-
-  {
-    path: 'payout-dashboard',
-    component: PayoutDashboardComponent
   },
   {
     path: 'new-dashboard',
