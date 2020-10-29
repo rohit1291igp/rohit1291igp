@@ -70,6 +70,7 @@ export class DashboardService {
             if(userType == 'warehouse'||userType == 'microsite' || userType == 'microsite-zeapl' || userType == 'admin' || userType == 'vendor'){
                 this.router.navigate(['/new-dashboard']);
             }
+            
             // if(userType == 'warehouse'){
             //     this.router.navigate(['/sendemail']);
             // }
