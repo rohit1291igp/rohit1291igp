@@ -196,7 +196,7 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 			_this.dataFromDB = true;
 			_this.openEdits = 0;
 			_this.dataSource = new MatTableDataSource(response.tableData);
-			_this.tableHeaders = ["select", "SKU", "WareHouse", "Quantity", "Priority", "actions"];
+			_this.tableHeaders = ["select", "SKU", "WareHouse", "RackId", "Quantity", "Priority", "actions"];
 
 			console.log('sidePanel Response --->', response);
 			setTimeout(() => {
@@ -210,7 +210,7 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 	readExcel(event) {
 		const workbook = new Excel.Workbook();
 		const target: DataTransfer = <DataTransfer>(event.target);
-		
+
 		let _this = this;
 		let tableData = [];
 		if (target.files.length !== 1) {
@@ -225,7 +225,7 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 				const worksheet = workbook.getWorksheet(1);
 				console.log('rowCount: ', worksheet.rowCount);
 				worksheet.eachRow(function (row, rowNumber) {
-					if (rowNumber == 1 && !((row.values[1].toLowerCase() == 'sku') && (row.values[2].toLowerCase() == 'warehouse') && (row.values[3].toLowerCase() == 'quantity') && (row.values[4].toLowerCase() == 'priority'))) {
+					if (rowNumber == 1 && !((row.values[1].toLowerCase() == 'sku') && (row.values[2].toLowerCase() == 'warehouse') && (row.values[3].toLowerCase() == 'rackid') && (row.values[4].toLowerCase() == 'quantity') && (row.values[5].toLowerCase() == 'priority'))) {
 						_this.openSnackBar('Invalid excelsheet format');
 						validExcel = false;
 						return;
@@ -235,8 +235,10 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 							tableData.push({
 								SKU: row.values[1],
 								WareHouse: row.values[2],
-								Quantity: row.values[3] || 0,
-								Priority: row.values[4] || 0
+								RackId: row.values[3] || 0,
+								Quantity: row.values[4] || 0,
+								Priority: row.values[5] || 0,
+								id: 0
 							})
 						}
 						else {
@@ -249,7 +251,7 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 					_this.sidenav.open();
 				}
 				_this.selection.clear();
-				
+
 				_this.tableform.get("tableEntries")['controls'] = []
 				tableData.forEach((ele) => {
 					const control = _this.fb.group({
@@ -259,7 +261,7 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 					(<FormArray>_this.tableform.get("tableEntries")).push(control);
 				});
 				_this.dataSource = new MatTableDataSource(tableData);
-				_this.tableHeaders = ["select", "SKU", "WareHouse", "Quantity", "Priority", "actions"];
+				_this.tableHeaders = ["select", "SKU", "WareHouse", "RackId", "Quantity", "Priority", "actions"];
 				_this.dataFromDB = false;
 				_this.openEdits = 0;
 				setTimeout(() => {
@@ -268,7 +270,7 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 				}, 100)
 			});
 		});
-		event.target.value='';
+		event.target.value = '';
 	}
 
 	viewExcel(data) {
@@ -286,7 +288,7 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 			(<FormArray>_this.tableform.get("tableEntries")).push(control);
 		});
 		_this.dataSource = new MatTableDataSource(dataSource);
-		_this.tableHeaders = ["select", "SKU", "WareHouse", "Quantity", "Priority", "actions"];
+		_this.tableHeaders = ["select", "SKU", "WareHouse", "RackId", "Quantity", "Priority", "actions"];
 		_this.dataFromDB = false;
 		_this.openEdits = 0;
 		setTimeout(() => {
@@ -311,10 +313,12 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 
 		_this.dataSource.data.forEach(ele => {
 			reqObj.payload.push({
+				"id": 0,
 				"WareHouse": ele.WareHouse,
 				"Priority": ele.Priority,
 				"SKU": ele.SKU,
-				"Quantity": ele.Quantity
+				"Quantity": ele.Quantity,
+				"RackId": ele.RackId
 			})
 		});
 
@@ -346,17 +350,19 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 		}
 
 		let reqObj: any = {
-			url: 'warehouse/decentralized/updateProductList',
+			url: 'warehouse/decentralized/updateProductList?isBulkUpload=true',
 			method: "put",
 			payload: <any>[]
 		};
 
 		_this.dataSource.data.forEach(ele => {
 			reqObj.payload.push({
+				"id": 0,
 				"WareHouse": ele.WareHouse,
 				"Priority": ele.Priority,
 				"SKU": ele.SKU,
-				"Quantity": ele.Quantity
+				"Quantity": ele.Quantity,
+				"RackId": ele.RackId
 			})
 		});
 
@@ -374,9 +380,9 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 			if (response.result.errorList.length) {
 				_this.errorList = response.result.errorList;
 				_this.sidenav.open()
-			}else{
+			} else {
 				_this.openSnackBar("Updated Successfully");
-			}		
+			}
 			console.log('sidePanel Response --->', response);
 
 		})
@@ -385,12 +391,13 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 	downloadExcel() {
 		let workbook = new Excel.Workbook();
 		let worksheet = workbook.addWorksheet('Report');
-		let titleRow = worksheet.addRow(["SKU", "Warehouse", "Quantity", "Priority"]);
+		let titleRow = worksheet.addRow(["SKU", "Warehouse", "RackId", "Quantity", "Priority"]);
 
 		this.dataSource.data.forEach(row => {
 			let line = [];
 			line.push(row.SKU);
 			line.push(row.WareHouse);
+			line.push(row.RackId);
 			line.push(row.Quantity);
 			line.push(row.Priority);
 			worksheet.addRow(line)
@@ -398,7 +405,7 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 
 		workbook.xlsx.writeBuffer().then((data) => {
 			let blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-			fs.saveAs(blob, 'report.xlsx');
+			fs.saveAs(blob, 'Product_Availability_report.xlsx');
 		});
 	}
 
@@ -414,8 +421,10 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 					data.push({
 						SKU: temp[0],
 						WareHouse: temp[1],
-						Quantity: temp[2],
-						Priority: temp[3]
+						RackId: temp[2],
+						Quantity: temp[3],
+						Priority: temp[4],
+						id: 0
 					})
 				}
 				else {
@@ -428,7 +437,7 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 			}
 			return data
 		}
-		catch{
+		catch {
 			this.openSnackBar('Invalid copy-paste');
 		}
 	}
@@ -484,10 +493,12 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 
 		this.selection.selected.forEach(ele => {
 			reqObj.payload.push({
+				"id": ele.id,
 				"WareHouse": ele.WareHouse,
 				"Priority": ele.Priority,
 				"SKU": ele.SKU,
-				"Quantity": ele.Quantity
+				"Quantity": ele.Quantity,
+				"RackId": ele.RackId
 			})
 		});
 		_this.BackendService.makeAjax(reqObj, function (err, response, headers) {
@@ -537,13 +548,15 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 			return;
 		}
 		let reqObj: any = {
-			url: 'warehouse/decentralized/updateProductList',
+			url: 'warehouse/decentralized/updateProductList?isBulkUpload=false',
 			method: "put",
 			payload: <any>[]
 		};
 		reqObj.payload = [{
+			id: _this.dataSource.data[index].id,
 			SKU: _this.dataSource.data[tableIndex].SKU,
 			WareHouse: _this.dataSource.data[tableIndex].WareHouse,
+			RackId: _this.dataSource.data[index].RackId,
 			Quantity: _this.tableform.get("tableEntries")["controls"][tableIndex].value.Quantity,
 			Priority: _this.tableform.get("tableEntries")["controls"][tableIndex].value.Priority
 		}]
@@ -601,17 +614,21 @@ export class ProductAvailabilityComponent implements OnInit, AfterViewChecked {
 			_this.dataSource.data.forEach((row, index) => {
 				if (row.editable) {
 					editRows.push({
+						id: _this.dataSource.data[index].id,
 						SKU: _this.dataSource.data[index].SKU,
+						RackId: _this.dataSource.data[index].RackId,
 						WareHouse: _this.dataSource.data[index].WareHouse,
 						Quantity: _this.tableform.get("tableEntries")["controls"][index].value.Quantity,
 						Priority: _this.tableform.get("tableEntries")["controls"][index].value.Priority
+
+
 					})
 
 				}
 			});
 		}
 		let reqObj: any = {
-			url: 'warehouse/decentralized/updateProductList',
+			url: 'warehouse/decentralized/updateProductList?isBulkUpload=false',
 			method: "put",
 			payload: <any>[]
 		};

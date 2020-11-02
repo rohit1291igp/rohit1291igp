@@ -164,9 +164,9 @@
               {{(element[column] || '-' )+" - "+element['comments']}}
             </ng-container>
             <ng-container *ngIf="column == 'Actions'">
-              <button mat-button color="primary" (click)='approveTransaction(element,true)'>
+              <button mat-button color="primary" (click)='approveTransaction($event,element,true)'>
                 <i class="fa fa-check"></i> Approve</button>
-              <button mat-button color="warn" (click)='approveTransaction(element,false)'><i class="fa fa-times"></i>
+              <button mat-button color="warn" (click)='approveTransaction($event,element,false)'><i class="fa fa-times"></i>
                 Reject</button>
             </ng-container>
           </mat-cell>

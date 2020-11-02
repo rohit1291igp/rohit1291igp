@@ -1,4 +1,4 @@
- // Modules
+// Modules
 import { CdkTableModule } from '@angular/cdk/table';
 import { DatePipe } from '@angular/common';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -26,7 +26,6 @@ import { BlogCreateComponent } from './components/blog-create/blog-create.compon
 import { BlogListComponent } from './components/blog-list/blog-list.component';
 import { BlogViewComponent } from './components/blog-view/blog-view.component';
 import { DeliveryTimeManagementComponent } from './components/delivery-time-management/delivery-time-management.component';
-import { DeliveryBoyDetailsComponent } from './components/deliveryboy-details/deliveryboy-details.component';
 import { DownloadEmailComponent } from './components/download-email/download-email.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { HomeComponent } from './components/home/home.component';
@@ -36,14 +35,11 @@ import { MainHeaderComponent } from './components/main-header/main-header.compon
 import { NewReportsComponentModule } from './components/new-reports-component/new-reports.component';
 import { NotificationComponent } from './components/notification/notification.component';
 import { OrderStockComponent } from './components/order-stocks/order-stock.component';
-import { PayoutDashboardModule } from './components/payout-dashboard/payout-dashboard.component';
-import { PerformanceReportComponent } from './components/performance-report/performance-report.component';
+// import { PayoutDashboardModule } from './components/payout-dashboard/payout-dashboard.component';
 import { DownloadStockedComponentProduct, ProductReportComponent } from './components/product-report/product-report.component';
 import { DownloadStockedComponent, editComponent } from './components/reports/reports.component';
 import { SelectItemForDelivered } from './components/select-item/select-item.component';
-import { StockComponentsReportsComponent } from './components/stock-components-reports/stock-components-reports.component';
 import { UploadExcelComponent } from './components/upload-excel/upload-excel.component';
-import { UploadedImageReportComponent } from './components/uploaded-image-report/uploaded-image-report.component';
 import { CapitalizePipeModule } from './customPipes/capitalze.pipe';
 import { DateFormatterPipeModule } from './customPipes/date-formatter';
 import { ObjectKeyValuePipe } from './customPipes/object-key-value.pipe';
@@ -63,7 +59,7 @@ import { UtilityService } from './services/utility.service';
 import { VoucherService } from './services/voucher.service';
 import { SharedModule } from './shared-module/shared/shared.module';
 import { CookieService } from './services/cookie.service';
-import { OrderReportComponent} from './components/order-report/order-report.component';
+// import { OrderReportComponent} from './components/order-report/order-report.component';
 // import { NewUserFormComponent } from './components/egv/user-management/new-user-form/new-user-form.component';
 import { EgvGuard } from './services/egv.guard';
 import { EgvService } from './services/egv.service';
@@ -98,26 +94,15 @@ export function ConfigLoader(envConfig: envConfig) {
     DownloadEmailComponent,
     AddDeliveryBoyComponent,
     NotificationComponent,
-    DeliveryBoyDetailsComponent,
     ImgPreviewComponent,
     SelectItemForDelivered,
     OrderStockComponent,
     testComponent,
     editComponent,
-    PerformanceReportComponent,
     ProductReportComponent,
-    StockComponentsReportsComponent,
     DeliveryTimeManagementComponent,
-    StockComponentsReportsComponent,
     DownloadStockedComponent,
-    DownloadStockedComponentProduct,
-    UploadedImageReportComponent,
-    OrderReportComponent,
-    // NewUserFormComponent,
-    // AlertManagementComponent,
-    // EditUserComponent,
-    // PasswordChangeComponent
-    // AutoSelectionComponent
+    DownloadStockedComponentProduct
   ],
   imports: [
     BrowserModule,
@@ -161,23 +146,23 @@ export function ConfigLoader(envConfig: envConfig) {
     NewReportsComponentModule,
     CapitalizePipeModule,
     DateFormatterPipeModule,
-    PayoutDashboardModule,
-    FormsModule, 
+    // PayoutDashboardModule,
+    FormsModule,
     ReactiveFormsModule
     // RouterModule
   ],
   providers: [
     {
-//      provide: Http,
-//      useFactory: httpFactory,
-//      deps: [XHRBackend, RequestOptions]
-          provide: HTTP_INTERCEPTORS,
-          useClass: MyHttpInterceptor,
-          multi: true
-     },
-     { provide: MAT_DIALOG_DATA, useValue: {} },
+      //      provide: Http,
+      //      useFactory: httpFactory,
+      //      deps: [XHRBackend, RequestOptions]
+      provide: HTTP_INTERCEPTORS,
+      useClass: MyHttpInterceptor,
+      multi: true
+    },
+    { provide: MAT_DIALOG_DATA, useValue: {} },
     { provide: MatDialogRef, useValue: {} },
-    {provide: MAT_DATE_LOCALE, useValue: 'en-GB'},
+    { provide: MAT_DATE_LOCALE, useValue: 'en-GB' },
     /*  envConfig,
     {
       provide: APP_INITIALIZER,
@@ -206,7 +191,7 @@ export function ConfigLoader(envConfig: envConfig) {
     ScriptService,
     SerachRankingService
   ],
-  entryComponents:[UploadExcelComponent,NotificationComponent, ImgPreviewComponent, SelectItemForDelivered, OrderStockComponent,editComponent, DownloadStockedComponent,DownloadStockedComponentProduct],
+  entryComponents: [UploadExcelComponent, NotificationComponent, ImgPreviewComponent, SelectItemForDelivered, OrderStockComponent, editComponent, DownloadStockedComponent, DownloadStockedComponentProduct],
   bootstrap: [AppComponent],
   exports: [RouterModule]
 })
