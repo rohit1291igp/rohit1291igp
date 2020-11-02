@@ -168,8 +168,9 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
       private _snackBar: MatSnackBar,
       public S3UploadService: S3UploadService,
       ) { }
-
+  sidePanelDataFilter;
   ngOnInit() {
+    this.selectedStore="all"
      //this.scrollTo(document.getElementById("mainOrderSection"), 0, 1250);
      this.deliveryBoyEnabled = localStorage.getItem('deliveryBoyEnabled') === 'true' ? true : false;
      this.setlDatePicker(null);
@@ -183,6 +184,26 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
         this.getRejectResons('reassign');
      }
      //this.statusReasonModel.OrderProductsList = [];
+  }
+
+  selectedStore='all'
+  onStoreSelect(){
+    if(this.selectedStore==='5'){
+        this.sidePanelData=this.sidePanelDataFilter.filter(ele=>{
+            return ele.fkAssociateId===5
+        })
+    }else if(this.selectedStore==='830'){
+        this.sidePanelData=this.sidePanelDataFilter.filter(ele=>{
+            return ele.fkAssociateId===830
+        })
+    }else{
+        this.sidePanelData=[...this.sidePanelDataFilter]
+    }  
+  }
+
+  isRdc(){
+      console.log("isRDC")
+      return localStorage.getItem('vendorName').includes('rdc')
   }
 
   //change active tab
@@ -570,6 +591,7 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
 
   loadTrayData(e, orderByStatus, orderId, dashBoardDataType, cb){
       e.stopPropagation();
+      this.selectedStore="all"
       let fkAssociateId = localStorage.getItem('fkAssociateId');
       var _this = this;
       var reqURL:string;
@@ -666,6 +688,7 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
               return cb(null, response.result ? Array.isArray(response.result) ? response.result : [response.result] : []);
           }else{
               _this.sidePanelData = response.result ? Array.isArray(response.result) ? response.result : [response.result] : [];
+              _this.sidePanelDataFilter = [..._this.sidePanelData]
               //_this.getNxtOrderStatus(_this.sidePanelData[0].ordersStatus);
               _this.scrollTo(document.getElementById("mainOrderSection"), 0, 0); // scroll to top
               setTimeout(function(){

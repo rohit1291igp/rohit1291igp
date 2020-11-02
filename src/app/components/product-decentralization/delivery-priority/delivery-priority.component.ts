@@ -303,7 +303,7 @@ export class DeliveryPriorityComponent implements OnInit,AfterViewChecked {
             //["select", "orgBarCode", "warehouse", "mappedBarCode", "actions"];
             if (rowNumber != 1 && validExcel) {
               if(!row.values[3]){
-                _this.uploadErrors.push(`Row ${rowNumber-1}: Invalid Country `);
+                _this.uploadErrors.push(`Row ${rowNumber-1}: Country field cannot be empty `);
               }else{
                 let obj_value={}
                     obj_value['id']=0;
