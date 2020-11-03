@@ -60,7 +60,7 @@
                   </div>
                 </div>
                 <div style="color: #6c757d; text-align: center;">
-                  Columns : Sku, Warehouse, Country, City, Pincode, Priority 
+                  Columns : Sku, Warehouse, Country, State, City, Pincode, Priority 
                 </div>
                 <br><br>
                 <div style="text-align: center;">
@@ -92,7 +92,7 @@
       <mat-card class="card-h-1">
         <mat-form-field class="width-100">
           <mat-label>Select</mat-label>
-          <mat-select [(ngModel)]="selected_view_or_download_by">
+          <mat-select [(ngModel)]="selected_view_or_download_by" (change)="onChangeViewBy()">
             <mat-option *ngFor="let option of ['sku','warehouse']" [value]="option">
               {{option | titlecase}}
             </mat-option>
@@ -256,6 +256,12 @@
           {{row.Country||'-'}}
         </mat-cell>
       </ng-container>
+      <ng-container matColumnDef="State">
+        <mat-header-cell *matHeaderCellDef> State </mat-header-cell>
+        <mat-cell *matCellDef="let row; let index = index" [formGroupName]="index">
+          {{row.State||'-'}}
+        </mat-cell>
+      </ng-container>
       <ng-container matColumnDef="City">
         <mat-header-cell *matHeaderCellDef> City </mat-header-cell>
         <mat-cell *matCellDef="let row; let index = index" [formGroupName]="index">
@@ -294,7 +300,7 @@
       <mat-header-row *matHeaderRowDef="tableHeaders"></mat-header-row>
       <mat-row *matRowDef="let row; let i = index; columns: tableHeaders;"></mat-row>
     </mat-table>
-    <mat-paginator [pageSizeOptions]="[5, 10, 20]" length="{{dataSource?.length}}" showFirstLastButtons>
+    <mat-paginator #paginator (page)="matTablePageChange($event)"  [pageSize]="50" [pageSizeOptions]="[50]" [showFirstLastButtons]="true" length="{{dataSource?.length}}" >
     </mat-paginator>
     <!-- <button type="button" (click)="addRow()">Add row</button> -->
   </form>
