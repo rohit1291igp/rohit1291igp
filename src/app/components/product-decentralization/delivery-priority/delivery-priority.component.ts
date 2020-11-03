@@ -157,6 +157,14 @@ export class DeliveryPriorityComponent implements OnInit,AfterViewChecked {
     }
   }
 
+  applyFilter(filterValue: any) {
+    // this.myForm.controls['filter'].setValue(filterValue);
+    this.dataSource.filter = filterValue.target.value.trim().toLowerCase();
+    if (this.dataSource.paginator) {
+        this.dataSource.paginator.firstPage();
+    }
+  }
+
 
   onEditRow(element){
     element.edit_flat=true;

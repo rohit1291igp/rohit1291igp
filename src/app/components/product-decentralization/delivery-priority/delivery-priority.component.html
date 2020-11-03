@@ -224,6 +224,12 @@
       </button>
     </div>
   </div>
+  <div>
+    <mat-form-field class="padding1">
+      <mat-label>Search</mat-label>
+      <input matInput (keyup)="applyFilter($event)" placeholder="Search Value" #input>
+    </mat-form-field>
+  </div>
   <form [formGroup]="tableform">
     <mat-table #table [dataSource]="dataSource" formArrayName="tableEntries" matSort>
       <ng-container matColumnDef="select">
