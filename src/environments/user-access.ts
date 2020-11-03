@@ -209,6 +209,11 @@ export const userAcess = {
             displayName: 'Password Reset',
             iconName: 'security',
             route: '/new-dashboard/egv/change-password',
+        },
+        {
+            displayName: 'Bulk EGV',
+            iconName: 'security',
+            route: '/new-dashboard/egv/bulkegv',
         }
 
     ],
