@@ -151,6 +151,9 @@ export class BulkEgvComponent implements OnInit {
     const datefrom = pipe.transform(date, format);
     return datefrom;
   }
+  sidenavClose(reason: string) {
+		this.sidenav.close();
+	}
 
 
   readExcel(event) {
