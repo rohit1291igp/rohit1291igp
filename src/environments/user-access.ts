@@ -212,7 +212,7 @@ export const userAcess = {
         },
         {
             displayName: 'Bulk EGV',
-            iconName: 'security',
+            iconName: 'addchart',
             route: '/new-dashboard/egv/bulkegv',
         }
 
