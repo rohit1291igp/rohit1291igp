@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
 import { MyDatePickerModule } from 'mydatepicker';
-import { MatFormFieldModule, MatAutocompleteModule, MatInputModule, MatTableModule, MatCardModule, MatButtonModule, MatMenuModule, MatDialogModule, MatSnackBarModule, MatPaginatorModule, MatSortModule, MatDatepickerModule, MatRadioModule, MatSelectModule, MatIconModule, MatChip, MatChipsModule } from '@angular/material';
+import { MatFormFieldModule, MatAutocompleteModule, MatInputModule, MatTableModule, MatCardModule, MatButtonModule, MatMenuModule, MatDialogModule, MatSnackBarModule, MatPaginatorModule, MatSortModule, MatDatepickerModule, MatRadioModule, MatSelectModule, MatIconModule, MatChip, MatChipsModule, MatSidenavModule } from '@angular/material';
 import { EgvService } from '../services/egv.service';
 import { EgvStatementComponent, transactionReportDialog } from 'app/components/egvpanels/egv-statement/egv-statement.component';
 import { EgvwalletComponent } from 'app/components/egvpanels/egvwallet/egvwallet.component';
@@ -17,6 +17,7 @@ import { AuthGuard } from 'app/services/auth-guard.service';
 import { AlertManagementComponent } from 'app/components/egv/alert-management/alert-management.component';
 import { NewUserFormComponent } from 'app/components/egv/user-management/new-user-form/new-user-form.component';
 import { EditUserComponent } from 'app/components/egv/user-management/edit-user/edit-user.component';
+import { BulkEgvComponent } from 'app/components/egvpanels/bulk-egv/bulk-egv.component'
 
 
 const routes: Routes = [
@@ -44,6 +45,11 @@ const routes: Routes = [
     component:AlertManagementComponent,
     canActivate:[AuthGuard,EgvGuard]
   },
+  {
+    path: 'bulkegv',
+    component: BulkEgvComponent,
+    canActivate: [AuthGuard, EgvGuard]
+  }
 
 ];
 
@@ -70,7 +76,8 @@ const routes: Routes = [
     MatRadioModule,
     MatSelectModule,
     MatIconModule,
-    MatChipsModule
+    MatChipsModule,
+    MatSidenavModule
   ],
   declarations: [
     EgvwalletComponent, 
@@ -82,7 +89,8 @@ const routes: Routes = [
     UserManagementComponent,
     transactionReportDialog,
     IndianNumericPipe,
-    EgvDashboardComponent],
+    EgvDashboardComponent,
+    BulkEgvComponent],
   providers: [EgvService],
   entryComponents: [transactionReportDialog,NewUserFormComponent,EditUserComponent]
 })
