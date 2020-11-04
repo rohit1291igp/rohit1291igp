@@ -108,7 +108,7 @@ export class DeliveryPriorityComponent implements OnInit,AfterViewChecked {
       payload=reqData;
     }
     let startLimit=_this.dataSource.data.length||0;
-    let endLimit=startLimit+100;
+    let endLimit=100;
     const reqObj = {
       url: `warehouse/decentralized/getDeliveryPriorityList?startLimit=${startLimit}&endLimit=${endLimit}${source}`,
       method: 'post',
@@ -130,7 +130,7 @@ export class DeliveryPriorityComponent implements OnInit,AfterViewChecked {
             });
             (<FormArray>_this.tableform.get("tableEntries")).push(control);
           });
-        _this.dataSource = new MatTableDataSource(tableData);
+        _this.dataSource.data=_this.dataSource.data.concat(tableData)
         _this.tableHeaders = response['tableHeaders']
         _this.tableHeaders.splice(_this.tableHeaders.indexOf("Id"),1)
         _this.tableHeaders.unshift('select')
@@ -154,6 +154,14 @@ export class DeliveryPriorityComponent implements OnInit,AfterViewChecked {
 
     if (page.length - (page.pageIndex * page.pageSize) <= page.pageSize) {
       this.onViewClick();
+    }
+  }
+
+  applyFilter(filterValue: any) {
+    // this.myForm.controls['filter'].setValue(filterValue);
+    this.dataSource.filter = filterValue.target.value.trim().toLowerCase();
+    if (this.dataSource.paginator) {
+        this.dataSource.paginator.firstPage();
     }
   }
 
