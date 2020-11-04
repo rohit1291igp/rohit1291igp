@@ -25,7 +25,7 @@
             <form [formGroup]="bulkegvform" (ngSubmit)="generateManualBulkEgv()">
               <div style="margin-bottom: 15px;">
                 <!-- *ngIf="env.userType=='egv_admin'" -->
-                <mat-form-field class="filterElement width20 marginLR10" *ngIf="env.userType =='egv_admin'">
+                <mat-form-field class="filterElement width20 marginLR10">
                   <mat-label>Select a Product</mat-label>
                   <input type="text" matInput placeholder='Select a Producr' formControlName="selectedProduct"
                     [matAutocomplete]="auto">
