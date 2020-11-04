@@ -159,7 +159,7 @@ export class OrderReportComponent implements OnInit {
       _this.queryObj.orderDateTo = _this.formatDate(data.value.orderTo, 'yyyy/MM/dd');
     }
     if (data.value.status && data.value.status != "All Order Status") {
-      _this.queryObj.status = data.value.status
+      _this.queryObj.status = data.value.status.split(' ').join('');
     }
 
     if (data.value.orderNo) {
@@ -214,7 +214,7 @@ export class OrderReportComponent implements OnInit {
       _this.queryObj.orderDateTo = _this.formatDate(data.value.orderTo, 'yyyy/MM/dd');
     }
     if (data.value.status && data.value.status != "All Order Status") {
-      _this.queryObj.status = data.value.status
+      _this.queryObj.status = data.value.status.split(' ').join('');
     }
 
     if (data.value.orderNo) {
