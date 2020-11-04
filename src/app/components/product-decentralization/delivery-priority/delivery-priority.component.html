@@ -211,6 +211,10 @@
       <i class="fa fa-download" aria-hidden="true"></i>
       Download
     </button>
+    <mat-form-field class="padding1">
+      <mat-label>Search</mat-label>
+      <input matInput (keyup)="applyFilter($event)" placeholder="Search Value" #input>
+    </mat-form-field>
     <div style="float:right;display:inline">
       <button class="btnRadius saveButton" mat-raised-button (click)="saveAllChanges()"
         [disabled]="!openEdits>0">
@@ -223,12 +227,6 @@
         Cancel Changes
       </button>
     </div>
-  </div>
-  <div>
-    <mat-form-field class="padding1">
-      <mat-label>Search</mat-label>
-      <input matInput (keyup)="applyFilter($event)" placeholder="Search Value" #input>
-    </mat-form-field>
   </div>
   <form [formGroup]="tableform">
     <mat-table #table [dataSource]="dataSource" formArrayName="tableEntries" matSort>

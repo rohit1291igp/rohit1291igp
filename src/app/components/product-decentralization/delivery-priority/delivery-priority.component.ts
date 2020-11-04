@@ -87,7 +87,17 @@ export class DeliveryPriorityComponent implements OnInit,AfterViewChecked {
   selectedWarehouse=""
   requestedSkus=""
   onViewClick(){
+    this.dataSource.data=[];
     console.log("onviewclick")
+    if(this.selected_view_or_download_by==='warehouse'){
+      this.getDeliveryPriorityList(this.selected_view_or_download_by,this.selectedWarehouse);
+    }else if(this.selected_view_or_download_by==='sku'){
+      let sku = this.requestedSkus.length>0?this.requestedSkus.split('\n'):[]
+      this.getDeliveryPriorityList(this.selected_view_or_download_by,sku)
+    }
+  }
+
+  onPageChange(){
     if(this.selected_view_or_download_by==='warehouse'){
       this.getDeliveryPriorityList(this.selected_view_or_download_by,this.selectedWarehouse);
     }else if(this.selected_view_or_download_by==='sku'){
@@ -153,7 +163,7 @@ export class DeliveryPriorityComponent implements OnInit,AfterViewChecked {
     console.log("paginator", page)
 
     if (page.length - (page.pageIndex * page.pageSize) <= page.pageSize) {
-      this.onViewClick();
+      this.onPageChange();
     }
   }
 
