@@ -121,7 +121,7 @@ export class BulkEgvComponent implements OnInit {
 
     console.log(this.bulkegvform.invalid);
     if (this.bulkegvform.invalid) { return }
-    if (this.bulkegvform.value.denomination < this.minValue || this.bulkegvform.value.denomination < this.maxValue) {
+    if (this.bulkegvform.value.denomination < this.minValue || this.bulkegvform.value.denomination > this.maxValue) {
       alert("Denomination should be between " + this.minValue + " and " + this.maxValue)
       return;
     }
