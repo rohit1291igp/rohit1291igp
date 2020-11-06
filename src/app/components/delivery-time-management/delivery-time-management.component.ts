@@ -24,6 +24,7 @@ export class DeliveryTimeManagementComponent implements OnInit {
 	dataSource: MatTableDataSource<any>;
 	tableHeaders;
 	searchForm: FormGroup;
+	warehouse: { key: number; value: string; };
 	constructor(
 		private fb: FormBuilder,
 		private BackendService: BackendService,
@@ -37,7 +38,7 @@ export class DeliveryTimeManagementComponent implements OnInit {
 		{ key: 4, value: 'Lucknow WH' },
 		{ key: 354, value: 'Mumbai WH' },
 		{ key: 318, value: 'Jaipur WH' },
-    { key: 72, value: 'Handels' }
+		{ key: 72, value: 'Handels' }
 	];
 
 	destinationTypeOptions: string[] = ['City', 'Pincode', 'Country'];
@@ -57,8 +58,11 @@ export class DeliveryTimeManagementComponent implements OnInit {
 
 		const toSelect = this.warehouseList.find(c => c.key == localStorage.fkAssociateId);
 		this.searchForm.get('source').setValue(toSelect);
-		if (toSelect && toSelect.key != 0) {
-			this.searchForm.get('source').disable();
+		if (toSelect) {
+			this.searchForm.controls['source'].disable();
+			this.warehouse = toSelect;
+			this.searchForm.get('source').setValue(toSelect);
+
 		}
 		else {
 			this.searchForm.get('source').setValue(this.warehouseList[0])
@@ -115,17 +119,9 @@ export class DeliveryTimeManagementComponent implements OnInit {
 			payload: <any>{}
 		};
 
-		_this.warehouseList.forEach(ele => {
-			if (ele.key == data.value.source['key'] || ele.key == localStorage.fkAssociateId) {
-				validFkaid = true;
-			}
-		});
-		if (validFkaid) {
-			if (data.value.source) {
-				fkaid = data.value.source.key;
-			} else {
-				fkaid = localStorage.fkAssociateId;
-			}
+
+		if (_this.warehouse) {
+			fkaid = _this.warehouse.key;
 		}
 		else {
 			fkaid = 0;
