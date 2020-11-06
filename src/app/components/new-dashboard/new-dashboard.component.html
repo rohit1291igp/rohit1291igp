@@ -1,10 +1,13 @@
 <nav>
     <i class="fa fa-bars" aria-hidden="true" (click)="drawer.toggle()" (mouseover)="drawer.open()" style="cursor: pointer"></i>
     <div class="d-flex align-items-baseline" style="float: right;">
-        <p *ngIf="username" style="margin-right: 12px;text-transform: capitalize;">Hi {{username}}
+        <p *ngIf="username" style="margin-right: 12px;text-transform: capitalize;">
+            <a *ngIf="env.userType==='egv_admin'||env.userType==='manager'||env.userType==='executive' else noEGV" style="text-decoration: none; cursor: pointer; color: white; font-weight: bold;" routerLink="/new-dashboard/egv/change-password">{{username}}</a>
+            <ng-template #noEGV>{{username}}</ng-template>
         </p>
         <i (click)="logout($event)" class="fa fa-sign-out" aria-hidden="true"></i>
     </div>
+        <img src="../../../assets/images/igp-logo.png" class="homeLogo" routerLink="/new-dashboard" width="6%" alt="igp">
 </nav>
 <mat-drawer-container class="example-container" autosize style="width: 100%;height: 100vh;">
     <mat-drawer #drawer #appDrawer class="example-sidenav" mode="side">
@@ -18,7 +21,7 @@
     </mat-drawer>
 
     <div class="example-sidenav-content">
-        <h2 *ngIf="!openPage" class="center-align">Pages</h2>
+        <h2 *ngIf="!openPage" class="center-align"></h2>
         <div *ngIf="openPage">
             <router-outlet></router-outlet>
         </div>
@@ -28,8 +31,8 @@
                 <ng-container *ngFor="let x of pages">
                     <a class="page-view" routerLink="{{x.route}}" (click)="navigate('page')">
                         <div class="img-hover-zoom">
-                            <div class="icon-title-container">
-                                <mat-icon aria-hidden="false" aria-label="Example home icon">{{x.iconName}}</mat-icon>
+                            <div class="icon-title-container" style="text-align: center;">
+                                <mat-icon style="width:fit-content" aria-hidden="false" aria-label="Example home icon">{{x.iconName}}</mat-icon>
                                 <p>{{x.displayName}}</p>
                             </div>
                         </div>

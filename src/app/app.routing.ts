@@ -5,17 +5,15 @@ import { BlogListComponent } from './components/blog-list/blog-list.component';
 import { BlogViewComponent } from './components/blog-view/blog-view.component';
 import { DailyOpsReportComponent } from './components/daily-ops-report/daily-ops-report.component';
 import { DeliveryTimeManagementComponent } from './components/delivery-time-management/delivery-time-management.component';
-import { DeliveryBoyDetailsComponent } from './components/deliveryboy-details/deliveryboy-details.component';
 import { DownloadEmailComponent } from './components/download-email/download-email.component';
 import { LoginComponent } from './components/login/login.component';
+
 import { OfferPageManagementComponent } from './components/offer-page-management/offer-page-management.component';
-import { OrderReportComponent } from './components/order-report/order-report.component';
-import { PayoutDashboardComponent } from './components/payout-dashboard/payout-dashboard.component';
-import { PerformanceReportComponent } from './components/performance-report/performance-report.component';
 import { ProductReportComponent } from './components/product-report/product-report.component';
-import { StockComponentsReportsComponent } from './components/stock-components-reports/stock-components-reports.component';
-import { UploadedImageReportComponent } from './components/uploaded-image-report/uploaded-image-report.component';
 import { AuthGuard } from './services/auth-guard.service';
+// import { EgvGuard } from './services/egv.guard';
+// import { AlertManagementComponent } from './components/egv/alert-management/alert-management.component';
+// import { PasswordChangeComponent } from './components/egv/user-management/password-change/password-change.component';
 
 
 const route: Routes = [
@@ -26,16 +24,7 @@ const route: Routes = [
     loadChildren: './modules/dashboard.module#DashboardModule',
     canActivate: [AuthGuard]
   },
-  {
-    path: 'reports/:type',
-    loadChildren: './modules/report.module#ReportModule',
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'deliveryBoyDetails',
-    component: DeliveryBoyDetailsComponent,
-    canActivate: [AuthGuard]
-  },
+
   {
     path: 'blog-create',
     component: BlogCreateComponent,
@@ -88,11 +77,6 @@ const route: Routes = [
     canActivate: [AuthGuard]
   },
   {
-    path: 'performanceReport',
-    component: PerformanceReportComponent,
-    canActivate: [AuthGuard]
-  },
-  {
     path: 'productReport',
     component: ProductReportComponent,
     canActivate: [AuthGuard]
@@ -103,39 +87,25 @@ const route: Routes = [
     canActivate: [AuthGuard]
   },
   {
-    path: 'dailywarehouseOpsReport',
-    component: DailyOpsReportComponent
-  },
-  {
-    path: 'stockReport',
-    component: StockComponentsReportsComponent,
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'payout-dashboard',
-    component: PayoutDashboardComponent
-  },
-  {
-    path: 'offerpagemanagement',
-    component: OfferPageManagementComponent
-  },
-  {
     path: 'new-dashboard',
     loadChildren: './modules/newDashboard.module#NewDashboardModule',
     canActivate: [AuthGuard]
-  }, {
-    path: 'uploaded-image',
-    component: UploadedImageReportComponent
-  },  
-  {
-    path: 'orderReport',
-    component: OrderReportComponent
   },
   {
     path: 'egv',
     loadChildren: './modules/egvpanel.module#EgvpanelModule',
     // canActivate: [AuthGuard]
   },
+  // {
+  //   path:'change-password',
+  //   component:PasswordChangeComponent,
+  //   canActivate:[AuthGuard,EgvGuard]
+  // },
+  // {
+  //   path:'alert-management',
+  //   component:AlertManagementComponent,
+  //   canActivate:[AuthGuard,EgvGuard]
+  // },
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
   // otherwise redirect to home
   { path: '**', redirectTo: 'dashboard' }

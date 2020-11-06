@@ -1,11 +1,11 @@
- // Modules
+// Modules
 import { CdkTableModule } from '@angular/cdk/table';
 import { DatePipe } from '@angular/common';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { HttpModule } from '@angular/http';
-import { MatAutocompleteModule, MatButtonModule, MatCardModule, MatCheckboxModule, MatDatepickerModule, MatDialogModule, MatDialogRef, MatFormFieldModule, MatIconModule, MatInputModule, MatListModule, MatMenuModule, MatNativeDateModule, MatPaginatorModule, MatProgressBarModule, MatProgressSpinnerModule, MatRadioModule, MatSelectModule, MatSidenavModule, MatSlideToggleModule, MatSnackBarModule, MatSortModule, MatTableModule, MatTabsModule, MAT_DATE_LOCALE, MAT_DIALOG_DATA } from '@angular/material';
+import { MatAutocompleteModule, MatButtonModule, MatCardModule, MatCheckboxModule, MatDatepickerModule, MatDialogModule, MatDialogRef, MatFormFieldModule, MatIconModule, MatInputModule, MatListModule, MatMenuModule, MatNativeDateModule, MatPaginatorModule, MatProgressBarModule, MatProgressSpinnerModule, MatRadioModule, MatSelectModule, MatSidenavModule, MatSlideToggleModule, MatSnackBarModule, MatSortModule, MatTableModule, MatTabsModule, MAT_DATE_LOCALE, MAT_DIALOG_DATA, MatChipsModule } from '@angular/material';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
@@ -25,9 +25,7 @@ import { AppComponent, testComponent } from './components/app.component';
 import { BlogCreateComponent } from './components/blog-create/blog-create.component';
 import { BlogListComponent } from './components/blog-list/blog-list.component';
 import { BlogViewComponent } from './components/blog-view/blog-view.component';
-import { DailyOpsReportComponent } from './components/daily-ops-report/daily-ops-report.component';
 import { DeliveryTimeManagementComponent } from './components/delivery-time-management/delivery-time-management.component';
-import { DeliveryBoyDetailsComponent } from './components/deliveryboy-details/deliveryboy-details.component';
 import { DownloadEmailComponent } from './components/download-email/download-email.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { HomeComponent } from './components/home/home.component';
@@ -36,16 +34,12 @@ import { LoginComponent } from './components/login/login.component';
 import { MainHeaderComponent } from './components/main-header/main-header.component';
 import { NewReportsComponentModule } from './components/new-reports-component/new-reports.component';
 import { NotificationComponent } from './components/notification/notification.component';
-import { OfferPageManagementComponent } from './components/offer-page-management/offer-page-management.component';
 import { OrderStockComponent } from './components/order-stocks/order-stock.component';
-import { PayoutDashboardModule } from './components/payout-dashboard/payout-dashboard.component';
-import { PerformanceReportComponent } from './components/performance-report/performance-report.component';
+// import { PayoutDashboardModule } from './components/payout-dashboard/payout-dashboard.component';
 import { DownloadStockedComponentProduct, ProductReportComponent } from './components/product-report/product-report.component';
 import { DownloadStockedComponent, editComponent } from './components/reports/reports.component';
 import { SelectItemForDelivered } from './components/select-item/select-item.component';
-import { StockComponentsReportsComponent } from './components/stock-components-reports/stock-components-reports.component';
 import { UploadExcelComponent } from './components/upload-excel/upload-excel.component';
-import { UploadedImageReportComponent } from './components/uploaded-image-report/uploaded-image-report.component';
 import { CapitalizePipeModule } from './customPipes/capitalze.pipe';
 import { DateFormatterPipeModule } from './customPipes/date-formatter';
 import { ObjectKeyValuePipe } from './customPipes/object-key-value.pipe';
@@ -65,7 +59,15 @@ import { UtilityService } from './services/utility.service';
 import { VoucherService } from './services/voucher.service';
 import { SharedModule } from './shared-module/shared/shared.module';
 import { CookieService } from './services/cookie.service';
-import { OrderReportComponent} from './components/order-report/order-report.component';
+// import { OrderReportComponent} from './components/order-report/order-report.component';
+// import { NewUserFormComponent } from './components/egv/user-management/new-user-form/new-user-form.component';
+import { EgvGuard } from './services/egv.guard';
+import { EgvService } from './services/egv.service';
+import { ScriptService } from './services/script.service';
+import { SerachRankingService } from './services/serach-ranking.service';
+// import { AlertManagementComponent } from './components/egv/alert-management/alert-management.component';
+// import { EditUserComponent } from './components/egv/user-management/edit-user/edit-user.component';
+// import { PasswordChangeComponent } from './components/egv/user-management/password-change/password-change.component';
 
 
 
@@ -92,25 +94,15 @@ export function ConfigLoader(envConfig: envConfig) {
     DownloadEmailComponent,
     AddDeliveryBoyComponent,
     NotificationComponent,
-    DeliveryBoyDetailsComponent,
     ImgPreviewComponent,
     SelectItemForDelivered,
     OrderStockComponent,
     testComponent,
     editComponent,
-    PerformanceReportComponent,
     ProductReportComponent,
-    DailyOpsReportComponent,
-    StockComponentsReportsComponent,
     DeliveryTimeManagementComponent,
-    DailyOpsReportComponent,
-    StockComponentsReportsComponent,
     DownloadStockedComponent,
-    DownloadStockedComponentProduct,
-    OfferPageManagementComponent,
-    UploadedImageReportComponent,
-    OrderReportComponent
-    // AutoSelectionComponent
+    DownloadStockedComponentProduct
   ],
   imports: [
     BrowserModule,
@@ -142,6 +134,7 @@ export function ConfigLoader(envConfig: envConfig) {
     MatAutocompleteModule,
     MatTabsModule,
     MatSlideToggleModule,
+    MatChipsModule,
     routing,
     SelectModule,
     MyDatePickerModule,
@@ -153,23 +146,23 @@ export function ConfigLoader(envConfig: envConfig) {
     NewReportsComponentModule,
     CapitalizePipeModule,
     DateFormatterPipeModule,
-    PayoutDashboardModule,
-    FormsModule, 
+    // PayoutDashboardModule,
+    FormsModule,
     ReactiveFormsModule
     // RouterModule
   ],
   providers: [
     {
-//      provide: Http,
-//      useFactory: httpFactory,
-//      deps: [XHRBackend, RequestOptions]
-          provide: HTTP_INTERCEPTORS,
-          useClass: MyHttpInterceptor,
-          multi: true
-     },
-     { provide: MAT_DIALOG_DATA, useValue: {} },
+      //      provide: Http,
+      //      useFactory: httpFactory,
+      //      deps: [XHRBackend, RequestOptions]
+      provide: HTTP_INTERCEPTORS,
+      useClass: MyHttpInterceptor,
+      multi: true
+    },
+    { provide: MAT_DIALOG_DATA, useValue: {} },
     { provide: MatDialogRef, useValue: {} },
-    {provide: MAT_DATE_LOCALE, useValue: 'en-GB'},
+    { provide: MAT_DATE_LOCALE, useValue: 'en-GB' },
     /*  envConfig,
     {
       provide: APP_INITIALIZER,
@@ -181,6 +174,7 @@ export function ConfigLoader(envConfig: envConfig) {
     Logger,
     AuthenticationService,
     AuthGuard,
+    EgvGuard,
     UserService,
     DashboardService,
     ReportsService,
@@ -191,10 +185,13 @@ export function ConfigLoader(envConfig: envConfig) {
     S3UploadService,
     Ng2ImgMaxService,
     VoucherService,
+    EgvService,
     NavService,
-    CookieService
+    CookieService,
+    ScriptService,
+    SerachRankingService
   ],
-  entryComponents:[UploadExcelComponent,NotificationComponent, ImgPreviewComponent, SelectItemForDelivered, OrderStockComponent,editComponent, DownloadStockedComponent,DownloadStockedComponentProduct],
+  entryComponents: [UploadExcelComponent, NotificationComponent, ImgPreviewComponent, SelectItemForDelivered, OrderStockComponent, editComponent, DownloadStockedComponent, DownloadStockedComponentProduct],
   bootstrap: [AppComponent],
   exports: [RouterModule]
 })

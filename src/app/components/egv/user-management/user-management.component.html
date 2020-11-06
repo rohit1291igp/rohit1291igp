@@ -1,0 +1,117 @@
+<div class="container m-top-1">
+  <div class="row">
+    <div class="col-md-10 col-sm-10 m-bottom-1">
+      <!-- <mat-card>
+        <h4>New Manager Account</h4>
+        <form [formGroup]="newUser" (ngSubmit)="onSubmit(f)" name="newUser" #f="ngForm">
+        <mat-form-field class="example-form-field">
+          <mat-label>Associate Name</mat-label>
+          <input matInput type="text" formControlName="associateName" required>
+          <mat-error *ngIf="newUser.get('associateName').hasError('required')">
+            Associate Name is <strong>required</strong>
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field class="example-form-field">
+          <mat-label>Contact Person</mat-label>
+          <input matInput type="text" formControlName="contactPerson" required>
+          <mat-error *ngIf="newUser.get('contactPerson').hasError('required')">
+            Contact Person is <strong>required</strong>
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field class="example-form-field">
+          <mat-label>Email</mat-label>
+          <input matInput type="text" formControlName="email" required>
+          <mat-error *ngIf="newUser.get('email').hasError('required')">
+            Email is <strong>required</strong>
+          </mat-error>
+          <mat-error *ngIf="newUser.controls['email'].hasError('email') && !newUser.controls['email'].hasError('required')">
+            Please enter a valid email address
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field class="example-form-field">
+          <mat-label>Address</mat-label>
+          <input matInput type="text" formControlName="address" required>
+          <mat-error *ngIf="newUser.get('address').hasError('required')">
+            Address is <strong>required</strong>
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field class="example-form-field">
+          <mat-label>Phone</mat-label>
+          <input matInput type="number" formControlName="phone" required >
+          <mat-error *ngIf="newUser.get('phone').hasError('required')">
+            Phone is <strong>required</strong>
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field class="example-form-field">
+          <mat-label>Username</mat-label>
+          <input matInput type="text" formControlName="user" required>
+          <mat-error *ngIf="newUser.get('user').hasError('required')">
+            User is <strong>required</strong>
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field class="example-form-field">
+          <mat-label>Password</mat-label>
+          <input matInput type="text" formControlName="password" required>
+          <mat-error *ngIf="newUser.get('password').hasError('required')">
+            Password is <strong>required</strong>
+          </mat-error>
+        </mat-form-field>
+
+        <div style="margin-top: 20px;" class="button-group">
+          <button type="submit" mat-raised-button>Submit</button>
+          <button type="button" mat-raised-button (click)="onClear(f)">Clear</button>
+        </div>
+      </form>
+      </mat-card> -->
+      <button *ngIf="env.userType==='egv_admin'" (click)="openDialog('client')" mat-raised-button>Add New Client</button>
+      <button *ngIf="env.userType==='egv_admin'" (click)="openDialog('manager')" mat-raised-button>Add Manager</button>
+      <button *ngIf="env.userType==='egv_admin'||env.userType==='manager'" (click)="openDialog('executive')" mat-raised-button>Add User</button>
+    </div>
+  </div>
+  <div *ngIf="dataSource.length" class="row m-top-1">
+    <div class="col-sm-12 col-md-12">
+      <div class="example-container mat-elevation-z8">
+        <mat-table #table [dataSource]="dataSource">
+      
+          <!--- Note that these columns can be defined in any order.
+                The actual rendered columns are set as a property on the row definition" -->
+      
+          <!-- Position Column -->
+          <ng-container *ngFor="let column of displayedColumns" matColumnDef="{{column}}">
+            <mat-header-cell *matHeaderCellDef>{{columnLables[column]}}</mat-header-cell>
+            <ng-container *ngIf="column!=='accountEnabled'">
+              <mat-cell *matCellDef="let element">
+                <ng-container *ngIf="column!=='edit'">
+                  {{element[column]}}
+                </ng-container>
+                <ng-container *ngIf="column==='edit'">
+                  <button mat-icon-button (click)="editUser(element)">
+                    <mat-icon>open_in_new</mat-icon>
+                  </button>
+                </ng-container>
+              </mat-cell>
+            </ng-container>
+            <ng-container *ngIf="column==='accountEnabled'">
+              <mat-cell *matCellDef="let element">
+                <!-- <mat-slide-toggle
+                  (change)="onAccountStatusChange($event,element)"
+                  [checked]="element.accountEnabled===1">
+              </mat-slide-toggle> -->
+              {{accountEnabledStatus[element[column]]}}
+              </mat-cell>
+            </ng-container>
+          </ng-container>
+          <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+        </mat-table>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="!dataSource.length" class="row m-top-1">
+    <mat-card>
+      <p>
+        No Data
+      </p>
+    </mat-card>
+  </div>
+</div>

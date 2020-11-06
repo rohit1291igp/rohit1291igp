@@ -25,7 +25,7 @@ export class OrderReportComponent implements OnInit {
   @ViewChild(OrdersActionTrayComponent) child: OrdersActionTrayComponent;
 
   searchForm: FormGroup;
-  delStatus = ['All Order Status', 'Processed', 'Confirmed', 'Out For Delivery', 'Delivery', 'Rejected'];
+  delStatus = ['All Order Status', 'Processed', 'Confirmed', 'Out For Delivery', 'Delivered', 'Rejected'];
 
   queryObj: any;
   public env = environment;
@@ -159,7 +159,7 @@ export class OrderReportComponent implements OnInit {
       _this.queryObj.orderDateTo = _this.formatDate(data.value.orderTo, 'yyyy/MM/dd');
     }
     if (data.value.status && data.value.status != "All Order Status") {
-      _this.queryObj.status = data.value.status
+      _this.queryObj.status = data.value.status.split(' ').join('');
     }
 
     if (data.value.orderNo) {
@@ -214,13 +214,13 @@ export class OrderReportComponent implements OnInit {
       _this.queryObj.orderDateTo = _this.formatDate(data.value.orderTo, 'yyyy/MM/dd');
     }
     if (data.value.status && data.value.status != "All Order Status") {
-      _this.queryObj.status = data.value.status
+      _this.queryObj.status = data.value.status.split(' ').join('');
     }
 
     if (data.value.orderNo) {
       _this.queryObj.orderNumber = data.value.orderNo
     }
-    _this.queryObj.endLimit = _this.reportSummary[0].value;
+    _this.queryObj.endLimit = 100;
     let url = _this.generateQueryString(_this.queryObj);
     _this.dowloadingSummary = true;
     let reqObj: any = {
@@ -228,32 +228,48 @@ export class OrderReportComponent implements OnInit {
       method: "get",
     };
     reqObj.url += url;
-    reqObj.url += "&startLimit=0&flag_count=0";
-    _this.BackendService.makeAjax(reqObj, function (error, _reportData) {
-      _this.dowloadingSummary = false;
-      var options = {
-        showLabels: true,
-        showTitle: false,
-        headers: Object.keys(_reportData.tableData[0]).map(m => m.charAt(0).toUpperCase() + m.slice(1)),
-        nullToEmptyString: true,
+    reqObj.url += "&startLimit=0&flag_count=1";
+    _this.reportsService.getReportData('getOrderReport', reqObj.url, function (error, _reportData) {
+      let downreqObj: any = {
+        url: 'getOrderReport?',
+        method: "get",
       };
-      let data = [];
-      new Promise((resolve) => {
-        for (let pi = 0; pi < _reportData.tableData.length; pi++) {
-          for (let k in _reportData.tableData[pi]) {
-            if (typeof _reportData.tableData[pi][k] == 'object' && _reportData.tableData[pi][k] != null) {
-              _reportData.tableData[pi][k] = _reportData.tableData[pi][k].value ? _reportData.tableData[pi][k].value : '';
+      _this.queryObj.endLimit = _reportData.summary[0].value;
+      let downurl = _this.generateQueryString(_this.queryObj);
+      downreqObj.url += downurl;
+      downreqObj.url += "&startLimit=0&flag_count=0";
+
+      _this.BackendService.makeAjax(downreqObj, function (error, _reportData) {
+        _this.dowloadingSummary = false;
+        var options = {
+          showLabels: true,
+          showTitle: false,
+          headers: Object.keys(_reportData.tableData[0]).map(m => m.charAt(0).toUpperCase() + m.slice(1)),
+          nullToEmptyString: true,
+        };
+        let data = [];
+        new Promise((resolve) => {
+          for (let pi = 0; pi < _reportData.tableData.length; pi++) {
+            for (let k in _reportData.tableData[pi]) {
+              if (typeof _reportData.tableData[pi][k] == 'object' && _reportData.tableData[pi][k] != null) {
+                _reportData.tableData[pi][k] = _reportData.tableData[pi][k].value ? _reportData.tableData[pi][k].value : '';
+              }
+            }
+            if (pi == (_reportData.tableData.length - 1)) {
+              resolve(_reportData.tableData);
             }
           }
-          if (pi == (_reportData.tableData.length - 1)) {
-            resolve(_reportData.tableData);
-          }
-        }
-      }).then((data) => {
+        }).then((data) => {
 
-        let download = new Angular5Csv(data, 'StockComponentReport-' + dateToday, options);
+          let download = new Angular5Csv(data, 'OrderReport-' + dateToday, options);
+        })
       })
-    })
+
+
+
+
+    });
+
   }
 
   addVendorToOrderMap(e, orderId, orderProductId) {
@@ -357,6 +373,19 @@ export class OrderReportComponent implements OnInit {
         resolve(response)
       })
     })
+
+    // return new Promise((resolve, reject) => {
+    //   _this.BackendService.makeNewAjax(reqObj).subscribe(
+    //     (result, err) => {
+    //       if (err) {
+    //         _this.openSnackBar('Something went wrong.');
+    //         console.log('Error=============>', err);
+    //         reject([])
+    //       }
+    //       console.log('sidePanel Response --->', result);
+    //       resolve(result)
+    //     })
+    // })
   }
 
   getVendorGroupList() {
