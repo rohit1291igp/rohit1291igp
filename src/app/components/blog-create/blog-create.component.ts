@@ -8,6 +8,7 @@ import * as S3 from 'aws-sdk/clients/s3';
 import { FileUploader } from 'ng2-file-upload';
 import { S3UploadService } from '../../services/s3Upload.service';
 import { HttpHeaders } from '@angular/common/http';
+import { ScriptService } from 'app/services/script.service';
 
 @Component({
     selector: 'app-blog-create',
@@ -39,8 +40,11 @@ export class BlogCreateComponent implements OnInit {
     constructor(
         public BackendService: BackendService,
         public UtilityService: UtilityService,
-        public S3UploadService: S3UploadService
-    ) {}
+        public S3UploadService: S3UploadService,
+        private scriptService:ScriptService,
+    ) {
+        this.scriptService.load('ckEditor');
+    }
 
     ngOnInit() {
         this.model.webstore = '';

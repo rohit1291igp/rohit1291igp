@@ -58,7 +58,132 @@ export const userAcess = {
             route: '/new-dashboard/dailywarehouseOpsReport',
         }
     ],
-
+    vendor: [
+        {
+            displayName: 'Dashboard',
+            iconName: 'home',
+            route: '/new-dashboard/dashboard',
+        },
+        {
+            displayName: 'Reports',
+            iconName: 'recent_actors',
+            route: 'devfestfl',
+            children: [
+                {
+                    displayName: 'Order Report',
+                    iconName: 'receipt',
+                    route: '/new-dashboard/orderReport',
+                },
+                {
+                    displayName: 'Product Report',
+                    iconName: 'shop',
+                    route: '/new-dashboard/reports/getVendorReport'
+                },
+                {
+                    displayName: 'Pincode Report',
+                    iconName: 'location_on',
+                    route: '/new-dashboard/reports/getPincodeReport'
+                },
+                {
+                    displayName: 'Delivery Boy Details',
+                    iconName: 'transfer_within_a_station',
+                    route: '/new-dashboard/deliveryBoyDetails'
+                },
+                {
+                    displayName: 'Uploaded Image',
+                    iconName: 'collections',
+                    route: '/new-dashboard/uploaded-image'
+                },
+                {
+                    displayName: 'Stock Component Report',
+                    iconName: 'store',
+                    route: '/new-dashboard/stockReport'
+                },
+                {
+                    displayName: 'Performance Report',
+                    iconName: 'analytics',
+                    route: '/new-dashboard/performanceReport'
+                }
+            ]
+        }],
+    admin: [
+        {
+            displayName: 'Dashboard',
+            iconName: 'home',
+            route: '/new-dashboard/dashboard',
+        },
+        {
+            displayName: 'Payout Dashboard',
+            iconName: 'home',
+            route: '/new-dashboard/payout-dashboard',
+        },
+        {
+            displayName: 'Reports',
+            iconName: 'recent_actors',
+            route: 'devfestfl',
+            children: [
+                {
+                    displayName: 'Order Report',
+                    iconName: 'receipt',
+                    route: '/new-dashboard/orderReport',
+                },
+                {
+                    displayName: 'Product Report',
+                    iconName: 'shop',
+                    route: '/new-dashboard/reports/getVendorReport'
+                },
+                {
+                    displayName: 'Pincode Report',
+                    iconName: 'location_on',
+                    route: '/new-dashboard/reports/getPincodeReport'
+                },
+                {
+                    displayName: 'Payout and Taxes',
+                    iconName: 'shop',
+                    route: '/new-dashboard/reports/getPayoutAndTaxesReport'
+                },
+                {
+                    displayName: 'Uploaded Image',
+                    iconName: 'collections',
+                    route: '/new-dashboard/uploaded-image'
+                },
+                {
+                    displayName: 'Stock Component Report',
+                    iconName: 'store',
+                    route: '/new-dashboard/stockReport'
+                },
+                {
+                    displayName: 'Performance Report',
+                    iconName: 'analytics',
+                    route: '/new-dashboard/performanceReport'
+                },
+                {
+                    displayName: 'Vendor Details',
+                    iconName: 'location_on',
+                    route: '/new-dashboard/reports/getVendorDetails'
+                },
+                {
+                    displayName: 'SLA Reports',
+                    iconName: 'location_on',
+                    route: '/new-dashboard/reports/getSlaReport'
+                },
+                {
+                    displayName: 'Barcode',
+                    iconName: 'location_on',
+                    route: '/new-dashboard/reports/getBarcodeToComponentReport'
+                },
+                {
+                    displayName: 'Barcode verify',
+                    iconName: 'location_on',
+                    route: '/new-dashboard/reports/getbarcodestoverify'
+                },
+                {
+                    displayName: 'Component Report',
+                    iconName: 'location_on',
+                    route: '/new-dashboard/reports/getComponentReport'
+                }
+            ]
+        }],
     egv_admin: [
         {
             displayName: 'Wallet',
@@ -85,7 +210,7 @@ export const userAcess = {
             iconName: 'security',
             route: '/new-dashboard/egv/change-password',
         }
-        
+
     ],
     manager: [
         {
@@ -113,7 +238,7 @@ export const userAcess = {
             iconName: 'security',
             route: '/new-dashboard/egv/change-password',
         }
-        
+
     ],
     executive: [
         {
@@ -131,7 +256,7 @@ export const userAcess = {
             iconName: 'security',
             route: '/new-dashboard/egv/change-password',
         }
-        
+
     ],
     marketing: [
         {
@@ -145,5 +270,38 @@ export const userAcess = {
             route: '/new-dashboard/offerpagemanagement',
         }
         
-    ]
+    ],
+    mldatascience: [
+        {
+            displayName: 'Search Ranking',
+            iconName: 'image',
+            route: '/new-dashboard/searchRanking',
+        },
+        
+
+
+    ],
+
+    microsite: [{
+        displayName: 'Dashboard',
+        iconName: 'home',
+        route: '/new-dashboard/dashboard-microsite',
+    },
+
+    {
+        displayName: 'Current Balance',
+        iconName: 'account_balance_wallet',
+        route: '/new-dashboard/reports/itcReport',
+    }],
+    "microsite-zeapl": [{
+        displayName: 'Dashboard',
+        iconName: 'home',
+        route: '/new-dashboard/dashboard-microsite',
+    },
+
+    {
+        displayName: 'Current Balance',
+        iconName: 'account_balance_wallet',
+        route: '/new-dashboard/reports/itcReport',
+    }]
 }

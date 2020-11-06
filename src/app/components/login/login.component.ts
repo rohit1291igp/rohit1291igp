@@ -114,21 +114,23 @@ export class LoginComponent implements OnInit {
                 //   environment.userType='vendor';
                 // }
 
-
+///dashboard-microsite
                 _this.UtilityService.changeRouteComponent();
                 if (userType === 'deliveryboy') {
                     _this.router.navigate(['/delivery-app']);
-                } else if (userType === 'microsite' || userType === 'microsite-zeapl') {
-                    _this.router.navigate(['/dashboard-microsite']);
+                } else if (userType === 'microsite' || userType === 'microsite-zeapl' || userType == 'microsite-loylty') {
+                    _this.router.navigate(['/new-dashboard']);
                 } else if (userType === 'voucher') {
                     _this.router.navigate(['/voucher/voucher']);
                 } else if (userType === 'gv') {
                     _this.router.navigate(['/voucher/gv']);
-                } else if (userType === 'warehouse' || userType === 'marketing') {
+                } else if (userType === 'warehouse' || userType === 'marketing' || userType === 'mldatascience') {
                     _this.router.navigate(['/new-dashboard']);
-                }else if (userType === 'egv_admin'||userType === 'manager'||userType === 'executive') {
+                } else if (userType === 'egv_admin' || userType === 'manager' || userType === 'executive') {
                     _this.router.navigate(['/new-dashboard']);
-                } 
+                } else if (userType === 'admin' || userType === 'vendor') {
+                    _this.router.navigate(['/new-dashboard/dashboard']);
+                }
                 else {
                     _this.router.navigate(['/dashboard']);
                 }
