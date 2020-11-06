@@ -300,8 +300,9 @@ export class EgvwalletComponent implements OnInit {
 
   //?userId=882&amount=10000&action=Credit&transacId=hfgvuhj&comments=kjhmhbnkjnkjnljguy&fkAssociateId=882&flagAdmin=0&flagApproveCredit=1
 
-  approveTransaction(data, approval) {
+  approveTransaction(e, data, approval) {
     let _this = this;
+    e.target.disabled = true;
     console.log(data);
     let reqObj: any = {
       url: 'wallet/updatewallet?action=Credit&amount=' + data['Amount'] + "&transacId=" + data['TxnDetails'],
@@ -318,10 +319,11 @@ export class EgvwalletComponent implements OnInit {
     reqObj.url += "&comments=" + data['comments'].slice(0, -10);
 
     _this.EgvService.getEgvService(reqObj).subscribe(
-      result => {
-        if (result.error) {
+      (result, error) => {
+        if (result.error || error) {
           _this.openSnackBar('Something went wrong.');
           console.log('Error=============>', result.error);
+          e.target.disabled = false;
 
         }
         _this.openSnackBar(result.result);
