@@ -26,7 +26,7 @@ export class DeliveryPriorityComponent implements OnInit,AfterViewChecked {
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  dataSource: MatTableDataSource<any>;
+  dataSource: MatTableDataSource<any>=new MatTableDataSource([]);
   tableHeaders: string[];
   searchForm: FormGroup;
   openEdits = 0;
@@ -40,6 +40,7 @@ export class DeliveryPriorityComponent implements OnInit,AfterViewChecked {
     this.tableform = this.fb.group({
       tableEntries: this.fb.array([])
     });
+    this.tableform.get("tableEntries")['controls'] = []
   }
 
   btnType: string;
@@ -86,6 +87,7 @@ export class DeliveryPriorityComponent implements OnInit,AfterViewChecked {
   selectedWarehouse=""
   requestedSkus=""
   onViewClick(){
+    this.dataSource.data=[];
     console.log("onviewclick")
     if(this.selected_view_or_download_by==='warehouse'){
       this.getDeliveryPriorityList(this.selected_view_or_download_by,this.selectedWarehouse);
@@ -95,18 +97,30 @@ export class DeliveryPriorityComponent implements OnInit,AfterViewChecked {
     }
   }
 
+  onPageChange(){
+    if(this.selected_view_or_download_by==='warehouse'){
+      this.getDeliveryPriorityList(this.selected_view_or_download_by,this.selectedWarehouse);
+    }else if(this.selected_view_or_download_by==='sku'){
+      let sku = this.requestedSkus.length>0?this.requestedSkus.split('\n'):[]
+      this.getDeliveryPriorityList(this.selected_view_or_download_by,sku)
+    }
+  }
+
   getDeliveryPriorityList(fetchBy,reqData){
+
     let _this = this;
     _this.openEdits=0;
     let payload=[];
     let source=""
     if(fetchBy==='warehouse'){
-      source="?source="+reqData;
+      source="&source="+reqData;
     }else if(fetchBy==='sku'){
       payload=reqData;
     }
+    let startLimit=_this.dataSource.data.length||0;
+    let endLimit=100;
     const reqObj = {
-      url: `warehouse/decentralized/getDeliveryPriorityList${source}`,
+      url: `warehouse/decentralized/getDeliveryPriorityList?startLimit=${startLimit}&endLimit=${endLimit}${source}`,
       method: 'post',
       payload: payload
     }
@@ -119,14 +133,14 @@ export class DeliveryPriorityComponent implements OnInit,AfterViewChecked {
           _this.openSnackBar("No Data Found")
         }
         _this.selection.clear()
-          _this.tableform.get("tableEntries")['controls'] = []
+          // _this.tableform.get("tableEntries")['controls'] = []
           tableData.forEach((ele) => {
             const control = _this.fb.group({
               Priority: [ele.Priority]
             });
             (<FormArray>_this.tableform.get("tableEntries")).push(control);
           });
-        _this.dataSource = new MatTableDataSource(tableData);
+        _this.dataSource.data=_this.dataSource.data.concat(tableData)
         _this.tableHeaders = response['tableHeaders']
         _this.tableHeaders.splice(_this.tableHeaders.indexOf("Id"),1)
         _this.tableHeaders.unshift('select')
@@ -139,6 +153,26 @@ export class DeliveryPriorityComponent implements OnInit,AfterViewChecked {
         console.log(response); 
       }
     })
+  }
+
+  onChangeViewBy(){
+    this.dataSource.data=[];
+  }
+
+  matTablePageChange(page) {
+    console.log("paginator", page)
+
+    if (page.length - (page.pageIndex * page.pageSize) <= page.pageSize) {
+      this.onPageChange();
+    }
+  }
+
+  applyFilter(filterValue: any) {
+    // this.myForm.controls['filter'].setValue(filterValue);
+    this.dataSource.filter = filterValue.target.value.trim().toLowerCase();
+    if (this.dataSource.paginator) {
+        this.dataSource.paginator.firstPage();
+    }
   }
 
 
@@ -294,8 +328,8 @@ export class DeliveryPriorityComponent implements OnInit,AfterViewChecked {
             console.log(_this.selectedFieldForUpload,row)
           }
           if(_this.excelAction==='add'){
-            if (rowNumber == 1 && !((row.values[1].toLowerCase() == 'sku') && (row.values[2].toLowerCase() == 'warehouse') && (row.values[3].toLowerCase() == "country" ) && (row.values[4].toLowerCase() == "city" ) && (row.values[5].toLowerCase() == "pincode" ) && (row.values[6].toLowerCase() == "priority"))) {
-              alert('Invalid excel sheet format! Columns must be in following sequence : Sku, Warehouse, Country, City, Pincode, Priority');
+            if (rowNumber == 1 && !((row.values[1].toLowerCase() == 'sku') && (row.values[2].toLowerCase() == 'warehouse') && (row.values[3].toLowerCase() == "country" ) && (row.values[4].toLowerCase() == "state" ) && (row.values[5].toLowerCase() == "city" ) && (row.values[6].toLowerCase() == "pincode" ) && (row.values[7].toLowerCase() == "priority"))) {
+              alert('Invalid excel sheet format! Columns must be in following sequence : Sku, Warehouse, Country, State, City, Pincode, Priority');
               validExcel = false;
               event.target.value=""
               return;
@@ -303,22 +337,23 @@ export class DeliveryPriorityComponent implements OnInit,AfterViewChecked {
             //["select", "orgBarCode", "warehouse", "mappedBarCode", "actions"];
             if (rowNumber != 1 && validExcel) {
               if(!row.values[3]){
-                _this.uploadErrors.push(`Row ${rowNumber-1}: Invalid Country `);
+                _this.uploadErrors.push(`Row ${rowNumber-1}: Country field cannot be empty `);
               }else{
                 let obj_value={}
                     obj_value['id']=0;
-                    obj_value['SKU']=row.values[1];
-                    obj_value['WareHouse']=row.values[2];
-                    obj_value['Country']=row.values[3];
-                    obj_value['City']=row.values[4];
-                    obj_value["Pincode"]=row.values[5];
-                    obj_value['Priority']=row.values[6];
+                    obj_value['SKU']=row.values[1]||"";
+                    obj_value['WareHouse']=row.values[2]||"";
+                    obj_value['Country']=row.values[3]||"";
+                    obj_value['State']=row.values[4]||"";
+                    obj_value['City']=row.values[5]||"";
+                    obj_value["Pincode"]=row.values[6]||"";
+                    obj_value['Priority']=row.values[7]||"";
                 tableData.push(obj_value)
               }
             }
           }else if(_this.excelAction=='update'){
-            if (rowNumber == 1 && !((row.values[1].toLowerCase() == 'sku') && (row.values[2].toLowerCase() == 'warehouse') && (row.values[3] == "country" ) && (row.values[4] == "city" ) && (row.values[5] == "pincode" ) && (row.values[6].toLowerCase() == "priority"))) {
-              alert('Invalid excel sheet format! Columns must be in following sequence : Sku,Warehouse,'+"City"+"Pincode"+",Priority");
+            if (rowNumber == 1 && !((row.values[1].toLowerCase() == 'sku') && (row.values[2].toLowerCase() == 'warehouse') && (row.values[3] == "country" ) && (row.values[4].toLowerCase() == "state" ) && (row.values[5].toLowerCase() == "city" ) && (row.values[6].toLowerCase() == "pincode" ) && (row.values[7].toLowerCase() == "priority"))) {
+              alert('Invalid excel sheet format! Columns must be in following sequence : Sku, Warehouse, Country, State, City, Pincode, Priority');
               validExcel = false;
               event.target.value=""
               return;
@@ -326,11 +361,13 @@ export class DeliveryPriorityComponent implements OnInit,AfterViewChecked {
             //["select", "orgBarCode", "warehouse", "mappedBarCode", "actions"];
             if (rowNumber != 1 && validExcel) {
               let obj_value={}
-                  obj_value['SKU']=row.values[1];
-                  obj_value['WareHouse']=row.values[2];
-                  obj_value['City']=row.values[3];
-                  obj_value['Pincode']=row.values[4];
-                  obj_value['Priority']=row.values[5];
+              obj_value['SKU']=row.values[1];
+              obj_value['WareHouse']=row.values[2];
+              obj_value['Country']=row.values[3];
+              obj_value['State']=row.values[4];
+              obj_value['City']=row.values[5];
+              obj_value["Pincode"]=row.values[6];
+              obj_value['Priority']=row.values[7];
               tableData.push(obj_value)
             }
           }
@@ -367,7 +404,6 @@ export class DeliveryPriorityComponent implements OnInit,AfterViewChecked {
     _this.tableform.get("tableEntries")['controls'] = []
     dataSource.forEach((ele) => {
       const control = _this.fb.group({
-        // mappedBarCode: [ele.mappedBarCode],
         Priority: [ele.Priority]
       });
       (<FormArray>_this.tableform.get("tableEntries")).push(control);
@@ -418,9 +454,10 @@ export class DeliveryPriorityComponent implements OnInit,AfterViewChecked {
     // this.openEdits--;
     let updatedEntry={
       "id":domain['id'],
-      "Country":domain['Country'],
       "SKU":domain['SKU'],
       "WareHouse":domain['WareHouse'],
+      "Country":domain['Country'],
+      "State":domain['State'],
       "City":domain['City'],
       "Pincode":domain['Pincode'],
       "Priority":this.tableform.get("tableEntries")["controls"][index].value.Priority
@@ -511,6 +548,7 @@ export class DeliveryPriorityComponent implements OnInit,AfterViewChecked {
             "SKU":row['SKU'],
             "WareHouse":row['WareHouse'],
             "Country":row['Country'],
+            "State":row['State'],
             "City":row['City'],
             "Pincode":row['Pincode'],
             "Priority":_this.tableform.get("tableEntries")["controls"][index].value.Priority
@@ -574,12 +612,14 @@ export class DeliveryPriorityComponent implements OnInit,AfterViewChecked {
   downloadExcel() {
 		let workbook = new Excel.Workbook();
 		let worksheet = workbook.addWorksheet('Report');
-		let titleRow = worksheet.addRow(["SKU", "Warehouse", "City","Pincode", "Priority"]);
+		let titleRow = worksheet.addRow(["SKU", "Warehouse", "Country", "State", "City","Pincode", "Priority"]);
 
 		this.dataSource.data.forEach(row => {
 			let line = [];
 			line.push(row.SKU);
-			line.push(row.WareHouse);
+      line.push(row.WareHouse);
+      line.push(row.Country);
+      line.push(row.State);
       line.push(row.City);
       line.push(row.Pincode);
 			line.push(row.Priority);
