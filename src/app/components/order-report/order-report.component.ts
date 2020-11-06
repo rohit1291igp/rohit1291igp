@@ -373,6 +373,19 @@ export class OrderReportComponent implements OnInit {
         resolve(response)
       })
     })
+
+    // return new Promise((resolve, reject) => {
+    //   _this.BackendService.makeNewAjax(reqObj).subscribe(
+    //     (result, err) => {
+    //       if (err) {
+    //         _this.openSnackBar('Something went wrong.');
+    //         console.log('Error=============>', err);
+    //         reject([])
+    //       }
+    //       console.log('sidePanel Response --->', result);
+    //       resolve(result)
+    //     })
+    // })
   }
 
   getVendorGroupList() {
