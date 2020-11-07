@@ -58,7 +58,7 @@ export class DeliveryTimeManagementComponent implements OnInit {
 
 		const toSelect = this.warehouseList.find(c => c.key == localStorage.fkAssociateId);
 		this.searchForm.get('source').setValue(toSelect);
-		if (toSelect) {
+		if (toSelect && toSelect.key != 0) {
 			this.searchForm.controls['source'].disable();
 			this.warehouse = toSelect;
 			this.searchForm.get('source').setValue(toSelect);
@@ -120,11 +120,11 @@ export class DeliveryTimeManagementComponent implements OnInit {
 		};
 
 
-		if (_this.warehouse) {
+		if (_this.warehouse && _this.warehouse.key != 0) {
 			fkaid = _this.warehouse.key;
 		}
 		else {
-			fkaid = 0;
+			fkaid = data.value.source.key;
 		}
 
 		reqObj.url += "&whId=" + fkaid;
