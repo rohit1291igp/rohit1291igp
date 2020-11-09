@@ -75,6 +75,7 @@ export class AppLoadService {
 
   initializeApp(): Promise<any> {
     return new Promise((resolve, reject) => {
+          sessionStorage.removeItem('micrositeStyleData');
           if(location.href.includes('login') && location.href.split('login/')[1]){
             resolve(this.getMicrositeDetails(location.href.split('login/')[1]));
           }else{
