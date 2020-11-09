@@ -2,7 +2,7 @@
 import { CdkTableModule } from '@angular/cdk/table';
 import { DatePipe } from '@angular/common';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { NgModule } from '@angular/core';
+import { NgModule, APP_INITIALIZER, Injectable } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { HttpModule } from '@angular/http';
 import { MatAutocompleteModule, MatButtonModule, MatCardModule, MatCheckboxModule, MatDatepickerModule, MatDialogModule, MatDialogRef, MatFormFieldModule, MatIconModule, MatInputModule, MatListModule, MatMenuModule, MatNativeDateModule, MatPaginatorModule, MatProgressBarModule, MatProgressSpinnerModule, MatRadioModule, MatSelectModule, MatSidenavModule, MatSlideToggleModule, MatSnackBarModule, MatSortModule, MatTableModule, MatTabsModule, MAT_DATE_LOCALE, MAT_DIALOG_DATA, MatChipsModule } from '@angular/material';
@@ -69,15 +69,59 @@ import { SerachRankingService } from './services/serach-ranking.service';
 // import { EditUserComponent } from './components/egv/user-management/edit-user/edit-user.component';
 // import { PasswordChangeComponent } from './components/egv/user-management/password-change/password-change.component';
 
+@Injectable()
+export class AppLoadService {
+  constructor() {}
 
+  initializeApp(): Promise<any> {
+    return new Promise((resolve, reject) => {
+          if(location.href.includes('login') && location.href.split('login/')[1]){
+            resolve(this.getMicrositeDetails(location.href.split('login/')[1]));
+          }else{
+            resolve(true);
+          }
+        });
+  }
 
+  getMicrositeDetails(microsite){
+    console.log('microsite - ', microsite)
+    let micrositeDetails;
+    switch (microsite) {
+        case 'itcinfotech':
+            micrositeDetails = {
+                headerLogoUrl:'https://cdn.igp.com/f_auto,q_auto/banners/IGP-for-business-50_new_png.png?v=6',
+                primaryColor:'#98cb00',
+                footerLogoUrl:`https://cdn.igp.com/f_auto,q_auto/banners/IGP-for-business-48_new.png?v=3`,
+                micrositeName: microsite
+            }
+            break;
+        case 'zeapl':
+            micrositeDetails = {
+                headerLogoUrl:'https://cdn.igp.com/f_auto,q_auto/banners/IGP-for-business-50_new_png.png?v=6',
+                primaryColor:'#FF4244',
+                footerLogoUrl:`https://cdn.igp.com/f_auto,q_auto/banners/IGP-for-business-48_new.png?v=3`,
+                micrositeName: microsite
+            }
+            break;    
+        default:
+                sessionStorage.removeItem('micrositeStyleData');
+            break;
+    }
+    return micrositeDetails && sessionStorage.setItem('micrositeStyleData', JSON.stringify(micrositeDetails));
+
+}
+}
+
+export function init_app(appLoadService: AppLoadService) {
+  return () => appLoadService.initializeApp();
+}
 
 
 //env config
-/*import {envConfig} from "./others/env.config";
-export function ConfigLoader(envConfig: envConfig) {
-    return () => envConfig.load();
-}*/
+// import {envConfig} from "./others/env.config";
+// export function ConfigLoader() {
+//     return () => function(){console.log('first load')};
+// }
 @NgModule({
   declarations: [
     AppComponent,
@@ -163,12 +207,14 @@ export function ConfigLoader(envConfig: envConfig) {
     { provide: MAT_DIALOG_DATA, useValue: {} },
     { provide: MatDialogRef, useValue: {} },
     { provide: MAT_DATE_LOCALE, useValue: 'en-GB' },
-    /*  envConfig,
-    {
-      provide: APP_INITIALIZER,
-      useFactory: ConfigLoader,
-      deps: [envConfig]
-    },*/
+    // envConfig,
+    AppLoadService,
+    { provide: APP_INITIALIZER, useFactory: init_app, deps: [AppLoadService], multi: true },
+    // {
+    //   provide: APP_INITIALIZER,
+    //   useFactory: ConfigLoader,
+    //   multi: true
+    // },
     BackendService,
     UtilityService,
     Logger,

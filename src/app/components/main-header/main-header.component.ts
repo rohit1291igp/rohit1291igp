@@ -21,6 +21,7 @@ export class MainHeaderComponent implements OnInit {
     reportDropdownOpen=false;
     selectedTopTab;
     selectedReportTab;
+    micrositeStyle;
     constructor(
       public router: Router,
       public BackendService : BackendService,
@@ -60,6 +61,8 @@ export class MainHeaderComponent implements OnInit {
               _this.dashboardService.isAdmin=(environment.userType && environment.userType === "admin");
           }
       });
+
+      _this.micrositeStyle = sessionStorage.getItem('micrositeStyleData') ? JSON.parse(sessionStorage.getItem('micrositeStyleData')) : null;
   }
 
   logout(e){

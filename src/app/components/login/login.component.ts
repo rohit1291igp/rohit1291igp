@@ -17,6 +17,7 @@ export class LoginComponent implements OnInit {
     loading = false;
     returnUrl: string;
     apierror: string;
+    micrositeStyle;
 
     constructor(
         public route1: ActivatedRoute,
@@ -25,7 +26,9 @@ export class LoginComponent implements OnInit {
         public BackendService: BackendService,
         public UtilityService: UtilityService,
         private cookieService: CookieService
-    ) { }
+    ) { 
+        
+    }
 
     ngOnInit() {
         this.model.associatename = "";
@@ -35,6 +38,7 @@ export class LoginComponent implements OnInit {
         if (this.cookieService.getCookie('currentUserToken') || localStorage.getItem('currentUser')) {
             this.router.navigate(['/dashboard']);
         }
+        this.micrositeStyle = sessionStorage.getItem('micrositeStyleData') ? JSON.parse(sessionStorage.getItem('micrositeStyleData')) : null;
     }
 
     login() {
