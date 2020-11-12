@@ -51,9 +51,22 @@ export class EgvService {
     return this.httpClient.put(url,req_body);
   }
 
-  getCompanyList(){
-    let url=environment.origin+'v1/admin/egvpanel/login/getCompanyList'
+  getCompanyList() {
+    let url = environment.origin + 'v1/admin/egvpanel/login/getCompanyList'
+    return this.httpClient.get(url)
+  }
+  getproductList(fk_associateId) {
+    let url = environment.origin + 'v1/admin/internal/bulk-egv/products?fkAssociateId=' + fk_associateId;
     return this.httpClient.get(url)
   }
 
+  generateBulkEgv(fk_associateId, userId, payload) {
+    let url = environment.origin + 'v1/admin/internal/bulk-egv/bookOrder?fkAssociateId=' + fk_associateId + '&userId=' + userId;
+    return this.httpClient.post(url, payload);
+  }
+
+  generateBulkEgvExcel(fk_associateId, userId, payload) {
+    let url = environment.origin + 'v1/admin/internal/bulk-egv/bookOrderWithExcel?fkAssociateId=' + fk_associateId + '&userId=' + userId;
+    return this.httpClient.post(url, payload);
+  }
 }
