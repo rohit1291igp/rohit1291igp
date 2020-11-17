@@ -31,6 +31,7 @@ export class BulkEgvComponent implements OnInit {
   @ViewChild("sidenav") sidenav: MatSidenav;
   excelFileUpload: any;
   errorList: any[];
+  denomination: any;
 
   constructor(
     private fb: FormBuilder,
@@ -80,6 +81,7 @@ export class BulkEgvComponent implements OnInit {
     this.userSelected = obj;
     if (obj.flagSlab) {
       this.bulkegvform.get('denomination').disable();
+      this.denomination = obj.maxValue;
       this.bulkegvform.get('denomination').setValue(obj.maxValue);
     }
     else {
@@ -130,7 +132,7 @@ export class BulkEgvComponent implements OnInit {
     let payload = {
       "productCode": this.bulkegvform.value.selectedProduct.productCode,
       "brand": this.bulkegvform.value.selectedProduct.brand,
-      "denomination": this.bulkegvform.value.denomination,
+      "denomination": (this.bulkegvform.value.denomination ? this.bulkegvform.value.denomination : this.denomination),
       "quantity": this.bulkegvform.value.quantity,
       "recipientName": this.bulkegvform.value.receipent_name,
       "recipientEmail": this.bulkegvform.value.receipent_email,
@@ -152,8 +154,8 @@ export class BulkEgvComponent implements OnInit {
     return datefrom;
   }
   sidenavClose(reason: string) {
-		this.sidenav.close();
-	}
+    this.sidenav.close();
+  }
 
 
   readExcel(event) {

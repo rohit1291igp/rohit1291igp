@@ -27,7 +27,7 @@
                 <!-- *ngIf="env.userType=='egv_admin'" -->
                 <mat-form-field class="filterElement width20 marginLR10">
                   <mat-label>Select a Product</mat-label>
-                  <input type="text" matInput placeholder='Select a Producr' formControlName="selectedProduct"
+                  <input type="text" matInput placeholder='Select a Product' formControlName="selectedProduct"
                     [matAutocomplete]="auto">
                   <mat-autocomplete #auto="matAutocomplete" (optionSelected)='getProductSelected($event.option.value)'
                     [displayWith]="productDisplayFn">
