@@ -139,3 +139,9 @@
   ::-webkit-scrollbar-thumb:hover {
     background: #f2f2f2; 
   }
+
+  .image{
+      width: 100%;
+      height: auto;
+      margin-top: -5px;
+  }
