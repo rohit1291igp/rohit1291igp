@@ -32,12 +32,12 @@ export class UserManagementComponent implements OnInit {
   }
 
   getUsers(){
-    if(environment.userType==='egv_admin'||environment.userType==='manager'){
+    if((environment.userType==='egv_admin' || environment.userType==='sub_egv_admin') || (environment.userType==='manager' || environment.userType==='sub_manager')){
       let egvUserType=""
       let fkid=null;
-      if(environment.userType==='egv_admin'){
+      if(environment.userType==='egv_admin' || environment.userType==='sub_egv_admin'){
         egvUserType='EGV_Admin';
-      }else if(environment.userType==='manager'){
+      }else if(environment.userType==='manager' || environment.userType==='sub_manager'){
         egvUserType='Manager';
         fkid=localStorage.getItem('fkAssociateId');
       }

@@ -24,7 +24,7 @@ export class NewUserFormComponent implements OnInit {
   ngOnInit() {
     console.log(this.data)
     this.setUserForm()
-    if(this.env.userType==='egv_admin'){
+    if(this.env.userType==='egv_admin' || this.env.userType==='sub_egv_admin'){
       this.getAccountsList()
     }else{
       this.selectedFkid=localStorage.getItem('fkAssociateId');
@@ -62,10 +62,10 @@ export class NewUserFormComponent implements OnInit {
       if(this.data.account_type==='client'){
         f.value.fk_associate_id=Number(localStorage.getItem('fkAssociateId'));
       }
-      if(this.data.account_type==='manager'){
+      if(this.data.account_type==='manager' || this.data.account_type==='sub_manager'){
         f.value.fk_associate_id=Number(this.selectedFkid);
-      }else if(this.data.account_type==='executive'){
-        if(this.env.userType==='egv_admin'){
+      }else if(this.data.account_type==='executive' || this.data.account_type==='sub_executive'){
+        if(this.env.userType==='egv_admin' || this.env.userType==='sub_egv_admin'){
           f.value.fk_associate_id=Number(this.selectedFkid);
         }else{
           f.value.fk_associate_id=Number(localStorage.getItem('fkAssociateId'));

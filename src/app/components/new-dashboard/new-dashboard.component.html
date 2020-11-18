@@ -2,7 +2,7 @@
     <i class="fa fa-bars" aria-hidden="true" (click)="drawer.toggle()" (mouseover)="drawer.open()" style="cursor: pointer"></i>
     <div class="d-flex align-items-baseline" style="float: right;">
         <p *ngIf="username" style="margin-right: 12px;text-transform: capitalize;">
-            <a *ngIf="env.userType==='egv_admin'||env.userType==='manager'||env.userType==='executive' else noEGV" style="text-decoration: none; cursor: pointer; color: white; font-weight: bold;" routerLink="/new-dashboard/egv/change-password">{{username}}</a>
+            <a *ngIf="(env.userType==='egv_admin' || env.userType==='sub_egv_admin') || (env.userType==='manager' || env.userType==='sub_manager') || (env.userType==='executive' || env.userType==='sub_executive') else noEGV" style="text-decoration: none; cursor: pointer; color: white; font-weight: bold;" routerLink="/new-dashboard/egv/change-password">{{username}}</a>
             <ng-template #noEGV>{{username}}</ng-template>
         </p>
         <i (click)="logout($event)" class="fa fa-sign-out" aria-hidden="true"></i>

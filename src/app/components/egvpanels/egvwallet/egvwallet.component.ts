@@ -60,7 +60,7 @@ export class EgvwalletComponent implements OnInit {
       limitType: [''],
       limitValue: ['']
     });
-    if (environment.userType == "manager" || environment.userType == "executive") {
+    if ((environment.userType == "manager" || environment.userType == "sub_manager") || (environment.userType == "executive" || environment.userType == "sub_executive")) {
       this.getAccountSummary(localStorage.fkAssociateId)
         .then((response) => {
           _this.walletSummary = response;
@@ -90,7 +90,7 @@ export class EgvwalletComponent implements OnInit {
 
       })
 
-    if (environment.userType == 'egv_admin') {
+    if (environment.userType == 'egv_admin' || environment.userType == 'sub_egv_admin') {
       this.getPendingList();
     }
   }
@@ -171,7 +171,7 @@ export class EgvwalletComponent implements OnInit {
     };
     reqObj.url += "&fkAssociateId=" + _this.userSelected.fk_associate_id;
     reqObj.url += "&userId=" + localStorage.fkUserId;
-    if (environment.userType == 'egv_admin') {
+    if (environment.userType == 'egv_admin' || environment.userType == 'sub_egv_admin') {
       reqObj.url += "&flagApproveCredit=2&flagAdmin=1"
     }
     if (environment.userType == "manager" || environment.userType == "executive") {
@@ -211,7 +211,7 @@ export class EgvwalletComponent implements OnInit {
       method: "put",
     };
     reqObj.url += "&fkAssociateId=" + _this.userSelected.fk_associate_id;
-    if (environment.userType == 'egv_admin') {
+    if (environment.userType == 'egv_admin' || environment.userType == 'sub_egv_admin') {
       reqObj.url += "&flagApproveCredit=2&flagAdmin=1"
     }
     if (environment.userType == "manager" || environment.userType == "executive") {
@@ -310,7 +310,7 @@ export class EgvwalletComponent implements OnInit {
     };
     reqObj.url += "&fkAssociateId=" + data['fkasid'];
     reqObj.url += "&userId=" + data['UserId'];
-    if (environment.userType == 'egv_admin') {
+    if (environment.userType == 'egv_admin' || environment.userType == 'sub_egv_admin') {
       reqObj.url += "&flagAdmin=1&flagApproveCredit=" + (approval ? 1 : -1);
     }
     else {

@@ -5,7 +5,7 @@
         <form [formGroup]="statementForm" (ngSubmit)="getStatement()">
           <div>
             <!-- *ngIf="env.userType=='egv_admin'" -->
-            <mat-form-field class="filterElement" *ngIf="env.userType =='egv_admin'">
+            <mat-form-field class="filterElement" *ngIf="env.userType =='egv_admin' || env.userType =='sub_egv_admin'">
               <mat-label>Select a client</mat-label>
               <input type="text" matInput placeholder='Select a client' formControlName="selectedUser"
                 [matAutocomplete]="auto">

@@ -126,7 +126,7 @@ export class LoginComponent implements OnInit {
                     _this.router.navigate(['/voucher/gv']);
                 } else if (userType === 'warehouse' || userType === 'marketing' || userType === 'mldatascience') {
                     _this.router.navigate(['/new-dashboard']);
-                } else if (userType === 'egv_admin' || userType === 'manager' || userType === 'executive') {
+                } else if ((userType === 'egv_admin' || userType === 'sub_egv_admin') || (userType === 'manager' || userType === 'sub_manager') || (userType === 'executive' || userType === 'sub_executive')) {
                     _this.router.navigate(['/new-dashboard']);
                 } else if (userType === 'admin' || userType === 'vendor') {
                     _this.router.navigate(['/new-dashboard/dashboard']);

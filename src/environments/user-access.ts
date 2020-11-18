@@ -298,10 +298,112 @@ export const userAcess = {
         iconName: 'home',
         route: '/new-dashboard/dashboard-microsite',
     },
-
     {
         displayName: 'Current Balance',
         iconName: 'account_balance_wallet',
         route: '/new-dashboard/reports/itcReport',
-    }]
+    }],
+    sub_egv_admin: [
+        {
+            displayName: 'Wallet',
+            iconName: 'account_balance_wallet',
+            route: '/new-dashboard/egv/wallet',
+        },
+        {
+            displayName: 'Statement',
+            iconName: 'receipt',
+            route: '/new-dashboard/egv/statement',
+        },
+        {
+            displayName: 'User Management',
+            iconName: 'supervisor_account',
+            route: '/new-dashboard/egv/user-management',
+        },
+        {
+            displayName: 'Alert Management',
+            iconName: 'notifications_none',
+            route: '/new-dashboard/egv/alert-management',
+        },
+        {
+            displayName: 'Password Reset',
+            iconName: 'security',
+            route: '/new-dashboard/egv/change-password',
+        },
+        {
+            displayName: 'Voucher Credit/Debit',
+            iconName: 'account_balance_wallet',
+            route: '/new-dashboard/dashboard-microsite',
+        },
+        {
+        displayName: 'Current Balance',
+        iconName: 'account_balance_wallet',
+        route: '/new-dashboard/reports/itcReport',
+        }
+    ],
+    sub_manager: [
+        {
+            displayName: 'Wallet',
+            iconName: 'account_balance_wallet',
+            route: '/new-dashboard/egv/wallet',
+        },
+        {
+            displayName: 'Statement',
+            iconName: 'receipt',
+            route: '/new-dashboard/egv/statement',
+        },
+        {
+            displayName: 'User Management',
+            iconName: 'supervisor_account',
+            route: '/new-dashboard/egv/user-management',
+        },
+        {
+            displayName: 'Alert Management',
+            iconName: 'notifications_none',
+            route: '/new-dashboard/egv/alert-management',
+        },
+        {
+            displayName: 'Password Reset',
+            iconName: 'security',
+            route: '/new-dashboard/egv/change-password',
+        },
+        {
+            displayName: 'Voucher Credit/Debit',
+            iconName: 'account_balance_wallet',
+            route: '/new-dashboard/dashboard-microsite',
+        },
+        {
+            displayName: 'Current Balance',
+            iconName: 'account_balance_wallet',
+            route: '/new-dashboard/reports/itcReport',
+        }
+
+    ],
+    sub_executive: [
+        {
+            displayName: 'Wallet',
+            iconName: 'account_balance_wallet',
+            route: '/new-dashboard/egv/wallet',
+        },
+        {
+            displayName: 'Statement',
+            iconName: 'receipt',
+            route: '/new-dashboard/egv/statement',
+        },
+        {
+            displayName: 'Password Reset',
+            iconName: 'security',
+            route: '/new-dashboard/egv/change-password',
+        },
+        {
+            displayName: 'Voucher Credit/Debitboard',
+            iconName: 'account_balance_wallet',
+            route: '/new-dashboard/dashboard-microsite',
+        },
+        {
+            displayName: 'Current Balance',
+            iconName: 'account_balance_wallet',
+            route: '/new-dashboard/reports/itcReport',
+        }
+
+    ],
 }
