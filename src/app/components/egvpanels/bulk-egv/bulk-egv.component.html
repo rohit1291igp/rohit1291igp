@@ -17,8 +17,8 @@
         <div class="row">
           <div class="col-md-12 marginLR10" style="margin-bottom: 15px;">
             <mat-radio-group [(ngModel)]="excelAction" aria-label="Upload By">
-              <mat-radio-button style="margin-right: 20px;" value="manual">Manual Entry</mat-radio-button>
-              <mat-radio-button style="margin-right: 20px;" value="excel">Excel upload</mat-radio-button>
+              <mat-radio-button style="margin-right: 20px;" value="manual">Single Product</mat-radio-button>
+              <mat-radio-button style="margin-right: 20px;" value="excel">Multiple Product(Excel Upload)</mat-radio-button>
             </mat-radio-group>
           </div>
           <div class="col-md-12 marginLR10" *ngIf="excelAction === 'manual'">
@@ -57,9 +57,10 @@
                 <mat-form-field class="addMoneyInput width20 marginLR10">
                   <mat-label> Recepient Email*</mat-label>
                   <input matInput name='receipent_email' type="email" [email]="true" formControlName="receipent_email">
+                  <mat-hint>Note - Bulk E-Gift Voucher will be sent on above mentioned email id.</mat-hint>
                 </mat-form-field>
                 <mat-form-field class="addMoneyInput width20 marginLR10">
-                  <mat-label>Schedule Later Date</mat-label>
+                  <mat-label>Delivery Date</mat-label>
                   <input matInput [matDatepicker]="scheduleDate" [min]="minDate"
                     (dateInput)="addEventFrom('input','scheduleDate', $event)"
                     (dateChange)="addEventFrom('change','scheduleDate', $event)"
@@ -68,7 +69,7 @@
                   <mat-datepicker #scheduleDate></mat-datepicker>
                 </mat-form-field>
 
-                <button type='submit' mat-raised-button>Generate Egv</button>
+                <button type='submit' mat-raised-button>Generate E-Gift Voucher</button>
               </div>
             </form>
           </div>
@@ -77,7 +78,7 @@
               <input type="file" id="file" (change)="readExcel($event)" />
               <label for="file" class="btn-2" (change)="readExcel($event)">
                 <i class="fa fa-upload" aria-hidden="true"></i>
-                Import Excel
+                Upload Excel
               </label>
               <mat-form-field class="addMoneyInput width20 marginLR10">
                 <mat-label>Delivery Date</mat-label>
@@ -92,8 +93,8 @@
                 color="primary">Submit</button>
             </div>
             <div style="margin-top:20px">
-              <button (click)="downloadProductList()" mat-button color="primary">Download Product List</button>
-              <button (click)="downloadSample()" mat-button color="primary">Download Sample</button>
+              <button (click)="downloadProductList()" mat-button color="primary">Available Vouchers List</button>
+              <button (click)="downloadSample()" mat-button color="primary">Download Bulk GV Template</button>
             </div>
           </div>
           <div class="col-md-12" style="margin-top:20px" *ngIf="excelAction === 'excel'">
