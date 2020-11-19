@@ -65,8 +65,8 @@ export class EgvService {
     return this.httpClient.post(url, payload);
   }
 
-  generateBulkEgvExcel(fk_associateId, userId, payload) {
-    let url = environment.origin + 'v1/admin/internal/bulk-egv/bookOrderWithExcel?fkAssociateId=' + fk_associateId + '&userId=' + userId;
+  generateBulkEgvExcel(fk_associateId, userId, scheduleDate, payload) {
+    let url = environment.origin + 'v1/admin/internal/bulk-egv/bookOrderWithExcel?fkAssociateId=' + fk_associateId + '&userId=' + userId + "&scheduleDate=" + scheduleDate;
     return this.httpClient.post(url, payload);
   }
 }
