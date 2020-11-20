@@ -32,10 +32,10 @@ export class UserManagementComponent implements OnInit {
   }
 
   getUsers(){
-    if((environment.userType==='egv_admin' || environment.userType==='sub_egv_admin') || (environment.userType==='manager' || environment.userType==='sub_manager')){
+    if((environment.userType==='egv_admin' || environment.userType==='sub_egv_admin' || environment.userType === 'wb_yourigpstore') || (environment.userType==='manager' || environment.userType==='sub_manager')){
       let egvUserType=""
       let fkid=null;
-      if(environment.userType==='egv_admin' || environment.userType==='sub_egv_admin'){
+      if(environment.userType==='egv_admin' || environment.userType==='sub_egv_admin' || environment.userType === 'wb_yourigpstore'){
         egvUserType='EGV_Admin';
       }else if(environment.userType==='manager' || environment.userType==='sub_manager'){
         egvUserType='Manager';

@@ -96,7 +96,7 @@ export class MicroSiteDasboardComponent implements OnInit {
         //     value: "Current Balance"
         // }
     ];
-
+    micrositeStyle;
     constructor(
         private fb: FormBuilder,
         private BackendService: BackendService,
@@ -104,6 +104,7 @@ export class MicroSiteDasboardComponent implements OnInit {
     ) { }
 
     ngOnInit() {
+        this.micrositeStyle = sessionStorage.getItem('micrositeStyleData') ? JSON.parse(sessionStorage.getItem('micrositeStyleData')) : null;
         this.fksId = localStorage.getItem('fkAssociateId');
         this.vendorName = localStorage.getItem('vendorName');
         this.myForm = this.fb.group({

@@ -10,7 +10,7 @@
 
 
       <div class="balance col-md-12 marginB20">
-        <div class="col-md-12 marginB20" style="margin-bottom:20px" *ngIf="env.userType == 'egv_admin' || env.userType == 'sub_egv_admin'">
+        <div class="col-md-12 marginB20" style="margin-bottom:20px" *ngIf="env.userType == 'egv_admin' || env.userType == 'sub_egv_admin' || env.userType == 'wb_yourigpstore'" >
           <mat-form-field class="addMoneyInput width15">
             <mat-label>Select a client</mat-label>
             <input type="text" matInput placeholder='Select a user' formControlName="selectedUser"
@@ -29,7 +29,7 @@
 
         <ng-template #loaded>
           <div class="col-md-12">
-            <div class="col-md-3 summaryBox" style="height:0;border:0" *ngIf="env.userType!='egv_admin' && env.userType != 'sub_egv_admin'"></div>
+            <div class="col-md-3 summaryBox" style="height:0;border:0" *ngIf="env.userType!='egv_admin' && env.userType != 'sub_egv_admin' && env.userType != 'wb_yourigpstore'"></div>
 
             <div class="col-md-3 col-sm-12 summaryBox">
               <div style='margin:auto'>&#8377; {{walletSummary.balance || '-' | indianNumeric}}</div>
@@ -41,12 +41,12 @@
               <div class="summaryIcon"><i class="fa fa-sliders fa-rotate-90"></i> Daily Limit </div>
             </div>
 
-            <div class="col-md-3  col-sm-12 summaryBox" *ngIf="env.userType=='egv_admin' || env.userType == 'sub_egv_admin'">
+            <div class="col-md-3  col-sm-12 summaryBox" *ngIf="env.userType=='egv_admin' || env.userType == 'sub_egv_admin' || env.userType == 'wb_yourigpstore'">
               <div style='margin:auto'>&#8377; {{walletSummary.creditLimit ||'-' | indianNumeric}}</div>
               <div class="summaryIcon">
                 <i class="fa fa-credit-card "></i> Credit Limit </div>
             </div>
-            <div class="col-md-3 col-sm-12 summaryBox" *ngIf="env.userType=='egv_admin' || env.userType == 'sub_egv_admin'">
+            <div class="col-md-3 col-sm-12 summaryBox" *ngIf="env.userType=='egv_admin' || env.userType == 'sub_egv_admin' || env.userType == 'wb_yourigpstore'">
               <div style='margin:auto'>{{walletSummary.creditLimitDays || '-'}}
                 {{(walletSummary.creditLimitDays>1)?'days':'day'}}</div>
               <div class="summaryIcon"> <i class="fa fa-calendar"></i> Credit Period </div>
@@ -86,12 +86,12 @@
             <input matInput name="comments" type="text" placeholder="Comments" formControlName="comments">
           </mat-form-field>
 
-          <button mat-flat-button class="addMoneyButton" type="submit">Add Money</button>
+          <button mat-flat-button class="addMoneyButton" type="submit" [ngStyle]="{'background-color': micrositeStyle ? micrositeStyle.primaryColor : '', 'color': micrositeStyle ? micrositeStyle.secondaryColor : ''}">Add Money</button>
         </div>
         <!-- <div class="marginB20">
               
             </div> -->
-        <div *ngIf="env.userType=='egv_admin' || env.userType == 'sub_egv_admin'">
+        <div *ngIf="env.userType=='egv_admin' || env.userType == 'sub_egv_admin' || env.userType == 'wb_yourigpstore'">
           <div class="width20 addMoney">
             Change Parameter
           </div>
@@ -106,7 +106,7 @@
             <mat-label> Enter New Value</mat-label>
             <input matInput name='limitValue' type="number" placeholder="Enter New Value" formControlName="limitValue">
           </mat-form-field>
-          <button mat-flat-button type="button" class="addMoneyButton" (click)="updateLimit()">Update</button>
+          <button mat-flat-button type="button" class="addMoneyButton" (click)="updateLimit()" [ngStyle]="{'background-color': micrositeStyle ? micrositeStyle.primaryColor : '', 'color': micrositeStyle ? micrositeStyle.secondaryColor : '' }">Update</button>
         </div>
 
 
@@ -114,7 +114,7 @@
     </div>
   </form>
 
-  <div class="col-md-12" *ngIf="env.userType == 'egv_admin' || env.userType == 'sub_egv_admin'">
+  <div class="col-md-12" *ngIf="env.userType == 'egv_admin' || env.userType == 'sub_egv_admin' || env.userType == 'wb_yourigpstore'">
     <div class='addMoney headerUnderLine col-md-12'>
       Pending Approvals
     </div>

@@ -32,6 +32,7 @@ export class MainHeaderComponent implements OnInit {
 
   @HostListener('document:click', ['$event.target'])
     public onClick(targetElement) {
+        this.micrositeStyle = sessionStorage.getItem('micrositeStyleData') ? JSON.parse(sessionStorage.getItem('micrositeStyleData')) : null;
         console.log('inside clicked ------->');
         const isClickedInside = this._elementRef.nativeElement.contains(targetElement);
         if (!isClickedInside) {
