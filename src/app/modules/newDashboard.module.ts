@@ -26,6 +26,7 @@ import { OfferPageManagementComponent } from 'app/components/offer-page-manageme
 import { MatSlideToggleModule } from '@angular/material';
 import { SearchRankingComponent } from 'app/components/search-ranking/search-ranking.component';
 import { PayoutDashboardComponent, PayoutDashboardModule } from 'app/components/payout-dashboard/payout-dashboard.component';
+import { PendingOrderComponent } from 'app/components/pending-order/pending-order.component';
 
 
 const routes: Routes = [{
@@ -108,9 +109,15 @@ const routes: Routes = [{
     path: 'searchRanking',
     component: SearchRankingComponent,
     canActivate: [AuthGuard]
-  }, {
+  },
+  {
     path: 'dashboard-microsite',
     loadChildren: './microsite.module#MicroSiteModule',
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'pending-orders',
+    component: PendingOrderComponent,
     canActivate: [AuthGuard]
   }
 
@@ -146,7 +153,8 @@ const routes: Routes = [{
     DeliveryBoyDetailsComponent,
     UploadedImageReportComponent,
     OfferPageManagementComponent,
-    SearchRankingComponent
+    SearchRankingComponent,
+    PendingOrderComponent
   ],
   providers: [NavService, UserAccessService]
 })
