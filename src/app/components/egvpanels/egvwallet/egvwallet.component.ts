@@ -311,6 +311,7 @@ export class EgvwalletComponent implements OnInit {
     };
     reqObj.url += "&fkAssociateId=" + data['fkasid'];
     reqObj.url += "&userId=" + data['UserId'];
+    reqObj.url += "logId" + data['logId'];
     if (environment.userType == 'egv_admin' || environment.userType == 'sub_egv_admin' || environment.userType == 'wb_yourigpstore') {
       reqObj.url += "&flagAdmin=1&flagApproveCredit=" + (approval ? 1 : -1);
     }
