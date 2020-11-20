@@ -1,5 +1,5 @@
 <h4>Add {{data['account_type']|titlecase}}</h4>
-<mat-form-field *ngIf="data.account_type!=='client' && env.userType==='egv_admin'" appearance="fill" class="example-form-field">
+<mat-form-field *ngIf="data.account_type!=='client' && (env.userType==='egv_admin' || env.userType==='sub_egv_admin' || env.userType==='wb_yourigpstore')" appearance="fill" class="example-form-field">
   <mat-label>Select Client</mat-label>
   <mat-select [(ngModel)]="selectedFkid">
     <mat-option *ngFor="let account of accounts_list" [value]="account.fk_associate_id">{{account.company_name}}</mat-option>

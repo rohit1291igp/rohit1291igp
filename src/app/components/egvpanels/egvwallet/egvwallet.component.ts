@@ -41,7 +41,7 @@ export class EgvwalletComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   maxDate: Date;
-
+  whitelabelStyle;
 
   constructor(
     private fb: FormBuilder,
@@ -52,6 +52,7 @@ export class EgvwalletComponent implements OnInit {
 
   ngOnInit() {
     let _this = this;
+    _this.whitelabelStyle = localStorage.getItem('whitelabelDetails') ? JSON.parse(localStorage.getItem('whitelabelDetails')) : null;
     this.addMoneyForm = this.fb.group({
       addMoneyTransactionId: ['', Validators.required],
       addMoneyAmount: ['', Validators.required],
@@ -60,7 +61,7 @@ export class EgvwalletComponent implements OnInit {
       limitType: [''],
       limitValue: ['']
     });
-    if (environment.userType == "manager" || environment.userType == "executive") {
+    if ((environment.userType == "manager" || environment.userType == "sub_manager") || (environment.userType == "executive" || environment.userType == "sub_executive")) {
       this.getAccountSummary(localStorage.fkAssociateId)
         .then((response) => {
           _this.walletSummary = response;
@@ -90,7 +91,7 @@ export class EgvwalletComponent implements OnInit {
 
       })
 
-    if (environment.userType == 'egv_admin') {
+    if (environment.userType == 'egv_admin' || environment.userType == 'sub_egv_admin' || environment.userType == 'wb_yourigpstore') {
       this.getPendingList();
     }
   }
@@ -171,7 +172,7 @@ export class EgvwalletComponent implements OnInit {
     };
     reqObj.url += "&fkAssociateId=" + _this.userSelected.fk_associate_id;
     reqObj.url += "&userId=" + localStorage.fkUserId;
-    if (environment.userType == 'egv_admin') {
+    if (environment.userType == 'egv_admin' || environment.userType == 'sub_egv_admin' || environment.userType == 'wb_yourigpstore') {
       reqObj.url += "&flagApproveCredit=2&flagAdmin=1"
     }
     if (environment.userType == "manager" || environment.userType == "executive") {
@@ -211,7 +212,7 @@ export class EgvwalletComponent implements OnInit {
       method: "put",
     };
     reqObj.url += "&fkAssociateId=" + _this.userSelected.fk_associate_id;
-    if (environment.userType == 'egv_admin') {
+    if (environment.userType == 'egv_admin' || environment.userType == 'sub_egv_admin' || environment.userType == 'wb_yourigpstore') {
       reqObj.url += "&flagApproveCredit=2&flagAdmin=1"
     }
     if (environment.userType == "manager" || environment.userType == "executive") {
@@ -310,8 +311,8 @@ export class EgvwalletComponent implements OnInit {
     };
     reqObj.url += "&fkAssociateId=" + data['fkasid'];
     reqObj.url += "&userId=" + data['UserId'];
-    reqObj.url += "logId" + data['logId']
-    if (environment.userType == 'egv_admin') {
+    reqObj.url += "logId" + data['logId'];
+    if (environment.userType == 'egv_admin' || environment.userType == 'sub_egv_admin' || environment.userType == 'wb_yourigpstore') {
       reqObj.url += "&flagAdmin=1&flagApproveCredit=" + (approval ? 1 : -1);
     }
     else {

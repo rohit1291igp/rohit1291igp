@@ -14,7 +14,7 @@ import { startWith,map } from 'rxjs/operators';
 import { OrderStockComponent } from '../order-stocks/order-stock.component';
 import { BackendService } from 'app/services/backend.service';
 import { Angular5Csv } from 'angular5-csv/dist/Angular5-csv';
-import { Router } from '@angular/router';
+import { Router, ActivationStart, RouterOutlet } from '@angular/router';
 import { UtilityService } from 'app/services/utility.service';
 
 interface Field {
@@ -84,7 +84,7 @@ export class NewReportsComponent implements OnInit {
     @Input() stockComponentList:any[];
     @Input() procList:any[]
     public env = environment;
-
+    @ViewChild(RouterOutlet) outlet: RouterOutlet;
     myForm: FormGroup;
     btnType = '';
     constructor(
@@ -105,6 +105,11 @@ export class NewReportsComponent implements OnInit {
     isHolidayManagement=false;
 
     ngOnInit() {
+        this.router.events.subscribe(e => {
+            if (e instanceof ActivationStart && e.snapshot.outlet === "administration")
+              this.outlet.deactivate();
+          });
+          
         this.myForm = this.fb.group({
             name: [''],
             multiSelection: [''],

@@ -18,7 +18,8 @@ import { AuthGuard } from './services/auth-guard.service';
 
 const route: Routes = [
 
-  { path: 'login', component: LoginComponent },
+  { path: 'login', component: LoginComponent},
+  { path: 'login/:micrositeName', component: LoginComponent},
   {
     path: 'dashboard',
     loadChildren: './modules/dashboard.module#DashboardModule',
