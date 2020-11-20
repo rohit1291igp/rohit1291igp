@@ -56,6 +56,11 @@ export const userAcess = {
             displayName: 'Ops-Report',
             iconName: 'analytics',
             route: '/new-dashboard/dailywarehouseOpsReport',
+        },
+        {
+            displayName: 'Pending orders',
+            iconName: 'analytics',
+            route: '/new-dashboard/pending-orders',
         }
     ],
     vendor: [
