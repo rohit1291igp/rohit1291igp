@@ -27,8 +27,10 @@ export class DeliveryTaskComponent implements OnInit {
     source = false;
     loading = true;
     browserSupport = false;
-    deliverWhen:string;
-    orderDetails:any;
+    deliverWhen: string;
+    orderDetails: any;
+    noDeliveryError: boolean = false;
+    errorMsg: string;
     constructor(private BackendService: BackendService, private router: Router) {
         this.filteredPickedUpOrderId = this.inputSearch.valueChanges.pipe(
             startWith(null),
@@ -86,16 +88,24 @@ export class DeliveryTaskComponent implements OnInit {
         this$.BackendService.makeAjax(reqObj, function (err, response, headers) {
 
             if (err || response.error) {
+                this$.loading = false;
                 console.log('Error=============>', err);
                 return;
             }
             if (response) {
                 this$.loading = false;
-                this$.orders = response.result;
-                this$.pickedUpOrderId = this$.orders.toBePickedUp.orderId.map(d => d.toString());
-                this$.toBeDeliveredOrderId = this$.orders.toBeDelivered.orderId.map(d => d.toString());
-                localStorage.setItem('orders', JSON.stringify(this$.orders));
-                return;
+                if (response.errorMessage) {
+                    this$.noDeliveryError = true;
+                    this$.errorMsg = response.errorMessage;
+                }
+                if (response.result) {
+                    this$.orders = response.result;
+                    this$.pickedUpOrderId = this$.orders.toBePickedUp.orderId.map(d => d.toString());
+                    this$.toBeDeliveredOrderId = this$.orders.toBeDelivered.orderId.map(d => d.toString());
+                    localStorage.setItem('orders', JSON.stringify(this$.orders));
+                    return;
+                }
+                
             }
         });
     }
