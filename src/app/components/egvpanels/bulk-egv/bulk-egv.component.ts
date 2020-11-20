@@ -29,9 +29,13 @@ export class BulkEgvComponent implements OnInit {
   minDate = new Date();
   excelAction: string = 'manual';
   @ViewChild("sidenav") sidenav: MatSidenav;
-  excelFileUpload: any;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  dataSource: MatTableDataSource<any>;
+  excelFileUpload: File;
   errorList: any[];
   denomination: any;
+  tableHeaders: any;
+  validExcel: boolean;
 
   constructor(
     private fb: FormBuilder,
@@ -43,10 +47,10 @@ export class BulkEgvComponent implements OnInit {
     let _this = this;
     this.bulkegvform = this.fb.group({
       selectedProduct: [''],
-      denomination: ['', [Validators.required, this.amountValidator]],
-      quantity: ['', Validators.required],
+      denomination: ['', [Validators.required, Validators.min(1), this.amountValidator]],
+      quantity: ['', [Validators.required, Validators.min(1)]],
       receipent_name: ['', Validators.required],
-      receipent_email: ['', Validators.required],
+      receipent_email: ['', [Validators.required, Validators.email, Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$")]],
       scheduleDate: [new Date()],
     });
     let fk_associateId = localStorage.fkAssociateId;
@@ -81,7 +85,6 @@ export class BulkEgvComponent implements OnInit {
     this.userSelected = obj;
     if (obj.flagSlab) {
       this.bulkegvform.get('denomination').disable();
-      this.denomination = obj.maxValue;
       this.bulkegvform.get('denomination').setValue(obj.maxValue);
     }
     else {
@@ -132,7 +135,7 @@ export class BulkEgvComponent implements OnInit {
     let payload = {
       "productCode": this.bulkegvform.value.selectedProduct.productCode,
       "brand": this.bulkegvform.value.selectedProduct.brand,
-      "denomination": (this.bulkegvform.value.denomination ? this.bulkegvform.value.denomination : this.denomination),
+      "denomination": this.bulkegvform.get('denomination').value,
       "quantity": this.bulkegvform.value.quantity,
       "recipientName": this.bulkegvform.value.receipent_name,
       "recipientEmail": this.bulkegvform.value.receipent_email,
@@ -166,41 +169,59 @@ export class BulkEgvComponent implements OnInit {
     if (target.files.length !== 1) {
       throw new Error('Cannot use multiple files');
     }
-    let validExcel = true;
+    _this.excelFileUpload = event.target.files[0];
+    _this.validExcel = true;
     _this.errorList = [];
     const arryBuffer = new Response(target.files[0]).arrayBuffer();
     arryBuffer.then(function (data) {
       workbook.xlsx.load(data).then(function () {
         console.log(workbook);
         const worksheet = workbook.getWorksheet(1);
+        let excelFormat = ["product code", "amount", "quantity", "name", "email", "brand"];
         console.log('rowCount: ', worksheet.rowCount);
         worksheet.eachRow(function (row, rowNumber) {
 
 
           if (rowNumber == 1) {
-            let excelFormat = ["product code", "amount", "quantity", "name", "email", "brand", "delivery date"];
+
             row.values.forEach((element, index) => {
-              if (element.toLowerCase() != excelFormat[index-1]) {
-                console.log(element,index,excelFormat[index])
+              if (element.toLowerCase() != excelFormat[index - 1]) {
+                console.log(element, index, excelFormat[index])
                 _this.openSnackBar('Invalid excelsheet format');
-                validExcel = false;
+                _this.validExcel = false;
                 return;
               }
             });
           }
-          if (rowNumber != 1 && validExcel) {
+          if (rowNumber != 1 && _this.validExcel) {
             if (!(row.values[1] && row.values[2] && row.values[3] && row.values[4] && row.values[5] && row.values[6])) {
               _this.errorList.push({ row: rowNumber, msg: "Values cannot be empty" })
+            }
+            else {
+              tableData.push({
+                [excelFormat[0]]: row.values[1],
+                [excelFormat[1]]: row.values[2],
+                [excelFormat[2]]: row.values[3],
+                [excelFormat[3]]: row.values[4],
+                [excelFormat[4]]: typeof (row.values[5]) == "string" ? row.values[5] : row.values[5].text,
+                [excelFormat[5]]: row.values[6]
+              });
             }
           }
         });
         if (_this.errorList.length) {
           _this.sidenav.open();
+          _this.excelFileUpload = null;
         }
         else {
-          _this.excelFileUpload = event.target.files[0];
-        }
+          console.log(tableData);
+          _this.dataSource = new MatTableDataSource(tableData);
+          _this.tableHeaders = excelFormat;
+          setTimeout(() => {
+            _this.dataSource.paginator = _this.paginator;
+          }, 100)
 
+        }
       });
     });
     console.log(tableData);
@@ -209,15 +230,19 @@ export class BulkEgvComponent implements OnInit {
 
   genrateBulkExcelEgv() {
     //apicall
+    debugger;
     let _this = this;
-    if (!this.excelFileUpload) { return }
+    if (!_this.excelFileUpload) {
+      alert("No file imported");
+      return
+    }
     let excelData = new FormData();
     excelData.append(this.excelFileUpload.name, this.excelFileUpload);
     let fk_associateId = localStorage.fkAssociateId;
     let fkUserId = localStorage.fkUserId;
-
-    _this.sidenav.open();
-    this.EgvService.generateBulkEgvExcel(fk_associateId, fkUserId, excelData).subscribe(
+    let scheduleDate = this.formatDate(this.bulkegvform.value.scheduleDate, 'yyyy-MM-dd')
+    // _this.sidenav.open();
+    this.EgvService.generateBulkEgvExcel(fk_associateId, fkUserId, scheduleDate, excelData).subscribe(
       result => {
         if (result['status'] == "Error") {
           if (result['data']['errorList']) {
@@ -228,12 +253,14 @@ export class BulkEgvComponent implements OnInit {
             _this.openSnackBar(result['data']);
           return
         }
+        _this.excelFileUpload = null;
+        _this.dataSource = new MatTableDataSource([]);
+        setTimeout(() => {
+          _this.dataSource.paginator = _this.paginator;
+        }, 100)
         _this.openSnackBar(result['data']);
       }
     )
-
-
-
   }
 
   downloadProductList() {
@@ -261,7 +288,7 @@ export class BulkEgvComponent implements OnInit {
     let workbook = new Excel.Workbook();
     let worksheet = workbook.addWorksheet('List');
     //Product Code	Amount	Quantity	Name	Email	Brand	Delivery Date
-    let titleRow = worksheet.addRow(["Product Code", "Amount", "Quantity", "Name", "Email", "Brand", "Delivery Date"]);
+    let titleRow = worksheet.addRow(["Product Code", "Amount", "Quantity", "Name", "Email", "Brand"]);
 
 
     workbook.xlsx.writeBuffer().then((data) => {

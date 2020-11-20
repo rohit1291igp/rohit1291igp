@@ -43,3 +43,12 @@
     background-color: #c3404e;
     overflow: hidden;
 }
+
+input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type=number] {
+    -moz-appearance: textfield;
+}
