@@ -41,7 +41,7 @@ export class EgvwalletComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   maxDate: Date;
-  micrositeStyle;
+  whitelabelStyle;
 
   constructor(
     private fb: FormBuilder,
@@ -52,7 +52,7 @@ export class EgvwalletComponent implements OnInit {
 
   ngOnInit() {
     let _this = this;
-    _this.micrositeStyle = sessionStorage.getItem('micrositeStyleData') ? JSON.parse(sessionStorage.getItem('micrositeStyleData')) : null;
+    _this.whitelabelStyle = localStorage.getItem('whitelabelDetails') ? JSON.parse(localStorage.getItem('whitelabelDetails')) : null;
     this.addMoneyForm = this.fb.group({
       addMoneyTransactionId: ['', Validators.required],
       addMoneyAmount: ['', Validators.required],

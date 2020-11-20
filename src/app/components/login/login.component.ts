@@ -17,7 +17,7 @@ export class LoginComponent implements OnInit {
     loading = false;
     returnUrl: string;
     apierror: string;
-    micrositeStyle;
+    whitelabelStyle;
 
     constructor(
         public route1: ActivatedRoute,
@@ -38,7 +38,7 @@ export class LoginComponent implements OnInit {
         if (this.cookieService.getCookie('currentUserToken') || localStorage.getItem('currentUser')) {
             this.router.navigate(['/dashboard']);
         }
-        this.micrositeStyle = sessionStorage.getItem('micrositeStyleData') ? JSON.parse(sessionStorage.getItem('micrositeStyleData')) : null;
+        this.whitelabelStyle = localStorage.getItem('whitelabelDetails') ? JSON.parse(localStorage.getItem('whitelabelDetails')) : null;
     }
 
     login() {
@@ -154,7 +154,7 @@ export class LoginComponent implements OnInit {
                             secondaryColor: "#fff",
                             whitelabelname: 'wb_yourigpstore'
                         }
-                        sessionStorage.setItem('micrositeStyleData', JSON.stringify(data));
+                        localStorage.setItem('whitelabelDetails', JSON.stringify(data));
                         _this.router.navigate(['/new-dashboard']);
 
                     }else{

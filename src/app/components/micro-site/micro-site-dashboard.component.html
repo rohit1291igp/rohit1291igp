@@ -36,9 +36,9 @@
                         </mat-form-field>
                     </div>
                     <div class="d-flex">
-                        <button [ngStyle]="{'background-color': micrositeStyle ? micrositeStyle.primaryColor : '', 'color': micrositeStyle ? micrositeStyle.secondaryColor : '' }" style="margin: 5px;flex:1;" id="search" [disabled]="!SearchForm.valid" type="submit" mat-raised-button
+                        <button [ngStyle]="{'background-color': whitelabelStyle ? whitelabelStyle.primaryColor : '', 'color': whitelabelStyle ? whitelabelStyle.secondaryColor : '' }" style="margin: 5px;flex:1;" id="search" [disabled]="!SearchForm.valid" type="submit" mat-raised-button
                         class="btn-color">Search</button>
-                        <button [ngStyle]="{'background-color': micrositeStyle ? micrositeStyle.primaryColor : '', 'color': micrositeStyle ? micrositeStyle.secondaryColor : '' }" style="margin: 5px;flex:1;" id="download" [disabled]="!SearchForm.valid" type="submit" mat-raised-button
+                        <button [ngStyle]="{'background-color': whitelabelStyle ? whitelabelStyle.primaryColor : '', 'color': whitelabelStyle ? whitelabelStyle.secondaryColor : '' }" style="margin: 5px;flex:1;" id="download" [disabled]="!SearchForm.valid" type="submit" mat-raised-button
                         class="btn-color">Download</button>  
                     </div>
                       
@@ -47,7 +47,7 @@
         </mat-card>
         <mat-card class="d-flex align-items-center justify-content-center text-align-center">
             <div *ngIf="fksId != '895' && vendorName != 'itcinfotech'" [ngClass]="displayUplaodFormFlag ? 'hide-form' : 'show-form'">
-                <button mat-stroked-button color="primary" [ngStyle]="{'background-color': micrositeStyle ? micrositeStyle.primaryColor : '' }" (click)="displayUploadForm(true)"
+                <button mat-stroked-button color="primary" [ngStyle]="{'background-color': whitelabelStyle ? whitelabelStyle.primaryColor : '' }" (click)="displayUploadForm(true)"
                     class="btn-color">Upload</button>
             </div>
             <mat-card *ngIf="fksId != '895' && vendorName != 'itcinfotech'" [ngClass]="displayUplaodFormFlag ? 'show-form' : 'hide-form'">

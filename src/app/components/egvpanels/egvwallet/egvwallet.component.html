@@ -86,7 +86,7 @@
             <input matInput name="comments" type="text" placeholder="Comments" formControlName="comments">
           </mat-form-field>
 
-          <button mat-flat-button class="addMoneyButton" type="submit" [ngStyle]="{'background-color': micrositeStyle ? micrositeStyle.primaryColor : '', 'color': micrositeStyle ? micrositeStyle.secondaryColor : ''}">Add Money</button>
+          <button mat-flat-button class="addMoneyButton" type="submit" [ngStyle]="{'background-color': whitelabelStyle ? whitelabelStyle.primaryColor : '', 'color': whitelabelStyle ? whitelabelStyle.secondaryColor : ''}">Add Money</button>
         </div>
         <!-- <div class="marginB20">
               
@@ -106,7 +106,7 @@
             <mat-label> Enter New Value</mat-label>
             <input matInput name='limitValue' type="number" placeholder="Enter New Value" formControlName="limitValue">
           </mat-form-field>
-          <button mat-flat-button type="button" class="addMoneyButton" (click)="updateLimit()" [ngStyle]="{'background-color': micrositeStyle ? micrositeStyle.primaryColor : '', 'color': micrositeStyle ? micrositeStyle.secondaryColor : '' }">Update</button>
+          <button mat-flat-button type="button" class="addMoneyButton" (click)="updateLimit()" [ngStyle]="{'background-color': whitelabelStyle ? whitelabelStyle.primaryColor : '', 'color': whitelabelStyle ? whitelabelStyle.secondaryColor : '' }">Update</button>
         </div>
 
 

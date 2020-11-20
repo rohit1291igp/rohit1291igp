@@ -1,5 +1,5 @@
 <!-- <ng-container *ngIf="navItems && navItems.length > 0"> -->
-<nav [ngStyle]="{'background-color': micrositeStyle ? micrositeStyle.primaryColor : '', 'color': micrositeStyle ? micrositeStyle.secondaryColor : '' }">
+<nav [ngStyle]="{'background-color': whitelabelStyle ? whitelabelStyle.primaryColor : '', 'color': whitelabelStyle ? whitelabelStyle.secondaryColor : '' }">
     <i class="fa fa-bars" aria-hidden="true" (click)="drawer.toggle()" (mouseover)="drawer.open()" style="cursor: pointer"></i>
     <div class="d-flex align-items-baseline" style="float: right;">
         <p *ngIf="username" style="margin-right: 12px;text-transform: capitalize;">
@@ -8,15 +8,15 @@
         </p>
         <i (click)="logout($event)" class="fa fa-sign-out" aria-hidden="true"></i>
     </div>
-        <ng-container *ngIf="micrositeStyle else defaultImg">
-            <img id="homePageLogo" src="{{micrositeStyle.headerLogoUrl}}" class="homeLogo" routerLink="/new-dashboard" width="10%" alt="igp">
+        <ng-container *ngIf="whitelabelStyle else defaultImg">
+            <img id="homePageLogo" src="{{whitelabelStyle.headerLogoUrl}}" class="homeLogo" routerLink="/new-dashboard" width="10%" alt="igp">
         </ng-container>
         <ng-template #defaultImg>
             <img id="homePageLogo" src="../../../assets/images/igp-logo.png" class="homeLogo" routerLink="/new-dashboard" width="6%" alt="igp">
         </ng-template>
 </nav>
 <mat-drawer-container class="example-container" autosize style="width: 100%;height: 100vh;" >
-    <mat-drawer #drawer #appDrawer class="example-sidenav" mode="side" [ngStyle]="{'background-color': micrositeStyle ? micrositeStyle.primaryColor : '', 'color': micrositeStyle ? micrositeStyle.secondaryColor : '' }">
+    <mat-drawer #drawer #appDrawer class="example-sidenav" mode="side" [ngStyle]="{'background-color': whitelabelStyle ? whitelabelStyle.primaryColor : '', 'color': whitelabelStyle ? whitelabelStyle.secondaryColor : '' }">
         <!-- <a routerLink="/new-dashboard" style="text-decoration: none;">
             <mat-icon aria-hidden="false" aria-label="Example home icon" style="color: #fff;">home
             </mat-icon>
@@ -40,7 +40,7 @@
                     <a class="page-view" routerLink="{{x.route}}" (click)="navigate('page')">
                         <div class="img-hover-zoom">
                             <div class="icon-title-container" style="text-align: center;">
-                                <mat-icon style="width:fit-content" [ngStyle]="{'color': micrositeStyle ? micrositeStyle.primaryColor : '' }" aria-hidden="false" aria-label="Example home icon">{{x.iconName}}</mat-icon>
+                                <mat-icon style="width:fit-content" [ngStyle]="{'color': whitelabelStyle ? whitelabelStyle.primaryColor : '' }" aria-hidden="false" aria-label="Example home icon">{{x.iconName}}</mat-icon>
                                 <p>{{x.displayName}}</p>
                             </div>
                         </div>

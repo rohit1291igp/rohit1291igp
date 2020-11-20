@@ -21,7 +21,7 @@ export class MainHeaderComponent implements OnInit {
     reportDropdownOpen=false;
     selectedTopTab;
     selectedReportTab;
-    micrositeStyle;
+    whitelabelStyle;
     constructor(
       public router: Router,
       public BackendService : BackendService,
@@ -32,7 +32,7 @@ export class MainHeaderComponent implements OnInit {
 
   @HostListener('document:click', ['$event.target'])
     public onClick(targetElement) {
-        this.micrositeStyle = sessionStorage.getItem('micrositeStyleData') ? JSON.parse(sessionStorage.getItem('micrositeStyleData')) : null;
+        this.whitelabelStyle = localStorage.getItem('whitelabelDetails') ? JSON.parse(localStorage.getItem('whitelabelDetails')) : null;
         console.log('inside clicked ------->');
         const isClickedInside = this._elementRef.nativeElement.contains(targetElement);
         if (!isClickedInside) {
@@ -63,7 +63,7 @@ export class MainHeaderComponent implements OnInit {
           }
       });
 
-      _this.micrositeStyle = sessionStorage.getItem('micrositeStyleData') ? JSON.parse(sessionStorage.getItem('micrositeStyleData')) : null;
+      _this.whitelabelStyle = localStorage.getItem('whitelabelDetails') ? JSON.parse(localStorage.getItem('whitelabelDetails')) : null;
   }
 
   logout(e){

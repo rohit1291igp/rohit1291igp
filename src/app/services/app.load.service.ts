@@ -10,7 +10,7 @@ export class AppLoadService {
   initializeApp(): Promise<any> {
     return new Promise((resolve, reject) => {
           if(location.href.includes('login') && location.href.split('login/')[1]){
-            sessionStorage.removeItem('micrositeStyleData');
+            localStorage.removeItem('whitelabelDetails');
 
             if(location.href.split('login/')[1].includes('yourigpstore')){
                 let data = {
@@ -19,7 +19,7 @@ export class AppLoadService {
                         secondaryColor: "#fff",
                         whitelabelname: location.href.split('login/')[1]
                     }
-                sessionStorage.setItem('micrositeStyleData', JSON.stringify(data));
+                    localStorage.setItem('whitelabelDetails', JSON.stringify(data));
                 resolve(true);
             }
             this.getMicrositeDetails(location.href.split('login/')[1]);
@@ -31,7 +31,7 @@ export class AppLoadService {
             }, 10);
           }else{
             if(location.href.includes('login') && !location.href.split('login/')[1]){
-                sessionStorage.removeItem('micrositeStyleData');
+                localStorage.removeItem('whitelabelDetails');
             }
             
             resolve(true);
@@ -42,13 +42,13 @@ export class AppLoadService {
   getMicrositeDetails(microsite){
     console.log('microsite - ', microsite)
     let micrositeDetails;
-    let url = `${environment.origin}v1/admin/${microsite}/details`;
+    let url = `${environment.origin}v1/admin/wb/${microsite}/details`;
     let subs = this.httpClient.get(url).subscribe(
       (response:any) => {
         this.micrositeDetails = 'getResponse';
 
         if(response && response.status == 'Success' && response.data){
-          response && sessionStorage.setItem('micrositeStyleData', JSON.stringify(response.data));
+          response && localStorage.setItem('whitelabelDetails', JSON.stringify(response.data));
         }
         
       },

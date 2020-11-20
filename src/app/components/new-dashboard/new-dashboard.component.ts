@@ -2,7 +2,7 @@ import { Component, OnInit, Inject, trigger, state, style, transition, animate, 
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { BehaviorSubject } from 'rxjs';
-import { Router, NavigationEnd, NavigationStart, ActivatedRoute } from '@angular/router';
+import { Router, NavigationEnd, NavigationStart, ActivatedRoute, RouterOutlet, ActivationStart } from '@angular/router';
 import { NavService } from 'app/services/NewService';
 import { environment } from 'environments/environment';
 import { DashboardComponent } from '../dashboard/dashboard.component';
@@ -90,8 +90,8 @@ export class NewDasboardComponent implements OnInit, AfterViewInit {
     //     }
     // ];
     pages
-    micrositeStyle
-
+    whitelabelStyle
+    @ViewChild(RouterOutlet) outlet: RouterOutlet;
     constructor(private navService: NavService, private router: Router, private activatedRoute: ActivatedRoute, public BackendService: BackendService, private cookieService: CookieService, private UserAccessService: UserAccessService) {
         router.events.subscribe((val: any) => {
             //On change check router
@@ -107,7 +107,12 @@ export class NewDasboardComponent implements OnInit, AfterViewInit {
     }
 
     ngOnInit() {
-        this.micrositeStyle = sessionStorage.getItem('micrositeStyleData') ? JSON.parse(sessionStorage.getItem('micrositeStyleData')) : null;
+        this.router.events.subscribe(e => {
+            if (e instanceof ActivationStart){
+                this.outlet && this.outlet.deactivate();
+                }
+          });
+        this.whitelabelStyle = localStorage.getItem('whitelabelDetails') ? JSON.parse(localStorage.getItem('whitelabelDetails')) : null;
         this.username = localStorage.getItem('vendorName') ? localStorage.getItem('vendorName') : '';
         const bodyEle = document.getElementsByTagName('body');
         let timer = setInterval(() => {
@@ -203,8 +208,8 @@ export class NewDasboardComponent implements OnInit, AfterViewInit {
                     }
                 }
             })();
-            if($this.micrositeStyle){
-                $this.micrositeStyle  = JSON.parse(JSON.stringify(sessionStorage.getItem('micrositeStyleData')));
+            if($this.whitelabelStyle){
+                $this.whitelabelStyle  = JSON.parse(JSON.stringify(localStorage.getItem('whitelabelDetails')));
             }
             $this.loading = true;
             setTimeout(()=>{
@@ -213,9 +218,9 @@ export class NewDasboardComponent implements OnInit, AfterViewInit {
             environment.mockAPI = "";
             environment.userType = "";
             
-            if($this.micrositeStyle){
-                sessionStorage.setItem('micrositeStyleData', $this.micrositeStyle);
-                let detail = JSON.parse($this.micrositeStyle);
+            if($this.whitelabelStyle){
+                localStorage.setItem('whitelabelDetails', $this.whitelabelStyle);
+                let detail = JSON.parse($this.whitelabelStyle);
                 $this.router.navigate([`/login/${detail.whitelabelname}`]);
             }else{
                 $this.router.navigate(['/login']);
