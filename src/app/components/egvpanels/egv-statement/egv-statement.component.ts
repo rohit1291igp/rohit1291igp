@@ -290,6 +290,7 @@ export class EgvStatementComponent implements OnInit {
 				let data: any = {};
 				data.dataSource = new MatTableDataSource(result.tableData);
 				data.tableHeaders = result.tableHeaders;
+				if(element.IsBulkEGV) data.tableHeaders.push("Recipient_Email");
 
 				_this.dialog.open(transactionReportDialog, { data });
 			})
