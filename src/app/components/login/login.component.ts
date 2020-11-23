@@ -17,6 +17,7 @@ export class LoginComponent implements OnInit {
     loading = false;
     returnUrl: string;
     apierror: string;
+    whitelabelStyle;
 
     constructor(
         public route1: ActivatedRoute,
@@ -25,7 +26,9 @@ export class LoginComponent implements OnInit {
         public BackendService: BackendService,
         public UtilityService: UtilityService,
         private cookieService: CookieService
-    ) { }
+    ) { 
+        
+    }
 
     ngOnInit() {
         this.model.associatename = "";
@@ -35,11 +38,21 @@ export class LoginComponent implements OnInit {
         if (this.cookieService.getCookie('currentUserToken') || localStorage.getItem('currentUser')) {
             this.router.navigate(['/dashboard']);
         }
+        this.whitelabelStyle = localStorage.getItem('whitelabelDetails') ? JSON.parse(localStorage.getItem('whitelabelDetails')) : null;
     }
 
     login() {
         let _this = this;
         this.loading = true;
+        if(location.href.split('login/')[1]){
+            if(location.href.split('login/')[1] != this.model.associatename){
+                _this.apierror = `Login Failed (Either Associate Name/UserId/Password wrong)`;
+                let associateName = document.getElementsByName("associatename");
+                associateName[0].focus();
+                this.loading = false;
+                return false;
+            }
+        }
         if (this.model.password === "ng") {
             sessionStorage.setItem('mockAPI', 'true'); environment.mockAPI = 'true';
 
@@ -92,7 +105,14 @@ export class LoginComponent implements OnInit {
                 localStorage.setItem('fkAssociateId', fkAssociateId);
                 localStorage.setItem('associateName', associateName);
                 localStorage.setItem('vendorName', _this.model.username);
-                localStorage.setItem('userType', userType);
+                
+                //For testing purpose
+                if(userType == 'wb-yourigpstore'){
+                    localStorage.setItem('userType', 'wb_yourigpstore');
+                }else{
+                    localStorage.setItem('userType', userType);
+                }
+                //end
                 localStorage.setItem('fkUserId', fkUserId)
                 localStorage.setItem('deliveryBoyEnabled', _response.result['deliveryBoyEnabled']);
                 _this.cookieService.createCookie('currentUserToken', token, 9);
@@ -126,8 +146,20 @@ export class LoginComponent implements OnInit {
                     _this.router.navigate(['/voucher/gv']);
                 } else if (userType === 'warehouse' || userType === 'marketing' || userType === 'mldatascience') {
                     _this.router.navigate(['/new-dashboard']);
-                } else if (userType === 'egv_admin' || userType === 'manager' || userType === 'executive') {
-                    _this.router.navigate(['/new-dashboard']);
+                } else if ((userType === 'egv_admin' || userType === 'sub_egv_admin' || localStorage.getItem('userType') === 'wb_yourigpstore') || (userType === 'manager' || userType === 'sub_manager') || (userType === 'executive' || userType === 'sub_executive')) {
+                    if(userType.includes('yourigpstore')){
+                        let data = {
+                            headerLogoUrl:'https://cdn.igp.com/f_auto,q_auto/banners/IGP-for-business-50_new_png.png?v=6',
+                            primaryColor:'#606869',
+                            secondaryColor: "#fff",
+                            whitelabelname: 'wb_yourigpstore'
+                        }
+                        localStorage.setItem('whitelabelDetails', JSON.stringify(data));
+                        _this.router.navigate(['/new-dashboard']);
+
+                    }else{
+                        _this.router.navigate(['/new-dashboard']);
+                    }
                 } else if (userType === 'admin' || userType === 'vendor') {
                     _this.router.navigate(['/new-dashboard/dashboard']);
                 }

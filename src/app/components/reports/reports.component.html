@@ -389,7 +389,7 @@
             <!-- {{reportDataLoader  | json}} -->
             <table class="report-table table table-striped table-bordered table-curved table-fixed">
                 <thead class="bg-igp text-white">
-                <tr>
+                <tr [ngStyle]="{'background-color': whitelabelStyle ? whitelabelStyle.primaryColor : '', 'color': whitelabelStyle ? whitelabelStyle.secondaryColor : '' }">
                     <th *ngFor="let tableLabel of reportDataLoader.tableHeaders">
                     {{tableLabel}} <span>&nbsp;&nbsp;</span>
                     <!--<span class="glyphicon glyphicon-chevron-down"></span>-->

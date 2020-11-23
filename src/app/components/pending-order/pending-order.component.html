@@ -5,16 +5,7 @@
         <form [formGroup]="statementForm" (ngSubmit)="getStatement()">
           <div>
             <!-- *ngIf="env.userType=='egv_admin'" -->
-            <mat-form-field class="filterElement" *ngIf="env.userType =='egv_admin' || env.userType =='sub_egv_admin' || env.userType =='wb_yourigpstore'">
-              <mat-label>Select a client</mat-label>
-              <input type="text" matInput placeholder='Select a client' formControlName="selectedUser"
-                [matAutocomplete]="auto">
-              <mat-autocomplete #auto="matAutocomplete" (optionSelected)='getUserSelected($event.option.value)'
-                [displayWith]="userDisplayFn">
-                <mat-option *ngFor="let option of filteredUserList | async" [value]="option">
-                  {{option.company_name}}</mat-option>
-              </mat-autocomplete>
-            </mat-form-field>
+
 
             <mat-form-field class="filterElement">
               <mat-label>Start Date</mat-label>
@@ -46,8 +37,6 @@
           </div>
           <div>
             <button type="submit" mat-raised-button>Get Statement</button>
-            <button type="button" mat-raised-button (click)="downloadStatement()">Download Statement</button>
-            <button type="button" mat-raised-button (click)="downloadTransactionReport()">Download Transaction Report</button>
           </div>
         </form>
       </div>
@@ -64,19 +53,20 @@
       <ng-container [matColumnDef]="column" *ngFor="let column of tableHeaders">
         <mat-header-cell mat-sort-header *matHeaderCellDef> {{column}} </mat-header-cell>
         <mat-cell *matCellDef="let element">
-          <ng-container *ngIf="column != 'TxnDetails' && column!= 'Amount' && column!= 'Balance'">
+          <ng-container *ngIf="column != 'Actions'">
             {{element[column] || '-'}}
           </ng-container>
-          <ng-container *ngIf="column == 'Amount' || column == 'Balance' ">
-            {{element[column] || '-' | indianNumeric}}
+          <ng-container *ngIf="column == 'Actions'">
+            <button mat-button color="primary" *ngIf="element['Status']=='pending'"
+              (click)='approveTransaction($event,element,"approved")'>
+              <i class="fa fa-check"></i> Approve</button>
+            <button mat-button color="warn" *ngIf="element['Status']=='pending'"
+              (click)='approveTransaction($event,element,"rejected")'><i class="fa fa-times"></i>
+              Reject</button>
+            <span *ngIf="element['Status']!='pending'"> - </span>
           </ng-container>
-          <ng-container *ngIf="column == 'TxnDetails'">
-            <a (click)="openDialog(element)" style="cursor:pointer"
-              *ngIf="element['TransactionType'] == 'Debit' else noLink">{{(element[column] || '-' )+" - "+element['comments'].slice(0,-10)}}</a>
-            <ng-template #noLink>
-              {{(element[column] || '-' )+" - "+element['comments']}}
-            </ng-template>
-          </ng-container>
+
+
         </mat-cell>
       </ng-container>
       <mat-header-row *matHeaderRowDef="tableHeaders"></mat-header-row>

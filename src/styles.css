@@ -897,6 +897,10 @@ body .dashboard-content, body .orders-button{
 .flex-wrap-wrap{
     flex-wrap: wrap;
 }
+.width-fit-content{
+    width: fit-content;
+}
+/* common Ends */
 .is-active {
     background: #fff;
     color: #C3404E !important;

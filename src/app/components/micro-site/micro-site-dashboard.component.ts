@@ -96,7 +96,7 @@ export class MicroSiteDasboardComponent implements OnInit {
         //     value: "Current Balance"
         // }
     ];
-
+    whitelabelStyle;
     constructor(
         private fb: FormBuilder,
         private BackendService: BackendService,
@@ -104,6 +104,7 @@ export class MicroSiteDasboardComponent implements OnInit {
     ) { }
 
     ngOnInit() {
+        this.whitelabelStyle = localStorage.getItem('whitelabelDetails') ? JSON.parse(localStorage.getItem('whitelabelDetails')) : null;
         this.fksId = localStorage.getItem('fkAssociateId');
         this.vendorName = localStorage.getItem('vendorName');
         this.myForm = this.fb.group({

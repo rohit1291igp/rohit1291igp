@@ -2,7 +2,7 @@ import { Component, OnInit, Inject, trigger, state, style, transition, animate, 
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { BehaviorSubject } from 'rxjs';
-import { Router, NavigationEnd, NavigationStart, ActivatedRoute } from '@angular/router';
+import { Router, NavigationEnd, NavigationStart, ActivatedRoute, RouterOutlet, ActivationStart } from '@angular/router';
 import { NavService } from 'app/services/NewService';
 import { environment } from 'environments/environment';
 import { DashboardComponent } from '../dashboard/dashboard.component';
@@ -25,7 +25,8 @@ export interface NavItem {
 export class NewDasboardComponent implements OnInit, AfterViewInit {
     openPage = false;
     username;
-    env=environment
+    env = environment
+    loading = true;
 
     @ViewChild('appDrawer') appDrawer: ElementRef;
     navItems: NavItem[] = this.UserAccessService.getUserAccess();
@@ -89,7 +90,8 @@ export class NewDasboardComponent implements OnInit, AfterViewInit {
     //     }
     // ];
     pages
-
+    whitelabelStyle
+    @ViewChild(RouterOutlet) outlet: RouterOutlet;
     constructor(private navService: NavService, private router: Router, private activatedRoute: ActivatedRoute, public BackendService: BackendService, private cookieService: CookieService, private UserAccessService: UserAccessService) {
         router.events.subscribe((val: any) => {
             //On change check router
@@ -105,21 +107,49 @@ export class NewDasboardComponent implements OnInit, AfterViewInit {
     }
 
     ngOnInit() {
+        this.router.events.subscribe(e => {
+            if (e instanceof ActivationStart){
+                this.outlet && this.outlet.deactivate();
+                }
+          });
+        this.whitelabelStyle = localStorage.getItem('whitelabelDetails') ? JSON.parse(localStorage.getItem('whitelabelDetails')) : null;
         this.username = localStorage.getItem('vendorName') ? localStorage.getItem('vendorName') : '';
         const bodyEle = document.getElementsByTagName('body');
-        this.pages = this.navItems.map(m => {
-            if(m.children){
-                return m.children.map((a:any) => {
-                    return {displayName: a.displayName,
-                    iconName: a.iconName,
-                    route: a.route}
+        let timer = setInterval(() => {
+            this.navItems = this.UserAccessService.getUserAccess();
+            if (this.navItems && this.navItems.length > 0) {
+                clearInterval(timer);
+                this.pages = this.navItems.map(m => {
+                    if (m.children) {
+                        return m.children.map((a: any) => {
+                            return {
+                                displayName: a.displayName,
+                                iconName: a.iconName,
+                                route: a.route
+                            }
+                        });
+
+                    } else {
+                        return m;
+                    }
+
+                }) as any;
+                this.pages = this.pages.flatMap(m => {
+                    return m;
                 });
-                
-            }else{
-                return m;
+                bodyEle[0].style.paddingTop = '0px';
+                console.log(this.activatedRoute)
+                const url = this.activatedRoute.snapshot as any;
+                //On Load check router
+                if ((url._routerState.url.match(/\//g) || []).length == 1) {
+                    this.openPage = false;
+                } else {
+                    this.openPage = true;
+                }
+                this.loading = false;
             }
-            
-        }) as any;
+        }, 1)
+
         // let newPages = [];
         // for(let i=0;pages.length > i; i++){
         //     if(Array.isArray(pages[i])){
@@ -130,18 +160,8 @@ export class NewDasboardComponent implements OnInit, AfterViewInit {
         //         newPages.push(pages[i]);
         //     }
         // }
-        this.pages = this.pages.flatMap(m => {
-            return m;
-            });
-        bodyEle[0].style.paddingTop = '0px';
-        console.log(this.activatedRoute)
-        const url = this.activatedRoute.snapshot as any;
-        //On Load check router
-        if ((url._routerState.url.match(/\//g) || []).length == 1) {
-            this.openPage = false;
-        } else {
-            this.openPage = true;
-        }
+
+        
     }
 
     ngAfterViewInit() {
@@ -172,11 +192,41 @@ export class NewDasboardComponent implements OnInit, AfterViewInit {
                 return;
             }
             $this.cookieService.deleteCookie('currentUserToken');
+            (function () {
+                var cookies = document.cookie.split("; ");
+                for (var c = 0; c < cookies.length; c++) {
+                    var d = window.location.hostname.split(".");
+                    while (d.length > 0) {
+                        var cookieBase = encodeURIComponent(cookies[c].split(";")[0].split("=")[0]) + '=; max-age=0; domain=' + d.join('.') + ' ;path=';
+                        var p = location.pathname.split('/');
+                        document.cookie = cookieBase + '/';
+                        while (p.length > 0) {
+                            document.cookie = cookieBase + p.join('/');
+                            p.pop();
+                        };
+                        d.shift();
+                    }
+                }
+            })();
+            if($this.whitelabelStyle){
+                $this.whitelabelStyle  = JSON.parse(JSON.stringify(localStorage.getItem('whitelabelDetails')));
+            }
+            $this.loading = true;
+            setTimeout(()=>{
             localStorage.clear();
             sessionStorage.clear();
             environment.mockAPI = "";
             environment.userType = "";
-            $this.router.navigate(['/login']);
+            
+            if($this.whitelabelStyle){
+                localStorage.setItem('whitelabelDetails', $this.whitelabelStyle);
+                let detail = JSON.parse($this.whitelabelStyle);
+                $this.router.navigate([`/login/${detail.whitelabelname}`]);
+            }else{
+                $this.router.navigate(['/login']);
+            }
+            },500)
+            
         })
 
 
