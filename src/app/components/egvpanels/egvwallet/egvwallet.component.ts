@@ -311,7 +311,7 @@ export class EgvwalletComponent implements OnInit {
     };
     reqObj.url += "&fkAssociateId=" + data['fkasid'];
     reqObj.url += "&userId=" + data['UserId'];
-    reqObj.url += "logId" + data['logId'];
+    reqObj.url += "&logId=" + data['logId']
     if (environment.userType == 'egv_admin' || environment.userType == 'sub_egv_admin' || environment.userType == 'wb_yourigpstore') {
       reqObj.url += "&flagAdmin=1&flagApproveCredit=" + (approval ? 1 : -1);
     }
@@ -323,7 +323,7 @@ export class EgvwalletComponent implements OnInit {
     _this.EgvService.getEgvService(reqObj).subscribe(
       (result, error) => {
         if (result.error || error) {
-          _this.openSnackBar('Something went wrong.');
+          _this.openSnackBar(result.errorMessage);
           console.log('Error=============>', result.error);
           e.target.disabled = false;
 
