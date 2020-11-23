@@ -326,9 +326,10 @@ export class EgvwalletComponent implements OnInit {
           _this.openSnackBar(result.errorMessage);
           console.log('Error=============>', result.error);
           e.target.disabled = false;
+         
 
         }
-        _this.openSnackBar(result.result);
+        else  _this.openSnackBar(result.result);
         _this.getPendingList();
       })
   }
