@@ -69,4 +69,9 @@ export class EgvService {
     let url = environment.origin + 'v1/admin/internal/bulk-egv/bookOrderWithExcel?fkAssociateId=' + fk_associateId + '&userId=' + userId + "&scheduleDate=" + scheduleDate;
     return this.httpClient.post(url, payload);
   }
+
+  resendgv(fkAssociateId,txnDetails){
+    let url = environment.origin + 'v1/admin/internal/bulk-egv/resendCardDetails?fkAssociateId='+fkAssociateId+'&uniqueOrderId='+txnDetails ;
+    return this.httpClient.get(url);
+  }
 }
