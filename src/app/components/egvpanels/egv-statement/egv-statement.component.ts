@@ -291,6 +291,7 @@ export class EgvStatementComponent implements OnInit {
 				data.dataSource = new MatTableDataSource(result.tableData);
 				data.tableHeaders = result.tableHeaders;
 				if(element.IsBulkEGV) data.tableHeaders.push("Recipient_Email");
+				if(element.Status == 'Delivered') data.tableHeaders.push("Actions");
 
 				_this.dialog.open(transactionReportDialog, { data });
 			})
@@ -370,7 +371,7 @@ export class EgvStatementComponent implements OnInit {
         <ng-container [matColumnDef]="column" *ngFor="let column of data.tableHeaders">
           <mat-header-cell mat-sort-header *matHeaderCellDef> {{column}} </mat-header-cell>
           <mat-cell *matCellDef="let element">
-		  <ng-container *ngIf="column != 'Balance' && column != 'Order Value'">
+		  <ng-container *ngIf="column != 'Balance' && column != 'Order Value' && column != 'Actions'">
               {{element[column] || '-'}}
 			</ng-container>
 			<ng-container *ngIf="column == 'Balance'">
@@ -379,6 +380,9 @@ export class EgvStatementComponent implements OnInit {
 		  <ng-container *ngIf="column == 'Order Value'">
 			{{element[column]|number:'1.2-2'}}
 		  </ng-container>
+		  <ng-container *ngIf="column == 'Actions'">
+		  <button (click)="resendGV(element)" mat-button color="primary">Resend Mail</button>
+		</ng-container>
           </mat-cell>
         </ng-container>
         <mat-header-row *matHeaderRowDef="data.tableHeaders"></mat-header-row>
@@ -402,7 +406,8 @@ export class transactionReportDialog implements OnInit {
 	@ViewChild(MatSort) sort: MatSort;
 	constructor(
 		public dialogRef: MatDialogRef<transactionReportDialog>,
-		@Inject(MAT_DIALOG_DATA) public data: any
+		@Inject(MAT_DIALOG_DATA) public data: any,
+		private EgvService: EgvService 
 	) {
 		setTimeout(() => {
 			data.dataSource.paginator = this.paginator;
@@ -446,6 +451,14 @@ export class transactionReportDialog implements OnInit {
 			// console.log(data)
 			let download = new Angular5Csv(data, 'Transaction Statement', options);
 		})
+	}
+
+	resendGV(element){
+		console.log(element)
+		this.EgvService.resendgv(localStorage.fkAssociateId,element['LR OrderId']).subscribe(
+			result => {
+				alert(result['data']);
+			})
 	}
 
 	applyFilter(event: Event) {

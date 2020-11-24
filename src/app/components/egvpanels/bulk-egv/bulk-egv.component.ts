@@ -176,7 +176,7 @@ export class BulkEgvComponent implements OnInit {
     arryBuffer.then(function (data) {
       workbook.xlsx.load(data).then(function () {
         console.log(workbook);
-        const worksheet = workbook.getWorksheet(1);
+        const worksheet = workbook._worksheets.filter(ele=>{return ele.orderNo == 0})[0];
         let excelFormat = ["product code", "amount", "quantity", "name", "email", "brand"];
         console.log('rowCount: ', worksheet.rowCount);
         worksheet.eachRow(function (row, rowNumber) {
