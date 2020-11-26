@@ -105,7 +105,7 @@ export class EgvStatementComponent implements OnInit {
 			url: 'login/getCompanyList',
 			method: "get",
 		};
-		// reqObj.url += '?fkAssociateId'+fkAssociateId;
+		if (environment.userType == "egv_parent") reqObj.url += '?fkAssociateId' + localStorage.fkAssociateId;
 		return new Promise((resolve, reject) => {
 			_this.EgvService.getEgvService(reqObj).subscribe(
 				result => {
@@ -157,8 +157,13 @@ export class EgvStatementComponent implements OnInit {
 				this.showHyperlink = true;
 			}
 		}
-		if (this.userSelected && (this.selectedUser.value || this.statementForm.value.selectedUser)) {
-			reqObj.url += '&fkasid=' + this.userSelected.fk_associate_id
+		if (environment.userType == 'egv_admin') {
+			if (this.userSelected && (this.selectedUser.value || this.statementForm.value.selectedUser)) {
+				reqObj.url += '&fkasid=' + this.userSelected.fk_associate_id
+			}
+		}
+		else {
+			reqObj.url += '&fkasid=' + localStorage.fkAssociateId;
 		}
 
 		// reqObj.url += '?fkAssociateId'+fkAssociateId;
@@ -200,8 +205,13 @@ export class EgvStatementComponent implements OnInit {
 		if (this.statementForm.value.transactionType && this.statementForm.value.transactionType != 'All') {
 			reqObj.url += '&transactionType=' + this.statementForm.value.transactionType;
 		}
-		if (this.userSelected && (this.selectedUser.value || this.statementForm.value.selectedUser)) {
-			reqObj.url += '&fkasid=' + this.userSelected.fk_associate_id
+		if (environment.userType == 'egv_admin') {
+			if (this.userSelected && (this.selectedUser.value || this.statementForm.value.selectedUser)) {
+				reqObj.url += '&fkasid=' + this.userSelected.fk_associate_id
+			}
+		}
+		else {
+			reqObj.url += '&fkasid=' + localStorage.fkAssociateId;
 		}
 
 		// reqObj.url += '?fkAssociateId'+fkAssociateId;

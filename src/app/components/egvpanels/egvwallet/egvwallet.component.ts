@@ -60,7 +60,7 @@ export class EgvwalletComponent implements OnInit {
       limitType: [''],
       limitValue: ['']
     });
-    if (environment.userType == "manager" || environment.userType == "executive") {
+    if (environment.userType == "manager" || environment.userType == "executive" || environment.userType == "egv_parent") {
       this.getAccountSummary(localStorage.fkAssociateId)
         .then((response) => {
           _this.walletSummary = response;
@@ -143,7 +143,8 @@ export class EgvwalletComponent implements OnInit {
       url: 'login/getCompanyList',
       method: "get",
     };
-    // reqObj.url += '?fkAssociateId'+fkAssociateId;
+    if (  environment.userType == "egv_parent")
+      reqObj.url += '?fkAssociateId'+localStorage.fkAssociateId;
     return new Promise((resolve, reject) => {
       _this.EgvService.getEgvService(reqObj).subscribe(
         result => {
@@ -310,6 +311,7 @@ export class EgvwalletComponent implements OnInit {
     };
     reqObj.url += "&fkAssociateId=" + data['fkasid'];
     reqObj.url += "&userId=" + data['UserId'];
+    reqObj.url += "&logId=" + data['logId']
     if (environment.userType == 'egv_admin') {
       reqObj.url += "&flagAdmin=1&flagApproveCredit=" + (approval ? 1 : -1);
     }
@@ -321,12 +323,13 @@ export class EgvwalletComponent implements OnInit {
     _this.EgvService.getEgvService(reqObj).subscribe(
       (result, error) => {
         if (result.error || error) {
-          _this.openSnackBar('Something went wrong.');
+          _this.openSnackBar(result.errorMessage);
           console.log('Error=============>', result.error);
           e.target.disabled = false;
+         
 
         }
-        _this.openSnackBar(result.result);
+        else  _this.openSnackBar(result.result);
         _this.getPendingList();
       })
   }
