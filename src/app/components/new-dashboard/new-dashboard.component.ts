@@ -2,7 +2,7 @@ import { Component, OnInit, Inject, trigger, state, style, transition, animate, 
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { BehaviorSubject } from 'rxjs';
-import { Router, NavigationEnd, NavigationStart, ActivatedRoute } from '@angular/router';
+import { Router, NavigationEnd, NavigationStart, ActivatedRoute, RouterOutlet, ActivationStart } from '@angular/router';
 import { NavService } from 'app/services/NewService';
 import { environment } from 'environments/environment';
 import { DashboardComponent } from '../dashboard/dashboard.component';
@@ -29,65 +29,7 @@ export class NewDasboardComponent implements OnInit, AfterViewInit {
 
     @ViewChild('appDrawer') appDrawer: ElementRef;
     navItems: NavItem[] = this.UserAccessService.getUserAccess();
-
-    // [
-    //     {
-    //         displayName: 'Dashboard',
-    //         iconName: 'home',
-    //         route: '/new-dashboard',
-    //     },
-    //     {
-    //         displayName: 'Send Email Module',
-    //         iconName: 'recent_actors',
-    //         route: 'devfestfl',
-    //         children: [
-    //             {
-    //                 displayName: 'Send Email',
-    //                 iconName: 'attach_email',
-    //                 route: '/new-dashboard/sendemail/sendemail',
-    //             },
-    //             {
-    //                 displayName: 'Excel Upload',
-    //                 iconName: 'attach_email',
-    //                 route: '/new-dashboard/sendemail/uploadtemplate'
-    //             },
-    //             {
-    //                 displayName: 'Order Update',
-    //                 iconName: 'analytics',
-    //                 route: '/new-dashboard/sendemail/orderupdatestatus'
-    //             },
-    //             {
-    //                 displayName: 'Payment Reconciliation',
-    //                 iconName: 'payments',
-    //                 route: '/new-dashboard/sendemail/payment-reconciliation'
-    //             },
-    //             {
-    //                 displayName: 'Address Update',
-    //                 iconName: 'location_on',
-    //                 route: '/new-dashboard/sendemail/addressUpdate'
-    //             }
-    //         ]
-    //     },
-    //     {
-    //         displayName: 'Holiday Calender Management',
-    //         iconName: 'calendar_today',
-    //         route: '/new-dashboard/HolidayCalendarManagement',
-    //     },
-    //     {
-    //         displayName: 'Product Decentralization',
-    //         iconName: 'card_giftcard',
-    //         route: '/new-dashboard/productDecentralization',
-    //     },
-    //     {
-    //         displayName: 'Banner Panel',
-    //         iconName: 'image',
-    //         route: '/new-dashboard/banner',
-    //     }, {
-    //         displayName: 'Ops-Report',
-    //         iconName: 'analytics',
-    //         route: '/new-dashboard/dailywarehouseOpsReport',
-    //     }
-    // ];
+    @ViewChild(RouterOutlet) outlet: RouterOutlet;
     pages
 
     constructor(private navService: NavService, private router: Router, private activatedRoute: ActivatedRoute, public BackendService: BackendService, private cookieService: CookieService, private UserAccessService: UserAccessService) {
@@ -105,6 +47,11 @@ export class NewDasboardComponent implements OnInit, AfterViewInit {
     }
 
     ngOnInit() {
+        this.router.events.subscribe(e => {
+            if (e instanceof ActivationStart){
+                this.outlet && this.outlet.deactivate();
+                }
+          });
         this.username = localStorage.getItem('vendorName') ? localStorage.getItem('vendorName') : '';
         const bodyEle = document.getElementsByTagName('body');
         this.pages = this.navItems.map(m => {
