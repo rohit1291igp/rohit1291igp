@@ -177,7 +177,7 @@ export class BulkEgvComponent implements OnInit {
       workbook.xlsx.load(data).then(function () {
         console.log(workbook);
         const worksheet = workbook._worksheets.filter(ele=>{return ele.orderNo == 0})[0];
-        let excelFormat = ["product code", "amount", "quantity", "name", "email", "brand"];
+        let excelFormat = ["product code", "amount", "quantity", "name", "email"];
         console.log('rowCount: ', worksheet.rowCount);
         worksheet.eachRow(function (row, rowNumber) {
 
@@ -194,7 +194,7 @@ export class BulkEgvComponent implements OnInit {
             });
           }
           if (rowNumber != 1 && _this.validExcel) {
-            if (!(row.values[1] && row.values[2] && row.values[3] && row.values[4] && row.values[5] && row.values[6])) {
+            if (!(row.values[1] && row.values[2] && row.values[3] && row.values[4] && row.values[5] )) {
               _this.errorList.push({ row: rowNumber, msg: "Values cannot be empty" })
             }
             else {
@@ -203,8 +203,7 @@ export class BulkEgvComponent implements OnInit {
                 [excelFormat[1]]: row.values[2],
                 [excelFormat[2]]: row.values[3],
                 [excelFormat[3]]: row.values[4],
-                [excelFormat[4]]: typeof (row.values[5]) == "string" ? row.values[5] : row.values[5].text,
-                [excelFormat[5]]: row.values[6]
+                [excelFormat[4]]: typeof (row.values[5]) == "string" ? row.values[5] : row.values[5].text                
               });
             }
           }
@@ -265,8 +264,12 @@ export class BulkEgvComponent implements OnInit {
 
   downloadProductList() {
     let workbook = new Excel.Workbook();
-    let worksheet = workbook.addWorksheet('List');
-    let titleRow = worksheet.addRow(["Product Code", "Brand", "Product Name", "Minimum Amount", "Maximum Amount"]);
+    let worksheet1 = workbook.addWorksheet('Template');
+    //Product Code	Amount	Quantity	Name	Email	Brand	Delivery Date
+    let titleRow = worksheet1.addRow(["Product Code", "Amount", "Quantity", "Name", "Email"]);
+
+    let worksheet2 = workbook.addWorksheet('Product List');
+     titleRow = worksheet2.addRow(["Product Code", "Brand", "Product Name", "Minimum Amount", "Maximum Amount"]);
 
     this.productList.forEach(row => {
       let line = [];
@@ -275,7 +278,7 @@ export class BulkEgvComponent implements OnInit {
       line.push(row.displayName);
       line.push(row.minValue);
       line.push(row.maxValue);
-      worksheet.addRow(line)
+      worksheet2.addRow(line)
     })
 
     workbook.xlsx.writeBuffer().then((data) => {
@@ -284,17 +287,17 @@ export class BulkEgvComponent implements OnInit {
     });
   }
 
-  downloadSample() {
-    let workbook = new Excel.Workbook();
-    let worksheet = workbook.addWorksheet('List');
-    //Product Code	Amount	Quantity	Name	Email	Brand	Delivery Date
-    let titleRow = worksheet.addRow(["Product Code", "Amount", "Quantity", "Name", "Email", "Brand"]);
+  // downloadSample() {
+  //   let workbook = new Excel.Workbook();
+  //   let worksheet = workbook.addWorksheet('List');
+  //   //Product Code	Amount	Quantity	Name	Email	Brand	Delivery Date
+  //   let titleRow = worksheet.addRow(["Product Code", "Amount", "Quantity", "Name", "Email", "Brand"]);
 
 
-    workbook.xlsx.writeBuffer().then((data) => {
-      let blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-      fs.saveAs(blob, 'Bulk_Egv_Sample.xlsx');
-    });
-  }
+  //   workbook.xlsx.writeBuffer().then((data) => {
+  //     let blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+  //     fs.saveAs(blob, 'Bulk_Egv_Sample.xlsx');
+  //   });
+  // }
 
 }
