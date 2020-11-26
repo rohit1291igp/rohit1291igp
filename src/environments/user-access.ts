@@ -52,15 +52,10 @@ export const userAcess = {
             iconName: 'card_giftcard',
             route: '/new-dashboard/productDecentralization',
         },
-         {
+        {
             displayName: 'Ops-Report',
             iconName: 'analytics',
             route: '/new-dashboard/dailywarehouseOpsReport',
-        },
-        {
-            displayName: 'Pending orders',
-            iconName: 'analytics',
-            route: '/new-dashboard/pending-orders',
         }
     ],
     vendor: [
@@ -300,16 +295,27 @@ export const userAcess = {
         displayName: 'Current Balance',
         iconName: 'account_balance_wallet',
         route: '/new-dashboard/reports/itcReport',
+    },
+    {
+        displayName: 'Pending orders',
+        iconName: 'analytics',
+        route: '/new-dashboard/pending-orders',
     }],
     "microsite-zeapl": [{
         displayName: 'Dashboard',
         iconName: 'home',
         route: '/new-dashboard/dashboard-microsite',
     },
+
     {
         displayName: 'Current Balance',
         iconName: 'account_balance_wallet',
         route: '/new-dashboard/reports/itcReport',
+    },
+    {
+        displayName: 'Pending orders',
+        iconName: 'analytics',
+        route: '/new-dashboard/pending-orders',
     }],
     sub_egv_admin: [
         {
