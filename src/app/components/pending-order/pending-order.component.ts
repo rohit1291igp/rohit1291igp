@@ -54,7 +54,7 @@ export class PendingOrderComponent implements OnInit {
       orderId: [''],
       startDate: [this.datetoday],
       endDate: [this.datetoday],
-      transactionType: ['']
+      transactionType: [this.transactionTypeList[0]]
     });
     this.maxDate = new Date();
     _this.getStatement();
@@ -100,6 +100,8 @@ export class PendingOrderComponent implements OnInit {
     reqObj.url += "fromDate=" + this.formatDate(this.statementForm.value.startDate, 'yyyy-MM-dd');
     reqObj.url += "&toDate=" + this.formatDate(this.statementForm.value.endDate, 'yyyy-MM-dd');
     reqObj.url += '&status=' + (this.statementForm.value.transactionType ? this.statementForm.value.transactionType : "pending");
+    reqObj.url += "&fkAssociateId=" + localStorage.fkAssociateId;
+    
     // 	if (this.statementForm.value.transactionType == 'opening' || this.statementForm.value.transactionType == 'closing') {
     // 		this.showHyperlink = true;
     // 	}
@@ -121,7 +123,8 @@ export class PendingOrderComponent implements OnInit {
       }
       _this.dataSource = new MatTableDataSource(response.tableData);
       _this.tableHeaders = response.tableHeaders;
-      _this.tableHeaders.push("Actions");
+      if(this.statementForm.value.transactionType == 'pending') _this.tableHeaders.push("Actions");
+      if(this.statementForm.value.transactionType == 'pending') _this.tableHeaders.push("Order ID");
       setTimeout(() => {
         _this.dataSource.paginator = _this.paginator;
         _this.dataSource.sort = _this.sort;
@@ -146,6 +149,7 @@ export class PendingOrderComponent implements OnInit {
       method: "put",
       payload: data
     };
+    reqObj.url += "&fkAssociateId=" + localStorage.fkAssociateId;
     reqObj.payload['Status'] = approval;
     console.log("payload object", data)
     this.BackendService.makeAjax(reqObj, function (err, response, headers) {
