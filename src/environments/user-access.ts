@@ -216,6 +216,33 @@ export const userAcess = {
             route: '/new-dashboard/egv/change-password',
         }
     ],
+    parent_manager: [
+        {
+            displayName: 'Wallet',
+            iconName: 'account_balance_wallet',
+            route: '/new-dashboard/egv/wallet',
+        },
+        {
+            displayName: 'Statement',
+            iconName: 'receipt',
+            route: '/new-dashboard/egv/statement',
+        },
+        {
+            displayName: 'User Management',
+            iconName: 'supervisor_account',
+            route: '/new-dashboard/egv/user-management',
+        },
+        {
+            displayName: 'Alert Management',
+            iconName: 'notifications_none',
+            route: '/new-dashboard/egv/alert-management',
+        },
+        {
+            displayName: 'Password Reset',
+            iconName: 'security',
+            route: '/new-dashboard/egv/change-password',
+        }
+    ],
     manager: [
         {
             displayName: 'Wallet',

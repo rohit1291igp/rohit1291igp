@@ -146,7 +146,7 @@ export class LoginComponent implements OnInit {
                     _this.router.navigate(['/voucher/gv']);
                 } else if (userType === 'warehouse' || userType === 'marketing' || userType === 'mldatascience') {
                     _this.router.navigate(['/new-dashboard']);
-                } else if ((userType === 'egv_admin' || userType === 'sub_egv_admin' || localStorage.getItem('userType') === 'wb_yourigpstore') || (userType === 'manager' || userType === 'sub_manager') || (userType === 'executive' || userType === 'sub_executive')) {
+                } else if ((userType === 'egv_admin' || userType === 'sub_egv_admin' || localStorage.getItem('userType') === 'wb_yourigpstore') || (userType === 'manager' || userType === 'sub_manager') || (userType === 'executive' || userType === 'sub_executive') || userType == 'parent_manager') {
                     if(userType.includes('yourigpstore')){
                         let data = {
                             headerLogoUrl:'https://cdn.igp.com/f_auto,q_auto/banners/IGP-for-business-50_new_png.png?v=6',

@@ -66,7 +66,9 @@ export class EgvwalletComponent implements OnInit {
         .then((response) => {
           _this.walletSummary = response;
           _this.loadingSummary = false;
-        })
+        }).catch(e => {
+          console.log(e);
+      })
     }
     this.getUserList()
       .then((response) => {
@@ -129,9 +131,10 @@ export class EgvwalletComponent implements OnInit {
             _this.openSnackBar('Something went wrong.');
             console.log('Error=============>', result.error);
             reject([])
+          }else{
+            console.log('sidePanel Response --->', result.result[0]);
+            resolve(result.result[0])
           }
-          console.log('sidePanel Response --->', result.result[0]);
-          resolve(result.result[0])
         })
     })
 
@@ -236,7 +239,9 @@ export class EgvwalletComponent implements OnInit {
             _this.walletSummary = response;
             _this.loadingSummary = false;
           })
-      )
+      ).catch(e => {
+        console.log(e);
+    })
 
   }
 
@@ -247,7 +252,9 @@ export class EgvwalletComponent implements OnInit {
       .then((response) => {
         _this.walletSummary = response;
         _this.loadingSummary = false;
-      })
+      }).catch(e => {
+        console.log(e);
+    })
 
   }
 

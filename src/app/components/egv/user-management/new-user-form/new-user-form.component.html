@@ -1,5 +1,5 @@
 <h4>Add {{data['account_type']|titlecase}}</h4>
-<mat-form-field *ngIf="data.account_type!=='client' && (env.userType==='egv_admin' || env.userType==='sub_egv_admin' || env.userType==='wb_yourigpstore')" appearance="fill" class="example-form-field">
+<mat-form-field *ngIf="data.account_type!=='client' && (env.userType==='egv_admin' || env.userType==='sub_egv_admin' || env.userType==='parent_manager' || env.userType==='wb_yourigpstore')" appearance="fill" class="example-form-field">
   <mat-label>Select Client</mat-label>
   <mat-select [(ngModel)]="selectedFkid">
     <mat-option *ngFor="let account of accounts_list" [value]="account.fk_associate_id">{{account.company_name}}</mat-option>
@@ -35,6 +35,12 @@
           <mat-label>Company Phone (optional)</mat-label>
           <input matInput type="text" formControlName="company_number">
         </mat-form-field>
+        <mat-form-field *ngIf="walletType == 'sub_wallet'" appearance="fill" class="example-form-field">
+          <mat-label>Select Wallets</mat-label>
+          <mat-select formControlName="parentId" >
+            <mat-option *ngFor="let account of accounts_list" [value]="account.fk_associate_id">{{account.company_name}}</mat-option>
+          </mat-select>
+        </mat-form-field>
       </ng-container>
     </div>
     <div [ngClass]="{'col-sm-6':data.account_type==='client'}">
@@ -69,6 +75,13 @@
         <mat-error *ngIf="newUser.get('username').hasError('required')">
           User is <strong>required</strong>
         </mat-error>
+      </mat-form-field>
+      <mat-form-field *ngIf="data.account_type==='client' && env.userType==='parent_manager'" appearance="fill" class="example-form-field">
+        <mat-label>Wallet Type</mat-label>
+        <mat-select [(value)]="walletType">
+          <mat-option value="master_wallet" selected>Master Wallet</mat-option>
+          <mat-option value="sub_wallet">Sub Wallet</mat-option>
+        </mat-select>
       </mat-form-field>
     </div>
   </div>

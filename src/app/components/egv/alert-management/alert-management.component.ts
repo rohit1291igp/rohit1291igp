@@ -36,7 +36,7 @@ export class AlertManagementComponent implements OnInit {
   fkid=""
   ngOnInit() {
     this.userType=localStorage.getItem('userType');
-    if(this.userType!=='egv_admin' && this.userType!=='sub_egv_admin' && this.userType!=='wb_yourigpstore' ){
+    if(this.userType!=='egv_admin' && this.userType!=='sub_egv_admin' && this.userType!=='parent_manager' && this.userType!=='wb_yourigpstore' ){
       this.fkid=localStorage.getItem('fkAssociateId')
       this.getAlerts();
       this.alertsEmails=[...this.alerts.alertEmailIds]
