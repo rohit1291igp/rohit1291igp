@@ -10,7 +10,7 @@
 
 
       <div class="balance col-md-12 marginB20">
-        <div class="col-md-12 marginB20" style="margin-bottom:20px" *ngIf="env.userType == 'egv_admin'">
+        <div class="col-md-12 marginB20" style="margin-bottom:20px" *ngIf="env.userType == 'egv_admin' || env.userType == 'egv_parent'">
           <mat-form-field class="addMoneyInput width15">
             <mat-label>Select a client</mat-label>
             <input type="text" matInput placeholder='Select a user' formControlName="selectedUser"
@@ -119,36 +119,11 @@
       Pending Approvals
     </div>
     <div class="col-md-12 marginB20">
-      <!-- <form>
-        <mat-form-field class="addMoneyInput">
-          <mat-label>Start Date</mat-label>
-          <input matInput [matDatepicker]="startDate" [max]="maxDate" [formControl]="startDate"
-            (dateInput)="addEventFrom('input','startDate', $event)"
-            (dateChange)="addEventFrom('change','startDate', $event)" [value]='startDate.value'>
-          <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
-          <mat-datepicker #startDate></mat-datepicker>
-        </mat-form-field>
-
-
-        <mat-form-field class="addMoneyInput">
-          <mat-label>End Date</mat-label>
-          <input matInput [matDatepicker]="endDate" [max]="maxDate" [formControl]="endDate"
-            (dateInput)="addEventFrom('input','endDate', $event)"
-            (dateChange)="addEventFrom('change','endDate', $event)" [value]='endDate.value'>
-          <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
-          <mat-datepicker #endDate></mat-datepicker>
-        </mat-form-field>
-
-        <button mat-raised-button (click)='getPendingList()'>Get Approvals List</button>
-      </form> -->
+     
     </div>
 
     <div class="col-md-12" *ngIf="dataSource?.data?.length > 0 else noRecord">
-      <!-- <mat-form-field style="margin:0 20px" class="filterElement">
-        <mat-label>Search</mat-label>
-        <i matSuffix class="fa fa-search "></i>
-        <input matInput (keyup)="applyFilter($event)" #input>
-      </mat-form-field> -->
+      
       <mat-table [dataSource]="dataSource" matSort>
         <ng-container [matColumnDef]="column" *ngFor="let column of tableHeaders">
           <mat-header-cell mat-sort-header *matHeaderCellDef> {{column}} </mat-header-cell>
