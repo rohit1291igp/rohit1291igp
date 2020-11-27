@@ -1,5 +1,5 @@
 <div class="container">
-  <div *ngIf="userType==='egv_admin'" class="row m-top-1" style="padding-left: 15px;">
+  <div *ngIf="userType==='egv_admin' || userType=== 'parent_manager'" class="row m-top-1" style="padding-left: 15px;">
     <mat-form-field appearance="fill">
       <mat-label>Select Account</mat-label>
       <mat-select [(ngModel)]="fkid" (change)="onFkidSelect()">

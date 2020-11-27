@@ -13,8 +13,10 @@ export class NewUserFormComponent implements OnInit {
 
   env=environment
   newUser:FormGroup
-  selectedFkid=""
+  selectedFkid="";
+  parentId='';
   accounts_list=[]
+  public walletType = 'master_wallet';
   constructor(
     private fb:FormBuilder,
     private egvService:EgvService,
@@ -24,7 +26,7 @@ export class NewUserFormComponent implements OnInit {
   ngOnInit() {
     console.log(this.data)
     this.setUserForm()
-    if(this.env.userType==='egv_admin'){
+    if(this.env.userType==='egv_admin' || this.env.userType==='sub_egv_admin' || this.env.userType==='parent_manager' || this.env.userType==='wb_yourigpstore'){
       this.getAccountsList()
     }else{
       this.selectedFkid=localStorage.getItem('fkAssociateId');
@@ -40,7 +42,10 @@ export class NewUserFormComponent implements OnInit {
       email:["",Validators.compose([Validators.required,Validators.email])],
       username:["",Validators.required],
       mobile:["",Validators.required]
-    })
+    });
+    if(this.env.userType==='parent_manager'){
+      this.newUser.addControl('parentId',this.fb.control('',[]))
+    }
   }
   setCompanyForm(){
     this.newUser.addControl('company_name',this.fb.control('',[Validators.required]))
@@ -61,11 +66,20 @@ export class NewUserFormComponent implements OnInit {
     if(f.valid){
       if(this.data.account_type==='client'){
         f.value.fk_associate_id=Number(localStorage.getItem('fkAssociateId'));
+        
+        if(this.env.userType==='egv_admin' && this.walletType == 'master_wallet'){
+          f.value['flagParent'] = true;
+        }
+
+        if(this.env.userType==='parent_manager'){
+          f.value['parentId'] = f.value.fk_associate_id;
+        }
+
       }
-      if(this.data.account_type==='manager'){
+      if(this.data.account_type==='manager' || this.data.account_type==='sub_manager'){
         f.value.fk_associate_id=Number(this.selectedFkid);
-      }else if(this.data.account_type==='executive'){
-        if(this.env.userType==='egv_admin'){
+      }else if(this.data.account_type==='executive' || this.data.account_type==='sub_executive'){
+        if(this.env.userType === 'egv_admin' || this.env.userType === 'sub_egv_admin' || this.env.userType==='parent_manager' || this.env.userType === 'wb_yourigpstore'){
           f.value.fk_associate_id=Number(this.selectedFkid);
         }else{
           f.value.fk_associate_id=Number(localStorage.getItem('fkAssociateId'));
