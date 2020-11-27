@@ -30,68 +30,9 @@ export class NewDasboardComponent implements OnInit, AfterViewInit {
 
     @ViewChild('appDrawer') appDrawer: ElementRef;
     navItems: NavItem[] = this.UserAccessService.getUserAccess();
-
-    // [
-    //     {
-    //         displayName: 'Dashboard',
-    //         iconName: 'home',
-    //         route: '/new-dashboard',
-    //     },
-    //     {
-    //         displayName: 'Send Email Module',
-    //         iconName: 'recent_actors',
-    //         route: 'devfestfl',
-    //         children: [
-    //             {
-    //                 displayName: 'Send Email',
-    //                 iconName: 'attach_email',
-    //                 route: '/new-dashboard/sendemail/sendemail',
-    //             },
-    //             {
-    //                 displayName: 'Excel Upload',
-    //                 iconName: 'attach_email',
-    //                 route: '/new-dashboard/sendemail/uploadtemplate'
-    //             },
-    //             {
-    //                 displayName: 'Order Update',
-    //                 iconName: 'analytics',
-    //                 route: '/new-dashboard/sendemail/orderupdatestatus'
-    //             },
-    //             {
-    //                 displayName: 'Payment Reconciliation',
-    //                 iconName: 'payments',
-    //                 route: '/new-dashboard/sendemail/payment-reconciliation'
-    //             },
-    //             {
-    //                 displayName: 'Address Update',
-    //                 iconName: 'location_on',
-    //                 route: '/new-dashboard/sendemail/addressUpdate'
-    //             }
-    //         ]
-    //     },
-    //     {
-    //         displayName: 'Holiday Calender Management',
-    //         iconName: 'calendar_today',
-    //         route: '/new-dashboard/HolidayCalendarManagement',
-    //     },
-    //     {
-    //         displayName: 'Product Decentralization',
-    //         iconName: 'card_giftcard',
-    //         route: '/new-dashboard/productDecentralization',
-    //     },
-    //     {
-    //         displayName: 'Banner Panel',
-    //         iconName: 'image',
-    //         route: '/new-dashboard/banner',
-    //     }, {
-    //         displayName: 'Ops-Report',
-    //         iconName: 'analytics',
-    //         route: '/new-dashboard/dailywarehouseOpsReport',
-    //     }
-    // ];
+    @ViewChild(RouterOutlet) outlet: RouterOutlet;
     pages
     whitelabelStyle
-    @ViewChild(RouterOutlet) outlet: RouterOutlet;
     constructor(private navService: NavService, private router: Router, private activatedRoute: ActivatedRoute, public BackendService: BackendService, private cookieService: CookieService, private UserAccessService: UserAccessService) {
         router.events.subscribe((val: any) => {
             //On change check router

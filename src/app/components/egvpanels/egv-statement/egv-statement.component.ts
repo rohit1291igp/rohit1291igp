@@ -106,7 +106,7 @@ export class EgvStatementComponent implements OnInit {
 			url: 'login/getCompanyList',
 			method: "get",
 		};
-		// reqObj.url += '?fkAssociateId'+fkAssociateId;
+		if (environment.userType == "egv_parent") reqObj.url += '?fkAssociateId' + localStorage.fkAssociateId;
 		return new Promise((resolve, reject) => {
 			_this.EgvService.getEgvService(reqObj).subscribe(
 				result => {
@@ -163,7 +163,11 @@ export class EgvStatementComponent implements OnInit {
 				reqObj.url += '&fkasid=' + this.userSelected.fk_associate_id
 			}
 		}
+<<<<<<< HEAD
 		else{
+=======
+		else {
+>>>>>>> upstream/sub-wallet
 			reqObj.url += '&fkasid=' + localStorage.fkAssociateId;
 		}
 		// reqObj.url += '?fkAssociateId'+fkAssociateId;
@@ -210,7 +214,11 @@ export class EgvStatementComponent implements OnInit {
 				reqObj.url += '&fkasid=' + this.userSelected.fk_associate_id
 			}
 		}
+<<<<<<< HEAD
 		else{
+=======
+		else {
+>>>>>>> upstream/sub-wallet
 			reqObj.url += '&fkasid=' + localStorage.fkAssociateId;
 		}
 

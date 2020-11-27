@@ -61,7 +61,7 @@ export class EgvwalletComponent implements OnInit {
       limitType: [''],
       limitValue: ['']
     });
-    if ((environment.userType == "manager" || environment.userType == "sub_manager") || (environment.userType == "executive" || environment.userType == "sub_executive")) {
+    if ((environment.userType == "manager" || environment.userType == "sub_manager") || (environment.userType == "executive" || environment.userType == "egv_parent" || environment.userType == "sub_executive")) {
       this.getAccountSummary(localStorage.fkAssociateId)
         .then((response) => {
           _this.walletSummary = response;
@@ -147,7 +147,8 @@ export class EgvwalletComponent implements OnInit {
       url: 'login/getCompanyList',
       method: "get",
     };
-    // reqObj.url += '?fkAssociateId'+fkAssociateId;
+    if (  environment.userType == "egv_parent")
+      reqObj.url += '?fkAssociateId'+localStorage.fkAssociateId;
     return new Promise((resolve, reject) => {
       _this.EgvService.getEgvService(reqObj).subscribe(
         result => {
@@ -318,7 +319,7 @@ export class EgvwalletComponent implements OnInit {
     };
     reqObj.url += "&fkAssociateId=" + data['fkasid'];
     reqObj.url += "&userId=" + data['UserId'];
-    reqObj.url += "&logId=" + data['logId']
+    reqObj.url += "&logId=" + data['logId'];
     if (environment.userType == 'egv_admin' || environment.userType == 'sub_egv_admin' || environment.userType == 'wb_yourigpstore') {
       reqObj.url += "&flagAdmin=1&flagApproveCredit=" + (approval ? 1 : -1);
     }
