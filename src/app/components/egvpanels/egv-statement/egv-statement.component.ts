@@ -163,11 +163,7 @@ export class EgvStatementComponent implements OnInit {
 				reqObj.url += '&fkasid=' + this.userSelected.fk_associate_id
 			}
 		}
-<<<<<<< HEAD
-		else{
-=======
 		else {
->>>>>>> upstream/sub-wallet
 			reqObj.url += '&fkasid=' + localStorage.fkAssociateId;
 		}
 		// reqObj.url += '?fkAssociateId'+fkAssociateId;
@@ -214,11 +210,7 @@ export class EgvStatementComponent implements OnInit {
 				reqObj.url += '&fkasid=' + this.userSelected.fk_associate_id
 			}
 		}
-<<<<<<< HEAD
-		else{
-=======
 		else {
->>>>>>> upstream/sub-wallet
 			reqObj.url += '&fkasid=' + localStorage.fkAssociateId;
 		}
 
