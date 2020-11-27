@@ -67,9 +67,14 @@ export class NewUserFormComponent implements OnInit {
       if(this.data.account_type==='client'){
         f.value.fk_associate_id=Number(localStorage.getItem('fkAssociateId'));
         
-        if(this.env.userType==='parent_manager' && this.walletType == 'master_wallet'){
+        if(this.env.userType==='egv_admin' && this.walletType == 'master_wallet'){
           f.value['flagParent'] = true;
         }
+
+        if(this.env.userType==='parent_manager'){
+          f.value['parentId'] = f.value.fk_associate_id;
+        }
+
       }
       if(this.data.account_type==='manager' || this.data.account_type==='sub_manager'){
         f.value.fk_associate_id=Number(this.selectedFkid);
