@@ -77,8 +77,9 @@ export class EgvStatementComponent implements OnInit {
 
 					}
 				}
-				_this.getStatement();
+				
 			})
+			_this.getStatement();
 
 
 	}
@@ -157,10 +158,14 @@ export class EgvStatementComponent implements OnInit {
 				this.showHyperlink = true;
 			}
 		}
-		if (this.userSelected && (this.selectedUser.value || this.statementForm.value.selectedUser)) {
-			reqObj.url += '&fkasid=' + this.userSelected.fk_associate_id
+		if (environment.userType == 'egv_admin') {
+			if (this.userSelected && (this.selectedUser.value || this.statementForm.value.selectedUser)) {
+				reqObj.url += '&fkasid=' + this.userSelected.fk_associate_id
+			}
 		}
-
+		else{
+			reqObj.url += '&fkasid=' + localStorage.fkAssociateId;
+		}
 		// reqObj.url += '?fkAssociateId'+fkAssociateId;
 		if (document.getElementById("cLoader")) document.getElementById("cLoader").classList.remove("hide");
 		this.EgvService.getEgvService(reqObj).subscribe(
@@ -200,8 +205,13 @@ export class EgvStatementComponent implements OnInit {
 		if (this.statementForm.value.transactionType && this.statementForm.value.transactionType != 'All') {
 			reqObj.url += '&transactionType=' + this.statementForm.value.transactionType;
 		}
-		if (this.userSelected && (this.selectedUser.value || this.statementForm.value.selectedUser)) {
-			reqObj.url += '&fkasid=' + this.userSelected.fk_associate_id
+		if (environment.userType == 'egv_admin') {
+			if (this.userSelected && (this.selectedUser.value || this.statementForm.value.selectedUser)) {
+				reqObj.url += '&fkasid=' + this.userSelected.fk_associate_id
+			}
+		}
+		else{
+			reqObj.url += '&fkasid=' + localStorage.fkAssociateId;
 		}
 
 		// reqObj.url += '?fkAssociateId'+fkAssociateId;
@@ -262,10 +272,12 @@ export class EgvStatementComponent implements OnInit {
 		let _this = this;
 		let newdate = element.Date.substring(0, 10).split("-").reverse().join("-");
 		let reqObj: any = {
-			url: 'reconcile/gettransactionwisereport?endDate=' + newdate + "&startDate=" + newdate + "&fkasid=" + element.fkasid,
+			url: 'reconcile/gettransactionwisereport?endDate=' + newdate + "&startDate=2020-11-18"  + "&fkasid=" + element.fkasid,
 			method: "get",
 		};
 		if (document.getElementById("cLoader")) document.getElementById("cLoader").classList.remove("hide");
+		reqObj.url += element.IsBulkEGV ? "&IsBulkEGV=true" : "";
+		reqObj.url += element.IsBulkEGV ? "&transactionId="+element.TxnDetails : "";
 		this.EgvService.getEgvService(reqObj).subscribe(
 			result => {
 				if (document.getElementById("cLoader")) document.getElementById("cLoader").classList.add("hide");

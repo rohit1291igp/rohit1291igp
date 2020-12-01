@@ -60,17 +60,13 @@ import { UtilityService } from './services/utility.service';
 import { VoucherService } from './services/voucher.service';
 import { SharedModule } from './shared-module/shared/shared.module';
 import { CookieService } from './services/cookie.service';
-// import { OrderReportComponent} from './components/order-report/order-report.component';
-// import { NewUserFormComponent } from './components/egv/user-management/new-user-form/new-user-form.component';
 import { EgvGuard } from './services/egv.guard';
 import { EgvService } from './services/egv.service';
 import { ScriptService } from './services/script.service';
 import { SerachRankingService } from './services/serach-ranking.service';
 import { environment } from 'environments/environment';
 import { AppLoadService } from './services/app.load.service';
-// import { AlertManagementComponent } from './components/egv/alert-management/alert-management.component';
-// import { EditUserComponent } from './components/egv/user-management/edit-user/edit-user.component';
-// import { PasswordChangeComponent } from './components/egv/user-management/password-change/password-change.component';
+
 
 export function init_app(appLoadService: AppLoadService) {
   return () => appLoadService.initializeApp();
