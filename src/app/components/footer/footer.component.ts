@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener, DoCheck } from '@angular/core';
 
 @Component({
   selector: 'app-footer',
@@ -22,7 +22,7 @@ import { Component, OnInit } from '@angular/core';
           }
           `]
 })
-export class FooterComponent implements OnInit {
+export class FooterComponent implements OnInit, DoCheck {
   whitelabelStyle;
 
   constructor() { }
@@ -30,5 +30,8 @@ export class FooterComponent implements OnInit {
   ngOnInit() {
     this.whitelabelStyle = localStorage.getItem('whitelabelDetails') ? JSON.parse(localStorage.getItem('whitelabelDetails')) : null;
   }
-
+    
+    ngDoCheck(){
+      this.whitelabelStyle = localStorage.getItem('whitelabelDetails') ? JSON.parse(localStorage.getItem('whitelabelDetails')) : null;
+    }
 }
