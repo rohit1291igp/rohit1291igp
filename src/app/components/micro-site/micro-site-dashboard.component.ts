@@ -62,6 +62,7 @@ export class MicroSiteDasboardComponent implements OnInit {
         { value: 'debit', viewValue: 'Debit' }
     ];
     fksId;
+    fkUserId;
     vendorName;
     /**
      * Pre-defined columns list for delivery boy table
@@ -107,6 +108,7 @@ export class MicroSiteDasboardComponent implements OnInit {
         this.whitelabelStyle = localStorage.getItem('whitelabelDetails') ? JSON.parse(localStorage.getItem('whitelabelDetails')) : null;
         this.fksId = localStorage.getItem('fkAssociateId');
         this.vendorName = localStorage.getItem('vendorName');
+        this.fkUserId = localStorage.getItem('fkUserId');
         this.myForm = this.fb.group({
             name: ['', [Validators.required, Validators.pattern('^[a-zA-Z ]*$')]],
             email: ['', [Validators.required]],
@@ -388,13 +390,24 @@ export class MicroSiteDasboardComponent implements OnInit {
                     break;
             }
             
-            let reqObj = {
-                url:
-                    `${micrositeUser}/userupload?issue=${micrositeVoucher}`,
-                method: 'post',
-                payload: formData,
-                options: options
-            };
+            let reqObj;
+            if(_this.whitelabelStyle){
+                reqObj = {
+                    url:
+                        `points/upload?user=temp&fkAssociateId=${_this.fksId}&fkUserId=${_this.fkUserId}&thirdPartyId=007`,
+                    method: 'post',
+                    payload: formData,
+                    options: options
+                };
+            }else{
+                reqObj = {
+                    url:
+                        `${micrositeUser}/userupload?issue=${micrositeVoucher}`,
+                    method: 'post',
+                    payload: formData,
+                    options: options
+                };
+            }
             _this.BackendService.makeAjax(reqObj, function (err, response, headers) {
 
                 if (err || response.error) {
