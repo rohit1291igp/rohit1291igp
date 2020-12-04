@@ -6,8 +6,8 @@
           <div>
             <!-- *ngIf="env.userType=='egv_admin'" -->
             <mat-form-field class="filterElement" *ngIf="env.userType =='egv_admin' || env.userType =='parent_manager' || env.userType =='sub_egv_admin' || env.userType =='wb_yourigpstore'">
-              <mat-label>Select a client</mat-label>
-              <input type="text" matInput placeholder='Select a client' formControlName="selectedUser"
+              <mat-label>Select a Wallet</mat-label>
+              <input type="text" matInput formControlName="selectedUser"
                 [matAutocomplete]="auto">
               <mat-autocomplete #auto="matAutocomplete" (optionSelected)='getUserSelected($event.option.value)'
                 [displayWith]="userDisplayFn">

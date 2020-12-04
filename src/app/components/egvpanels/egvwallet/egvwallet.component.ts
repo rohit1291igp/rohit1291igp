@@ -207,9 +207,11 @@ export class EgvwalletComponent implements OnInit {
             // _this.openSnackBar('Something went wrong.');
             console.log('Error=============>', result.error);
             reject([])
+          }else{
+            console.log('getUserList Response --->', result);
+            resolve(result)
           }
-          console.log('getUserList Response --->', result);
-          resolve(result)
+          
         })
     })
 

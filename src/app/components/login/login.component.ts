@@ -143,7 +143,7 @@ export class LoginComponent implements OnInit {
                 } else if (userType === 'warehouse' || userType === 'marketing' || userType === 'mldatascience') {
                     _this.router.navigate(['/new-dashboard']);
                 } else if ((userType === 'egv_admin' || userType === 'sub_egv_admin' || localStorage.getItem('userType') === 'wb_yourigpstore') || (userType === 'manager' || userType === 'sub_manager') || (userType === 'executive' || userType === 'sub_executive' || userType == 'parent_manager')) {
-                    if(userType.includes('yourigpstore') && !_this.whitelabelStyle){
+                    if((userType === 'manager' || userType === 'sub_manager') || (userType === 'executive' || userType === 'sub_executive' || userType == 'parent_manager') && !_this.whitelabelStyle){
                         _this.AppLoadService.getMicrositeDetails(_this.model.associatename);
                         let timer = setInterval(() => {
                             if(_this.AppLoadService.micrositeDetails){

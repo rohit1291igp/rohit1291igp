@@ -15,6 +15,7 @@ export class NewUserFormComponent implements OnInit {
   newUser:FormGroup
   selectedFkid="";
   parentId='';
+  fksId;
   accounts_list=[]
   public walletType = 'master_wallet';
   constructor(
@@ -25,9 +26,10 @@ export class NewUserFormComponent implements OnInit {
 
   ngOnInit() {
     console.log(this.data)
+    this.fksId=localStorage.getItem('fkAssociateId');
     this.setUserForm()
     if(this.env.userType==='egv_admin' || this.env.userType==='sub_egv_admin' || this.env.userType==='parent_manager' || this.env.userType==='wb_yourigpstore'){
-      this.getAccountsList()
+      this.getAccountsList(this.env.userType)
     }else{
       this.selectedFkid=localStorage.getItem('fkAssociateId');
     }
@@ -55,8 +57,9 @@ export class NewUserFormComponent implements OnInit {
       this.newUser.addControl('company_number',this.fb.control('',[]))
   }
 
-  getAccountsList(){
-    this.egvService.getCompanyList().subscribe((res:any)=>{
+  getAccountsList(userType){
+    let parentId = userType == 'parent_manager' ? localStorage.getItem('fkAssociateId') : null;
+    this.egvService.getCompanyList(parentId).subscribe((res:any)=>{
       this.accounts_list=res;
     })
   }
@@ -79,6 +82,7 @@ export class NewUserFormComponent implements OnInit {
       if(this.data.account_type==='manager' || this.data.account_type==='sub_manager'){
         f.value.fk_associate_id=Number(this.selectedFkid);
       }else if(this.data.account_type==='executive' || this.data.account_type==='sub_executive'){
+        f.value['parentId'] = this.fksId;
         if(this.env.userType === 'egv_admin' || this.env.userType === 'sub_egv_admin' || this.env.userType==='parent_manager' || this.env.userType === 'wb_yourigpstore'){
           f.value.fk_associate_id=Number(this.selectedFkid);
         }else{
