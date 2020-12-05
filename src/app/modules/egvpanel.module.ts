@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
 import { MyDatePickerModule } from 'mydatepicker';
-import { MatFormFieldModule, MatAutocompleteModule, MatInputModule, MatTableModule, MatCardModule, MatButtonModule, MatMenuModule, MatDialogModule, MatSnackBarModule, MatPaginatorModule, MatSortModule, MatDatepickerModule, MatRadioModule, MatSelectModule, MatIconModule, MatChip, MatChipsModule, MatSidenavModule } from '@angular/material';
+import { MatFormFieldModule, MatAutocompleteModule, MatInputModule, MatTableModule, MatCardModule, MatButtonModule, MatMenuModule, MatDialogModule, MatSnackBarModule, MatPaginatorModule, MatSortModule, MatDatepickerModule, MatRadioModule, MatSelectModule, MatIconModule, MatChip, MatChipsModule, MatSidenavModule, MatCheckboxModule } from '@angular/material';
 import { EgvService } from '../services/egv.service';
 import { EgvStatementComponent, transactionReportDialog } from 'app/components/egvpanels/egv-statement/egv-statement.component';
 import { EgvwalletComponent } from 'app/components/egvpanels/egvwallet/egvwallet.component';
@@ -77,7 +77,8 @@ const routes: Routes = [
     MatSelectModule,
     MatIconModule,
     MatChipsModule,
-    MatSidenavModule
+    MatSidenavModule,
+    MatCheckboxModule
   ],
   declarations: [
     EgvwalletComponent, 

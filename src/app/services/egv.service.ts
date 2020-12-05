@@ -51,8 +51,13 @@ export class EgvService {
     return this.httpClient.put(url,req_body);
   }
 
-  getCompanyList() {
-    let url = environment.origin + 'v1/admin/egvpanel/login/getCompanyList'
+  getCompanyList(parentId) {
+    let url;
+    if(parentId){
+        url = environment.origin + `v1/admin/egvpanel/login/getCompanyList?parentId=${parentId}`;
+    }else{
+      url = environment.origin + 'v1/admin/egvpanel/login/getCompanyList';
+    }
     return this.httpClient.get(url)
   }
   getproductList(fk_associateId) {
