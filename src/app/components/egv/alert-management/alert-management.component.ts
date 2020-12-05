@@ -265,7 +265,7 @@ export class AlertManagementComponent implements OnInit {
 
   unique_accounts=[]
   getAccounts(){
-    this.egvService.getCompanyList().subscribe((res:any)=>{
+    this.egvService.getCompanyList(null).subscribe((res:any)=>{
       this.unique_accounts=res;
     })
   }

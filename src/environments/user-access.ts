@@ -273,6 +273,16 @@ export const userAcess = {
             displayName: 'Bulk EGV',
             iconName: 'addchart',
             route: '/new-dashboard/egv/bulkegv',
+        },
+        {
+            displayName: 'Voucher Credit/Debit',
+            iconName: 'account_balance_wallet',
+            route: '/new-dashboard/dashboard-microsite',
+        },
+        {
+            displayName: 'Current Balance',
+            iconName: 'account_balance_wallet',
+            route: '/new-dashboard/reports/itcReport',
         }
     ],
     executive: [
@@ -290,6 +300,16 @@ export const userAcess = {
             displayName: 'Password Reset',
             iconName: 'security',
             route: '/new-dashboard/egv/change-password',
+        },
+        {
+            displayName: 'Voucher Credit/Debit',
+            iconName: 'account_balance_wallet',
+            route: '/new-dashboard/dashboard-microsite',
+        },
+        {
+            displayName: 'Current Balance',
+            iconName: 'account_balance_wallet',
+            route: '/new-dashboard/reports/itcReport',
         }
 
     ],
