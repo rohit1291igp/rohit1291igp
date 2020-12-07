@@ -67,7 +67,7 @@ export class DashboardService {
         ) { 
             let userType = localStorage.getItem('userType');
             
-            if(userType == 'warehouse'||userType == 'microsite' || userType == 'microsite-zeapl' || userType == 'admin' || userType == 'vendor'){
+            if(userType == 'warehouse'||userType == 'microsite' || userType == 'microsite-zeapl' || userType == 'admin' || userType == 'vendor' || userType ==  'parent_manager'){
                 this.router.navigate(['/new-dashboard']);
             }
             

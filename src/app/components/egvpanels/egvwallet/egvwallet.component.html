@@ -12,8 +12,8 @@
       <div class="balance col-md-12 marginB20">
         <div class="col-md-12 marginB20" style="margin-bottom:20px" *ngIf="env.userType == 'egv_admin' || env.userType.includes('parent')">
           <mat-form-field class="addMoneyInput width15" *ngIf="env.userType =='egv_admin'">
-            <mat-label>Select a client</mat-label>
-            <input type="text" matInput placeholder='Select a user' formControlName="selectedUser"
+            <mat-label>Select a Wallet</mat-label>
+            <input type="text" matInput formControlName="selectedUser"
               [matAutocomplete]="auto">
             <mat-autocomplete #auto="matAutocomplete" (optionSelected)='getUserSelected($event.option.value)'
               [displayWith]="userDisplayFn">
@@ -21,7 +21,7 @@
                 {{option.company_name}}</mat-option>
             </mat-autocomplete>
           </mat-form-field>
-          <mat-form-field class="filterElement">
+          <mat-form-field class="filterElement" *ngIf="addMoneyForm.value.selectedUser">
             <mat-label>Select a wallet</mat-label>
             <input type="text" matInput placeholder='Select a wallet' formControlName="selectedChild"
               [matAutocomplete]="auto">
@@ -33,13 +33,13 @@
           </mat-form-field>
         </div>
         <div *ngIf="loadingSummary else loaded">
-          Select a Client to view Summary.
+          Select a Wallet to view Summary.
         </div>
 
 
         <ng-template #loaded>
           <div class="col-md-12">
-            <div class="col-md-3 summaryBox" style="height:0;border:0" *ngIf="env.userType!='egv_admin'"></div>
+            <div class="col-md-3 summaryBox" style="height:0;border:0" *ngIf="env.userType!='egv_admin' && env.userType != 'sub_egv_admin' && env.userType != 'wb_yourigpstore'"></div>
 
             <div class="col-md-3 col-sm-12 summaryBox">
               <div style='margin:auto'>&#8377; {{walletSummary.balance || '-' | indianNumeric}}</div>
@@ -51,12 +51,12 @@
               <div class="summaryIcon"><i class="fa fa-sliders fa-rotate-90"></i> Daily Limit </div>
             </div>
 
-            <div class="col-md-3  col-sm-12 summaryBox" *ngIf="env.userType=='egv_admin'">
+            <div class="col-md-3  col-sm-12 summaryBox" *ngIf="env.userType=='egv_admin' || env.userType == 'sub_egv_admin' || env.userType == 'wb_yourigpstore'">
               <div style='margin:auto'>&#8377; {{walletSummary.creditLimit ||'-' | indianNumeric}}</div>
               <div class="summaryIcon">
                 <i class="fa fa-credit-card "></i> Credit Limit </div>
             </div>
-            <div class="col-md-3 col-sm-12 summaryBox" *ngIf="env.userType=='egv_admin'">
+            <div class="col-md-3 col-sm-12 summaryBox" *ngIf="env.userType=='egv_admin' || env.userType == 'sub_egv_admin' || env.userType == 'wb_yourigpstore'">
               <div style='margin:auto'>{{walletSummary.creditLimitDays || '-'}}
                 {{(walletSummary.creditLimitDays>1)?'days':'day'}}</div>
               <div class="summaryIcon"> <i class="fa fa-calendar"></i> Credit Period </div>
@@ -97,13 +97,13 @@
             <input matInput name="comments" type="text" placeholder="Comments" formControlName="comments">
           </mat-form-field>
 
-          <button mat-flat-button class="addMoneyButton" type="submit">Add Money</button>
+          <button mat-flat-button class="addMoneyButton" type="submit" [ngStyle]="{'background-color': whitelabelStyle ? whitelabelStyle.primaryColor : '', 'color': whitelabelStyle ? whitelabelStyle.secondaryColor : ''}">Add Money</button>
           <mat-checkbox class="example-margin" [(ngModel)]="requestAddflag" [ngModelOptions]="{standalone: true}" *ngIf="addMoneyForm.get('selectedChild').value">Transfer Money To Selected Sub-wallet</mat-checkbox>
         </div>
         <!-- <div class="marginB20">
               
             </div> -->
-        <div *ngIf="env.userType=='egv_admin'">
+        <div *ngIf="env.userType=='egv_admin' || env.userType == 'sub_egv_admin' || env.userType == 'wb_yourigpstore'">
           <div class="width20 addMoney">
             Change Parameter
           </div>
@@ -118,7 +118,7 @@
             <mat-label> Enter New Value</mat-label>
             <input matInput name='limitValue' type="number" placeholder="Enter New Value" formControlName="limitValue">
           </mat-form-field>
-          <button mat-flat-button type="button" class="addMoneyButton" (click)="updateLimit()">Update</button>
+          <button mat-flat-button type="button" class="addMoneyButton" (click)="updateLimit()" [ngStyle]="{'background-color': whitelabelStyle ? whitelabelStyle.primaryColor : '', 'color': whitelabelStyle ? whitelabelStyle.secondaryColor : '' }">Update</button>
         </div>
 
 
@@ -126,7 +126,7 @@
     </div>
   </form>
 
-  <div class="col-md-12" *ngIf="env.userType == 'egv_admin'">
+  <div class="col-md-12" *ngIf="env.userType == 'egv_admin' || env.userType == 'sub_egv_admin' || env.userType == 'wb_yourigpstore'">
     <div class='addMoney headerUnderLine col-md-12'>
       Pending Approvals
     </div>

@@ -17,6 +17,7 @@ import { AuthGuard } from 'app/services/auth-guard.service';
 import { AlertManagementComponent } from 'app/components/egv/alert-management/alert-management.component';
 import { NewUserFormComponent } from 'app/components/egv/user-management/new-user-form/new-user-form.component';
 import { EditUserComponent } from 'app/components/egv/user-management/edit-user/edit-user.component';
+import { BulkEgvComponent } from 'app/components/egvpanels/bulk-egv/bulk-egv.component'
 
 
 const routes: Routes = [
@@ -44,6 +45,11 @@ const routes: Routes = [
     component:AlertManagementComponent,
     canActivate:[AuthGuard,EgvGuard]
   },
+  {
+    path: 'bulkegv',
+    component: BulkEgvComponent,
+    canActivate: [AuthGuard, EgvGuard]
+  }
 
 ];
 
@@ -84,7 +90,8 @@ const routes: Routes = [
     UserManagementComponent,
     transactionReportDialog,
     IndianNumericPipe,
-    EgvDashboardComponent],
+    EgvDashboardComponent,
+    BulkEgvComponent],
   providers: [EgvService],
   entryComponents: [transactionReportDialog,NewUserFormComponent,EditUserComponent]
 })
