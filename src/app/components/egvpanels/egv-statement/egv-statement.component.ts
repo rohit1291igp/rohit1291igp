@@ -33,6 +33,9 @@ export class EgvStatementComponent implements OnInit {
 	dataSource: MatTableDataSource<any>;
 	tableHeaders: any;
 	showHyperlink: boolean = false;
+	childList: any;
+	filteredChildList: any;
+	childSelected: any;
 
 	constructor(
 		private fb: FormBuilder,
@@ -47,39 +50,55 @@ export class EgvStatementComponent implements OnInit {
 
 		this.statementForm = this.fb.group({
 			selectedUser: [''],
+			selectedChild: [''],
 			startDate: [new Date()],
 			endDate: [new Date()],
 			transactionType: ['']
 		});
 		this.maxDate = new Date();
-
-		_this.getUserList()
+		let parentId = environment.userType.includes('parent') ? localStorage.fkAssociateId : '';
+		_this.getUserList(parentId)
 			.then((response) => {
-				_this.usersList = response;
-				// _this.usersList.push(
-				// { "user_id": 20835, "name": "879 test", "fkAssociateId": "882", "company_name": "879 test", "userType": "Manager", "accountExpired": false, "credentialExpired": false, "accountLocked": false, "accountEnabled": 1, "deliveryBoyEnabled": false, "access": [{}] })
-				_this.filteredUserList = _this.statementForm.get('selectedUser').valueChanges
-					.pipe(
-						startWith(''),
-						map(value => typeof value === 'string' ? value : value['company_name']),
-						map(name => name ? _this.vendorListFilter(name) : _this.usersList)
 
-					);
-				if (environment.userType == "manager" || environment.userType == "executive") {
-					const toSelect = _this.usersList.find(c => c.fk_associate_id == localStorage.fkAssociateId);
+				if (environment.userType.includes('parent')) {
+					_this.childList = response;
+					let toSelect = { company_name: localStorage.associateName, fk_associate_id: localStorage.fkAssociateId };
 					_this.selectedUser.setValue(toSelect);
 					_this.statementForm.get('selectedUser').setValue(toSelect);
 					_this.userSelected = toSelect;
-					_this.userSelected.fk_associate_id = localStorage.fkAssociateId;
+					_this.filteredChildList = _this.statementForm.get('selectedChild').valueChanges
+						.pipe(
+							startWith(''),
+							map(value => typeof value === 'string' ? value : value['company_name']),
+							map(name => name ? _this.childListFilter(name) : _this.childList)
+
+						);
+				}
+				else {
+					_this.usersList = response;
+					_this.filteredUserList = _this.statementForm.get('selectedUser').valueChanges
+						.pipe(
+							startWith(''),
+							map(value => typeof value === 'string' ? value : value['company_name']),
+							map(name => name ? _this.userListFilter(name) : _this.usersList)
+
+						);
+				}
+				if (environment.userType == "manager" || environment.userType == "executive") {
+
+
+					const toSelect = _this.usersList.find(c => c.fk_associate_id == localStorage.fkAssociateId);
+					_this.selectedUser.setValue(toSelect);
+					_this.statementForm.get('selectedUser').setValue(toSelect);
 					if (toSelect) {
 						_this.selectedUser.disable();
 						_this.statementForm.get('selectedUser').disable();
-
+						_this.userSelected = toSelect;
 					}
 				}
-				
+
 			})
-			_this.getStatement();
+		_this.getStatement();
 
 
 	}
@@ -96,9 +115,25 @@ export class EgvStatementComponent implements OnInit {
 
 	getUserSelected(obj: any) {
 		this.userSelected = obj;
+		let _this = this;
+		this.getUserList(obj.fk_associate_id).then((response) => {
+			_this.childList = response;
+			_this.childList.unshift(obj)
+			// _this.usersList.push(
+			// { "user_id": 20835, "name": "879 test", "fkAssociateId": "882", "company_name": "879 test", "userType": "Manager", "accountExpired": false, "credentialExpired": false, "accountLocked": false, "accountEnabled": 1, "deliveryBoyEnabled": false, "access": [{}] })
+			_this.filteredChildList = _this.statementForm.get('selectedChild').valueChanges
+			  .pipe(
+				startWith(''),
+				map(value => typeof value === 'string' ? value : value['company_name']),
+				map(name => name ? _this.childListFilter(name) : _this.childList)
+	  
+			  );
+		  })
 	}
-
-	getUserList() {
+	getChildSelected(obj: any) {
+		this.childSelected = obj;
+	}
+	getUserList(parentId) {
 
 		let _this = this;
 		this.submitted = true;
@@ -106,7 +141,7 @@ export class EgvStatementComponent implements OnInit {
 			url: 'login/getCompanyList',
 			method: "get",
 		};
-		if (environment.userType == "egv_parent") reqObj.url += '?fkAssociateId' + localStorage.fkAssociateId;
+		if (parentId) reqObj.url += '?parentId=' + parentId;
 		return new Promise((resolve, reject) => {
 			_this.EgvService.getEgvService(reqObj).subscribe(
 				result => {
@@ -122,10 +157,17 @@ export class EgvStatementComponent implements OnInit {
 
 	}
 
-	private vendorListFilter(name: string): any[] {
+	private userListFilter(name: string): any[] {
 		const filterValue = name.toLowerCase();
 		return this.usersList.filter(option => option.company_name.toLowerCase().indexOf(filterValue) === 0);
 	}
+
+
+	private childListFilter(name: string): any[] {
+		const filterValue = name.toLowerCase();
+		return this.childList.filter(option => option.company_name.toLowerCase().indexOf(filterValue) === 0);
+	}
+
 
 	userDisplayFn(user: any): string {
 		return user && user.company_name ? user.company_name : '';
@@ -158,9 +200,9 @@ export class EgvStatementComponent implements OnInit {
 				this.showHyperlink = true;
 			}
 		}
-		if (environment.userType == 'egv_admin') {
-			if (this.userSelected && (this.selectedUser.value || this.statementForm.value.selectedUser)) {
-				reqObj.url += '&fkasid=' + this.userSelected.fk_associate_id
+		if (environment.userType == 'egv_admin' || environment.userType.includes('parent')) {
+			if (this.childSelected && (this.childSelected.value || this.statementForm.value.childSelected)) {
+				reqObj.url += '&fkasid=' + this.childSelected.fk_associate_id
 			}
 		}
 		else {
@@ -272,12 +314,12 @@ export class EgvStatementComponent implements OnInit {
 		let _this = this;
 		let newdate = element.Date.substring(0, 10).split("-").reverse().join("-");
 		let reqObj: any = {
-			url: 'reconcile/gettransactionwisereport?endDate=' + newdate + "&startDate=2020-11-18"  + "&fkasid=" + element.fkasid,
+			url: 'reconcile/gettransactionwisereport?endDate=' + newdate + "&startDate=2020-11-18" + "&fkasid=" + element.fkasid,
 			method: "get",
 		};
 		if (document.getElementById("cLoader")) document.getElementById("cLoader").classList.remove("hide");
 		reqObj.url += element.IsBulkEGV ? "&IsBulkEGV=true" : "";
-		reqObj.url += element.IsBulkEGV ? "&transactionId="+element.TxnDetails : "";
+		reqObj.url += element.IsBulkEGV ? "&transactionId=" + element.TxnDetails : "";
 		this.EgvService.getEgvService(reqObj).subscribe(
 			result => {
 				if (document.getElementById("cLoader")) document.getElementById("cLoader").classList.add("hide");
@@ -290,7 +332,7 @@ export class EgvStatementComponent implements OnInit {
 				let data: any = {};
 				data.dataSource = new MatTableDataSource(result.tableData);
 				data.tableHeaders = result.tableHeaders;
-				if(element.IsBulkEGV) data.tableHeaders.push("Recipient_Email");
+				if (element.IsBulkEGV) data.tableHeaders.push("Recipient_Email");
 
 				_this.dialog.open(transactionReportDialog, { data });
 			})

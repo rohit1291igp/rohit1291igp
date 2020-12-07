@@ -5,13 +5,23 @@
         <form [formGroup]="statementForm" (ngSubmit)="getStatement()">
           <div>
             <!-- *ngIf="env.userType=='egv_admin'" -->
-            <mat-form-field class="filterElement" *ngIf="env.userType =='egv_admin' || env.userType =='parent_manager' || env.userType =='sub_egv_admin' || env.userType =='wb_yourigpstore'">
+            <mat-form-field class="addMoneyInput width15" *ngIf="env.userType =='egv_admin'">
               <mat-label>Select a Wallet</mat-label>
-              <input type="text" matInput formControlName="selectedUser"
-                [matAutocomplete]="auto">
+              <input type="text" matInput formControlName="selectedUser" [matAutocomplete]="auto">
               <mat-autocomplete #auto="matAutocomplete" (optionSelected)='getUserSelected($event.option.value)'
                 [displayWith]="userDisplayFn">
                 <mat-option *ngFor="let option of filteredUserList | async" [value]="option">
+                  {{option.company_name}}</mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+            <mat-form-field class="filterElement"
+              *ngIf="statementForm.value.selectedUser && (env.userType =='egv_admin' || env.userType.includes('parent'))">
+              <mat-label>Select a wallet</mat-label>
+              <input type="text" matInput placeholder='Select a wallet' formControlName="selectedChild"
+                [matAutocomplete]="auto">
+              <mat-autocomplete #auto="matAutocomplete" (optionSelected)='getChildSelected($event.option.value)'
+                [displayWith]="userDisplayFn">
+                <mat-option *ngFor="let option of filteredChildList | async" [value]="option">
                   {{option.company_name}}</mat-option>
               </mat-autocomplete>
             </mat-form-field>
@@ -47,7 +57,8 @@
           <div>
             <button type="submit" mat-raised-button>Get Statement</button>
             <button type="button" mat-raised-button (click)="downloadStatement()">Download Statement</button>
-            <button type="button" mat-raised-button (click)="downloadTransactionReport()">Download Transaction Report</button>
+            <button type="button" mat-raised-button (click)="downloadTransactionReport()">Download Transaction
+              Report</button>
           </div>
         </form>
       </div>

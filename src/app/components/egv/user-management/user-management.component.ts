@@ -35,13 +35,18 @@ export class UserManagementComponent implements OnInit {
     if((environment.userType==='egv_admin' || environment.userType==='parent_manager' || environment.userType==='sub_egv_admin' || environment.userType === 'wb_yourigpstore') || (environment.userType==='manager' || environment.userType==='sub_manager')){
       let egvUserType=""
       let fkid=null;
-      if(environment.userType==='egv_admin' || environment.userType==='parent_manager' || environment.userType==='sub_egv_admin' || environment.userType === 'wb_yourigpstore'){
+      let parentID = null;
+      if(environment.userType==='egv_admin' || environment.userType==='sub_egv_admin' || environment.userType === 'wb_yourigpstore'){
         egvUserType='EGV_Admin';
       }else if(environment.userType==='manager' || environment.userType==='sub_manager'){
         egvUserType='Manager';
         fkid=localStorage.getItem('fkAssociateId');
       }
-      this.egvService.getUserList(egvUserType,fkid).subscribe((res:any)=>{
+      else if( environment.userType==='parent_manager'){
+        egvUserType='EGV_Admin';
+        parentID=localStorage.getItem('fkAssociateId');
+      }
+      this.egvService.getUserList(egvUserType,fkid,parentID).subscribe((res:any)=>{
         if(res.tableData.length){
           // this.displayedColumns=Object.keys(res.tableData[0]).filter(ele=>ele!=='access');
             res.tableHeaders.forEach(a =>{
