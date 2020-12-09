@@ -122,13 +122,13 @@ export class EgvStatementComponent implements OnInit {
 			// _this.usersList.push(
 			// { "user_id": 20835, "name": "879 test", "fkAssociateId": "882", "company_name": "879 test", "userType": "Manager", "accountExpired": false, "credentialExpired": false, "accountLocked": false, "accountEnabled": 1, "deliveryBoyEnabled": false, "access": [{}] })
 			_this.filteredChildList = _this.statementForm.get('selectedChild').valueChanges
-			  .pipe(
-				startWith(''),
-				map(value => typeof value === 'string' ? value : value['company_name']),
-				map(name => name ? _this.childListFilter(name) : _this.childList)
-	  
-			  );
-		  })
+				.pipe(
+					startWith(''),
+					map(value => typeof value === 'string' ? value : value['company_name']),
+					map(name => name ? _this.childListFilter(name) : _this.childList)
+
+				);
+		})
 	}
 	getChildSelected(obj: any) {
 		this.childSelected = obj;
@@ -200,9 +200,16 @@ export class EgvStatementComponent implements OnInit {
 				this.showHyperlink = true;
 			}
 		}
-		if (environment.userType == 'egv_admin' || environment.userType.includes('parent')) {
-			if (this.childSelected && (this.childSelected.value || this.statementForm.value.childSelected)) {
+		if (environment.userType == 'egv_admin') {
+			if (this.childSelected && (this.childSelected.value || this.statementForm.value.selectedChild)) {
 				reqObj.url += '&fkasid=' + this.childSelected.fk_associate_id
+			}
+		}
+		else if (environment.userType.includes('parent')) {
+			if (this.childSelected && (this.childSelected.value || this.statementForm.value.selectedChild)) {
+				reqObj.url += '&fkasid=' + this.childSelected.fk_associate_id
+			} else {
+				reqObj.url += '&fkasid=' + localStorage.fkAssociateId;
 			}
 		}
 		else {
