@@ -4,6 +4,7 @@ import { BackendService } from '../../services/backend.service';
 import {environment} from "../../../environments/environment";
 import { DashboardComponent } from '../dashboard/dashboard.component';
 import { DashboardService } from '../../services/dashboard.service';
+import { CookieService } from 'app/services/cookie.service';
 
 @Component({
   selector: 'app-main-header',
@@ -14,7 +15,7 @@ export class MainHeaderComponent implements OnInit {
     environment=environment;
     isMobile=environment.isMobile;
     isAdmin=(environment.userType && environment.userType === "admin");
-    vendorName:any = localStorage.getItem('associateName');
+    vendorName:any = localStorage.getItem('vendorName');
     deliveryBoyName:any;
     userType:any = localStorage.getItem('userType');
     reportDropdownOpen=false;
@@ -24,7 +25,8 @@ export class MainHeaderComponent implements OnInit {
       public router: Router,
       public BackendService : BackendService,
       private _elementRef: ElementRef,
-      public dashboardService: DashboardService
+      public dashboardService: DashboardService,
+      private cookieService: CookieService
         ) { }
 
   @HostListener('document:click', ['$event.target'])
@@ -51,7 +53,7 @@ export class MainHeaderComponent implements OnInit {
       _this.router.events.subscribe((event) => {
           if (event instanceof NavigationEnd) {
               console.log('Url changed');
-              _this.vendorName = localStorage.getItem('associateName');
+              _this.vendorName = localStorage.getItem('vendorName');
               _this.activeTabHighlight();
               environment.userType = localStorage.getItem('userType');
               _this.deliveryBoyName = localStorage.getItem('vendorName');
@@ -65,7 +67,7 @@ export class MainHeaderComponent implements OnInit {
 
           let reqObj = {
               //url : "?responseType=json&scopeId=1&token="+localStorage.getItem('currentUserToken')+"&method=igp.auth.doLogOut",
-              url : "doLogOut?responseType=json&scopeId=1&token="+localStorage.getItem('currentUserToken'),
+              url : "doLogOut?responseType=json&scopeId=1&token="+_this.cookieService.getCookie('currentUserToken'),
               method : "post",
               payload : {}
           };
@@ -75,7 +77,7 @@ export class MainHeaderComponent implements OnInit {
                   console.log(err)
                   return;
               }
-
+              _this.cookieService.deleteCookie('currentUserToken');
               localStorage.clear();
               sessionStorage.clear();
               environment.mockAPI="";
@@ -107,14 +109,29 @@ export class MainHeaderComponent implements OnInit {
           _this.selectedReportTab="";
           _this.reportDropdownOpen=false;
       }
-      if(currentRoute === "/sendemail/uploadtemplate"){
-        _this.selectedTopTab = "sendemail/uploadtemplate";
-        _this.selectedReportTab="";
-        _this.reportDropdownOpen=false;
-    }
+    //   if(currentRoute === "/sendemail/uploadtemplate"){
+    //     _this.selectedTopTab = "sendemail/uploadtemplate";
+    //     _this.selectedReportTab="";
+    //     _this.reportDropdownOpen=false;
+    // }
 
       if(currentRoute === "/payout-dashboard"){
         _this.selectedTopTab = "payout-dashboard";
+        _this.selectedReportTab="";
+        _this.reportDropdownOpen=false;
+    }
+    if(currentRoute === "/HolidayCalendarManagement"){
+        _this.selectedTopTab = "HolidayCalendarManagement";
+        _this.selectedReportTab="";
+        _this.reportDropdownOpen=false;
+    }
+    if(currentRoute === "/productDecentralization"){
+        _this.selectedTopTab = "productDecentralization";
+        _this.selectedReportTab="";
+        _this.reportDropdownOpen=false;
+    }
+    if(currentRoute === "/banner"){
+        _this.selectedTopTab = "banner";
         _this.selectedReportTab="";
         _this.reportDropdownOpen=false;
     }

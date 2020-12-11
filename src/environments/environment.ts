@@ -8,9 +8,11 @@ export const environment = {
   log : true,
  // origin: 'http://35.171.85.169:8081/',54.88.211.119
   //  origin: 'http://34.229.23.111:8081/',
-  origin:'http://adminapi.igp.com/',
+  origin:'http://18.233.106.34:8081/',
+  // origin:'http://adminapi.igp.com/',
+  // origin:'http://adminapi.igp.com/',
   originMock: 'https://5a43a511342c490012f3fca2.mockapi.io/',
-  productsURL : 'https://d1xs5fw35mbn8b.cloudfront.net/p/',
+  productsURL : 'http://img1.igp.com/p/',
   productsCompURL : 'http://admin.indiangiftsportal.com/handelscomponents/',
   isMobile: window.screen.width < 1000,
   userType: localStorage.getItem('userType'),
@@ -20,10 +22,12 @@ export const environment = {
   s3SecretKey : '', 
   // s3AccessKey : 'AKIAIYVR3IZCNZG4TU4Q',
   // s3SecretKey : '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',
-  blogBucketName : 'blogcreatives',
-  componentBucketName : 'handelscomponents',
-  igpBlogCDN : 'https://cdn.igp.com/f_auto,q_auto,t_blogimage/blogs/',
-  interfloraBlogCDN : 'https://res.cloudinary.com/interflora/f_auto,q_auto,t_blogimage/blogs/',
-  componentImageUrl : 'https://handelscomponents.s3.amazonaws.com/',
-  blogsAcl : 'public-read'
+  blogBucketName: 'blogcreatives',
+  componentBucketName: 'handelscomponents',
+  igpBlogCDN: 'https://cdn.igp.com/f_auto,q_auto,t_blogimage/blogs/',
+  interfloraBlogCDN: 'https://res.cloudinary.com/interflora/f_auto,q_auto,t_blogimage/blogs/',
+  componentImageUrl: 'https://handelscomponents.s3.amazonaws.com/',
+  blogsAcl: 'public-read',
+  bannerImageUrl : 'https://handelscomponents.s3.amazonaws.com/'
+
 };

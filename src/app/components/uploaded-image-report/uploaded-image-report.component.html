@@ -1,0 +1,142 @@
+<div class="container-fluid reports-cont">
+  <div class="row">
+    <div class="m-top-1" style="width:100%; height:14em;">
+      <div class="col-sm-9 col-md-9">
+        <mat-card class="card-h-25">
+          <div class="row">
+            <div class="delivery-date col-sm-4 col-md-4">
+              <mat-form-field appearance="fill" class="w-150">
+                <mat-label>Delivery Date From</mat-label>
+                <input matInput [matDatepicker]="deliveryDateFromPicker"
+                  (dateChange)="getDatePickerValue('delivery_from', $event)" [value]="deliveryDateFrom">
+                <mat-datepicker-toggle matSuffix [for]="deliveryDateFromPicker"></mat-datepicker-toggle>
+                <mat-datepicker #deliveryDateFromPicker></mat-datepicker>
+              </mat-form-field>
+
+              <mat-form-field appearance="fill" class="w-150">
+                <mat-label>Delivery Date To</mat-label>
+                <input matInput [matDatepicker]="deliveryDateToPicker"
+                  (dateChange)="getDatePickerValue('delivery_to', $event)" [value]="deliveryDateTo">
+                <mat-datepicker-toggle matSuffix [for]="deliveryDateToPicker"></mat-datepicker-toggle>
+                <mat-datepicker #deliveryDateToPicker></mat-datepicker>
+              </mat-form-field>
+            </div>
+            <div class="order-date col-sm-4 col-md-4">
+              <mat-form-field appearance="fill" class="w-150">
+                <mat-label>Order Date From</mat-label>
+                <input matInput [matDatepicker]="orderDateFromPicker"
+                  (dateChange)="getDatePickerValue('order_from', $event)" [value]="orderDateFrom">
+                <mat-datepicker-toggle matSuffix [for]="orderDateFromPicker"></mat-datepicker-toggle>
+                <mat-datepicker #orderDateFromPicker></mat-datepicker>
+              </mat-form-field>
+
+              <mat-form-field appearance="fill" class="w-150">
+                <mat-label>Order Date To</mat-label>
+                <input matInput [matDatepicker]="orderDateToPicker"
+                  (dateChange)="getDatePickerValue('order_to', $event)" [value]="orderDateTo">
+                <mat-datepicker-toggle matSuffix [for]="orderDateToPicker"></mat-datepicker-toggle>
+                <mat-datepicker #orderDateToPicker></mat-datepicker>
+              </mat-form-field>
+            </div>
+            <div class="col-sm-4 col-md-4">
+              <mat-form-field class="w-150">
+                <mat-label>Order No.</mat-label>
+                <input matInput placeholder="Order No." name="orderNo" [(ngModel)]="orderNumber">
+              </mat-form-field>
+              <button mat-raised-button (click)="onSearchFilterClick()">Search All Parameters</button>
+              <button mat-raised-button (click)="onClearClick()">Clear</button>
+            </div>
+          </div>
+        </mat-card>
+
+      </div>
+      <div class="col-sm-3 col-md-3">
+        <mat-card class="card-h-25">
+          <div class="underLine paddingHalf text-bold">Summary</div>
+          <div class="summaryBlockCont">
+            <div class="summaryBlock inline m-top-1" *ngFor="let summ of [1]; index as i;">
+              <div class="icon l" aria-hidden="true">
+                <img style="display: block;" src="assets/images/icons/gift.svg" alt="orders" *ngIf="i === 0">
+                <img src="assets/images/icons/inr.svg" alt="inr" *ngIf="i === 1">
+                <img src="assets/images/icons/inr.svg" alt="inr" *ngIf="i === 2">
+              </div>
+              <div class="text-igp summaryLabel">{{'Order'}}</div>
+              <div class="text-bold">{{summaryCount?.value || '-' }}</div>
+            </div>
+          </div>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+  <div class="row m-top-1">
+    <div class="col-sm-12 col-md-12">
+      <mat-card>
+        <div class="">
+          <mat-form-field class="padding1">
+            <mat-label>Filter</mat-label>
+            <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Cake" #input>
+          </mat-form-field>
+          <mat-table *ngIf="dataSource.data.length" #table [dataSource]="dataSource">
+            <ng-container *ngFor="let column of displayedColumns; let i=index;" matColumnDef="{{column}}">
+              <mat-header-cell *matHeaderCellDef> {{removeUnderscore(column)}} </mat-header-cell>
+              <mat-cell *matCellDef="let element">
+                <ng-container *ngIf="i<4">
+                  {{column==='Date'?(element[column] | date : 'yyyy-MM-dd') : (element[column])}}
+
+                    <span class="icon m" aria-hidden="true" *ngIf="column === 'Order_No'" (click)="viewOrderDetail($event, element['Order_No'])">
+                      <img src="assets/images/icons/view.svg" alt="inr">
+                  </span>
+                </ng-container>
+                <ng-container *ngIf="i>3">
+                  <img *ngIf="column==='Product_Image'" class="clk mar-all-10" style="width: 4em; box-shadow: 0 1px 3px #888888;"
+                    src="{{productsURL}}th/{{element[column]}}"
+                    (click)="imagePreview($event,productsURL+'l/'+element[column])" alt="{{element[column]}}">
+                  <ng-container *ngIf="column==='Out_Of_Delivery'||column==='Proof_Of_Delivery'">
+                    <img class="clk mar-all-10" *ngFor="let imgSrc of element[column]" (click)="imagePreview($event,imgSrc)"
+                      style="width: 4em; box-shadow: 0 1px 3px #888888;" src="{{imgSrc}}" alt="{{imgSrc}}">
+                  </ng-container>
+                </ng-container>
+                <!-- <ng-container *ngIf="i>4">
+                  <img *ngIf="" class="clk" style="width: 4em; box-shadow: 0 1px 3px #888888;" src="{{element[column][0]}}" alt="{{element[column][0]}}">
+                </ng-container> -->
+              </mat-cell>
+            </ng-container>
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+          </mat-table>
+
+          <mat-paginator #paginator (page)="matTablePageChange($event)"  [pageSize]="50" [pageSizeOptions]="[50]" [showFirstLastButtons]="true">
+          </mat-paginator>
+        </div>
+      </mat-card>
+    </div>
+  </div>
+</div>
+
+<!-- Image Preview -->
+<div class="image-preview" *ngIf="imagePreviewFlag">
+  <div class="modal fade in" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
+    style="display: block; overflow:scroll; background: rgba(0, 0, 0, 0.77); z-index:9999999;"
+    (click)="imagePreview($event)">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content" (click)="imagePreview($event, 'ignore')"
+        [ngClass]="{'mHeight' : isMobile, 'cHeight' : !isMobile}">
+        <div class="modal-header" style="border-bottom:none;">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"
+            (click)="imagePreview($event)"><span aria-hidden="true">×</span></button>
+        </div>
+        <div class="modal-body center-align">
+          <img class="img-responsive" src="{{imagePreviewSrc}}" alt="product_img_preview">
+          <!--<p>Some text in the modal.</p>-->
+        </div>
+        <!--<div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              </div>-->
+      </div>
+    </div>
+  </div>
+  <!--<div class="modal-backdrop fade in" (click)="imagePreview($event)"></div>-->
+</div>
+
+
+<app-orders-action-tray></app-orders-action-tray>

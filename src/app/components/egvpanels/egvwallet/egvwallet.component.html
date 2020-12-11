@@ -1,0 +1,186 @@
+<div class="main-container">
+
+  <form [formGroup]="addMoneyForm" (ngSubmit)="addMoneyToWallet(addMoneyForm)">
+    <div class='col-md-12'>
+      <div class='headerUnderLine addMoney col-md-12'>
+        Summary
+
+
+      </div>
+
+
+      <div class="balance col-md-12 marginB20">
+        <div class="col-md-12 marginB20" style="margin-bottom:20px" *ngIf="env.userType == 'egv_admin'">
+          <mat-form-field class="addMoneyInput width15">
+            <mat-label>Select a client</mat-label>
+            <input type="text" matInput placeholder='Select a user' formControlName="selectedUser"
+              [matAutocomplete]="auto">
+            <mat-autocomplete #auto="matAutocomplete" (optionSelected)='getUserSelected($event.option.value)'
+              [displayWith]="userDisplayFn">
+              <mat-option *ngFor="let option of filteredUserList | async" [value]="option">
+                {{option.company_name}}</mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </div>
+        <div *ngIf="loadingSummary else loaded">
+          Select a Client to view Summary.
+        </div>
+
+
+        <ng-template #loaded>
+          <div class="col-md-12">
+            <div class="col-md-3 summaryBox" style="height:0;border:0" *ngIf="env.userType!='egv_admin'"></div>
+
+            <div class="col-md-3 col-sm-12 summaryBox">
+              <div style='margin:auto'>&#8377; {{walletSummary.balance || '-' | indianNumeric}}</div>
+              <div class="summaryIcon"> <i class="fa fa-balance-scale "></i> Balance</div>
+            </div>
+
+            <div class="col-md-3 col-sm-12 summaryBox">
+              <div style='margin:auto'>&#8377; {{walletSummary.dailyTransLimit || '-' | indianNumeric}}</div>
+              <div class="summaryIcon"><i class="fa fa-sliders fa-rotate-90"></i> Daily Limit </div>
+            </div>
+
+            <div class="col-md-3  col-sm-12 summaryBox" *ngIf="env.userType=='egv_admin'">
+              <div style='margin:auto'>&#8377; {{walletSummary.creditLimit ||'-' | indianNumeric}}</div>
+              <div class="summaryIcon">
+                <i class="fa fa-credit-card "></i> Credit Limit </div>
+            </div>
+            <div class="col-md-3 col-sm-12 summaryBox" *ngIf="env.userType=='egv_admin'">
+              <div style='margin:auto'>{{walletSummary.creditLimitDays || '-'}}
+                {{(walletSummary.creditLimitDays>1)?'days':'day'}}</div>
+              <div class="summaryIcon"> <i class="fa fa-calendar"></i> Credit Period </div>
+            </div>
+
+            <div class="col-md-3 col-sm-12 summaryBox">
+              <div style='margin:auto'>{{walletSummary.active?'Active':'Inactive'}}</div>
+              <div class="summaryIcon">
+                <i class="fa fa-check" *ngIf=" walletSummary.active"></i>
+                <i class="fa fa-times" *ngIf=" !walletSummary.active"></i> Status
+              </div>
+            </div>
+
+          </div>
+
+        </ng-template>
+      </div>
+    </div>
+    <div class="col-md-12">
+      <div class='addMoney headerUnderLine col-md-12'>
+        Add Money To Wallet
+      </div>
+      <div class="col-md-12 marginB20">
+
+        <div>
+          <mat-form-field class="addMoneyInput width20 marginB20">
+            <mat-label> Enter Amount*</mat-label>
+            <input matInput name='amount' type="number" placeholder="Enter Amount" formControlName="addMoneyAmount">
+          </mat-form-field>
+
+          <mat-form-field class="addMoneyInput width20">
+            <mat-label> Enter UTR*</mat-label>
+            <input matInput name="utr" type="text" placeholder="Enter UTR" formControlName="addMoneyTransactionId">
+          </mat-form-field>
+          <mat-form-field class="addMoneyInput width20">
+            <mat-label> Comments (optional)</mat-label>
+            <input matInput name="comments" type="text" placeholder="Comments" formControlName="comments">
+          </mat-form-field>
+
+          <button mat-flat-button class="addMoneyButton" type="submit">Add Money</button>
+        </div>
+        <!-- <div class="marginB20">
+              
+            </div> -->
+        <div *ngIf="env.userType=='egv_admin'">
+          <div class="width20 addMoney">
+            Change Parameter
+          </div>
+          <mat-form-field class="addMoneyInput width20">
+            <mat-label>Select Parameter</mat-label>
+            <mat-select formControlName="limitType">
+              <mat-option *ngFor="let option of limitTypeList" [value]="option">{{option.value}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field class="addMoneyInput width20">
+            <mat-label> Enter New Value</mat-label>
+            <input matInput name='limitValue' type="number" placeholder="Enter New Value" formControlName="limitValue">
+          </mat-form-field>
+          <button mat-flat-button type="button" class="addMoneyButton" (click)="updateLimit()">Update</button>
+        </div>
+
+
+      </div>
+    </div>
+  </form>
+
+  <div class="col-md-12" *ngIf="env.userType == 'egv_admin'">
+    <div class='addMoney headerUnderLine col-md-12'>
+      Pending Approvals
+    </div>
+    <div class="col-md-12 marginB20">
+      <!-- <form>
+        <mat-form-field class="addMoneyInput">
+          <mat-label>Start Date</mat-label>
+          <input matInput [matDatepicker]="startDate" [max]="maxDate" [formControl]="startDate"
+            (dateInput)="addEventFrom('input','startDate', $event)"
+            (dateChange)="addEventFrom('change','startDate', $event)" [value]='startDate.value'>
+          <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
+          <mat-datepicker #startDate></mat-datepicker>
+        </mat-form-field>
+
+
+        <mat-form-field class="addMoneyInput">
+          <mat-label>End Date</mat-label>
+          <input matInput [matDatepicker]="endDate" [max]="maxDate" [formControl]="endDate"
+            (dateInput)="addEventFrom('input','endDate', $event)"
+            (dateChange)="addEventFrom('change','endDate', $event)" [value]='endDate.value'>
+          <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
+          <mat-datepicker #endDate></mat-datepicker>
+        </mat-form-field>
+
+        <button mat-raised-button (click)='getPendingList()'>Get Approvals List</button>
+      </form> -->
+    </div>
+
+    <div class="col-md-12" *ngIf="dataSource?.data?.length > 0 else noRecord">
+      <!-- <mat-form-field style="margin:0 20px" class="filterElement">
+        <mat-label>Search</mat-label>
+        <i matSuffix class="fa fa-search "></i>
+        <input matInput (keyup)="applyFilter($event)" #input>
+      </mat-form-field> -->
+      <mat-table [dataSource]="dataSource" matSort>
+        <ng-container [matColumnDef]="column" *ngFor="let column of tableHeaders">
+          <mat-header-cell mat-sort-header *matHeaderCellDef> {{column}} </mat-header-cell>
+          <mat-cell *matCellDef="let element">
+            <ng-container
+              *ngIf="column != 'TxnDetails' && column!= 'Amount' && column!= 'Balance' && column!='Actions'">
+              {{element[column] || '-'}}
+            </ng-container>
+            <ng-container *ngIf="column == 'Amount' || column == 'Balance' ">
+              {{element[column] || '-' | indianNumeric}}
+            </ng-container>
+            <ng-container *ngIf="column=='TxnDetails'">
+              {{(element[column] || '-' )+" - "+element['comments']}}
+            </ng-container>
+            <ng-container *ngIf="column == 'Actions'">
+              <button mat-button color="primary" (click)='approveTransaction($event,element,true)'>
+                <i class="fa fa-check"></i> Approve</button>
+              <button mat-button color="warn" (click)='approveTransaction($event,element,false)'><i class="fa fa-times"></i>
+                Reject</button>
+            </ng-container>
+          </mat-cell>
+        </ng-container>
+        <mat-header-row *matHeaderRowDef="tableHeaders"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: tableHeaders;">
+        </mat-row>
+      </mat-table>
+      <mat-paginator [pageSizeOptions]="[10, 20, 50]" length="{{dataSource?.length}}" showFirstLastButtons>
+      </mat-paginator>
+    </div>
+    <ng-template #noRecord>
+      <div class="col-md-12" style="color: #C3404E;">No Approvals Pending</div>
+    </ng-template>
+  </div>
+
+</div>

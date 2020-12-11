@@ -3,6 +3,7 @@ export const environment = {
   log : false,
   // origin: 'http://34.229.23.111:8081/',
   origin: 'http://adminapi.igp.com/',
+  // origin:'http://18.233.106.34:8081/',
   originMock: 'https://5a43a511342c490012f3fca2.mockapi.io/',
   apiInitial : 'IGPService/web/services/rest',
   productsURL : 'https://d1xs5fw35mbn8b.cloudfront.net/p/',
@@ -17,5 +18,6 @@ export const environment = {
   igpBlogCDN : 'https://cdn.igp.com/f_auto,q_auto,t_blogimage/blogs/',
   interfloraBlogCDN : 'https://res.cloudinary.com/interflora/f_auto,q_auto,t_blogimage/blogs/',
   componentImageUrl : 'https://handelscomponents.s3.amazonaws.com/',
-  blogsAcl : 'public-read'
+  blogsAcl : 'public-read',  
+  bannerImageUrl : 'https://handelscomponents.s3.amazonaws.com/'
 };

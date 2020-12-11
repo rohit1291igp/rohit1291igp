@@ -8,6 +8,7 @@ import { NotificationComponent } from '../notification/notification.component';
 import { NativeDateAdapter } from '@angular/material';
 import { MatDateFormats, DateAdapter, MAT_DATE_FORMATS } from '@angular/material/core';
 import { Angular5Csv } from 'angular5-csv/dist/Angular5-csv';
+import { isArray } from 'util';
 
 export class AppDateAdapter extends NativeDateAdapter {
     format(date: Date, displayFormat: Object): string {
@@ -60,6 +61,8 @@ export class MicroSiteDasboardComponent implements OnInit {
         { value: 'credit', viewValue: 'Credit' },
         { value: 'debit', viewValue: 'Debit' }
     ];
+    fksId;
+    vendorName;
     /**
      * Pre-defined columns list for delivery boy table
      */
@@ -101,6 +104,8 @@ export class MicroSiteDasboardComponent implements OnInit {
     ) { }
 
     ngOnInit() {
+        this.fksId = localStorage.getItem('fkAssociateId');
+        this.vendorName = localStorage.getItem('vendorName');
         this.myForm = this.fb.group({
             name: ['', [Validators.required, Validators.pattern('^[a-zA-Z ]*$')]],
             email: ['', [Validators.required]],
@@ -182,7 +187,18 @@ export class MicroSiteDasboardComponent implements OnInit {
         const now = Date.now();
         const datefrom = pipe.transform(now, 'yyyy-MM-dd');
         const dateto = pipe.transform(now, 'yyyy-MM-dd');
-        const micrositeUser = localStorage.getItem('userType') == 'microsite' ? 'itc' : 'zeapl';
+        let micrositeUser = localStorage.getItem('userType');
+        switch (micrositeUser) {
+            case 'microsite':
+                micrositeUser = 'itc';
+                break;
+            case 'microsite-zeapl':
+                micrositeUser = 'zeapl';
+                break;
+            case 'microsite-loylty':
+                micrositeUser = 'loylty';
+                break;
+        }
         const reqObj = {
             url: `${micrositeUser}/getuserrecord?fromdate=${datefrom}&todate=${dateto}&emailid=&type=all`,
             method: "get"
@@ -193,7 +209,7 @@ export class MicroSiteDasboardComponent implements OnInit {
                 console.log('Error=============>', err);
                 return;
             }
-            if (response.status.toLowerCase() == 'success' && response.data) {
+            if (response.status.toLowerCase() == 'success' && response.data && isArray(response.data)) {
                 response.data.length > 0 && response.data.forEach(m => m.uploadDate = pipe.transform(m.uploadDate, 'dd/MM/yyyy'));
                 response.data.length > 0 && response.data.forEach(m => m.couponUsedDate = pipe.transform(m.couponUsedDate, 'dd/MM/yyyy'));
                 _this.dataSource = new MatTableDataSource(response.data);
@@ -226,7 +242,18 @@ export class MicroSiteDasboardComponent implements OnInit {
         headers.append('Content-Type', 'multipart/form-data');
         headers.append('Accept', 'application/json');
         let options = new RequestOptions({ headers: headers });
-        const micrositeUser = localStorage.getItem('userType') == 'microsite' ? 'itc' : 'zeapl';
+        let micrositeUser = localStorage.getItem('userType');
+        switch (micrositeUser) {
+            case 'microsite':
+                micrositeUser = 'itc';
+                break;
+            case 'microsite-zeapl':
+                micrositeUser = 'zeapl';
+                break;
+            case 'microsite-loylty':
+                micrositeUser = 'loylty';
+                break;
+        }
 
         let reqObj = {
             url: `${micrositeUser}/getuserrecord?fromdate=${datefrom}&todate=${dateto}&emailid=${data.value.email}&type=${data.value.filtertype}`,
@@ -343,8 +370,22 @@ export class MicroSiteDasboardComponent implements OnInit {
             headers.append('Content-Type', 'multipart/form-data');
             headers.append('Accept', 'application/json');
             let options = new RequestOptions({ headers: headers });
-            const micrositeUser = localStorage.getItem('userType') == 'microsite' ? 'itc' : 'zeapl';
-            const micrositeVoucher = localStorage.getItem('userType') == 'microsite' ? 'itcvouchers' : 'zeaplvouchers';
+            let micrositeVoucher = '';
+            let micrositeUser = localStorage.getItem('userType');
+            switch (micrositeUser) {
+                case 'microsite':
+                    micrositeUser = 'itc';
+                    micrositeVoucher = 'itcvouchers';
+                    break;
+                case 'microsite-zeapl':
+                    micrositeUser = 'zeapl';
+                    micrositeVoucher = 'zeaplvouchers';
+                    break;
+                case 'microsite-loylty':
+                    micrositeUser = 'loylty';
+                    micrositeVoucher = 'loyltyvouchers';
+                    break;
+            }
             
             let reqObj = {
                 url:
