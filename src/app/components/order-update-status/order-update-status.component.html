@@ -117,7 +117,7 @@
                 <div class="m-top-1 left-align" *ngIf="isUploading">
                   <h3 style="text-align: center;">Upload File...</h3>
                 </div>
-                <div class="checkbox" *ngIf="_data.selectedStatus == 'Released'"
+                <div class="checkbox" *ngIf="_data.selectedStatus == 'Released' && (fkAssociateId == 1 || fkUserId == 20508)"
                   style="text-align: left;margin-top: 5%;margin-bottom: 1px;">
                   <label>
                     <input type="checkbox" name="forceupdate" [(ngModel)]="_data.forceUpdate"

@@ -238,7 +238,9 @@ export class OrderReportComponent implements OnInit {
       let downurl = _this.generateQueryString(_this.queryObj);
       downreqObj.url += downurl;
       downreqObj.url += "&startLimit=0&flag_count=0";
-
+      if(_this.env.userType == 'vendor'){
+        downreqObj.url += `&fkAssociateId=${localStorage.getItem('fkAssociateId')}`;
+        }
       _this.BackendService.makeAjax(downreqObj, function (error, _reportData) {
         _this.dowloadingSummary = false;
         var options = {
