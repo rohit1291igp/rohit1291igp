@@ -39,24 +39,24 @@
 
         <ng-template #loaded>
           <div class="col-md-12">
-            <div class="col-md-3 summaryBox" style="height:0;border:0" *ngIf="env.userType!='egv_admin' && env.userType != 'sub_egv_admin' && env.userType != 'wb_yourigpstore'"></div>
+            <div class="col-md-3 summaryBox" style="height:0;border:0" *ngIf="env.userType!='egv_admin' && env.userType != 'sub_egv_admin' && env.userType != 'wb_yourigpstore' && !env.userType.includes('parent')"></div>
 
             <div class="col-md-3 col-sm-12 summaryBox">
               <div style='margin:auto'>&#8377; {{walletSummary.balance || '-' | indianNumeric}}</div>
               <div class="summaryIcon"> <i class="fa fa-balance-scale "></i> Balance</div>
             </div>
 
-            <div class="col-md-3 col-sm-12 summaryBox">
+            <div class="col-md-3 col-sm-12 summaryBox"  *ngIf="env.userType=='egv_admin' || env.userType.includes('parent') || env.userType == 'wb_yourigpstore'">
               <div style='margin:auto'>&#8377; {{walletSummary.dailyTransLimit || '-' | indianNumeric}}</div>
               <div class="summaryIcon"><i class="fa fa-sliders fa-rotate-90"></i> Daily Limit </div>
             </div>
 
-            <div class="col-md-3  col-sm-12 summaryBox" *ngIf="env.userType=='egv_admin' || env.userType == 'sub_egv_admin' || env.userType == 'wb_yourigpstore'">
+            <div class="col-md-3  col-sm-12 summaryBox" *ngIf="env.userType=='egv_admin' || env.userType.includes('parent') || env.userType == 'wb_yourigpstore'">
               <div style='margin:auto'>&#8377; {{walletSummary.creditLimit ||'-' | indianNumeric}}</div>
               <div class="summaryIcon">
                 <i class="fa fa-credit-card "></i> Credit Limit </div>
             </div>
-            <div class="col-md-3 col-sm-12 summaryBox" *ngIf="env.userType=='egv_admin' || env.userType == 'sub_egv_admin' || env.userType == 'wb_yourigpstore'">
+            <div class="col-md-3 col-sm-12 summaryBox" *ngIf="env.userType=='egv_admin' || env.userType.includes('parent') || env.userType == 'wb_yourigpstore'">
               <div style='margin:auto'>{{walletSummary.creditLimitDays || '-'}}
                 {{(walletSummary.creditLimitDays>1)?'days':'day'}}</div>
               <div class="summaryIcon"> <i class="fa fa-calendar"></i> Credit Period </div>
@@ -76,7 +76,7 @@
       </div>
     </div>
     <!-- *ngIf="env.userType == 'egv_admin' || env.userType.includes('parent')" -->
-    <div class="col-md-12" >
+    <div class="col-md-12" *ngIf="env.userType == 'egv_admin' || env.userType.includes('parent')" >
       <div class='addMoney headerUnderLine col-md-12'>
         Add Money To Wallet
       </div>
@@ -98,7 +98,7 @@
           </mat-form-field>
 
           <button mat-flat-button class="addMoneyButton" type="submit" [ngStyle]="{'background-color': whitelabelStyle ? whitelabelStyle.primaryColor : '', 'color': whitelabelStyle ? whitelabelStyle.secondaryColor : ''}">Add Money</button>
-          <mat-checkbox class="example-margin" [(ngModel)]="requestAddflag" [ngModelOptions]="{standalone: true}" *ngIf="addMoneyForm.get('selectedChild').value">Transfer Money To Selected Sub-wallet</mat-checkbox>
+          <!-- <mat-checkbox class="example-margin" [(ngModel)]="requestAddflag" [ngModelOptions]="{standalone: true}" *ngIf="addMoneyForm.get('selectedChild').value">Transfer Money To Selected Sub-wallet</mat-checkbox> -->
         </div>
         <!-- <div class="marginB20">
               

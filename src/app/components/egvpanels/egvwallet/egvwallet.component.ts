@@ -82,7 +82,6 @@ export class EgvwalletComponent implements OnInit {
       limitType: [''],
       limitValue: ['']
     });
-
     if ((environment.userType == "manager" || environment.userType == "sub_manager") || (environment.userType == "executive" || environment.userType == "sub_executive") || environment.userType.includes("parent")) {
       this.getAccountSummary(localStorage.fkAssociateId)
         .then((response) => {
@@ -90,7 +89,7 @@ export class EgvwalletComponent implements OnInit {
           _this.loadingSummary = false;
         }).catch(e => {
           console.log(e);
-      })
+        })
     }
 
     let parentId = environment.userType.includes('parent') ? localStorage.fkAssociateId : '';
@@ -101,6 +100,7 @@ export class EgvwalletComponent implements OnInit {
           let toSelect = { company_name: localStorage.associateName, fk_associate_id: localStorage.fkAssociateId };
           _this.selectedUser.setValue(toSelect);
           _this.addMoneyForm.get('selectedUser').setValue(toSelect);
+          _this.addMoneyForm.get('selectedChild').setValue(_this.childList[0]);
           _this.userSelected = toSelect;
           _this.filteredChildList = _this.addMoneyForm.get('selectedChild').valueChanges
             .pipe(
@@ -180,7 +180,7 @@ export class EgvwalletComponent implements OnInit {
             _this.openSnackBar('Something went wrong.');
             console.log('Error=============>', result.error);
             reject([])
-          }else{
+          } else {
             console.log('sidePanel Response --->', result.result[0]);
             resolve(result.result[0])
           }
@@ -207,16 +207,16 @@ export class EgvwalletComponent implements OnInit {
             // _this.openSnackBar('Something went wrong.');
             console.log('Error=============>', result.error);
             reject([])
-          }else{
+          } else {
             console.log('getUserList Response --->', result);
             resolve(result)
           }
-          
+
         })
     })
 
   }
-
+  //this.formatDate(Date.now(),'yyyy-MM-dd HH:mm:ss')
   addMoneyToWallet(data) {
     debugger;
     if (this.addMoneyForm.invalid && !this.userSelected) {
@@ -231,18 +231,19 @@ export class EgvwalletComponent implements OnInit {
     reqObj.url += "&userId=" + localStorage.fkUserId;
     reqObj.url += "&flagAdmin=" + this.flagAdminMap[environment.userType];
 
-    if (environment.userType == "manager" || environment.userType == "executive" || ((environment.userType.includes('parent') && !this.requestAddflag))) {
+    if (environment.userType == "manager" || environment.userType == "executive" || ((environment.userType.includes('parent') && (_this.addMoneyForm.get('selectedChild')['value'].fk_associate_id == localStorage.fkAssociateId)))) {
       reqObj.url += "&flagApproveCredit=" + this.flagApproveCreditMap.pending;
     }
-    if (environment.userType == 'egv_admin' || environment.userType == 'sub_egv_admin' || environment.userType == 'wb_yourigpstore' || (environment.userType.includes('parent') && this.requestAddflag)) {
+    if (environment.userType == 'egv_admin' || environment.userType == 'wb_yourigpstore' || (environment.userType.includes('parent') && (_this.addMoneyForm.get('selectedChild')['value'].fk_associate_id != localStorage.fkAssociateId))) {
       reqObj.url += "&flagApproveCredit=" + this.flagApproveCreditMap.adminInsert;
     }
 
-    if (environment.userType.includes('parent') && this.requestAddflag) {
+    if (environment.userType.includes('parent') && (_this.addMoneyForm.get('selectedChild')['value'].fk_associate_id != localStorage.fkAssociateId)) {
       reqObj.url += "&parentId=" + _this.userSelected.fk_associate_id;
       reqObj.url += "&fkAssociateId=" + _this.addMoneyForm.get('selectedChild')['value'].fk_associate_id;
     } else {
-      reqObj.url += "&fkAssociateId=" + _this.userSelected.fk_associate_id;
+      reqObj.url += "&fkAssociateId=" + _this.addMoneyForm.get('selectedChild')['value'].fk_associate_id;
+
     }
 
     if (_this.addMoneyForm.value.comments) {
@@ -257,8 +258,13 @@ export class EgvwalletComponent implements OnInit {
 
         }
         _this.openSnackBar(result.result);
+        _this.addMoneyForm.patchValue({
+          addMoneyTransactionId: '',
+          addMoneyAmount: '',
+          comments: '',
+        });
       }).then(
-        _this.getAccountSummary(_this.userSelected.fk_associate_id)
+        _this.getAccountSummary(_this.addMoneyForm.get('selectedChild')['value'].fk_associate_id)
           .then((response) => {
             _this.walletSummary = response;
             _this.loadingSummary = false;
@@ -278,7 +284,7 @@ export class EgvwalletComponent implements OnInit {
       url: 'wallet/updatewallet?flagNotAmount=true',
       method: "put",
     };
-    reqObj.url += "&fkAssociateId=" + _this.userSelected.fk_associate_id;
+    reqObj.url += "&fkAssociateId=" + _this.addMoneyForm.get('selectedChild')['value'].fk_associate_id;
     if (environment.userType == 'egv_admin' || environment.userType == 'sub_egv_admin' || environment.userType == 'wb_yourigpstore') {
       reqObj.url += "&flagApproveCredit=2&flagAdmin=1"
     }
@@ -305,7 +311,7 @@ export class EgvwalletComponent implements OnInit {
           })
       ).catch(e => {
         console.log(e);
-    })
+      })
 
   }
 
@@ -318,11 +324,12 @@ export class EgvwalletComponent implements OnInit {
         _this.loadingSummary = false;
       }).catch(e => {
         console.log(e);
-    })
+      })
 
     this.getUserList(obj.fk_associate_id).then((response) => {
       _this.childList = response;
-      _this.childList.unshift(obj)
+      _this.addMoneyForm.get('selectedChild').setValue(_this.childList[0]);
+      // _this.childList.unshift(obj)
       // _this.usersList.push(
       // { "user_id": 20835, "name": "879 test", "fkAssociateId": "882", "company_name": "879 test", "userType": "Manager", "accountExpired": false, "credentialExpired": false, "accountLocked": false, "accountEnabled": 1, "deliveryBoyEnabled": false, "access": [{}] })
       _this.filteredChildList = _this.addMoneyForm.get('selectedChild').valueChanges

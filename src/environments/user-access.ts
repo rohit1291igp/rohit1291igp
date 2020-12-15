@@ -52,15 +52,10 @@ export const userAcess = {
             iconName: 'card_giftcard',
             route: '/new-dashboard/productDecentralization',
         },
-         {
+        {
             displayName: 'Ops-Report',
             iconName: 'analytics',
             route: '/new-dashboard/dailywarehouseOpsReport',
-        },
-        {
-            displayName: 'Pending orders',
-            iconName: 'analytics',
-            route: '/new-dashboard/pending-orders',
         }
     ],
     vendor: [
@@ -241,6 +236,43 @@ export const userAcess = {
             displayName: 'Password Reset',
             iconName: 'security',
             route: '/new-dashboard/egv/change-password',
+        },
+        {
+            displayName: 'Bulk EGV',
+            iconName: 'addchart',
+            route: '/new-dashboard/egv/bulkegv',
+        }
+    ],
+    parent_executive: [
+        {
+            displayName: 'Wallet',
+            iconName: 'account_balance_wallet',
+            route: '/new-dashboard/egv/wallet',
+        },
+        {
+            displayName: 'Statement',
+            iconName: 'receipt',
+            route: '/new-dashboard/egv/statement',
+        },
+        {
+            displayName: 'User Management',
+            iconName: 'supervisor_account',
+            route: '/new-dashboard/egv/user-management',
+        },
+        {
+            displayName: 'Alert Management',
+            iconName: 'notifications_none',
+            route: '/new-dashboard/egv/alert-management',
+        },
+        {
+            displayName: 'Password Reset',
+            iconName: 'security',
+            route: '/new-dashboard/egv/change-password',
+        },
+        {
+            displayName: 'Bulk EGV',
+            iconName: 'addchart',
+            route: '/new-dashboard/egv/bulkegv',
         }
     ],
     manager: [
@@ -282,7 +314,7 @@ export const userAcess = {
         {
             displayName: 'Current Balance',
             iconName: 'account_balance_wallet',
-            route: '/new-dashboard/reports/itcReport',
+            route: '/new-dashboard/reports/whitelabelReport',
         }
     ],
     executive: [
@@ -309,7 +341,7 @@ export const userAcess = {
         {
             displayName: 'Current Balance',
             iconName: 'account_balance_wallet',
-            route: '/new-dashboard/reports/itcReport',
+            route: '/new-dashboard/reports/whitelabelReport',
         }
 
     ],
@@ -346,17 +378,28 @@ export const userAcess = {
     {
         displayName: 'Current Balance',
         iconName: 'account_balance_wallet',
-        route: '/new-dashboard/reports/itcReport',
+        route: '/new-dashboard/reports/whitelabelReport',
+    },
+    {
+        displayName: 'Pending orders',
+        iconName: 'analytics',
+        route: '/new-dashboard/pending-orders',
     }],
     "microsite-zeapl": [{
         displayName: 'Dashboard',
         iconName: 'home',
         route: '/new-dashboard/dashboard-microsite',
     },
+
     {
         displayName: 'Current Balance',
         iconName: 'account_balance_wallet',
-        route: '/new-dashboard/reports/itcReport',
+        route: '/new-dashboard/reports/whitelabelReport',
+    },
+    {
+        displayName: 'Pending orders',
+        iconName: 'analytics',
+        route: '/new-dashboard/pending-orders',
     }],
     sub_egv_admin: [
         {
@@ -392,7 +435,7 @@ export const userAcess = {
         {
         displayName: 'Current Balance',
         iconName: 'account_balance_wallet',
-        route: '/new-dashboard/reports/itcReport',
+        route: '/new-dashboard/reports/whitelabelReport',
         }
     ],
     sub_manager: [
@@ -429,7 +472,7 @@ export const userAcess = {
         {
             displayName: 'Current Balance',
             iconName: 'account_balance_wallet',
-            route: '/new-dashboard/reports/itcReport',
+            route: '/new-dashboard/reports/whitelabelReport',
         }
 
     ],
@@ -457,7 +500,7 @@ export const userAcess = {
         {
             displayName: 'Current Balance',
             iconName: 'account_balance_wallet',
-            route: '/new-dashboard/reports/itcReport',
+            route: '/new-dashboard/reports/whitelabelReport',
         }
 
     ],

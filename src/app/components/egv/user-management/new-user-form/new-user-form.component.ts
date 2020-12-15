@@ -65,36 +65,41 @@ export class NewUserFormComponent implements OnInit {
   }
 
   onSubmit(f:NgForm){
+    debugger;
     console.log(f)
     if(f.valid){
+      let obj = f.value;
       if(this.data.account_type==='client'){
-        f.value.fk_associate_id=Number(localStorage.getItem('fkAssociateId'));
+        obj.fk_associate_id=Number(localStorage.getItem('fkAssociateId'));
         
         if(this.env.userType==='egv_admin' && this.walletType == 'master_wallet'){
-          f.value['flagParent'] = true;
+          obj['flagParent'] = true;
         }
 
         if(this.env.userType==='parent_manager'){
-          f.value['parentId'] = f.value.fk_associate_id;
+          obj['parentId'] = f.value.fk_associate_id;
         }
 
       }
       if(this.data.account_type==='manager' || this.data.account_type==='sub_manager'){
-        f.value.fk_associate_id=Number(this.selectedFkid);
+        obj.fk_associate_id=Number(this.selectedFkid);
       }else if(this.data.account_type==='executive' || this.data.account_type==='sub_executive'){
-        f.value['parentId'] = this.fksId;
+        obj['parentId'] = this.fksId;
         if(this.env.userType === 'egv_admin' || this.env.userType === 'sub_egv_admin' || this.env.userType==='parent_manager' || this.env.userType === 'wb_yourigpstore'){
-          f.value.fk_associate_id=Number(this.selectedFkid);
+          obj.fk_associate_id=Number(this.selectedFkid);
         }else{
-          f.value.fk_associate_id=Number(localStorage.getItem('fkAssociateId'));
+          obj.fk_associate_id=Number(localStorage.getItem('fkAssociateId'));
         }
       }
+      if(this.env.userType==='parent_manager' && (Number(this.selectedFkid) == Number(localStorage.getItem('fkAssociateId')))){
+        obj.flagParent = true;
+      }
       // defaul
-      f.value.usertype=this.UserTypesMap[this.data.account_type]
-      f.value.id=0;
+      obj.usertype=this.UserTypesMap[this.data.account_type]
+      obj.id=0;
 
-      console.log(f.value)
-      this.egvService.createEgvUser(f.value).subscribe((res:any)=>{
+      console.log(obj)
+      this.egvService.createEgvUser(obj).subscribe((res:any)=>{
         if(res.error){
           alert('unable to create new user')
         }else{
