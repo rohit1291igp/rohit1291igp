@@ -357,6 +357,9 @@ export class ReportsComponent implements OnInit{
                 _this.reportType = 'whitelabel/report';
                 _this.searchResultModel["fkAssociateId"]=localStorage.fkAssociateId;
                 _this.searchResultModel["fkUserId"]=localStorage.fkUserId;
+                const pipe = new DatePipe('en-US');
+                _this.searchResultModel["toDate"]  = pipe.transform(new Date(), 'yyyy-MM-dd');
+                _this.searchResultModel["fromDate"] = pipe.transform(new Date().setMonth(new Date().getMonth() - 1), 'yyyy-MM-dd');
             }
           /* set default vendor - start */
           if(_this.defaultVendor && ( _this.reportType === 'getVendorReport' || _this.reportType === 'getComponentReport' || _this.reportType === 'getPincodeReport') && (_this.environment.userType && _this.environment.userType === 'admin')){

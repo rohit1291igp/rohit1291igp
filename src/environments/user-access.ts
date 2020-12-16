@@ -241,6 +241,16 @@ export const userAcess = {
             displayName: 'Bulk EGV',
             iconName: 'addchart',
             route: '/new-dashboard/egv/bulkegv',
+        },
+        {
+            displayName: 'Voucher Credit/Debit',
+            iconName: 'account_balance_wallet',
+            route: '/new-dashboard/dashboard-microsite',
+        },
+        {
+            displayName: 'Current Balance',
+            iconName: 'account_balance_wallet',
+            route: '/new-dashboard/reports/whitelabelReport',
         }
     ],
     parent_executive: [
@@ -273,6 +283,16 @@ export const userAcess = {
             displayName: 'Bulk EGV',
             iconName: 'addchart',
             route: '/new-dashboard/egv/bulkegv',
+        },
+        {
+            displayName: 'Voucher Credit/Debit',
+            iconName: 'account_balance_wallet',
+            route: '/new-dashboard/dashboard-microsite',
+        },
+        {
+            displayName: 'Current Balance',
+            iconName: 'account_balance_wallet',
+            route: '/new-dashboard/reports/whitelabelReport',
         }
     ],
     manager: [

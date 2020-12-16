@@ -264,11 +264,14 @@ export class EgvwalletComponent implements OnInit {
           comments: '',
         });
       }).then(
-        _this.getAccountSummary(_this.addMoneyForm.get('selectedChild')['value'].fk_associate_id)
-          .then((response) => {
-            _this.walletSummary = response;
-            _this.loadingSummary = false;
-          })
+        setTimeout(() => {
+          _this.getAccountSummary(_this.addMoneyForm.get('selectedChild')['value'].fk_associate_id)
+            .then((response) => {
+              _this.walletSummary = response;
+              _this.loadingSummary = false;
+            })
+        }, 1000)
+
       )
 
 
