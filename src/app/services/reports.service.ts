@@ -56,7 +56,7 @@ export class ReportsService {
               let fkAssociateId = localStorage.getItem('fkAssociateId');
               var queryParmas= queryString;
 
-              if(environment.userType == 'vendor'){
+              if(environment.userType == 'vendor' || environment.userType == 'hdextnp'){
                   queryParmas += queryParmas ? '&fkAssociateId='+fkAssociateId : 'fkAssociateId='+fkAssociateId;
               }
               /*if(!/deliveryDateFrom/.test(queryString)){

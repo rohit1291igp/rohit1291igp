@@ -162,7 +162,7 @@ export class LoginComponent implements OnInit {
                     }else{
                         _this.router.navigate(['/new-dashboard']);
                     }
-                } else if (userType === 'admin' || userType === 'vendor') {
+                } else if (userType === 'admin' || userType === 'vendor' || userType == 'hdextnp') {
                     _this.router.navigate(['/new-dashboard/dashboard']);
                 }
                 else {

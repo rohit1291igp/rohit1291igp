@@ -560,5 +560,53 @@ export const userAcess = {
         iconName: 'receipt',
         route: '/new-dashboard/reports/wb-yourigpstore',
         }
-    ]
+    ],
+    hdextnp:[
+        {
+            displayName: 'Dashboard',
+            iconName: 'home',
+            route: '/new-dashboard/dashboard',
+        },
+        {
+            displayName: 'Reports',
+            iconName: 'recent_actors',
+            route: 'devfestfl',
+            children: [
+                {
+                    displayName: 'Order Report',
+                    iconName: 'receipt',
+                    route: '/new-dashboard/orderReport',
+                },
+                {
+                    displayName: 'Product Report',
+                    iconName: 'shop',
+                    route: '/new-dashboard/reports/getVendorReport'
+                },
+                {
+                    displayName: 'Pincode Report',
+                    iconName: 'location_on',
+                    route: '/new-dashboard/reports/getPincodeReport'
+                },
+                {
+                    displayName: 'Delivery Boy Details',
+                    iconName: 'transfer_within_a_station',
+                    route: '/new-dashboard/deliveryBoyDetails'
+                },
+                {
+                    displayName: 'Uploaded Image',
+                    iconName: 'collections',
+                    route: '/new-dashboard/uploaded-image'
+                },
+                {
+                    displayName: 'Stock Component Report',
+                    iconName: 'store',
+                    route: '/new-dashboard/stockReport'
+                },
+                {
+                    displayName: 'Performance Report',
+                    iconName: 'analytics',
+                    route: '/new-dashboard/performanceReport'
+                }
+            ]
+        }]
 }
