@@ -455,8 +455,8 @@
                             </select>
                     </div>
                     <div class="searchFiled pull-left" *ngIf="reportType == 'whitelabel/report'">
-                        <my-date-picker id="whitelabelFromDate" name="whitelabelFromDate" placeholder="Enter start date" [options]="myDatePickerOptions" [(ngModel)]="searchResultModel['fromDate']" ></my-date-picker>
-                        <my-date-picker id="whitelabelToDate" name="whitelabelToDate" placeholder="Enter end date" [options]="myDatePickerOptions" [(ngModel)]="searchResultModel['toDate']"></my-date-picker>
+                        <my-date-picker id="whitelabelFromDate" name="whitelabelFromDate" placeholder="Enter start date" [options]="myDatePickerOptions" [(ngModel)]="searchResultModel['fromdate']" ></my-date-picker>
+                        <my-date-picker id="whitelabelToDate" name="whitelabelToDate" placeholder="Enter end date" [options]="myDatePickerOptions" [(ngModel)]="searchResultModel['todate']"></my-date-picker>
                     </div>
                 
                     <div *ngIf="reportType !== 'getbarcodestoverify'" class="searchFieldsSubmit relative inline">

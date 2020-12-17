@@ -9,6 +9,8 @@ import { NativeDateAdapter } from '@angular/material';
 import { MatDateFormats, DateAdapter, MAT_DATE_FORMATS } from '@angular/material/core';
 import { Angular5Csv } from 'angular5-csv/dist/Angular5-csv';
 import { isArray } from 'util';
+import * as Excel from 'exceljs/dist/exceljs.min.js';
+import * as fs from 'file-saver';
 
 export class AppDateAdapter extends NativeDateAdapter {
     format(date: Date, displayFormat: Object): string {
@@ -234,7 +236,7 @@ export class MicroSiteDasboardComponent implements OnInit {
                     }
                 }, 100);
             }
-            
+
         });
     }
 
@@ -275,7 +277,7 @@ export class MicroSiteDasboardComponent implements OnInit {
                 method: 'get',
                 options: options
             };
-         }
+        }
         else {
             reqObj = {
                 url: `${micrositeUser}/getuserrecord?fromdate=${datefrom}&todate=${dateto}&emailid=${data.value.email}&type=${data.value.filtertype}`,
@@ -354,12 +356,12 @@ export class MicroSiteDasboardComponent implements OnInit {
                             nullToEmptyString: false,
                         };
                         // userData.unshift(headerData);
-                        let filedate = datefrom?datefrom + '-' :''  + dateto?dateto:'';
+                        let filedate = datefrom ? datefrom + '-' : '' + dateto ? dateto : '';
                         let download = new Angular5Csv(userData, 'userReport-' + filedate, options);
                     }
                 }
             }
-            else{
+            else {
                 _this.dataSource = new MatTableDataSource([]);
             }
 
@@ -473,15 +475,16 @@ export class MicroSiteDasboardComponent implements OnInit {
         });
     }
 
-    downloadSample(){
-        var options = {
-            showLabels: true,
-            showTitle: false,
-            headers: ['name','points','email' ],
-            nullToEmptyString: false,
-        };
-        // userData.unshift(headerData);
-        
-        let download = new Angular5Csv([], 'Sample', options);
+    downloadSample() {
+
+
+        let workbook = new Excel.Workbook();
+        let worksheet1 = workbook.addWorksheet('Template');
+        let titleRow = worksheet1.addRow(['name', 'points', 'email']);
+
+        workbook.xlsx.writeBuffer().then((data) => {
+            let blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+            fs.saveAs(blob, 'Template.xlsx');
+        });
     }
 }

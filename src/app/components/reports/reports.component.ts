@@ -358,8 +358,8 @@ export class ReportsComponent implements OnInit{
                 _this.searchResultModel["fkAssociateId"]=localStorage.fkAssociateId;
                 _this.searchResultModel["fkUserId"]=localStorage.fkUserId;
                 const pipe = new DatePipe('en-US');
-                _this.searchResultModel["toDate"]  = pipe.transform(new Date(), 'yyyy-MM-dd');
-                _this.searchResultModel["fromDate"] = pipe.transform(new Date().setMonth(new Date().getMonth() - 1), 'yyyy-MM-dd');
+                _this.searchResultModel["todate"]  = pipe.transform(new Date(), 'yyyy-MM-dd');
+                _this.searchResultModel["fromdate"] = pipe.transform(new Date().setMonth(new Date().getMonth() - 1), 'yyyy-MM-dd');
             }
           /* set default vendor - start */
           if(_this.defaultVendor && ( _this.reportType === 'getVendorReport' || _this.reportType === 'getComponentReport' || _this.reportType === 'getPincodeReport') && (_this.environment.userType && _this.environment.userType === 'admin')){
@@ -958,7 +958,7 @@ getDeliveryBoyList(){
             _this.searchResultModel["startLimit"] = 0;
             _this.searchResultModel["endLimit"] = 1000000;
         }
-        
+        debugger;
         _this.queryString = _this.generateQueryString(_this.searchResultModel);
         console.log('searchReportSubmit =====> queryString ====>', _this.queryString);
         /*if(_this.queryString === ""){
