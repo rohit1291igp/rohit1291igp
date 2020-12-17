@@ -83,7 +83,7 @@
           </ng-container>
           <ng-container *ngIf="column == 'TxnDetails'">
             <a (click)="openDialog(element)" style="cursor:pointer"
-              *ngIf="element['TransactionType'] == 'Debit' else noLink">{{(element[column] || '-' )+" - "+element['comments']}}</a>
+              *ngIf="(element['TransactionType'] == 'Debit' && element['TransactionMethod'] != 0) else noLink">{{(element[column] || '-' )+" - "+element['comments']}}</a>
             <ng-template #noLink>
               {{(element[column] || '-' )+" - "+element['comments']}}
             </ng-template>

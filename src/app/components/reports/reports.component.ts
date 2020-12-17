@@ -993,6 +993,33 @@ getDeliveryBoyList(){
                 // if(e){
                     _this.columnFilterSubmit(e);
                     _this.showMoreTableData(e);
+                if(_this.isDownload){
+                    var options = {
+                        showLabels: true, 
+                        showTitle: false,
+                        headers: Object.keys(_this.orginalReportData.tableData[0]).map(m => m.charAt(0).toUpperCase() + m.slice(1)),
+                        nullToEmptyString: true,
+                        };
+                    let data = [];
+                    new Promise((resolve)=>{
+                        for(let pi=0; pi < _this.orginalReportData.tableData.length; pi++){
+                            for(let k in _this.orginalReportData.tableData[pi]){
+                                if(typeof _this.orginalReportData.tableData[pi][k] == 'object' &&_this.orginalReportData.tableData[pi][k] != null){
+                                    _this.orginalReportData.tableData[pi][k] = _this.orginalReportData.tableData[pi][k].value ? _this.orginalReportData.tableData[pi][k].value : '';
+                                }
+                            }
+                            if(pi == (_this.orginalReportData.tableData.length-1)){
+                                resolve(_this.orginalReportData.tableData);
+                            }
+                        }
+                    }).then((data)=>{
+                        // data = _this.orginalReportData.tableData;
+                        let download = new Angular5Csv(data, _this.reportType, options);
+                        _this.isDownload = false;
+                    })
+                    
+                    
+                }
                 // }
             }else{
                 _this.orginalReportData.summary = [];

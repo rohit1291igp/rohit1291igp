@@ -328,12 +328,12 @@ export class EgvStatementComponent implements OnInit {
 		let _this = this;
 		let newdate = element.Date.substring(0, 10).split("-").reverse().join("-");
 		let reqObj: any = {
-			url: 'reconcile/gettransactionwisereport?endDate=' + newdate + "&startDate=" + newdate + "&fkasid=" + element.fkasid,
+			url: 'reconcile/gettransactionwisereport?endDate=' + newdate + "&startDate=" + newdate + "&fkasid=" + element.fkasid + "&transactionId=" + element.TxnDetails + "&transactionMethod=" + element.TransactionMethod,
 			method: "get",
 		};
 		if (document.getElementById("cLoader")) document.getElementById("cLoader").classList.remove("hide");
-		reqObj.url += element.IsBulkEGV ? "&IsBulkEGV=true" : "";
-		reqObj.url += element.IsBulkEGV ? "&transactionId=" + element.TxnDetails : "";
+		reqObj.url += (element.TransactionMethod == 2) ? "&IsBulkEGV=true" : "";
+		// reqObj.url += element.IsBulkEGV ? "&transactionId=" + element.TxnDetails : "";
 		this.EgvService.getEgvService(reqObj).subscribe(
 			result => {
 				if (document.getElementById("cLoader")) document.getElementById("cLoader").classList.add("hide");
@@ -346,7 +346,7 @@ export class EgvStatementComponent implements OnInit {
 				let data: any = {};
 				data.dataSource = new MatTableDataSource(result.tableData);
 				data.tableHeaders = result.tableHeaders;
-				if (element.IsBulkEGV) data.tableHeaders.push("Recipient_Email");
+				if (element.TransactionMethod == 2) data.tableHeaders.push("Recipient_Email");
 				if (element.Status == 'Delivered') data.tableHeaders.push("Actions");
 
 				_this.dialog.open(transactionReportDialog, { data });
