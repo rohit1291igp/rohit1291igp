@@ -253,11 +253,14 @@ export class EgvwalletComponent implements OnInit {
     _this.EgvService.getEgvService(reqObj).subscribe(
       result => {
         if (result.error) {
-          _this.openSnackBar('Something went wrong.');
+          _this.openSnackBar(result.errorMessage);
           console.log('Error=============>', result.error);
 
         }
-        _this.openSnackBar(result.result);
+        else{
+          _this.openSnackBar(result.result);
+        }
+       
         _this.addMoneyForm.patchValue({
           addMoneyTransactionId: '',
           addMoneyAmount: '',

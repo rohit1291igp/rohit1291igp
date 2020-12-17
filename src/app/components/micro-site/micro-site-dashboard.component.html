@@ -49,6 +49,7 @@
             <div *ngIf="fksId != '895' && vendorName != 'itcinfotech'" [ngClass]="displayUplaodFormFlag ? 'hide-form' : 'show-form'">
                 <button mat-stroked-button color="primary" [ngStyle]="{'background-color': whitelabelStyle ? whitelabelStyle.primaryColor : '' }" (click)="displayUploadForm(true)"
                     class="btn-color">Upload</button>
+                    <button mat-raised-button (click)="downloadSample()">Download Template</button>
             </div>
             <mat-card *ngIf="fksId != '895' && vendorName != 'itcinfotech'" [ngClass]="displayUplaodFormFlag ? 'show-form' : 'hide-form'">
                 <div>
@@ -61,6 +62,7 @@
                             <br>
                             <button type="submit" mat-raised-button [disabled]="!file.value"
                                 class="btn-color">Upload</button>
+                           
                         </div>
                     </form>
                 </div>
@@ -92,7 +94,7 @@
                     <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" showFirstLastButtons></mat-paginator>
                 </ng-container>
                 <ng-template #noRecord>
-                    <div style="color:#C3404E">Today No Record Found</div>
+                    <div style="color:#C3404E">No Records Found</div>
                 </ng-template>
             </mat-card>
         </ng-container>

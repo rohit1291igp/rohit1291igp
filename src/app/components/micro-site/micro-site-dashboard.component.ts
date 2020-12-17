@@ -117,8 +117,8 @@ export class MicroSiteDasboardComponent implements OnInit {
 
         this.SearchForm = this.fb.group({
             filtertype: ['all', Validators.required],
-            datefrom: ['', Validators.required],
-            dateto: ['', Validators.required],
+            datefrom: [''],
+            dateto: [''],
             email: ['']
         });
         this.displayedColumns = this.columnNames.map(x => x.id);
@@ -234,6 +234,7 @@ export class MicroSiteDasboardComponent implements OnInit {
                     }
                 }, 100);
             }
+            
         });
     }
 
@@ -288,7 +289,7 @@ export class MicroSiteDasboardComponent implements OnInit {
                 _this.openSnackBar('Server Error');
                 return;
             }
-            if (response.status.toLowerCase() == 'success' && response.data) {
+            if (response.status.toLowerCase() == 'success' && isArray(response.data)) {
                 if (buttonName === 'search') {
                     _this.displayUploadForm(false);
                     if (data.value.filtertype == 'all') {
@@ -353,10 +354,13 @@ export class MicroSiteDasboardComponent implements OnInit {
                             nullToEmptyString: false,
                         };
                         // userData.unshift(headerData);
-                        let filedate = datefrom + '-' + dateto;
+                        let filedate = datefrom?datefrom + '-' :''  + dateto?dateto:'';
                         let download = new Angular5Csv(userData, 'userReport-' + filedate, options);
                     }
                 }
+            }
+            else{
+                _this.dataSource = new MatTableDataSource([]);
             }
 
         });
@@ -467,5 +471,17 @@ export class MicroSiteDasboardComponent implements OnInit {
             duration: 5 * 1000,
             panelClass: ['snackbar-background']
         });
+    }
+
+    downloadSample(){
+        var options = {
+            showLabels: true,
+            showTitle: false,
+            headers: ['name','points','email' ],
+            nullToEmptyString: false,
+        };
+        // userData.unshift(headerData);
+        
+        let download = new Angular5Csv([], 'Sample', options);
     }
 }
