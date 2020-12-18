@@ -344,6 +344,7 @@ export class EgvStatementComponent implements OnInit {
 
 				}
 				let data: any = {};
+				data.fkasid = element.fkasid;
 				data.dataSource = new MatTableDataSource(result.tableData);
 				data.tableHeaders = result.tableHeaders;
 				if (element.TransactionMethod == 2) data.tableHeaders.push("Recipient_Email");
@@ -496,7 +497,7 @@ export class transactionReportDialog implements OnInit {
 		var options = {
 			showLabels: true,
 			showTitle: false,
-			headers: this.data.tableHeaders,
+			headers: this.data.tableHeaders.filter(ele => { return ele != 'Actions' }),
 			nullToEmptyString: true,
 		};
 
@@ -509,7 +510,9 @@ export class transactionReportDialog implements OnInit {
 					if (typeof this.data.dataSource.data[pi][k] == 'object' && this.data.dataSource.data[pi][k] != null) {
 						this.data.dataSource.data[pi][k] = this.data.dataSource.data[pi][k].value ? this.data.dataSource.data[pi][k].value : '';
 					}
-					temp[k] = this.data.dataSource.data[pi][k];
+					if (k != 'Actions') {
+						temp[k] = this.data.dataSource.data[pi][k];
+					}
 				}
 				reportDownloadData.push(temp);
 				if (pi == (this.data.dataSource.data.length - 1)) {
@@ -522,9 +525,10 @@ export class transactionReportDialog implements OnInit {
 		})
 	}
 
+
 	resendGV(element) {
 		console.log(element)
-		this.EgvService.resendgv(localStorage.fkAssociateId, element['LR OrderId']).subscribe(
+		this.EgvService.resendgv(this.data.fkasid, element['OrderId']).subscribe(
 			result => {
 				alert(result['data']);
 			})

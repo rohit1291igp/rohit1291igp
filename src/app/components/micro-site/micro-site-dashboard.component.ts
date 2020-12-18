@@ -207,7 +207,7 @@ export class MicroSiteDasboardComponent implements OnInit {
         let reqObj;
         if (_this.whitelabelStyle) {
             reqObj = {
-                url: `whitelabel/getuserrecord?fromdate=${datefrom}&todate=${dateto}&emailid=&type=all&fkAssociateId=${localStorage.fkAssociateId}&fkUserId=${localStorage.fkUserId}`,
+                url: `whitelabel/getuserrecord?fromdate=${datefrom}&todate=${dateto}&emailid=&type=all&fkAssociateId=${localStorage.fkAssociateId}&fkUserId=0`,
                 method: "get"
             };
         }
@@ -273,7 +273,7 @@ export class MicroSiteDasboardComponent implements OnInit {
         let reqObj;
         if (_this.whitelabelStyle) {
             reqObj = {
-                url: `whitelabel/getuserrecord?fromdate=${datefrom}&todate=${dateto}&emailid=${data.value.email}&type=${data.value.filtertype}&fkAssociateId=${localStorage.fkAssociateId}&fkUserId=${localStorage.fkUserId}`,
+                url: `whitelabel/getuserrecord?fromdate=${datefrom}&todate=${dateto}&emailid=${data.value.email}&type=${data.value.filtertype}&fkAssociateId=${localStorage.fkAssociateId}&fkUserId=0`,
                 method: 'get',
                 options: options
             };

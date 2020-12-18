@@ -356,7 +356,7 @@ export class ReportsComponent implements OnInit{
             if(_this.reportType === 'whitelabelReport'){
                 _this.reportType = 'whitelabel/report';
                 _this.searchResultModel["fkAssociateId"]=localStorage.fkAssociateId;
-                _this.searchResultModel["fkUserId"]=localStorage.fkUserId;
+                _this.searchResultModel["fkUserId"]=0;
                 const pipe = new DatePipe('en-US');
                 _this.searchResultModel["todate"]  = pipe.transform(new Date(), 'yyyy-MM-dd');
                 _this.searchResultModel["fromdate"] = pipe.transform(new Date().setMonth(new Date().getMonth() - 1), 'yyyy-MM-dd');
