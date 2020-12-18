@@ -123,7 +123,9 @@ export class BulkEgvComponent implements OnInit {
   }
 
   generateManualBulkEgv() {
-
+    if(!this.bulkegvform.value.selectedProduct){
+      alert('Please select a Product');
+    }
     console.log(this.bulkegvform.invalid);
     if (this.bulkegvform.invalid) { return }
     if (this.bulkegvform.value.denomination < this.minValue || this.bulkegvform.value.denomination > this.maxValue) {
