@@ -194,7 +194,9 @@ export class BulkEgvComponent implements OnInit {
             });
           }
           if (rowNumber != 1 && _this.validExcel) {
+            
             if (!(row.values[1] && row.values[2] && row.values[3] && row.values[4] && row.values[5] )) {
+              console.log(row.values[1],row.values[2],row.values[3],row.values[4],row.values[5] );
               _this.errorList.push({ row: rowNumber, msg: "Values cannot be empty" })
             }
             else {
