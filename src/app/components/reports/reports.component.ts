@@ -353,7 +353,14 @@ export class ReportsComponent implements OnInit{
             if(_this.reportType === 'zeaplReport'){
                 _this.reportType = 'zeapl/report'
             }
-            
+            if(_this.reportType === 'whitelabelReport'){
+                _this.reportType = 'whitelabel/report';
+                _this.searchResultModel["fkAssociateId"]=localStorage.fkAssociateId;
+                _this.searchResultModel["fkUserId"]=0;
+                const pipe = new DatePipe('en-US');
+                _this.searchResultModel["todate"]  = pipe.transform(new Date(), 'yyyy-MM-dd');
+                _this.searchResultModel["fromdate"] = pipe.transform(new Date().setMonth(new Date().getMonth() - 1), 'yyyy-MM-dd');
+            }
           /* set default vendor - start */
           if(_this.defaultVendor && ( _this.reportType === 'getVendorReport' || _this.reportType === 'getComponentReport' || _this.reportType === 'getPincodeReport') && (_this.environment.userType && _this.environment.userType === 'admin')){
               _this.searchResultModel["fkAssociateId"]=_this.defaultVendor;
@@ -951,7 +958,7 @@ getDeliveryBoyList(){
             _this.searchResultModel["startLimit"] = 0;
             _this.searchResultModel["endLimit"] = 1000000;
         }
-        
+        debugger;
         _this.queryString = _this.generateQueryString(_this.searchResultModel);
         console.log('searchReportSubmit =====> queryString ====>', _this.queryString);
         /*if(_this.queryString === ""){
@@ -986,6 +993,33 @@ getDeliveryBoyList(){
                 // if(e){
                     _this.columnFilterSubmit(e);
                     _this.showMoreTableData(e);
+                if(_this.isDownload){
+                    var options = {
+                        showLabels: true, 
+                        showTitle: false,
+                        headers: Object.keys(_this.orginalReportData.tableData[0]).map(m => m.charAt(0).toUpperCase() + m.slice(1)),
+                        nullToEmptyString: true,
+                        };
+                    let data = [];
+                    new Promise((resolve)=>{
+                        for(let pi=0; pi < _this.orginalReportData.tableData.length; pi++){
+                            for(let k in _this.orginalReportData.tableData[pi]){
+                                if(typeof _this.orginalReportData.tableData[pi][k] == 'object' &&_this.orginalReportData.tableData[pi][k] != null){
+                                    _this.orginalReportData.tableData[pi][k] = _this.orginalReportData.tableData[pi][k].value ? _this.orginalReportData.tableData[pi][k].value : '';
+                                }
+                            }
+                            if(pi == (_this.orginalReportData.tableData.length-1)){
+                                resolve(_this.orginalReportData.tableData);
+                            }
+                        }
+                    }).then((data)=>{
+                        // data = _this.orginalReportData.tableData;
+                        let download = new Angular5Csv(data, _this.reportType, options);
+                        _this.isDownload = false;
+                    })
+                    
+                    
+                }
                 // }
             }else{
                 _this.orginalReportData.summary = [];

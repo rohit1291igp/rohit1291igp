@@ -9,6 +9,8 @@ import { NativeDateAdapter } from '@angular/material';
 import { MatDateFormats, DateAdapter, MAT_DATE_FORMATS } from '@angular/material/core';
 import { Angular5Csv } from 'angular5-csv/dist/Angular5-csv';
 import { isArray } from 'util';
+import * as Excel from 'exceljs/dist/exceljs.min.js';
+import * as fs from 'file-saver';
 
 export class AppDateAdapter extends NativeDateAdapter {
     format(date: Date, displayFormat: Object): string {
@@ -117,8 +119,8 @@ export class MicroSiteDasboardComponent implements OnInit {
 
         this.SearchForm = this.fb.group({
             filtertype: ['all', Validators.required],
-            datefrom: ['', Validators.required],
-            dateto: ['', Validators.required],
+            datefrom: [''],
+            dateto: [''],
             email: ['']
         });
         this.displayedColumns = this.columnNames.map(x => x.id);
@@ -202,10 +204,19 @@ export class MicroSiteDasboardComponent implements OnInit {
                 micrositeUser = 'loylty';
                 break;
         }
-        const reqObj = {
-            url: `${micrositeUser}/getuserrecord?fromdate=${datefrom}&todate=${dateto}&emailid=&type=all`,
-            method: "get"
-        };
+        let reqObj;
+        if (_this.whitelabelStyle) {
+            reqObj = {
+                url: `whitelabel/getuserrecord?fromdate=${datefrom}&todate=${dateto}&emailid=&type=all&fkAssociateId=${localStorage.fkAssociateId}&fkUserId=0`,
+                method: "get"
+            };
+        }
+        else {
+            reqObj = {
+                url: `${micrositeUser}/getuserrecord?fromdate=${datefrom}&todate=${dateto}&emailid=&type=all`,
+                method: "get"
+            };
+        }
         _this.BackendService.makeAjax(reqObj, function (err, response, headers) {
 
             if (err || response.error) {
@@ -225,6 +236,7 @@ export class MicroSiteDasboardComponent implements OnInit {
                     }
                 }, 100);
             }
+
         });
     }
 
@@ -258,18 +270,28 @@ export class MicroSiteDasboardComponent implements OnInit {
                 break;
         }
 
-        let reqObj = {
-            url: `${micrositeUser}/getuserrecord?fromdate=${datefrom}&todate=${dateto}&emailid=${data.value.email}&type=${data.value.filtertype}`,
-            method: 'get',
-            options: options
-        };
+        let reqObj;
+        if (_this.whitelabelStyle) {
+            reqObj = {
+                url: `whitelabel/getuserrecord?fromdate=${datefrom}&todate=${dateto}&emailid=${data.value.email}&type=${data.value.filtertype}&fkAssociateId=${localStorage.fkAssociateId}&fkUserId=0`,
+                method: 'get',
+                options: options
+            };
+        }
+        else {
+            reqObj = {
+                url: `${micrositeUser}/getuserrecord?fromdate=${datefrom}&todate=${dateto}&emailid=${data.value.email}&type=${data.value.filtertype}`,
+                method: 'get',
+                options: options
+            };
+        }
         _this.BackendService.makeAjax(reqObj, function (err, response, headers) {
 
             if (err || response.error) {
                 _this.openSnackBar('Server Error');
                 return;
             }
-            if (response.status.toLowerCase() == 'success' && response.data) {
+            if (response.status.toLowerCase() == 'success' && isArray(response.data)) {
                 if (buttonName === 'search') {
                     _this.displayUploadForm(false);
                     if (data.value.filtertype == 'all') {
@@ -316,7 +338,7 @@ export class MicroSiteDasboardComponent implements OnInit {
                                 "couponUsedDate": f.couponUsedDate
                             }
                             return userData.push(a);
-                        }else{
+                        } else {
                             userData.push(f)
                         }
 
@@ -334,10 +356,13 @@ export class MicroSiteDasboardComponent implements OnInit {
                             nullToEmptyString: false,
                         };
                         // userData.unshift(headerData);
-                        let filedate = datefrom + '-' + dateto;
+                        let filedate = datefrom ? datefrom + '-' : '' + dateto ? dateto : '';
                         let download = new Angular5Csv(userData, 'userReport-' + filedate, options);
                     }
                 }
+            }
+            else {
+                _this.dataSource = new MatTableDataSource([]);
             }
 
         });
@@ -389,17 +414,17 @@ export class MicroSiteDasboardComponent implements OnInit {
                     micrositeVoucher = 'loyltyvouchers';
                     break;
             }
-            
+
             let reqObj;
-            if(_this.whitelabelStyle){
+            if (_this.whitelabelStyle) {
                 reqObj = {
                     url:
-                        `points/upload?user=temp&fkAssociateId=${_this.fksId}&fkUserId=${_this.fkUserId}&thirdPartyId=007`,
+                        `whitelabel/userupload?fkAssociateId=${localStorage.fkAssociateId}&fkUserId=${localStorage.fkUserId}`,
                     method: 'post',
                     payload: formData,
                     options: options
                 };
-            }else{
+            } else {
                 reqObj = {
                     url:
                         `${micrositeUser}/userupload?issue=${micrositeVoucher}`,
@@ -447,6 +472,19 @@ export class MicroSiteDasboardComponent implements OnInit {
             data: data,
             duration: 5 * 1000,
             panelClass: ['snackbar-background']
+        });
+    }
+
+    downloadSample() {
+
+
+        let workbook = new Excel.Workbook();
+        let worksheet1 = workbook.addWorksheet('Template');
+        let titleRow = worksheet1.addRow(['name', 'points', 'email']);
+
+        workbook.xlsx.writeBuffer().then((data) => {
+            let blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+            fs.saveAs(blob, 'Template.xlsx');
         });
     }
 }

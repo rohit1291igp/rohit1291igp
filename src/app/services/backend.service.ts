@@ -44,6 +44,8 @@ export class BackendService {
                         reqObj.url = environment.origin + 'v1/handels/' + reqObj.url;
                       }else if(environment.userType === 'microsite' || environment.userType === 'microsite-zeapl' || environment.userType === 'microsite-loylty'){
                         reqObj.url = environment.origin + 'v1/admin/' + reqObj.url;
+                      }else if(environment.userType === 'egv_admin' || environment.userType === 'manager' || environment.userType === 'executive' ||  environment.userType.includes('parent')){
+                        reqObj.url = environment.origin + 'v1/admin/' + reqObj.url;
                       } else if(environment.userType === 'voucher'){
                         reqObj.url = environment.origin + 'v1/' + reqObj.url;
                       } else if(environment.userType === 'gv'){
