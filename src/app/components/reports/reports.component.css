@@ -48,7 +48,7 @@
 }
 
 .searchFieldsSubmit {
-    bottom: 0.5em;
+    /* bottom: 0.5em; */
     position: absolute;
     right: 1em;
 }

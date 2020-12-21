@@ -313,11 +313,10 @@ export class AlertManagementComponent implements OnInit {
 
   openSnackBar(data) {
     this._snackBar.openFromComponent(NotificationComponent, {
-      data: data,
-      duration: 5 * 1000,
-      panelClass: ['snackbar-success'],
-      verticalPosition: "top"
+        data: data,
+        duration: 5 * 1000,
+        panelClass: ['snackbar-background']
     });
-  }
+}
 
 }

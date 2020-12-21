@@ -36,12 +36,14 @@ export class EgvStatementComponent implements OnInit {
 	childList: any;
 	filteredChildList: any;
 	childSelected: any;
+	
 
 	constructor(
 		private fb: FormBuilder,
 		private EgvService: EgvService,
 		private cdRef: ChangeDetectorRef,
-		public dialog: MatDialog
+		public dialog: MatDialog,
+		private _snackBar: MatSnackBar
 	) { }
 
 	ngOnInit() {
@@ -102,6 +104,14 @@ export class EgvStatementComponent implements OnInit {
 		_this.getStatement();
 
 
+	}
+
+	openSnackBar(data) {
+		this._snackBar.openFromComponent(NotificationComponent, {
+			data: data,
+			duration: 5 * 1000,
+			panelClass: ['snackbar-background']
+		});
 	}
 
 	ngAfterViewChecked() {
@@ -282,7 +292,7 @@ export class EgvStatementComponent implements OnInit {
 
 				}
 				if (!result.tableData.length) {
-					alert('No Records found');
+					_this.openSnackBar('No Records found');
 				}
 				var options = {
 					showLabels: true,
@@ -348,6 +358,11 @@ export class EgvStatementComponent implements OnInit {
 				data.dataSource = new MatTableDataSource(result.tableData);
 				data.tableHeaders = result.tableHeaders;
 				if (element.TransactionMethod == 2) data.tableHeaders.push("Recipient_Email");
+				if (element.TransactionMethod == 3) {
+					let index = data.tableHeaders.indexOf('OrderId');
+					data.tableHeaders.splice(index,1);;
+					data.tableHeaders.splice(index,0,"Recipient_Email");
+				}
 				if (element.Status == 'Delivered') data.tableHeaders.push("Actions");
 
 				_this.dialog.open(transactionReportDialog, { data });
@@ -392,14 +407,20 @@ export class EgvStatementComponent implements OnInit {
 
 				}
 				if (!result.tableData.length) {
-					alert('No Records found');
+					_this.openSnackBar('No Records found');
 				}
+				
+					let index = result.tableHeaders.indexOf('OrderId');
+					result.tableHeaders.splice(index,0,"Recipient_Email");
+				
+				console.log(result.tableHeaders);
 				var options = {
 					showLabels: true,
 					showTitle: false,
 					headers: result.tableHeaders,
 					nullToEmptyString: true,
 				};
+				
 
 				let data = [];
 				let reportDownloadData = [];
@@ -410,7 +431,7 @@ export class EgvStatementComponent implements OnInit {
 							if (typeof result.tableData[pi][k] == 'object' && result.tableData[pi][k] != null) {
 								result.tableData[pi][k] = result.tableData[pi][k].value ? result.tableData[pi][k].value : '';
 							}
-							temp[k] = result.tableData[pi][k];
+							temp[k] = result.tableData[pi][k]?result.tableData[pi][k]:'-';
 						}
 						reportDownloadData.push(temp);
 						if (pi == (result.tableData.length - 1)) {
@@ -477,7 +498,8 @@ export class transactionReportDialog implements OnInit {
 	constructor(
 		public dialogRef: MatDialogRef<transactionReportDialog>,
 		@Inject(MAT_DIALOG_DATA) public data: any,
-		private EgvService: EgvService
+		private EgvService: EgvService,
+		private _snackBar: MatSnackBar
 	) {
 		setTimeout(() => {
 			data.dataSource.paginator = this.paginator;
@@ -491,6 +513,13 @@ export class transactionReportDialog implements OnInit {
 			this.dataSource.paginator = this.paginator;
 			this.dataSource.sort = this.sort;
 		}, 100)
+	}
+	openSnackBar(data) {
+		this._snackBar.openFromComponent(NotificationComponent, {
+			data: data,
+			duration: 5 * 1000,
+			panelClass: ['snackbar-background']
+		});
 	}
 	downloadStatement() {
 
@@ -527,10 +556,11 @@ export class transactionReportDialog implements OnInit {
 
 
 	resendGV(element) {
+		let $this = this;
 		console.log(element)
 		this.EgvService.resendgv(this.data.fkasid, element['OrderId']).subscribe(
 			result => {
-				alert(result['data']);
+				$this.openSnackBar(result['data']);
 			})
 	}
 

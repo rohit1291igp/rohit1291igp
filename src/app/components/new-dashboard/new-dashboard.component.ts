@@ -48,7 +48,7 @@ export class NewDasboardComponent implements OnInit, AfterViewInit {
     }
 
     ngOnInit() {
-        debugger;
+       
         let $this=this;
         this.router.events.subscribe(e => {
             if (e instanceof ActivationStart){
@@ -58,7 +58,7 @@ export class NewDasboardComponent implements OnInit, AfterViewInit {
         this.whitelabelStyle = localStorage.getItem('whitelabelDetails') ? JSON.parse(localStorage.getItem('whitelabelDetails')) : null;
         this.username = localStorage.getItem('vendorName') ? localStorage.getItem('vendorName') : '';
         const bodyEle = document.getElementsByTagName('body');
-        debugger;
+       
         this.UserAccessService.getUserAccess(function(navItems){
             $this.navItems = navItems; 
             if (navItems && navItems.length > 0) {
