@@ -1,102 +1,127 @@
-<div class="itc-dashboard-main-container">
-    <div class="itc-dashboard-search-and-upload-container d-flex">
+<mat-sidenav-container (backdropClick)="sidenavClose('backdrop')">
+    <mat-sidenav #sidenav position="end" (keydown.escape)="sidenavClose('escape')" style="width: 50%;" disableClose>
         <mat-card>
-            <div class="itc-dashboard-user-header">Search User</div>
-            <form [formGroup]="SearchForm" (ngSubmit)="onSubmit(SearchForm)">
-                <div class="form-container">
-                    <div class="d-flex">
-                        <mat-form-field class="flex-1 m-8">
-                            <input matInput [matDatepicker]="picker" placeholder="From"
-                                (dateInput)="addEventFrom('input', $event)"
-                                (dateChange)="addEventFrom('change', $event)" autocomplete="off">
-                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                            <mat-datepicker #picker></mat-datepicker>
-                        </mat-form-field>
-
-                        <mat-form-field class="flex-1 m-8">
-                            <input matInput [matDatepicker]="pickers" placeholder="To"
-                                (dateInput)="addEventTo('input', $event)" (dateChange)="addEventTo('change', $event)"
-                                autocomplete="off">
-                            <mat-datepicker-toggle matSuffix [for]="pickers"></mat-datepicker-toggle>
-                            <mat-datepicker #pickers></mat-datepicker>
-                        </mat-form-field>
-                    </div>
-                    <div class="d-flex">
-                        <mat-form-field class="flex-1 m-8">
-                            <!-- (keyup)="applyFilter($event.target.value)" -->
-                            <input matInput formControlName="email" placeholder="Email" autocomplete="off">
-                        </mat-form-field>
-                        <mat-form-field class="m-8 flex-1">
-                            <mat-label>Type</mat-label>
-                            <mat-select formControlName="filtertype">
-                                <mat-option *ngFor="let x of filterType" [value]="x.value">
-                                    {{x.viewValue}}
-                                </mat-option>
-                            </mat-select>
-                        </mat-form-field>
-                    </div>
-                    <div class="d-flex">
-                        <button [ngStyle]="{'background-color': whitelabelStyle ? whitelabelStyle.primaryColor : '', 'color': whitelabelStyle ? whitelabelStyle.secondaryColor : '' }" style="margin: 5px;flex:1;" id="search" [disabled]="!SearchForm.valid" type="submit" mat-raised-button
-                        class="btn-color">Search</button>
-                        <button [ngStyle]="{'background-color': whitelabelStyle ? whitelabelStyle.primaryColor : '', 'color': whitelabelStyle ? whitelabelStyle.secondaryColor : '' }" style="margin: 5px;flex:1;" id="download" [disabled]="!SearchForm.valid" type="submit" mat-raised-button
-                        class="btn-color">Download</button>  
-                    </div>
-                      
-                </div>
-            </form>
-        </mat-card>
-        <mat-card class="d-flex align-items-center justify-content-center text-align-center">
-            <div *ngIf="fksId != '895' && vendorName != 'itcinfotech'" [ngClass]="displayUplaodFormFlag ? 'hide-form' : 'show-form'">
-                <button mat-stroked-button color="primary" [ngStyle]="{'background-color': whitelabelStyle ? whitelabelStyle.primaryColor : '' }" (click)="displayUploadForm(true)"
-                    class="btn-color">Upload</button>
-                    <button mat-raised-button (click)="downloadSample()">Download Template</button>
+            <div class="row">
+                <span style="float: right; font-size: 1.8em; cursor: pointer;" (click)="sidenav.close()">&times;</span>
+                <h4 class="col-sm-6" style="color:rgb(195, 64, 78)" *ngIf="errorList?.length">Errors :
+                    {{errorList.length}}</h4>
             </div>
-            <mat-card *ngIf="fksId != '895' && vendorName != 'itcinfotech'" [ngClass]="displayUplaodFormFlag ? 'show-form' : 'hide-form'">
-                <div>
-                    <i class="fa fa-times" style="float: right; cursor:pointer;color:#C3404E"
-                        (click)="displayUploadForm(false)"></i>
-                    <form (ngSubmit)="uploadExcel($event)">
+        </mat-card>
+        <mat-card *ngFor="let ele of errorList">
+            Row:{{ele.row}} :- {{ele.msg}}
+        </mat-card>
+    </mat-sidenav>
+
+    <mat-sidenav-content>
+        <div class="itc-dashboard-main-container">
+            <div class="itc-dashboard-search-and-upload-container d-flex">
+                <mat-card>
+                    <div class="itc-dashboard-user-header">Search User</div>
+                    <form [formGroup]="SearchForm" (ngSubmit)="onSubmit(SearchForm)">
                         <div class="form-container">
-                            <input id="uploadFile" type="file" name="file" #file (change)="fileChange($event)"
-                                accept=".xls, .xlsx, .csv">
-                            <br>
-                            <button type="submit" mat-raised-button [disabled]="!file.value"
-                                class="btn-color">Upload</button>
-                           
+                            <div class="d-flex">
+                                <mat-form-field class="flex-1 m-8">
+                                    <input matInput [matDatepicker]="picker" placeholder="From"
+                                        (dateInput)="addEventFrom('input', $event)"
+                                        (dateChange)="addEventFrom('change', $event)" autocomplete="off">
+                                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                    <mat-datepicker #picker></mat-datepicker>
+                                </mat-form-field>
+
+                                <mat-form-field class="flex-1 m-8">
+                                    <input matInput [matDatepicker]="pickers" placeholder="To"
+                                        (dateInput)="addEventTo('input', $event)"
+                                        (dateChange)="addEventTo('change', $event)" autocomplete="off">
+                                    <mat-datepicker-toggle matSuffix [for]="pickers"></mat-datepicker-toggle>
+                                    <mat-datepicker #pickers></mat-datepicker>
+                                </mat-form-field>
+                            </div>
+                            <div class="d-flex">
+                                <mat-form-field class="flex-1 m-8">
+                                    <!-- (keyup)="applyFilter($event.target.value)" -->
+                                    <input matInput formControlName="email" placeholder="Email" autocomplete="off">
+                                </mat-form-field>
+                                <mat-form-field class="m-8 flex-1">
+                                    <mat-label>Type</mat-label>
+                                    <mat-select formControlName="filtertype">
+                                        <mat-option *ngFor="let x of filterType" [value]="x.value">
+                                            {{x.viewValue}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                            <div class="d-flex">
+                                <button
+                                    [ngStyle]="{'background-color': whitelabelStyle ? whitelabelStyle.primaryColor : '', 'color': whitelabelStyle ? whitelabelStyle.secondaryColor : '' }"
+                                    style="margin: 5px;flex:1;" id="search" [disabled]="!SearchForm.valid" type="submit"
+                                    mat-raised-button class="btn-color">Search</button>
+                                <button
+                                    [ngStyle]="{'background-color': whitelabelStyle ? whitelabelStyle.primaryColor : '', 'color': whitelabelStyle ? whitelabelStyle.secondaryColor : '' }"
+                                    style="margin: 5px;flex:1;" id="download" [disabled]="!SearchForm.valid"
+                                    type="submit" mat-raised-button class="btn-color">Download</button>
+                            </div>
+
                         </div>
                     </form>
-                </div>
-            </mat-card>
+                </mat-card>
+                <mat-card class="d-flex align-items-center justify-content-center text-align-center">
+                    <div *ngIf="fksId != '895' && vendorName != 'itcinfotech'"
+                        [ngClass]="displayUplaodFormFlag ? 'hide-form' : 'show-form'">
+                        <button mat-stroked-button color="primary"
+                            [ngStyle]="{'background-color': whitelabelStyle ? whitelabelStyle.primaryColor : '' }"
+                            (click)="displayUploadForm(true)" class="btn-color">Upload</button>
+                        <button mat-raised-button (click)="downloadSample()">Download Template</button>
+                    </div>
+                    <mat-card *ngIf="fksId != '895' && vendorName != 'itcinfotech'"
+                        [ngClass]="displayUplaodFormFlag ? 'show-form' : 'hide-form'">
+                        <div>
+                            <i class="fa fa-times" style="float: right; cursor:pointer;color:#C3404E"
+                                (click)="displayUploadForm(false)"></i>
+                            <form (ngSubmit)="uploadExcel($event)">
+                                <div class="form-container">
+                                    <input id="uploadFile" type="file" name="file" #file (change)="fileChange($event)"
+                                        accept=".xls, .xlsx, .csv">
+                                    <br>
+                                    <button type="submit" mat-raised-button [disabled]="!file.value"
+                                        class="btn-color">Upload</button>
+
+                                </div>
+                            </form>
+                        </div>
+                    </mat-card>
 
 
-        </mat-card>
-    </div>
-    <div class="itc-dashboard-user-container">
-        <ng-container>
-            <mat-card>
-                <!-- <mat-form-field>
+                </mat-card>
+            </div>
+            <div class="itc-dashboard-user-container">
+                <ng-container>
+                    <mat-card>
+                        <!-- <mat-form-field>
                     <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter" autocomplete="off">
                 </mat-form-field> -->
-                <ng-container
-                    *ngIf="(dataSource?._renderData | async) && (dataSource?._renderData | async ).length > 0 else noRecord">
-                    <mat-table #table mat-table [dataSource]="dataSource" matSort>
-                        <ng-container matColumnDef="{{column.id}}" *ngFor="let column of columnNames;">
-                            <mat-header-cell mat-header-cell *matHeaderCellDef mat-sort-header> {{column.value}}
-                            </mat-header-cell>
-                            <mat-cell mat-cell *matCellDef="let element">
-                                <span *ngIf="element[column.id]">{{element[column.id]}}</span>
-                                <span *ngIf="!element[column.id]" style="padding-left: 8px;">-</span>
-                            </mat-cell>
+                        <ng-container
+                            *ngIf="(dataSource?._renderData | async) && (dataSource?._renderData | async ).length > 0 else noRecord">
+                            <mat-table #table mat-table [dataSource]="dataSource" matSort>
+                                <ng-container matColumnDef="{{column.id}}" *ngFor="let column of columnNames;">
+                                    <mat-header-cell mat-header-cell *matHeaderCellDef mat-sort-header> {{column.value}}
+                                    </mat-header-cell>
+                                    <mat-cell mat-cell *matCellDef="let element">
+                                        <span *ngIf="element[column.id]">{{element[column.id]}}</span>
+                                        <span *ngIf="!element[column.id]" style="padding-left: 8px;">-</span>
+                                    </mat-cell>
+                                </ng-container>
+                                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                                <mat-row class="delivery-boy-row" *matRowDef="let row; columns: displayedColumns;">
+                                </mat-row>
+                            </mat-table>
+                            <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" showFirstLastButtons></mat-paginator>
                         </ng-container>
-                        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-                        <mat-row class="delivery-boy-row" *matRowDef="let row; columns: displayedColumns;"></mat-row>
-                    </mat-table>
-                    <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" showFirstLastButtons></mat-paginator>
+                        <ng-template #noRecord>
+                            <div style="color:#C3404E">No Records Found</div>
+                        </ng-template>
+                    </mat-card>
                 </ng-container>
-                <ng-template #noRecord>
-                    <div style="color:#C3404E">No Records Found</div>
-                </ng-template>
-            </mat-card>
-        </ng-container>
-    </div>
-</div>
+            </div>
+        </div>
+    </mat-sidenav-content>
+</mat-sidenav-container>

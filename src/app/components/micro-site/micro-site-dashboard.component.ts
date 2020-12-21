@@ -2,7 +2,7 @@ import { DatePipe } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Headers, RequestOptions } from "@angular/http";
-import { MatDatepickerInputEvent, MatSort, MatTableDataSource, MatSnackBar, MatPaginator } from '@angular/material';
+import { MatDatepickerInputEvent, MatSort, MatTableDataSource, MatSnackBar, MatPaginator, Sort, MatSidenav } from '@angular/material';
 import { BackendService } from '../../services/backend.service';
 import { NotificationComponent } from '../notification/notification.component';
 import { NativeDateAdapter } from '@angular/material';
@@ -66,6 +66,7 @@ export class MicroSiteDasboardComponent implements OnInit {
     fksId;
     fkUserId;
     vendorName;
+    @ViewChild("sidenav") sidenav: MatSidenav;
     /**
      * Pre-defined columns list for delivery boy table
      */
@@ -100,6 +101,7 @@ export class MicroSiteDasboardComponent implements OnInit {
         // }
     ];
     whitelabelStyle;
+    errorList: any;
     constructor(
         private fb: FormBuilder,
         private BackendService: BackendService,
@@ -165,13 +167,20 @@ export class MicroSiteDasboardComponent implements OnInit {
             case 'debit':
                 this.columnNames = tempData.filter(f => f.id != 'uploadDate');
                 break;
+            case 'whitelabel':
+                this.columnNames = tempData.filter(f => (f.id != 'couponCode' &&  f.id != 'couponUsedDate'));
+                // this.columnNames.push({ id: 'emailId', value: "Recipient Email" })
+                break;
             default:
                 this.columnNames = tempData;
                 break;
         }
-
         this.displayedColumns = this.columnNames.map(x => x.id);
     }
+
+    sidenavClose(reason: string) {
+        this.sidenav.close();
+      }
 
     displayUploadForm(flag) {
         this.displayUplaodFormFlag = flag;
@@ -218,7 +227,7 @@ export class MicroSiteDasboardComponent implements OnInit {
             };
         }
         _this.BackendService.makeAjax(reqObj, function (err, response, headers) {
-
+            debugger;
             if (err || response.error) {
                 console.log('Error=============>', err);
                 return;
@@ -227,7 +236,9 @@ export class MicroSiteDasboardComponent implements OnInit {
                 response.data.length > 0 && response.data.forEach(m => m.uploadDate = pipe.transform(m.uploadDate, 'dd/MM/yyyy'));
                 response.data.length > 0 && response.data.forEach(m => m.couponUsedDate = pipe.transform(m.couponUsedDate, 'dd/MM/yyyy'));
                 _this.dataSource = new MatTableDataSource(response.data);
-                _this.setTableColumn('all');
+                if (_this.whitelabelStyle) _this.setTableColumn('whitelabel');
+                else
+                    _this.setTableColumn('all');
                 setTimeout(() => {
                     _this.dataSource.sort = _this.sort;
                     _this.dataSource.paginator = _this.paginator;
@@ -272,6 +283,7 @@ export class MicroSiteDasboardComponent implements OnInit {
 
         let reqObj;
         if (_this.whitelabelStyle) {
+            
             reqObj = {
                 url: `whitelabel/getuserrecord?fromdate=${datefrom}&todate=${dateto}&emailid=${data.value.email}&type=${data.value.filtertype}&fkAssociateId=${localStorage.fkAssociateId}&fkUserId=0`,
                 method: 'get',
@@ -286,7 +298,7 @@ export class MicroSiteDasboardComponent implements OnInit {
             };
         }
         _this.BackendService.makeAjax(reqObj, function (err, response, headers) {
-
+            debugger;
             if (err || response.error) {
                 _this.openSnackBar('Server Error');
                 return;
@@ -294,6 +306,7 @@ export class MicroSiteDasboardComponent implements OnInit {
             if (response.status.toLowerCase() == 'success' && isArray(response.data)) {
                 if (buttonName === 'search') {
                     _this.displayUploadForm(false);
+                    debugger;
                     if (data.value.filtertype == 'all') {
                         response.data = response.data.length > 0 && response.data.filter(f => {
                             if (f.type == 'debit') {
@@ -306,9 +319,10 @@ export class MicroSiteDasboardComponent implements OnInit {
                     }
                     response.data.length > 0 && response.data.forEach(m => m.uploadDate = pipe.transform(m.uploadDate, 'dd/MM/yy'));
                     response.data.length > 0 && response.data.forEach(m => m.couponUsedDate = pipe.transform(m.couponUsedDate, 'dd/MM/yy'));
-
+                    if (_this.whitelabelStyle) { }
                     _this.dataSource = new MatTableDataSource(response.data);
-                    _this.setTableColumn(data.value.filtertype);
+                    if(_this.whitelabelStyle)_this.setTableColumn('whitelabel');
+                    else _this.setTableColumn(data.value.filtertype);
                     setTimeout(() => {
                         _this.dataSource.sort = _this.sort;
                         _this.dataSource.paginator = _this.paginator;
@@ -328,8 +342,17 @@ export class MicroSiteDasboardComponent implements OnInit {
                         if (i == userData.length) {
                             isdataready = true;
                         }
-                        if (data.value.filtertype == 'all') {
-                            var a = {
+                         if(_this.whitelabelStyle){
+                            let a = {
+                                "emailId": f.emailId,
+                                "uploadDate": f.uploadDate,
+                                "amount": f.amount,
+                                "type": f.type,
+                            }
+                            return userData.push(a);
+                        }
+                        else if (data.value.filtertype == 'all') {
+                            let a = {
                                 "emailId": f.emailId,
                                 "couponCode": f.couponCode,
                                 "uploadDate": f.uploadDate,
@@ -343,10 +366,12 @@ export class MicroSiteDasboardComponent implements OnInit {
                         }
 
                     })
-
+                    debugger;
                     userData.length > 0 && userData.forEach(m => m.uploadDate = pipe.transform(m.uploadDate, 'dd/MM/yy'));
-                    userData.length > 0 && userData.forEach(m => m.couponUsedDate ? m.couponUsedDate = pipe.transform(m.couponUsedDate, 'dd/MM/yy') : m.couponUsedDate = '');
-                    // let headerData = _this.swap(response.data[0]);
+                    if(!_this.whitelabelStyle){ 
+                        userData.length > 0 && userData.forEach(m => m.couponUsedDate ? m.couponUsedDate = pipe.transform(m.couponUsedDate, 'dd/MM/yy') : m.couponUsedDate = '');
+                    
+                }// let headerData = _this.swap(response.data[0]);
 
                     if (isdataready) {
                         var options = {
@@ -444,7 +469,11 @@ export class MicroSiteDasboardComponent implements OnInit {
                 if (response.status.toLowerCase() == 'success') {
                     fileInput.value = '';
                     _this.displayUploadForm(false);
-                    _this.openSnackBar(`File Uploaded Sucessfully!`);
+                    if(response.data.split(',').length){
+                        _this.errorList = response.data.split(',');
+                        _this.sidenav.open();
+                    }
+                    else _this.openSnackBar(response.data);
                     fileInput.value = '';
                     _this.getUsers();
                 } else {

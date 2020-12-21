@@ -158,12 +158,11 @@ export class EgvwalletComponent implements OnInit {
 
   openSnackBar(data) {
     this._snackBar.openFromComponent(NotificationComponent, {
-      data: data,
-      duration: 5 * 1000,
-      panelClass: ['snackbar-success'],
-      verticalPosition: "top"
+        data: data,
+        duration: 5 * 1000,
+        panelClass: ['snackbar-background']
     });
-  }
+}
 
   getAccountSummary(fkAssociateId) {
     let _this = this;
@@ -241,14 +240,16 @@ export class EgvwalletComponent implements OnInit {
     if (environment.userType.includes('parent') && (_this.addMoneyForm.get('selectedChild')['value'].fk_associate_id != localStorage.fkAssociateId)) {
       reqObj.url += "&parentId=" + _this.userSelected.fk_associate_id;
       reqObj.url += "&fkAssociateId=" + _this.addMoneyForm.get('selectedChild')['value'].fk_associate_id;
+      reqObj.url += "&comments=" + _this.addMoneyForm.value.comments + " ["+_this.addMoneyForm.get('selectedChild')['value'].company_name +"]"
     } else {
       reqObj.url += "&fkAssociateId=" + _this.addMoneyForm.get('selectedChild')['value'].fk_associate_id;
-
-    }
-
-    if (_this.addMoneyForm.value.comments) {
       reqObj.url += "&comments=" + _this.addMoneyForm.value.comments
+
     }
+
+    // if (_this.addMoneyForm.value.comments) {
+    //   reqObj.url += "&comments=" + _this.addMoneyForm.value.comments
+    // }
 
     _this.EgvService.getEgvService(reqObj).subscribe(
       result => {

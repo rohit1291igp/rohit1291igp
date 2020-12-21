@@ -384,11 +384,11 @@
                 </div>
             </div>
         </div>
-
+{{whitelabelStyle|json}}
         <div class="col-sm-12 col-md-12 table-cont m-top-2 table-fixed">
             <!-- {{reportDataLoader  | json}} -->
             <table class="report-table table table-striped table-bordered table-curved table-fixed">
-                <thead class="bg-igp text-white">
+                <thead class="bg-igp text-white" [ngStyle]="{'background-color': whitelabelStyle ? whitelabelStyle.primaryColor : '', 'color': whitelabelStyle ? whitelabelStyle.secondaryColor : '' }">
                 <tr [ngStyle]="{'background-color': whitelabelStyle ? whitelabelStyle.primaryColor : '', 'color': whitelabelStyle ? whitelabelStyle.secondaryColor : '' }">
                     <th *ngFor="let tableLabel of reportDataLoader.tableHeaders">
                     {{tableLabel}} <span>&nbsp;&nbsp;</span>
@@ -413,7 +413,7 @@
 
 <div class="container-fluid reports-cont" *ngIf="reportData">
     <div class="row">
-        <div class="col-sm-12 col-md-12 m-top-1" *ngIf="reportType === 'getOrderReport' || reportType === 'getPayoutAndTaxesReport' || reportType === 'getOrderFileUploadReport' || reportType === 'getbarcodestoverify'|| reportType === 'whitelabel/report'" style="width:100%; height:14em;">
+        <div class="col-sm-12 col-md-12 m-top-1" *ngIf="reportType === 'getOrderReport' || reportType === 'getPayoutAndTaxesReport' || reportType === 'getOrderFileUploadReport' || reportType === 'getbarcodestoverify'|| reportType === 'whitelabel/report'" style="width:100%;">
 
             <div class="col-sm-9 col-md-9 reprts-search-fields bg-white padding1" style="margin-right:0.5%; height:100%;" [style.width]="(getTopBlockWidth()).left">
                 <div class="underLine paddingHalf text-bold">Search Parameters</div>
@@ -455,8 +455,8 @@
                             </select>
                     </div>
                     <div class="searchFiled pull-left" *ngIf="reportType == 'whitelabel/report'">
-                        <my-date-picker id="whitelabelFromDate" name="whitelabelFromDate" placeholder="Enter start date" [options]="myDatePickerOptions" [(ngModel)]="searchResultModel['fromdate']" ></my-date-picker>
-                        <my-date-picker id="whitelabelToDate" name="whitelabelToDate" placeholder="Enter end date" [options]="myDatePickerOptions" [(ngModel)]="searchResultModel['todate']"></my-date-picker>
+                        <!-- <my-date-picker id="whitelabelFromDate" name="whitelabelFromDate" placeholder="Enter start date" [options]="myDatePickerOptions" [(ngModel)]="searchResultModel['fromdate']" ></my-date-picker> -->
+                        <input class="form-control" type="text" name="whitelabelemailid" placeholder="Enter Email Id" [(ngModel)]="searchResultModel['emailid']">
                     </div>
                 
                     <div *ngIf="reportType !== 'getbarcodestoverify'" class="searchFieldsSubmit relative inline">
@@ -514,7 +514,7 @@
               </div>
             </div>
             <div class="searchFieldsSubmit relative inline">
-              <input  type="submit" class="btn btn-primary pull-right bg-igp searchSubmitBtn"  value="Search All Parameters"/>
+              <input  type="submit" class="btn btn-primary pull-right bg-igp searchSubmitBtn" [ngStyle]="{'background-color': whitelabelStyle ? whitelabelStyle.primaryColor : '', 'color': whitelabelStyle ? whitelabelStyle.secondaryColor : '' }"  value="Search All Parameters"/>
             </div>
           </form>
 

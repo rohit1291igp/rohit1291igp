@@ -74,12 +74,11 @@ export class BulkEgvComponent implements OnInit {
 
   openSnackBar(data) {
     this._snackBar.openFromComponent(NotificationComponent, {
-      data: data,
-      duration: 5 * 1000,
-      panelClass: ['snackbar-success'],
-      verticalPosition: "top"
+        data: data,
+        duration: 5 * 1000,
+        panelClass: ['snackbar-background']
     });
-  }
+}
 
   getProductSelected(obj: any) {
     this.userSelected = obj;
@@ -124,12 +123,12 @@ export class BulkEgvComponent implements OnInit {
 
   generateManualBulkEgv() {
     if(!this.bulkegvform.value.selectedProduct){
-      alert('Please select a Product');
+      this.openSnackBar('Please select a Product');
     }
     console.log(this.bulkegvform.invalid);
     if (this.bulkegvform.invalid) { return }
     if (this.bulkegvform.value.denomination < this.minValue || this.bulkegvform.value.denomination > this.maxValue) {
-      alert("Denomination should be between " + this.minValue + " and " + this.maxValue)
+      this.openSnackBar("Denomination should be between " + this.minValue + " and " + this.maxValue)
       return;
     }
     debugger;
@@ -236,7 +235,7 @@ export class BulkEgvComponent implements OnInit {
     debugger;
     let _this = this;
     if (!_this.excelFileUpload) {
-      alert("No file imported");
+      _this.openSnackBar("No file imported");
       return
     }
     let excelData = new FormData();
