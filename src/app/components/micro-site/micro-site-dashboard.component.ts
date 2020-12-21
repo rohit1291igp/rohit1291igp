@@ -466,10 +466,17 @@ export class MicroSiteDasboardComponent implements OnInit {
                     _this.openSnackBar('Server Error');
                     return;
                 }
+                debugger;
                 if (response.status.toLowerCase() == 'success') {
                     fileInput.value = '';
                     _this.displayUploadForm(false);
-                    if(response.data.split(',').length){
+                    debugger;
+                   
+                    if( isArray(response.data)){
+                        _this.errorList = response.data;
+                        _this.sidenav.open();
+                    }
+                    else if(response.data.split(',').length){
                         _this.errorList = response.data.split(',');
                         _this.sidenav.open();
                     }
