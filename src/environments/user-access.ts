@@ -320,23 +320,7 @@ export const userAcess = {
             displayName: 'Password Reset',
             iconName: 'security',
             route: '/new-dashboard/egv/change-password',
-        },
-        {
-            displayName: 'Bulk EGV',
-            iconName: 'addchart',
-            route: '/new-dashboard/egv/bulkegv',
-        },
-        {
-            displayName: 'Voucher Credit/Debit',
-            iconName: 'account_balance_wallet',
-            route: '/new-dashboard/dashboard-microsite',
-        },
-        {
-            displayName: 'Current Balance',
-            iconName: 'account_balance_wallet',
-            route: '/new-dashboard/reports/whitelabelReport',
-        }
-    ],
+        } ],
     executive: [
         {
             displayName: 'Wallet',
