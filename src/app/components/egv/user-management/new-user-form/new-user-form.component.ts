@@ -71,6 +71,7 @@ export class NewUserFormComponent implements OnInit {
     console.log(f)
     if(f.valid){
       let obj = f.value;
+      
       if(this.data.account_type==='client'){
         obj.fk_associate_id=Number(localStorage.getItem('fkAssociateId'));
         
@@ -85,8 +86,11 @@ export class NewUserFormComponent implements OnInit {
       }
       if(this.data.account_type==='manager' || this.data.account_type==='sub_manager'){
         obj.fk_associate_id=Number(this.selectedFkid);
+        if(this.env.userType==='egv_admin') obj['flagParent'] = true;
+
       }else if(this.data.account_type==='executive' || this.data.account_type==='sub_executive'){
         obj['parentId'] = this.fksId;
+        if(this.env.userType==='egv_admin') obj['flagParent'] = true;
         if(this.env.userType === 'egv_admin' || this.env.userType === 'sub_egv_admin' || this.env.userType==='parent_manager' || this.env.userType === 'wb_yourigpstore'){
           obj.fk_associate_id=Number(this.selectedFkid);
         }else{

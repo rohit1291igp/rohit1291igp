@@ -154,6 +154,10 @@ export class MicroSiteDasboardComponent implements OnInit {
             {
                 id: "amount",
                 value: "Amount"
+            },
+            {
+                id: "orderId",
+                value: "Order ID"
             }//,
             // {
             //     id: "balance",
@@ -162,10 +166,10 @@ export class MicroSiteDasboardComponent implements OnInit {
         ];
         switch (type) {
             case 'credit':
-                this.columnNames = tempData.filter(f => f.id != 'couponUsedDate');
+                this.columnNames = tempData.filter(f => f.id != 'couponUsedDate' && f.id != 'orderId' );
                 break;
             case 'debit':
-                this.columnNames = tempData.filter(f => f.id != 'uploadDate');
+                this.columnNames = tempData.filter(f => f.id != 'uploadDate' && f.id != 'orderId' );
                 break;
             case 'whitelabel':
                 this.columnNames = tempData.filter(f => (f.id != 'couponCode' &&  f.id != 'couponUsedDate'));
@@ -348,6 +352,7 @@ export class MicroSiteDasboardComponent implements OnInit {
                                 "uploadDate": f.uploadDate,
                                 "amount": f.amount,
                                 "type": f.type,
+                                "orderId" : f.orderId
                             }
                             return userData.push(a);
                         }
