@@ -14,13 +14,17 @@ export class UserAccessService {
   ) { }
 
   getUserAccess(cb) {
-
+    debugger
     this.httpClient.get(environment.origin + 'v1/handels/getUserAccess?userRole=' + environment.userType + '&fkAssociateId=' + localStorage.fkAssociateId)
-      .subscribe(result => {
-
+      .subscribe((result) => {
+        debugger;
+       
         if (result['data'].length)
           cb(result['data']);
         else cb(userAcess[environment.userType])
+      },
+      error=>{
+        cb(userAcess[environment.userType]);
       })
     //v1/handels/getUserAccess?userRole=Manager&fkAssociateId=318
     //  return userAcess[environment.userType];
