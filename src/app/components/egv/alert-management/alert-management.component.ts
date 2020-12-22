@@ -35,6 +35,7 @@ export class AlertManagementComponent implements OnInit {
   userType=""
   fkid=""
   ngOnInit() {
+    debugger;
     this.userType=localStorage.getItem('userType');
     if(this.userType!=='egv_admin' && this.userType!=='sub_egv_admin' && this.userType!=='parent_manager' && this.userType!=='wb_yourigpstore' ){
       this.fkid=localStorage.getItem('fkAssociateId')
@@ -47,8 +48,12 @@ export class AlertManagementComponent implements OnInit {
         this.sosEmails=[...this.alerts.sosemailIds]
         this.sosMobile=[...this.alerts.sosmobNums]
         this.SosLimit=this.alerts.sosLimit;
-    }else{
-      this.getAccounts()
+    }else if(this.userType=='parent_manager'){
+      this.fkid=localStorage.getItem('fkAssociateId')
+      this.getAccounts(this.fkid);
+    }
+    else{
+      this.getAccounts(null);
     }
   }
   alerts= {
@@ -264,8 +269,8 @@ export class AlertManagementComponent implements OnInit {
   }
 
   unique_accounts=[]
-  getAccounts(){
-    this.egvService.getCompanyList(null).subscribe((res:any)=>{
+  getAccounts(parentid){
+    this.egvService.getCompanyList(parentid).subscribe((res:any)=>{
       this.unique_accounts=res;
     })
   }
