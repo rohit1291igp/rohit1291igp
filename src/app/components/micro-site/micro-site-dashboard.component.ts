@@ -477,12 +477,12 @@ export class MicroSiteDasboardComponent implements OnInit {
                     _this.displayUploadForm(false);
                     debugger;
                    
-                    if( isArray(response.data) && response.data > 1){
+                    if( isArray(response.data) && response.data.length > 1){
                         _this.errorList = response.data;
                         _this.sidenav.open();
                     }
-                    else if(response.data.split(',').length){
-                        _this.errorList = response.data.split(',');
+                    else if(response.data[0].split(',').length > 1){
+                        _this.errorList = response.data[0].split(',');
                         _this.sidenav.open();
                     }
                     else _this.openSnackBar(response.data);
