@@ -477,7 +477,7 @@ export class MicroSiteDasboardComponent implements OnInit {
                     _this.displayUploadForm(false);
                     debugger;
                    
-                    if( isArray(response.data)){
+                    if( isArray(response.data) && response.data > 1){
                         _this.errorList = response.data;
                         _this.sidenav.open();
                     }
