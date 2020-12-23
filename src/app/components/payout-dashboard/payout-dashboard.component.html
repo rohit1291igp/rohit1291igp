@@ -115,10 +115,10 @@
             <li>Complaince : {{tabledata?.compliances}} ({{tabledata?.perccompliances}}%)</li>
         </ul>
         <ul class="table-data-vendor">
-            <li>Total Sales : {{tabledata?.totalCost}}</li>
+            <li *ngIf="environment.userType != 'hdextnp'">Total Sales : {{tabledata?.totalCost}}</li>
             <li>Penalty : {{tabledata?.penalty}}</li>
             <li>Rewards : {{tabledata?.rewards}}</li>
-            <li>Payout : {{tabledata?.netPayment}}</li>
+            <li *ngIf="environment.userType != 'hdextnp'">Payout : {{tabledata?.netPayment}}</li>
             <li>&nbsp;</li>
             <li>&nbsp;</li>
         </ul>

@@ -181,6 +181,7 @@ export class OrderReportComponent implements OnInit {
       console.log('sidePanel Response --->', _reportData);
       _this.dataSource = new MatTableDataSource(_reportData.tableData);
       _this.tableHeaders = _reportData.tableHeaders;
+      if (environment.userType == 'hdextnp') { _this.tableHeaders.splice(_this.tableHeaders.indexOf('Amount'), 1) }
       setTimeout(() => {
         _this.dataSource.paginator = _this.paginator;
         _this.dataSource.sort = _this.sort;
@@ -238,27 +239,33 @@ export class OrderReportComponent implements OnInit {
       let downurl = _this.generateQueryString(_this.queryObj);
       downreqObj.url += downurl;
       downreqObj.url += "&startLimit=0&flag_count=0";
-      if(_this.env.userType == 'vendor' || _this.env.userType == 'hdextnp' ){
+      if (_this.env.userType == 'vendor' || _this.env.userType == 'hdextnp') {
         downreqObj.url += `&fkAssociateId=${localStorage.getItem('fkAssociateId')}`;
-        }
+      }
       _this.BackendService.makeAjax(downreqObj, function (error, _reportData) {
         _this.dowloadingSummary = false;
+        _this.tableHeaders = _reportData.tableHeaders;
+        if (environment.userType == 'hdextnp') { _this.tableHeaders.splice(_this.tableHeaders.indexOf('Amount'), 1) }
         var options = {
           showLabels: true,
           showTitle: false,
-          headers: Object.keys(_reportData.tableData[0]).map(m => m.charAt(0).toUpperCase() + m.slice(1)),
+          headers: _this.tableHeaders,
           nullToEmptyString: true,
         };
         let data = [];
+        let reportDownloadData = [];
         new Promise((resolve) => {
           for (let pi = 0; pi < _reportData.tableData.length; pi++) {
+            let temp = {}
             for (let k in _reportData.tableData[pi]) {
               if (typeof _reportData.tableData[pi][k] == 'object' && _reportData.tableData[pi][k] != null) {
                 _reportData.tableData[pi][k] = _reportData.tableData[pi][k].value ? _reportData.tableData[pi][k].value : '';
               }
+              if (environment.userType != 'hdextnp' && k != 'Amount') temp[k] = _reportData.tableData[pi][k];
             }
+            reportDownloadData.push(temp);
             if (pi == (_reportData.tableData.length - 1)) {
-              resolve(_reportData.tableData);
+              resolve(reportDownloadData);
             }
           }
         }).then((data) => {
