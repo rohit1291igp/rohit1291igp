@@ -975,7 +975,7 @@
                                 <div class="product-main relative">
                                     <div class="component-eggless prod-img abs" *ngIf="orderProduct.productQuantity>1">X {{orderProduct.productQuantity}}</div>
                                     <img class="product-image clk" src="{{productsURL}}th/{{orderProduct.productImage}}?th={{orderProduct.productUpdateDateTime}}" alt="product_img" (click)="imagePreview($event, productsURL+'l/'+(orderProduct.productImage)+'?th='+orderProduct.productUpdateDateTime)">
-                                    <div class="price-display">Rs. {{orderProduct.vendorPrice}}</div>
+                                    <div class="price-display" *ngIf="env.userType!='hdextnp'">Rs. {{orderProduct.vendorPrice}}</div>
                                 </div>
                                 <div class="equal-sign table-inline-display" *ngIf="orderProduct && orderProduct.componentList && orderProduct.componentList.length">
                                    <div class="table-cell-display v-align-middle">=</div>
@@ -987,8 +987,8 @@
                                 <img class="component-image clk" src="{{productsCompURL}}th/{{prodComponent.componentImage}}?th={{prodComponent.timestamp}}" alt="Component_img" (click)="imagePreview($event, productsCompURL+'full/'+(prodComponent.componentImage)+'?th='+prodComponent.timestamp)" (error)="onSrcError($event)">
                                 <div class="component-quantity center-align">x {{prodComponent.quantity | number | replace}}</div>
                                 <div class="component-name center-align">{{prodComponent.componentName}} </div>
-                                <div class="price-display" *ngIf="prodComponent.componentPrice && prodComponent.componentPrice !== 'N/A' && prodComponent.componentName !== 'Adjustment' " style="margin-top: 6px; font-size: 0.80em;">{{prodComponent.componentPrice | number | replace}}x{{prodComponent.quantity | number}}={{prodComponent.componentPrice  * prodComponent.quantity}}</div>
-                                <div class="price-display" *ngIf="prodComponent.componentPrice && prodComponent.componentPrice !== 'N/A' && prodComponent.componentName === 'Adjustment'" style="margin-top: 6px; font-size: 0.80em;">Rs. {{prodComponent.componentPrice | number | replace}}</div>
+                                <div class="price-display" *ngIf="env.userType!='hdextnp' && prodComponent.componentPrice && prodComponent.componentPrice !== 'N/A' && prodComponent.componentName !== 'Adjustment' " style="margin-top: 6px; font-size: 0.80em;">{{prodComponent.componentPrice | number | replace}}x{{prodComponent.quantity | number}}={{prodComponent.componentPrice  * prodComponent.quantity}}</div>
+                                <div class="price-display" *ngIf="env.userType!='hdextnp' && prodComponent.componentPrice && prodComponent.componentPrice !== 'N/A' && prodComponent.componentName === 'Adjustment'" style="margin-top: 6px; font-size: 0.80em;">Rs. {{prodComponent.componentPrice | number | replace}}</div>
                               </div>
                               <div class="table-inline-display plus-sign" *ngIf="(i+1) !== orderProduct.componentList.length">
                                 <div class="table-cell-display v-align-middle">+</div>
@@ -999,7 +999,7 @@
                     </div>
                   </div>
 
-                    <div class="row">
+                    <div *ngIf="env.userType!='hdextnp'" class="row">
                         <div class="col-md-4 pull-left text-bold" [ngClass]="{'no-padding m-b-1' : isMobile}">
                             <div>Net Product Price  <span style="margin-left:0.1em;">
                                 <span class="theme-red rightAlignrdNumber" *ngIf="order.vendorOrderTotal" [style.width]="(order.vendorOrderTotal).toString().length < 4 ? '3.5em': (order.vendorOrderTotal).toString().length+'em' ">Rs. <span class="pull-right">{{order.orderNetProductPrice | number : '2.0-0' | replace}}</span></span></span>
