@@ -85,7 +85,8 @@ export class OrderReportComponent implements OnInit {
       }
       console.log('sidePanel Response --->', _reportData);
       _this.dataSource = new MatTableDataSource(_reportData.tableData);
-      _this.tableHeaders = _reportData.tableHeaders;
+      _this.tableHeaders = _reportData.tableHeaders;      
+      if (environment.userType == 'hdextnp') { _this.tableHeaders.splice(_this.tableHeaders.indexOf('Amount'), 1) }
       setTimeout(() => {
         _this.dataSource.paginator = _this.paginator;
         _this.dataSource.sort = _this.sort;
