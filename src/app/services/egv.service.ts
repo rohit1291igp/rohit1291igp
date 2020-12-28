@@ -23,10 +23,13 @@ export class EgvService {
     return this.httpClient[reqObj.method](url, reqObj.payload, reqObj.options1);
   }
 
-  getUserList(egvUserType,fkid){
+  getUserList(egvUserType,fkid,parentId){
     let url=environment.origin+"v1/admin/egvpanel/login/getUserList?egvUserType="+egvUserType;
     if(fkid){
       url+='&fkId='+fkid;
+    }
+    if(parentId){
+      url+='&parentId='+parentId;
     }
     return this.httpClient.get(url)
   }
@@ -51,9 +54,32 @@ export class EgvService {
     return this.httpClient.put(url,req_body);
   }
 
-  getCompanyList(){
-    let url=environment.origin+'v1/admin/egvpanel/login/getCompanyList'
+  getCompanyList(parentId) {
+    let url;
+    if(parentId){
+        url = environment.origin + `v1/admin/egvpanel/login/getCompanyList?parentId=${parentId}`;
+    }else{
+      url = environment.origin + 'v1/admin/egvpanel/login/getCompanyList';
+    }
+    return this.httpClient.get(url)
+  }
+  getproductList(fk_associateId) {
+    let url = environment.origin + 'v1/admin/internal/bulk-egv/products?fkAssociateId=' + fk_associateId;
     return this.httpClient.get(url)
   }
 
+  generateBulkEgv(fk_associateId, userId, payload) {
+    let url = environment.origin + 'v1/admin/internal/bulk-egv/bookOrder?fkAssociateId=' + fk_associateId + '&userId=' + userId;
+    return this.httpClient.post(url, payload);
+  }
+
+  generateBulkEgvExcel(fk_associateId, userId, scheduleDate, payload) {
+    let url = environment.origin + 'v1/admin/internal/bulk-egv/bookOrderWithExcel?fkAssociateId=' + fk_associateId + '&userId=' + userId + "&scheduleDate=" + scheduleDate;
+    return this.httpClient.post(url, payload);
+  }
+
+  resendgv(fkAssociateId,txnDetails){
+    let url = environment.origin + 'v1/admin/internal/bulk-egv/resendCardDetails?fkAssociateId='+fkAssociateId+'&uniqueOrderId='+txnDetails ;
+    return this.httpClient.get(url);
+  }
 }

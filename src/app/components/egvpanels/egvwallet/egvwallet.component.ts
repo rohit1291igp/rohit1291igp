@@ -28,7 +28,6 @@ export class EgvwalletComponent implements OnInit {
   datetoday: Date = new Date();
   startDate = new FormControl(new Date().setMonth(this.datetoday.getMonth() - 6));
   endDate = new FormControl(this.datetoday);
-  //creditLimit,dailyTransLimit,creditLimitDays
   limitTypeList = [
     { key: 'dailyTransLimit', value: 'Daily Limit' },
     { key: 'creditLimit', value: 'Credit Limit' },
@@ -42,6 +41,27 @@ export class EgvwalletComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
   maxDate: Date;
 
+  whitelabelStyle;
+  childList: any;
+  filteredChildList: any;
+  childSelected: any;
+  requestAddflag: boolean = false;
+
+  flagAdminMap = {
+    manager: 0,
+    executive: 0,
+    egv_admin: 1,
+    parent_manager: 2,
+    parent_executive: 2
+  }
+
+  flagApproveCreditMap = {
+    reject: -1,
+    pending: 0,
+    adminApproved: 1,
+    adminInsert: 2,
+
+  }
 
   constructor(
     private fb: FormBuilder,
@@ -52,32 +72,57 @@ export class EgvwalletComponent implements OnInit {
 
   ngOnInit() {
     let _this = this;
+    _this.whitelabelStyle = localStorage.getItem('whitelabelDetails') ? JSON.parse(localStorage.getItem('whitelabelDetails')) : null;
     this.addMoneyForm = this.fb.group({
       addMoneyTransactionId: ['', Validators.required],
       addMoneyAmount: ['', Validators.required],
       comments: [''],
-      selectedUser: ['', Validators.required],
+      selectedUser: [''],
+      selectedChild: [''],
       limitType: [''],
       limitValue: ['']
     });
-    if (environment.userType == "manager" || environment.userType == "executive") {
+    if ((environment.userType == "manager" || environment.userType == "sub_manager") || (environment.userType == "executive" || environment.userType == "sub_executive") || environment.userType.includes("parent")) {
       this.getAccountSummary(localStorage.fkAssociateId)
         .then((response) => {
           _this.walletSummary = response;
           _this.loadingSummary = false;
+        }).catch(e => {
+          console.log(e);
         })
     }
-    this.getUserList()
-      .then((response) => {
-        _this.usersList = response;
-        _this.filteredUserList = _this.addMoneyForm.get('selectedUser').valueChanges
-          .pipe(
-            startWith(''),
-            map(value => typeof value === 'string' ? value : value['company_name']),
-            map(name => name ? _this.userListFilter(name) : _this.usersList)
 
-          );
+    let parentId = environment.userType.includes('parent') ? localStorage.fkAssociateId : '';
+    this.getUserList(parentId)
+      .then((response) => {
+        if (environment.userType.includes('parent')) {
+          _this.childList = response;
+          let toSelect = { company_name: localStorage.associateName, fk_associate_id: localStorage.fkAssociateId };
+          _this.selectedUser.setValue(toSelect);
+          _this.addMoneyForm.get('selectedUser').setValue(toSelect);
+          _this.addMoneyForm.get('selectedChild').setValue(_this.childList[0]);
+          _this.userSelected = toSelect;
+          _this.filteredChildList = _this.addMoneyForm.get('selectedChild').valueChanges
+            .pipe(
+              startWith(''),
+              map(value => typeof value === 'string' ? value : value['company_name']),
+              map(name => name ? _this.childListFilter(name) : _this.childList)
+
+            );
+        }
+        else {
+          _this.usersList = response;
+          _this.filteredUserList = _this.addMoneyForm.get('selectedUser').valueChanges
+            .pipe(
+              startWith(''),
+              map(value => typeof value === 'string' ? value : value['company_name']),
+              map(name => name ? _this.userListFilter(name) : _this.usersList)
+
+            );
+        }
         if (environment.userType == "manager" || environment.userType == "executive") {
+
+
           const toSelect = _this.usersList.find(c => c.fk_associate_id == localStorage.fkAssociateId);
           _this.selectedUser.setValue(toSelect);
           _this.addMoneyForm.get('selectedUser').setValue(toSelect);
@@ -90,7 +135,7 @@ export class EgvwalletComponent implements OnInit {
 
       })
 
-    if (environment.userType == 'egv_admin') {
+    if (environment.userType == 'egv_admin' || environment.userType == 'sub_egv_admin' || environment.userType == 'wb_yourigpstore') {
       this.getPendingList();
     }
   }
@@ -99,6 +144,13 @@ export class EgvwalletComponent implements OnInit {
     const filterValue = name.toLowerCase();
     return this.usersList.filter(option => option.company_name.toLowerCase().indexOf(filterValue) === 0);
   }
+
+
+  private childListFilter(name: string): any[] {
+    const filterValue = name.toLowerCase();
+    return this.childList.filter(option => option.company_name.toLowerCase().indexOf(filterValue) === 0);
+  }
+
 
   ngAfterViewChecked() {
     this.cdRef.detectChanges();
@@ -128,40 +180,46 @@ export class EgvwalletComponent implements OnInit {
             _this.openSnackBar('Something went wrong.');
             console.log('Error=============>', result.error);
             reject([])
+          } else {
+            console.log('sidePanel Response --->', result.result[0]);
+            resolve(result.result[0])
           }
-          console.log('sidePanel Response --->', result.result[0]);
-          resolve(result.result[0])
         })
     })
 
   }
 
-  getUserList() {
+  getUserList(parentId) {
+
     let _this = this;
     this.submitted = true;
     let reqObj: any = {
       url: 'login/getCompanyList',
       method: "get",
     };
-    // reqObj.url += '?fkAssociateId'+fkAssociateId;
+    // if (environment.userType.includes("parent")) reqObj.url += '?parentId=' + localStorage.fkAssociateId;
+    if (parentId) reqObj.url += '?parentId=' + parentId;
+
     return new Promise((resolve, reject) => {
       _this.EgvService.getEgvService(reqObj).subscribe(
         result => {
           if (result.error) {
             // _this.openSnackBar('Something went wrong.');
             console.log('Error=============>', result.error);
-            reject(result)
+            reject([])
+          } else {
+            console.log('getUserList Response --->', result);
+            resolve(result)
           }
-          console.log('getUserList Response --->', result);
-          resolve(result)
+
         })
     })
 
   }
-
+  //this.formatDate(Date.now(),'yyyy-MM-dd HH:mm:ss')
   addMoneyToWallet(data) {
     debugger;
-    if (this.addMoneyForm.invalid) {
+    if (this.addMoneyForm.invalid && !this.userSelected) {
       return;
     }
     let _this = this;
@@ -169,14 +227,25 @@ export class EgvwalletComponent implements OnInit {
       url: 'wallet/updatewallet?action=Credit&amount=' + data.value.addMoneyAmount + "&transacId=" + data.value.addMoneyTransactionId,
       method: "put",
     };
-    reqObj.url += "&fkAssociateId=" + _this.userSelected.fk_associate_id;
+
     reqObj.url += "&userId=" + localStorage.fkUserId;
-    if (environment.userType == 'egv_admin') {
-      reqObj.url += "&flagApproveCredit=2&flagAdmin=1"
+    reqObj.url += "&flagAdmin=" + this.flagAdminMap[environment.userType];
+
+    if (environment.userType == "manager" || environment.userType == "executive" || ((environment.userType.includes('parent') && (_this.addMoneyForm.get('selectedChild')['value'].fk_associate_id == localStorage.fkAssociateId)))) {
+      reqObj.url += "&flagApproveCredit=" + this.flagApproveCreditMap.pending;
     }
-    if (environment.userType == "manager" || environment.userType == "executive") {
-      reqObj.url += "&flagApproveCredit=0&flagAdmin=0"
+    if (environment.userType == 'egv_admin' || environment.userType == 'wb_yourigpstore' || (environment.userType.includes('parent') && (_this.addMoneyForm.get('selectedChild')['value'].fk_associate_id != localStorage.fkAssociateId))) {
+      reqObj.url += "&flagApproveCredit=" + this.flagApproveCreditMap.adminInsert;
     }
+
+    if (environment.userType.includes('parent') && (_this.addMoneyForm.get('selectedChild')['value'].fk_associate_id != localStorage.fkAssociateId)) {
+      reqObj.url += "&parentId=" + _this.userSelected.fk_associate_id;
+      reqObj.url += "&fkAssociateId=" + _this.addMoneyForm.get('selectedChild')['value'].fk_associate_id;
+    } else {
+      reqObj.url += "&fkAssociateId=" + _this.addMoneyForm.get('selectedChild')['value'].fk_associate_id;
+
+    }
+
     if (_this.addMoneyForm.value.comments) {
       reqObj.url += "&comments=" + _this.addMoneyForm.value.comments
     }
@@ -189,12 +258,20 @@ export class EgvwalletComponent implements OnInit {
 
         }
         _this.openSnackBar(result.result);
+        _this.addMoneyForm.patchValue({
+          addMoneyTransactionId: '',
+          addMoneyAmount: '',
+          comments: '',
+        });
       }).then(
-        _this.getAccountSummary(_this.userSelected.fk_associate_id)
-          .then((response) => {
-            _this.walletSummary = response;
-            _this.loadingSummary = false;
-          })
+        setTimeout(() => {
+          _this.getAccountSummary(_this.addMoneyForm.get('selectedChild')['value'].fk_associate_id)
+            .then((response) => {
+              _this.walletSummary = response;
+              _this.loadingSummary = false;
+            })
+        }, 1000)
+
       )
 
 
@@ -210,8 +287,8 @@ export class EgvwalletComponent implements OnInit {
       url: 'wallet/updatewallet?flagNotAmount=true',
       method: "put",
     };
-    reqObj.url += "&fkAssociateId=" + _this.userSelected.fk_associate_id;
-    if (environment.userType == 'egv_admin') {
+    reqObj.url += "&fkAssociateId=" + _this.addMoneyForm.get('selectedChild')['value'].fk_associate_id;
+    if (environment.userType == 'egv_admin' || environment.userType == 'sub_egv_admin' || environment.userType == 'wb_yourigpstore') {
       reqObj.url += "&flagApproveCredit=2&flagAdmin=1"
     }
     if (environment.userType == "manager" || environment.userType == "executive") {
@@ -235,7 +312,9 @@ export class EgvwalletComponent implements OnInit {
             _this.walletSummary = response;
             _this.loadingSummary = false;
           })
-      )
+      ).catch(e => {
+        console.log(e);
+      })
 
   }
 
@@ -246,8 +325,36 @@ export class EgvwalletComponent implements OnInit {
       .then((response) => {
         _this.walletSummary = response;
         _this.loadingSummary = false;
+      }).catch(e => {
+        console.log(e);
       })
 
+    this.getUserList(obj.fk_associate_id).then((response) => {
+      _this.childList = response;
+      _this.addMoneyForm.get('selectedChild').setValue(_this.childList[0]);
+      // _this.childList.unshift(obj)
+      // _this.usersList.push(
+      // { "user_id": 20835, "name": "879 test", "fkAssociateId": "882", "company_name": "879 test", "userType": "Manager", "accountExpired": false, "credentialExpired": false, "accountLocked": false, "accountEnabled": 1, "deliveryBoyEnabled": false, "access": [{}] })
+      _this.filteredChildList = _this.addMoneyForm.get('selectedChild').valueChanges
+        .pipe(
+          startWith(''),
+          map(value => typeof value === 'string' ? value : value['company_name']),
+          map(name => name ? _this.childListFilter(name) : _this.childList)
+
+        );
+    })
+
+
+  }
+
+  getChildSelected(obj: any) {
+    let _this = this;
+    this.childSelected = obj;
+    _this.getAccountSummary(obj.fk_associate_id)
+      .then((response) => {
+        _this.walletSummary = response;
+        _this.loadingSummary = false;
+      })
   }
 
   userDisplayFn(user: any): string {
@@ -310,8 +417,9 @@ export class EgvwalletComponent implements OnInit {
     };
     reqObj.url += "&fkAssociateId=" + data['fkasid'];
     reqObj.url += "&userId=" + data['UserId'];
-    if (environment.userType == 'egv_admin') {
-      reqObj.url += "&flagAdmin=1&flagApproveCredit=" + (approval ? 1 : -1);
+    reqObj.url += "&logId=" + data['logId']
+    if (environment.userType == 'egv_admin' || environment.userType == 'sub_egv_admin' || environment.userType == 'wb_yourigpstore') {
+      reqObj.url += "&flagAdmin=1&flagApproveCredit=" + (approval ? this.flagApproveCreditMap.adminApproved : this.flagApproveCreditMap.reject);
     }
     else {
       return;
@@ -321,12 +429,13 @@ export class EgvwalletComponent implements OnInit {
     _this.EgvService.getEgvService(reqObj).subscribe(
       (result, error) => {
         if (result.error || error) {
-          _this.openSnackBar('Something went wrong.');
+          _this.openSnackBar(result.errorMessage);
           console.log('Error=============>', result.error);
           e.target.disabled = false;
 
+
         }
-        _this.openSnackBar(result.result);
+        else _this.openSnackBar(result.result);
         _this.getPendingList();
       })
   }

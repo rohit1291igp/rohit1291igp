@@ -16,10 +16,10 @@ export class NavService {
   }
 
   public closeNav() {
-    this.appDrawer.close();
+    this.appDrawer && this.appDrawer.close();
   }
 
   public openNav() {
-    this.appDrawer.open();
+    this.appDrawer && this.appDrawer.open();
   }
 }

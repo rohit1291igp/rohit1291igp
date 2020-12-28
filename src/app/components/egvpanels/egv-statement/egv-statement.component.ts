@@ -33,6 +33,9 @@ export class EgvStatementComponent implements OnInit {
 	dataSource: MatTableDataSource<any>;
 	tableHeaders: any;
 	showHyperlink: boolean = false;
+	childList: any;
+	filteredChildList: any;
+	childSelected: any;
 
 	constructor(
 		private fb: FormBuilder,
@@ -47,38 +50,56 @@ export class EgvStatementComponent implements OnInit {
 
 		this.statementForm = this.fb.group({
 			selectedUser: [''],
+			selectedChild: [''],
 			startDate: [new Date()],
 			endDate: [new Date()],
 			transactionType: ['']
 		});
 		this.maxDate = new Date();
-
-		_this.getUserList()
+		let parentId = environment.userType.includes('parent') ? localStorage.fkAssociateId : '';
+		_this.getUserList(parentId)
 			.then((response) => {
-				_this.usersList = response;
-				// _this.usersList.push(
-				// { "user_id": 20835, "name": "879 test", "fkAssociateId": "882", "company_name": "879 test", "userType": "Manager", "accountExpired": false, "credentialExpired": false, "accountLocked": false, "accountEnabled": 1, "deliveryBoyEnabled": false, "access": [{}] })
-				_this.filteredUserList = _this.statementForm.get('selectedUser').valueChanges
-					.pipe(
-						startWith(''),
-						map(value => typeof value === 'string' ? value : value['company_name']),
-						map(name => name ? _this.vendorListFilter(name) : _this.usersList)
 
-					);
-				if (environment.userType == "manager" || environment.userType == "executive") {
-					const toSelect = _this.usersList.find(c => c.fk_associate_id == localStorage.fkAssociateId);
+				if (environment.userType.includes('parent')) {
+					_this.childList = response;
+					let toSelect = { company_name: localStorage.associateName, fk_associate_id: localStorage.fkAssociateId };
 					_this.selectedUser.setValue(toSelect);
 					_this.statementForm.get('selectedUser').setValue(toSelect);
+					_this.statementForm.get('selectedChild').setValue(_this.childList[0]);
 					_this.userSelected = toSelect;
-					_this.userSelected.fk_associate_id = localStorage.fkAssociateId;
+					_this.filteredChildList = _this.statementForm.get('selectedChild').valueChanges
+						.pipe(
+							startWith(''),
+							map(value => typeof value === 'string' ? value : value['company_name']),
+							map(name => name ? _this.childListFilter(name) : _this.childList)
+
+						);
+				}
+				else {
+					_this.usersList = response;
+					_this.filteredUserList = _this.statementForm.get('selectedUser').valueChanges
+						.pipe(
+							startWith(''),
+							map(value => typeof value === 'string' ? value : value['company_name']),
+							map(name => name ? _this.userListFilter(name) : _this.usersList)
+
+						);
+				}
+				if (environment.userType == "manager" || environment.userType == "executive") {
+
+
+					let toSelect = { company_name: localStorage.associateName, fk_associate_id: localStorage.fkAssociateId };
+					_this.selectedUser.setValue(toSelect);
+					_this.statementForm.get('selectedUser').setValue(toSelect);
 					if (toSelect) {
 						_this.selectedUser.disable();
 						_this.statementForm.get('selectedUser').disable();
-
+						_this.userSelected = toSelect;
 					}
 				}
-				_this.getStatement();
+
 			})
+		_this.getStatement();
 
 
 	}
@@ -95,9 +116,25 @@ export class EgvStatementComponent implements OnInit {
 
 	getUserSelected(obj: any) {
 		this.userSelected = obj;
-	}
+		let _this = this;
+		this.getUserList(obj.fk_associate_id).then((response) => {
+			_this.childList = response;
+			// _this.childList.unshift(obj)
+			// _this.usersList.push(
+			// { "user_id": 20835, "name": "879 test", "fkAssociateId": "882", "company_name": "879 test", "userType": "Manager", "accountExpired": false, "credentialExpired": false, "accountLocked": false, "accountEnabled": 1, "deliveryBoyEnabled": false, "access": [{}] })
+			_this.filteredChildList = _this.statementForm.get('selectedChild').valueChanges
+				.pipe(
+					startWith(''),
+					map(value => typeof value === 'string' ? value : value['company_name']),
+					map(name => name ? _this.childListFilter(name) : _this.childList)
 
-	getUserList() {
+				);
+		})
+	}
+	getChildSelected(obj: any) {
+		this.childSelected = obj;
+	}
+	getUserList(parentId) {
 
 		let _this = this;
 		this.submitted = true;
@@ -105,7 +142,7 @@ export class EgvStatementComponent implements OnInit {
 			url: 'login/getCompanyList',
 			method: "get",
 		};
-		// reqObj.url += '?fkAssociateId'+fkAssociateId;
+		if (parentId) reqObj.url += '?parentId=' + parentId;
 		return new Promise((resolve, reject) => {
 			_this.EgvService.getEgvService(reqObj).subscribe(
 				result => {
@@ -121,10 +158,17 @@ export class EgvStatementComponent implements OnInit {
 
 	}
 
-	private vendorListFilter(name: string): any[] {
+	private userListFilter(name: string): any[] {
 		const filterValue = name.toLowerCase();
 		return this.usersList.filter(option => option.company_name.toLowerCase().indexOf(filterValue) === 0);
 	}
+
+
+	private childListFilter(name: string): any[] {
+		const filterValue = name.toLowerCase();
+		return this.childList.filter(option => option.company_name.toLowerCase().indexOf(filterValue) === 0);
+	}
+
 
 	userDisplayFn(user: any): string {
 		return user && user.company_name ? user.company_name : '';
@@ -157,10 +201,21 @@ export class EgvStatementComponent implements OnInit {
 				this.showHyperlink = true;
 			}
 		}
-		if (this.userSelected && (this.selectedUser.value || this.statementForm.value.selectedUser)) {
-			reqObj.url += '&fkasid=' + this.userSelected.fk_associate_id
+		if (environment.userType == 'egv_admin') {
+			if (this.childSelected && (this.childSelected.value || this.statementForm.value.selectedChild)) {
+				reqObj.url += '&fkasid=' + this.childSelected.fk_associate_id
+			}
 		}
-
+		else if (environment.userType.includes('parent')) {
+			if (this.childSelected && (this.childSelected.value || this.statementForm.value.selectedChild)) {
+				reqObj.url += '&fkasid=' + this.childSelected.fk_associate_id
+			} else {
+				reqObj.url += '&fkasid=' + localStorage.fkAssociateId;
+			}
+		}
+		else {
+			reqObj.url += '&fkasid=' + localStorage.fkAssociateId;
+		}
 		// reqObj.url += '?fkAssociateId'+fkAssociateId;
 		if (document.getElementById("cLoader")) document.getElementById("cLoader").classList.remove("hide");
 		this.EgvService.getEgvService(reqObj).subscribe(
@@ -200,10 +255,21 @@ export class EgvStatementComponent implements OnInit {
 		if (this.statementForm.value.transactionType && this.statementForm.value.transactionType != 'All') {
 			reqObj.url += '&transactionType=' + this.statementForm.value.transactionType;
 		}
-		if (this.userSelected && (this.selectedUser.value || this.statementForm.value.selectedUser)) {
-			reqObj.url += '&fkasid=' + this.userSelected.fk_associate_id
+		if (environment.userType == 'egv_admin') {
+			if (this.childSelected && (this.childSelected.value || this.statementForm.value.selectedChild)) {
+				reqObj.url += '&fkasid=' + this.childSelected.fk_associate_id
+			}
 		}
-
+		else if (environment.userType.includes('parent')) {
+			if (this.childSelected && (this.childSelected.value || this.statementForm.value.selectedChild)) {
+				reqObj.url += '&fkasid=' + this.childSelected.fk_associate_id
+			} else {
+				reqObj.url += '&fkasid=' + localStorage.fkAssociateId;
+			}
+		}
+		else {
+			reqObj.url += '&fkasid=' + localStorage.fkAssociateId;
+		}
 		// reqObj.url += '?fkAssociateId'+fkAssociateId;
 		if (document.getElementById("cLoader")) document.getElementById("cLoader").classList.remove("hide");
 		this.EgvService.getEgvService(reqObj).subscribe(
@@ -266,6 +332,8 @@ export class EgvStatementComponent implements OnInit {
 			method: "get",
 		};
 		if (document.getElementById("cLoader")) document.getElementById("cLoader").classList.remove("hide");
+		reqObj.url += element.IsBulkEGV ? "&IsBulkEGV=true" : "";
+		reqObj.url += element.IsBulkEGV ? "&transactionId=" + element.TxnDetails : "";
 		this.EgvService.getEgvService(reqObj).subscribe(
 			result => {
 				if (document.getElementById("cLoader")) document.getElementById("cLoader").classList.add("hide");
@@ -278,6 +346,8 @@ export class EgvStatementComponent implements OnInit {
 				let data: any = {};
 				data.dataSource = new MatTableDataSource(result.tableData);
 				data.tableHeaders = result.tableHeaders;
+				if (element.IsBulkEGV) data.tableHeaders.push("Recipient_Email");
+				if (element.Status == 'Delivered') data.tableHeaders.push("Actions");
 
 				_this.dialog.open(transactionReportDialog, { data });
 			})
@@ -292,10 +362,23 @@ export class EgvStatementComponent implements OnInit {
 		};
 		reqObj.url += "startDate=" + this.formatDate(this.statementForm.value.startDate, 'yyyy-MM-dd');
 		reqObj.url += "&endDate=" + this.formatDate(this.statementForm.value.endDate, 'yyyy-MM-dd');
-		if (this.userSelected && (this.selectedUser.value || this.statementForm.value.selectedUser)) {
-			reqObj.url += '&fkasid=' + this.userSelected.fk_associate_id
+		if (environment.userType == 'egv_admin') {
+			if (this.childSelected && (this.childSelected.value || this.statementForm.value.selectedChild)) {
+				reqObj.url += '&fkasid=' + this.childSelected.fk_associate_id
+			}
+		}
+		else if (environment.userType.includes('parent')) {
+			if (this.childSelected && (this.childSelected.value || this.statementForm.value.selectedChild)) {
+				reqObj.url += '&fkasid=' + this.childSelected.fk_associate_id
+			} else {
+				reqObj.url += '&fkasid=' + localStorage.fkAssociateId;
+			}
+		}
+		else {
+			reqObj.url += '&fkasid=' + localStorage.fkAssociateId;
 		}
 
+		// reqObj.url += '&fkasid=' + this.childSelected.fk_associate_id;
 		if (document.getElementById("cLoader")) document.getElementById("cLoader").classList.remove("hide");
 
 		this.EgvService.getEgvService(reqObj).subscribe(
@@ -357,7 +440,7 @@ export class EgvStatementComponent implements OnInit {
         <ng-container [matColumnDef]="column" *ngFor="let column of data.tableHeaders">
           <mat-header-cell mat-sort-header *matHeaderCellDef> {{column}} </mat-header-cell>
           <mat-cell *matCellDef="let element">
-		  <ng-container *ngIf="column != 'Balance' && column != 'Order Value'">
+		  <ng-container *ngIf="column != 'Balance' && column != 'Order Value' && column != 'Actions'">
               {{element[column] || '-'}}
 			</ng-container>
 			<ng-container *ngIf="column == 'Balance'">
@@ -366,6 +449,9 @@ export class EgvStatementComponent implements OnInit {
 		  <ng-container *ngIf="column == 'Order Value'">
 			{{element[column]|number:'1.2-2'}}
 		  </ng-container>
+		  <ng-container *ngIf="column == 'Actions'">
+		  <button (click)="resendGV(element)" mat-button color="primary">Resend Mail</button>
+		</ng-container>
           </mat-cell>
         </ng-container>
         <mat-header-row *matHeaderRowDef="data.tableHeaders"></mat-header-row>
@@ -389,7 +475,8 @@ export class transactionReportDialog implements OnInit {
 	@ViewChild(MatSort) sort: MatSort;
 	constructor(
 		public dialogRef: MatDialogRef<transactionReportDialog>,
-		@Inject(MAT_DIALOG_DATA) public data: any
+		@Inject(MAT_DIALOG_DATA) public data: any,
+		private EgvService: EgvService
 	) {
 		setTimeout(() => {
 			data.dataSource.paginator = this.paginator;
@@ -433,6 +520,14 @@ export class transactionReportDialog implements OnInit {
 			// console.log(data)
 			let download = new Angular5Csv(data, 'Transaction Statement', options);
 		})
+	}
+
+	resendGV(element) {
+		console.log(element)
+		this.EgvService.resendgv(localStorage.fkAssociateId, element['LR OrderId']).subscribe(
+			result => {
+				alert(result['data']);
+			})
 	}
 
 	applyFilter(event: Event) {

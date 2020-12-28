@@ -1,8 +1,12 @@
-<h4>Add {{data['account_type']|titlecase}}</h4>
-<mat-form-field *ngIf="data.account_type!=='client' && env.userType==='egv_admin'" appearance="fill" class="example-form-field">
-  <mat-label>Select Client</mat-label>
+<h4>Add <ng-container *ngIf="data['account_type'] == 'client' else accountType">Wallet</ng-container>
+  <ng-template #accountType>{{data['account_type']|titlecase}}</ng-template><!-- {{data['account_type']|titlecase}} --></h4> 
+<mat-form-field
+  *ngIf="data.account_type!=='client' && (env.userType==='egv_admin' || env.userType==='sub_egv_admin' || env.userType==='parent_manager' || env.userType==='wb_yourigpstore')"
+  appearance="fill" class="example-form-field">
+  <mat-label>Select Wallet</mat-label>
   <mat-select [(ngModel)]="selectedFkid">
-    <mat-option *ngFor="let account of accounts_list" [value]="account.fk_associate_id">{{account.company_name}}</mat-option>
+    <mat-option *ngFor="let account of accounts_list" [value]="account.fk_associate_id">{{account.company_name}}
+    </mat-option>
   </mat-select>
 </mat-form-field>
 <form [formGroup]="newUser" (ngSubmit)="onSubmit(f)" name="newUser" #f="ngForm">
@@ -12,6 +16,22 @@
         Company Details
       </h5>
       <ng-container>
+        <mat-form-field *ngIf="data.account_type==='client' && env.userType==='egv_admin'" appearance="fill"
+          class="example-form-field">
+          <mat-label>Wallet Type</mat-label>
+          <mat-select [(value)]="walletType" required>
+            <mat-option value="master_wallet" selected>Master Wallet</mat-option>
+            <mat-option value="sub_wallet">Sub Wallet</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field *ngIf="walletType == 'sub_wallet'" appearance="fill" class="example-form-field">
+          <mat-label>Select Wallet</mat-label>
+          <mat-select formControlName="parentId">
+            <mat-option *ngFor="let account of accounts_list" [value]="account.fk_associate_id">{{account.company_name}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
         <mat-form-field class="example-form-field">
           <mat-label>Company Name</mat-label>
           <input matInput type="text" formControlName="company_name" required>
@@ -52,7 +72,8 @@
         <mat-error *ngIf="newUser.get('email').hasError('required')">
           Email is <strong>required</strong>
         </mat-error>
-        <mat-error *ngIf="newUser.controls['email'].hasError('email') && !newUser.controls['email'].hasError('required')">
+        <mat-error
+          *ngIf="newUser.controls['email'].hasError('email') && !newUser.controls['email'].hasError('required')">
           Please enter a valid email address
         </mat-error>
       </mat-form-field>

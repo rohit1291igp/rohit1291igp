@@ -44,6 +44,9 @@ export class MyHttpInterceptor implements HttpInterceptor {
             }
         }, (err: any) => {
             if (err instanceof HttpErrorResponse) {
+                let homePage = document.getElementById("homePageLogo");
+                // homePage && homePage.click();
+                // window.location.reload();
                 /*if (err.status === 401) {
                     // redirect to the login route
                     // or show a modal

@@ -228,6 +228,7 @@ export class ReportsComponent implements OnInit{
   testArray = [{"ComponentCode":"testteddy","StockQuantity":11,"ComponentDeliveryStatus":"Rejected","AwbNo":"","ComponentId":1440,"CourierName":"","OrderComponentId":1,"VendorId":843,"ComponentName":"test teddy","ComponentImage":"Teddy (1).docx","VendorName":"Test","ComponentCostVendor":200.000,"OrderTime":"2020-02-27 17:53:42.0"},{"ComponentCode":"Cakeboxtest","StockQuantity":10,"ComponentDeliveryStatus":"Rejected","AwbNo":"","ComponentId":1441,"CourierName":"","OrderComponentId":15,"VendorId":843,"ComponentName":"Cake box test","ComponentImage":"Boxes (1).xlsx","VendorName":"Test","ComponentCostVendor":200.000,"OrderTime":"2020-02-27 17:53:42.0"}];
   //list of vendors
   vendorsGroupList = [];
+  whitelabelStyle: any;
   constructor(
       private _elementRef: ElementRef,
       public reportsService: ReportsService,
@@ -243,6 +244,7 @@ export class ReportsComponent implements OnInit{
 
   ngOnInit() {
       var _this = this;
+      _this.whitelabelStyle = localStorage.getItem('whitelabelDetails') ? JSON.parse(localStorage.getItem('whitelabelDetails')) : null;
       _this.myForm = this.fb.group({
         componentName: [''],
         ComponentCode: [''],
@@ -351,7 +353,14 @@ export class ReportsComponent implements OnInit{
             if(_this.reportType === 'zeaplReport'){
                 _this.reportType = 'zeapl/report'
             }
-            
+            if(_this.reportType === 'whitelabelReport'){
+                _this.reportType = 'whitelabel/report';
+                _this.searchResultModel["fkAssociateId"]=localStorage.fkAssociateId;
+                _this.searchResultModel["fkUserId"]=localStorage.fkUserId;
+                const pipe = new DatePipe('en-US');
+                _this.searchResultModel["toDate"]  = pipe.transform(new Date(), 'yyyy-MM-dd');
+                _this.searchResultModel["fromDate"] = pipe.transform(new Date().setMonth(new Date().getMonth() - 1), 'yyyy-MM-dd');
+            }
           /* set default vendor - start */
           if(_this.defaultVendor && ( _this.reportType === 'getVendorReport' || _this.reportType === 'getComponentReport' || _this.reportType === 'getPincodeReport') && (_this.environment.userType && _this.environment.userType === 'admin')){
               _this.searchResultModel["fkAssociateId"]=_this.defaultVendor;

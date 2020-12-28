@@ -281,7 +281,7 @@ export class StockComponentsReportsComponent implements OnInit {
         var _this = this;
 
         let reqObj = {};
-        if (_this.userType == 'vendor') {
+        if (_this.userType == 'vendor' || _this.userType == 'hdextnp') {
             if (_this.fkasid) {
                 reqObj = {
                     url: 'getListOfVendorComponents?startLimit=0&endLimit=5000&fkAssociateId=' + _this.fkasid,

@@ -479,9 +479,13 @@
                     </span>
 
                 </span>
+                <select [(ngModel)]="selectedStore" (change)="onStoreSelect()" style="display: inline-block; width: 100px;" class="form-control" >
+                    <option value="all">All</option>
+                    <option value="5">IGP</option>
+                    <option value="830">Interflora</option>
+                </select>
             </p>
             <p class="text-grey no-margin">Total - <span *ngIf="!sidePanelData">0</span><span *ngIf="sidePanelData">{{sidePanelData.length}}</span> Orders</p>
-
             <div class="pullAll" *ngIf="!isMobile && env.userType == 'vendor'" [ngClass]="{'disableBtn' : !sidePanelData}">
                 <app-widgets (onWidgetClickEvent)="printDropDown($event)" [wOptions]="{type : 'dropDown', data:printDropDwonData}"></app-widgets>
                 <!--<button type="button" class="btn btn-secondary" (click)="print($event, 'order', null, null, null, 'all')">Print All</button>-->
@@ -853,6 +857,18 @@
                          Help / Instructions
                         </div>
 
+                        <div class="btn btn-primary actions-button text-bold" (click)="showCustomerDetails(orderIndex)" *ngIf="isRdc()" >
+                            Customer Details
+                    </div>
+                    <div class="custDetail-{{orderIndex}} hide"> 
+                            <div>Name: {{order.customersName}}</div>
+                            <div>Mobile: {{order.customersMobile}}</div>
+                            <div>Email: {{order.customersEmail}}</div>
+                            <div>Purchased Date: {{order.datePurchased | slice:0:10}}</div>
+                            <div>Purchased Time: {{order.datePurchased | slice:11:19}}</div>
+                            <div><span>{{order.customersCountry}},{{order.customersCity}}</span></div>
+                    </div>
+
                         <div class="order-instruction-detail" *ngIf="order.orderInstruction">
                             <div class="arrow-up abs"></div>
                             <div style="white-space: -moz-pre-wrap; white-space: -hp-pre-wrap; white-space: -o-pre-wrap; white-space: -pre-wrap; white-space: pre-wrap;"><div [outerHTML]="order.orderInstruction"></div></div>
@@ -921,6 +937,8 @@
                                 <div>Name: {{order.customersName}}</div>
                                 <div>Mobile: {{order.customersMobile}}</div>
                                 <div>Email: {{order.customersEmail}}</div>
+                                <div>Purchased Date: {{order.datePurchased | slice:0:10}}</div>
+                                <div>Purchased Time: {{order.datePurchased | slice:11:19}}</div>
                                 <div><span>{{order.customersCountry}},{{order.customersCity}}</span></div>
                         </div>
                         <div class="btn btn-primary actions-button text-bold" (click)="adminActionsInit($event, 'addComplaints', orderIndex)" *ngIf="env.userType == 'admin' && order.orderProducts[0].ordersProductStatus == 'Shipped'">

@@ -56,7 +56,7 @@ export class ReportsService {
               let fkAssociateId = localStorage.getItem('fkAssociateId');
               var queryParmas= queryString;
 
-              if(environment.userType == 'vendor'){
+              if(environment.userType == 'vendor' || environment.userType == 'hdextnp'){
                   queryParmas += queryParmas ? '&fkAssociateId='+fkAssociateId : 'fkAssociateId='+fkAssociateId;
               }
               /*if(!/deliveryDateFrom/.test(queryString)){
@@ -88,8 +88,8 @@ export class ReportsService {
               console.log(reqObj)
 
               _this.BackendService.makeAjax(reqObj, function(err, response, headers){
-                  if(err || response.error) {
-                      console.log('Error=============>', err, response.errorCode);
+                  if(err || response.error ) {
+                      console.log('Error=============>', err, response);
                   }
 
                   console.log('getReportData Response --->', response);

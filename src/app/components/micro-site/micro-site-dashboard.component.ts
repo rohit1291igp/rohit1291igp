@@ -62,6 +62,7 @@ export class MicroSiteDasboardComponent implements OnInit {
         { value: 'debit', viewValue: 'Debit' }
     ];
     fksId;
+    fkUserId;
     vendorName;
     /**
      * Pre-defined columns list for delivery boy table
@@ -96,7 +97,7 @@ export class MicroSiteDasboardComponent implements OnInit {
         //     value: "Current Balance"
         // }
     ];
-
+    whitelabelStyle;
     constructor(
         private fb: FormBuilder,
         private BackendService: BackendService,
@@ -104,8 +105,10 @@ export class MicroSiteDasboardComponent implements OnInit {
     ) { }
 
     ngOnInit() {
+        this.whitelabelStyle = localStorage.getItem('whitelabelDetails') ? JSON.parse(localStorage.getItem('whitelabelDetails')) : null;
         this.fksId = localStorage.getItem('fkAssociateId');
         this.vendorName = localStorage.getItem('vendorName');
+        this.fkUserId = localStorage.getItem('fkUserId');
         this.myForm = this.fb.group({
             name: ['', [Validators.required, Validators.pattern('^[a-zA-Z ]*$')]],
             email: ['', [Validators.required]],
@@ -199,10 +202,19 @@ export class MicroSiteDasboardComponent implements OnInit {
                 micrositeUser = 'loylty';
                 break;
         }
-        const reqObj = {
-            url: `${micrositeUser}/getuserrecord?fromdate=${datefrom}&todate=${dateto}&emailid=&type=all`,
-            method: "get"
-        };
+        let reqObj;
+        if (_this.whitelabelStyle) {
+            reqObj = {
+                url: `whitelabel/getuserrecord?fromdate=${datefrom}&todate=${dateto}&emailid=&type=all&fkAssociateId=${localStorage.fkAssociateId}&fkUserId=${localStorage.fkUserId}`,
+                method: "get"
+            };
+        }
+        else {
+            reqObj = {
+                url: `${micrositeUser}/getuserrecord?fromdate=${datefrom}&todate=${dateto}&emailid=&type=all`,
+                method: "get"
+            };
+        }
         _this.BackendService.makeAjax(reqObj, function (err, response, headers) {
 
             if (err || response.error) {
@@ -255,11 +267,21 @@ export class MicroSiteDasboardComponent implements OnInit {
                 break;
         }
 
-        let reqObj = {
-            url: `${micrositeUser}/getuserrecord?fromdate=${datefrom}&todate=${dateto}&emailid=${data.value.email}&type=${data.value.filtertype}`,
-            method: 'get',
-            options: options
-        };
+        let reqObj;
+        if (_this.whitelabelStyle) {
+            reqObj = {
+                url: `whitelabel/getuserrecord?fromdate=${datefrom}&todate=${dateto}&emailid=${data.value.email}&type=${data.value.filtertype}&fkAssociateId=${localStorage.fkAssociateId}&fkUserId=${localStorage.fkUserId}`,
+                method: 'get',
+                options: options
+            };
+         }
+        else {
+            reqObj = {
+                url: `${micrositeUser}/getuserrecord?fromdate=${datefrom}&todate=${dateto}&emailid=${data.value.email}&type=${data.value.filtertype}`,
+                method: 'get',
+                options: options
+            };
+        }
         _this.BackendService.makeAjax(reqObj, function (err, response, headers) {
 
             if (err || response.error) {
@@ -313,7 +335,7 @@ export class MicroSiteDasboardComponent implements OnInit {
                                 "couponUsedDate": f.couponUsedDate
                             }
                             return userData.push(a);
-                        }else{
+                        } else {
                             userData.push(f)
                         }
 
@@ -386,14 +408,25 @@ export class MicroSiteDasboardComponent implements OnInit {
                     micrositeVoucher = 'loyltyvouchers';
                     break;
             }
-            
-            let reqObj = {
-                url:
-                    `${micrositeUser}/userupload?issue=${micrositeVoucher}`,
-                method: 'post',
-                payload: formData,
-                options: options
-            };
+
+            let reqObj;
+            if (_this.whitelabelStyle) {
+                reqObj = {
+                    url:
+                        `whitelabel/userupload?fkAssociateId=${localStorage.fkAssociateId}&fkUserId=${localStorage.fkUserId}`,
+                    method: 'post',
+                    payload: formData,
+                    options: options
+                };
+            } else {
+                reqObj = {
+                    url:
+                        `${micrositeUser}/userupload?issue=${micrositeVoucher}`,
+                    method: 'post',
+                    payload: formData,
+                    options: options
+                };
+            }
             _this.BackendService.makeAjax(reqObj, function (err, response, headers) {
 
                 if (err || response.error) {
