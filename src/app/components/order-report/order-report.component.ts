@@ -181,6 +181,7 @@ export class OrderReportComponent implements OnInit {
       console.log('sidePanel Response --->', _reportData);
       _this.dataSource = new MatTableDataSource(_reportData.tableData);
       _this.tableHeaders = _reportData.tableHeaders;
+      if(environment.userType == 'hdextnp') _this.tableHeaders.splice(_this.tableHeaders.indexOf('Amount'),1)
       setTimeout(() => {
         _this.dataSource.paginator = _this.paginator;
         _this.dataSource.sort = _this.sort;
@@ -189,76 +190,85 @@ export class OrderReportComponent implements OnInit {
   }
 
   downloadData(data) {
-    let _this = this;
-    _this.queryObj = {};
-    const dateToday = _this.formatDate(Date.now(), 'yyyy-MM-dd');
-    if (_this.env.userType == 'admin') {
+    let $this = this;
+    $this.queryObj = {};
+    const dateToday = $this.formatDate(Date.now(), 'yyyy-MM-dd');
+    if ($this.env.userType == 'admin') {
       if (data.value.vendorGroup) {
-        _this.queryObj.filterId = data.value.vendorGroup.key;
+        $this.queryObj.filterId = data.value.vendorGroup.key;
       }
-      if (_this.vendorSelected) {
-        _this.queryObj.fkAssociateId = _this.vendorSelected.Vendor_Id
+      if ($this.vendorSelected) {
+        $this.queryObj.fkAssociateId = $this.vendorSelected.Vendor_Id
       }
     }
 
     if (data.value.deliveryFrom) {
-      _this.queryObj.deliveryDateFrom = _this.formatDate(data.value.deliveryFrom, 'yyyy/MM/dd');
+      $this.queryObj.deliveryDateFrom = $this.formatDate(data.value.deliveryFrom, 'yyyy/MM/dd');
     }
     if (data.value.deliveryTo) {
-      _this.queryObj.deliveryDateTo = _this.formatDate(data.value.deliveryTo, 'yyyy/MM/dd');
+      $this.queryObj.deliveryDateTo = $this.formatDate(data.value.deliveryTo, 'yyyy/MM/dd');
     }
     if (data.value.orderFrom) {
-      _this.queryObj.orderDateFrom = _this.formatDate(data.value.orderFrom, 'yyyy/MM/dd');
+      $this.queryObj.orderDateFrom = $this.formatDate(data.value.orderFrom, 'yyyy/MM/dd');
     }
     if (data.value.orderTo) {
-      _this.queryObj.orderDateTo = _this.formatDate(data.value.orderTo, 'yyyy/MM/dd');
+      $this.queryObj.orderDateTo = $this.formatDate(data.value.orderTo, 'yyyy/MM/dd');
     }
     if (data.value.status && data.value.status != "All Order Status") {
-      _this.queryObj.status = data.value.status.split(' ').join('');
+      $this.queryObj.status = data.value.status.split(' ').join('');
     }
 
     if (data.value.orderNo) {
-      _this.queryObj.orderNumber = data.value.orderNo
+      $this.queryObj.orderNumber = data.value.orderNo
     }
-    _this.queryObj.endLimit = 100;
-    let url = _this.generateQueryString(_this.queryObj);
-    _this.dowloadingSummary = true;
+    $this.queryObj.endLimit = 100;
+    let url = $this.generateQueryString($this.queryObj);
+    $this.dowloadingSummary = true;
     let reqObj: any = {
       url: 'getOrderReport?',
       method: "get",
     };
     reqObj.url += url;
     reqObj.url += "&startLimit=0&flag_count=1";
-    _this.reportsService.getReportData('getOrderReport', reqObj.url, function (error, _reportData) {
+    $this.reportsService.getReportData('getOrderReport', reqObj.url, function (error, _reportData) {
       let downreqObj: any = {
         url: 'getOrderReport?',
         method: "get",
       };
-      _this.queryObj.endLimit = _reportData.summary[0].value;
-      let downurl = _this.generateQueryString(_this.queryObj);
+      $this.queryObj.endLimit = _reportData.summary[0].value;
+      let downurl = $this.generateQueryString($this.queryObj);
       downreqObj.url += downurl;
       downreqObj.url += "&startLimit=0&flag_count=0";
-      if(_this.env.userType == 'vendor' || _this.env.userType == 'hdextnp' ){
+      if($this.env.userType == 'vendor' || $this.env.userType == 'hdextnp' ){
         downreqObj.url += `&fkAssociateId=${localStorage.getItem('fkAssociateId')}`;
         }
-      _this.BackendService.makeAjax(downreqObj, function (error, _reportData) {
-        _this.dowloadingSummary = false;
+        
+      $this.BackendService.makeAjax(downreqObj, function (error, _reportData) {
+        $this.dowloadingSummary = false;
+        // _this.tableHeaders = _reportData.tableHeaders;
+        if(environment.userType == 'hdextnp') _reportData.tableHeaders.splice(_reportData.tableHeaders.indexOf('Amount'),1)
         var options = {
           showLabels: true,
           showTitle: false,
-          headers: Object.keys(_reportData.tableData[0]).map(m => m.charAt(0).toUpperCase() + m.slice(1)),
+          headers: _reportData.tableHeaders,
           nullToEmptyString: true,
         };
         let data = [];
+        let reportDownloadData = [];
         new Promise((resolve) => {
+          let temp = {}
           for (let pi = 0; pi < _reportData.tableData.length; pi++) {
             for (let k in _reportData.tableData[pi]) {
               if (typeof _reportData.tableData[pi][k] == 'object' && _reportData.tableData[pi][k] != null) {
                 _reportData.tableData[pi][k] = _reportData.tableData[pi][k].value ? _reportData.tableData[pi][k].value : '';
               }
+              if(!(environment.userType == 'hdextnp' && k == "Amount"))
+                temp[k] = _reportData.tableData[pi][k];
             }
+            debugger;
+            reportDownloadData.push(temp);
             if (pi == (_reportData.tableData.length - 1)) {
-              resolve(_reportData.tableData);
+              resolve(reportDownloadData);
             }
           }
         }).then((data) => {
