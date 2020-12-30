@@ -257,8 +257,9 @@ export class OrderReportComponent implements OnInit {
         let data = [];
         let reportDownloadData = [];
         new Promise((resolve) => {
-          let temp = {}
+         
           for (let pi = 0; pi < _reportData.tableData.length; pi++) {
+            let temp = {}
             for (let k in _reportData.tableData[pi]) {
               if (typeof _reportData.tableData[pi][k] == 'object' && _reportData.tableData[pi][k] != null) {
                 _reportData.tableData[pi][k] = _reportData.tableData[pi][k].value ? _reportData.tableData[pi][k].value : '';
