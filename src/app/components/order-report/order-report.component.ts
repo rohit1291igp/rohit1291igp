@@ -85,8 +85,8 @@ export class OrderReportComponent implements OnInit {
       }
       console.log('sidePanel Response --->', _reportData);
       _this.dataSource = new MatTableDataSource(_reportData.tableData);
-      _this.tableHeaders = _reportData.tableHeaders;      
-      if(environment.userType == 'hdextnp') _this.tableHeaders.splice(_this.tableHeaders.indexOf('Amount'),1)
+      _this.tableHeaders = _reportData.tableHeaders;
+      if (environment.userType == 'hdextnp') _this.tableHeaders.splice(_this.tableHeaders.indexOf('Amount'), 1)
       setTimeout(() => {
         _this.dataSource.paginator = _this.paginator;
         _this.dataSource.sort = _this.sort;
@@ -182,7 +182,7 @@ export class OrderReportComponent implements OnInit {
       console.log('sidePanel Response --->', _reportData);
       _this.dataSource = new MatTableDataSource(_reportData.tableData);
       _this.tableHeaders = _reportData.tableHeaders;
-      if(environment.userType == 'hdextnp') _this.tableHeaders.splice(_this.tableHeaders.indexOf('Amount'),1)
+      if (environment.userType == 'hdextnp') _this.tableHeaders.splice(_this.tableHeaders.indexOf('Amount'), 1)
       setTimeout(() => {
         _this.dataSource.paginator = _this.paginator;
         _this.dataSource.sort = _this.sort;
@@ -240,32 +240,34 @@ export class OrderReportComponent implements OnInit {
       let downurl = $this.generateQueryString($this.queryObj);
       downreqObj.url += downurl;
       downreqObj.url += "&startLimit=0&flag_count=0";
-      if($this.env.userType == 'vendor' || $this.env.userType == 'hdextnp' ){
+      if ($this.env.userType == 'vendor' || $this.env.userType == 'hdextnp') {
         downreqObj.url += `&fkAssociateId=${localStorage.getItem('fkAssociateId')}`;
-        }
-        
+      }
+
       $this.BackendService.makeAjax(downreqObj, function (error, _reportData) {
         $this.dowloadingSummary = false;
+        let headers = Object.keys(_reportData.tableData[0]).map(m => m.charAt(0).toUpperCase() + m.slice(1))
         // _this.tableHeaders = _reportData.tableHeaders;
-        if(environment.userType == 'hdextnp') _reportData.tableHeaders.splice(_reportData.tableHeaders.indexOf('Amount'),1)
+        headers.splice(headers.indexOf('Order_Product_Id'), 1)
+        if (environment.userType == 'hdextnp') headers.splice(headers.indexOf('Amount'), 1)
         var options = {
           showLabels: true,
           showTitle: false,
-          headers: _reportData.tableHeaders,
+          headers: headers,
           nullToEmptyString: true,
         };
         let data = [];
         let reportDownloadData = [];
         new Promise((resolve) => {
-         
+
           for (let pi = 0; pi < _reportData.tableData.length; pi++) {
             let temp = {}
             for (let k in _reportData.tableData[pi]) {
               if (typeof _reportData.tableData[pi][k] == 'object' && _reportData.tableData[pi][k] != null) {
                 _reportData.tableData[pi][k] = _reportData.tableData[pi][k].value ? _reportData.tableData[pi][k].value : '';
               }
-              if(!(environment.userType == 'hdextnp' && k == "Amount"))
-                temp[k] = _reportData.tableData[pi][k];
+              if (!(environment.userType == 'hdextnp' && k == "Amount"))
+                if (k != 'Order_Product_Id') temp[k] = _reportData.tableData[pi][k];
             }
             debugger;
             reportDownloadData.push(temp);
