@@ -53,6 +53,7 @@ export class UserManagementComponent implements OnInit {
               this.columnLables[a]= this.capitalizeFirstLetter(a.replace('_', ' '));
             })
           this.displayedColumns= res.tableHeaders;
+          this.displayedColumns.push('edit');
           this.dataSource=res.tableData;
         }
       })
