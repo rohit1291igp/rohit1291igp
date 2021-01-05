@@ -13,7 +13,7 @@
 }
 
 [type="file"] {
-    height: 0;
+    height: 0; 
     overflow: hidden;
     width: 0;
 }
