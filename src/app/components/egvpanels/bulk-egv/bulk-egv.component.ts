@@ -245,7 +245,7 @@ export class BulkEgvComponent implements OnInit {
     let scheduleDate = this.formatDate(this.bulkegvform.value.scheduleDate, 'yyyy-MM-dd')
     // _this.sidenav.open();
     this.EgvService.generateBulkEgvExcel(fk_associateId, fkUserId, scheduleDate, excelData).subscribe(
-      result => {
+      result => { 
         if (result['status'] == "Error") {
           if (result['data']['errorList']) {
             _this.errorList = result['data']['errorList']
