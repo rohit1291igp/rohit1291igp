@@ -22,7 +22,8 @@
     cursor: pointer;
 }
 
-::ng-deep .mat-cell {
+::ng-deep .mat-cell,
+::ng-deep .mat-column-Status {
     text-align: center;
     justify-content: center;
 }

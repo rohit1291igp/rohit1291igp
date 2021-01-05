@@ -23,10 +23,13 @@ export class EgvService {
     return this.httpClient[reqObj.method](url, reqObj.payload, reqObj.options1);
   }
 
-  getUserList(egvUserType,fkid){
+  getUserList(egvUserType,fkid,parentId){
     let url=environment.origin+"v1/admin/egvpanel/login/getUserList?egvUserType="+egvUserType;
     if(fkid){
       url+='&fkId='+fkid;
+    }
+    if(parentId){
+      url+='&parentId='+parentId;
     }
     return this.httpClient.get(url)
   }
@@ -51,8 +54,13 @@ export class EgvService {
     return this.httpClient.put(url,req_body);
   }
 
-  getCompanyList() {
-    let url = environment.origin + 'v1/admin/egvpanel/login/getCompanyList'
+  getCompanyList(parentId) {
+    let url;
+    if(parentId){
+        url = environment.origin + `v1/admin/egvpanel/login/getCompanyList?parentId=${parentId}`;
+    }else{
+      url = environment.origin + 'v1/admin/egvpanel/login/getCompanyList';
+    }
     return this.httpClient.get(url)
   }
   getproductList(fk_associateId) {

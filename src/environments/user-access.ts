@@ -211,6 +211,90 @@ export const userAcess = {
             route: '/new-dashboard/egv/change-password',
         }
     ],
+    parent_manager: [
+        {
+            displayName: 'Wallet',
+            iconName: 'account_balance_wallet',
+            route: '/new-dashboard/egv/wallet',
+        },
+        {
+            displayName: 'Statement',
+            iconName: 'receipt',
+            route: '/new-dashboard/egv/statement',
+        },
+        {
+            displayName: 'User Management',
+            iconName: 'supervisor_account',
+            route: '/new-dashboard/egv/user-management',
+        },
+        {
+            displayName: 'Alert Management',
+            iconName: 'notifications_none',
+            route: '/new-dashboard/egv/alert-management',
+        },
+        {
+            displayName: 'Password Reset',
+            iconName: 'security',
+            route: '/new-dashboard/egv/change-password',
+        },
+        {
+            displayName: 'Bulk EGV',
+            iconName: 'addchart',
+            route: '/new-dashboard/egv/bulkegv',
+        },
+        {
+            displayName: 'Voucher Credit/Debit',
+            iconName: 'account_balance_wallet',
+            route: '/new-dashboard/dashboard-microsite',
+        },
+        {
+            displayName: 'Current Balance',
+            iconName: 'account_balance_wallet',
+            route: '/new-dashboard/reports/whitelabelReport',
+        }
+    ],
+    parent_executive: [
+        {
+            displayName: 'Wallet',
+            iconName: 'account_balance_wallet',
+            route: '/new-dashboard/egv/wallet',
+        },
+        {
+            displayName: 'Statement',
+            iconName: 'receipt',
+            route: '/new-dashboard/egv/statement',
+        },
+        {
+            displayName: 'User Management',
+            iconName: 'supervisor_account',
+            route: '/new-dashboard/egv/user-management',
+        },
+        {
+            displayName: 'Alert Management',
+            iconName: 'notifications_none',
+            route: '/new-dashboard/egv/alert-management',
+        },
+        {
+            displayName: 'Password Reset',
+            iconName: 'security',
+            route: '/new-dashboard/egv/change-password',
+        },
+        {
+            displayName: 'Bulk EGV',
+            iconName: 'addchart',
+            route: '/new-dashboard/egv/bulkegv',
+        },
+        {
+            displayName: 'Voucher Credit/Debit',
+            iconName: 'account_balance_wallet',
+            route: '/new-dashboard/dashboard-microsite',
+        },
+        {
+            displayName: 'Current Balance',
+            iconName: 'account_balance_wallet',
+            route: '/new-dashboard/reports/whitelabelReport',
+        }
+    ],
     manager: [
         {
             displayName: 'Wallet',
@@ -241,6 +325,16 @@ export const userAcess = {
             displayName: 'Bulk EGV',
             iconName: 'addchart',
             route: '/new-dashboard/egv/bulkegv',
+        },
+        {
+            displayName: 'Voucher Credit/Debit',
+            iconName: 'account_balance_wallet',
+            route: '/new-dashboard/dashboard-microsite',
+        },
+        {
+            displayName: 'Current Balance',
+            iconName: 'account_balance_wallet',
+            route: '/new-dashboard/reports/whitelabelReport',
         }
     ],
     executive: [
@@ -258,6 +352,16 @@ export const userAcess = {
             displayName: 'Password Reset',
             iconName: 'security',
             route: '/new-dashboard/egv/change-password',
+        },
+        {
+            displayName: 'Voucher Credit/Debit',
+            iconName: 'account_balance_wallet',
+            route: '/new-dashboard/dashboard-microsite',
+        },
+        {
+            displayName: 'Current Balance',
+            iconName: 'account_balance_wallet',
+            route: '/new-dashboard/reports/whitelabelReport',
         }
 
     ],
@@ -294,7 +398,7 @@ export const userAcess = {
     {
         displayName: 'Current Balance',
         iconName: 'account_balance_wallet',
-        route: '/new-dashboard/reports/itcReport',
+        route: '/new-dashboard/reports/whitelabelReport',
     },
     {
         displayName: 'Pending orders',
@@ -310,7 +414,7 @@ export const userAcess = {
     {
         displayName: 'Current Balance',
         iconName: 'account_balance_wallet',
-        route: '/new-dashboard/reports/itcReport',
+        route: '/new-dashboard/reports/whitelabelReport',
     },
     {
         displayName: 'Pending orders',
@@ -351,7 +455,7 @@ export const userAcess = {
         {
         displayName: 'Current Balance',
         iconName: 'account_balance_wallet',
-        route: '/new-dashboard/reports/itcReport',
+        route: '/new-dashboard/reports/whitelabelReport',
         }
     ],
     sub_manager: [
@@ -388,7 +492,7 @@ export const userAcess = {
         {
             displayName: 'Current Balance',
             iconName: 'account_balance_wallet',
-            route: '/new-dashboard/reports/itcReport',
+            route: '/new-dashboard/reports/whitelabelReport',
         }
 
     ],
@@ -416,7 +520,7 @@ export const userAcess = {
         {
             displayName: 'Current Balance',
             iconName: 'account_balance_wallet',
-            route: '/new-dashboard/reports/itcReport',
+            route: '/new-dashboard/reports/whitelabelReport',
         }
 
     ],
@@ -456,5 +560,53 @@ export const userAcess = {
         iconName: 'receipt',
         route: '/new-dashboard/reports/wb-yourigpstore',
         }
-    ]
+    ],
+    hdextnp:[
+        {
+            displayName: 'Dashboard',
+            iconName: 'home',
+            route: '/new-dashboard/dashboard',
+        },
+        {
+            displayName: 'Reports',
+            iconName: 'recent_actors',
+            route: 'devfestfl',
+            children: [
+                {
+                    displayName: 'Order Report',
+                    iconName: 'receipt',
+                    route: '/new-dashboard/orderReport',
+                },
+                {
+                    displayName: 'Product Report',
+                    iconName: 'shop',
+                    route: '/new-dashboard/reports/getVendorReport'
+                },
+                {
+                    displayName: 'Pincode Report',
+                    iconName: 'location_on',
+                    route: '/new-dashboard/reports/getPincodeReport'
+                },
+                {
+                    displayName: 'Delivery Boy Details',
+                    iconName: 'transfer_within_a_station',
+                    route: '/new-dashboard/deliveryBoyDetails'
+                },
+                {
+                    displayName: 'Uploaded Image',
+                    iconName: 'collections',
+                    route: '/new-dashboard/uploaded-image'
+                },
+                {
+                    displayName: 'Stock Component Report',
+                    iconName: 'store',
+                    route: '/new-dashboard/stockReport'
+                },
+                {
+                    displayName: 'Performance Report',
+                    iconName: 'analytics',
+                    route: '/new-dashboard/performanceReport'
+                }
+            ]
+        }]
 }

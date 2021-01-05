@@ -5,13 +5,23 @@
         <form [formGroup]="statementForm" (ngSubmit)="getStatement()">
           <div>
             <!-- *ngIf="env.userType=='egv_admin'" -->
-            <mat-form-field class="filterElement" *ngIf="env.userType =='egv_admin' || env.userType =='sub_egv_admin' || env.userType =='wb_yourigpstore'">
-              <mat-label>Select a client</mat-label>
-              <input type="text" matInput placeholder='Select a client' formControlName="selectedUser"
-                [matAutocomplete]="auto">
+            <mat-form-field class="addMoneyInput width15" *ngIf="env.userType =='egv_admin'">
+              <mat-label>Select a Wallet</mat-label>
+              <input type="text" matInput formControlName="selectedUser" [matAutocomplete]="auto">
               <mat-autocomplete #auto="matAutocomplete" (optionSelected)='getUserSelected($event.option.value)'
                 [displayWith]="userDisplayFn">
                 <mat-option *ngFor="let option of filteredUserList | async" [value]="option">
+                  {{option.company_name}}</mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+            <mat-form-field class="filterElement"
+              *ngIf="statementForm.value.selectedUser && (env.userType =='egv_admin' || env.userType.includes('parent'))">
+              <mat-label>Select a wallet</mat-label>
+              <input type="text" matInput placeholder='Select a wallet' formControlName="selectedChild"
+                [matAutocomplete]="auto">
+              <mat-autocomplete #auto="matAutocomplete" (optionSelected)='getChildSelected($event.option.value)'
+                [displayWith]="userDisplayFn">
+                <mat-option *ngFor="let option of filteredChildList | async" [value]="option">
                   {{option.company_name}}</mat-option>
               </mat-autocomplete>
             </mat-form-field>
@@ -47,7 +57,8 @@
           <div>
             <button type="submit" mat-raised-button>Get Statement</button>
             <button type="button" mat-raised-button (click)="downloadStatement()">Download Statement</button>
-            <button type="button" mat-raised-button (click)="downloadTransactionReport()">Download Transaction Report</button>
+            <button type="button" mat-raised-button (click)="downloadTransactionReport()">Download Transaction
+              Report</button>
           </div>
         </form>
       </div>
@@ -72,7 +83,7 @@
           </ng-container>
           <ng-container *ngIf="column == 'TxnDetails'">
             <a (click)="openDialog(element)" style="cursor:pointer"
-              *ngIf="element['TransactionType'] == 'Debit' else noLink">{{(element[column] || '-' )+" - "+element['comments'].slice(0,-10)}}</a>
+              *ngIf="element['TransactionType'] == 'Debit' else noLink">{{(element[column] || '-' )+" - "+element['comments']}}</a>
             <ng-template #noLink>
               {{(element[column] || '-' )+" - "+element['comments']}}
             </ng-template>

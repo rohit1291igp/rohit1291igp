@@ -34,7 +34,7 @@ export class BackendService {
                   reqObj.url= environment.originMock + reqObj.url;
               }
           }else{
-              if(environment.userType && environment.userType != 'vendor' && !(reqObj.url.includes('login')) && !(reqObj.url.includes('doLogOut')) ){
+              if(environment.userType && (environment.userType != 'vendor' && environment.userType != 'hdextnp' ) && !(reqObj.url.includes('login')) && !(reqObj.url.includes('doLogOut')) ){
                   if(environment.userType === 'root' || environment.userType==='warehouse' || environment.userType==='marketing') {
                     reqObj.url = environment.origin + 'v1/admin/' + reqObj.url;
                   }else if (environment.userType === 'blogger') {
@@ -43,6 +43,8 @@ export class BackendService {
                       if(environment.userType === 'deliveryboy'){
                         reqObj.url = environment.origin + 'v1/handels/' + reqObj.url;
                       }else if(environment.userType === 'microsite' || environment.userType === 'microsite-zeapl' || environment.userType === 'microsite-loylty'){
+                        reqObj.url = environment.origin + 'v1/admin/' + reqObj.url;
+                      }else if(environment.userType === 'egv_admin' || environment.userType === 'manager' || environment.userType === 'executive' ||  environment.userType.includes('parent')){
                         reqObj.url = environment.origin + 'v1/admin/' + reqObj.url;
                       } else if(environment.userType === 'voucher'){
                         reqObj.url = environment.origin + 'v1/' + reqObj.url;

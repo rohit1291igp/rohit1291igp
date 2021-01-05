@@ -13,7 +13,7 @@ describe('BulkEgvComponent', () => {
     .compileComponents();
   }));
 
-  beforeEach(() => {
+  beforeEach(() => { 
     fixture = TestBed.createComponent(BulkEgvComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

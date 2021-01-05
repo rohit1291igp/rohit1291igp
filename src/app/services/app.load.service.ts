@@ -12,16 +12,16 @@ export class AppLoadService {
           if(location.href.includes('login') && location.href.split('login/')[1]){
             localStorage.removeItem('whitelabelDetails');
 
-            if(location.href.split('login/')[1].includes('yourigpstore')){
-                let data = {
-                        headerLogoUrl:'https://cdn.igp.com/f_auto,q_auto/banners/IGP-for-business-50_new_png.png?v=6',
-                        primaryColor:'#606869',
-                        secondaryColor: "#fff",
-                        whitelabelname: location.href.split('login/')[1]
-                    }
-                    localStorage.setItem('whitelabelDetails', JSON.stringify(data));
-                resolve(true);
-            }
+            // if(location.href.split('login/')[1].includes('yourigpstore')){
+            //     let data = {
+            //             headerLogoUrl:'https://cdn.igp.com/f_auto,q_auto/banners/IGP-for-business-50_new_png.png?v=6',
+            //             primaryColor:'#606869',
+            //             secondaryColor: "#fff",
+            //             whitelabelname: location.href.split('login/')[1]
+            //         }
+            //         localStorage.setItem('whitelabelDetails', JSON.stringify(data));
+            //     resolve(true);
+            // }
             this.getMicrositeDetails(location.href.split('login/')[1]);
             let timer = setInterval(() => {
               if(this.micrositeDetails){

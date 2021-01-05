@@ -38,6 +38,7 @@ export class OrderUpdateStatusComponent implements OnInit {
     forceUpdate:false
   };
   fkAssociateId;
+  fkUserId;
   showFiller = false;
   @ViewChild('drawer') infoDrawer: any;
   constructor(
@@ -47,6 +48,8 @@ export class OrderUpdateStatusComponent implements OnInit {
 
   ngOnInit() {
     this.fkAssociateId = localStorage.getItem('fkAssociateId');
+    this.fkUserId = localStorage.getItem('fkUserId');
+
 
     this._data.selectedStatus = 'Select Status';
     this._data.selectedCourier = 'Select Courier';

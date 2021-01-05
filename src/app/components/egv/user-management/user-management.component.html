@@ -63,9 +63,9 @@
         </div>
       </form>
       </mat-card> -->
-      <button *ngIf="env.userType==='egv_admin' || env.userType==='sub_egv_admin' || env.userType=== 'wb_yourigpstore'" (click)="openDialog('client')" mat-raised-button>Add New Client</button>
-      <button *ngIf="env.userType==='egv_admin' || env.userType==='sub_egv_admin' || env.userType=== 'wb_yourigpstore'" (click)="openDialog('manager')" mat-raised-button>Add Manager</button>
-      <button *ngIf="(env.userType==='egv_admin' || env.userType==='sub_egv_admin' || env.userType=== 'wb_yourigpstore') || (env.userType==='manager' || env.userType==='sub_manager')" (click)="openDialog('executive')" mat-raised-button>Add User</button>
+      <button *ngIf="env.userType==='egv_admin' || env.userType==='parent_manager' || env.userType==='sub_egv_admin' || env.userType=== 'wb_yourigpstore'" (click)="openDialog('client')" mat-raised-button>Add Client</button>
+      <button *ngIf="env.userType==='egv_admin' || env.userType==='parent_manager' || env.userType==='sub_egv_admin' || env.userType=== 'wb_yourigpstore'" (click)="openDialog('manager')" mat-raised-button>Add Manager</button>
+      <button *ngIf="(env.userType==='egv_admin' || env.userType==='parent_manager' || env.userType==='sub_egv_admin' || env.userType=== 'wb_yourigpstore') || (env.userType==='manager' || env.userType==='sub_manager')" (click)="openDialog('executive')" mat-raised-button>Add User</button>
     </div>
   </div>
   <div *ngIf="dataSource.length" class="row m-top-1">

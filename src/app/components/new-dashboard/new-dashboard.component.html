@@ -1,4 +1,4 @@
-<!-- <ng-container *ngIf="navItems && navItems.length > 0"> -->
+<ng-container *ngIf="!loading">
 <nav [ngStyle]="{'background-color': whitelabelStyle ? whitelabelStyle.primaryColor : '', 'color': whitelabelStyle ? whitelabelStyle.secondaryColor : '' }">
     <i class="fa fa-bars" aria-hidden="true" (click)="drawer.toggle()" (mouseover)="drawer.open()" style="cursor: pointer"></i>
     <div class="d-flex align-items-baseline" style="float: right;">
@@ -50,7 +50,7 @@
         </ng-container>
     </div>
 </mat-drawer-container>
-<!-- </ng-container> -->
+</ng-container>
 <div [ngStyle]="{display: loading ? 'flex' : 'none'}" class="spinner">
     <mat-spinner [diameter]="40"></mat-spinner>
     </div>

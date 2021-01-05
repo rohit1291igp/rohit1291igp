@@ -32,23 +32,36 @@ export class UserManagementComponent implements OnInit {
   }
 
   getUsers(){
-    if((environment.userType==='egv_admin' || environment.userType==='sub_egv_admin' || environment.userType === 'wb_yourigpstore') || (environment.userType==='manager' || environment.userType==='sub_manager')){
+    if((environment.userType==='egv_admin' || environment.userType==='parent_manager' || environment.userType==='sub_egv_admin' || environment.userType === 'wb_yourigpstore') || (environment.userType==='manager' || environment.userType==='sub_manager')){
       let egvUserType=""
       let fkid=null;
+      let parentID = null;
       if(environment.userType==='egv_admin' || environment.userType==='sub_egv_admin' || environment.userType === 'wb_yourigpstore'){
         egvUserType='EGV_Admin';
       }else if(environment.userType==='manager' || environment.userType==='sub_manager'){
         egvUserType='Manager';
         fkid=localStorage.getItem('fkAssociateId');
       }
-      this.egvService.getUserList(egvUserType,fkid).subscribe((res:any)=>{
+      else if( environment.userType==='parent_manager'){
+        egvUserType='EGV_Admin';
+        parentID=localStorage.getItem('fkAssociateId');
+      }
+      this.egvService.getUserList(egvUserType,fkid,parentID).subscribe((res:any)=>{
         if(res.tableData.length){
           // this.displayedColumns=Object.keys(res.tableData[0]).filter(ele=>ele!=='access');
-          this.displayedColumns=['name','associateName','userType','accountEnabled','edit']
+            res.tableHeaders.forEach(a =>{
+              this.columnLables[a]= this.capitalizeFirstLetter(a.replace('_', ' '));
+            })
+          this.displayedColumns= res.tableHeaders;
+          this.displayedColumns.push('edit');
           this.dataSource=res.tableData;
         }
       })
     }
+  }
+
+  capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
   }
 
   openDialog(accountType): void {
@@ -80,12 +93,6 @@ export class UserManagementComponent implements OnInit {
   }
 
   columnLables={
-    user_id:"User Id",
-    name:"Username",
-    associateName:"Name",
-    userType:"User Type",
-    accountEnabled:"Enabled",
-    edit:"Edit"
   }
 
   accountEnabledStatus={

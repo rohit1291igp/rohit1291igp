@@ -1,4 +1,4 @@
-<ng-container *ngIf="environment.userType !== 'blogger' && environment.userType !== 'warehouse' && environment.userType !=='egv_admin' && environment.userType !=='sub_egv_admin' && environment.userType !== 'wb_yourigpstore'">
+<ng-container *ngIf="environment.userType !== 'blogger' && environment.userType !== 'warehouse' && environment.userType !=='egv_admin' && environment.userType !=='sub_egv_admin' && environment.userType !== 'wb_yourigpstore' && environment.userType !== 'parent_manager'">
     <!--<div class="headerVendor navbar-brand" *ngIf="vendorName">- {{vendorName}}</div>-->
 <app-header-tabs (onTabChanged)="loadDashboardCount($event)" (onOrderSearch)="search($event)" [dashboardCounts]="dashboardData.counts" [vendorsList]="vendorsList"></app-header-tabs>
 
