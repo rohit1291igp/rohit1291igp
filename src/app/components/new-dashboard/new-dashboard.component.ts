@@ -27,9 +27,9 @@ export class NewDasboardComponent implements OnInit, AfterViewInit {
     username;
     env = environment
     loading = true;
-
+    navItems;
     @ViewChild('appDrawer') appDrawer: ElementRef;
-    navItems: NavItem[] = this.UserAccessService.getUserAccess();
+    // navItems = this.UserAccessService.getUserAccess();
     @ViewChild(RouterOutlet) outlet: RouterOutlet;
     pages
     whitelabelStyle
@@ -48,6 +48,8 @@ export class NewDasboardComponent implements OnInit, AfterViewInit {
     }
 
     ngOnInit() {
+       
+        let $this=this;
         this.router.events.subscribe(e => {
             if (e instanceof ActivationStart){
                 this.outlet && this.outlet.deactivate();
@@ -56,41 +58,76 @@ export class NewDasboardComponent implements OnInit, AfterViewInit {
         this.whitelabelStyle = localStorage.getItem('whitelabelDetails') ? JSON.parse(localStorage.getItem('whitelabelDetails')) : null;
         this.username = localStorage.getItem('vendorName') ? localStorage.getItem('vendorName') : '';
         const bodyEle = document.getElementsByTagName('body');
-        let timer = setInterval(() => {
-            this.navItems = this.UserAccessService.getUserAccess();
-            if (this.navItems && this.navItems.length > 0) {
-                clearInterval(timer);
-                this.pages = this.navItems.map(m => {
-                    if (m.children) {
-                        return m.children.map((a: any) => {
-                            return {
-                                displayName: a.displayName,
-                                iconName: a.iconName,
-                                route: a.route
+       
+        this.UserAccessService.getUserAccess(function(navItems){
+            $this.navItems = navItems; 
+            if (navItems && navItems.length > 0) {
+                        
+                        $this.pages = navItems.map(m => {
+                            if (m.children) {
+                                return m.children.map((a: any) => {
+                                    return {
+                                        displayName: a.displayName,
+                                        iconName: a.iconName,
+                                        route: a.route
+                                    }
+                                });
+        
+                            } else {
+                                return m;
                             }
+        
+                        }) as any;
+                        $this.pages = $this.pages.flatMap(m => {
+                            return m;
                         });
-
-                    } else {
-                        return m;
+                        bodyEle[0].style.paddingTop = '0px';
+                        console.log($this.activatedRoute)
+                        const url = $this.activatedRoute.snapshot as any;
+                        //On Load check router
+                        if ((url._routerState.url.match(/\//g) || []).length == 1) {
+                            $this.openPage = false;
+                        } else {
+                            $this.openPage = true;
+                        }
+                        $this.loading = false;
                     }
+        });
+        //   = <NavItem[]>temp;
+        // let timer = setInterval(() => {           
+        //     if (this.navItems && this.navItems.length > 0) {
+        //         clearInterval(timer);
+        //         this.pages = this.navItems.map(m => {
+        //             if (m.children) {
+        //                 return m.children.map((a: any) => {
+        //                     return {
+        //                         displayName: a.displayName,
+        //                         iconName: a.iconName,
+        //                         route: a.route
+        //                     }
+        //                 });
 
-                }) as any;
-                this.pages = this.pages.flatMap(m => {
-                    return m;
-                });
-                bodyEle[0].style.paddingTop = '0px';
-                console.log(this.activatedRoute)
-                const url = this.activatedRoute.snapshot as any;
-                //On Load check router
-                if ((url._routerState.url.match(/\//g) || []).length == 1) {
-                    this.openPage = false;
-                } else {
-                    this.openPage = true;
-                }
-                this.loading = false;
-            }
-        }, 1)
+        //             } else {
+        //                 return m;
+        //             }
 
+        //         }) as any;
+        //         this.pages = this.pages.flatMap(m => {
+        //             return m;
+        //         });
+        //         bodyEle[0].style.paddingTop = '0px';
+        //         console.log(this.activatedRoute)
+        //         const url = this.activatedRoute.snapshot as any;
+        //         //On Load check router
+        //         if ((url._routerState.url.match(/\//g) || []).length == 1) {
+        //             this.openPage = false;
+        //         } else {
+        //             this.openPage = true;
+        //         }
+        //         this.loading = false;
+        //     }
+        // }, 1)
+    
         // let newPages = [];
         // for(let i=0;pages.length > i; i++){
         //     if(Array.isArray(pages[i])){

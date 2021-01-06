@@ -2,13 +2,15 @@ import { DatePipe } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Headers, RequestOptions } from "@angular/http";
-import { MatDatepickerInputEvent, MatSort, MatTableDataSource, MatSnackBar, MatPaginator } from '@angular/material';
+import { MatDatepickerInputEvent, MatSort, MatTableDataSource, MatSnackBar, MatPaginator, Sort, MatSidenav } from '@angular/material';
 import { BackendService } from '../../services/backend.service';
 import { NotificationComponent } from '../notification/notification.component';
 import { NativeDateAdapter } from '@angular/material';
 import { MatDateFormats, DateAdapter, MAT_DATE_FORMATS } from '@angular/material/core';
 import { Angular5Csv } from 'angular5-csv/dist/Angular5-csv';
 import { isArray } from 'util';
+import * as Excel from 'exceljs/dist/exceljs.min.js';
+import * as fs from 'file-saver';
 
 export class AppDateAdapter extends NativeDateAdapter {
     format(date: Date, displayFormat: Object): string {
@@ -64,6 +66,7 @@ export class MicroSiteDasboardComponent implements OnInit {
     fksId;
     fkUserId;
     vendorName;
+    @ViewChild("sidenav") sidenav: MatSidenav;
     /**
      * Pre-defined columns list for delivery boy table
      */
@@ -98,6 +101,7 @@ export class MicroSiteDasboardComponent implements OnInit {
         // }
     ];
     whitelabelStyle;
+    errorList: any;
     constructor(
         private fb: FormBuilder,
         private BackendService: BackendService,
@@ -117,8 +121,8 @@ export class MicroSiteDasboardComponent implements OnInit {
 
         this.SearchForm = this.fb.group({
             filtertype: ['all', Validators.required],
-            datefrom: ['', Validators.required],
-            dateto: ['', Validators.required],
+            datefrom: [''],
+            dateto: [''],
             email: ['']
         });
         this.displayedColumns = this.columnNames.map(x => x.id);
@@ -150,6 +154,10 @@ export class MicroSiteDasboardComponent implements OnInit {
             {
                 id: "amount",
                 value: "Amount"
+            },
+            {
+                id: "orderId",
+                value: "Order ID"
             }//,
             // {
             //     id: "balance",
@@ -158,18 +166,25 @@ export class MicroSiteDasboardComponent implements OnInit {
         ];
         switch (type) {
             case 'credit':
-                this.columnNames = tempData.filter(f => f.id != 'couponUsedDate');
+                this.columnNames = tempData.filter(f => f.id != 'couponUsedDate' && f.id != 'orderId' );
                 break;
             case 'debit':
-                this.columnNames = tempData.filter(f => f.id != 'uploadDate');
+                this.columnNames = tempData.filter(f => f.id != 'uploadDate' && f.id != 'orderId' );
+                break;
+            case 'whitelabel':
+                this.columnNames = tempData.filter(f => (f.id != 'couponCode' &&  f.id != 'couponUsedDate'));
+                // this.columnNames.push({ id: 'emailId', value: "Recipient Email" })
                 break;
             default:
                 this.columnNames = tempData;
                 break;
         }
-
         this.displayedColumns = this.columnNames.map(x => x.id);
     }
+
+    sidenavClose(reason: string) {
+        this.sidenav.close();
+      }
 
     displayUploadForm(flag) {
         this.displayUplaodFormFlag = flag;
@@ -205,7 +220,7 @@ export class MicroSiteDasboardComponent implements OnInit {
         let reqObj;
         if (_this.whitelabelStyle) {
             reqObj = {
-                url: `whitelabel/getuserrecord?fromdate=${datefrom}&todate=${dateto}&emailid=&type=all&fkAssociateId=${localStorage.fkAssociateId}&fkUserId=${localStorage.fkUserId}`,
+                url: `whitelabel/getuserrecord?fromdate=${datefrom}&todate=${dateto}&emailid=&type=all&fkAssociateId=${localStorage.fkAssociateId}&fkUserId=0`,
                 method: "get"
             };
         }
@@ -216,7 +231,7 @@ export class MicroSiteDasboardComponent implements OnInit {
             };
         }
         _this.BackendService.makeAjax(reqObj, function (err, response, headers) {
-
+            debugger;
             if (err || response.error) {
                 console.log('Error=============>', err);
                 return;
@@ -225,7 +240,9 @@ export class MicroSiteDasboardComponent implements OnInit {
                 response.data.length > 0 && response.data.forEach(m => m.uploadDate = pipe.transform(m.uploadDate, 'dd/MM/yyyy'));
                 response.data.length > 0 && response.data.forEach(m => m.couponUsedDate = pipe.transform(m.couponUsedDate, 'dd/MM/yyyy'));
                 _this.dataSource = new MatTableDataSource(response.data);
-                _this.setTableColumn('all');
+                if (_this.whitelabelStyle) _this.setTableColumn('whitelabel');
+                else
+                    _this.setTableColumn('all');
                 setTimeout(() => {
                     _this.dataSource.sort = _this.sort;
                     _this.dataSource.paginator = _this.paginator;
@@ -234,6 +251,7 @@ export class MicroSiteDasboardComponent implements OnInit {
                     }
                 }, 100);
             }
+
         });
     }
 
@@ -269,12 +287,13 @@ export class MicroSiteDasboardComponent implements OnInit {
 
         let reqObj;
         if (_this.whitelabelStyle) {
+            
             reqObj = {
-                url: `whitelabel/getuserrecord?fromdate=${datefrom}&todate=${dateto}&emailid=${data.value.email}&type=${data.value.filtertype}&fkAssociateId=${localStorage.fkAssociateId}&fkUserId=${localStorage.fkUserId}`,
+                url: `whitelabel/getuserrecord?fromdate=${datefrom}&todate=${dateto}&emailid=${data.value.email}&type=${data.value.filtertype}&fkAssociateId=${localStorage.fkAssociateId}&fkUserId=0`,
                 method: 'get',
                 options: options
             };
-         }
+        }
         else {
             reqObj = {
                 url: `${micrositeUser}/getuserrecord?fromdate=${datefrom}&todate=${dateto}&emailid=${data.value.email}&type=${data.value.filtertype}`,
@@ -283,14 +302,15 @@ export class MicroSiteDasboardComponent implements OnInit {
             };
         }
         _this.BackendService.makeAjax(reqObj, function (err, response, headers) {
-
+            debugger;
             if (err || response.error) {
                 _this.openSnackBar('Server Error');
                 return;
             }
-            if (response.status.toLowerCase() == 'success' && response.data) {
+            if (response.status.toLowerCase() == 'success' && isArray(response.data)) {
                 if (buttonName === 'search') {
                     _this.displayUploadForm(false);
+                    debugger;
                     if (data.value.filtertype == 'all') {
                         response.data = response.data.length > 0 && response.data.filter(f => {
                             if (f.type == 'debit') {
@@ -303,9 +323,10 @@ export class MicroSiteDasboardComponent implements OnInit {
                     }
                     response.data.length > 0 && response.data.forEach(m => m.uploadDate = pipe.transform(m.uploadDate, 'dd/MM/yy'));
                     response.data.length > 0 && response.data.forEach(m => m.couponUsedDate = pipe.transform(m.couponUsedDate, 'dd/MM/yy'));
-
+                    if (_this.whitelabelStyle) { }
                     _this.dataSource = new MatTableDataSource(response.data);
-                    _this.setTableColumn(data.value.filtertype);
+                    if(_this.whitelabelStyle)_this.setTableColumn('whitelabel');
+                    else _this.setTableColumn(data.value.filtertype);
                     setTimeout(() => {
                         _this.dataSource.sort = _this.sort;
                         _this.dataSource.paginator = _this.paginator;
@@ -325,8 +346,18 @@ export class MicroSiteDasboardComponent implements OnInit {
                         if (i == userData.length) {
                             isdataready = true;
                         }
-                        if (data.value.filtertype == 'all') {
-                            var a = {
+                         if(_this.whitelabelStyle){
+                            let a = {
+                                "emailId": f.emailId,
+                                "uploadDate": f.uploadDate,
+                                "amount": f.amount,
+                                "type": f.type,
+                                "orderId" : f.orderId
+                            }
+                            return userData.push(a);
+                        }
+                        else if (data.value.filtertype == 'all') {
+                            let a = {
                                 "emailId": f.emailId,
                                 "couponCode": f.couponCode,
                                 "uploadDate": f.uploadDate,
@@ -340,10 +371,12 @@ export class MicroSiteDasboardComponent implements OnInit {
                         }
 
                     })
-
+                    debugger;
                     userData.length > 0 && userData.forEach(m => m.uploadDate = pipe.transform(m.uploadDate, 'dd/MM/yy'));
-                    userData.length > 0 && userData.forEach(m => m.couponUsedDate ? m.couponUsedDate = pipe.transform(m.couponUsedDate, 'dd/MM/yy') : m.couponUsedDate = '');
-                    // let headerData = _this.swap(response.data[0]);
+                    if(!_this.whitelabelStyle){ 
+                        userData.length > 0 && userData.forEach(m => m.couponUsedDate ? m.couponUsedDate = pipe.transform(m.couponUsedDate, 'dd/MM/yy') : m.couponUsedDate = '');
+                    
+                }// let headerData = _this.swap(response.data[0]);
 
                     if (isdataready) {
                         var options = {
@@ -353,10 +386,13 @@ export class MicroSiteDasboardComponent implements OnInit {
                             nullToEmptyString: false,
                         };
                         // userData.unshift(headerData);
-                        let filedate = datefrom + '-' + dateto;
+                        let filedate = datefrom ? datefrom + '-' : '' + dateto ? dateto : '';
                         let download = new Angular5Csv(userData, 'userReport-' + filedate, options);
                     }
                 }
+            }
+            else {
+                _this.dataSource = new MatTableDataSource([]);
             }
 
         });
@@ -435,10 +471,21 @@ export class MicroSiteDasboardComponent implements OnInit {
                     _this.openSnackBar('Server Error');
                     return;
                 }
+                debugger;
                 if (response.status.toLowerCase() == 'success') {
                     fileInput.value = '';
                     _this.displayUploadForm(false);
-                    _this.openSnackBar(`File Uploaded Sucessfully!`);
+                    debugger;
+                   
+                    if( isArray(response.data) && response.data.length > 1){
+                        _this.errorList = response.data;
+                        _this.sidenav.open();
+                    }
+                    else if(response.data[0].split(',').length > 1){
+                        _this.errorList = response.data[0].split(',');
+                        _this.sidenav.open();
+                    }
+                    else _this.openSnackBar(response.data);
                     fileInput.value = '';
                     _this.getUsers();
                 } else {
@@ -466,6 +513,19 @@ export class MicroSiteDasboardComponent implements OnInit {
             data: data,
             duration: 5 * 1000,
             panelClass: ['snackbar-background']
+        });
+    }
+
+    downloadSample() {
+
+
+        let workbook = new Excel.Workbook();
+        let worksheet1 = workbook.addWorksheet('Template');
+        let titleRow = worksheet1.addRow(['name', 'points', 'email']);
+
+        workbook.xlsx.writeBuffer().then((data) => {
+            let blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+            fs.saveAs(blob, 'Template.xlsx');
         });
     }
 }
