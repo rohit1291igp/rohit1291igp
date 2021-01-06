@@ -300,7 +300,7 @@ export class EgvStatementComponent implements OnInit {
 							if (typeof result.tableData[pi][k] == 'object' && result.tableData[pi][k] != null) {
 								result.tableData[pi][k] = result.tableData[pi][k].value ? result.tableData[pi][k].value : '';
 							}
-							temp[k] = result.tableData[pi][k]?result.tableData[pi][k]:'-';
+							temp[k] = result.tableData[pi][k]?result.tableData[pi][k]:'';
 						}
 						reportDownloadData.push(temp);
 						if (pi == (result.tableData.length - 1)) {
@@ -410,7 +410,7 @@ export class EgvStatementComponent implements OnInit {
 							if (typeof result.tableData[pi][k] == 'object' && result.tableData[pi][k] != null) {
 								result.tableData[pi][k] = result.tableData[pi][k].value ? result.tableData[pi][k].value : '';
 							}
-							temp[k] = result.tableData[pi][k]?result.tableData[pi][k]:'-';
+							temp[k] = result.tableData[pi][k]?result.tableData[pi][k]:'';
 						}
 						reportDownloadData.push(temp);
 						if (pi == (result.tableData.length - 1)) {
@@ -510,7 +510,7 @@ export class transactionReportDialog implements OnInit {
 					if (typeof this.data.dataSource.data[pi][k] == 'object' && this.data.dataSource.data[pi][k] != null) {
 						this.data.dataSource.data[pi][k] = this.data.dataSource.data[pi][k].value ? this.data.dataSource.data[pi][k].value : '';
 					}
-					temp[k] = this.data.dataSource.data[pi][k]?this.data.dataSource.data[pi][k]:'-';
+					temp[k] = this.data.dataSource.data[pi][k]?this.data.dataSource.data[pi][k]:'';
 				}
 				reportDownloadData.push(temp);
 				if (pi == (this.data.dataSource.data.length - 1)) {
