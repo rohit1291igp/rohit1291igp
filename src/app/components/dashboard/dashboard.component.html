@@ -4,8 +4,7 @@
 
 <section class="dbMobile" *ngIf="isMobile">
         <div class="topSection">
-
-
+            
             <div class="col-md-12 vendor-detail m-top-1">
                 <!--<p>Hi <span class="text-igp">{{vendorName}}!</span></p>-->
                 <p>Below is the schedule of orders you need to fulfil:</p>
@@ -240,6 +239,16 @@
 <div class="container-fluid dashboardTable">
     <div class="row padding-extra dbTableHeader">
         <!--<p>Hi {{vendorName}}!</p>-->
+        <p>
+            <mat-form-field appearance="fill">
+            <mat-label>Select a sector</mat-label>
+            <mat-select>
+              <mat-option *ngFor="let food of foods" [value]="food.value">
+                {{food.viewValue}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </p>
         <p>Below is the schedule of orders you need to fulfil:</p>
     </div>
     <div class="row dashboard-content">
