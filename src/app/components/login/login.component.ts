@@ -46,7 +46,9 @@ export class LoginComponent implements OnInit {
     login() {
         let _this = this;
         _this.loading = true;
+        debugger;
         if(location.href.split('login/')[1]){
+           
             if( this.whitelabelStyle.associateName.includes( _this.model.associatename.toLocaleLowerCase())){
                 _this.apierror = `Login Failed (Either Associate Name/UserId/Password wrong)`;
                 let associateName = document.getElementsByName("associatename");
@@ -142,8 +144,8 @@ export class LoginComponent implements OnInit {
                     _this.router.navigate(['/voucher/gv']);
                 } else if (userType === 'warehouse' || userType === 'marketing' || userType === 'mldatascience') {
                     _this.router.navigate(['/new-dashboard']);
-                } else if ((userType === 'egv_admin' || userType === 'sub_egv_admin' || localStorage.getItem('userType') === 'wb_yourigpstore') || (userType === 'manager' || userType === 'sub_manager') || (userType === 'executive' || userType === 'sub_executive' || userType == 'parent_manager')) {
-                    if((userType === 'manager' || userType === 'sub_manager') || (userType === 'executive' || userType === 'sub_executive' || userType == 'parent_manager') && !_this.whitelabelStyle){
+                } else if ((userType === 'egv_admin' || userType === 'sub_egv_admin' || localStorage.getItem('userType') === 'wb_yourigpstore') || (userType === 'manager' || userType === 'sub_manager') || (userType === 'executive' || userType === 'sub_executive' || userType == 'parent_manager' || userType == 'parent_executive')) {
+                    if((userType === 'manager' || userType === 'sub_manager') || (userType === 'executive' || userType === 'sub_executive' || userType == 'parent_manager'   || userType == 'parent_executive') && !_this.whitelabelStyle){
                         _this.AppLoadService.getMicrositeDetails(_this.model.associatename);
                         let timer = setInterval(() => {
                             if(_this.AppLoadService.micrositeDetails){

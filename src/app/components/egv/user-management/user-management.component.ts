@@ -43,7 +43,7 @@ export class UserManagementComponent implements OnInit {
         fkid=localStorage.getItem('fkAssociateId');
       }
       else if( environment.userType==='parent_manager'){
-        egvUserType='EGV_Admin';
+        egvUserType='Parent_Manager';
         parentID=localStorage.getItem('fkAssociateId');
       }
       this.egvService.getUserList(egvUserType,fkid,parentID).subscribe((res:any)=>{

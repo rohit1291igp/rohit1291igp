@@ -1,9 +1,9 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, NgForm } from '@angular/forms';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { MatDialogRef, MatSnackBar, MAT_DIALOG_DATA } from '@angular/material';
 import { EgvService } from 'app/services/egv.service';
 import { environment } from "environments/environment";
-
+import { NotificationComponent } from 'app/components/notification/notification.component';
 @Component({
   selector: 'app-new-user-form',
   templateUrl: './new-user-form.component.html',
@@ -21,7 +21,8 @@ export class NewUserFormComponent implements OnInit {
   constructor(
     private fb:FormBuilder,
     private egvService:EgvService,
-    public dialogRef: MatDialogRef<NewUserFormComponent>,
+    public dialogRef: MatDialogRef<NewUserFormComponent>,    
+    private _snackBar: MatSnackBar,
     @Inject(MAT_DIALOG_DATA) public data: any) { }
 
   ngOnInit() {
@@ -66,26 +67,28 @@ export class NewUserFormComponent implements OnInit {
 
   onSubmit(f:NgForm){
     debugger;
+    let $this = this;
     console.log(f)
     if(f.valid){
       let obj = f.value;
+      
       if(this.data.account_type==='client'){
         obj.fk_associate_id=Number(localStorage.getItem('fkAssociateId'));
         
         if(this.env.userType==='egv_admin' && this.walletType == 'master_wallet'){
           obj['flagParent'] = true;
         }
-
-        if(this.env.userType==='parent_manager'){
-          obj['parentId'] = f.value.fk_associate_id;
-        }
+        else  obj['parentId'] = f.value.fk_associate_id;       
 
       }
-      if(this.data.account_type==='manager' || this.data.account_type==='sub_manager'){
+      if(this.data.account_type==='manager'){
         obj.fk_associate_id=Number(this.selectedFkid);
-      }else if(this.data.account_type==='executive' || this.data.account_type==='sub_executive'){
+        if(this.env.userType==='egv_admin') obj['flagParent'] = true;
+
+      }else if(this.data.account_type==='executive'){
         obj['parentId'] = this.fksId;
-        if(this.env.userType === 'egv_admin' || this.env.userType === 'sub_egv_admin' || this.env.userType==='parent_manager' || this.env.userType === 'wb_yourigpstore'){
+        if(this.env.userType==='egv_admin') obj['flagParent'] = true;
+        if(this.env.userType === 'egv_admin' || this.env.userType==='parent_manager' || this.env.userType === 'wb_yourigpstore'){
           obj.fk_associate_id=Number(this.selectedFkid);
         }else{
           obj.fk_associate_id=Number(localStorage.getItem('fkAssociateId'));
@@ -100,10 +103,11 @@ export class NewUserFormComponent implements OnInit {
 
       console.log(obj)
       this.egvService.createEgvUser(obj).subscribe((res:any)=>{
+        debugger;
         if(res.error){
-          alert('unable to create new user')
+          this.openSnackBar('Unable to create new user')
         }else{
-          alert('Egv user created successfully')
+           this.openSnackBar('User created successfully')
           this.dialogRef.close();
         }
       })
@@ -133,5 +137,13 @@ export class NewUserFormComponent implements OnInit {
   onNoClick(): void {
     this.dialogRef.close();
   }
+
+  openSnackBar(data) {
+    this._snackBar.openFromComponent(NotificationComponent, {
+        data: data,
+        duration: 5 * 1000,
+        panelClass: ['snackbar-background']
+    });
+}
 
 }

@@ -285,7 +285,7 @@ export class AlertManagementComponent implements OnInit {
   getAlerts(){
     this.egvService.getEGVAlerts(this.fkid).subscribe((res:any)=>{
       if(res.error){
-        alert('something went wrong')
+         this.openSnackBar('something went wrong')
       }else{
         this.alerts=res.result;
         console.log(this.alerts)
@@ -320,11 +320,10 @@ export class AlertManagementComponent implements OnInit {
 
   openSnackBar(data) {
     this._snackBar.openFromComponent(NotificationComponent, {
-      data: data,
-      duration: 5 * 1000,
-      panelClass: ['snackbar-success'],
-      verticalPosition: "top"
+        data: data,
+        duration: 5 * 1000,
+        panelClass: ['snackbar-background']
     });
-  }
+}
 
 }
