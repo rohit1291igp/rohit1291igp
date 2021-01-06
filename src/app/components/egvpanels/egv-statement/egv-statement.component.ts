@@ -561,6 +561,8 @@ export class transactionReportDialog implements OnInit {
 		this.EgvService.resendgv(this.data.fkasid, element['OrderId']).subscribe(
 			result => {
 				$this.openSnackBar(result['data']);
+
+
 			})
 	}
 
