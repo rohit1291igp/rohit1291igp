@@ -10,6 +10,7 @@ import {environment} from "../../../environments/environment";
 import { Observable } from "rxjs";
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 
+
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -22,6 +23,7 @@ export class DashboardComponent implements OnInit {
   isAdmin=(environment.userType && environment.userType === "admin");
   prodOrderstatus : any;
   dashBoardDataType;
+  foods;
   vendorName = localStorage.getItem('associateName');
   public mainHeaderComponent: MainHeaderComponent;
   public dashboardData: any;
@@ -57,6 +59,8 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit() {
     // var _this = this;
+    this.getSectorList()
+
     if(environment.userType == 'admin'){
       this.getDashboardFiltersOptions();
       localStorage.removeItem("vendorGrpId");
@@ -242,6 +246,22 @@ export class DashboardComponent implements OnInit {
         }
     }
   });
-  }   
+  }
+  
+  getSectorList(){
+    let reqObj = {
+      url: `getSectorListForVendor?fkAssociateId=565`,
+      method: "get"
+  };
+    this.BackendService.makeAjax(reqObj, function (err, response, headers) {
+      if (err || response.error) {
+        console.log('Error=============>', err);
+        return;
+    }
+    if (response.result) {
+       console.log('aaya',response.result)
+    }
+  });
+  }
 
 }

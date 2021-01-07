@@ -11,3 +11,7 @@
     text-align: center;
     cursor: pointer;
 }
+
+.mat-cell, .mat-header-cell{
+    text-align: inherit !important;
+}

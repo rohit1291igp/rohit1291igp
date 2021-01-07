@@ -634,6 +634,7 @@
               Add
               <ng-container *ngIf="reportType === 'getPincodeReport'">Pincode</ng-container>
             </div>
+            <div  class="btn btn-primary addActionBtn add-pincode-vendor" (click)="downloadSamplePincode()"> Download Sample</div>
           </div>
         </div>
 
@@ -855,7 +856,7 @@
                                                                     <div class="tableactBtn" *ngFor="let actBtn of tableAction[tableCol]; let z='index'" (click)="actionBtnInvoke(actBtn, getCellValue(tableRowValue[tableCol]), tableRowValue, tableCol, dataIndex, 1)">
                                                                         <!-- {{tableCol | json}} -->
                                                                         <span class="tableactBtntxt"  *ngIf="tableRowValue['Proc_Type_Vendor'] == 'Stocked' && tableCol !='InStock'">{{getActBtnTxt(actBtn, getCellValue(tableRowValue[tableCol]))}}</span>
-                                                                        <ng-container *ngIf="(z+1) < tableAction[tableCol].length"> &nbsp; |</ng-container>
+                                                                        <ng-container *ngIf="(z+1) < tableAction[tableCol].length"> &nbsp; Edit</ng-container>
                                                                     </div>
                                                                 </ng-container>
                                                             <ng-container *ngIf="reportType !== 'getComponentReport' && reportType !== 'getVendorDetails' && reportType !== 'getBarcodeToComponentReport' && reportType !== 'deliveryBoyDetails' && !(tableRowValue[tableCol] && tableRowValue[tableCol]['requestValue'] &&tableRowValue[tableCol]['requestValue'] == -1) && reportType !== 'getComponentReport'">
