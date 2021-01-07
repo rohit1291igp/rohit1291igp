@@ -486,7 +486,7 @@
                 </select>
             </p>
             <p class="text-grey no-margin">Total - <span *ngIf="!sidePanelData">0</span><span *ngIf="sidePanelData">{{sidePanelData.length}}</span> Orders</p>
-            <div class="pullAll" *ngIf="!isMobile && env.userType == 'vendor'" [ngClass]="{'disableBtn' : !sidePanelData}">
+            <div class="pullAll" *ngIf="!isMobile && (env.userType == 'vendor' || env.userType == 'hdextnp')" [ngClass]="{'disableBtn' : !sidePanelData}">
                 <app-widgets (onWidgetClickEvent)="printDropDown($event)" [wOptions]="{type : 'dropDown', data:printDropDwonData}"></app-widgets>
                 <!--<button type="button" class="btn btn-secondary" (click)="print($event, 'order', null, null, null, 'all')">Print All</button>-->
             </div>
@@ -781,7 +781,7 @@
                       <div class="text-bold">Deliver to: {{order.deliveryName}}</div>
                       <div class="address">{{order.addressType}} Address - {{order.deliveryStreetAddress}}, <span *ngIf="order.deliveryStreetAddress2">{{order.deliveryStreetAddress2}},</span>{{order.deliveryCity}}-{{order.deliveryPostcode}}, {{order.deliveryState}}</div>
                       <div class="contact">CONTACT NUMBER - {{order.deliveryMobile}} <span *ngIf="order.deliveryAlternateMobile">,{{order.deliveryAlternateMobile}}</span></div>
-                      <div class="contact" *ngIf="order.deliverySector"> Delivery Sector : {{order.deliverySector}}</div>
+                      <div class="contact" *ngIf="order.deliverySector">Sector : {{order.deliverySector}}</div>
                       
                     </div>
                     <div class="col-md-4 order-actions" [ngClass]="{'borderLeft': !isMobile}" *ngIf="!isMobile">

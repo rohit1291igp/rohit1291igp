@@ -430,6 +430,7 @@ export class EgvStatementComponent implements OnInit {
 					for (let pi = 0; pi < result.tableData.length; pi++) {
 						let temp = {}
 						for (let k of result.tableHeaders) {
+							k = (k== 'Order Id') ? (k.split(' ').join('')) : k;
 							if (typeof result.tableData[pi][k] == 'object' && result.tableData[pi][k] != null) {
 								result.tableData[pi][k] = result.tableData[pi][k].value ? result.tableData[pi][k].value : '';
 							}
@@ -447,10 +448,10 @@ export class EgvStatementComponent implements OnInit {
 			})
 	}
 	getTxnDetails(element){
-		debugger;
-		console.log("Hiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii",element);
+		// debugger;
+		// console.log("Hiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii",element);
 		let str = (element['TxnDetails']||"")+(element['comments']!=" "?" - ":"")+element['comments'];
-		console.log(str);
+		// console.log(str);
 		return str;
 	}
 }
@@ -551,7 +552,7 @@ export class transactionReportDialog implements OnInit {
 			for (let pi = 0; pi < this.data.dataSource.data.length; pi++) {
 				let temp = {}
 				for (let k of this.data.tableHeaders) {
-					k =k.split(' ').join('');
+					k = (k== 'Order Id') ? (k.split(' ').join('')) : k;
 					if (typeof this.data.dataSource.data[pi][k] == 'object' && this.data.dataSource.data[pi][k] != null) {
 						this.data.dataSource.data[pi][k] = this.data.dataSource.data[pi][k].value ? this.data.dataSource.data[pi][k].value : '';
 					}
