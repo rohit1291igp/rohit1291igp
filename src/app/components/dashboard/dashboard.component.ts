@@ -6,9 +6,10 @@ import { OrdersActionTrayComponent } from '../orders-action-tray/orders-action-t
 import { BackendService } from '../../services/backend.service';
 import { MainHeaderComponent } from '../main-header/main-header.component';
 import { UtilityService } from '../../services/utility.service';
-import {environment} from "../../../environments/environment";
+import { environment } from "../../../environments/environment";
 import { Observable } from "rxjs";
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
+
 
 @Component({
   selector: 'app-dashboard',
@@ -17,31 +18,33 @@ import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 })
 export class DashboardComponent implements OnInit {
   @ViewChild(OrdersActionTrayComponent) child: OrdersActionTrayComponent;
-  environment=environment;
-  isMobile=environment.isMobile;
-  isAdmin=(environment.userType && environment.userType === "admin");
-  prodOrderstatus : any;
+  environment = environment;
+  isMobile = environment.isMobile;
+  isAdmin = (environment.userType && environment.userType === "admin");
+  prodOrderstatus: any;
   dashBoardDataType;
+  sectors;
+  selectedSector;
   vendorName = localStorage.getItem('associateName');
   public mainHeaderComponent: MainHeaderComponent;
   public dashboardData: any;
   public masterData: Object;
-  public displayStatusToggle:any={
-        "new" : true,
-        "confirmed" : false,
-        "Ofd":false,
-        "delivered":false
+  public displayStatusToggle: any = {
+    "new": true,
+    "confirmed": false,
+    "Ofd": false,
+    "delivered": false
   };
   public isRowAlert: Object;
 
   public myDatePickerOptions: IMyOptions = {
     // other options...
     dateFormat: 'dd mmm. yyyy',
-    inline:false,
-    alignSelectorRight : true,
-    editableDateField:false,
-    openSelectorOnInputClick:true,
-    showClearDateBtn:false
+    inline: false,
+    alignSelectorRight: true,
+    editableDateField: false,
+    openSelectorOnInputClick: true,
+    showClearDateBtn: false
     //disableDateRanges : [{begin: this.UtilityService.getDateObj(0), end: this.UtilityService.getDateObj(2)}]
   };
   public dateRange: Object = {};
@@ -53,72 +56,79 @@ export class DashboardComponent implements OnInit {
     public dashboardService: DashboardService,
     public BackendService: BackendService,
     public UtilityService: UtilityService
-      ) { }
+  ) { }
 
   ngOnInit() {
     // var _this = this;
-    if(environment.userType == 'admin'){
+    this.getSectorList().then(response =>{
+      debugger;
+      this.sectors = response;
+    })
+
+    if (environment.userType == 'admin') {
       this.getDashboardFiltersOptions();
       localStorage.removeItem("vendorGrpId");
-    } 
+    }
     if (environment.userType !== 'blogger') {
-        this.isRowAlert = this.dashboardService.getAlertRow();
-        this.dashboardData = this.dashboardService.getCustomData();
-        this.loadDbData();
-        this.dashboardObservable = Observable.interval(1000 * 60 * 1.5)
-            .subscribe(() => {
-                console.log('Dasboard IntervalObservable working !!!');
-                this.loadDbData();
-            });
-           
+      this.isRowAlert = this.dashboardService.getAlertRow();
+      this.dashboardData = this.dashboardService.getCustomData();
+      this.loadDbData('');
+      this.dashboardObservable = Observable.interval(1000 * 60 * 1.5)
+        .subscribe(() => {
+          console.log('Dasboard IntervalObservable working !!!');
+          this.loadDbData('');
+        });
+
     }
 
-    if(environment.userType === 'deliveryboy'){
+    if (environment.userType === 'deliveryboy') {
       this.router.navigate(['/delivery-app/task']);
     }
   }
 
   ngOnDestroy() {
     if (environment.userType !== 'blogger') {
-        this.dashboardObservable && this.dashboardObservable.unsubscribe();
+      this.dashboardObservable && this.dashboardObservable.unsubscribe();
     }
   }
 
-  loadDbData(){
-      var _this = this;
-      var cookieFDate = this.UtilityService.getCookie("festivalDate") ?  JSON.parse(_this.UtilityService.getCookie("festivalDate")) : null;
-      var cookieFDatwFormatted = cookieFDate ? cookieFDate.date.year+'-'+cookieFDate.date.month+'-'+cookieFDate.date.day : null;
-      this.dashboardService.getDashboardData(cookieFDatwFormatted, function(result){
-          /*if(!result.new[0] || (result.new[0] && result.new[0].deliveryTimes !== "pas")) {
-           _this.dashboardData = _this.dashboardService.getCustomData();
-           return;
-           }*/
-          _this.dashboardData = result;
-          let vendorGrpId = localStorage.getItem("vendorGrpId") ? true : false;
-          if(vendorGrpId){
-            _this.dashboardData.counts = JSON.parse(localStorage.getItem('dashboardCounts'));
-          }else{
-            localStorage.setItem("dashboardCounts", JSON.stringify(_this.dashboardData.counts));
-          }
-          _this.dateRange = _this.setFestivalDate(result.festivalDate || new Date());
-          _this.isRowAlert = _this.dashboardService.getAlertRow();
-      },_this.dashBoardDataType, null);
-      this.masterData = this.dashboardService.getMasterData();
-      //this.getDashboardData();
+  loadDbData(sector) {
+    debugger;
+    var _this = this;
+    var cookieFDate = this.UtilityService.getCookie("festivalDate") ? JSON.parse(_this.UtilityService.getCookie("festivalDate")) : null;
+    var cookieFDatwFormatted = cookieFDate ? cookieFDate.date.year + '-' + cookieFDate.date.month + '-' + cookieFDate.date.day : null;
+    this.dashboardService.getDashboardData(cookieFDatwFormatted,sector, function (result) {
+      /*if(!result.new[0] || (result.new[0] && result.new[0].deliveryTimes !== "pas")) {
+       _this.dashboardData = _this.dashboardService.getCustomData();
+       return;
+       }*/
+      _this.dashboardData = result;
+      let vendorGrpId = localStorage.getItem("vendorGrpId") ? true : false;
+      if (vendorGrpId) {
+        _this.dashboardData.counts = JSON.parse(localStorage.getItem('dashboardCounts'));
+      } else {
+        localStorage.setItem("dashboardCounts", JSON.stringify(_this.dashboardData.counts));
+      }
+      _this.dateRange = _this.setFestivalDate(result.festivalDate || new Date());
+      _this.isRowAlert = _this.dashboardService.getAlertRow();
+    }, _this.dashBoardDataType, null);
+    this.masterData = this.dashboardService.getMasterData();
+    //this.getDashboardData();
   }
 
-  search(parameters){
+  search(parameters) {
     this.child.toggleTray(parameters.e, "", parameters.searchkey, null);
     this.disableAllTableCell();
   }
 
-  searchWithProdIds(e, orderId, orderProductId, orderStatus){
-     this.child.toggleTray(e, orderStatus, {"orderId":orderId, "orderProductIds":orderProductId}, null);
+  searchWithProdIds(e, orderId, orderProductId, orderStatus) {
+    this.child.toggleTray(e, orderStatus, { "orderId": orderId, "orderProductIds": orderProductId }, null);
   }
 
   viewOrders(e) {
     e.preventDefault();
     e.stopPropagation();
+    e.sector = this.selectedSector?this.selectedSector:''
     let cat = e.currentTarget.dataset.cat;
     let subCat = e.currentTarget.dataset.subcat;
 
@@ -126,35 +136,35 @@ export class DashboardComponent implements OnInit {
     let status = e.currentTarget.dataset.status;
     let orderId = e.currentTarget.dataset.orderid;
 
-    if(cat && subCat){
-        status = {"cat":cat, "subCat":subCat, "status":status};
+    if (cat && subCat) {
+      status = { "cat": cat, "subCat": subCat, "status": status };
     }
     console.log('viewOrders called>>>>>>>>>>status', status);
     this.child.toggleTray(e, status, orderId, this.dashBoardDataType);
 
     //changing clicked element position if its index greater than 0
-    if(_status === "processing" || _status === "notAlloted" || _status === "Processed" || _status === "Confirmed" || _status === "OutForDelivery"){
-        let _this = this;
-        let clickEleIndex =  (_status === "OutForDelivery" && !this.isAdmin) ? e.currentTarget.parentElement.parentElement.dataset.index : e.currentTarget.parentElement.parentElement.parentElement.dataset.index;
-        _this.dashboardData = _this.dashboardService.changeDashboardDataOrder(_this.dashboardData, clickEleIndex, _status);
+    if (_status === "processing" || _status === "notAlloted" || _status === "Processed" || _status === "Confirmed" || _status === "OutForDelivery") {
+      let _this = this;
+      let clickEleIndex = (_status === "OutForDelivery" && !this.isAdmin) ? e.currentTarget.parentElement.parentElement.dataset.index : e.currentTarget.parentElement.parentElement.parentElement.dataset.index;
+      _this.dashboardData = _this.dashboardService.changeDashboardDataOrder(_this.dashboardData, clickEleIndex, _status);
     }
   }
 
-  switchOfdData(prodOrderstatus){
-      if(!prodOrderstatus) prodOrderstatus= 'OutForDeliveryView';
-      this.dashboardService.changeDashboardDataOrder(this.dashboardData, null, prodOrderstatus);
+  switchOfdData(prodOrderstatus) {
+    if (!prodOrderstatus) prodOrderstatus = 'OutForDeliveryView';
+    this.dashboardService.changeDashboardDataOrder(this.dashboardData, null, prodOrderstatus);
   }
 
- disableAllTableCell(){
-     this.dashboardData = this.dashboardService.disableAllTableCell(this.dashboardData);
- }
+  disableAllTableCell() {
+    this.dashboardData = this.dashboardService.disableAllTableCell(this.dashboardData);
+  }
 
   openPanel(e, status) {
     e.preventDefault();
     e.stopPropagation();
 
     this.child.toggleTray(e, status, null, this.dashBoardDataType);
-      this.disableAllTableCell();
+    this.disableAllTableCell();
     console.log('Side-panel opened for status: ', status);
   }
 
@@ -164,84 +174,107 @@ export class DashboardComponent implements OnInit {
 
   onDateChanged(event: IMyDateModel) {
     console.log('Date changed');
+    let sector = this.selectedSector?this.selectedSector:'';
+    debugger;
     console.log('onDateChanged(): ', event.date, ' - jsdate: ', new Date(event.jsdate).toLocaleDateString(), ' - formatted: ', event.formatted, ' - epoc timestamp: ', event.epoc);
-      let selectedDate = event.date.year+'-'+event.date.month+'-'+event.date.day; //new Date(event.jsdate).toLocaleDateString(); //event.jsdate;
-        var _this = this;
-        this.dashboardService.getDashboardData(selectedDate, function(result){
-            /*if(!result.new[0] && (result.new[0] && result.new[0].deliveryTimes !== "today")) {
-                _this.dashboardData = _this.dashboardService.getCustomData();
-                return;
-            }*/
-            _this.dashboardData = result;
-            _this.dateRange = _this.setFestivalDate(result.festivalDate || new Date());
-            //save dateRange in cookie
-            _this.UtilityService.setCookie("festivalDate", JSON.stringify(_this.dateRange), (6*60*60*1000));
-        }, _this.dashBoardDataType, null);
+    let selectedDate = event.date.year + '-' + event.date.month + '-' + event.date.day; //new Date(event.jsdate).toLocaleDateString(); //event.jsdate;
+    var _this = this;
+    this.dashboardService.getDashboardData(selectedDate,sector, function (result) {
+      /*if(!result.new[0] && (result.new[0] && result.new[0].deliveryTimes !== "today")) {
+          _this.dashboardData = _this.dashboardService.getCustomData();
+          return;
+      }*/
+      _this.dashboardData = result;
+      _this.dateRange = _this.setFestivalDate(result.festivalDate || new Date());
+      //save dateRange in cookie
+      _this.UtilityService.setCookie("festivalDate", JSON.stringify(_this.dateRange), (6 * 60 * 60 * 1000));
+    }, _this.dashBoardDataType, null);
   }
 
-  setFestivalDate(fesDate){
-      fesDate = new Date(fesDate);
-      let disableDates = [{begin: {year: 2017, month: 6, day: 14}, end: {year: 2017, month: 6, day: 20}}];
-      return { date: { year: fesDate.getFullYear(), month: (fesDate.getMonth()+1), day: fesDate.getDate() } }
+  setFestivalDate(fesDate) {
+    fesDate = new Date(fesDate);
+    let disableDates = [{ begin: { year: 2017, month: 6, day: 14 }, end: { year: 2017, month: 6, day: 20 } }];
+    return { date: { year: fesDate.getFullYear(), month: (fesDate.getMonth() + 1), day: fesDate.getDate() } }
   }
 
-  loadDashboardCount(e){
-      if(e === "closed"){
-          //reArrange DB data
-          this.dashboardData = this.dashboardService.reArrangeDbDate(this.dashboardData);
-      }else{
-          this.dashBoardDataType = (e && e.currentTarget) ? e.currentTarget.dataset.tab : e;
-          let vendorGroupId;
-          if(e && !isNaN(e)){
-            vendorGroupId = e;
-          }else{
-            localStorage.removeItem("vendorGrpId");
-          }
-          var _this = this;
-          var cookieFDate = _this.UtilityService.getCookie("festivalDate") ?  JSON.parse(_this.UtilityService.getCookie("festivalDate")) : null;
-          var cookieFDatwFormatted = cookieFDate ? cookieFDate.date.year+'-'+cookieFDate.date.month+'-'+cookieFDate.date.day : null;
-          this.dashboardService.getDashboardData(cookieFDatwFormatted, function(result){
-              /*if(!result.new[0] || (result.new[0] && result.new[0].deliveryTimes !== "today")) {
-                  _this.dashboardData = _this.dashboardService.getCustomData();
-                  return;
-              }*/
-              _this.dashboardData = result;
-              _this.dateRange = _this.setFestivalDate(result.festivalDate || new Date());
-          }, _this.dashBoardDataType, _this.dashboardData, vendorGroupId);
+  loadDashboardCount(e) {
+    if (e === "closed") {
+      //reArrange DB data
+      this.dashboardData = this.dashboardService.reArrangeDbDate(this.dashboardData);
+    } else {
+      this.dashBoardDataType = (e && e.currentTarget) ? e.currentTarget.dataset.tab : e;
+      let vendorGroupId;
+      if (e && !isNaN(e)) {
+        vendorGroupId = e;
+      } else {
+        localStorage.removeItem("vendorGrpId");
       }
+      var _this = this;
+      var cookieFDate = _this.UtilityService.getCookie("festivalDate") ? JSON.parse(_this.UtilityService.getCookie("festivalDate")) : null;
+      var cookieFDatwFormatted = cookieFDate ? cookieFDate.date.year + '-' + cookieFDate.date.month + '-' + cookieFDate.date.day : null;
+      this.dashboardService.getDashboardData(cookieFDatwFormatted, function (result) {
+        /*if(!result.new[0] || (result.new[0] && result.new[0].deliveryTimes !== "today")) {
+            _this.dashboardData = _this.dashboardService.getCustomData();
+            return;
+        }*/
+        _this.dashboardData = result;
+        _this.dateRange = _this.setFestivalDate(result.festivalDate || new Date());
+      }, _this.dashBoardDataType, _this.dashboardData, vendorGroupId);
+    }
   }
 
-  toggleTableColumn(e, _prop, value){
-      var _this=this;
-      for(var prop in _this.displayStatusToggle){
-        _this.displayStatusToggle[prop]=false;
-      }
-      _this.displayStatusToggle[_prop]=value;
+  toggleTableColumn(e, _prop, value) {
+    var _this = this;
+    for (var prop in _this.displayStatusToggle) {
+      _this.displayStatusToggle[prop] = false;
+    }
+    _this.displayStatusToggle[_prop] = value;
   }
 
-  ifExist(obj, prop){
-     return prop in obj;
+  ifExist(obj, prop) {
+    return prop in obj;
   }
 
-  getDashboardFiltersOptions(){
-    var _this=this;
+  getDashboardFiltersOptions() {
+    var _this = this;
 
     const reqObj = {
       url: `getDashboardFilters`,
       method: "get"
-  };
-  this.BackendService.makeAjax(reqObj, function (err, response, headers) {
+    };
+    this.BackendService.makeAjax(reqObj, function (err, response, headers) {
       if (err || response.error) {
         console.log('Error=============>', err);
         return;
-    }
-    if (response.result) {
+      }
+      if (response.result) {
         for (var prop in response.result) {
-            var item = {id : prop, value:response.result[prop]};
-            _this.vendorsList.push(item);
+          var item = { id: prop, value: response.result[prop] };
+          _this.vendorsList.push(item);
         }
-    }
-  });
-  }   
+      }
+    });
+  }
 
+  getSectorList() {
+    let reqObj = {
+      url: `getSectorListForVendor?fkAssociateId=565`,
+      method: "get"
+    };
+    return new Promise((resolve, reject) => {
+      this.BackendService.makeAjax(reqObj, function (err, response, headers) {
+        debugger;
+        if (err || response.error) {
+          console.log('Error=============>', err);
+          reject([]);
+        }
+        if (response) {
+          console.log('aaya', response);
+          resolve(response);
+        }
+      });
+    });
+  }
 }
+
+

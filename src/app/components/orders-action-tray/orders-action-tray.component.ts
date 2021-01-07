@@ -591,7 +591,8 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
 
   loadTrayData(e, orderByStatus, orderId, dashBoardDataType, cb){
       e.stopPropagation();
-      this.selectedStore="all"
+      this.selectedStore="all";
+      let sector = e.sector?e.sector:'';
       let fkAssociateId = localStorage.getItem('fkAssociateId');
       var _this = this;
       var reqURL:string;
@@ -653,9 +654,9 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
           //fetch vendorGrpId
           let filterId = localStorage.getItem('vendorGrpId') ? localStorage.getItem('vendorGrpId') : 0;
           if(orderDeliveryTime === "future"){
-              reqURL ="getOrderByStatusDate?responseType=json&scopeId=1&isfuture=true&orderAction="+dashBoardDataType+"&section="+section+"&status="+orderStatus+"&fkassociateId="+fkAssociateId+"&date="+spDate+"&filterId="+filterId;
+              reqURL ="getOrderByStatusDate?responseType=json&scopeId=1&isfuture=true&orderAction="+dashBoardDataType+"&section="+section+"&status="+orderStatus+"&fkassociateId="+fkAssociateId+"&date="+spDate+"&filterId="+filterId+'&sector='+sector;
           }else{
-              reqURL ="getOrderByStatusDate?responseType=json&scopeId=1&orderAction="+dashBoardDataType+"&section="+section+"&status="+orderStatus+"&fkassociateId="+fkAssociateId+"&date="+spDate+"&filterId="+filterId;
+              reqURL ="getOrderByStatusDate?responseType=json&scopeId=1&orderAction="+dashBoardDataType+"&section="+section+"&status="+orderStatus+"&fkassociateId="+fkAssociateId+"&date="+spDate+"&filterId="+filterId+'&sector='+sector;
           }
 
           if(cat && subCat){

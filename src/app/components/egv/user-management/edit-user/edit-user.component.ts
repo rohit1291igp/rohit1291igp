@@ -39,10 +39,11 @@ export class EditUserComponent implements OnInit {
 
   onSubmit(){
     let req_body={}
+    debugger;
     if(this.display_name){
       req_body={
-        username:this.data.user.name,
-        fk_associate_id:this.data.user.fkAssociateId,
+        username:this.data.user.username,
+        fk_associate_id:this.data.user.fk_associate_id,
         display_name:this.display_name,
         enabled:this.account_status,
         usertype:this.user_type

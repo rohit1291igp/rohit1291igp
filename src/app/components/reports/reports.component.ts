@@ -14,6 +14,8 @@ import { OrdersActionTrayComponent } from '../orders-action-tray/orders-action-t
 import { OrderStockComponent } from '../order-stocks/order-stock.component';
 import { HttpHeaders } from '@angular/common/http';
 import { DatePipe } from '@angular/common';
+import * as Excel from 'exceljs/dist/exceljs.min.js';
+import * as fs from 'file-saver';
 
 @Component({
   selector: 'app-reports',
@@ -1546,6 +1548,7 @@ getDeliveryBoyList(){
 
     getActBtnTxt(actBtnTxt, cellValue){
         debugger;
+        console.log(actBtnTxt,cellValue,"yahahaahahahhahaah")
         var _actBtnTxt="";
         if(/stock/gi.test(actBtnTxt)){
             if(cellValue === 'Out of Stock')
@@ -2400,6 +2403,16 @@ getDeliveryBoyList(){
             }
         });
 
+    }
+    downloadSamplePincode(){
+        let workbook = new Excel.Workbook();
+        let worksheet1 = workbook.addWorksheet('Template');
+        let titleRow = worksheet1.addRow(['name', 'points', 'email']);
+
+        workbook.xlsx.writeBuffer().then((data) => {
+            let blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+            fs.saveAs(blob, 'Template.xlsx');
+        });
     }
 }
 
