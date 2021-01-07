@@ -11,6 +11,7 @@ import { Angular5Csv } from 'angular5-csv/dist/Angular5-csv';
 import { isArray } from 'util';
 import * as Excel from 'exceljs/dist/exceljs.min.js';
 import * as fs from 'file-saver';
+import { UserAccessService } from 'app/services/user-access.service';
 
 export class AppDateAdapter extends NativeDateAdapter {
     format(date: Date, displayFormat: Object): string {
@@ -102,14 +103,19 @@ export class MicroSiteDasboardComponent implements OnInit {
     ];
     whitelabelStyle;
     errorList: any;
+    userTypeForTransaction:any;
     constructor(
         private fb: FormBuilder,
         private BackendService: BackendService,
-        private _snackBar: MatSnackBar
+        private _snackBar: MatSnackBar,
+        private userAccessService: UserAccessService
     ) { }
 
     ngOnInit() {
         this.whitelabelStyle = localStorage.getItem('whitelabelDetails') ? JSON.parse(localStorage.getItem('whitelabelDetails')) : null;
+        if(this.whitelabelStyle){
+            this.userTypeForTransaction = this.userAccessService.userAccessDetails && this.userAccessService.userAccessDetails.find(f => f.displayName == 'Voucher Credit') ? true : false;
+        }
         this.fksId = localStorage.getItem('fkAssociateId');
         this.vendorName = localStorage.getItem('vendorName');
         this.fkUserId = localStorage.getItem('fkUserId');
@@ -118,13 +124,25 @@ export class MicroSiteDasboardComponent implements OnInit {
             email: ['', [Validators.required]],
             file: ['', Validators.required]
         });
-
-        this.SearchForm = this.fb.group({
-            filtertype: ['all', Validators.required],
-            datefrom: [''],
-            dateto: [''],
-            email: ['']
-        });
+        // If user is enable of credit voucher only
+        if(this.userTypeForTransaction){
+            delete this.columnNames[2];
+            this.SearchForm = this.fb.group({
+                filtertype: ['credit', Validators.required],
+                datefrom: [''],
+                dateto: [''],
+                email: ['']
+            });
+        }else{
+            this.SearchForm = this.fb.group({
+                filtertype: ['all', Validators.required],
+                datefrom: [''],
+                dateto: [''],
+                email: ['']
+            });
+        }
+        
+        
         this.displayedColumns = this.columnNames.map(x => x.id);
         this.getUsers();
     }
@@ -164,6 +182,10 @@ export class MicroSiteDasboardComponent implements OnInit {
             //     value: "Current Balance"
             // }
         ];
+        if(this.userTypeForTransaction){
+            delete tempData[2];
+            delete tempData[6];
+        }
         switch (type) {
             case 'credit':
                 this.columnNames = tempData.filter(f => f.id != 'couponUsedDate' && f.id != 'orderId' );
@@ -220,7 +242,7 @@ export class MicroSiteDasboardComponent implements OnInit {
         let reqObj;
         if (_this.whitelabelStyle) {
             reqObj = {
-                url: `whitelabel/getuserrecord?fromdate=${datefrom}&todate=${dateto}&emailid=&type=all&fkAssociateId=${localStorage.fkAssociateId}&fkUserId=0`,
+                url: `whitelabel/getuserrecord?fromdate=${datefrom}&todate=${dateto}&emailid=&type=${this.SearchForm.value.filtertype}&fkAssociateId=${localStorage.fkAssociateId}&fkUserId=0`,
                 method: "get"
             };
         }
@@ -377,7 +399,18 @@ export class MicroSiteDasboardComponent implements OnInit {
                         userData.length > 0 && userData.forEach(m => m.couponUsedDate ? m.couponUsedDate = pipe.transform(m.couponUsedDate, 'dd/MM/yy') : m.couponUsedDate = '');
                     
                 }// let headerData = _this.swap(response.data[0]);
-
+                //deleting orderId and type property from array of object
+                if(_this.userTypeForTransaction){
+                    userData.forEach((e,i) =>{
+                        for(let x in userData[i]){
+                             if(x == 'orderId' || x == 'type'){
+                               delete userData[i][x];
+                               console.log(userData[i]);
+                              }
+                         }
+                        
+                   })
+                }
                     if (isdataready) {
                         var options = {
                             showLabels: true,
@@ -386,7 +419,9 @@ export class MicroSiteDasboardComponent implements OnInit {
                             nullToEmptyString: false,
                         };
                         // userData.unshift(headerData);
+                        
                         let filedate = datefrom ? datefrom + '-' : '' + dateto ? dateto : '';
+                        
                         let download = new Angular5Csv(userData, 'userReport-' + filedate, options);
                     }
                 }
