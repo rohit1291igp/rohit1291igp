@@ -8,7 +8,7 @@ import { NavItem } from 'app/components/menu-list-item/menu-list-item.component'
 
 @Injectable()
 export class UserAccessService {
-
+userAccessDetails:any;
   constructor(
     private httpClient: HttpClient
   ) { }
@@ -19,9 +19,12 @@ export class UserAccessService {
       .subscribe((result) => {
         debugger;
        
-        if (result['data'].length)
+        if (result['data'].length){
+          this.userAccessDetails = result['data'];
           cb(result['data']);
-        else cb(userAcess[environment.userType])
+        }else{
+          cb(userAcess[environment.userType]);
+        }
       },
       error=>{
         cb(userAcess[environment.userType]);

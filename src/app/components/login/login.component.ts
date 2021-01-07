@@ -49,7 +49,7 @@ export class LoginComponent implements OnInit {
         debugger;
         if(location.href.split('login/')[1]){
            
-            if( this.whitelabelStyle.associateName.includes( _this.model.associatename.toLocaleLowerCase())){
+            if(!this.whitelabelStyle.associateName.includes( _this.model.associatename.toLocaleLowerCase())){
                 _this.apierror = `Login Failed (Either Associate Name/UserId/Password wrong)`;
                 let associateName = document.getElementsByName("associatename");
                 associateName[0].focus();
