@@ -448,10 +448,10 @@ export class EgvStatementComponent implements OnInit {
 			})
 	}
 	getTxnDetails(element){
-		// debugger;
+		 debugger;
 		// console.log("Hiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii",element);
-		let str = (element['TxnDetails']||"")+(element['comments']!=" "?" - ":"")+element['comments'];
-		// console.log(str);
+		let str = (element['TxnDetails']||"")+(element['comments'].trim()!=""?" - ":"")+element['comments']
+		 console.log(str);
 		return str;
 	}
 }

@@ -445,7 +445,7 @@ export class EgvwalletComponent implements OnInit {
   }
 
   getTxnDetails(element){		
-		let str = (element['TxnDetails']||"")+(element['comments']!=" "?" - ":"")+element['comments'];
+		let str = (element['TxnDetails']||"")+(element['comments'].trim()!=""?" - ":"")+element['comments'];
 		return str;
 	}
 

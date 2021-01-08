@@ -76,7 +76,7 @@
         <mat-header-cell mat-sort-header *matHeaderCellDef> {{column}} </mat-header-cell>
         <mat-cell *matCellDef="let element">
           <ng-container
-            *ngIf="column != 'Txn Details' && column != 'Transaction Type' && column!= 'Amount' && column!= 'Balance'">
+            *ngIf="column != 'Transaction Details' && column != 'Transaction Type' && column!= 'Amount' && column!= 'Balance'">
             {{element[column] || '-'}}
           </ng-container>
           <ng-container *ngIf="column == 'Amount' || column == 'Balance' ">
@@ -85,7 +85,7 @@
           <ng-container *ngIf="column == 'Transaction Type' ">
             {{element['TransactionType'] || '-'}}
           </ng-container>
-          <ng-container *ngIf="column == 'Txn Details'">
+          <ng-container *ngIf="column == 'Transaction Details'">
             <a (click)="openDialog(element)" style="cursor:pointer"
               *ngIf="(element['TransactionType'] == 'Debit' && element['TransactionMethod'] != 0) else noLink">{{getTxnDetails(element)}}</a>
             <ng-template #noLink>
