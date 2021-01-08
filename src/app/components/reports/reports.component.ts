@@ -2407,7 +2407,7 @@ getDeliveryBoyList(){
     downloadSamplePincode(){
         let workbook = new Excel.Workbook();
         let worksheet1 = workbook.addWorksheet('Template');
-        let titleRow = worksheet1.addRow(['name', 'points', 'email']);
+        let titleRow = worksheet1.addRow(['Vendor Id', 'Ship Type', 'Pincode','Ship Charge','Sector','Outskirt']);
 
         workbook.xlsx.writeBuffer().then((data) => {
             let blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });

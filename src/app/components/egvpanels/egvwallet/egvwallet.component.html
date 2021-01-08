@@ -148,7 +148,7 @@
           <mat-header-cell mat-sort-header *matHeaderCellDef> {{column}} </mat-header-cell>
           <mat-cell *matCellDef="let element">
             <ng-container
-              *ngIf="column != 'Txn Details' && column != 'Transaction Type' && column!= 'Amount' && column!= 'Balance' && column!= 'Actions'">
+              *ngIf="column != 'Transaction Details' && column != 'Transaction Type' && column!= 'Amount' && column!= 'Balance' && column!= 'Actions'">
               {{element[column] || '-'}}
             </ng-container>
             <ng-container *ngIf="column == 'Amount' || column == 'Balance' ">
@@ -157,7 +157,7 @@
             <ng-container *ngIf="column == 'Transaction Type' ">
               {{element['TransactionType'] || '-'}}
             </ng-container>
-            <ng-container *ngIf="column == 'Txn Details'">
+            <ng-container *ngIf="column == 'Transaction Details'">
                 {{getTxnDetails(element)}}
             </ng-container>
             <ng-container *ngIf="column == 'Actions'">

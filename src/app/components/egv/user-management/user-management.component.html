@@ -74,6 +74,7 @@
         (click)="openDialog('executive')" mat-raised-button>Add User</button>
     </div>
   </div>
+  
   <div *ngIf="dataSource.length" class="row m-top-1">
     <div class="col-sm-12 col-md-12">
       <div class="example-container mat-elevation-z8">
@@ -83,15 +84,19 @@
                 The actual rendered columns are set as a property on the row definition" -->
 
           <!-- Position Column -->
+         
           <ng-container *ngFor="let column of displayedColumns" matColumnDef="{{column}}">
-            <mat-header-cell *matHeaderCellDef>{{columnLables[column]}}</mat-header-cell>
+            <mat-header-cell *matHeaderCellDef>{{getHeader(column)}}</mat-header-cell>
             <ng-container *ngIf="column!=='accountEnabled'">
               <mat-cell *matCellDef="let element">
-                <ng-container *ngIf="column!=='edit' && column!='usertypename'">
+                <ng-container *ngIf="column!=='edit' && column!='Role'  && column!='Status'">
                   {{element[column]}}
                 </ng-container>
-                <ng-container *ngIf="column=='usertypename'">
-                  {{element[column].toLowerCase().includes('parent')?element[column].slice(7):element[column]}}
+                <ng-container *ngIf="column=='Role'">
+                  {{element['usertypename'].toLowerCase().includes('parent')?element['usertypename'].slice(7):element['usertypename']}}
+                </ng-container>
+                <ng-container *ngIf="column=='Status'">
+                  {{element['enabled']?"Enabled":"Disabled"}}
                 </ng-container>
 
                 <ng-container *ngIf="column==='edit'">
