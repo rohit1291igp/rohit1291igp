@@ -61,21 +61,22 @@ export class NewDasboardComponent implements OnInit, AfterViewInit {
        
         this.UserAccessService.getUserAccess(function(navItems){
             $this.navItems = navItems; 
+            localStorage.setItem('navItems',JSON.stringify(navItems));
             if (navItems && navItems.length > 0) {
                         
                         $this.pages = navItems.map(m => {
-                            if (m.children) {
-                                return m.children.map((a: any) => {
-                                    return {
-                                        displayName: a.displayName,
-                                        iconName: a.iconName,
-                                        route: a.route
-                                    }
-                                });
+                            // if (m.children) {
+                            //     return m.children.map((a: any) => {
+                            //         return {
+                            //             displayName: a.displayName,
+                            //             iconName: a.iconName,
+                            //             route: a.route
+                            //         }
+                            //     });
         
-                            } else {
+                            // } else {
                                 return m;
-                            }
+                            // }
         
                         }) as any;
                         $this.pages = $this.pages.flatMap(m => {
@@ -214,5 +215,21 @@ export class NewDasboardComponent implements OnInit, AfterViewInit {
                 break;
             }
         }
+    }
+    
+    //on click tumbnail if children then open list of pages
+    openChildren(childrens){
+        this.pages = childrens.map((a: any) => {
+            return {
+                displayName: a.displayName,
+                iconName: a.iconName,
+                route: a.route
+            }
+        });
+    }
+
+    //trigger this function when click perform on main logo
+    home(){
+        this.pages = localStorage.getItem('navItems') ? JSON.parse(localStorage.getItem('navItems')) : this.pages;
     }
 }
