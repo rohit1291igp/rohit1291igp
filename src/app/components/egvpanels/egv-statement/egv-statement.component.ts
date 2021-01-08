@@ -307,7 +307,7 @@ export class EgvStatementComponent implements OnInit {
 					for (let pi = 0; pi < result.tableData.length; pi++) {
 						let temp = {}
 						for (let k of result.tableHeaders) {
-							k = k.split(' ').join('')
+							k = (k=='Transaction Details')?"TxnDetails":k.split(' ').join('')
 							if (typeof result.tableData[pi][k] == 'object' && result.tableData[pi][k] != null) {
 								result.tableData[pi][k] = result.tableData[pi][k].value ? result.tableData[pi][k].value : '';
 							}
