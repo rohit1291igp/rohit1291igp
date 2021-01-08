@@ -1,0 +1,53 @@
+[type="file"] {
+    height: 0;
+    overflow: hidden;
+    width: 0;
+    display: inline;
+}
+
+[type="file"]+label {
+    color: #fff;
+    cursor: pointer;
+    display: inline-block;
+    font-size: inherit;
+    font-weight: 500;
+    margin-bottom: 1rem;
+    outline: none;
+    padding: 0.5rem 20px;
+    position: relative;
+    transition: all 0.3s;
+    vertical-align: middle;
+}
+
+[type="file"]+label:hover {
+    background-color: darken(#c3404e, 10%);
+}
+
+[type="file"]+label.btn-2 {
+    background-color: #c3404e;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+[type="file"]+label.btn-2:hover {
+    background-color: #8a2630;
+}
+
+[type="file"]+label.btn-2:hover::before {
+    right: 75%;
+}
+
+.textFieldLeft{
+    text-align:right;
+    min-height:50px;
+    margin:10px 0
+}
+.textFieldRight
+{
+    min-height:50px;
+    margin:10px 0
+}
+
+.bodyTextArea{
+    width: 500px;
+}
