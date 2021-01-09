@@ -36,8 +36,8 @@ const routes: Routes = [
     MatDatepickerModule,
     MatRadioModule,
     MatSelectModule,
-    MatSidenavModule
-    // SharedModule
+    MatSidenavModule,
+    SharedModule
   ],
   declarations: [
     MicroSiteDasboardComponent
