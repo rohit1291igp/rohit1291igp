@@ -62,7 +62,7 @@ export class MicroSiteDasboardComponent implements OnInit {
     @ViewChild(MatSort) sort: MatSort;
     @ViewChild(MatPaginator) paginator: MatPaginator;
     displayUplaodFormFlag = false;
-    displaySingleUpload = true;
+    displaySingleUpload: string = 'manual';
     events: string[] = [];
     filterType = [
         { value: 'all', viewValue: 'All' },
@@ -597,14 +597,16 @@ export class MicroSiteDasboardComponent implements OnInit {
     
       }
 
-      headerClick(){
-          if(this.excelAction === 'manual'){
-              this.excelAction = 'excel';
-              this.displaySingleUpload = !this.displaySingleUpload;
-          } else {
-            this.excelAction = 'manual';
-            this.displaySingleUpload = !this.displaySingleUpload;
-          }
+      headerClick(excelAction){
+        this.displaySingleUpload = excelAction;
+        this.excelAction = excelAction;
+        //   if(excelAction === 'manual'){
+        //     //   excelAction = 'excel';
+        //       this.displaySingleUpload = !this.displaySingleUpload;
+        //   } else {
+        //     // excelAction = 'manual';
+        //     this.displaySingleUpload = !this.displaySingleUpload;
+        //   }
       }
 
       formatDate(date, format) {

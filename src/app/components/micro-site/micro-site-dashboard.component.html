@@ -65,9 +65,9 @@
                     </form>
                 </mat-card>
                 <mat-card class="align-items-center justify-content-center text-align-center" style="width: 50%;">
-                    <div [(ngModel)]="excelAction" style="margin-bottom: 6em;">
-                        <mat-card class="d-flex align-items-center justify-content-center text-align-center col-md-6 "  [ngClass]="displaySingleUpload ? 'selectedHeader' : 'deSelectedHeader'"  value="manual" style="height: 1em;cursor: pointer;" (click)="headerClick()">Single</mat-card>
-                        <mat-card class="d-flex align-items-center justify-content-center text-align-center col-md-6 active"  [ngClass]="displaySingleUpload ? 'deSelectedHeader' : 'selectedHeader'" style="height: 1em;cursor: pointer;" value="excel" (click)="headerClick()">Multiple</mat-card>
+                    <div style="margin-bottom: 6em;">
+                        <mat-card class="d-flex align-items-center justify-content-center text-align-center col-md-6 "  [ngClass]="displaySingleUpload == 'manual' ? 'selectedHeader' : 'deSelectedHeader'"  value="manual" style="height: 1em;cursor: pointer;" (click)="headerClick('manual')">Single</mat-card>
+                        <mat-card class="d-flex align-items-center justify-content-center text-align-center col-md-6 active"  [ngClass]="displaySingleUpload == 'manual' ? 'deSelectedHeader' : 'selectedHeader'" style="height: 1em;cursor: pointer;" value="excel" (click)="headerClick('excel')">Multiple</mat-card>
                     </div>
                     <div *ngIf="fksId != '895' && vendorName != 'itcinfotech'"
                         [ngClass]="displayUplaodFormFlag ? 'hide-form' : 'show-form'" style="display: initial;">
@@ -113,7 +113,7 @@
                         </form>
                     </div>
                     <mat-card *ngIf="fksId != '895' && vendorName != 'itcinfotech'"
-                        [ngClass]="displayUplaodFormFlag ? 'show-form' : 'hide-form'">
+                        [ngClass]="displayUplaodFormFlag ? 'show-form' : 'hide-form'" style="margin: 6px auto;">
                         <div>
                             <i class="fa fa-times" style="float: right; cursor:pointer;color:#C3404E"
                                 (click)="displayUploadForm(false)"></i>
