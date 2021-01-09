@@ -33,6 +33,7 @@ export class NewDasboardComponent implements OnInit, AfterViewInit {
     @ViewChild(RouterOutlet) outlet: RouterOutlet;
     pages
     whitelabelStyle
+    backBtnShow: boolean;
     constructor(private navService: NavService, private router: Router, private activatedRoute: ActivatedRoute, public BackendService: BackendService, private cookieService: CookieService, private UserAccessService: UserAccessService) {
         router.events.subscribe((val: any) => {
             //On change check router
@@ -50,32 +51,34 @@ export class NewDasboardComponent implements OnInit, AfterViewInit {
     ngOnInit() {
        
         let $this=this;
-        this.router.events.subscribe(e => {
+        $this.router.events.subscribe(e => {
             if (e instanceof ActivationStart){
-                this.outlet && this.outlet.deactivate();
+                $this.outlet && $this.outlet.deactivate();
                 }
           });
-        this.whitelabelStyle = localStorage.getItem('whitelabelDetails') ? JSON.parse(localStorage.getItem('whitelabelDetails')) : null;
-        this.username = localStorage.getItem('vendorName') ? localStorage.getItem('vendorName') : '';
+        $this.whitelabelStyle = localStorage.getItem('whitelabelDetails') ? JSON.parse(localStorage.getItem('whitelabelDetails')) : null;
+        $this.username = localStorage.getItem('vendorName') ? localStorage.getItem('vendorName') : '';
         const bodyEle = document.getElementsByTagName('body');
        
-        this.UserAccessService.getUserAccess(function(navItems){
+        $this.UserAccessService.getUserAccess(function(navItems){
             $this.navItems = navItems; 
+            $this.UserAccessService.userAccessDetails = navItems;
+            localStorage.setItem('navItems',JSON.stringify(navItems));
             if (navItems && navItems.length > 0) {
                         
                         $this.pages = navItems.map(m => {
-                            if (m.children) {
-                                return m.children.map((a: any) => {
-                                    return {
-                                        displayName: a.displayName,
-                                        iconName: a.iconName,
-                                        route: a.route
-                                    }
-                                });
+                            // if (m.children) {
+                            //     return m.children.map((a: any) => {
+                            //         return {
+                            //             displayName: a.displayName,
+                            //             iconName: a.iconName,
+                            //             route: a.route
+                            //         }
+                            //     });
         
-                            } else {
+                            // } else {
                                 return m;
-                            }
+                            // }
         
                         }) as any;
                         $this.pages = $this.pages.flatMap(m => {
@@ -147,6 +150,7 @@ export class NewDasboardComponent implements OnInit, AfterViewInit {
     }
 
     navigate(type) {
+        this.backBtnShow = false;
         if (type == 'menu') {
             this.openPage = false;
         } else {
@@ -215,4 +219,33 @@ export class NewDasboardComponent implements OnInit, AfterViewInit {
             }
         }
     }
+
+    //on click tumbnail if children then open list of pages
+    openChildren(childrens){
+        this.backBtnShow = true;
+        localStorage.setItem('prevNavState', JSON.stringify(this.pages));
+        this.pages = childrens.map((a: any) => {
+            return {
+                displayName: a.displayName,
+                iconName: a.iconName,
+                route: a.route
+            }
+        });
+    }
+
+    //trigger this function when click perform on main logo
+    home(flag?:any){
+        if(flag == 'back'){
+            this.backBtnShow = false;
+            let homePageLogo = document.getElementById("homePageLogo");
+            homePageLogo.click();
+        }
+        this.pages = localStorage.getItem('navItems') ? JSON.parse(localStorage.getItem('navItems')) : this.pages;
+    }
+
+    //Navigation previous - Will implement later for multi layer
+    // navPrevious(){
+    //     this.pages = localStorage.getItem('prevNavState') ? JSON.parse(localStorage.getItem('prevNavState')) : this.pages;
+    // }
+    
 }

@@ -82,3 +82,11 @@ nav {
     align-items: center;
     opacity: 0.8;
 }
+
+.back-nav-btn{
+    color: #c3404e;
+    font-size: 1.2em;
+    margin: 5px 9px;
+    width: fit-content;
+    cursor: pointer;
+}
