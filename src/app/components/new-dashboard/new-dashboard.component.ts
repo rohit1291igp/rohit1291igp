@@ -51,17 +51,18 @@ export class NewDasboardComponent implements OnInit, AfterViewInit {
     ngOnInit() {
        
         let $this=this;
-        this.router.events.subscribe(e => {
+        $this.router.events.subscribe(e => {
             if (e instanceof ActivationStart){
-                this.outlet && this.outlet.deactivate();
+                $this.outlet && $this.outlet.deactivate();
                 }
           });
-        this.whitelabelStyle = localStorage.getItem('whitelabelDetails') ? JSON.parse(localStorage.getItem('whitelabelDetails')) : null;
-        this.username = localStorage.getItem('vendorName') ? localStorage.getItem('vendorName') : '';
+        $this.whitelabelStyle = localStorage.getItem('whitelabelDetails') ? JSON.parse(localStorage.getItem('whitelabelDetails')) : null;
+        $this.username = localStorage.getItem('vendorName') ? localStorage.getItem('vendorName') : '';
         const bodyEle = document.getElementsByTagName('body');
        
-        this.UserAccessService.getUserAccess(function(navItems){
+        $this.UserAccessService.getUserAccess(function(navItems){
             $this.navItems = navItems; 
+            $this.UserAccessService.userAccessDetails = navItems;
             localStorage.setItem('navItems',JSON.stringify(navItems));
             if (navItems && navItems.length > 0) {
                         
