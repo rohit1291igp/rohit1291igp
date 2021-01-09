@@ -12,6 +12,10 @@ const routes: Routes = [
   {
     path: '',
     component: MicroSiteDasboardComponent
+  },
+  {
+    path: 'voucher-credit',
+    component: MicroSiteDasboardComponent
   }
 ];
 

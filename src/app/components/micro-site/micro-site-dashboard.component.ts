@@ -62,7 +62,7 @@ export class MicroSiteDasboardComponent implements OnInit {
     @ViewChild(MatSort) sort: MatSort;
     @ViewChild(MatPaginator) paginator: MatPaginator;
     displayUplaodFormFlag = false;
-    displaySingleUpload = true;
+    displaySingleUpload: string = 'manual';
     events: string[] = [];
     filterType = [
         { value: 'all', viewValue: 'All' },
@@ -119,7 +119,7 @@ export class MicroSiteDasboardComponent implements OnInit {
     ngOnInit() {
         this.whitelabelStyle = localStorage.getItem('whitelabelDetails') ? JSON.parse(localStorage.getItem('whitelabelDetails')) : null;
         if(this.whitelabelStyle){
-            this.userTypeForTransaction = this.userAccessService.userAccessDetails && this.userAccessService.userAccessDetails.find(f => f.displayName == 'Voucher Credit') ? true : false;
+            this.userTypeForTransaction = this.userAccessService.userAccessDetails && this.userAccessService.userAccessDetails.find(f => f.route.includes('voucher-credit')) ? true : false;
         }
         this.fksId = localStorage.getItem('fkAssociateId');
         this.vendorName = localStorage.getItem('vendorName');
@@ -597,14 +597,16 @@ export class MicroSiteDasboardComponent implements OnInit {
     
       }
 
-      headerClick(){
-          if(this.excelAction === 'manual'){
-              this.excelAction = 'excel';
-              this.displaySingleUpload = !this.displaySingleUpload;
-          } else {
-            this.excelAction = 'manual';
-            this.displaySingleUpload = !this.displaySingleUpload;
-          }
+      headerClick(excelAction){
+        this.displaySingleUpload = excelAction;
+        this.excelAction = excelAction;
+        //   if(excelAction === 'manual'){
+        //     //   excelAction = 'excel';
+        //       this.displaySingleUpload = !this.displaySingleUpload;
+        //   } else {
+        //     // excelAction = 'manual';
+        //     this.displaySingleUpload = !this.displaySingleUpload;
+        //   }
       }
 
       formatDate(date, format) {

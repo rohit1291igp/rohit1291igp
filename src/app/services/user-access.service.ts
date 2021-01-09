@@ -20,7 +20,6 @@ userAccessDetails:any;
         debugger;
        
         if (result['data'].length){
-          this.userAccessDetails = result['data'];
           cb(result['data']);
         }else{
           cb(userAcess[environment.userType]);
