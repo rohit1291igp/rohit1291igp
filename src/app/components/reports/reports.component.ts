@@ -1019,7 +1019,7 @@ getDeliveryBoyList(){
 
                         if(_this.reportType === "whitelabel/report"){
                    
-                          options.headers = _this.tableHeaders;
+                          options.headers = _this.tableHeaders.map(ele => ele.replace(/([A-Z])/g, ' $1').replace(/^./, function(str){ return str.toUpperCase()}) )
                         }
                     let data = [];
                     let reportDownloadData = [];
@@ -1027,6 +1027,7 @@ getDeliveryBoyList(){
                         for(let pi=0; pi < _this.orginalReportData.tableData.length; pi++){
                             let temp = {}
                             for(let k in _this.orginalReportData.tableData[pi]){
+
                                 if(typeof _this.orginalReportData.tableData[pi][k] == 'object' &&_this.orginalReportData.tableData[pi][k] != null){
                                     _this.orginalReportData.tableData[pi][k] = _this.orginalReportData.tableData[pi][k].value ? _this.orginalReportData.tableData[pi][k].value : '';
                                 }
@@ -2268,11 +2269,14 @@ getDeliveryBoyList(){
     }
 
     getHeaderCellValue(headerData: any) {
+        console.log(headerData);
         if (headerData.includes('_')) {
+            console.log('underscore');
             return headerData.replace(/_/g, " ").replace(/^\w|\s\w/g, function (letter) {
                 return letter.toUpperCase();
               })
         } else {
+            console.log('camel');
             return headerData.replace(/([A-Z])/g, ' $1').replace(/^./, function(str){ return str.toUpperCase();});
         }
         
