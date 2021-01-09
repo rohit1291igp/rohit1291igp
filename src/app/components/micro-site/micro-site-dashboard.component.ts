@@ -1,6 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import { Headers, RequestOptions } from "@angular/http";
 import { MatDatepickerInputEvent, MatSort, MatTableDataSource, MatSnackBar, MatPaginator, Sort, MatSidenav } from '@angular/material';
 import { BackendService } from '../../services/backend.service';
@@ -52,12 +52,17 @@ export const APP_DATE_FORMATS: MatDateFormats = {
 export class MicroSiteDasboardComponent implements OnInit {
 
     myForm: FormGroup;
+    voucherSingleForm : FormGroup;
     SearchForm: FormGroup;
     dataSource;
     displayedColumns = [];
+    excelAction: string = 'manual';
+    maxValue: number = 0;
+    minValue: number = 0;
     @ViewChild(MatSort) sort: MatSort;
     @ViewChild(MatPaginator) paginator: MatPaginator;
     displayUplaodFormFlag = false;
+    displaySingleUpload = true;
     events: string[] = [];
     filterType = [
         { value: 'all', viewValue: 'All' },
@@ -141,8 +146,13 @@ export class MicroSiteDasboardComponent implements OnInit {
                 email: ['']
             });
         }
-        
-        
+
+        this.voucherSingleForm = this.fb.group({
+            denomination: ['', [Validators.required, Validators.min(1), this.amountValidator]],
+            receipent_name: ['', Validators.required],
+            receipent_email: ['', [Validators.required, Validators.email, Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$")]],
+            scheduleDate: [new Date()],
+          });
         this.displayedColumns = this.columnNames.map(x => x.id);
         this.getUsers();
     }
@@ -531,6 +541,77 @@ export class MicroSiteDasboardComponent implements OnInit {
             });
         }
     }
+
+    amountValidator() {
+        console.log("valiadtion starts");
+        return (control: AbstractControl): { [key: string]: boolean } | null => {
+    
+          if (control.value > 10) {
+            return { 'error': true }
+          }
+          return null;
+        };
+    }
+    generateManualVoucher() {
+
+        console.log(this.voucherSingleForm.invalid);
+        if (this.voucherSingleForm.invalid) { return }
+        // if (this.voucherSingleForm.value.denomination < this.minValue || this.voucherSingleForm.value.denomination > this.maxValue) {
+        //   alert("Denomination should be between " + this.minValue + " and " + this.maxValue)
+        //   return;
+        // }
+        debugger;
+        let _this = this;
+        let payload = {
+          "amount": this.voucherSingleForm.get('denomination').value,
+          "name": this.voucherSingleForm.value.receipent_name,
+          "emailId": this.voucherSingleForm.value.receipent_email,
+          "deliveryDate": this.formatDate(this.voucherSingleForm.value.scheduleDate, 'yyyy-MM-dd')
+        }
+        let fk_associateId = localStorage.fkAssociateId;
+        let fkUserId = localStorage.fkUserId;
+        let headers = new Headers();
+        /** No need to include Content-Type in Angular 4 */
+        headers.append('Content-Type', 'multipart/form-data');
+        headers.append('Accept', 'application/json');
+        let options = new RequestOptions({ headers: headers });
+        let reqObj = {
+            url:
+                `whitelabel/singlepointupload?fkAssociateId=${fk_associateId}&fkUserId=${fkUserId}`,
+            method: 'post',
+            payload: payload,
+            options: options
+        };
+        _this.BackendService.makeAjax(reqObj, function (err, response, headers) {
+            if (err || response.error) {
+                console.log('Error=============>', err);
+                _this.openSnackBar('Server Error');
+                return;
+            }
+            if (response.status.toLowerCase() == 'success') {
+                _this.openSnackBar(response['status']);
+            } else {
+                _this.openSnackBar(response.data[0]);
+            }
+        });
+    
+      }
+
+      headerClick(){
+          if(this.excelAction === 'manual'){
+              this.excelAction = 'excel';
+              this.displaySingleUpload = !this.displaySingleUpload;
+          } else {
+            this.excelAction = 'manual';
+            this.displaySingleUpload = !this.displaySingleUpload;
+          }
+      }
+
+      formatDate(date, format) {
+        const pipe = new DatePipe('en-US');
+        const datefrom = pipe.transform(date, format);
+        return datefrom;
+      }
 
     addEventFrom(type: string, event: MatDatepickerInputEvent<Date>) {
         this.SearchForm.patchValue({
