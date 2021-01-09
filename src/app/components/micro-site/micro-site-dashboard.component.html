@@ -64,17 +64,25 @@
                         </div>
                     </form>
                 </mat-card>
-                <mat-card class="align-items-center justify-content-center text-align-center" style="width: 50%;">
-                    <div style="margin-bottom: 6em;">
+                <mat-card class="align-items-center justify-content-center text-align-center" style="width: 50%;position: relative;">
+                    <!-- <div style="margin-bottom: 6em;">
                         <mat-card class="d-flex align-items-center justify-content-center text-align-center col-md-6 "  [ngClass]="displaySingleUpload == 'manual' ? 'selectedHeader' : 'deSelectedHeader'"  value="manual" style="height: 1em;cursor: pointer;" (click)="headerClick('manual')">Single</mat-card>
                         <mat-card class="d-flex align-items-center justify-content-center text-align-center col-md-6 active"  [ngClass]="displaySingleUpload == 'manual' ? 'deSelectedHeader' : 'selectedHeader'" style="height: 1em;cursor: pointer;" value="excel" (click)="headerClick('excel')">Multiple</mat-card>
-                    </div>
+                    </div> -->
                     <div *ngIf="fksId != '895' && vendorName != 'itcinfotech'"
-                        [ngClass]="displayUplaodFormFlag ? 'hide-form' : 'show-form'" style="display: initial;">
+                        [ngClass]="displayUplaodFormFlag ? 'hide-form' : 'show-form'" style="display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        position: absolute;
+                        top: 0;
+                        bottom: 0;
+                        right: 0;
+                        left: 0;
+                        margin: 0 auto;">
                         <button mat-stroked-button color="primary"
                             [ngStyle]="{'background-color': whitelabelStyle ? whitelabelStyle.primaryColor : '' }"
                             (click)="displayUploadForm(true)" *ngIf="excelAction === 'excel'" class="btn-color">Upload</button>
-                        <button mat-raised-button *ngIf="excelAction === 'excel'" (click)="downloadSample()">Download Template</button>
+                        <button mat-raised-button *ngIf="excelAction === 'excel'" (click)="downloadSample()" style="margin-left: 8px;">Download Template</button>
                     </div>
                     <div class="col-md-12 marginLR10" *ngIf="excelAction === 'manual'">
                         <form [formGroup]="voucherSingleForm" (ngSubmit)="generateManualVoucher()">
