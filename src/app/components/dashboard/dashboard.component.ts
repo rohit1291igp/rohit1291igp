@@ -258,7 +258,7 @@ export class DashboardComponent implements OnInit {
 
   getSectorList() {
     let reqObj = {
-      url: `getSectorListForVendor?fkAssociateId=565`,
+      url: `getSectorListForVendor?fkAssociateId=`+localStorage.fkAssociateId,
       method: "get"
     };
     return new Promise((resolve, reject) => {
