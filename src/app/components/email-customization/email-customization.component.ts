@@ -56,13 +56,15 @@ export class EmailCustomizationComponent implements OnInit {
 
       reader.onload = (event: any) => { // called once readAsDataURL is completed
 
-        this.deskImageUrl = event['target']['result'].toString();
+        // this.deskImageUrl = event['target']['result'].toString();
         let emailformData = new FormData();
 
         emailformData.append(this.deskImage.name, this.deskImage);
         this.uploadImageToS3(emailformData).then(
           (response) => {
+            this.deskImageUrl = response['result'].uploadedFilePath.s3commonupload[0];
             console.log(response);
+            debugger;
           }
         )
       }
@@ -72,21 +74,14 @@ export class EmailCustomizationComponent implements OnInit {
   uploadImageToS3(payload) {
     let _this = this;
     return new Promise((resolve, reject) => {
-      const httpOptions = {
-        headers: new HttpHeaders({
-          'Content-Type': 'multipart/form-data',
-          'Access-Control-Allow-Origin': '*'
-        })
-      };
       let reqImgObj: any = {
         url: 'banner/customEmailImagesUpload',
         method: 'post',
-        payload: payload,
-        options1: httpOptions
+        payload: payload
       };
       reqImgObj.url += '?imageType=CUSTOMIZE_EMAIL_HEADER';
       _this.BackendService.makeAjax(reqImgObj, function (err, response, headers) {
-        if (err) {
+        if (err || response.error) {
           _this.openSnackBar('Something went wrong.');
           console.log('Error=============>', err);
           reject(err);

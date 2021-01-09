@@ -2269,10 +2269,13 @@ getDeliveryBoyList(){
 
     getHeaderCellValue(headerData: any) {
         if (headerData.includes('_')) {
-            return headerData.replace(/_|_/g, ' ');
+            return headerData.replace(/_/g, " ").replace(/^\w|\s\w/g, function (letter) {
+                return letter.toUpperCase();
+              })
         } else {
-            return headerData;
+            return headerData.replace(/([A-Z])/g, ' $1').replace(/^./, function(str){ return str.toUpperCase();});
         }
+        
     }
 
     getRowCellValue(rowData: any) {
