@@ -33,6 +33,7 @@ export class NewDasboardComponent implements OnInit, AfterViewInit {
     @ViewChild(RouterOutlet) outlet: RouterOutlet;
     pages
     whitelabelStyle
+    backBtnShow: boolean;
     constructor(private navService: NavService, private router: Router, private activatedRoute: ActivatedRoute, public BackendService: BackendService, private cookieService: CookieService, private UserAccessService: UserAccessService) {
         router.events.subscribe((val: any) => {
             //On change check router
@@ -148,6 +149,7 @@ export class NewDasboardComponent implements OnInit, AfterViewInit {
     }
 
     navigate(type) {
+        this.backBtnShow = false;
         if (type == 'menu') {
             this.openPage = false;
         } else {
@@ -216,9 +218,11 @@ export class NewDasboardComponent implements OnInit, AfterViewInit {
             }
         }
     }
-    
+
     //on click tumbnail if children then open list of pages
     openChildren(childrens){
+        this.backBtnShow = true;
+        localStorage.setItem('prevNavState', JSON.stringify(this.pages));
         this.pages = childrens.map((a: any) => {
             return {
                 displayName: a.displayName,
@@ -229,7 +233,18 @@ export class NewDasboardComponent implements OnInit, AfterViewInit {
     }
 
     //trigger this function when click perform on main logo
-    home(){
+    home(flag?:any){
+        if(flag == 'back'){
+            this.backBtnShow = false;
+            let homePageLogo = document.getElementById("homePageLogo");
+            homePageLogo.click();
+        }
         this.pages = localStorage.getItem('navItems') ? JSON.parse(localStorage.getItem('navItems')) : this.pages;
     }
+
+    //Navigation previous - Will implement later for multi layer
+    // navPrevious(){
+    //     this.pages = localStorage.getItem('prevNavState') ? JSON.parse(localStorage.getItem('prevNavState')) : this.pages;
+    // }
+    
 }
