@@ -512,6 +512,7 @@
                                 <div class="text-bold">Deliver to: <app-loader></app-loader></div>
                                 <div class="address">Address - <app-loader></app-loader></div>
                                 <div class="contact">CONTACT NUMBER - <app-loader></app-loader></div>
+                                <div class="contact">Sector : <app-loader></app-loader></div>
                             </div>
                             <div class="col-md-4 order-actions" *ngIf="!isMobile">
                                 <div class="row" *ngIf="!isAdmin">
@@ -781,7 +782,7 @@
                       <div class="text-bold">Deliver to: {{order.deliveryName}}</div>
                       <div class="address">{{order.addressType}} Address - {{order.deliveryStreetAddress}}, <span *ngIf="order.deliveryStreetAddress2">{{order.deliveryStreetAddress2}},</span>{{order.deliveryCity}}-{{order.deliveryPostcode}}, {{order.deliveryState}}</div>
                       <div class="contact">CONTACT NUMBER - {{order.deliveryMobile}} <span *ngIf="order.deliveryAlternateMobile">,{{order.deliveryAlternateMobile}}</span></div>
-                      <div class="contact" *ngIf="order.deliverySector">Sector : {{order.deliverySector}}</div>
+                      <div class="contact">Sector : {{order.orderProducts[0].deliverySector}}</div>
                       
                     </div>
                     <div class="col-md-4 order-actions" [ngClass]="{'borderLeft': !isMobile}" *ngIf="!isMobile">
