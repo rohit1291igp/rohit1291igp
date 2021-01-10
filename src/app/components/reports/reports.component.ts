@@ -2418,7 +2418,7 @@ getDeliveryBoyList(){
 
         workbook.xlsx.writeBuffer().then((data) => {
             let blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-            fs.saveAs(blob, 'Template.xlsx');
+            fs.saveAs(blob, 'Pincode_Sample.xlsx');
         });
     }
 }

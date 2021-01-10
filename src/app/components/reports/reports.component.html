@@ -184,6 +184,7 @@
                         <ng-container *ngIf="reportType === 'getVendorDetails'">Vendor</ng-container>
                         <ng-container *ngIf="reportType === 'getBarcodeToComponentReport'">Barcode</ng-container>
                     </h4>
+                    <div *ngIf="reportType === 'getPincodeReport'" class="btn btn-primary addActionBtn add-pincode-vendor" (click)="downloadSamplePincode()"> Download Sample</div>
                 </div>
 
                 <div class="modal-body center-align" *ngIf="reportType === 'getVendorDetails'">
@@ -553,6 +554,9 @@
                     <ng-container *ngIf="reportType === 'getVendorDetails'">Vendor</ng-container>
                     <ng-container *ngIf="reportType === 'getBarcodeToComponentReport'">Barcode</ng-container>
                 </div>
+                <div *ngIf="reportType === 'getPincodeReport'" class="btn btn-primary addActionBtn add-pincode-vendor" (click)="downloadSamplePincode()"> Download Sample
+                    
+                </div>
                 <form name="searchReport" (ngSubmit)="f.form.valid && searchReportSubmit($event,true, myForm)" #f="ngForm" nonvalidate>
                     <div class="searchFields m-top-1 inline" >
                         <div class="pull-left" style="width:70%;">
@@ -815,7 +819,8 @@
                                                       <option selected value="">Select Vendor</option>
                                                         <option  *ngFor="let vendor of tableRowValue[tableCol]; let i='index'" value="{{vendor.Vendor_Id}}">{{vendor.Vendor_Name}}</option>
                                                     </select>
-                                                </div>
+                                                </div>                                                
+                                                <span *ngIf="tableCol == 'Outskirt'" >{{tableRowValue[tableCol]?"Yes":"No"}}</span>
                                             </div>
             
                                             <!--update messgae start-->
