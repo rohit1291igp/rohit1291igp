@@ -1036,7 +1036,9 @@ getDeliveryBoyList(){
                                    if(k != 'giftVouchers') temp[k] = _this.orginalReportData.tableData[pi][k];
                                 }
                                 else {
-                                    temp[k] = _this.orginalReportData.tableData[pi][k];
+                                    if(k == "Outskirt")       temp[k] = _this.orginalReportData.tableData[pi][k] ? "Yes" : "No";
+                                    else temp[k] = _this.orginalReportData.tableData[pi][k];
+                                   
                                 }
                             }
                             reportDownloadData.push(temp);
@@ -1164,15 +1166,28 @@ getDeliveryBoyList(){
                     nullToEmptyString: true,
                   };
                 let data = [];
+                let reportDownloadData = [];
                 new Promise((resolve)=>{
                     for(let pi=0; pi < _this.orginalReportData.tableData.length; pi++){
+                        let temp = {}
                         for(let k in _this.orginalReportData.tableData[pi]){
+
                             if(typeof _this.orginalReportData.tableData[pi][k] == 'object' &&_this.orginalReportData.tableData[pi][k] != null){
                                 _this.orginalReportData.tableData[pi][k] = _this.orginalReportData.tableData[pi][k].value ? _this.orginalReportData.tableData[pi][k].value : '';
                             }
+                            debugger;
+                            if (_this.reportType === "whitelabel/report") {
+                               if(k != 'giftVouchers') temp[k] = _this.orginalReportData.tableData[pi][k];
+                            }
+                            else {
+                                if(k == "Outskirt")       temp[k] = _this.orginalReportData.tableData[pi][k] ? "Yes" : "No";
+                                else temp[k] = _this.orginalReportData.tableData[pi][k];
+                               
+                            }
                         }
+                        reportDownloadData.push(temp);
                         if(pi == (_this.orginalReportData.tableData.length-1)){
-                            resolve(_this.orginalReportData.tableData);
+                            resolve(reportDownloadData);
                         }
                     }
                 }).then((data)=>{
