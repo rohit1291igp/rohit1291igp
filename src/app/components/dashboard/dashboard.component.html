@@ -239,10 +239,13 @@
 <div class="container-fluid dashboardTable">
     <div class="row padding-extra dbTableHeader">
         <!--<p>Hi {{vendorName}}!</p>-->
-        <p>
+        <p *ngIf="fkAssociateId !=72">
             <mat-form-field appearance="fill">
             <mat-label>Select a sector</mat-label>
             <mat-select (change) = "loadDbData($event.value)" [(ngModel)] = "selectedSector" >
+                <mat-option [value]=" " >
+                   All
+                </mat-option>
               <mat-option *ngFor="let sector of sectors" [value]="sector" >
                 {{sector}}
               </mat-option>
