@@ -25,6 +25,7 @@ export class DashboardComponent implements OnInit {
   dashBoardDataType;
   sectors;
   selectedSector;
+  fkAssociateId = localStorage.fkAssociateId;
   vendorName = localStorage.getItem('associateName');
   public mainHeaderComponent: MainHeaderComponent;
   public dashboardData: any;
@@ -60,7 +61,7 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit() {
     // var _this = this;
-    this.getSectorList().then(response =>{
+    this.getSectorList().then(response => {
       debugger;
       this.sectors = response;
     })
@@ -76,7 +77,7 @@ export class DashboardComponent implements OnInit {
       this.dashboardObservable = Observable.interval(1000 * 60 * 1.5)
         .subscribe(() => {
           console.log('Dasboard IntervalObservable working !!!');
-          this.loadDbData('');
+          this.loadDbData(this.selectedSector);
         });
 
     }
@@ -95,9 +96,10 @@ export class DashboardComponent implements OnInit {
   loadDbData(sector) {
     debugger;
     var _this = this;
+    if (!sector) { sector = ''; }
     var cookieFDate = this.UtilityService.getCookie("festivalDate") ? JSON.parse(_this.UtilityService.getCookie("festivalDate")) : null;
     var cookieFDatwFormatted = cookieFDate ? cookieFDate.date.year + '-' + cookieFDate.date.month + '-' + cookieFDate.date.day : null;
-    this.dashboardService.getDashboardData(cookieFDatwFormatted,sector, function (result) {
+    this.dashboardService.getDashboardData(cookieFDatwFormatted, sector, function (result) {
       /*if(!result.new[0] || (result.new[0] && result.new[0].deliveryTimes !== "pas")) {
        _this.dashboardData = _this.dashboardService.getCustomData();
        return;
@@ -128,7 +130,7 @@ export class DashboardComponent implements OnInit {
   viewOrders(e) {
     e.preventDefault();
     e.stopPropagation();
-    e.sector = this.selectedSector?this.selectedSector:''
+    e.sector = this.selectedSector ? this.selectedSector : ''
     let cat = e.currentTarget.dataset.cat;
     let subCat = e.currentTarget.dataset.subcat;
 
@@ -174,12 +176,12 @@ export class DashboardComponent implements OnInit {
 
   onDateChanged(event: IMyDateModel) {
     console.log('Date changed');
-    let sector = this.selectedSector?this.selectedSector:'';
+    let sector = this.selectedSector ? this.selectedSector : '';
     debugger;
     console.log('onDateChanged(): ', event.date, ' - jsdate: ', new Date(event.jsdate).toLocaleDateString(), ' - formatted: ', event.formatted, ' - epoc timestamp: ', event.epoc);
     let selectedDate = event.date.year + '-' + event.date.month + '-' + event.date.day; //new Date(event.jsdate).toLocaleDateString(); //event.jsdate;
     var _this = this;
-    this.dashboardService.getDashboardData(selectedDate,sector, function (result) {
+    this.dashboardService.getDashboardData(selectedDate, sector, function (result) {
       /*if(!result.new[0] && (result.new[0] && result.new[0].deliveryTimes !== "today")) {
           _this.dashboardData = _this.dashboardService.getCustomData();
           return;
@@ -258,7 +260,7 @@ export class DashboardComponent implements OnInit {
 
   getSectorList() {
     let reqObj = {
-      url: `getSectorListForVendor?fkAssociateId=`+localStorage.fkAssociateId,
+      url: `getSectorListForVendor?fkAssociateId=` + localStorage.fkAssociateId,
       method: "get"
     };
     return new Promise((resolve, reject) => {

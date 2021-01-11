@@ -542,11 +542,14 @@
                 
             <div class="col-sm-9 col-md-9 reprts-search-fields bg-white padding1" style="padding-right:0; width:100%;">
                     <button class="remove-filter-btn" (click)="ngOnInit()">Remove Filter</button> 
+                <div *ngIf="reportType === 'getPincodeReport'" class="btn btn-primary addActionBtn1" (click)="downloadSamplePincode()"> Download Sample
+                    </div>
                 <div *ngIf="reportType == 'getVendorReport' || reportType == 'getPincodeReport' || reportType == 'getVendorDetails'" class="underLine paddingHalf text-bold">Search Vendor</div>
                 <div *ngIf="reportType === 'getComponentReport'" class="underLine paddingHalf text-bold">Search Component</div>
                 <!-- <div *ngIf="reportType === 'getComponentOrderReport' || environment.userType == 'vendor'" class="underLine paddingHalf text-bold">Search Component                    
                 </div> -->
                 <div *ngIf="reportType === 'getBarcodeToComponentReport'" class="underLine paddingHalf text-bold">Search Barcode</div>
+                
                 <div *ngIf="reportType != 'getComponentOrderReport'" class="btn btn-primary addActionBtn" (click)="addActionInit($event)">
                     Add
                     <ng-container *ngIf="reportType === 'getVendorReport' || reportType === 'getComponentReport'">Component</ng-container>
@@ -554,9 +557,7 @@
                     <ng-container *ngIf="reportType === 'getVendorDetails'">Vendor</ng-container>
                     <ng-container *ngIf="reportType === 'getBarcodeToComponentReport'">Barcode</ng-container>
                 </div>
-                <div *ngIf="reportType === 'getPincodeReport'" class="btn btn-primary addActionBtn add-pincode-vendor" (click)="downloadSamplePincode()"> Download Sample
-                    
-                </div>
+                
                 <form name="searchReport" (ngSubmit)="f.form.valid && searchReportSubmit($event,true, myForm)" #f="ngForm" nonvalidate>
                     <div class="searchFields m-top-1 inline" >
                         <div class="pull-left" style="width:70%;">
@@ -777,7 +778,7 @@
                                                         </div>
                                                 </span>
                                                 </span>
-                                                <span *ngIf="ifDate(tableCol) != 'date' && tableCol != 'Ship_Type' && tableCol != 'Component_Image' && tableCol != 'Component Image' && tableCol != 'Product Image' && tableCol != 'Product_Image' && tableCol != 'Out Of Delivery' && tableCol != 'Out_Of_Delivery' && tableCol != 'Proof Of Delivery' && tableCol != 'Proof_Of_Delivery' && tableCol != 'Vendor_List' && tableCol !== 'component'" >
+                                                <span *ngIf="ifDate(tableCol) != 'date' && tableCol != 'Ship_Type' && tableCol != 'Component_Image' && tableCol != 'Component Image' && tableCol != 'Product Image' && tableCol != 'Product_Image' && tableCol != 'Out Of Delivery' && tableCol != 'Out_Of_Delivery' && tableCol != 'Proof Of Delivery' && tableCol != 'Proof_Of_Delivery' && tableCol != 'Vendor_List' && tableCol !== 'component' && tableCol !== 'Outskirt'" >
                                                     <span *ngIf="getCellValue(tableRowValue[tableCol]) === 0 && tableCol !== 'Delivery_Boy_App'">
                                                             {{getCellValue(tableRowValue[tableCol])}}
                                                     </span>
