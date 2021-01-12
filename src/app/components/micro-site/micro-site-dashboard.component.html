@@ -65,10 +65,10 @@
                     </form>
                 </mat-card>
                 <mat-card class="align-items-center justify-content-center text-align-center" style="width: 50%;position: relative;">
-                    <!-- <div style="margin-bottom: 6em;">
-                        <mat-card class="d-flex align-items-center justify-content-center text-align-center col-md-6 "  [ngClass]="displaySingleUpload == 'manual' ? 'selectedHeader' : 'deSelectedHeader'"  value="manual" style="height: 1em;cursor: pointer;" (click)="headerClick('manual')">Single</mat-card>
-                        <mat-card class="d-flex align-items-center justify-content-center text-align-center col-md-6 active"  [ngClass]="displaySingleUpload == 'manual' ? 'deSelectedHeader' : 'selectedHeader'" style="height: 1em;cursor: pointer;" value="excel" (click)="headerClick('excel')">Multiple</mat-card>
-                    </div> -->
+                    <div style="margin-bottom: 6em;">
+                        <mat-card class="d-flex align-items-center justify-content-center text-align-center col-md-6 "  [ngClass]="displaySingleUpload == 'manual' ? 'selectedHeader' : 'deSelectedHeader'"  value="manual" style="height: 1em;cursor: pointer;z-index: 1;" (click)="headerClick('manual')">Single</mat-card>
+                        <mat-card class="d-flex align-items-center justify-content-center text-align-center col-md-6 active"  [ngClass]="displaySingleUpload == 'manual' ? 'deSelectedHeader' : 'selectedHeader'" style="height: 1em;cursor: pointer;z-index: 1;" value="excel" (click)="headerClick('excel')">Multiple</mat-card>
+                    </div>
                     <div *ngIf="fksId != '895' && vendorName != 'itcinfotech'"
                         [ngClass]="displayUplaodFormFlag ? 'hide-form' : 'show-form'" style="display: flex;
                         align-items: center;
