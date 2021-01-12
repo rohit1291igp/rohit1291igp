@@ -56,13 +56,13 @@ export class MicroSiteDasboardComponent implements OnInit {
     SearchForm: FormGroup;
     dataSource;
     displayedColumns = [];
-    excelAction: string = 'excel';
+    excelAction: string = 'manual';
     maxValue: number = 0;
     minValue: number = 0;
     @ViewChild(MatSort) sort: MatSort;
     @ViewChild(MatPaginator) paginator: MatPaginator;
     displayUplaodFormFlag = false;
-    displaySingleUpload: string = 'excel';
+    displaySingleUpload: string = 'manual';
     events: string[] = [];
     filterType = [
         { value: 'all', viewValue: 'All' },
