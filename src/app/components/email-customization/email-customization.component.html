@@ -5,7 +5,7 @@
         <div class="col-md-8">
           <div class="col-md-12">
             <div class="col-md-2 textFieldLeft">
-              Upload Image
+              Banner image 
             </div>
             <div class="col-md-10 textFieldRight">
               <span>
@@ -23,12 +23,12 @@
             </div>
           </div>
           <div class="col-md-12">
-            <div class="col-md-2 textFieldLeft ">
+            <!-- <div class="col-md-2 textFieldLeft ">
               Email Name
-            </div>
-            <div class="col-md-10 textFieldRight">
+            </div> -->
+            <!-- <div class="col-md-10 textFieldRight">
               <input matInput type="text" class="bodyTextArea" formControlName="emailName">
-            </div>
+            </div> -->
           </div>
           <div class="col-md-12">
             <div class="col-md-2 textFieldLeft">
@@ -40,20 +40,29 @@
           </div>
           <div class="col-md-12">
             <div class="col-md-2 textFieldLeft">
-              Email Footer
+              Signature
             </div>
             <div class="col-md-10 textFieldRight">
               <textarea class="bodyTextArea" matInput formControlName="emailFooter" rows="4"></textarea>
             </div>
           </div>
+          <div class="col-md-12">
+            <div class="col-md-2 textFieldLeft ">
+              Test Recipient Mail:
+            </div>
+            <div class="col-md-10 textFieldRight">
+              <input matInput type="text" class="bodyTextArea" formControlName="emailTestMail">
+            </div>
+          </div>
           <div class="col-md-12 buttons">
             <button class="btnRadius" (click)="sendTestEmail()" mat-raised-button>Send test Email</button>
             <button class="btnRadius" (click)="getEmail()" mat-raised-button>Get Saved Email</button>
-            <button class="btnRadius" (click)="updateEmail()" mat-raised-button>Save Changes</button>
-            <button class="btnRadius" (click)="createEmail()" mat-raised-button>Create New</button>
-
+            <button class="btnRadius" (click)="createUpdateEmail()" mat-raised-button>Save Changes</button>
+  
           </div>
         </div>
+        
+
         <div class="col-md-4">
 
           <div>
