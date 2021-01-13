@@ -600,6 +600,9 @@ export class MicroSiteDasboardComponent implements OnInit {
       headerClick(excelAction){
         this.displaySingleUpload = excelAction;
         this.excelAction = excelAction;
+        if(excelAction === 'manual'){
+            this.displayUplaodFormFlag = false;
+        }
         //   if(excelAction === 'manual'){
         //     //   excelAction = 'excel';
         //       this.displaySingleUpload = !this.displaySingleUpload;
