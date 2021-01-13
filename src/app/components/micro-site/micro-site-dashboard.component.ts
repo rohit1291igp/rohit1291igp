@@ -636,7 +636,7 @@ export class MicroSiteDasboardComponent implements OnInit {
     downloadSample() {
         let workbook = new Excel.Workbook();
         let worksheet1 = workbook.addWorksheet('Template');
-        let titleRow = worksheet1.addRow(['Name', 'Value', 'Email']);
+        let titleRow = worksheet1.addRow(['Name', 'Value', 'Email', 'DeliveryDate']);
 
         workbook.xlsx.writeBuffer().then((data) => {
             let blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
