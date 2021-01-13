@@ -128,7 +128,6 @@ export class DashboardComponent implements OnInit {
   }
 
   viewOrders(e) {
-    debugger;
     e.preventDefault();
     e.stopPropagation();
     e.sector = this.selectedSector ? this.selectedSector : ''
