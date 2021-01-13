@@ -18,6 +18,7 @@ export class EmailCustomizationComponent implements OnInit {
   deskImageUrl: any;
   deskImage: any;
   emailForm: FormGroup;
+  mailId: any = 0;
 
   constructor(
     private fb: FormBuilder,
@@ -30,7 +31,10 @@ export class EmailCustomizationComponent implements OnInit {
       emailName: [''],
       emailFooter: [''],
       emailSubject: [''],
+      emailTestMail:['']
     });
+
+    this.getEmail();
   }
   openSnackBar(data) {
     this._snackBar.openFromComponent(NotificationComponent, {
@@ -91,18 +95,84 @@ export class EmailCustomizationComponent implements OnInit {
 
     });
   }
+
   sendTestEmail() {
+    if(!this.emailForm.value.emailTestMail){
+      this.openSnackBar('Please provide a recipient E-mail ID.');
+      return;
+    }
+    let _this = this;
+    let reqObj: any = {
+      url: 'sendTestEmail',
+      method: 'post',
+      payload: {}
+    };
+    reqObj.url += '?walletId=' + localStorage.fkAssociateId + '&templateName=PointsUpload&name=Test';
+    reqObj.url += '&email='+this.emailForm.value.emailTestMail;
+    _this.BackendService.makeAjax(reqObj, function (err, response, headers) {
+      if (err || response.error) {
+        _this.openSnackBar('Something went wrong.');
+        console.log('Error=============>', err);
+        return;
+      }
+      _this.openSnackBar(response.result);
+    });
 
   }
+
   getEmail() {
-
+    let _this = this;
+    // http://localhost:8083/v1/admin/getMailTemplateByWalletIdAndTemplateName?walletId=928&templateName=Test_Template
+    let reqObj: any = {
+      url: 'getMailTemplateByWalletIdAndTemplateName',
+      method: 'get'
+    };
+    reqObj.url += '?walletId=' + localStorage.fkAssociateId + '&templateName=PointsUpload';
+    _this.BackendService.makeAjax(reqObj, function (err, response, headers) {
+      if (err || response.error) {
+        _this.openSnackBar('Something went wrong.');
+        console.log('Error=============>', err);
+        return;
+      }
+      _this.deskImageUrl = response.result.email_header.slice(10, -40);
+      _this.mailId = response.result.mailId;
+      _this.emailForm.patchValue({
+        emailBody: response.result.email_body ? response.result.email_body.slice(3, -4) : '',
+        emailFooter: response.result.email_footer ? response.result.email_footer.slice(3, -4) : '',
+        emailSubject: response.result.type_description 
+      })
+    });
   }
-  updateEmail() {
+  createUpdateEmail() {
+    let _this = this;
+    debugger;
+    let reqObj: any = {
+      url: 'addOREditCustomizedEmailTemplate',
+      method: 'post',
+      payload: {}
+    };
+    reqObj.url += '?walletId=' + localStorage.fkAssociateId + '&templateName=PointsUpload';
+    reqObj.payload.mailId = this.mailId;
+    reqObj.payload.email_header = '<img src="' + this.deskImageUrl + ' alt="IGP.com" width="500" height="600">';
+    reqObj.payload.email_body = '<p>' + this.emailForm.value.emailBody + '</p>';
+    reqObj.payload.email_footer = '<p>' + this.emailForm.value.emailFooter + '</p>';
+    // reqObj.payload.email_sender = '<p>' +  this.emailForm.value.emailName + '</p>';
+    reqObj.payload.type_description =  this.emailForm.value.emailSubject;
+    reqObj.payload.content = "Dear <Geetesh> ,<Br><Br>KAFM has rewarded you <b><amount></b> reward points. To redeem, please apply the following code during checkout on - https://www.igp.com/redeem<Br><Br>";
+    reqObj.payload.templateName = "PointsUpload",
 
+      _this.BackendService.makeAjax(reqObj, function (err, response, headers) {
+        if (err || response.error) {
+          _this.openSnackBar('Something went wrong.');
+          console.log('Error=============>', err);
+          return;
+        }
+        // _this.deskImageUrl = response.result.email_header.slice(10, -41);
+        // _this.mailId = response.result.mailId
+        _this.openSnackBar(response.result);
+      });
   }
-  createEmail() {
 
-  }
 
 
 }
