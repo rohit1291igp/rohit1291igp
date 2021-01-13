@@ -365,7 +365,7 @@
                             </div>
                         </div>
                         <div class="searchFieldsSubmit">
-                            <input  type="submit" class="btn btn-primary pull-right bg-igp searchSubmitBtn"  value="Search All Parameters" />
+                            <input [ngStyle]="{'background-color': whitelabelStyle ? whitelabelStyle.primaryColor : '', 'color': whitelabelStyle ? whitelabelStyle.secondaryColor : '' }" type="submit" class="btn btn-primary pull-right bg-igp searchSubmitBtn"  value="Search All Parameters" />
                         </div>
                     </form>
             </div>
@@ -460,10 +460,10 @@
                     </div>
                 
                     <div *ngIf="reportType !== 'getbarcodestoverify'" class="searchFieldsSubmit relative inline">
-                        <input  type="submit" class="btn btn-primary pull-right bg-igp searchSubmitBtn"  value="Search All Parameters"/>
+                        <input  [ngStyle]="{'background-color': whitelabelStyle ? whitelabelStyle.primaryColor : '', 'color': whitelabelStyle ? whitelabelStyle.secondaryColor : '' }" type="submit" class="btn btn-primary pull-right bg-igp searchSubmitBtn"  value="Search All Parameters"/>
                     </div>
                     <div *ngIf="reportType == 'getbarcodestoverify'" class="searchFieldsSubmit relative inline" style="top:6em;">
-                            <input  type="submit" class="btn btn-primary pull-right bg-igp searchSubmitBtn"  value="Search Parameters"/>
+                            <input  [ngStyle]="{'background-color': whitelabelStyle ? whitelabelStyle.primaryColor : '', 'color': whitelabelStyle ? whitelabelStyle.secondaryColor : '' }" type="submit" class="btn btn-primary pull-right bg-igp searchSubmitBtn"  value="Search Parameters"/>
                     </div>
                 </form>
 
@@ -514,7 +514,7 @@
               </div>
             </div>
             <div class="searchFieldsSubmit relative inline">
-              <input  type="submit" class="btn btn-primary pull-right bg-igp searchSubmitBtn" [ngStyle]="{'background-color': whitelabelStyle ? whitelabelStyle.primaryColor : '', 'color': whitelabelStyle ? whitelabelStyle.secondaryColor : '' }"  value="Search All Parameters"/>
+              <input type="submit" class="btn btn-primary pull-right bg-igp searchSubmitBtn" [ngStyle]="{'background-color': whitelabelStyle ? whitelabelStyle.primaryColor : '', 'color': whitelabelStyle ? whitelabelStyle.secondaryColor : '' }"  value="Search All Parameters"/>
             </div>
           </form>
 
@@ -653,8 +653,8 @@
                   Bulk Assign <span class="glyphicon glyphicon-check" title="Bulk Assign"></span>
                 </div>
                 <table class="report-table table table-striped table-bordered table-curved fixed-header2">
-                    <thead class="bg-igp text-white" (click)="stopEventPropgation($event)">
-                        <tr>
+                    <thead [ngStyle]="{'background-color': whitelabelStyle ? whitelabelStyle.primaryColor : '', 'color': whitelabelStyle ? whitelabelStyle.secondaryColor : '' }" class="bg-igp text-white" (click)="stopEventPropgation($event)">
+                        <tr [ngStyle]="{'background-color': whitelabelStyle ? whitelabelStyle.primaryColor : '', 'color': whitelabelStyle ? whitelabelStyle.secondaryColor : '' }">
                             <ng-container *ngFor="let tableLabel of reportData.tableHeaders; let a='index';">
                                     <th class="relative" [ngClass]="{'reportDate' : tableLabel === 'Date', 'hide' : isHiddenCell(tableLabel), 'selectedHeader' : reportLabelState[tableLabel]['filterdd']}">
                                         <span>
