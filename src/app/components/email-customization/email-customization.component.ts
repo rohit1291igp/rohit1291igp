@@ -153,7 +153,8 @@ export class EmailCustomizationComponent implements OnInit {
     };
     reqObj.url += '?walletId=' + localStorage.fkAssociateId + '&templateName=PointsUpload';
     reqObj.payload.mailId = this.mailId;
-    reqObj.payload.email_header = '<img src="' + this.deskImageUrl + ' alt="IGP.com" width="500" height="600">';
+    // reqObj.payload.email_header = '<img src="' + this.deskImageUrl + ' alt="IGP.com" width="500" height="600">';
+    reqObj.payload.email_header = this.deskImageUrl;
     reqObj.payload.email_body = '<p>' + this.emailForm.value.emailBody + '</p>';
     reqObj.payload.email_footer = '<p>' + this.emailForm.value.emailFooter + '</p>';
     // reqObj.payload.email_sender = '<p>' +  this.emailForm.value.emailName + '</p>';
