@@ -628,6 +628,13 @@ export class MicroSiteDasboardComponent implements OnInit {
             dateto: event.value
         });
     }
+
+    addEventScheduleDate(type: string, event: MatDatepickerInputEvent<Date>) {
+        this.voucherSingleForm.patchValue({
+            scheduleDate: event.value
+        });
+    }
+
     openSnackBar(data) {
         this._snackBar.openFromComponent(NotificationComponent, {
             data: data,

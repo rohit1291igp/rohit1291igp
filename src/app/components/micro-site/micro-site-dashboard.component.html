@@ -113,8 +113,8 @@
                             <mat-form-field class="addMoneyInput width20 marginLR10">
                                 <mat-label>Delivery Date</mat-label>
                                 <input matInput [matDatepicker]="scheduleDate" [min]="minDate"
-                                (dateInput)="addEventFrom('input','scheduleDate', $event)"
-                                (dateChange)="addEventFrom('change','scheduleDate', $event)"
+                                (dateInput)="addEventScheduleDate('input', $event)"
+                                (dateChange)="addEventScheduleDate('change', $event)"
                                 [value]="voucherSingleForm.get('scheduleDate').value" autocomplete="off">
                                 <mat-datepicker-toggle matSuffix [for]="scheduleDate"></mat-datepicker-toggle>
                                 <mat-datepicker #scheduleDate></mat-datepicker>
