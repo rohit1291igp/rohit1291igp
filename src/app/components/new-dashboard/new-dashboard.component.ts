@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, trigger, state, style, transition, animate, HostBinding, Input, Injectable, ViewChild, ElementRef, AfterViewInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, Inject, trigger, state, style, transition, animate, HostBinding, Input, Injectable, ViewChild, ElementRef, AfterViewInit, ViewEncapsulation, OnDestroy } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { BehaviorSubject } from 'rxjs';
@@ -22,7 +22,7 @@ export interface NavItem {
     styleUrls: ['./new-dashboard.component.css'],
     encapsulation: ViewEncapsulation.None
 })
-export class NewDasboardComponent implements OnInit, AfterViewInit {
+export class NewDasboardComponent implements OnInit, AfterViewInit, OnDestroy {
     openPage = false;
     username;
     env = environment
@@ -34,6 +34,7 @@ export class NewDasboardComponent implements OnInit, AfterViewInit {
     pages
     whitelabelStyle
     backBtnShow: boolean;
+    bodyEle;
     constructor(private navService: NavService, private router: Router, private activatedRoute: ActivatedRoute, public BackendService: BackendService, private cookieService: CookieService, private UserAccessService: UserAccessService) {
         router.events.subscribe((val: any) => {
             //On change check router
@@ -58,7 +59,7 @@ export class NewDasboardComponent implements OnInit, AfterViewInit {
           });
         $this.whitelabelStyle = localStorage.getItem('whitelabelDetails') ? JSON.parse(localStorage.getItem('whitelabelDetails')) : null;
         $this.username = localStorage.getItem('vendorName') ? localStorage.getItem('vendorName') : '';
-        const bodyEle = document.getElementsByTagName('body');
+        $this.bodyEle = document.getElementsByTagName('body');
        
         $this.UserAccessService.getUserAccess(function(navItems){
             $this.navItems = navItems; 
@@ -84,7 +85,7 @@ export class NewDasboardComponent implements OnInit, AfterViewInit {
                         $this.pages = $this.pages.flatMap(m => {
                             return m;
                         });
-                        bodyEle[0].style.paddingTop = '0px';
+                        $this.bodyEle[0].style.paddingTop = '0px';
                         console.log($this.activatedRoute)
                         const url = $this.activatedRoute.snapshot as any;
                         //On Load check router
@@ -248,4 +249,7 @@ export class NewDasboardComponent implements OnInit, AfterViewInit {
     //     this.pages = localStorage.getItem('prevNavState') ? JSON.parse(localStorage.getItem('prevNavState')) : this.pages;
     // }
     
+    ngOnDestroy(){
+        this.bodyEle[0].style.paddingTop = '62px';
+    }
 }
