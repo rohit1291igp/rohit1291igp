@@ -852,6 +852,9 @@ body .dashboard-content, body .orders-button{
 .text-align-center{
     text-align: center;
 }
+.text-align-justify{
+    text-align: justify;
+}
 .m-8{
     margin: 8px;
 }
