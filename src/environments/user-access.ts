@@ -209,6 +209,11 @@ export const userAcess = {
             displayName: 'Password Reset',
             iconName: 'security',
             route: '/new-dashboard/egv/change-password',
+        },
+        {
+            displayName: 'Email Template',
+            iconName: 'email',
+            route: '/new-dashboard/egv/email-customization',
         }
     ],
     parent_manager: [
@@ -251,6 +256,11 @@ export const userAcess = {
             displayName: 'Current Balance',
             iconName: 'account_balance_wallet',
             route: '/new-dashboard/reports/whitelabelReport',
+        },
+        {
+            displayName: 'Email Template',
+            iconName: 'email',
+            route: '/new-dashboard/egv/email-customization',
         }
     ],
     parent_executive: [
@@ -293,6 +303,11 @@ export const userAcess = {
             displayName: 'Current Balance',
             iconName: 'account_balance_wallet',
             route: '/new-dashboard/reports/whitelabelReport',
+        },
+        {
+            displayName: 'Email Template',
+            iconName: 'email',
+            route: '/new-dashboard/egv/email-customization',
         }
     ],
     manager: [
@@ -320,6 +335,11 @@ export const userAcess = {
             displayName: 'Password Reset',
             iconName: 'security',
             route: '/new-dashboard/egv/change-password',
+        },
+        {
+            displayName: 'Email Template',
+            iconName: 'email',
+            route: '/new-dashboard/egv/email-customization',
         } ],
     executive: [
         {
@@ -346,6 +366,11 @@ export const userAcess = {
             displayName: 'Current Balance',
             iconName: 'account_balance_wallet',
             route: '/new-dashboard/reports/whitelabelReport',
+        },
+        {
+            displayName: 'Email Template',
+            iconName: 'email',
+            route: '/new-dashboard/egv/email-customization',
         }
 
     ],
