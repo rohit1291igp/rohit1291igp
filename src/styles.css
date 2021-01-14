@@ -158,6 +158,10 @@ body{
     padding:1em;
 }
 
+.padding-0{
+    padding: 0 !important;
+}
+
 
 /* Utility css end */
 
@@ -875,6 +879,9 @@ body .dashboard-content, body .orders-button{
 }
 .justify-content-space-around{
     justify-content: space-around;
+}
+.justify-content-space-between{
+    justify-content: space-between;
 }
 .justify-content-flex-end{
     justify-content: flex-end;

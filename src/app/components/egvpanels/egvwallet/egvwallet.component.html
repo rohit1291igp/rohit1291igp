@@ -41,36 +41,80 @@
           <div class="col-md-12">
             <!-- <div class="col-md-3 summaryBox" style="height:0;border:0" *ngIf="env.userType!='egv_admin' && env.userType != 'sub_egv_admin' && env.userType != 'wb_yourigpstore' && !env.userType.includes('parent')"></div> -->
 
-            <div class="col-md-3 col-sm-12 summaryBox">
-              <div style='margin:auto'>&#8377; {{walletSummary.balance || '0' | indianNumeric}}</div>
-              <div class="summaryIcon"> <i class="fa fa-balance-scale "></i> Balance</div>
+            <div class="col-md-3 col-sm-12 summaryBox d-flex">
+              <div style="flex: 0.7;font-size: 1.3em;">
+                <i class="fa fa-balance-scale summary-icon-circle" ></i>
+              </div>
+              <div style="flex: 1;text-align: end;padding-right: 0.5em;">
+                <div style="margin:auto;font-size: 1.1em;">&#8377; {{walletSummary.balance || '0' | indianNumeric}}
+                </div>
+                <div class="summaryIcon"> Balance</div>
+              </div>
             </div>
 
-            <div class="col-md-3 col-sm-12 summaryBox"
+            <div class="col-md-3 col-sm-12 summaryBox d-flex"
               *ngIf="env.userType=='egv_admin'|| env.userType == 'wb_yourigpstore'">
-              <div style='margin:auto'>&#8377; {{walletSummary.dailyTransLimit || '0' | indianNumeric}}</div>
-              <div class="summaryIcon"><i class="fa fa-sliders fa-rotate-90"></i> Daily Limit </div>
+              <!-- <div style='margin:auto'>&#8377; {{walletSummary.dailyTransLimit || '0' | indianNumeric}}</div>
+              <div class="summaryIcon"><i class="fa fa-sliders fa-rotate-90"></i> Daily Limit </div> -->
+              <div style="flex: 0.7;font-size: 1.3em;">
+                <i class="fa fa-sliders fa-rotate-90 summary-icon-circle"></i>
+              </div>
+              <div style="flex: 1;text-align: end;padding-right: 0.5em;">
+                <div style="margin:auto;font-size: 1.1em;">&#8377;
+                  {{walletSummary.dailyTransLimit || '0' | indianNumeric}}</div>
+                <div class="summaryIcon"> Daily Limit</div>
+              </div>
             </div>
 
-            <div class="col-md-3  col-sm-12 summaryBox"
+            <!-- <div class="col-md-3  col-sm-12 summaryBox"
               *ngIf="env.userType=='egv_admin'  || env.userType == 'wb_yourigpstore'">
               <div style='margin:auto'>&#8377; {{walletSummary.creditLimit ||'0' | indianNumeric}}</div>
               <div class="summaryIcon">
                 <i class="fa fa-credit-card "></i> Credit Limit </div>
-            </div>
-            <div class="col-md-3 col-sm-12 summaryBox"
+            </div> -->
+            <div class="col-md-3  col-sm-12 summaryBox d-flex"
               *ngIf="env.userType=='egv_admin'  || env.userType == 'wb_yourigpstore'">
-              <div style='margin:auto'>{{walletSummary.creditLimitDays || '0'}}
-                {{(walletSummary.creditLimitDays>1)?'days':'day'}}</div>
-              <div class="summaryIcon"> <i class="fa fa-calendar"></i> Credit Period </div>
+              <div style="flex: 0.7;font-size: 1.3em;">
+                <i class="fa fa-credit-card summary-icon-circle"></i>
+              </div>
+              <div style="flex: 1;text-align: end;padding-right: 0.5em;">
+                <div style="margin:auto;font-size: 1.1em;">&#8377;
+                  {{walletSummary.creditLimit || '0' | indianNumeric}}</div>
+                <div class="summaryIcon"> Credit Limit</div>
+              </div>
             </div>
 
-            <div class="col-md-3 col-sm-12 summaryBox">
-              <div style='margin:auto'>{{walletSummary.active?'Active':'Inactive'}}</div>
+            <div class="col-md-3 col-sm-12 summaryBox d-flex"
+              *ngIf="env.userType=='egv_admin'  || env.userType == 'wb_yourigpstore'">
+              <!-- <div style='margin:auto'>{{walletSummary.creditLimitDays || '0'}}
+                {{(walletSummary.creditLimitDays>1)?'days':'day'}}</div>
+              <div class="summaryIcon"> <i class="fa fa-calendar"></i> Credit Period </div> -->
+              <div style="flex: 0.7;font-size: 1.3em;">
+                  <i class="fa fa-calendar summary-icon-circle"></i>
+                </div>
+                <div style="flex: 1;text-align: end;padding-right: 0.5em;">
+                  <div style="margin:auto;font-size: 1.1em;">&#8377;
+                    {{walletSummary.creditLimitDays || '0' | indianNumeric}}</div>
+                  <div class="summaryIcon"> Daily Limit</div>
+                </div>
+            </div>
+
+            <div class="col-md-3 col-sm-12 summaryBox d-flex">
+              <!-- <div style='margin:auto'>{{walletSummary.active?'Active':'Inactive'}}</div>
               <div class="summaryIcon">
                 <i class="fa fa-check" *ngIf=" walletSummary.active"></i>
                 <i class="fa fa-times" *ngIf=" !walletSummary.active"></i> Status
-              </div>
+              </div> -->
+              <div style="flex: 0.7;font-size: 1.3em;">
+                  <!-- <i class="fa fa-calendar" class="summary-icon-circle"></i> -->
+                  <i class="fa fa-check summary-icon-circle" *ngIf=" walletSummary.active"></i>
+                <i class="fa fa-times summary-icon-circle" *ngIf=" !walletSummary.active"></i>
+                </div>
+                <div style="flex: 1;text-align: end;padding-right: 0.5em;">
+                  <div style="margin:auto;font-size: 1.1em;">&#8377;
+                    {{walletSummary.creditLimitDays || '0' | indianNumeric}}</div>
+                  <div class="summaryIcon">{{walletSummary.active?'Active':'Inactive'}}</div>
+                </div>
             </div>
 
           </div>
@@ -158,7 +202,7 @@
               {{element['TransactionType'] || '-'}}
             </ng-container>
             <ng-container *ngIf="column == 'Transaction Details'">
-                {{getTxnDetails(element)}}
+              {{getTxnDetails(element)}}
             </ng-container>
             <ng-container *ngIf="column == 'Actions'">
               <button mat-button color="primary" (click)='approveTransaction($event,element,true)'>
