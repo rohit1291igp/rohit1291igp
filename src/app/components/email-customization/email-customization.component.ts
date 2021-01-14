@@ -137,8 +137,8 @@ export class EmailCustomizationComponent implements OnInit {
       _this.deskImageUrl = response.result.email_header;
       _this.mailId = response.result.mailId;
       _this.emailForm.patchValue({
-        emailBody: response.result.email_body ? response.result.email_body.slice(3,-4).replace('</p><p>',"\n") : '',
-        emailFooter: response.result.email_footer ? response.result.email_footer.slice(3, -4).replace('</p><p>',"\n") : '',
+        emailBody: response.result.email_body ? response.result.email_body.slice(3,-4).replace(/<\/p><p>/g,"\n") : '',
+        emailFooter: response.result.email_footer ? response.result.email_footer.slice(3, -4).replace(/<\/p><p>/g,"\n") : '',
         emailSubject: response.result.type_description 
       })
     });
