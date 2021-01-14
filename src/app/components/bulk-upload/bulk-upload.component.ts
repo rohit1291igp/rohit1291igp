@@ -87,7 +87,6 @@ export class BulkUploadComponent implements OnInit {
     const workbook = new Excel.Workbook();
     const target: DataTransfer = <DataTransfer>(event.target);
     let _this = this;
-    _this.isUploading = true;
     if (target.files.length !== 1) {
       throw new Error('Cannot use multiple files');
     }
@@ -141,7 +140,6 @@ export class BulkUploadComponent implements OnInit {
           setTimeout(() => {
             _this.dataSource.paginator = _this.paginator;
           }, 100)
-          _this.isUploading = false;
 
         }
       });
@@ -154,6 +152,7 @@ export class BulkUploadComponent implements OnInit {
   uploadExcel(event) {
     debugger;
     const _this = this;
+    _this.isUploading = true;
     const reqObj = {
       url: 'bulkAssignDeliveryBoy?fkAssociateId='+ localStorage.fkAssociateId + '&byUserId=' + localStorage.fkUserId,
       method: 'post',
@@ -181,6 +180,7 @@ export class BulkUploadComponent implements OnInit {
             return;
       }
       if (response.status.toLowerCase() == 'success') {
+        _this.isUploading = false;
         if (response.data && response.data.error && response.data.error.length) {
           _this._data.uploadErrorList = response.data.error;
           _this._data.uploadErrorCount = response.data.count;
@@ -195,6 +195,8 @@ export class BulkUploadComponent implements OnInit {
         else
           _this.openSnackBar(response.data);
       } else {
+        _this.isUploading = false;
+
         _this.openSnackBar(response.data[0]);
       }
     });
