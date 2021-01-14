@@ -1131,6 +1131,7 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
 
   print(e, print_type, orderId, deliveryDate, deliveryTime, all){
       e.stopPropagation();
+      
       let printContents="", popupWin;
       //let targetId = print_type === "order" ? ("order_"+orderId) : ("order_message_"+orderId);
       if(all){

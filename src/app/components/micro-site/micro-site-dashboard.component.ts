@@ -263,7 +263,7 @@ export class MicroSiteDasboardComponent implements OnInit {
             };
         }
         _this.BackendService.makeAjax(reqObj, function (err, response, headers) {
-            debugger;
+            
             if (err || response.error) {
                 console.log('Error=============>', err);
                 return;
@@ -334,7 +334,7 @@ export class MicroSiteDasboardComponent implements OnInit {
             };
         }
         _this.BackendService.makeAjax(reqObj, function (err, response, headers) {
-            debugger;
+            
             if (err || response.error) {
                 _this.openSnackBar('Server Error');
                 return;
@@ -342,7 +342,7 @@ export class MicroSiteDasboardComponent implements OnInit {
             if (response.status.toLowerCase() == 'success' && isArray(response.data)) {
                 if (buttonName === 'search') {
                     _this.displayUploadForm(false);
-                    debugger;
+                    
                     if (data.value.filtertype == 'all') {
                         response.data = response.data.length > 0 && response.data.filter(f => {
                             if (f.type == 'debit') {
@@ -403,7 +403,7 @@ export class MicroSiteDasboardComponent implements OnInit {
                         }
 
                     })
-                    debugger;
+                    
                     userData.length > 0 && userData.forEach(m => m.uploadDate = pipe.transform(m.uploadDate, 'dd/MM/yy'));
                     if(!_this.whitelabelStyle){ 
                         userData.length > 0 && userData.forEach(m => m.couponUsedDate ? m.couponUsedDate = pipe.transform(m.couponUsedDate, 'dd/MM/yy') : m.couponUsedDate = '');
@@ -515,11 +515,11 @@ export class MicroSiteDasboardComponent implements OnInit {
                     _this.openSnackBar('Server Error');
                     return;
                 }
-                debugger;
+                
                 if (response.status.toLowerCase() == 'success') {
                     fileInput.value = '';
                     _this.displayUploadForm(false);
-                    debugger;
+                    
                    
                     if( isArray(response.data) && response.data.length > 1){
                         _this.errorList = response.data;
@@ -560,7 +560,7 @@ export class MicroSiteDasboardComponent implements OnInit {
         //   alert("Denomination should be between " + this.minValue + " and " + this.maxValue)
         //   return;
         // }
-        debugger;
+        
         let _this = this;
         let payload = {
           "amount": this.voucherSingleForm.get('denomination').value,

@@ -62,7 +62,7 @@ export class DashboardComponent implements OnInit {
   ngOnInit() {
     // var _this = this;
     this.getSectorList().then(response => {
-      debugger;
+      
       this.sectors = response;
     })
 
@@ -94,7 +94,7 @@ export class DashboardComponent implements OnInit {
   }
 
   loadDbData(sector) {
-    debugger;
+    
     var _this = this;
     if (!sector) { sector = ''; }
     var cookieFDate = this.UtilityService.getCookie("festivalDate") ? JSON.parse(_this.UtilityService.getCookie("festivalDate")) : null;
@@ -177,7 +177,7 @@ export class DashboardComponent implements OnInit {
   onDateChanged(event: IMyDateModel) {
     console.log('Date changed');
     let sector = this.selectedSector ? this.selectedSector : '';
-    debugger;
+    
     console.log('onDateChanged(): ', event.date, ' - jsdate: ', new Date(event.jsdate).toLocaleDateString(), ' - formatted: ', event.formatted, ' - epoc timestamp: ', event.epoc);
     let selectedDate = event.date.year + '-' + event.date.month + '-' + event.date.day; //new Date(event.jsdate).toLocaleDateString(); //event.jsdate;
     var _this = this;
@@ -265,7 +265,7 @@ export class DashboardComponent implements OnInit {
     };
     return new Promise((resolve, reject) => {
       this.BackendService.makeAjax(reqObj, function (err, response, headers) {
-        debugger;
+        
         if (err || response.error) {
           console.log('Error=============>', err);
           reject([]);

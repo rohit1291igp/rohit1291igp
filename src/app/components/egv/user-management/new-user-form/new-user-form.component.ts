@@ -66,7 +66,7 @@ export class NewUserFormComponent implements OnInit {
   }
 
   onSubmit(f:NgForm){
-    debugger;
+    
     let $this = this;
     console.log(f)
     if(f.valid){
@@ -103,7 +103,7 @@ export class NewUserFormComponent implements OnInit {
 
       console.log(obj)
       this.egvService.createEgvUser(obj).subscribe((res:any)=>{
-        debugger;
+        
         if(res.error){
           this.openSnackBar('Unable to create new user')
         }else{

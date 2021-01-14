@@ -809,7 +809,7 @@ export class DashboardService {
             //console.log('environment----->', environment);
             let apiPath = this.isAdmin ? 'getDashboardDetail' : 'getVendorCountDetail';
             let reqObj;
-            debugger;
+            
             if(vendorGroupId){
                 reqObj = {
                     url : apiPath+"?responseType=json&scopeId=1&fkAssociateId="+fkAssociateId+"&specificDate="+specificDate+"&filterId="+vendorGroupId+"&sector="+sector,
