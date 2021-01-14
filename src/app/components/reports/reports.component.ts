@@ -402,13 +402,16 @@ export class ReportsComponent implements OnInit{
                     console.log('reportLabelState===>', _this.reportLabelState);
                     /* report label states - end */
                     if(_this.reportType === "whitelabel/report"){
-                       debugger;
+                       
                         let index =  _reportData.tableHeaders.indexOf('giftVouchers');
                         _reportData.tableHeaders.splice(index,1);;
                     }
                     _this.dataSource = _reportData.tableData ? _reportData.tableData : [];
                     _this.tableHeaders = _reportData.tableHeaders ? _reportData.tableHeaders : [];
                     
+                    if (environment.userType == 'hdextnp' && _this.reportType == 'getVendorReport'){
+                        _this.tableHeaders.splice(_this.tableHeaders.indexOf('Price'), 1);
+                    }
                     _reportData.searchFields = _this.reportDataLoader.searchFields;
                     _this.reportData = _reportData;
                     _this.orginalReportData = JSON.parse(JSON.stringify(_this.reportData)); //Object.assign({}, _this.reportData);
@@ -967,7 +970,7 @@ getDeliveryBoyList(){
             _this.searchResultModel["startLimit"] = 0;
             _this.searchResultModel["endLimit"] = 1000000;
         }
-        debugger;
+        
         _this.queryString = _this.generateQueryString(_this.searchResultModel);
         console.log('searchReportSubmit =====> queryString ====>', _this.queryString);
         /*if(_this.queryString === ""){
@@ -995,7 +998,7 @@ getDeliveryBoyList(){
                 if(_this.reportType == 'getbarcodestoverify'){
                     _this.reportData = _reportData;
                 }
-                
+               
                 _this.orginalReportData.tableData = _reportData.tableData; //
                 _this.dataSource = _reportData.tableData ? _reportData.tableData : [];
                 _this.tableHeaders = _reportData.tableHeaders ? _reportData.tableHeaders : [];
@@ -1004,12 +1007,15 @@ getDeliveryBoyList(){
                      let index =   _this.tableHeaders.indexOf('giftVouchers');
                      _this.tableHeaders.splice(index,1);;
                  }
+                 if (environment.userType == 'hdextnp' && _this.reportType == 'getVendorReport'){
+                    _this.tableHeaders.splice(_this.tableHeaders.indexOf('Price'), 1);
+                }
                 _this.orginalReportData.tableData.concat(_reportData.tableData);
                 // if(e){
                     _this.columnFilterSubmit(e);
                     _this.showMoreTableData(e);
                 if(_this.isDownload){
-                    debugger;
+                    
                     var options = {
                         showLabels: true, 
                         showTitle: false,
@@ -1021,6 +1027,10 @@ getDeliveryBoyList(){
                    
                           options.headers = _this.tableHeaders.map(ele => ele.replace(/([A-Z])/g, ' $1').replace(/^./, function(str){ return str.toUpperCase()}) )
                         }
+                        if(environment.userType == 'hdextnp' && _this.reportType == 'getVendorReport'){
+                            options.headers =  _this.tableHeaders
+                        }
+
                     let data = [];
                     let reportDownloadData = [];
                     new Promise((resolve)=>{
@@ -1031,9 +1041,12 @@ getDeliveryBoyList(){
                                 if(typeof _this.orginalReportData.tableData[pi][k] == 'object' &&_this.orginalReportData.tableData[pi][k] != null){
                                     _this.orginalReportData.tableData[pi][k] = _this.orginalReportData.tableData[pi][k].value ? _this.orginalReportData.tableData[pi][k].value : '';
                                 }
-                                debugger;
+                                
                                 if (_this.reportType === "whitelabel/report") {
                                    if(k != 'giftVouchers') temp[k] = _this.orginalReportData.tableData[pi][k];
+                                }
+                                else if(environment.userType == 'hdextnp' && _this.reportType == 'getVendorReport'){
+                                    if(k != 'Price') temp[k] = _this.orginalReportData.tableData[pi][k];
                                 }
                                 else {
                                     if(k == "Outskirt")       temp[k] = _this.orginalReportData.tableData[pi][k] ? "Yes" : "No";
@@ -1175,9 +1188,12 @@ getDeliveryBoyList(){
                             if(typeof _this.orginalReportData.tableData[pi][k] == 'object' &&_this.orginalReportData.tableData[pi][k] != null){
                                 _this.orginalReportData.tableData[pi][k] = _this.orginalReportData.tableData[pi][k].value ? _this.orginalReportData.tableData[pi][k].value : '';
                             }
-                            debugger;
+                            
                             if (_this.reportType === "whitelabel/report") {
                                if(k != 'giftVouchers') temp[k] = _this.orginalReportData.tableData[pi][k];
+                            }
+                            else if(environment.userType == 'hdextnp' && _this.reportType == 'getVendorReport'){
+                                if(k != 'Price') temp[k] = _this.orginalReportData.tableData[pi][k];
                             }
                             else {
                                 if(k == "Outskirt")       temp[k] = _this.orginalReportData.tableData[pi][k] ? "Yes" : "No";
@@ -1563,7 +1579,7 @@ getDeliveryBoyList(){
     }
 
     getActBtnTxt(actBtnTxt, cellValue){
-        debugger;
+        
         console.log(actBtnTxt,cellValue,"yahahaahahahhahaah")
         var _actBtnTxt="";
         if(/stock/gi.test(actBtnTxt)){

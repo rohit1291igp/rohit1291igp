@@ -131,7 +131,7 @@ export class BulkEgvComponent implements OnInit {
       this.openSnackBar("Denomination should be between " + this.minValue + " and " + this.maxValue)
       return;
     }
-    debugger;
+    
     let _this = this;
     let payload = {
       "productCode": this.bulkegvform.value.selectedProduct.productCode,
@@ -232,7 +232,7 @@ export class BulkEgvComponent implements OnInit {
 
   genrateBulkExcelEgv() {
     //apicall
-    debugger;
+    
     let _this = this;
     if (!_this.excelFileUpload) {
       _this.openSnackBar("No file imported");

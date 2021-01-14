@@ -39,12 +39,12 @@ export class EditUserComponent implements OnInit {
     this.user_type=this.user_type_map[this.data.user.usertypename];
     this.account_status =Number( this.data.user.enabled);
     console.log(this.data)
-    debugger;
+    
   }
 
   onSubmit(){
     let req_body={}
-    debugger;
+    
     if(this.display_name){
       req_body={
         username:this.data.user.username,

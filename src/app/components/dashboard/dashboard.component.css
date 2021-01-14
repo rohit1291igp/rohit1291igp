@@ -1,5 +1,5 @@
 .padding-extra {
-    padding: 10px 20px 0;
+    padding: 0px 20px 0;
 }
 
 .custom-date-picker {
@@ -193,7 +193,7 @@
 .title-well{
     letter-spacing: 1px;
 }
-
+/* 
 .content-section{
     margin: 20px 0 0 0;
-}
+} */

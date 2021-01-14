@@ -512,7 +512,6 @@
                                 <div class="text-bold">Deliver to: <app-loader></app-loader></div>
                                 <div class="address">Address - <app-loader></app-loader></div>
                                 <div class="contact">CONTACT NUMBER - <app-loader></app-loader></div>
-                                <div class="contact">Sector : <app-loader></app-loader></div>
                             </div>
                             <div class="col-md-4 order-actions" *ngIf="!isMobile">
                                 <div class="row" *ngIf="!isAdmin">
@@ -765,6 +764,7 @@
                           <span class="dtm" *ngIf="order && order.orderProducts[0] && order.orderProducts[0].orderProductExtraInfo">
                               <span class="uppercase delivery-time text-bold" attr.data-dt="{{order.orderProducts[0].orderProductExtraInfo.deliveryDate}}" attr.data-pd="{{order.datePurchased}}" >{{getDeliveryDetail(order.orderProducts[0].orderProductExtraInfo, order.datePurchased)}}</span>
                             <br/><span class="uppercase delivery-time text-bold" >{{order.orderOccasion}}</span>
+                            <br/><span class="uppercase delivery-time text-bold" >{{order?.orderProducts[0].deliverySector}}</span>
                           </span>
                         <span *ngIf="deliveryBoyEnabled && order?.orderProducts[0]?.deliveryBoyName" class="delivery-boy">Delivery Boy Name:- {{order?.orderProducts[0]?.deliveryBoyName}}</span>
 
@@ -782,7 +782,7 @@
                       <div class="text-bold">Deliver to: {{order.deliveryName}}</div>
                       <div class="address">{{order.addressType}} Address - {{order.deliveryStreetAddress}}, <span *ngIf="order.deliveryStreetAddress2">{{order.deliveryStreetAddress2}},</span>{{order.deliveryCity}}-{{order.deliveryPostcode}}, {{order.deliveryState}}</div>
                       <div class="contact">CONTACT NUMBER - {{order.deliveryMobile}} <span *ngIf="order.deliveryAlternateMobile">,{{order.deliveryAlternateMobile}}</span></div>
-                      <div class="contact">Sector : {{order.orderProducts[0].deliverySector}}</div>
+                      
                       
                     </div>
                     <div class="col-md-4 order-actions" [ngClass]="{'borderLeft': !isMobile}" *ngIf="!isMobile">

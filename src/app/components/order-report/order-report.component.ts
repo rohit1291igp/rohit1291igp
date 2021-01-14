@@ -269,7 +269,7 @@ export class OrderReportComponent implements OnInit {
               if (!(environment.userType == 'hdextnp' && k == "Amount"))
                 if (k != 'Order_Product_Id') temp[k] = _reportData.tableData[pi][k];
             }
-            debugger;
+            
             reportDownloadData.push(temp);
             if (pi == (_reportData.tableData.length - 1)) {
               resolve(reportDownloadData);

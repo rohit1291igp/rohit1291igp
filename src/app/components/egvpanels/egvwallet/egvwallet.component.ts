@@ -217,7 +217,7 @@ export class EgvwalletComponent implements OnInit {
   }
   //this.formatDate(Date.now(),'yyyy-MM-dd HH:mm:ss')
   addMoneyToWallet(data) {
-    debugger;
+    
     if (this.addMoneyForm.invalid && !this.userSelected) {
       return;
     }
@@ -282,7 +282,7 @@ export class EgvwalletComponent implements OnInit {
   }
 
   updateLimit() {
-    debugger;
+    
     let _this = this;
     if (!_this.addMoneyForm.value.limitType || !_this.addMoneyForm.value.limitValue) {
       return
