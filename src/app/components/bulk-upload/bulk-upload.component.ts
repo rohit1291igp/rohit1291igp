@@ -146,7 +146,7 @@ export class BulkUploadComponent implements OnInit {
     });
     console.log(_this.tableData);
     // event.target.value = '';
-
+    
   }
 
   uploadExcel(event) {
@@ -158,7 +158,9 @@ export class BulkUploadComponent implements OnInit {
       method: 'post',
       payload: _this.tableData
     };
+    _this.tableData = [];
     _this.BackendService.makeAjax(reqObj, function(err, response, headers) {
+      event.target.elements[0].value = "";
     //   response = {
     //     "status": "Success",
     //     "data": {
