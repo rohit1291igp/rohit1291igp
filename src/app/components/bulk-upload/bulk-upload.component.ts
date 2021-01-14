@@ -157,26 +157,26 @@ export class BulkUploadComponent implements OnInit {
       Payload: _this.tableData
     };
     _this.BackendService.makeAjax(reqObj, function(err, response, headers) {
-      response = {
-        "status": "Success",
-        "data": {
-            "error": [
-                {
-                    "row": 1,
-                    "msg": "There is no delivery boy mapped to this vendor."
-                }
-            ],
-            "count": {
-                "correct": 0,
-                "fail": 1
-            }
-        }
-    }
-      // if (err || response.error) {
-      //   console.log('Error=============>', err);
-      //   _this.openSnackBar('Server Error');
-      //       return;
-      // }
+    //   response = {
+    //     "status": "Success",
+    //     "data": {
+    //         "error": [
+    //             {
+    //                 "row": 1,
+    //                 "msg": "There is no delivery boy mapped to this vendor."
+    //             }
+    //         ],
+    //         "count": {
+    //             "correct": 0,
+    //             "fail": 1
+    //         }
+    //     }
+    // }
+      if (err || response.error) {
+        console.log('Error=============>', err);
+        _this.openSnackBar('Server Error');
+            return;
+      }
       if (response.status.toLowerCase() == 'success') {
         if (response.data && response.data.error && response.data.error.length) {
           _this._data.uploadErrorList = response.data.error;
