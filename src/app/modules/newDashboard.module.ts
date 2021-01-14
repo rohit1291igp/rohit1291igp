@@ -27,6 +27,7 @@ import { MatSlideToggleModule } from '@angular/material';
 import { SearchRankingComponent } from 'app/components/search-ranking/search-ranking.component';
 import { PayoutDashboardComponent, PayoutDashboardModule } from 'app/components/payout-dashboard/payout-dashboard.component';
 import { PendingOrderComponent } from 'app/components/pending-order/pending-order.component';
+import { BulkUploadComponent } from 'app/components/bulk-upload/bulk-upload.component';
 
 
 const routes: Routes = [{
@@ -49,6 +50,11 @@ const routes: Routes = [{
   {
     path: 'orderReport',
     component: OrderReportComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'bulkupload',
+    component: BulkUploadComponent,
     canActivate: [AuthGuard]
   },
   {
@@ -148,6 +154,7 @@ const routes: Routes = [{
     DeliveryPriorityComponent,
     DailyOpsReportComponent,
     OrderReportComponent,
+    BulkUploadComponent,
     PerformanceReportComponent,
     StockComponentsReportsComponent,
     DeliveryBoyDetailsComponent,

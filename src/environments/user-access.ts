@@ -6,38 +6,6 @@ export const userAcess = {
             route: '/new-dashboard',
         },
         {
-            displayName: 'Send Email Module',
-            iconName: 'recent_actors',
-            route: 'devfestfl',
-            children: [
-                {
-                    displayName: 'Send Email',
-                    iconName: 'attach_email',
-                    route: '/new-dashboard/sendemail/sendemail',
-                },
-                {
-                    displayName: 'Excel Upload',
-                    iconName: 'attach_email',
-                    route: '/new-dashboard/sendemail/uploadtemplate'
-                },
-                {
-                    displayName: 'Order Update',
-                    iconName: 'analytics',
-                    route: '/new-dashboard/sendemail/orderupdatestatus'
-                },
-                {
-                    displayName: 'Payment Reconciliation',
-                    iconName: 'payments',
-                    route: '/new-dashboard/sendemail/payment-reconciliation'
-                },
-                {
-                    displayName: 'Address Update',
-                    iconName: 'location_on',
-                    route: '/new-dashboard/sendemail/addressUpdate'
-                }
-            ]
-        },
-        {
             displayName: 'Holiday Calender Management',
             iconName: 'calendar_today',
             route: '/new-dashboard/HolidayCalendarManagement',
@@ -56,6 +24,38 @@ export const userAcess = {
             displayName: 'Ops-Report',
             iconName: 'analytics',
             route: '/new-dashboard/dailywarehouseOpsReport',
+        },
+        {
+            displayName: 'Order Update',
+            iconName: 'analytics',
+            route: '/new-dashboard/sendemail/orderupdatestatus'
+        },
+        {
+            displayName: 'Payment Reconciliation',
+            iconName: 'payments',
+            route: '/new-dashboard/sendemail/payment-reconciliation'
+        },
+        {
+            displayName: 'Address Update',
+            iconName: 'location_on',
+            route: '/new-dashboard/sendemail/addressUpdate'
+        },
+        {
+            displayName: 'Send Email Module',
+            iconName: 'recent_actors',
+            route: 'devfestfl',
+            children: [
+                {
+                    displayName: 'Send Email',
+                    iconName: 'attach_email',
+                    route: '/new-dashboard/sendemail/sendemail',
+                },
+                {
+                    displayName: 'Excel Upload',
+                    iconName: 'attach_email',
+                    route: '/new-dashboard/sendemail/uploadtemplate'
+                }
+            ]
         }
     ],
     vendor: [
@@ -105,6 +105,10 @@ export const userAcess = {
                     route: '/new-dashboard/performanceReport'
                 }
             ]
+        },{
+            displayName: 'Bulk Upload',
+            iconName: 'cloud_upload',
+            route: '/new-dashboard/bulkupload',
         }],
     admin: [
         {
@@ -251,7 +255,12 @@ export const userAcess = {
             displayName: 'Current Balance',
             iconName: 'account_balance_wallet',
             route: '/new-dashboard/reports/whitelabelReport',
-        }
+        },
+        {
+           displayName: 'Email Template',
+           iconName: 'email',
+           route: '/new-dashboard/egv/email-customization',
+       }
     ],
     parent_executive: [
         {
@@ -293,7 +302,12 @@ export const userAcess = {
             displayName: 'Current Balance',
             iconName: 'account_balance_wallet',
             route: '/new-dashboard/reports/whitelabelReport',
-        }
+        },
+        {
+           displayName: 'Email Template',
+           iconName: 'email',
+           route: '/new-dashboard/egv/email-customization',
+       }
     ],
     manager: [
         {
@@ -320,7 +334,12 @@ export const userAcess = {
             displayName: 'Password Reset',
             iconName: 'security',
             route: '/new-dashboard/egv/change-password',
-        } ],
+        },
+        {
+           displayName: 'Email Template',
+           iconName: 'email',
+           route: '/new-dashboard/egv/email-customization',
+       } ],
     executive: [
         {
             displayName: 'Wallet',
@@ -346,7 +365,12 @@ export const userAcess = {
             displayName: 'Current Balance',
             iconName: 'account_balance_wallet',
             route: '/new-dashboard/reports/whitelabelReport',
-        }
+        },
+        {
+           displayName: 'Email Template',
+           iconName: 'email',
+           route: '/new-dashboard/egv/email-customization',
+       }
 
     ],
     marketing: [

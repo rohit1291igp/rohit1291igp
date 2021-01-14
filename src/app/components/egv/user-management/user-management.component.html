@@ -63,27 +63,42 @@
         </div>
       </form>
       </mat-card> -->
-      <button *ngIf="env.userType==='egv_admin' || env.userType==='parent_manager' || env.userType==='sub_egv_admin' || env.userType=== 'wb_yourigpstore'" (click)="openDialog('client')" mat-raised-button>Add Client</button>
-      <button *ngIf="env.userType==='egv_admin' || env.userType==='parent_manager' || env.userType==='sub_egv_admin' || env.userType=== 'wb_yourigpstore'" (click)="openDialog('manager')" mat-raised-button>Add Manager</button>
-      <button *ngIf="(env.userType==='egv_admin' || env.userType==='parent_manager' || env.userType==='sub_egv_admin' || env.userType=== 'wb_yourigpstore') || (env.userType==='manager' || env.userType==='sub_manager')" (click)="openDialog('executive')" mat-raised-button>Add User</button>
+      <button
+        *ngIf="env.userType==='egv_admin' || env.userType==='parent_manager' || env.userType==='sub_egv_admin' || env.userType=== 'wb_yourigpstore'"
+        (click)="openDialog('client')" mat-raised-button>Add Client</button>
+      <button
+        *ngIf="env.userType==='egv_admin' || env.userType==='parent_manager' || env.userType==='sub_egv_admin' || env.userType=== 'wb_yourigpstore'"
+        (click)="openDialog('manager')" mat-raised-button>Add Manager</button>
+      <button
+        *ngIf="(env.userType==='egv_admin' || env.userType==='parent_manager' || env.userType==='sub_egv_admin' || env.userType=== 'wb_yourigpstore') || (env.userType==='manager' || env.userType==='sub_manager')"
+        (click)="openDialog('executive')" mat-raised-button>Add User</button>
     </div>
   </div>
+  
   <div *ngIf="dataSource.length" class="row m-top-1">
     <div class="col-sm-12 col-md-12">
       <div class="example-container mat-elevation-z8">
         <mat-table #table [dataSource]="dataSource">
-      
+
           <!--- Note that these columns can be defined in any order.
                 The actual rendered columns are set as a property on the row definition" -->
-      
+
           <!-- Position Column -->
+         
           <ng-container *ngFor="let column of displayedColumns" matColumnDef="{{column}}">
-            <mat-header-cell *matHeaderCellDef>{{columnLables[column]}}</mat-header-cell>
+            <mat-header-cell *matHeaderCellDef>{{getHeader(column)}}</mat-header-cell>
             <ng-container *ngIf="column!=='accountEnabled'">
               <mat-cell *matCellDef="let element">
-                <ng-container *ngIf="column!=='edit'">
+                <ng-container *ngIf="column!=='edit' && column!='Role'  && column!='Status'">
                   {{element[column]}}
                 </ng-container>
+                <ng-container *ngIf="column=='Role'">
+                  {{element['usertypename'].toLowerCase().includes('parent')?element['usertypename'].slice(7):element['usertypename']}}
+                </ng-container>
+                <ng-container *ngIf="column=='Status'">
+                  {{element['enabled']?"Enabled":"Disabled"}}
+                </ng-container>
+
                 <ng-container *ngIf="column==='edit'">
                   <button mat-icon-button (click)="editUser(element)">
                     <mat-icon>open_in_new</mat-icon>
@@ -97,7 +112,7 @@
                   (change)="onAccountStatusChange($event,element)"
                   [checked]="element.accountEnabled===1">
               </mat-slide-toggle> -->
-              {{accountEnabledStatus[element[column]]}}
+                {{accountEnabledStatus[element[column]]}}
               </mat-cell>
             </ng-container>
           </ng-container>

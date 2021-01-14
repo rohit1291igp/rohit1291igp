@@ -802,16 +802,17 @@ export class DashboardService {
         return getDashboardDataResponse;
     }
 
-    getDashboardCount(spcificDate, cb, vendorGroupId?:any){
+    getDashboardCount(spcificDate,sector, cb, vendorGroupId?:any){
             let fkAssociateId = localStorage.getItem('fkAssociateId');
             //let specificDate = Date.parse(spcificDate) || 0;
             let specificDate = spcificDate || 0;
             //console.log('environment----->', environment);
             let apiPath = this.isAdmin ? 'getDashboardDetail' : 'getVendorCountDetail';
             let reqObj;
+            
             if(vendorGroupId){
                 reqObj = {
-                    url : apiPath+"?responseType=json&scopeId=1&fkAssociateId="+fkAssociateId+"&specificDate="+specificDate+"&filterId="+vendorGroupId,
+                    url : apiPath+"?responseType=json&scopeId=1&fkAssociateId="+fkAssociateId+"&specificDate="+specificDate+"&filterId="+vendorGroupId+"&sector="+sector,
                     method : "get",
                     payload : {}
                 };
@@ -820,7 +821,7 @@ export class DashboardService {
 
                 reqObj = {
                     //url : "?responseType=json&scopeId=1&fkAssociateId="+fkAssociateId+"&specificDate="+specificDate+"&method=igp.vendor.getVendorCountDetail",
-                    url : apiPath+"?responseType=json&scopeId=1&fkAssociateId="+fkAssociateId+"&specificDate="+specificDate,
+                    url : apiPath+"?responseType=json&scopeId=1&fkAssociateId="+fkAssociateId+"&specificDate="+specificDate+"&sector="+sector,
                     method : "get",
                     payload : {}
                 };
@@ -847,9 +848,10 @@ export class DashboardService {
 
     }
 
-    getDashboardData(specificDate, cb, dataType, currentDBData, vendorGroupId?:any) {
+    getDashboardData(specificDate,sector, cb, dataType, currentDBData, vendorGroupId?:any) {
         var _this = this;
-        _this.getDashboardCount(specificDate, function(result){
+       
+        _this.getDashboardCount(specificDate,sector, function(result){
             let getDashboardDataResponse;
             if(_this.isAdmin){
                 getDashboardDataResponse = _this.formarAdminDashBoardData(result, dataType, currentDBData);

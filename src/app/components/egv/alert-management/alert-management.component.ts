@@ -285,7 +285,7 @@ export class AlertManagementComponent implements OnInit {
   getAlerts(){
     this.egvService.getEGVAlerts(this.fkid).subscribe((res:any)=>{
       if(res.error){
-        alert('something went wrong')
+         this.openSnackBar('something went wrong')
       }else{
         this.alerts=res.result;
         console.log(this.alerts)

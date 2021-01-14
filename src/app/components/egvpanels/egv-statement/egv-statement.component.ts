@@ -307,10 +307,11 @@ export class EgvStatementComponent implements OnInit {
 					for (let pi = 0; pi < result.tableData.length; pi++) {
 						let temp = {}
 						for (let k of result.tableHeaders) {
+							k = (k=='Transaction Details')?"TxnDetails":k.split(' ').join('')
 							if (typeof result.tableData[pi][k] == 'object' && result.tableData[pi][k] != null) {
 								result.tableData[pi][k] = result.tableData[pi][k].value ? result.tableData[pi][k].value : '';
 							}
-							temp[k] = result.tableData[pi][k];
+							temp[k] = result.tableData[pi][k]?result.tableData[pi][k]:'';
 						}
 						reportDownloadData.push(temp);
 						if (pi == (result.tableData.length - 1)) {
@@ -318,6 +319,7 @@ export class EgvStatementComponent implements OnInit {
 						}
 					}
 				}).then((data) => {
+					
 					// console.log(data)
 					let download = new Angular5Csv(data, 'Statement' + dateToday, options);
 				})
@@ -428,10 +430,11 @@ export class EgvStatementComponent implements OnInit {
 					for (let pi = 0; pi < result.tableData.length; pi++) {
 						let temp = {}
 						for (let k of result.tableHeaders) {
+							k = (k== 'Order Id') ? (k.split(' ').join('')) : k;
 							if (typeof result.tableData[pi][k] == 'object' && result.tableData[pi][k] != null) {
 								result.tableData[pi][k] = result.tableData[pi][k].value ? result.tableData[pi][k].value : '';
 							}
-							temp[k] = result.tableData[pi][k]?result.tableData[pi][k]:'-';
+							temp[k] = result.tableData[pi][k]?result.tableData[pi][k]:'';
 						}
 						reportDownloadData.push(temp);
 						if (pi == (result.tableData.length - 1)) {
@@ -443,6 +446,13 @@ export class EgvStatementComponent implements OnInit {
 					let download = new Angular5Csv(data, 'Transaction Report', options);
 				})
 			})
+	}
+	getTxnDetails(element){
+		 
+		// console.log("Hiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii",element);
+		let str = (element['TxnDetails']||"")+(element['comments'].trim()!=""?" - ":"")+element['comments']
+		 console.log(str);
+		return str;
 	}
 }
 
@@ -462,14 +472,20 @@ export class EgvStatementComponent implements OnInit {
         <ng-container [matColumnDef]="column" *ngFor="let column of data.tableHeaders">
           <mat-header-cell mat-sort-header *matHeaderCellDef> {{column}} </mat-header-cell>
           <mat-cell *matCellDef="let element">
-		  <ng-container *ngIf="column != 'Balance' && column != 'Order Value' && column != 'Actions'">
+		  <ng-container *ngIf="column != 'Balance' && column != 'Order Value' && column != 'Actions' && column != 'Order Id'  && column != 'Transfer Price'  && column != 'Order Price'">
               {{element[column] || '-'}}
 			</ng-container>
 			<ng-container *ngIf="column == 'Balance'">
 			{{element[column] || '-'| indianNumeric}}
 		  </ng-container>
+		  <ng-container *ngIf="column == 'Transfer Price'">
+			{{element['TransferPrice'] || '-'}}
+		  </ng-container>
+		  <ng-container *ngIf="column == 'Order Id'">
+			{{element['OrderId'] || '-'| indianNumeric}}
+		  </ng-container>
 		  <ng-container *ngIf="column == 'Order Value'">
-			{{element[column]|number:'1.2-2'}}
+			{{element['Order Value'] || '-'| indianNumeric}}
 		  </ng-container>
 		  <ng-container *ngIf="column == 'Actions'">
 		  <button (click)="resendGV(element)" mat-button color="primary">Resend Mail</button>
@@ -536,12 +552,11 @@ export class transactionReportDialog implements OnInit {
 			for (let pi = 0; pi < this.data.dataSource.data.length; pi++) {
 				let temp = {}
 				for (let k of this.data.tableHeaders) {
+					k = (k== 'Order Id') ? (k.split(' ').join('')) : k;
 					if (typeof this.data.dataSource.data[pi][k] == 'object' && this.data.dataSource.data[pi][k] != null) {
 						this.data.dataSource.data[pi][k] = this.data.dataSource.data[pi][k].value ? this.data.dataSource.data[pi][k].value : '';
 					}
-					if (k != 'Actions') {
-						temp[k] = this.data.dataSource.data[pi][k];
-					}
+					temp[k] = this.data.dataSource.data[pi][k]?this.data.dataSource.data[pi][k]:'';
 				}
 				reportDownloadData.push(temp);
 				if (pi == (this.data.dataSource.data.length - 1)) {
@@ -549,6 +564,7 @@ export class transactionReportDialog implements OnInit {
 				}
 			}
 		}).then((data) => {
+			
 			// console.log(data)
 			let download = new Angular5Csv(data, 'Transaction Statement', options);
 		})
@@ -561,6 +577,8 @@ export class transactionReportDialog implements OnInit {
 		this.EgvService.resendgv(this.data.fkasid, element['OrderId']).subscribe(
 			result => {
 				$this.openSnackBar(result['data']);
+
+
 			})
 	}
 
