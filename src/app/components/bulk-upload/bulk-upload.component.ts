@@ -36,6 +36,7 @@ export class BulkUploadComponent implements OnInit {
     emptyFileValidation: false,
     uploadSuccessFlag: false
   };
+  isUploading = false;
 
   _data = {
     uploadFileName: "",
@@ -86,6 +87,7 @@ export class BulkUploadComponent implements OnInit {
     const workbook = new Excel.Workbook();
     const target: DataTransfer = <DataTransfer>(event.target);
     let _this = this;
+    _this.isUploading = true;
     if (target.files.length !== 1) {
       throw new Error('Cannot use multiple files');
     }
@@ -139,6 +141,7 @@ export class BulkUploadComponent implements OnInit {
           setTimeout(() => {
             _this.dataSource.paginator = _this.paginator;
           }, 100)
+          _this.isUploading = false;
 
         }
       });
