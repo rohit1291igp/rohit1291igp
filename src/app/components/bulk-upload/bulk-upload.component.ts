@@ -156,7 +156,7 @@ export class BulkUploadComponent implements OnInit {
     const reqObj = {
       url: 'bulkAssignDeliveryBoy?fkAssociateId='+ localStorage.fkAssociateId + '&byUserId=' + localStorage.fkUserId,
       method: 'post',
-      Payload: _this.tableData
+      payload: _this.tableData
     };
     _this.BackendService.makeAjax(reqObj, function(err, response, headers) {
     //   response = {
