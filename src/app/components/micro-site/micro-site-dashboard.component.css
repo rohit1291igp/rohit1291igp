@@ -1,5 +1,6 @@
 .itc-dashboard-main-container {
     /* margin-top: 75px; */
+    background: #f2f2f2;
 }
 
 .itc-dashboard-user-header {
@@ -82,3 +83,6 @@ mat-header-cell:nth-child(5) {
     color:rgb(66, 134, 244);
     background-color:rgb(66, 134, 244) ;
   }
+  .mat-drawer-content{
+      background: #f2f2f2;
+  }  
