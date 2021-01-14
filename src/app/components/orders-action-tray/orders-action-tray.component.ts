@@ -286,6 +286,7 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
  vendorIssueSubmit($event){
      var _this =this;
      var fkAssociateId = localStorage.getItem('fkAssociateId');
+     var fkUserId = localStorage.getItem('fkUserId');
      var orderProducts = _this.vendorIssueValue.orderProducts;
      var orderProductIds = "";
      if(orderProducts && orderProducts.length){
@@ -299,7 +300,7 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
      }
 
      let reqObj =  {
-         url : 'vendorissue?vendorIssue='+_this.vendorIssueValue.reason+'+&orderId='+_this.vendorIssueValue.orderId+'&orderProductIds='+orderProductIds+'&fkAssociateId='+fkAssociateId,
+         url : 'vendorissue?vendorIssue='+_this.vendorIssueValue.reason+'+&orderId='+_this.vendorIssueValue.orderId+'&orderProductIds='+orderProductIds+'&fkAssociateId='+fkAssociateId+'&byUserId='+fkUserId,
          method : 'post'
      };
 
@@ -318,6 +319,7 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
    var orderId = order.orderId;
    var orderProducts = order.orderProducts;
    var orderProductIds = "";
+   var fkUserId = localStorage.getItem('fkUserId');
    if(orderProducts && orderProducts.length){
      for(var i in orderProducts){
        if(!orderProductIds){
@@ -330,7 +332,7 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
 
    var message = _this.vendorIssueValue.reason;
    let reqObj = {
-     url : 'addVendorInstruction?orderId='+orderId+'&orderProductId='+orderProductIds+'&fkAssociateId='+fkAssociateId+'&message='+message,
+     url : 'addVendorInstruction?orderId='+orderId+'&orderProductId='+orderProductIds+'&fkAssociateId='+fkAssociateId+'&message='+message+'&byUserId='+fkUserId,
      method : 'post'
    };
 
@@ -952,7 +954,8 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
                     remarks: rejectionMessage,
                     orderId:orderId,
                     orderProductId:orderProducts[orderIndex].orderProductId,
-                    fkAssociateId:fkAssociateId
+                    fkAssociateId:fkAssociateId,
+                    byUserId : localStorage.getItem('fkUserId')
                  };
                  let paramsStr = _this.UtilityService.formatParams(paramsObj);
                   let reqObj =  {
@@ -1464,7 +1467,8 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
                   orderId:_this.sidePanelData[orderIndex].orderId,
                   orderProductId:_this.adminActions.adminActionsModel.orderProductId,
                   fkAssociateId:_this.adminActions.adminActionsModel.checkBox ? _this.adminActions.adminActionsModel.assignChangeAnotherVendor : _this.adminActions.adminActionsModel.assignChangeVendor,
-                  orderProductIds:getOrderProductIds()
+                  orderProductIds:getOrderProductIds(),
+                  byUserId : localStorage.getItem('fkUserId')
               };
               apiSuccessHandler=function(apiResponse){
                   let currentTab = _this.activeDashBoardDataType;
@@ -1481,7 +1485,8 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
                         remarks: "",
                         orderId:_this.sidePanelData[orderIndex].orderId,
                         orderProductId:_this.adminActions.adminActionsModel.orderProductId,
-                        fkAssociateId:_this.adminActions.adminActionsModel.checkBox ? _this.adminActions.adminActionsModel.assignChangeAnotherVendor : _this.adminActions.adminActionsModel.assignChangeVendor
+                        fkAssociateId:_this.adminActions.adminActionsModel.checkBox ? _this.adminActions.adminActionsModel.assignChangeAnotherVendor : _this.adminActions.adminActionsModel.assignChangeVendor,
+                        byUserId : localStorage.getItem('fkUserId')
                      };
                      let paramsStr = _this.UtilityService.formatParams(paramsObj);
                       let reqObj =  {
@@ -1513,7 +1518,8 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
                   orderProductId:_this.adminActions.adminActionsModel.orderProductId,
                   //shippingCharge:_this.adminActions.adminActionsModel.shippingCharge,
                   //componentPrice:_this.adminActions.adminActionsModel.componentPrice,
-                  orderProductIds:getOrderProductIds()
+                  orderProductIds:getOrderProductIds(),
+                  byUserId : localStorage.getItem('fkUserId')
               };
 
               if(_this.adminActions.adminActionsModel.shippingCharge) paramsObj['shippingCharge']=_this.adminActions.adminActionsModel.shippingCharge;
@@ -1540,7 +1546,8 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
                   deliveryDate:_date.year+'-'+_date.month+'-'+_date.day,
                   deliveryType:_this.adminActions.adminActionsModel.deliveryType,
                   deliveryTime:_this.adminActions.adminActionsModel.deliveryTime,
-                  orderProductIds:getOrderProductIds()
+                  orderProductIds:getOrderProductIds(),
+                  byUserId : localStorage.getItem('fkUserId')
               };
               apiSuccessHandler=function(apiResponse){
                   _this.sidePanelDataOnStatusUpdate(orderIndex, _this.sidePanelData[orderIndex].orderId, null, null, apiResponse.result);
@@ -1563,7 +1570,8 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
                   orderId:_this.sidePanelData[orderIndex].orderId,
                   orderProductId:_this.adminActions.adminActionsModel.orderProductId,
                   comment:_this.adminActions.adminActionsModel.cancelComment,
-                  orderProductIds:getOrderProductIds()
+                  orderProductIds:getOrderProductIds(),
+                  byUserId : localStorage.getItem('fkUserId')
               };
               apiSuccessHandler=function(apiResponse){
                   let currentTab = _this.activeDashBoardDataType;
@@ -1579,7 +1587,8 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
           case 'attemptedDelivery' : url="approveDeliveryAttempt";
               paramsObj={
                   orderId:_this.sidePanelData[orderIndex].orderId,
-                  orderProductIds:getOrderProductIds()
+                  orderProductIds:getOrderProductIds(),
+                  byUserId : localStorage.getItem('fkUserId')
               };
               apiSuccessHandler=function(apiResponse){
                   let currentTab = _this.activeDashBoardDataType;
@@ -1602,7 +1611,8 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
                 orderId:_this.sidePanelData[orderIndex].orderId,
                 orderProductId:_this.sidePanelData[orderIndex].orderProducts[orderIndex].orderProductId,
                 fkAssociateId:_this.sidePanelData[orderIndex].orderProducts[orderIndex].fkAssociateId,
-                uploadedImages: _this.uploadedImages.toString()
+                uploadedImages: _this.uploadedImages.toString(),
+                byUserId : localStorage.getItem('fkUserId')
             };
             url = "savePerformanceReasons";
             apiSuccessHandler=function(apiResponse){
@@ -1626,7 +1636,8 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
                 orderId:_this.sidePanelData[orderIndex].orderId,
                 orderProductId:_this.sidePanelData[orderIndex].orderProducts[orderIndex].orderProductId,
                 fkAssociateId:_this.sidePanelData[orderIndex].orderProducts[orderIndex].fkAssociateId,
-                uploadedImages: _this.uploadedImages.toString()
+                uploadedImages: _this.uploadedImages.toString(),
+                byUserId : localStorage.getItem('fkUserId')
             };
             url = "savePerformanceReasons";
             apiSuccessHandler=function(apiResponse){
