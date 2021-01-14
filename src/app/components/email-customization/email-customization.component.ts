@@ -159,7 +159,7 @@ export class EmailCustomizationComponent implements OnInit {
     reqObj.payload.email_footer = '<p>' + this.emailForm.value.emailFooter.replace(/\n/g,"</p><p>") + '</p>';
     // reqObj.payload.email_sender = '<p>' +  this.emailForm.value.emailName + '</p>';
     reqObj.payload.type_description =  this.emailForm.value.emailSubject;
-    reqObj.payload.content = "Dear <name><body>Voucher code: <coupon>Voucher amount: <amount>Validity: <ExpiryDate>";
+    reqObj.payload.content = "<p>Dear <name>,</p><p><body></p><p><b>Voucher code:</b> <coupon><br><b>Voucher amount: </b><amount><br><b>Validity: </b><ExpiryDate></p>";
     reqObj.payload.templateName = "PointsUpload",
 
       _this.BackendService.makeAjax(reqObj, function (err, response, headers) {
