@@ -98,7 +98,7 @@ export class BulkUploadComponent implements OnInit {
       workbook.xlsx.load(data).then(function () {
         console.log(workbook);
         const worksheet = workbook._worksheets.filter(ele=>{return ele.orderNo == 0})[0];
-        let excelFormat = ['orderid', 'deliverydate', 'deliveryboyname'];
+        let excelFormat = ['orderid', 'deliveryboyname'];
         console.log('rowCount: ', worksheet.rowCount);
         worksheet.eachRow(function (row, rowNumber) {
 
@@ -116,15 +116,14 @@ export class BulkUploadComponent implements OnInit {
           }
           if (rowNumber != 1 && _this.validExcel) {
             
-            if (!(row.values[1] && row.values[2] && row.values[3])) {
-              console.log(row.values[1],row.values[2],row.values[3] );
+            if (!(row.values[1] && row.values[2] )) {
+              console.log(row.values[1],row.values[2] );
               _this.errorList.push({ row: rowNumber, msg: "Values cannot be empty" })
             }
             else {
               _this.tableData.push({
                 [excelFormat[0]]: row.values[1],
-                [excelFormat[1]]: row.values[2].getFullYear() + '-'+ ('0' + (row.values[2].getMonth()+1)).slice(-2) + '-'+  ('0' + row.values[2].getDate()).slice(-2) ,
-                [excelFormat[2]]: row.values[3]               
+                [excelFormat[1]]: row.values[2]               
               });
             }
           }
@@ -207,7 +206,7 @@ export class BulkUploadComponent implements OnInit {
   downloadSample() {
     let workbook = new Excel.Workbook();
     let worksheet1 = workbook.addWorksheet('Template');
-    let titleRow = worksheet1.addRow(['orderid', 'deliverydate', 'deliveryboyname']);
+    let titleRow = worksheet1.addRow(['orderid', 'deliveryboyname']);
 
     workbook.xlsx.writeBuffer().then((data) => {
       let blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
