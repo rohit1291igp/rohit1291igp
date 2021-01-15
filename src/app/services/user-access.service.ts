@@ -14,10 +14,9 @@ userAccessDetails:any;
   ) { }
 
   getUserAccess(cb) {
-    debugger
     this.httpClient.get(environment.origin + 'v1/handels/getUserAccess?userRole=' + environment.userType + '&fkAssociateId=' + localStorage.fkAssociateId)
       .subscribe((result) => {
-        debugger;
+        
        
         if (result['data'].length){
           cb(result['data']);

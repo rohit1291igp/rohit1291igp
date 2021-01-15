@@ -319,7 +319,7 @@ export class EgvStatementComponent implements OnInit {
 						}
 					}
 				}).then((data) => {
-					debugger;
+					
 					// console.log(data)
 					let download = new Angular5Csv(data, 'Statement' + dateToday, options);
 				})
@@ -448,7 +448,7 @@ export class EgvStatementComponent implements OnInit {
 			})
 	}
 	getTxnDetails(element){
-		 debugger;
+		 
 		// console.log("Hiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii",element);
 		let str = (element['TxnDetails']||"")+(element['comments'].trim()!=""?" - ":"")+element['comments']
 		 console.log(str);
@@ -564,7 +564,7 @@ export class transactionReportDialog implements OnInit {
 				}
 			}
 		}).then((data) => {
-			debugger;
+			
 			// console.log(data)
 			let download = new Angular5Csv(data, 'Transaction Statement', options);
 		})

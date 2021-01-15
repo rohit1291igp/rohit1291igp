@@ -47,7 +47,7 @@ export class EmailCustomizationComponent implements OnInit {
 
   onImageUpload(event) {
     console.log(event);
-    debugger;
+    
     if (event.target.files && event.target.files[0]) {
       // if (!RegExp(/^[a-zA-Z0-9\ ]{0,25}$/g).test(event.target.files[0].name.split('.').slice(0, -1).join('.'))) {
       //   this.openSnackBar('File name should be of maximum 25 characters long with no symbols');
@@ -68,7 +68,7 @@ export class EmailCustomizationComponent implements OnInit {
           (response) => {
             this.deskImageUrl = response['result'].uploadedFilePath.s3commonupload[0];
             console.log(response);
-            debugger;
+            
           }
         )
       }
@@ -134,18 +134,18 @@ export class EmailCustomizationComponent implements OnInit {
         console.log('Error=============>', err);
         return;
       }
-      _this.deskImageUrl = response.result.email_header.slice(10, -40);
+      _this.deskImageUrl = response.result.email_header;
       _this.mailId = response.result.mailId;
       _this.emailForm.patchValue({
-        emailBody: response.result.email_body ? response.result.email_body.slice(3, -4) : '',
-        emailFooter: response.result.email_footer ? response.result.email_footer.slice(3, -4) : '',
+        emailBody: response.result.email_body ? response.result.email_body.slice(3,-4).replace('</p><p>',"\n") : '',
+        emailFooter: response.result.email_footer ? response.result.email_footer.slice(3, -4).replace('</p><p>',"\n") : '',
         emailSubject: response.result.type_description 
       })
     });
   }
   createUpdateEmail() {
     let _this = this;
-    debugger;
+    
     let reqObj: any = {
       url: 'addOREditCustomizedEmailTemplate',
       method: 'post',
@@ -155,11 +155,11 @@ export class EmailCustomizationComponent implements OnInit {
     reqObj.payload.mailId = this.mailId;
     // reqObj.payload.email_header = '<img src="' + this.deskImageUrl + ' alt="IGP.com" width="500" height="600">';
     reqObj.payload.email_header = this.deskImageUrl;
-    reqObj.payload.email_body = '<p>' + this.emailForm.value.emailBody + '</p>';
-    reqObj.payload.email_footer = '<p>' + this.emailForm.value.emailFooter + '</p>';
+    reqObj.payload.email_body = '<p>' + this.emailForm.value.emailBody.replace(/\n/g,"</p><p>") + '</p>';
+    reqObj.payload.email_footer = '<p>' + this.emailForm.value.emailFooter.replace(/\n/g,"</p><p>") + '</p>';
     // reqObj.payload.email_sender = '<p>' +  this.emailForm.value.emailName + '</p>';
     reqObj.payload.type_description =  this.emailForm.value.emailSubject;
-    reqObj.payload.content = "Dear <Geetesh> ,<Br><Br>KAFM has rewarded you <b><amount></b> reward points. To redeem, please apply the following code during checkout on - https://www.igp.com/redeem<Br><Br>";
+    reqObj.payload.content = "<p>Dear <name>,</p><p><body></p><p><b>Voucher code:</b> <coupon><br><b>Voucher amount: </b><amount><br><b>Validity: </b><ExpiryDate></p>";
     reqObj.payload.templateName = "PointsUpload",
 
       _this.BackendService.makeAjax(reqObj, function (err, response, headers) {
