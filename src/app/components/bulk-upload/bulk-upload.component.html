@@ -1,12 +1,28 @@
-<div class="modal-body center-align">
-    <div class="col-sm-12 col-md-12 m-top-1 searchFields2" style="width:100%;">
-    <div class="col-sm-9 col-md-9 reprts-search-fields bg-white padding1" style="width:100%;height: 10em;">
-        <h3>Bulk Upload:</h3>
-        <div  class="btn btn-primary addActionBtn add-pincode-vendor" (click)="downloadSample()"> Download Sample</div>
-    </div>
-    </div>
-    <div class="form-group">
-            <div class="" style="height:70vh;">
+<mat-sidenav-container (backdropClick)="sidenavClose('backdrop')">
+    <mat-sidenav #sidenav position="end" (keydown.escape)="sidenavClose('escape')" style="width: 50%;" disableClose>
+        <mat-card>
+            <div class="row">
+                <span style="float: right; font-size: 1.8em; cursor: pointer;" (click)="sidenav.close()">&times;</span>
+                <h4 class="col-sm-6" style="color:rgb(195, 64, 78)" *ngIf="errorList?.length">Errors :
+                    {{errorList.length}}</h4>
+            </div>
+        </mat-card>
+        <mat-card *ngFor="let ele of errorList">
+            Row:{{ele.row}} :- {{ele.msg}}
+        </mat-card>
+    </mat-sidenav>
+
+    <mat-sidenav-content>
+        <div class="modal-body center-align">
+            <div class="col-sm-12 col-md-12 m-top-1 searchFields2" style="width:100%;">
+                <div class="col-sm-9 col-md-9 reprts-search-fields bg-white padding1" style="width:100%;height: 10em;">
+                    <h3>Bulk Upload:</h3>
+                    <div class="btn btn-primary addActionBtn add-pincode-vendor" (click)="downloadSample()"> Download
+                        Sample</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="" style="height:70vh;">
                     <div class="" style="display: block; background: transparent;">
                         <div class="modal-dialog modal-lg">
                             <div class="modal-content" style="margin-left:25%;margin-top: 20%; width:50%;">
@@ -16,31 +32,34 @@
                                 <div class="modal-body center-align">
                                     <form (ngSubmit)="f.form.valid && uploadExcel($event)" #f="ngForm" nonvalidate>
                                         <div class="m-top-1 left-align">
-                                            <input id="excelFile" class="form-control custom-control m-top-1" type="file" name="file" (change)="readExcel($event)" accept=".xls, .xlsx"
-                                                required>
+                                            <input id="excelFile" class="form-control custom-control m-top-1"
+                                                type="file" name="file" (change)="readExcel($event)"
+                                                accept=".xls, .xlsx" required>
                                         </div>
                                         <div class="m-top-1 left-align" *ngIf="isUploading">
                                             <h3 style="text-align: center;">Uploading File...</h3>
                                         </div>
-                
+
                                         <button class="btn btn-primary m-top-1" *ngIf="!isUploading">Upload</button>
-                                        <div class="help-block theme-red" *ngIf="_flags.emptyFileValidation">Please choose a excel file.</div>
+                                        <div class="help-block theme-red" *ngIf="_flags.emptyFileValidation">Please
+                                            choose a excel file.</div>
                                     </form>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                
-                <div *ngIf="true" class="error-section" [ngClass]="{'show-error-section': _data.uploadErrorList.length, 'hide-error-section': !_data.uploadErrorList.length}">
+
+                <div *ngIf="true" class="error-section"
+                    [ngClass]="{'show-error-section': _data.uploadErrorList.length, 'hide-error-section': !_data.uploadErrorList.length}">
                     <div class="colInline col-sm-1 col-md-1" style="top: 1em; right: 1em; position: absolute;">
                         <span (click)="closeErrorSection($event)" style="color:#000;">
                             <i class="glyphicon glyphicon-remove close-tray"></i>
                         </span>
                     </div>
-                
+
                     <h3 style="text-decoration:underline;">{{_data.uploadFileName}}</h3>
-                    
+
                     <div>
                         <div class="caption m-top-1">Error list:-</div>
                         <div class="errorCont" *ngFor="let err of _data.uploadErrorList">
@@ -50,5 +69,8 @@
                         </div>
                     </div>
                 </div>
-    </div>
-</div>
+            </div>
+        </div>
+
+    </mat-sidenav-content>
+</mat-sidenav-container>
