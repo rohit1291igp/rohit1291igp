@@ -1,4 +1,4 @@
-<div class="container m-top-1">
+<div class="container m-top-1" style="width:70%">
   <div class="row">
     <div class="col-md-12 col-sm-12 m-bottom-1" style="text-align: right;">
       <!-- <mat-card>
@@ -77,7 +77,7 @@
   
   <div *ngIf="dataSource.length" class="row m-top-1">
     <div class="col-sm-12 col-md-12">
-      <div class="example-container mat-elevation-z8">
+      <div class="example-container mat-elevation-z8 ">
         <mat-table #table [dataSource]="dataSource">
 
           <!--- Note that these columns can be defined in any order.
@@ -100,9 +100,10 @@
                 </ng-container>
 
                 <ng-container *ngIf="column==='edit'">
-                  <button mat-icon-button (click)="editUser(element)">
+                  <!-- <button mat-icon-button (click)="editUser(element)">
                    Edit
-                  </button>
+                  </button> -->
+                  <a (click)="editUser(element)" style="cursor:pointer">Edit</a>
                 </ng-container>
               </mat-cell>
             </ng-container>
