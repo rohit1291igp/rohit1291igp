@@ -217,4 +217,8 @@ export class BulkUploadComponent implements OnInit {
       });
     }
 
+    sidenavClose(reason: string) {
+      this.sidenav.close();
+    }
+
 }
