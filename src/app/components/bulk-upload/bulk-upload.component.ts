@@ -116,9 +116,9 @@ export class BulkUploadComponent implements OnInit {
           }
           if (rowNumber != 1 && _this.validExcel) {
             
-            if (!(row.values[1] && row.values[2] )) {
+            if (!(row.values[1] && row.values[2] ) || (isNaN(row.values[1] ))) {
               console.log(row.values[1],row.values[2] );
-              _this.errorList.push({ row: rowNumber, msg: "Values cannot be empty" })
+              _this.errorList.push({ row: rowNumber, msg: "Missing/Invalid data" })
             }
             else {
               _this.tableData.push({
