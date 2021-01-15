@@ -1,6 +1,10 @@
 .filterElement {
-    width: 40%;
+    width: 80%;
     margin-right: 15px;
+}
+
+.addMoneyInput{
+    width:80%
 }
 
 .is-invalid {
@@ -40,7 +44,7 @@
 }
 
 [type="file"]+label.btn-2 {
-    background-color: #c3404e;
+    background-color: #626869;
     overflow: hidden;
 }
 
@@ -51,4 +55,9 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
 
 input[type=number] {
     -moz-appearance: textfield;
+}
+
+.btnColor{
+    background-color: #626869;
+    color: white;
 }

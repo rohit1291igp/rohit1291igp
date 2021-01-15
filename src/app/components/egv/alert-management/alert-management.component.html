@@ -21,8 +21,8 @@
               <mat-icon class="btnColor">check_circle</mat-icon>
             </button>
             <button mat-icon-button (click)="toggleAlertAmountBtn()">
-              <mat-icon class="btnColor" *ngIf="isAlertAmountDisabled">edit</mat-icon>
-              <mat-icon class="btnColor" *ngIf="!isAlertAmountDisabled">cancel</mat-icon>
+              <mat-icon class="btnColor material-icons-outlined" *ngIf="isAlertAmountDisabled">edit</mat-icon>
+              <mat-icon class="btnColor material-icons-outlined" *ngIf="!isAlertAmountDisabled">cancel</mat-icon>
             </button>
           </div>
 
@@ -33,8 +33,8 @@
             <h5 style="">
               Email &nbsp;
                 <button (click)="addAlertEmailFlag=!addAlertEmailFlag" mat-icon-button>
-                  <mat-icon class="btnColor" *ngIf="!addAlertEmailFlag">person_add</mat-icon>
-                  <mat-icon class="btnColor" *ngIf="addAlertEmailFlag">cancel</mat-icon>
+                  <mat-icon class="btnColor material-icons-outlined" *ngIf="!addAlertEmailFlag">person_add</mat-icon>
+                  <mat-icon class="btnColor material-icons-outlined" *ngIf="addAlertEmailFlag">cancel</mat-icon>
                 </button>
             </h5>
             <div *ngIf="addAlertEmailFlag">
@@ -55,8 +55,8 @@
             <h5 style="">
               Mobile
               <button (click)="addAlertMobFlag=!addAlertMobFlag" mat-icon-button>
-                <mat-icon class="btnColor" *ngIf="!addAlertMobFlag">person_add</mat-icon>
-                <mat-icon class="btnColor" *ngIf="addAlertMobFlag">cancel</mat-icon>
+                <mat-icon class="btnColor material-icons-outlined" *ngIf="!addAlertMobFlag">person_add</mat-icon>
+                <mat-icon class="btnColor material-icons-outlined" *ngIf="addAlertMobFlag">cancel</mat-icon>
               </button>
             </h5>
             <div *ngIf="addAlertMobFlag">
@@ -84,11 +84,11 @@
               <input type="number" matInput placeholder="Low Balance Alert" [(ngModel)]="SosLimit" [disabled]="isSosAmountDisabled">
             </mat-form-field>
             <button *ngIf="!isSosAmountDisabled" (click)="SosAmountChange()" mat-icon-button>
-              <mat-icon class="btnColor">check_circle</mat-icon>
+              <mat-icon class="btnColor material-icons-outlined">check_circle</mat-icon>
             </button>
             <button mat-icon-button (click)="toggleSosAmountBtn()">
-              <mat-icon class="btnColor" *ngIf="isSosAmountDisabled">edit</mat-icon>
-              <mat-icon class="btnColor" *ngIf="!isSosAmountDisabled">cancel</mat-icon>
+              <mat-icon class="btnColor material-icons-outlined" *ngIf="isSosAmountDisabled">edit</mat-icon>
+              <mat-icon class="btnColor material-icons-outlined" *ngIf="!isSosAmountDisabled">cancel</mat-icon>
             </button>
           </div>
         </h4>
@@ -99,8 +99,8 @@
             <h5 style="">
               Email &nbsp;
                 <button (click)="addSosEmailFlag=!addSosEmailFlag" mat-icon-button material-icons-outlined>
-                  <mat-icon class="btnColor" *ngIf="!addSosEmailFlag">person_add</mat-icon>
-                  <mat-icon class="btnColor" *ngIf="addSosEmailFlag">cancel</mat-icon>
+                  <mat-icon class="btnColor material-icons-outlined" *ngIf="!addSosEmailFlag">person_add</mat-icon>
+                  <mat-icon class="btnColor material-icons-outlined" *ngIf="addSosEmailFlag">cancel</mat-icon>
                 </button>
             </h5>
             <div *ngIf="addSosEmailFlag">
@@ -121,8 +121,8 @@
             <h5 style="">
               Mobile
               <button (click)="addSosMobFlag=!addSosMobFlag" mat-icon-button>
-                <mat-icon class="btnColor" *ngIf="!addSosMobFlag">person_add</mat-icon>
-                <mat-icon class="btnColor" *ngIf="addSosMobFlag">cancel</mat-icon>
+                <mat-icon class="btnColor material-icons-outlined" *ngIf="!addSosMobFlag">person_add</mat-icon>
+                <mat-icon class="btnColor material-icons-outlined" *ngIf="addSosMobFlag">cancel</mat-icon>
               </button>
             </h5>
             <div *ngIf="addSosMobFlag">

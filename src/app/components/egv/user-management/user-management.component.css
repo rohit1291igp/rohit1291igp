@@ -15,3 +15,8 @@
 .mat-cell, .mat-header-cell{
     text-align: inherit !important;
 }
+
+.btnColor{
+    background-color: #626869;
+    color: white;
+}
