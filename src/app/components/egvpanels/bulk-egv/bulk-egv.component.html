@@ -18,7 +18,7 @@
 
         <div class="col-md-4" style="background-color: white; padding:10px; margin:10px">
 
-          <div class="col-md-12 marginLR10" style="margin-bottom: 15px;">
+          <div class="col-md-12 marginLR10" style="margin-bottom: 15px;margin-top: 15px">
             <mat-radio-group [(ngModel)]="excelAction" aria-label="Upload By">
               <mat-radio-button style="margin-right: 20px;" value="manual">Single Product</mat-radio-button>
               <mat-radio-button style="margin-right: 20px;" value="excel">Multiple Product</mat-radio-button>
@@ -41,7 +41,7 @@
                   </mat-autocomplete>
                 </mat-form-field>
                 <br>
-                <mat-form-field class="addMoneyInput width20 marginLR10">
+                <mat-form-field class="addMoneyInput width20 marginLR10" style="margin-bottom:20px">
                   <mat-label> Denomination*</mat-label>
                   <input matInput name='denomination' type="number" placeholder="Enter Amount"
                     formControlName="denomination">
@@ -76,18 +76,19 @@
                   <mat-datepicker #scheduleDate></mat-datepicker>
                 </mat-form-field>
                 <br>
-                <button class="btnColor" type='submit' mat-raised-button>Generate E-Gift Voucher</button>
+                <button class="btnColor" type='submit' style="margin-left: 10px;" mat-raised-button>Generate E-Gift Voucher</button>
               </div>
             </form>
           </div>
           <div class="col-md-12 marginLR10" *ngIf="excelAction === 'excel'">
             <div>
               <input type="file" id="file" (change)="readExcel($event)" />
-              <label for="file" class="btn-2" (change)="readExcel($event)">
+              <label for="file" class="btn-2 addMoneyInput" (change)="readExcel($event)">
                 <i class="fa fa-upload" aria-hidden="true"></i>
                 Upload Excel
               </label>
-              <mat-form-field class=" width20 marginLR10">
+              <br>
+              <mat-form-field class=" width20 marginLR10 addMoneyInput">
                 <mat-label>Delivery Date</mat-label>
                 <input matInput [matDatepicker]="scheduleDate" [min]="minDate"
                   (dateInput)="addEventFrom('input','scheduleDate', $event)"
@@ -96,7 +97,8 @@
                 <mat-datepicker-toggle matSuffix [for]="scheduleDate"></mat-datepicker-toggle>
                 <mat-datepicker #scheduleDate></mat-datepicker>
               </mat-form-field>
-              <button style="margin-top:10px" (click)="genrateBulkExcelEgv()" mat-raised-button
+              <br>
+              <button style="margin-top:10px;margin-left: 10px" (click)="genrateBulkExcelEgv()" mat-raised-button
                 color="primary">Submit</button>
             </div>
             <div style="margin-top:20px">

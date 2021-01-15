@@ -37,13 +37,16 @@ export class AlertManagementComponent implements OnInit {
   ngOnInit() {
     console.log('alert')
     this.userType=localStorage.getItem('userType');
+    this.fkid=localStorage.getItem('fkAssociateId');
+    this.getAlerts();
+    
     if(this.userType.includes('parent')){
       this.getAccounts(localStorage.getItem('fkAssociateId'));
       this.fkid=localStorage.getItem('fkAssociateId')
     }
     else if(this.userType!=='egv_admin' && this.userType!=='sub_egv_admin'){
       this.fkid=localStorage.getItem('fkAssociateId')
-      this.getAlerts();
+      
       this.alertsEmails=[...this.alerts.alertEmailIds]
         this.alertsMobile=[...this.alerts.alertMobNums]
         this.alertLimit=this.alerts.alertLimit;
