@@ -1,5 +1,13 @@
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
 /* You can add global styles to this file, and also import other style files */
+
+@font-face {
+    font-family: 'Intro Semi Bold';
+    src: url(./assets/fonts/Intro-Book-Regular.otf) format('opentype'), 
+    url(./assets/fonts/Intro-Book-Regular.otf) format('opentype'), 
+    url(./assets/fonts/Intro-Book-Regular.otf) format('opentype');
+ }
+
 html{
     font-size: 14px;
 }

@@ -88,7 +88,7 @@
                             (click)="displayUploadForm(true)" *ngIf="excelAction === 'excel'" class="btn-color">Upload</button>
                         <button mat-raised-button *ngIf="excelAction === 'excel'" (click)="downloadSample()" style="margin-left: 8px;">Download Template</button>
                     </div>
-                    <div class="col-md-8 marginLR10 text-align-justify" *ngIf="excelAction === 'manual'">
+                    <div class="col-md-10 marginLR10 text-align-justify" *ngIf="excelAction === 'manual'">
                         <form [formGroup]="voucherSingleForm" (ngSubmit)="generateManualVoucher()">
                             <div style="margin-bottom: 15px;">
                             <!-- *ngIf="env.userType=='egv_admin'" -->
@@ -120,8 +120,7 @@
                                 <mat-datepicker #scheduleDate></mat-datepicker>
                             </mat-form-field>
             
-                            <button type='submit' mat-raised-button class="btn-color" style="float: right;
-                            padding: 0px 41px;">Send Voucher</button>
+                            <button type='submit' mat-raised-button class="btn-color" style="padding: 0px 41px;" [ngStyle]="{'background-color': whitelabelStyle ? whitelabelStyle.primaryColor : '', 'color': whitelabelStyle ? whitelabelStyle.secondaryColor : '' }">Send Voucher</button>
                             </div>
                         </form>
                     </div>
