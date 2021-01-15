@@ -30,7 +30,7 @@ export class BulkUploadComponent implements OnInit {
   @ViewChild("sidenav") sidenav: MatSidenav;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   dataSource: MatTableDataSource<any>;
-  
+
   _flags = {
     fileOversizeValidation: false,
     emptyFileValidation: false,
@@ -42,9 +42,9 @@ export class BulkUploadComponent implements OnInit {
     uploadFileName: "",
     uploadErrorList: [],
     uploadErrorCount: {
-        correct: "",
-        fail: ""
-      },
+      correct: "",
+      fail: ""
+    },
   };
   excelFileUpload: File;
   errorList: any[];
@@ -67,14 +67,14 @@ export class BulkUploadComponent implements OnInit {
 
   ngOnInit() {
     var _this = this;
-    
+
   }
 
   openSnackBar(data) {
     this._snackBar.openFromComponent(NotificationComponent, {
-        data: data,
-        duration: 5 * 1000,
-        panelClass: ['snackbar-background']
+      data: data,
+      duration: 5 * 1000,
+      panelClass: ['snackbar-background']
     });
   }
 
@@ -97,7 +97,7 @@ export class BulkUploadComponent implements OnInit {
     arryBuffer.then(function (data) {
       workbook.xlsx.load(data).then(function () {
         console.log(workbook);
-        const worksheet = workbook._worksheets.filter(ele=>{return ele.orderNo == 0})[0];
+        const worksheet = workbook._worksheets.filter(ele => { return ele.orderNo == 0 })[0];
         let excelFormat = ['orderid', 'deliveryboyname'];
         console.log('rowCount: ', worksheet.rowCount);
         worksheet.eachRow(function (row, rowNumber) {
@@ -115,15 +115,15 @@ export class BulkUploadComponent implements OnInit {
             });
           }
           if (rowNumber != 1 && _this.validExcel) {
-            
-            if (!(row.values[1] && row.values[2] ) || (isNaN(row.values[1] ))) {
-              console.log(row.values[1],row.values[2] );
+
+            if (!(row.values[1] && row.values[2]) || (isNaN(row.values[1]))) {
+              console.log(row.values[1], row.values[2]);
               _this.errorList.push({ row: rowNumber, msg: "Missing/Invalid data" })
             }
             else {
               _this.tableData.push({
                 [excelFormat[0]]: row.values[1],
-                [excelFormat[1]]: row.values[2]               
+                [excelFormat[1]]: row.values[2]
               });
             }
           }
@@ -145,56 +145,56 @@ export class BulkUploadComponent implements OnInit {
     });
     console.log(_this.tableData);
     // event.target.value = '';
-    
+
   }
 
   uploadExcel(event) {
     debugger;
-    if( this.validExcel){
+    if (this.validExcel) {
       return;
     }
     const _this = this;
     _this.isUploading = true;
     const reqObj = {
-      url: 'bulkAssignDeliveryBoy?fkAssociateId='+ localStorage.fkAssociateId + '&byUserId=' + localStorage.fkUserId,
+      url: 'bulkAssignDeliveryBoy?fkAssociateId=' + localStorage.fkAssociateId + '&byUserId=' + localStorage.fkUserId,
       method: 'post',
       payload: _this.tableData
     };
     _this.tableData = [];
-    _this.BackendService.makeAjax(reqObj, function(err, response, headers) {
+    _this.BackendService.makeAjax(reqObj, function (err, response, headers) {
       event.target.elements[0].value = "";
-    //   response = {
-    //     "status": "Success",
-    //     "data": {
-    //         "error": [
-    //             {
-    //                 "row": 1,
-    //                 "msg": "There is no delivery boy mapped to this vendor."
-    //             }
-    //         ],
-    //         "count": {
-    //             "correct": 0,
-    //             "fail": 1
-    //         }
-    //     }
-    // }
+      //   response = {
+      //     "status": "Success",
+      //     "data": {
+      //         "error": [
+      //             {
+      //                 "row": 1,
+      //                 "msg": "There is no delivery boy mapped to this vendor."
+      //             }
+      //         ],
+      //         "count": {
+      //             "correct": 0,
+      //             "fail": 1
+      //         }
+      //     }
+      // }
       if (err || response.error) {
         console.log('Error=============>', err);
         _this.openSnackBar('Server Error');
-            return;
+        return;
       }
       if (response.status.toLowerCase() == 'success') {
         _this.isUploading = false;
         if (response.data && response.data.error && response.data.error.length) {
           _this._data.uploadErrorList = response.data.error;
           _this._data.uploadErrorCount = response.data.count;
-        } else if( isArray(response.data) && response.data.length > 1){
+        } else if (isArray(response.data) && response.data.length > 1) {
           _this.errorList = response.data;
           _this.sidenav.open();
         }
-        else if(response.data[0].split(',').length > 1){
-            _this.errorList = response.data[0].split(',');
-            _this.sidenav.open();
+        else if (response.data[0].split(',').length > 1) {
+          _this.errorList = response.data[0].split(',');
+          _this.sidenav.open();
         }
         else
           _this.openSnackBar(response.data);
@@ -214,7 +214,11 @@ export class BulkUploadComponent implements OnInit {
     workbook.xlsx.writeBuffer().then((data) => {
       let blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
       fs.saveAs(blob, 'Template.xlsx');
-      });
-    }
+    });
+  }
+
+  sidenavClose(reason: string) {
+    this.sidenav.close();
+  }
 
 }
