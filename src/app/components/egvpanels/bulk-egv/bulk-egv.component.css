@@ -38,6 +38,7 @@
     transition: all 0.3s;
     vertical-align: middle;
     margin-bottom: 20px;
+    margin-left: 10px;
 }
 
 [type="file"]+label:hover {
