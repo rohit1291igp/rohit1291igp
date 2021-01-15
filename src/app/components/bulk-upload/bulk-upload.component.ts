@@ -221,8 +221,4 @@ export class BulkUploadComponent implements OnInit {
     this.sidenav.close();
   }
 
-    sidenavClose(reason: string) {
-      this.sidenav.close();
-    }
-
 }
