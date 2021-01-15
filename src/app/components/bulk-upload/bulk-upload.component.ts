@@ -50,7 +50,7 @@ export class BulkUploadComponent implements OnInit {
   errorList: any[];
   denomination: any;
   tableHeaders: any;
-  validExcel: boolean;
+  validExcel: boolean = true;
   tableData = [];
 
 
@@ -150,6 +150,9 @@ export class BulkUploadComponent implements OnInit {
 
   uploadExcel(event) {
     debugger;
+    if( this.validExcel){
+      return;
+    }
     const _this = this;
     _this.isUploading = true;
     const reqObj = {
