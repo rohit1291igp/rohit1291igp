@@ -13,7 +13,8 @@
         <h4>
           <span style="margin-top: 5px;">Balance Update</span>
           <div style="padding:1em;">
-            <span style="color: rgba(0,0,0,.38);">&#8377;</span><mat-form-field style="width:75%">
+            <span style="color: rgba(0,0,0,.38);">&#8377;</span>
+            <mat-form-field style="width:75%">
               <mat-label>Threshold 1</mat-label>
               <input type="number" matInput placeholder="Balance Update" [(ngModel)]="alertLimit" [disabled]="isAlertAmountDisabled">
             </mat-form-field>
@@ -38,7 +39,7 @@
                 </button>
             </h5>
             <div *ngIf="addAlertEmailFlag">
-              <mat-form-field class="example-full-width">
+              <mat-form-field class="width80">
                 <mat-label>Add Email Address</mat-label>
                 <input matInput type="email" placeholder="Email" [(ngModel)]="newAlertEmail">
               </mat-form-field>
@@ -60,7 +61,7 @@
               </button>
             </h5>
             <div *ngIf="addAlertMobFlag">
-              <mat-form-field class="example-full-width">
+              <mat-form-field class="width80">
                 <mat-label>Add Mobile No.</mat-label>
                 <input matInput placeholder="Mobile" (paste)="validateMob($event)" minlength=10 maxlength=10 (keypress)="validateMob($event)" type="text" [(ngModel)]="newAlertMob">
               </mat-form-field>
@@ -104,7 +105,7 @@
                 </button>
             </h5>
             <div *ngIf="addSosEmailFlag">
-              <mat-form-field class="example-full-width">
+              <mat-form-field class="width80">
                 <mat-label>Add Email Address</mat-label>
                 <input matInput placeholder="Email" [(ngModel)]="newSosEmail">
               </mat-form-field>
@@ -126,7 +127,7 @@
               </button>
             </h5>
             <div *ngIf="addSosMobFlag">
-              <mat-form-field class="example-full-width">
+              <mat-form-field class="width80">
                 <mat-label>Add Mobile No.</mat-label>
                 <input matInput type="text" (paste)="validateMob($event)" minlength=10 maxlength=10 (keypress)="validateMob($event)" [(ngModel)]="newSosMob" placeholder="Mobile">
               </mat-form-field>

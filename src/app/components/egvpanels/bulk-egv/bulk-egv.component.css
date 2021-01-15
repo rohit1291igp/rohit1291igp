@@ -37,6 +37,7 @@
     position: relative;
     transition: all 0.3s;
     vertical-align: middle;
+    margin-bottom: 20px;
 }
 
 [type="file"]+label:hover {

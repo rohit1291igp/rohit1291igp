@@ -18,7 +18,7 @@
 
         <div class="col-md-4" style="background-color: white; padding:10px; margin:10px">
 
-          <div class="col-md-12 marginLR10" style="margin-bottom: 15px;">
+          <div class="col-md-12 marginLR10" style="margin-bottom: 15px;margin-top: 15px">
             <mat-radio-group [(ngModel)]="excelAction" aria-label="Upload By">
               <mat-radio-button style="margin-right: 20px;" value="manual">Single Product</mat-radio-button>
               <mat-radio-button style="margin-right: 20px;" value="excel">Multiple Product</mat-radio-button>
@@ -41,7 +41,7 @@
                   </mat-autocomplete>
                 </mat-form-field>
                 <br>
-                <mat-form-field class="addMoneyInput width20 marginLR10">
+                <mat-form-field class="addMoneyInput width20 marginLR10" style="margin-bottom:20px">
                   <mat-label> Denomination*</mat-label>
                   <input matInput name='denomination' type="number" placeholder="Enter Amount"
                     formControlName="denomination">
@@ -87,6 +87,7 @@
                 <i class="fa fa-upload" aria-hidden="true"></i>
                 Upload Excel
               </label>
+              <br>
               <mat-form-field class=" width20 marginLR10">
                 <mat-label>Delivery Date</mat-label>
                 <input matInput [matDatepicker]="scheduleDate" [min]="minDate"
@@ -96,6 +97,7 @@
                 <mat-datepicker-toggle matSuffix [for]="scheduleDate"></mat-datepicker-toggle>
                 <mat-datepicker #scheduleDate></mat-datepicker>
               </mat-form-field>
+              <br>
               <button style="margin-top:10px" (click)="genrateBulkExcelEgv()" mat-raised-button
                 color="primary">Submit</button>
             </div>
