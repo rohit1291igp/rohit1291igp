@@ -21,8 +21,11 @@ import { BulkEgvComponent } from 'app/components/egvpanels/bulk-egv/bulk-egv.com
 import { EmailCustomizationComponent } from 'app/components/email-customization/email-customization.component';
 import { CKEditorModule } from 'ng2-ckeditor';
 import { ScriptService } from 'app/services/script.service';
-import { ContactUsEditComponent } from 'app/components/contact-us-email/contact-us-edit.component';
+import { ContactUsEditComponent } from 'app/components/contact-us-edit/contact-us-edit.component';
 import { FaqEditComponent } from 'app/components/faq-edit/faq-edit.component';
+import { FaqComponent } from 'app/components/faq/faq.component';
+import { ContactUsComponent } from 'app/components/contact-us/contact-us.component';
+
 
 
 const routes: Routes = [
@@ -66,6 +69,14 @@ const routes: Routes = [
   {
     path: 'faq-edit',
     component: FaqEditComponent
+  },
+  {
+    path: 'contact-us',
+    component: ContactUsComponent
+  },
+  {
+    path: 'faq',
+    component: FaqComponent
   }
 ];
 
@@ -111,7 +122,9 @@ const routes: Routes = [
     BulkEgvComponent,
     EmailCustomizationComponent,
     ContactUsEditComponent,
-    FaqEditComponent],
+    FaqEditComponent,
+    ContactUsComponent,
+    FaqComponent],
   providers: [EgvService, ScriptService],
   entryComponents: [transactionReportDialog,NewUserFormComponent,EditUserComponent]
 })

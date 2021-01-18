@@ -462,12 +462,12 @@ export const userAcess = {
             route: '/new-dashboard/reports/whitelabelReport',
         },
         {
-            displayName: 'contact us',
+            displayName: 'Edit Contact Us',
             iconName: 'contact_page',
             route: '/new-dashboard/egv/contact-us-edit',
         },
         {
-            displayName: 'FAQ',
+            displayName: 'Edit FAQ',
             iconName: 'question_answer',
             route: '/new-dashboard/egv/faq-edit',
         }
@@ -507,6 +507,16 @@ export const userAcess = {
             displayName: 'Current Balance',
             iconName: 'account_balance_wallet',
             route: '/new-dashboard/reports/whitelabelReport',
+        },
+        {
+            displayName: 'Contact Us',
+            iconName: 'contact_page',
+            route: '/new-dashboard/egv/contact-us',
+        },
+        {
+            displayName: 'FAQ',
+            iconName: 'question_answer',
+            route: '/new-dashboard/egv/faq',
         }
 
     ],
