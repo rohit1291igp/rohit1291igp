@@ -1,9 +1,9 @@
-<h4>Add <ng-container *ngIf="data['account_type'] == 'client' else accountType">Client</ng-container>
+<h4>Add <ng-container *ngIf="data['account_type'] == 'client' else accountType">Account</ng-container>
   <ng-template #accountType>{{data['account_type']|titlecase}}</ng-template><!-- {{data['account_type']|titlecase}} --></h4> 
 <mat-form-field
   *ngIf="data.account_type!=='client' && (env.userType==='egv_admin' || env.userType==='sub_egv_admin' || env.userType==='parent_manager' || env.userType==='wb_yourigpstore')"
   appearance="fill" class="example-form-field">
-  <mat-label>Select Wallet</mat-label>
+  <mat-label>Select Account</mat-label>
   <mat-select [(ngModel)]="selectedFkid">
     <mat-option *ngFor="let account of accounts_list" [value]="account.fk_associate_id">{{account.company_name}}
     </mat-option>
