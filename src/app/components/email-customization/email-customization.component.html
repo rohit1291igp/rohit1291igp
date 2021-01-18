@@ -35,7 +35,9 @@
               Email Body
             </div>
             <div class="col-md-10 textFieldRight">
+             
               <textarea class="bodyTextArea" matInput formControlName="emailBody" rows="5"></textarea>
+              <span style="">{{emailForm.get('emailBody').value.length}}/1000</span>
             </div>
           </div>
           <div class="col-md-12">
