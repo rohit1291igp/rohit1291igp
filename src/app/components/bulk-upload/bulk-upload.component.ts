@@ -189,6 +189,7 @@ export class BulkUploadComponent implements OnInit {
         if (response.data && response.data.error && response.data.error.length) {
           _this._data.uploadErrorList = response.data.error;
           _this._data.uploadErrorCount = response.data.count;
+          
         } else if (isArray(response.data) && response.data.length > 1) {
           _this.errorList = response.data;
           _this.sidenav.open();
