@@ -60,7 +60,7 @@ export class EmailCustomizationComponent implements OnInit {
 
       reader.onload = (event: any) => { // called once readAsDataURL is completed
 
-        // this.deskImageUrl = event['target']['result'].toString();
+       this.deskImageUrl = event['target']['result'].toString();
         let emailformData = new FormData();
 
         emailformData.append(this.deskImage.name, this.deskImage);
