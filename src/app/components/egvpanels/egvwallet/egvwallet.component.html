@@ -13,7 +13,7 @@
         <div class="col-md-12 marginB20" style="margin-bottom:20px"
           *ngIf="env.userType == 'egv_admin' || env.userType.includes('parent')">
           <mat-form-field class="addMoneyInput width15" *ngIf="env.userType =='egv_admin'">
-            <mat-label>Select a Wallet</mat-label>
+            <mat-label>Select a Account</mat-label>
             <input type="text" matInput formControlName="selectedUser" [matAutocomplete]="auto">
             <mat-autocomplete #auto="matAutocomplete" (optionSelected)='getUserSelected($event.option.value)'
               [displayWith]="userDisplayFn">
@@ -22,8 +22,8 @@
             </mat-autocomplete>
           </mat-form-field>
           <mat-form-field class="filterElement" *ngIf="addMoneyForm.value.selectedUser">
-            <mat-label>Select a wallet</mat-label>
-            <input type="text" matInput placeholder='Select a wallet' formControlName="selectedChild"
+            <mat-label>Select a account</mat-label>
+            <input type="text" matInput placeholder='Select a account' formControlName="selectedChild"
               [matAutocomplete]="auto">
             <mat-autocomplete #auto="matAutocomplete" (optionSelected)='getChildSelected($event.option.value)'
               [displayWith]="userDisplayFn">
@@ -33,7 +33,7 @@
           </mat-form-field>
         </div>
         <div *ngIf="loadingSummary else loaded">
-          Select a Wallet to view Summary.
+          Select a Account to view Summary.
         </div>
 
 
@@ -126,7 +126,7 @@
     <div style="background: #fff;width: 96%;margin: 0 auto;overflow: auto;padding: 6px 19px;border-radius: 3px;
     box-shadow: 0px 1px 3px 0px #ccc;" *ngIf="env.userType == 'egv_admin' || env.userType.includes('parent')">
       <div class='addMoney headerUnderLine col-md-12'>
-        Add Money To Wallet
+        Add Money To Account
       </div>
       <div class="col-md-12 marginB20">
 

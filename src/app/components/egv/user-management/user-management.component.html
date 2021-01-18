@@ -65,7 +65,7 @@
       </mat-card> -->
       <button
         *ngIf="env.userType==='egv_admin' || env.userType==='parent_manager' || env.userType==='sub_egv_admin' || env.userType=== 'wb_yourigpstore'"
-        (click)="openDialog('client')" mat-raised-button class="btnColor">Add Client</button>
+        (click)="openDialog('client')" mat-raised-button class="btnColor">Add Account</button>
       <button
         *ngIf="env.userType==='egv_admin' || env.userType==='parent_manager' || env.userType==='sub_egv_admin' || env.userType=== 'wb_yourigpstore'"
         (click)="openDialog('manager')" mat-raised-button class="btnColor">Add Manager</button>
