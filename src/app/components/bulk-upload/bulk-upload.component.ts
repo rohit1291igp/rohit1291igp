@@ -47,7 +47,7 @@ export class BulkUploadComponent implements OnInit {
     },
   };
   excelFileUpload: File;
-  errorList: any[];
+  errorList: any[] = [];
   denomination: any;
   tableHeaders: any;
   validExcel: boolean = true;
@@ -150,7 +150,8 @@ export class BulkUploadComponent implements OnInit {
 
   uploadExcel(event) {
     debugger;
-    if (this.validExcel) {
+    if (!this.validExcel || this.errorList.length) {
+      console.log("Invalid excel")
       return;
     }
     const _this = this;
