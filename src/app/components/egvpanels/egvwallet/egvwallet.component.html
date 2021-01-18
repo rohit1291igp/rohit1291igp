@@ -93,9 +93,9 @@
                   <i class="fa fa-calendar summary-icon-circle"></i>
                 </div>
                 <div style="flex: 5;text-align: end;padding-right: 0.5em;">
-                  <div style="margin:auto;font-size: 1.1em;">&#8377;
-                    {{walletSummary.creditLimitDays || '0' | indianNumeric}}</div>
-                  <div class="summaryIcon"> Daily Limit</div>
+                  <div style="margin:auto;font-size: 1.1em;">
+                    {{walletSummary.creditLimitDays || '0' | indianNumeric}} {{(walletSummary.creditLimitDays>1)?'days':'day'}}</div>
+                  <div class="summaryIcon">Credit Period</div>
                 </div>
             </div>
 
