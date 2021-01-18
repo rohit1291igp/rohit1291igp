@@ -1,9 +1,9 @@
 <div class="main-container ">
   <mat-card class="marginB20">
     <div class="row">
-      <div class="col-md-12 marginB20">
+      <div class="col-md-8">
         <form [formGroup]="statementForm" (ngSubmit)="getStatement()">
-          <div>
+          <div style="margin-bottom: 0.5em;">
             <!-- *ngIf="env.userType=='egv_admin'" -->
             <mat-form-field class="addMoneyInput width15" *ngIf="env.userType =='egv_admin'">
               <mat-label>Select a Wallet</mat-label>
@@ -54,7 +54,7 @@
               </mat-select>
             </mat-form-field>
           </div>
-          <div>
+          <div class="col-md-12 padding-0" style="padding-right: 1.5em !important;">
             <button type="submit" mat-raised-button>Get Statement</button>
             <button type="button" mat-raised-button (click)="downloadStatement()">Download Statement</button>
             <button type="button" mat-raised-button (click)="downloadTransactionReport()">Download Transaction
@@ -65,28 +65,39 @@
     </div>
   </mat-card>
   <!-- <button (click)="openDialog()">cllick</button> -->
-  <div class="mat-elevation-z8" *ngIf="dataSource?.data?.length > 0 else noRecord">
-    <mat-form-field style="margin:0 20px" class="filterElement">
+  <div class="mat-elevation-z8" *ngIf="dataSource?.data?.length > 0 else noRecord" style="padding-top:12px;background: #fff;">
+    <!-- <mat-form-field style="margin:0 20px" class="filterElement">
       <mat-label>Search</mat-label>
       <i matSuffix class="fa fa-search "></i>
       <input matInput (keyup)="applyFilter($event)" #input>
-    </mat-form-field>
+    </mat-form-field> -->
+    <div class="search-container-box">
+        <input matInput (keyup)="applyFilter($event)" placeholder="Search here" #input>
+        <i matSuffix class="fa fa-search " (click)="input.focus()"></i>
+    </div>
     <mat-table [dataSource]="dataSource" matSort>
       <ng-container [matColumnDef]="column" *ngFor="let column of tableHeaders">
-        <mat-header-cell mat-sort-header *matHeaderCellDef> {{column}} </mat-header-cell>
-        <mat-cell *matCellDef="let element">
-          <ng-container *ngIf="column != 'TxnDetails' && column!= 'Amount' && column!= 'Balance'">
+        <mat-header-cell mat-sort-header *matHeaderCellDef style="text-align: center !important;
+        justify-content: center;"> {{column}} </mat-header-cell>
+        <mat-cell *matCellDef="let element" style="text-align: center !important;
+        justify-content: center;">
+          <ng-container
+            *ngIf="column != 'Transaction Details' && column != 'Transaction Type' && column!= 'Amount' && column!= 'Balance'">
             {{element[column] || '-'}}
           </ng-container>
           <ng-container *ngIf="column == 'Amount' || column == 'Balance' ">
             {{element[column] || '-' | indianNumeric}}
           </ng-container>
-          <ng-container *ngIf="column == 'TxnDetails'">
+          <ng-container *ngIf="column == 'Transaction Type' ">
+            {{element['TransactionType'] || '-'}}
+          </ng-container>
+          <ng-container *ngIf="column == 'Transaction Details'">
             <a (click)="openDialog(element)" style="cursor:pointer"
-              *ngIf="(element['TransactionType'] == 'Debit' && element['TransactionMethod'] != 0) else noLink">{{(element[column] || '-' )+" - "+element['comments']}}</a>
+              *ngIf="(element['TransactionType'] == 'Debit' && element['TransactionMethod'] != 0) else noLink">{{getTxnDetails(element)}}</a>
             <ng-template #noLink>
-              {{(element[column] || '-' )+" - "+element['comments']}}
+              {{getTxnDetails(element)}}
             </ng-template>
+
           </ng-container>
         </mat-cell>
       </ng-container>

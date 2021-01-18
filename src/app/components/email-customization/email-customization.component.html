@@ -1,0 +1,76 @@
+<div class="main-container">
+  <mat-card>
+    <form [formGroup]="emailForm">
+      <div class='row'>
+        <div class="col-md-8">
+          <div class="col-md-12">
+            <div class="col-md-2 textFieldLeft">
+              Banner image 
+            </div>
+            <div class="col-md-10 textFieldRight">
+              <span>
+                <input type="file" id="deskImagefile" (change)="onImageUpload($event)" accept=" image/*" />
+                <label for="deskImagefile" class="btn-2">Upload Desktop Banner</label>
+              </span>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="col-md-2 textFieldLeft">
+              Email Subject
+            </div>
+            <div class="col-md-10 textFieldRight">
+              <textarea class="bodyTextArea" matInput formControlName="emailSubject" rows="2"></textarea>
+            </div>
+          </div>
+          <!-- <div class="col-md-12">
+            <div class="col-md-2 textFieldLeft ">
+              Sender's Name
+            </div>
+            <div class="col-md-10 textFieldRight">
+              <input matInput type="text" class="bodyTextArea" formControlName="emailName">
+            </div>
+          </div> -->
+          <div class="col-md-12">
+            <div class="col-md-2 textFieldLeft">
+              Email Body
+            </div>
+            <div class="col-md-10 textFieldRight">
+              <textarea class="bodyTextArea" matInput formControlName="emailBody" rows="5"></textarea>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="col-md-2 textFieldLeft">
+              Signature
+            </div>
+            <div class="col-md-10 textFieldRight">
+              <textarea class="bodyTextArea" matInput formControlName="emailFooter" rows="4"></textarea>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="col-md-2 textFieldLeft ">
+              Test Recipient Mail:
+            </div>
+            <div class="col-md-10 textFieldRight">
+              <input matInput type="text" class="bodyTextArea" formControlName="emailTestMail">
+            </div>
+          </div>
+          <div class="col-md-12 buttons">
+            <button class="btnRadius" (click)="sendTestEmail()" mat-raised-button>Send test Email</button>
+            <button class="btnRadius" (click)="getEmail()" mat-raised-button>Get Saved Email</button>
+            <button class="btnRadius" (click)="createUpdateEmail()" mat-raised-button>Save Changes</button>
+  
+          </div>
+        </div>
+        
+
+        <div class="col-md-4">
+
+          <div>
+            <span *ngIf="deskImageUrl"> Uploaded Image:</span>
+            <img [src]="deskImageUrl" *ngIf="deskImageUrl" style="max-width: 100%;border:1px solid black">
+          </div>
+        </div>
+      </div>
+    </form>
+  </mat-card>
+</div>

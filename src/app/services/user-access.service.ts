@@ -8,20 +8,21 @@ import { NavItem } from 'app/components/menu-list-item/menu-list-item.component'
 
 @Injectable()
 export class UserAccessService {
-
+userAccessDetails:any;
   constructor(
     private httpClient: HttpClient
   ) { }
 
   getUserAccess(cb) {
-    debugger
     this.httpClient.get(environment.origin + 'v1/handels/getUserAccess?userRole=' + environment.userType + '&fkAssociateId=' + localStorage.fkAssociateId)
       .subscribe((result) => {
-        debugger;
+        
        
-        if (result['data'].length)
+        if (result['data'].length){
           cb(result['data']);
-        else cb(userAcess[environment.userType])
+        }else{
+          cb(userAcess[environment.userType]);
+        }
       },
       error=>{
         cb(userAcess[environment.userType]);

@@ -12,6 +12,10 @@ const routes: Routes = [
   {
     path: '',
     component: MicroSiteDasboardComponent
+  },
+  {
+    path: 'voucher-credit',
+    component: MicroSiteDasboardComponent
   }
 ];
 
@@ -36,8 +40,8 @@ const routes: Routes = [
     MatDatepickerModule,
     MatRadioModule,
     MatSelectModule,
-    MatSidenavModule
-    // SharedModule
+    MatSidenavModule,
+    SharedModule
   ],
   declarations: [
     MicroSiteDasboardComponent

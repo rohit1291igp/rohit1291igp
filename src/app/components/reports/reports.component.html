@@ -184,6 +184,7 @@
                         <ng-container *ngIf="reportType === 'getVendorDetails'">Vendor</ng-container>
                         <ng-container *ngIf="reportType === 'getBarcodeToComponentReport'">Barcode</ng-container>
                     </h4>
+                    <div *ngIf="reportType === 'getPincodeReport'" class="btn btn-primary addActionBtn add-pincode-vendor" (click)="downloadSamplePincode()"> Download Sample</div>
                 </div>
 
                 <div class="modal-body center-align" *ngIf="reportType === 'getVendorDetails'">
@@ -344,7 +345,7 @@
     </div>
 </div>
 
-<div class="row padding-extra dbTableHeader" *ngIf="reportType !== 'itc/report'">
+<div class="row padding-extra dbTableHeader" *ngIf="reportType.includes('new-dashboard/reports/whitelabelReport')">
     <p style="font-weight: bold; padding: 0.5em 2.5em 0;">Hi {{vendorName}} !</p>
 </div>
 
@@ -364,7 +365,7 @@
                             </div>
                         </div>
                         <div class="searchFieldsSubmit">
-                            <input  type="submit" class="btn btn-primary pull-right bg-igp searchSubmitBtn"  value="Search All Parameters" />
+                            <input [ngStyle]="{'background-color': whitelabelStyle ? whitelabelStyle.primaryColor : '', 'color': whitelabelStyle ? whitelabelStyle.secondaryColor : '' }" type="submit" class="btn btn-primary pull-right bg-igp searchSubmitBtn"  value="Search All Parameters" />
                         </div>
                     </form>
             </div>
@@ -455,14 +456,14 @@
                     </div>
                     <div class="searchFiled pull-left" *ngIf="reportType == 'whitelabel/report'">
                         <!-- <my-date-picker id="whitelabelFromDate" name="whitelabelFromDate" placeholder="Enter start date" [options]="myDatePickerOptions" [(ngModel)]="searchResultModel['fromdate']" ></my-date-picker> -->
-                        <input class="form-control" type="text" name="whitelabelemailid" placeholder="Enter Email Id" [(ngModel)]="searchResultModel['emailid']">
+                        <input class="form-control" type="text" name="whitelabelemailid" placeholder="Enter Email Id" [(ngModel)]="searchResultModel['emailid']" style="width: 200px;">
                     </div>
                 
                     <div *ngIf="reportType !== 'getbarcodestoverify'" class="searchFieldsSubmit relative inline">
-                        <input  type="submit" class="btn btn-primary pull-right bg-igp searchSubmitBtn"  value="Search All Parameters"/>
+                        <input  style="background: chartreuse;" [ngStyle]="{'background-color': whitelabelStyle ? whitelabelStyle.primaryColor : '', 'color': whitelabelStyle ? whitelabelStyle.secondaryColor : '' }" type="submit" [ngClass]="{'bg-igp': !whitelabelStyle}" class="btn btn-primary pull-right bg-igp searchSubmitBtn"  value="Search All Parameters"/>
                     </div>
                     <div *ngIf="reportType == 'getbarcodestoverify'" class="searchFieldsSubmit relative inline" style="top:6em;">
-                            <input  type="submit" class="btn btn-primary pull-right bg-igp searchSubmitBtn"  value="Search Parameters"/>
+                            <input  [ngStyle]="{'background-color': whitelabelStyle ? whitelabelStyle.primaryColor : '', 'color': whitelabelStyle ? whitelabelStyle.secondaryColor : '' }" type="submit" class="btn btn-primary pull-right bg-igp searchSubmitBtn"  value="Search Parameters"/>
                     </div>
                 </form>
 
@@ -513,7 +514,7 @@
               </div>
             </div>
             <div class="searchFieldsSubmit relative inline">
-              <input  type="submit" class="btn btn-primary pull-right bg-igp searchSubmitBtn" [ngStyle]="{'background-color': whitelabelStyle ? whitelabelStyle.primaryColor : '', 'color': whitelabelStyle ? whitelabelStyle.secondaryColor : '' }"  value="Search All Parameters"/>
+              <input type="submit" class="btn btn-primary pull-right bg-igp searchSubmitBtn" [ngStyle]="{'background-color': whitelabelStyle ? whitelabelStyle.primaryColor : '', 'color': whitelabelStyle ? whitelabelStyle.secondaryColor : '' }"  value="Search All Parameters"/>
             </div>
           </form>
 
@@ -541,11 +542,14 @@
                 
             <div class="col-sm-9 col-md-9 reprts-search-fields bg-white padding1" style="padding-right:0; width:100%;">
                     <button class="remove-filter-btn" (click)="ngOnInit()">Remove Filter</button> 
+                <div *ngIf="reportType === 'getPincodeReport'" class="btn btn-primary addActionBtn1" (click)="downloadSamplePincode()"> Download Sample
+                    </div>
                 <div *ngIf="reportType == 'getVendorReport' || reportType == 'getPincodeReport' || reportType == 'getVendorDetails'" class="underLine paddingHalf text-bold">Search Vendor</div>
                 <div *ngIf="reportType === 'getComponentReport'" class="underLine paddingHalf text-bold">Search Component</div>
                 <!-- <div *ngIf="reportType === 'getComponentOrderReport' || environment.userType == 'vendor'" class="underLine paddingHalf text-bold">Search Component                    
                 </div> -->
                 <div *ngIf="reportType === 'getBarcodeToComponentReport'" class="underLine paddingHalf text-bold">Search Barcode</div>
+                
                 <div *ngIf="reportType != 'getComponentOrderReport'" class="btn btn-primary addActionBtn" (click)="addActionInit($event)">
                     Add
                     <ng-container *ngIf="reportType === 'getVendorReport' || reportType === 'getComponentReport'">Component</ng-container>
@@ -553,6 +557,7 @@
                     <ng-container *ngIf="reportType === 'getVendorDetails'">Vendor</ng-container>
                     <ng-container *ngIf="reportType === 'getBarcodeToComponentReport'">Barcode</ng-container>
                 </div>
+                
                 <form name="searchReport" (ngSubmit)="f.form.valid && searchReportSubmit($event,true, myForm)" #f="ngForm" nonvalidate>
                     <div class="searchFields m-top-1 inline" >
                         <div class="pull-left" style="width:70%;">
@@ -628,12 +633,13 @@
             </div>
         </div>
 
-        <div class="col-sm-12 col-md-12 m-top-1 searchFields2" *ngIf="(reportType === 'getPincodeReport') && (environment.userType && environment.userType === 'vendor') " style="width:100%;">
+        <div class="col-sm-12 col-md-12 m-top-1 searchFields2" *ngIf="(reportType === 'getPincodeReport') && (environment.userType && (environment.userType === 'vendor')) " style="width:100%;">
           <div class="col-sm-9 col-md-9 reprts-search-fields bg-white padding1" style="padding-right:0; width:100%;">
             <div attr.data-associate-id={{associateId}} id="vendor-add-pincode" class="btn btn-primary addActionBtn add-pincode-vendor" (click)="addActionInit($event)">
               Add
               <ng-container *ngIf="reportType === 'getPincodeReport'">Pincode</ng-container>
             </div>
+            <div  class="btn btn-primary addActionBtn add-pincode-vendor" (click)="downloadSamplePincode()"> Download Sample</div>
           </div>
         </div>
 
@@ -647,8 +653,8 @@
                   Bulk Assign <span class="glyphicon glyphicon-check" title="Bulk Assign"></span>
                 </div>
                 <table class="report-table table table-striped table-bordered table-curved fixed-header2">
-                    <thead class="bg-igp text-white" (click)="stopEventPropgation($event)">
-                        <tr>
+                    <thead [ngStyle]="{'background-color': whitelabelStyle ? whitelabelStyle.primaryColor : '', 'color': whitelabelStyle ? whitelabelStyle.secondaryColor : '' }" class="bg-igp text-white" (click)="stopEventPropgation($event)">
+                        <tr [ngStyle]="{'background-color': whitelabelStyle ? whitelabelStyle.primaryColor : '', 'color': whitelabelStyle ? whitelabelStyle.secondaryColor : '' }">
                             <ng-container *ngFor="let tableLabel of reportData.tableHeaders; let a='index';">
                                     <th class="relative" [ngClass]="{'reportDate' : tableLabel === 'Date', 'hide' : isHiddenCell(tableLabel), 'selectedHeader' : reportLabelState[tableLabel]['filterdd']}">
                                         <span>
@@ -772,7 +778,7 @@
                                                         </div>
                                                 </span>
                                                 </span>
-                                                <span *ngIf="ifDate(tableCol) != 'date' && tableCol != 'Ship_Type' && tableCol != 'Component_Image' && tableCol != 'Component Image' && tableCol != 'Product Image' && tableCol != 'Product_Image' && tableCol != 'Out Of Delivery' && tableCol != 'Out_Of_Delivery' && tableCol != 'Proof Of Delivery' && tableCol != 'Proof_Of_Delivery' && tableCol != 'Vendor_List' && tableCol !== 'component'" >
+                                                <span *ngIf="ifDate(tableCol) != 'date' && tableCol != 'Ship_Type' && tableCol != 'Component_Image' && tableCol != 'Component Image' && tableCol != 'Product Image' && tableCol != 'Product_Image' && tableCol != 'Out Of Delivery' && tableCol != 'Out_Of_Delivery' && tableCol != 'Proof Of Delivery' && tableCol != 'Proof_Of_Delivery' && tableCol != 'Vendor_List' && tableCol !== 'component' && tableCol !== 'Outskirt'" >
                                                     <span *ngIf="getCellValue(tableRowValue[tableCol]) === 0 && tableCol !== 'Delivery_Boy_App'">
                                                             {{getCellValue(tableRowValue[tableCol])}}
                                                     </span>
@@ -814,7 +820,8 @@
                                                       <option selected value="">Select Vendor</option>
                                                         <option  *ngFor="let vendor of tableRowValue[tableCol]; let i='index'" value="{{vendor.Vendor_Id}}">{{vendor.Vendor_Name}}</option>
                                                     </select>
-                                                </div>
+                                                </div>                                                
+                                                <span *ngIf="tableCol == 'Outskirt'" >{{tableRowValue[tableCol]?"Yes":"No"}}</span>
                                             </div>
             
                                             <!--update messgae start-->
@@ -855,7 +862,7 @@
                                                                     <div class="tableactBtn" *ngFor="let actBtn of tableAction[tableCol]; let z='index'" (click)="actionBtnInvoke(actBtn, getCellValue(tableRowValue[tableCol]), tableRowValue, tableCol, dataIndex, 1)">
                                                                         <!-- {{tableCol | json}} -->
                                                                         <span class="tableactBtntxt"  *ngIf="tableRowValue['Proc_Type_Vendor'] == 'Stocked' && tableCol !='InStock'">{{getActBtnTxt(actBtn, getCellValue(tableRowValue[tableCol]))}}</span>
-                                                                        <ng-container *ngIf="(z+1) < tableAction[tableCol].length"> &nbsp; |</ng-container>
+                                                                        <ng-container *ngIf="(z+1) < tableAction[tableCol].length"> &nbsp; Edit</ng-container>
                                                                     </div>
                                                                 </ng-container>
                                                             <ng-container *ngIf="reportType !== 'getComponentReport' && reportType !== 'getVendorDetails' && reportType !== 'getBarcodeToComponentReport' && reportType !== 'deliveryBoyDetails' && !(tableRowValue[tableCol] && tableRowValue[tableCol]['requestValue'] &&tableRowValue[tableCol]['requestValue'] == -1) && reportType !== 'getComponentReport'">

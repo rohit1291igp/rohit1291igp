@@ -14,3 +14,8 @@ input::-webkit-inner-spin-button {
 input[type=number] {
   -moz-appearance: textfield;
 }
+
+.btnColor{
+  background-color: #626869;
+  color: white;
+}
