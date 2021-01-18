@@ -19,10 +19,10 @@ import { NewUserFormComponent } from 'app/components/egv/user-management/new-use
 import { EditUserComponent } from 'app/components/egv/user-management/edit-user/edit-user.component';
 import { BulkEgvComponent } from 'app/components/egvpanels/bulk-egv/bulk-egv.component';
 import { EmailCustomizationComponent } from 'app/components/email-customization/email-customization.component';
-import { ContactUsComponent } from 'app/components/contact-us/contact-us.component';
 import { CKEditorModule } from 'ng2-ckeditor';
 import { ScriptService } from 'app/services/script.service';
-import { FaqComponent } from 'app/components/faq/faq.component';
+import { ContactUsEditComponent } from 'app/components/contact-us-email/contact-us-edit.component';
+import { FaqEditComponent } from 'app/components/faq-edit/faq-edit.component';
 
 
 const routes: Routes = [
@@ -60,12 +60,12 @@ const routes: Routes = [
     component: EmailCustomizationComponent
   },
   {
-    path: 'contact-us',
-    component: ContactUsComponent
+    path: 'contact-us-edit',
+    component: ContactUsEditComponent
   },
   {
-    path: 'faq',
-    component: FaqComponent
+    path: 'faq-edit',
+    component: FaqEditComponent
   }
 ];
 
@@ -110,8 +110,8 @@ const routes: Routes = [
     EgvDashboardComponent,
     BulkEgvComponent,
     EmailCustomizationComponent,
-    ContactUsComponent,
-    FaqComponent],
+    ContactUsEditComponent,
+    FaqEditComponent],
   providers: [EgvService, ScriptService],
   entryComponents: [transactionReportDialog,NewUserFormComponent,EditUserComponent]
 })

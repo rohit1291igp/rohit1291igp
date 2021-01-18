@@ -13,11 +13,11 @@ import { ScriptService } from 'app/services/script.service';
 
 
 @Component({
-	selector: 'app-contact-us',
-	templateUrl: './contact-us.component.html',
-	styleUrls: ['./contact-us.component.css']
+	selector: 'app-contact-us-edit',
+	templateUrl: './contact-us-edit.component.html',
+	styleUrls: ['./contact-us-edit.component.css']
 })
-export class ContactUsComponent implements OnInit {
+export class ContactUsEditComponent implements OnInit {
 	name = 'ng2-ckeditor';
 	@ViewChild("drawer") drawer: any;
 	ckeConfig: any;

@@ -13,11 +13,11 @@ import { ScriptService } from 'app/services/script.service';
 
 
 @Component({
-	selector: 'app-faq',
-	templateUrl: './faq.component.html',
-	styleUrls: ['./faq.component.css']
+	selector: 'app-faq-edit',
+	templateUrl: './faq-edit.component.html',
+	styleUrls: ['./faq-edit.component.css']
 })
-export class FaqComponent implements OnInit {
+export class FaqEditComponent implements OnInit {
 	name = 'ng2-ckeditor';
 	@ViewChild("drawer") drawer: any;
 	ckeConfig: any;

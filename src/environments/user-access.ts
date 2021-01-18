@@ -464,12 +464,12 @@ export const userAcess = {
         {
             displayName: 'contact us',
             iconName: 'contact_page',
-            route: '/new-dashboard/egv/contact-us',
+            route: '/new-dashboard/egv/contact-us-edit',
         },
         {
             displayName: 'FAQ',
             iconName: 'question_answer',
-            route: '/new-dashboard/egv/faq',
+            route: '/new-dashboard/egv/faq-edit',
         }
     ],
     sub_manager: [
