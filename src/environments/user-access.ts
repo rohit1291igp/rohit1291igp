@@ -457,9 +457,19 @@ export const userAcess = {
             route: '/new-dashboard/dashboard-microsite',
         },
         {
-        displayName: 'Current Balance',
-        iconName: 'account_balance_wallet',
-        route: '/new-dashboard/reports/whitelabelReport',
+            displayName: 'Current Balance',
+            iconName: 'account_balance_wallet',
+            route: '/new-dashboard/reports/whitelabelReport',
+        },
+        {
+            displayName: 'contact us',
+            iconName: 'contact_page',
+            route: '/new-dashboard/egv/contact-us',
+        },
+        {
+            displayName: 'FAQ',
+            iconName: 'question_answer',
+            route: '/new-dashboard/egv/faq',
         }
     ],
     sub_manager: [

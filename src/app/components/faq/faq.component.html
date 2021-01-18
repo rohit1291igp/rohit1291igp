@@ -1,0 +1,27 @@
+<mat-drawer-container class="main-container">
+    <mat-drawer #drawer class="example-sidenav" mode="side" style="width:100%;">
+      <div style="float: right;cursor: pointer;" (click)="drawerToggle('close')"><mat-icon class="material-icons-outlined">close</mat-icon></div>
+      <div [innerHTML]="mycontent"></div>
+    </mat-drawer>
+  
+    <div class="example-sidenav-content">
+            <div class="preview-button d-flex align-items-center" (click)="drawerToggle('open')">Preview <mat-icon class="material-icons-outlined">preview</mat-icon></div>
+              <form class="editor-form" role="form" #myForm="ngForm" accept-charset="UTF-8" novalidate>
+                <div class="form-group has-feedback" 
+                      [ngClass]="{ 'has-error': myckeditor.invalid && myckeditor.touched }">
+                  <ckeditor [(ngModel)]="mycontent" 
+                            #myckeditor="ngModel"
+                            name="myckeditor"
+                            required
+                            [config]="ckeConfig" 
+                            debounce="500" 
+                            (paste)="onPaste($event)"
+                            (change)="onChange($event)">
+                  </ckeditor>
+              
+                  <div *ngIf="myckeditor.invalid && myckeditor.touched" class="help-block">Required field.</div>
+                </div>
+                <button [disabled]="myForm.invalid" class="btn btn-primary">Save</button>
+                </form>
+    </div>
+  </mat-drawer-container>

@@ -19,6 +19,10 @@ import { NewUserFormComponent } from 'app/components/egv/user-management/new-use
 import { EditUserComponent } from 'app/components/egv/user-management/edit-user/edit-user.component';
 import { BulkEgvComponent } from 'app/components/egvpanels/bulk-egv/bulk-egv.component';
 import { EmailCustomizationComponent } from 'app/components/email-customization/email-customization.component';
+import { ContactUsComponent } from 'app/components/contact-us/contact-us.component';
+import { CKEditorModule } from 'ng2-ckeditor';
+import { ScriptService } from 'app/services/script.service';
+import { FaqComponent } from 'app/components/faq/faq.component';
 
 
 const routes: Routes = [
@@ -54,8 +58,15 @@ const routes: Routes = [
   {
     path: 'email-customization',
     component: EmailCustomizationComponent
+  },
+  {
+    path: 'contact-us',
+    component: ContactUsComponent
+  },
+  {
+    path: 'faq',
+    component: FaqComponent
   }
-
 ];
 
 @NgModule({
@@ -63,6 +74,7 @@ const routes: Routes = [
     MatCardModule,
     CommonModule,
     RouterModule.forChild(routes),
+    CKEditorModule,
     FormsModule,
     ReactiveFormsModule,
     MyDatePickerModule,
@@ -97,8 +109,10 @@ const routes: Routes = [
     IndianNumericPipe,
     EgvDashboardComponent,
     BulkEgvComponent,
-    EmailCustomizationComponent],
-  providers: [EgvService],
+    EmailCustomizationComponent,
+    ContactUsComponent,
+    FaqComponent],
+  providers: [EgvService, ScriptService],
   entryComponents: [transactionReportDialog,NewUserFormComponent,EditUserComponent]
 })
 export class EgvpanelModule { }
