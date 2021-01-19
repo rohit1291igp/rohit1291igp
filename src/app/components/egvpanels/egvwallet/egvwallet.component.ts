@@ -1,6 +1,6 @@
-import { Component, OnInit, NgModule, ViewChild, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, NgModule, ViewChild, ChangeDetectorRef, Inject } from '@angular/core';
 import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { MatDatepickerInput, MatAutocompleteModule, MatAutocomplete, MatPaginator, MatTableDataSource, MatSort, MatSnackBar } from '@angular/material';
+import { MatDatepickerInput, MatAutocompleteModule, MatAutocomplete, MatPaginator, MatTableDataSource, MatSort, MatSnackBar, MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material';
 import { startWith, map } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
 import 'rxjs/add/operator/toPromise';
@@ -68,6 +68,7 @@ export class EgvwalletComponent implements OnInit {
     private EgvService: EgvService,
     private cdRef: ChangeDetectorRef,
     private _snackBar: MatSnackBar,
+    public dialog: MatDialog
   ) { }
 
   ngOnInit() {
@@ -158,11 +159,11 @@ export class EgvwalletComponent implements OnInit {
 
   openSnackBar(data) {
     this._snackBar.openFromComponent(NotificationComponent, {
-        data: data,
-        duration: 5 * 1000,
-        panelClass: ['snackbar-background']
+      data: data,
+      duration: 5 * 1000,
+      panelClass: ['snackbar-background']
     });
-}
+  }
 
   getAccountSummary(fkAssociateId) {
     let _this = this;
@@ -217,7 +218,7 @@ export class EgvwalletComponent implements OnInit {
   }
   //this.formatDate(Date.now(),'yyyy-MM-dd HH:mm:ss')
   addMoneyToWallet(data) {
-    
+
     if (this.addMoneyForm.invalid && !this.userSelected) {
       return;
     }
@@ -240,7 +241,7 @@ export class EgvwalletComponent implements OnInit {
     if (environment.userType.includes('parent') && (_this.addMoneyForm.get('selectedChild')['value'].fk_associate_id != localStorage.fkAssociateId)) {
       reqObj.url += "&parentId=" + _this.userSelected.fk_associate_id;
       reqObj.url += "&fkAssociateId=" + _this.addMoneyForm.get('selectedChild')['value'].fk_associate_id;
-      reqObj.url += "&comments=" + _this.addMoneyForm.value.comments + " ["+_this.addMoneyForm.get('selectedChild')['value'].company_name +"]"
+      reqObj.url += "&comments=" + _this.addMoneyForm.value.comments + " [" + _this.addMoneyForm.get('selectedChild')['value'].company_name + "]"
     } else {
       reqObj.url += "&fkAssociateId=" + _this.addMoneyForm.get('selectedChild')['value'].fk_associate_id;
       reqObj.url += "&comments=" + _this.addMoneyForm.value.comments
@@ -258,10 +259,10 @@ export class EgvwalletComponent implements OnInit {
           console.log('Error=============>', result.error);
 
         }
-        else{
+        else {
           _this.openSnackBar(result.result);
         }
-       
+
         _this.addMoneyForm.patchValue({
           addMoneyTransactionId: '',
           addMoneyAmount: '',
@@ -282,7 +283,7 @@ export class EgvwalletComponent implements OnInit {
   }
 
   updateLimit() {
-    
+
     let _this = this;
     if (!_this.addMoneyForm.value.limitType || !_this.addMoneyForm.value.limitValue) {
       return
@@ -414,11 +415,11 @@ export class EgvwalletComponent implements OnInit {
   approveTransaction(e, data, approval) {
     let _this = this;
     e.target.disabled = true;
-    console.log(data);
-    let reqObj: any = {
+    var reqObj: any = {
       url: 'wallet/updatewallet?action=Credit&amount=' + data['Amount'] + "&transacId=" + data['TxnDetails'],
       method: "put",
     };
+
     reqObj.url += "&fkAssociateId=" + data['fkasid'];
     reqObj.url += "&userId=" + data['UserId'];
     reqObj.url += "&logId=" + data['logId']
@@ -430,23 +431,120 @@ export class EgvwalletComponent implements OnInit {
     }
     reqObj.url += "&comments=" + data['comments'].slice(0, -10);
 
-    _this.EgvService.getEgvService(reqObj).subscribe(
-      (result, error) => {
-        if (result.error || error) {
-          _this.openSnackBar(result.errorMessage);
-          console.log('Error=============>', result.error);
-          e.target.disabled = false;
+    _this.checkWalletDiscount().then(res => {
+      if (res) {
+        //open dialog box on basis of get reponse
+        this.dialog.open(WalletDiscountComponent, {
+          data: { data: res }
+        });
+      }
+
+      _this.EgvService.getEgvService(reqObj).subscribe(
+        (result, error) => {
+          if (result.error || error) {
+            _this.openSnackBar(result.errorMessage);
+            console.log('Error=============>', result.error);
+            e.target.disabled = false;
 
 
-        }
-        else _this.openSnackBar(result.result);
-        _this.getPendingList();
-      })
+          }
+          else _this.openSnackBar(result.result);
+          _this.getPendingList();
+        })
+
+    });
   }
 
-  getTxnDetails(element){		
-		let str = (element['TxnDetails']||"")+(element['comments'].trim()!=""?" - ":"")+element['comments'];
-		return str;
-	}
+  getTxnDetails(element) {
+    let str = (element['TxnDetails'] || "") + (element['comments'].trim() != "" ? " - " : "") + element['comments'];
+    return str;
+  }
 
+  checkWalletDiscount() {
+    const _this = this;
+    return new Promise((resolve, reject) => {
+      _this.EgvService.walletDiscount(localStorage.fkAssociateId).subscribe(
+        (result: any) => {
+          if (result.error) {
+            _this.openSnackBar(result.errorMessage);
+            console.log('Error=============>', result.error);
+            reject([])
+          } else {
+            let testres = {
+              "error": false,
+              "errorCode": "NO_ERROR",
+              "errorMessage": "",
+              "errorParams": [],
+              "result": [
+                {
+                  "amount": null,
+                  "percent": 7,
+                  "days": 30,
+                  "walletId": 1077
+                }
+              ]
+            }
+            resolve(testres.result[0])
+          }
+        },
+        (error) => {
+          let testres = {
+            "error": false,
+            "errorCode": "NO_ERROR",
+            "errorMessage": "",
+            "errorParams": [],
+            "result": [
+              {
+                "amount": null,
+                "percent": 7,
+                "days": 30,
+                "walletId": 1077
+              }
+            ]
+          }
+          resolve(testres.result[0])
+        }
+      )
+    })
+  }
+
+}
+
+@Component({
+  selector: 'app-wallet-discount',
+  template: `<div>
+  <div style="float: right;cursor: pointer;" (click)="close()"><mat-icon class="material-icons-outlined">close</mat-icon></div>
+  <div >
+   <div>Recharge amount</div><div>500</div>  
+  </div>
+  <form [formGroup]="discountForm" (ngSubmit)="addMoneyToWallet(discountForm)">
+    <mat-form-field>
+    <input type="text" formControlName="discount"
+    [matAutocomplete]="auto">
+    </mat-form-field>
+    <mat-form-field>
+    <input type="text" formControlName="damount"
+    [matAutocomplete]="auto">
+    </mat-form-field>
+  </form>
+  </div>`,
+})
+export class WalletDiscountComponent implements OnInit {
+  discountForm: FormGroup;
+  constructor(
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    public dialogRef: MatDialogRef<WalletDiscountComponent>,
+    private fb: FormBuilder
+  ) { }
+
+  ngOnInit() {
+    this.discountForm = this.fb.group({
+      discount: ['', Validators.required],
+      damount: ['', Validators.required]
+    });
+  }
+
+  close() {
+    this.dialogRef.close();
+  }
 }

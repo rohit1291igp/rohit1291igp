@@ -82,5 +82,10 @@ export class EgvService {
     let url = environment.origin + 'v1/admin/internal/bulk-egv/resendCardDetails?fkAssociateId='+fkAssociateId+'&uniqueOrderId='+txnDetails ;
     return this.httpClient.get(url);
   }
+
+  walletDiscount(walletId){
+   const url = `${environment.origin}v1/admin/egvpanel/wallet/discount?walletId=${walletId}`;
+   return this.httpClient.get(url);
+  }
 }
  
