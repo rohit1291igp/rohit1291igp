@@ -1,8 +1,11 @@
 <div class="feedsCont" *ngIf="feedData.length" [ngClass]="{'mob' : isMobile}">
-    <div class="text-bold">Updates:</div>
+    <div class="text-bold">Updates: <img *ngIf="notification" src="https://media.giphy.com/media/XD9LHOATb4HdwsPpCm/giphy.gif" style="height: 50px;" alt="" srcset=""></div>
     <ul class="feeds">
         <li *ngFor="let feed of feedData;">
-            <span *ngIf="feed.orderId"> <span class="text-bold">{{feed.orderId}}</span> - <span [outerHTML]="feed.instruction"></span></span>
+            <span *ngIf="feed.orderId"> 
+                <span class="text-bold"><a href="javascript:void(0);" (click)="openTray($event, feed.flagRead)">{{feed.orderId}}</a></span> - <span [outerHTML]="feed.instruction"></span>
+                <span *ngIf="!feed.flagRead"><button (click)="markAsRead(feed.orderId)"  style="position: absolute;left: 45em;;">Mark As Read</button></span>
+            </span>
             <div class="bg-loader" *ngIf="!feed.orderId" style="">&nbsp;</div>
         </li>
     </ul>
