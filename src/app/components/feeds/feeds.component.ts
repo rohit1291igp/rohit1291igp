@@ -160,6 +160,7 @@ export class FeedsComponent implements OnInit {
         console.log('feeds Response --->', response.result);
         _this.feedData=response.result;
         response.result.find(function(feed){
+            _this.notification = false;
           if(!feed.flagRead){
              return _this.notification = true;  
           }
