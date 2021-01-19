@@ -434,24 +434,37 @@ export class EgvwalletComponent implements OnInit {
     _this.checkWalletDiscount().then(res => {
       if (res) {
         //open dialog box on basis of get reponse
-        this.dialog.open(WalletDiscountComponent, {
+        const dialogRef = this.dialog.open(WalletDiscountComponent, {
           data: { data: res }
         });
-      }
-
-      _this.EgvService.getEgvService(reqObj).subscribe(
-        (result, error) => {
-          if (result.error || error) {
-            _this.openSnackBar(result.errorMessage);
-            console.log('Error=============>', result.error);
-            e.target.disabled = false;
-
-
-          }
-          else _this.openSnackBar(result.result);
-          _this.getPendingList();
+        dialogRef.afterClosed().subscribe(result => {
+          // _this.EgvService.getEgvService(reqObj).subscribe(
+          //   (result, error) => {
+          //     if (result.error || error) {
+          //       _this.openSnackBar(result.errorMessage);
+          //       console.log('Error=============>', result.error);
+          //       e.target.disabled = false;
+    
+    
+          //     }
+          //     else _this.openSnackBar(result.result);
+          //     _this.getPendingList();
+          //   })
         })
-
+      }else{
+        // _this.EgvService.getEgvService(reqObj).subscribe(
+        //   (result, error) => {
+        //     if (result.error || error) {
+        //       _this.openSnackBar(result.errorMessage);
+        //       console.log('Error=============>', result.error);
+        //       e.target.disabled = false;
+  
+  
+        //     }
+        //     else _this.openSnackBar(result.result);
+        //     _this.getPendingList();
+        //   })
+      }
     });
   }
 
@@ -512,20 +525,23 @@ export class EgvwalletComponent implements OnInit {
 
 @Component({
   selector: 'app-wallet-discount',
-  template: `<div>
-  <div style="float: right;cursor: pointer;" (click)="close()"><mat-icon class="material-icons-outlined">close</mat-icon></div>
-  <div >
+  template: `<div style="width: 250px;">
+  <div style="float: right;cursor: pointerwidth: 100%;text-align: right;" (click)="close()"><mat-icon class="material-icons-outlined">close</mat-icon></div>
+  <div style="clear:both;"></div>
+  <div class="d-flex justify-content-space-between m-b-1">
    <div>Recharge amount</div><div>500</div>  
   </div>
   <form [formGroup]="discountForm" (ngSubmit)="addMoneyToWallet(discountForm)">
-    <mat-form-field>
-    <input type="text" formControlName="discount"
-    [matAutocomplete]="auto">
-    </mat-form-field>
-    <mat-form-field>
-    <input type="text" formControlName="damount"
-    [matAutocomplete]="auto">
-    </mat-form-field>
+    <div class="d-flex justify-content-space-between m-b-1">
+    <div>Discount percent</div>
+    <input type="text" formControlName="discount" style="width:50px">
+    </div>
+
+    <div class="d-flex justify-content-space-between">
+    <div>Discount Amount</div>
+    <input type="text" formControlName="damount" style="width:50px">
+    </div>
+
   </form>
   </div>`,
 })
