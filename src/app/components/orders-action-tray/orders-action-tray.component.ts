@@ -323,9 +323,9 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
    if(orderProducts && orderProducts.length){
      for(var i in orderProducts){
        if(!orderProductIds){
-         orderProductIds = orderProductIds + (orderProducts[i].orderProductId).toString();
+            orderProductIds =  (orderProducts[i].orderProductId).toString(); // orderProductIds + --API wants only 1 orderproductid
        }else{
-         orderProductIds = orderProductIds +","+(orderProducts[i].orderProductId).toString();
+         orderProductIds = (orderProducts[i].orderProductId).toString(); // orderProductIds +","+ --API wants only 1 orderproductid
        }
      }
    }
