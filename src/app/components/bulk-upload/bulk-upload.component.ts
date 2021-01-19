@@ -122,7 +122,7 @@ export class BulkUploadComponent implements OnInit {
             }
             else {
               _this.tableData.push({
-                [excelFormat[0]]: row.values[1],
+                [excelFormat[0]]: +row.values[1],
                 [excelFormat[1]]: row.values[2]
               });
             }
