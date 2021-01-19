@@ -82,5 +82,15 @@ export class EgvService {
     let url = environment.origin + 'v1/admin/internal/bulk-egv/resendCardDetails?fkAssociateId='+fkAssociateId+'&uniqueOrderId='+txnDetails ;
     return this.httpClient.get(url);
   }
+
+  getUserDetails( userId){
+    let url = environment.origin + 'v1/admin/egvpanel/login/getDisplayNameEmailMobileOfUser?userId='+userId ;
+    return this.httpClient.get(url);
+  }
+  editUserDetails(email,mobile,displayName,userId){
+    let url = environment.origin + 'v1/admin/egvpanel/login/updateDisplayNameEmailMobileOfUser?email='+email+'&mobile='+mobile+'&displayName='+displayName+'&userId='+userId;
+    return this.httpClient.put(url, {});
+
+  }
 }
  
