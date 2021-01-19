@@ -186,7 +186,11 @@ export class BulkUploadComponent implements OnInit {
       }
       if (response.status.toLowerCase() == 'success') {
         _this.isUploading = false;
-        if (response.data && response.data.error && response.data.error.length) {
+
+        if(response.data.count.correct && response.data.count.fail == 0){
+          _this.openSnackBar("File uploaded Successfully.");
+        }
+         else if (response.data && response.data.error && response.data.error.length) {
           _this._data.uploadErrorList = response.data.error;
           _this._data.uploadErrorCount = response.data.count;
           
@@ -194,15 +198,10 @@ export class BulkUploadComponent implements OnInit {
           _this.errorList = response.data;
           _this.sidenav.open();
         }
-        else if (response.data[0].split(',').length > 1) {
-          _this.errorList = response.data[0].split(',');
-          _this.sidenav.open();
-        }
         else
           _this.openSnackBar(response.data);
       } else {
         _this.isUploading = false;
-
         _this.openSnackBar(response.data[0]);
       }
     });
