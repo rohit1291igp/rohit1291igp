@@ -198,10 +198,6 @@ export class BulkUploadComponent implements OnInit {
           _this.errorList = response.data;
           _this.sidenav.open();
         }
-        else if (response.data[0].split(',').length > 1) {
-          _this.errorList = response.data[0].split(',');
-          _this.sidenav.open();
-        }
         else
           _this.openSnackBar(response.data);
       } else {
