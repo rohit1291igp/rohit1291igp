@@ -545,8 +545,8 @@ export class EgvwalletComponent implements OnInit {
       <input type="text" formControlName="damount" style="width:50px">
     </div>
     <div class="d-flex justify-content-space-around">
-      <button type="submit" mat-flat-button >Approve</button> <button mat-flat-button
-        (click)="close() [ngStyle]="{'background-color': whitelabelStyle ? whitelabelStyle.primaryColor : '#c3404e', 'color': whitelabelStyle ? whitelabelStyle.secondaryColor : '#fff' }"">Cancel</button>
+      <button type="submit" mat-flat-button >Approve</button> <button type="reset" mat-flat-button
+        (click)="close()" [ngStyle]="{'background-color': whitelabelStyle ? whitelabelStyle.primaryColor : '#c3404e', 'color': whitelabelStyle ? whitelabelStyle.secondaryColor : '#fff' }">Cancel</button>
     </div>
   </form>
 </div>`,
@@ -567,7 +567,7 @@ export class WalletDiscountComponent implements OnInit {
   }
 
   walletDiscount(data){
-    this.dialogRef.close(data);
+    this.dialogRef.close(data.value);
   }
 
   close() {
