@@ -506,7 +506,7 @@
 
 
 <div *ngIf="environment.userType === 'vendor' else adminUser" class="d-flex" [ngClass]="{'flex-direction-column': isMobile}" style="background: #F2F2F2;padding: 2em 0;">
-<app-feeds [ngStyle]="{'width': isMobile ? '100%' : '50%'}"></app-feeds>
+<app-feeds (onOrderSearch)="search($event)" [ngStyle]="{'width': isMobile ? '100%' : '50%'}"></app-feeds>
 <app-payout-dashboard [ngStyle]="{'width': isMobile ? '100%' : '49%'}"></app-payout-dashboard>    
 </div>
 <ng-template #adminUser>
