@@ -8,8 +8,7 @@ import { environment } from '../../../environments/environment';
 import 'rxjs/add/operator/toPromise';
 import { HttpHeaders } from '@angular/common/http';
 import { DatePipe } from '@angular/common';
-import { NotificationComponent } from 'app/components/notification/notification.component';
-import { ScriptService } from 'app/services/script.service';
+import { ScriptService } from '../../services/script.service';
 
 
 @Component({

@@ -158,7 +158,7 @@
               {{element['TransactionType'] || '-'}}
             </ng-container>
             <ng-container *ngIf="column == 'Transaction Details'">
-                {{getTxnDetails(element)}}
+              {{getTxnDetails(element)}}
             </ng-container>
             <ng-container *ngIf="column == 'Actions'">
               <button mat-button color="primary" (click)='approveTransaction($event,element,true)'>

@@ -413,7 +413,7 @@ export class EgvwalletComponent implements OnInit {
   //?userId=882&amount=10000&action=Credit&transacId=hfgvuhj&comments=kjhmhbnkjnkjnljguy&fkAssociateId=882&flagAdmin=0&flagApproveCredit=1
 
   approveTransaction(e, data, approval) {
-    let _this = this;
+    let $this = this;
     e.target.disabled = true;
     var reqObj: any = {
       url: 'wallet/updatewallet?action=Credit&amount=' + data['Amount'] + "&transacId=" + data['TxnDetails'],
@@ -431,38 +431,38 @@ export class EgvwalletComponent implements OnInit {
     }
     reqObj.url += "&comments=" + data['comments'].slice(0, -10);
 
-    _this.checkWalletDiscount().then(res => {
+    $this.checkWalletDiscount().then(res => {
       if (res) {
         //open dialog box on basis of get reponse
         const dialogRef = this.dialog.open(WalletDiscountComponent, {
           data: { data: res }
         });
         dialogRef.afterClosed().subscribe(result => {
-          // _this.EgvService.getEgvService(reqObj).subscribe(
+          // $this.EgvService.getEgvService(reqObj).subscribe(
           //   (result, error) => {
           //     if (result.error || error) {
-          //       _this.openSnackBar(result.errorMessage);
+          //       $this.openSnackBar(result.errorMessage);
           //       console.log('Error=============>', result.error);
           //       e.target.disabled = false;
     
     
           //     }
-          //     else _this.openSnackBar(result.result);
-          //     _this.getPendingList();
+          //     else $this.openSnackBar(result.result);
+          //     $this.getPendingList();
           //   })
         })
       }else{
-        // _this.EgvService.getEgvService(reqObj).subscribe(
+        // $this.EgvService.getEgvService(reqObj).subscribe(
         //   (result, error) => {
         //     if (result.error || error) {
-        //       _this.openSnackBar(result.errorMessage);
+        //       $this.openSnackBar(result.errorMessage);
         //       console.log('Error=============>', result.error);
         //       e.target.disabled = false;
   
   
         //     }
-        //     else _this.openSnackBar(result.result);
-        //     _this.getPendingList();
+        //     else $this.openSnackBar(result.result);
+        //     $this.getPendingList();
         //   })
       }
     });
@@ -526,24 +526,30 @@ export class EgvwalletComponent implements OnInit {
 @Component({
   selector: 'app-wallet-discount',
   template: `<div style="width: 250px;">
-  <div style="float: right;cursor: pointerwidth: 100%;text-align: right;" (click)="close()"><mat-icon class="material-icons-outlined">close</mat-icon></div>
+  <div style="float: right;cursor: pointerwidth: 100%;text-align: right;" (click)="close()">
+    <mat-icon class="material-icons-outlined">close</mat-icon>
+  </div>
   <div style="clear:both;"></div>
   <div class="d-flex justify-content-space-between m-b-1">
-   <div>Recharge amount</div><div>500</div>  
+    <div>Recharge amount</div>
+    <div>500</div>
   </div>
-  <form [formGroup]="discountForm" (ngSubmit)="addMoneyToWallet(discountForm)">
+  <form [formGroup]="discountForm" (ngSubmit)="walletDiscount(discountForm)">
     <div class="d-flex justify-content-space-between m-b-1">
-    <div>Discount percent</div>
-    <input type="text" formControlName="discount" style="width:50px">
+      <div>Discount percent</div>
+      <input type="text" formControlName="discount" style="width:50px">
     </div>
 
-    <div class="d-flex justify-content-space-between">
-    <div>Discount Amount</div>
-    <input type="text" formControlName="damount" style="width:50px">
+    <div class="d-flex justify-content-space-between m-b-1">
+      <div>Discount Amount</div>
+      <input type="text" formControlName="damount" style="width:50px">
     </div>
-
+    <div class="d-flex justify-content-space-around">
+      <button type="submit" mat-flat-button >Approve</button> <button mat-flat-button
+        (click)="close() [ngStyle]="{'background-color': whitelabelStyle ? whitelabelStyle.primaryColor : '#c3404e', 'color': whitelabelStyle ? whitelabelStyle.secondaryColor : '#fff' }"">Cancel</button>
+    </div>
   </form>
-  </div>`,
+</div>`,
 })
 export class WalletDiscountComponent implements OnInit {
   discountForm: FormGroup;
@@ -560,7 +566,12 @@ export class WalletDiscountComponent implements OnInit {
     });
   }
 
+  walletDiscount(data){
+    this.dialogRef.close(data);
+  }
+
   close() {
     this.dialogRef.close();
   }
+
 }
