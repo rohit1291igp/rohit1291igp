@@ -456,11 +456,11 @@
                     </div>
                     <div class="searchFiled pull-left" *ngIf="reportType == 'whitelabel/report'">
                         <!-- <my-date-picker id="whitelabelFromDate" name="whitelabelFromDate" placeholder="Enter start date" [options]="myDatePickerOptions" [(ngModel)]="searchResultModel['fromdate']" ></my-date-picker> -->
-                        <input class="form-control" type="text" name="whitelabelemailid" placeholder="Enter Email Id" [(ngModel)]="searchResultModel['emailid']">
+                        <input class="form-control" type="text" name="whitelabelemailid" placeholder="Enter Email Id" [(ngModel)]="searchResultModel['emailid']" style="width: 200px;">
                     </div>
                 
                     <div *ngIf="reportType !== 'getbarcodestoverify'" class="searchFieldsSubmit relative inline">
-                        <input  [ngStyle]="{'background-color': whitelabelStyle ? whitelabelStyle.primaryColor : '', 'color': whitelabelStyle ? whitelabelStyle.secondaryColor : '' }" type="submit" class="btn btn-primary pull-right bg-igp searchSubmitBtn"  value="Search All Parameters"/>
+                        <input  style="background: chartreuse;" [ngStyle]="{'background-color': whitelabelStyle ? whitelabelStyle.primaryColor : '', 'color': whitelabelStyle ? whitelabelStyle.secondaryColor : '' }" type="submit" [ngClass]="{'bg-igp': !whitelabelStyle}" class="btn btn-primary pull-right bg-igp searchSubmitBtn"  value="Search All Parameters"/>
                     </div>
                     <div *ngIf="reportType == 'getbarcodestoverify'" class="searchFieldsSubmit relative inline" style="top:6em;">
                             <input  [ngStyle]="{'background-color': whitelabelStyle ? whitelabelStyle.primaryColor : '', 'color': whitelabelStyle ? whitelabelStyle.secondaryColor : '' }" type="submit" class="btn btn-primary pull-right bg-igp searchSubmitBtn"  value="Search Parameters"/>

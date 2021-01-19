@@ -16,7 +16,7 @@
         </ng-template>
 </nav>
 <mat-drawer-container class="example-container" autosize style="width: 100%;height: 100vh;background: #f2f2f2;padding-top: 2em;" >
-        <div *ngIf="backBtnShow" class="back-nav-btn" (click)="home('back')"><i class="fa fa-arrow-left" aria-hidden="true"></i> Back </div>
+        <div *ngIf="backBtnShow" class="back-nav-btn" [ngStyle]="{'color': whitelabelStyle ? whitelabelStyle.primaryColor : '' }" (click)="home('back')"><i class="fa fa-arrow-left" aria-hidden="true"></i> Back </div>
     <mat-drawer #drawer #appDrawer class="example-sidenav" style="max-width: 350px;" mode="side" [ngStyle]="{'background-color': whitelabelStyle ? whitelabelStyle.primaryColor : '', 'color': whitelabelStyle ? whitelabelStyle.secondaryColor : '' }">
         <!-- <a routerLink="/new-dashboard" style="text-decoration: none;">
             <mat-icon aria-hidden="false" aria-label="Example home icon" style="color: #fff;">home
