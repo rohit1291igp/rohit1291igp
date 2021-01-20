@@ -9,6 +9,7 @@ import { DatePipe } from '@angular/common';
 import { NotificationComponent } from 'app/components/notification/notification.component';
 import { EgvService } from 'app/services/egv.service';
 import { UrlHandlingStrategy } from '@angular/router';
+import { Subject, Observable } from 'rxjs';
 
 
 @Component({
@@ -415,7 +416,7 @@ export class EgvwalletComponent implements OnInit {
   approveTransaction(e, data, approval) {
     let $this = this;
     e.target.disabled = true;
-    var reqObj: any = {
+    let reqObj: any = {
       url: 'wallet/updatewallet?action=Credit&amount=' + data['Amount'] + "&transacId=" + data['TxnDetails'],
       method: "put",
     };
@@ -424,7 +425,7 @@ export class EgvwalletComponent implements OnInit {
     reqObj.url += "&userId=" + data['UserId'];
     reqObj.url += "&logId=" + data['logId']
     if (environment.userType == 'egv_admin' || environment.userType == 'sub_egv_admin' || environment.userType == 'wb_yourigpstore') {
-      reqObj.url += "&flagAdmin=1&flagApproveCredit=" + (approval ? this.flagApproveCreditMap.adminApproved : this.flagApproveCreditMap.reject);
+      reqObj.url += "&flagAdmin=1";
     }
     else {
       return;
@@ -432,38 +433,47 @@ export class EgvwalletComponent implements OnInit {
     reqObj.url += "&comments=" + data['comments'].slice(0, -10);
 
     $this.checkWalletDiscount().then(res => {
-      if (res) {
+      if (res && approval) {
+        res['amount'] = data.Amount;
         //open dialog box on basis of get reponse
         const dialogRef = this.dialog.open(WalletDiscountComponent, {
-          data: { data: res }
+          data: res
         });
         dialogRef.afterClosed().subscribe(result => {
-          // $this.EgvService.getEgvService(reqObj).subscribe(
-          //   (result, error) => {
-          //     if (result.error || error) {
-          //       $this.openSnackBar(result.errorMessage);
-          //       console.log('Error=============>', result.error);
-          //       e.target.disabled = false;
+          if(result){
+          reqObj.url +=`flagApproveCredit=${(approval ? this.flagApproveCreditMap.adminApproved : this.flagApproveCreditMap.reject)}&discountPercent=${result.discountPercent}&discountAmount=${result.discountAmount}&discountFlag=true`;
+
+          $this.EgvService.getEgvService(reqObj).subscribe(
+            (result, error) => {
+              if (result.error || error) {
+                $this.openSnackBar(result.errorMessage);
+                console.log('Error=============>', result.error);
+                e.target.disabled = false;
     
     
-          //     }
-          //     else $this.openSnackBar(result.result);
-          //     $this.getPendingList();
-          //   })
+              }
+              else $this.openSnackBar(result.result);
+              $this.getPendingList();
+            })
+          }
+          // else{
+          //   reqObj.url +=`flagApproveCredit=${(false ? this.flagApproveCreditMap.adminApproved : this.flagApproveCreditMap.reject)}`;
+          // }
         })
       }else{
-        // $this.EgvService.getEgvService(reqObj).subscribe(
-        //   (result, error) => {
-        //     if (result.error || error) {
-        //       $this.openSnackBar(result.errorMessage);
-        //       console.log('Error=============>', result.error);
-        //       e.target.disabled = false;
+        reqObj.url +=`flagApproveCredit=${(approval ? this.flagApproveCreditMap.adminApproved : this.flagApproveCreditMap.reject)}`;
+        $this.EgvService.getEgvService(reqObj).subscribe(
+          (result, error) => {
+            if (result.error || error) {
+              $this.openSnackBar(result.errorMessage);
+              console.log('Error=============>', result.error);
+              e.target.disabled = false;
   
   
-        //     }
-        //     else $this.openSnackBar(result.result);
-        //     $this.getPendingList();
-        //   })
+            }
+            else $this.openSnackBar(result.result);
+            $this.getPendingList();
+          })
       }
     });
   }
@@ -481,41 +491,13 @@ export class EgvwalletComponent implements OnInit {
           if (result.error) {
             _this.openSnackBar(result.errorMessage);
             console.log('Error=============>', result.error);
-            reject([])
+            reject([]);
           } else {
-            let testres = {
-              "error": false,
-              "errorCode": "NO_ERROR",
-              "errorMessage": "",
-              "errorParams": [],
-              "result": [
-                {
-                  "amount": null,
-                  "percent": 7,
-                  "days": 30,
-                  "walletId": 1077
-                }
-              ]
-            }
-            resolve(testres.result[0])
+            resolve(result.result[0]);
           }
         },
         (error) => {
-          let testres = {
-            "error": false,
-            "errorCode": "NO_ERROR",
-            "errorMessage": "",
-            "errorParams": [],
-            "result": [
-              {
-                "amount": null,
-                "percent": 7,
-                "days": 30,
-                "walletId": 1077
-              }
-            ]
-          }
-          resolve(testres.result[0])
+          reject([]);
         }
       )
     })
@@ -532,17 +514,17 @@ export class EgvwalletComponent implements OnInit {
   <div style="clear:both;"></div>
   <div class="d-flex justify-content-space-between m-b-1">
     <div>Recharge amount</div>
-    <div>500</div>
+    <div>{{data?.amount}}</div>
   </div>
   <form [formGroup]="discountForm" (ngSubmit)="walletDiscount(discountForm)">
     <div class="d-flex justify-content-space-between m-b-1">
       <div>Discount percent</div>
-      <input type="text" formControlName="discount" style="width:50px">
+      <input type="number" formControlName="discountPercent" style="width:50px" (keyup)="discountChange.next()">
     </div>
 
     <div class="d-flex justify-content-space-between m-b-1">
       <div>Discount Amount</div>
-      <input type="text" formControlName="damount" style="width:50px">
+      <input type="number" formControlName="discountAmount" style="width:50px" (keyup)="amountChange.next()">
     </div>
     <div class="d-flex justify-content-space-around">
       <button type="submit" mat-flat-button >Approve</button> <button type="reset" mat-flat-button
@@ -550,20 +532,50 @@ export class EgvwalletComponent implements OnInit {
     </div>
   </form>
 </div>`,
+styleUrls: ['./egvwallet.component.css']
 })
 export class WalletDiscountComponent implements OnInit {
   discountForm: FormGroup;
+  public discountChange = new Subject<string>();
+  public amountChange = new Subject<string>();
+
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     public dialogRef: MatDialogRef<WalletDiscountComponent>,
     private fb: FormBuilder
-  ) { }
+  ) { 
+    const discountChangeObservable = this.discountChange
+      .map((value:any) => event.target['value'])
+      .debounceTime(300)
+      .distinctUntilChanged()
+      .flatMap((search) => {
+        return Observable.of(search).delay(500);
+      })
+      .subscribe((data) => {
+        this.discountForm.patchValue({discountAmount: this.percentage(data, this.data.amount) })
+      });
+
+      const amountChangeObservable = this.amountChange
+      .map((value:any) => event.target['value'])
+      .debounceTime(300)
+      .distinctUntilChanged()
+      .flatMap((search) => {
+        return Observable.of(search).delay(500);
+      })
+      .subscribe((data) => {
+        this.discountForm.patchValue({discountPercent: this.calculateDiscount(data, this.data.amount) })
+      });  
+  }
 
   ngOnInit() {
     this.discountForm = this.fb.group({
-      discount: ['', Validators.required],
-      damount: ['', Validators.required]
+      discountPercent: ['', Validators.required],
+      amount: ['', Validators.required],
+      discountAmount:['', Validators.required]
     });
+    let perc = this.percentage(this.data.percent, this.data.amount);
+    
+    this.discountForm.patchValue({discountPercent: this.data.percent ? Number(this.data.percent) : 0.00, amount: this.data.amount ? this.data.amount : 0.00, discountAmount: perc})
   }
 
   walletDiscount(data){
@@ -574,4 +586,12 @@ export class WalletDiscountComponent implements OnInit {
     this.dialogRef.close();
   }
 
+  percentage(percent, total) {
+    return ((percent/ 100) * total).toFixed(2);
+  }
+
+  calculateDiscount(discountAmount, number){
+    return ((discountAmount / number) * 100).toFixed(2);
+    //Math.round((900 / 1000) * 100)
+  }
 }
