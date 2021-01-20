@@ -83,16 +83,16 @@ export class FaqEditComponent implements OnInit {
 			"walletId": localStorage.fkAssociateId,
 			"type": localStorage.userType,
 			"edit": "true",
-			"pageType": 2,//1 - for contanct us for other number will faq
+			"pagetype": 2,//1 - for contanct us for other number will faq
 			"message": "",
-			"contanctUs": _this.htmlContent,
-			"faq": "",
+			"contanctUs": '',
+			"faq": _this.htmlContent,
 			"webstoreId": 5
 		}
 		_this._egvService.postContactFaqPage(reqObj).subscribe(
 			(res:any )=>{
 					if(res.status == 'Success'){
-						_this.htmlContent = res.data.contanctUs;
+						_this.htmlContent = res.data.faq;
 					}else{
 						_this.openSnackBar('Something went wrong.');
 					}

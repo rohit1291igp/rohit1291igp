@@ -85,7 +85,7 @@ export class ContactUsEditComponent implements OnInit {
 			"walletId": localStorage.fkAssociateId,
 			"type": localStorage.userType,
 			"edit": "true",
-			"pageType": 1,//1 - for contanct us for other number will faq
+			"pagetype": 1,//1 - for contanct us for other number will faq
 			"message": "",
 			"contanctUs": _this.htmlContent,
 			"faq": "",
