@@ -19,6 +19,8 @@ export class LoginComponent implements OnInit {
     returnUrl: string;
     apierror: string;
     whitelabelStyle;
+    forgotPassword = false;
+    forgotPasswordModel: any = {}
 
     constructor(
         public route1: ActivatedRoute,
@@ -28,14 +30,16 @@ export class LoginComponent implements OnInit {
         public UtilityService: UtilityService,
         private cookieService: CookieService,
         private AppLoadService: AppLoadService
-    ) { 
-        
+    ) {
+
     }
 
     ngOnInit() {
         this.model.associatename = "";
         this.model.username = "";
         this.model.password = "";
+        this.forgotPasswordModel.associatename = "";
+        this.forgotPasswordModel.username = ""
 
         if (this.cookieService.getCookie('currentUserToken') || localStorage.getItem('currentUser')) {
             this.router.navigate(['/dashboard']);
@@ -46,10 +50,10 @@ export class LoginComponent implements OnInit {
     login() {
         let _this = this;
         _this.loading = true;
-        if(location.href.split('login/')[1]){
+        if (location.href.split('login/')[1]) {
 
-            let match = this.whitelabelStyle.associateName.find(ele => ele.toLowerCase() ==  _this.model.associatename.toLowerCase())
-            if(!match){
+            let match = this.whitelabelStyle.associateName.find(ele => ele.toLowerCase() == _this.model.associatename.toLowerCase())
+            if (!match) {
                 _this.apierror = `Login Failed (Either Associate Name/UserId/Password wrong)`;
                 let associateName = document.getElementsByName("associatename");
                 associateName[0].focus();
@@ -132,7 +136,7 @@ export class LoginComponent implements OnInit {
                 //   environment.userType='vendor';
                 // }
 
-///dashboard-microsite
+                ///dashboard-microsite
                 _this.UtilityService.changeRouteComponent();
                 if (userType === 'deliveryboy') {
                     _this.router.navigate(['/delivery-app']);
@@ -145,14 +149,14 @@ export class LoginComponent implements OnInit {
                 } else if (userType === 'warehouse' || userType === 'marketing' || userType === 'mldatascience') {
                     _this.router.navigate(['/new-dashboard']);
                 } else if ((userType === 'egv_admin' || userType === 'sub_egv_admin' || localStorage.getItem('userType') === 'wb_yourigpstore') || (userType === 'manager' || userType === 'sub_manager') || (userType === 'executive' || userType === 'sub_executive' || userType == 'parent_manager' || userType == 'parent_executive')) {
-                    if((userType === 'manager' || userType === 'sub_manager') || (userType === 'executive' || userType === 'sub_executive' || userType == 'parent_manager'   || userType == 'parent_executive') && !_this.whitelabelStyle){
+                    if ((userType === 'manager' || userType === 'sub_manager') || (userType === 'executive' || userType === 'sub_executive' || userType == 'parent_manager' || userType == 'parent_executive') && !_this.whitelabelStyle) {
                         _this.AppLoadService.getMicrositeDetails(_this.model.associatename);
                         let timer = setInterval(() => {
-                            if(_this.AppLoadService.micrositeDetails){
+                            if (_this.AppLoadService.micrositeDetails) {
                                 _this.router.navigate(['/new-dashboard']);
                                 clearInterval(timer);
                             }
-                          }, 10);
+                        }, 10);
                         // let data = {
                         //     headerLogoUrl:'https://cdn.igp.com/f_auto,q_auto/banners/IGP-for-business-50_new_png.png?v=6',
                         //     primaryColor:'#606869',
@@ -161,7 +165,7 @@ export class LoginComponent implements OnInit {
                         // }
                         // localStorage.setItem('whitelabelDetails', JSON.stringify(data));
 
-                    }else{
+                    } else {
                         _this.router.navigate(['/new-dashboard']);
                     }
                 } else if (userType === 'admin' || userType === 'vendor' || userType == 'hdextnp') {
@@ -172,6 +176,24 @@ export class LoginComponent implements OnInit {
                 }
             });
         }
+    }
+    resetPassword() {
+        //http://localhost:8083/v1/admin/egvpanel/login/ResetUserPassword?associateName=PBS&userName=PBS
+        if (!(this.forgotPasswordModel.associatename && this.forgotPasswordModel.username)) {
+            this.apierror = "Please fill all the fields."
+            return
+        }
+        let _this = this;
+        let reqObj = {
+
+            url: `egvpanel/login/ResetUserPassword?associatename=${_this.forgotPasswordModel.associatename}&username=${_this.forgotPasswordModel.username}`,
+            method: "put",
+            payload: {}
+        };
+
+        _this.BackendService.makeAjax(reqObj, function (err, response, headers) {
+            _this.apierror = response.result;
+        })
     }
 
 }
