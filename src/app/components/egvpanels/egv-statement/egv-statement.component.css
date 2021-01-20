@@ -48,3 +48,25 @@
 {
     text-align: right !important;
 }
+
+.search-container-box{
+    margin: 1px 19px 12px auto;
+    border: 1px solid #a6a6a6;
+    width: fit-content;
+    padding: 0px 10px;
+    border-radius: 3px;
+}
+.search-container-box>input{
+    width: 200px;
+    padding: 6px 4px;
+}
+.search-container-box>i{
+    font-size: 1.2em;
+    margin-bottom: 9px;
+    color: #a6a6a6;
+}
+
+.main-container {
+    width: 98%;
+    margin: 0 auto;
+}

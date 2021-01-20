@@ -105,6 +105,10 @@ export const userAcess = {
                     route: '/new-dashboard/performanceReport'
                 }
             ]
+        },{
+            displayName: 'Bulk Upload',
+            iconName: 'cloud_upload',
+            route: '/new-dashboard/bulkupload',
         }],
     admin: [
         {
