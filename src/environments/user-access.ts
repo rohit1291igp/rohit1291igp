@@ -517,6 +517,16 @@ export const userAcess = {
             displayName: 'FAQ',
             iconName: 'question_answer',
             route: '/new-dashboard/egv/faq',
+        },
+        {
+            displayName: 'Edit Contact Us',
+            iconName: 'contact_page',
+            route: '/new-dashboard/egv/contact-us-edit',
+        },
+        {
+            displayName: 'Edit FAQ',
+            iconName: 'question_answer',
+            route: '/new-dashboard/egv/faq-edit',
         }
 
     ],

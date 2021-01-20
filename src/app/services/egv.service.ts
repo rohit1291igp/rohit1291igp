@@ -87,5 +87,15 @@ export class EgvService {
    const url = `${environment.origin}v1/admin/egvpanel/wallet/discount?walletId=${walletId}`;
    return this.httpClient.get(url);
   }
+
+  getContactFaqPage(walletId, userId, pagetype){
+    const url = `${environment.origin}v1/admin/get/contanctusfaq?walletId=${walletId}&userId=${userId}&pagetype=${pagetype}`;
+   return this.httpClient.get(url);
+  }
+  
+  postContactFaqPage(payload){
+    const url = `${environment.origin}v1/admin/edit/contanctusfaq`;
+   return this.httpClient.post(url, payload);
+  }
 }
  
