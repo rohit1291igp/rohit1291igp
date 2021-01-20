@@ -495,7 +495,7 @@
 
 .orderLogContInner.slideropen{
     position: absolute;
-    top: 10em;
+    /* top: 10em; */
 }
 
 .mob .orderLogContInner.slideropen, .mob .uIContInner.slideropen{
