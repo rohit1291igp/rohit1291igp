@@ -9,6 +9,8 @@ import 'rxjs/add/operator/toPromise';
 import { HttpHeaders } from '@angular/common/http';
 import { DatePipe } from '@angular/common';
 import { ScriptService } from '../../services/script.service';
+import { EgvService } from 'app/services/egv.service';
+import { NotificationComponent } from '../notification/notification.component';
 
 
 @Component({
@@ -20,15 +22,16 @@ export class FaqEditComponent implements OnInit {
 	name = 'ng2-ckeditor';
 	@ViewChild("drawer") drawer: any;
 	ckeConfig: any;
-	mycontent: string;
 	log: string = '';
 	@ViewChild("myckeditor") ckeditor: any;
+	htmlContent = '';
 
 	constructor(
 		private scriptService: ScriptService,
+		private _egvService: EgvService,
+		private _snackBar: MatSnackBar,
 	) {
 		this.scriptService.load('ckEditor');
-		this.mycontent = `<p>My html content</p>`;
 	}
 
 	ngOnInit() {
@@ -36,6 +39,7 @@ export class FaqEditComponent implements OnInit {
 			allowedContent: false,
 			forcePasteAsPlainText: true
 		};
+		this.getContactPage();
 	}
 
 	onChange($event: any): void {
@@ -55,4 +59,57 @@ export class FaqEditComponent implements OnInit {
 			this.drawer.open();
 		}
 	}
+
+	getContactPage(){
+		const _this = this;
+		_this._egvService.getContactFaqPage(localStorage.fkAssociateId, localStorage.fkUserId, 2).subscribe(
+			(res:any )=>{
+					if(res.status == 'Success'){
+						_this.htmlContent = res.data.contanctUs;
+					}else{
+						_this.openSnackBar('Something went wrong.');
+					}
+				},
+			error => {
+				console.log(error);
+				_this.openSnackBar('Something went wrong.');
+			}	
+			
+		)
+	}
+	saveContactUs(){
+		const _this = this;
+		let reqObj = {
+			"walletId": localStorage.fkAssociateId,
+			"type": localStorage.userType,
+			"edit": "true",
+			"pageType": 2,//1 - for contanct us for other number will faq
+			"message": "",
+			"contanctUs": _this.htmlContent,
+			"faq": "",
+			"webstoreId": 5
+		}
+		_this._egvService.postContactFaqPage(reqObj).subscribe(
+			(res:any )=>{
+					if(res.status == 'Success'){
+						_this.htmlContent = res.data.contanctUs;
+					}else{
+						_this.openSnackBar('Something went wrong.');
+					}
+				},
+			error => {
+				console.log(error);
+				_this.openSnackBar('Something went wrong.');
+			}	
+			
+		)
+	}
+
+	openSnackBar(data) {
+		this._snackBar.openFromComponent(NotificationComponent, {
+		  data: data,
+		  duration: 5 * 1000,
+		  panelClass: ['snackbar-background']
+		});
+	  }
 }

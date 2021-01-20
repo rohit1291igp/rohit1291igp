@@ -1,7 +1,7 @@
 <mat-drawer-container class="main-container">
     <mat-drawer #drawer class="example-sidenav" mode="side" style="width:100%;">
       <div style="float: right;cursor: pointer;" (click)="drawerToggle('close')"><mat-icon class="material-icons-outlined">close</mat-icon></div>
-      <div [innerHTML]="mycontent"></div>
+      <div [innerHTML]="htmlContent"></div>
     </mat-drawer>
   
     <div class="example-sidenav-content">
@@ -9,7 +9,7 @@
               <form class="editor-form" role="form" #myForm="ngForm" accept-charset="UTF-8" novalidate>
                 <div class="form-group has-feedback" 
                       [ngClass]="{ 'has-error': myckeditor.invalid && myckeditor.touched }">
-                  <ckeditor [(ngModel)]="mycontent" 
+                  <ckeditor [(ngModel)]="htmlContent" 
                             #myckeditor="ngModel"
                             name="myckeditor"
                             required

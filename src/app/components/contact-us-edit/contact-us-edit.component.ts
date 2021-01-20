@@ -39,6 +39,8 @@ export class ContactUsEditComponent implements OnInit {
 			allowedContent: false,
 			forcePasteAsPlainText: true
 		};
+
+		this.getContactPage();
 	}
 
 	onChange($event: any): void {
@@ -61,7 +63,7 @@ export class ContactUsEditComponent implements OnInit {
 
 	getContactPage(){
 		const _this = this;
-		_this._egvService.getContactFaqPage(localStorage.fkAssociateId, localStorage.userId, 1).subscribe(
+		_this._egvService.getContactFaqPage(localStorage.fkAssociateId, localStorage.fkUserId, 1).subscribe(
 			(res:any )=>{
 					if(res.status == 'Success'){
 						_this.htmlContent = res.data.contanctUs;
@@ -83,7 +85,7 @@ export class ContactUsEditComponent implements OnInit {
 			"walletId": localStorage.fkAssociateId,
 			"type": localStorage.userType,
 			"edit": "true",
-			"pagetype": 1,//1 - for contanct us for other number will faq
+			"pageType": 1,//1 - for contanct us for other number will faq
 			"message": "",
 			"contanctUs": _this.htmlContent,
 			"faq": "",
@@ -93,6 +95,7 @@ export class ContactUsEditComponent implements OnInit {
 			(res:any )=>{
 					if(res.status == 'Success'){
 						_this.htmlContent = res.data.contanctUs;
+						_this.openSnackBar(res.data.message);
 					}else{
 						_this.openSnackBar('Something went wrong.');
 					}
