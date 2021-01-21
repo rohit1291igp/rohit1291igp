@@ -513,17 +513,17 @@ export class EgvwalletComponent implements OnInit {
   </div>
   <div style="clear:both;"></div>
   <div class="d-flex justify-content-space-between m-b-1">
-    <div>Recharge amount</div>
+    <div>Recharge Amount (Rs.)</div>
     <div>{{data?.amount}}</div>
   </div>
   <form [formGroup]="discountForm" (ngSubmit)="walletDiscount(discountForm)">
     <div class="d-flex justify-content-space-between m-b-1">
-      <div>Discount percent</div>
+      <div>Discount Percent (%)</div>
       <input type="number" formControlName="discountPercent" style="width:50px" (keyup)="discountChange.next()">
     </div>
 
     <div class="d-flex justify-content-space-between m-b-1">
-      <div>Discount Amount</div>
+      <div>Discount Amount (Rs.)</div>
       <input type="number" formControlName="discountAmount" style="width:50px" (keyup)="amountChange.next()">
     </div>
     <div class="d-flex justify-content-space-around">
@@ -553,8 +553,14 @@ export class WalletDiscountComponent implements OnInit {
         return Observable.of(search).delay(500);
       })
       .subscribe((data) => {
+        if(data >= 100){
+          this.discountForm.patchValue({discountPercent: 100});
+          this.formValidation = 100 ? Math.ceil(100) : false;
+          this.discountForm.patchValue({discountAmount: this.percentage(100, this.data.amount) });
+        }else{
         this.formValidation = data ? Math.ceil(data) : false;
-        this.discountForm.patchValue({discountAmount: this.percentage(data, this.data.amount) })
+        this.discountForm.patchValue({discountAmount: this.percentage(data, this.data.amount) });
+        }
       });
 
       const amountChangeObservable = this.amountChange
@@ -564,9 +570,15 @@ export class WalletDiscountComponent implements OnInit {
       .flatMap((search) => {
         return Observable.of(search).delay(500);
       })
-      .subscribe((data) => {
-        this.formValidation = data ? Math.ceil(data) : false;
-        this.discountForm.patchValue({discountPercent: this.calculateDiscount(data, this.data.amount) })
+      .subscribe((dataAmt) => {
+        if(dataAmt >= this.data.amount){
+          this.discountForm.patchValue({discountAmount: this.data.amount});
+          this.formValidation = (this.data.amount-1) ? Math.ceil(this.data.amount) : false;
+          this.discountForm.patchValue({discountPercent: this.calculateDiscount(this.data.amount, this.data.amount) });
+        }else{
+        this.formValidation = dataAmt ? Math.ceil(dataAmt) : false;
+        this.discountForm.patchValue({discountPercent: this.calculateDiscount(dataAmt, this.data.amount) });
+        }
       });  
   }
 
@@ -579,7 +591,11 @@ export class WalletDiscountComponent implements OnInit {
     });
     let perc = this.percentage(this.data.percent, this.data.amount);
     
-    this.discountForm.patchValue({discountPercent: this.data.percent ? Number(this.data.percent) : null, amount: this.data.amount ? this.data.amount : null, discountAmount: perc})
+    this.discountForm.patchValue({discountPercent: this.data.percent ? Number(this.data.percent) : null, amount: this.data.amount ? this.data.amount : null, discountAmount: perc});
+
+    if(this.discountForm.value.discountPercent && this.discountForm.value.discountAmount){
+      this.formValidation = this.discountForm.value.discountAmount;
+    }
   }
 
   walletDiscount(data){
