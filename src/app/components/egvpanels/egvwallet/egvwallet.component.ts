@@ -432,8 +432,8 @@ export class EgvwalletComponent implements OnInit {
     }
     reqObj.url += "&comments=" + data['comments'].slice(0, -10);
 
-    $this.checkWalletDiscount().then(res => {
-      if (res && approval) {
+    $this.checkWalletDiscount().then((res:any) => {
+      if (res && res.walletId && approval) {
         res['amount'] = data.Amount;
         //open dialog box on basis of get reponse
         const dialogRef = this.dialog.open(WalletDiscountComponent, {
@@ -527,7 +527,7 @@ export class EgvwalletComponent implements OnInit {
       <input type="number" formControlName="discountAmount" style="width:50px" (keyup)="amountChange.next()">
     </div>
     <div class="d-flex justify-content-space-around">
-      <button type="submit" mat-flat-button >Approve</button> <button type="reset" mat-flat-button
+      <button type="submit" mat-flat-button [disabled]="!formValidation">Approve</button> <button type="reset" mat-flat-button
         (click)="close()" [ngStyle]="{'background-color': whitelabelStyle ? whitelabelStyle.primaryColor : '#c3404e', 'color': whitelabelStyle ? whitelabelStyle.secondaryColor : '#fff' }">Cancel</button>
     </div>
   </form>
@@ -539,7 +539,7 @@ export class WalletDiscountComponent implements OnInit {
   public discountChange = new Subject<string>();
   public amountChange = new Subject<string>();
   whitelabelStyle: any;
-
+  formValidation:any;
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     public dialogRef: MatDialogRef<WalletDiscountComponent>,
@@ -553,6 +553,7 @@ export class WalletDiscountComponent implements OnInit {
         return Observable.of(search).delay(500);
       })
       .subscribe((data) => {
+        this.formValidation = data ? Math.ceil(data) : false;
         this.discountForm.patchValue({discountAmount: this.percentage(data, this.data.amount) })
       });
 
@@ -564,6 +565,7 @@ export class WalletDiscountComponent implements OnInit {
         return Observable.of(search).delay(500);
       })
       .subscribe((data) => {
+        this.formValidation = data ? Math.ceil(data) : false;
         this.discountForm.patchValue({discountPercent: this.calculateDiscount(data, this.data.amount) })
       });  
   }
