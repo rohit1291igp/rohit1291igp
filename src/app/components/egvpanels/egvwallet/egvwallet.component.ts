@@ -581,7 +581,10 @@ export class WalletDiscountComponent implements OnInit {
   }
 
   walletDiscount(data){
-    this.dialogRef.close(data.value);
+    let formValues = data.value;
+    if(formValues.discountPercent && Math.ceil(formValues.discountAmount)){
+      this.dialogRef.close(data.value);
+    }
   }
 
   close() {
