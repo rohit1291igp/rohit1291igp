@@ -97,5 +97,15 @@ export class EgvService {
     const url = `${environment.origin}v1/admin/edit/contanctusfaq`;
    return this.httpClient.post(url, payload);
   }
+
+  getUserDetails(userId){
+    let url = environment.origin + 'v1/admin/egvpanel/login/getDisplayNameEmailMobileOfUser?userId='+userId ;
+    return this.httpClient.get(url);
+  }
+  editUserDetails(email,mobile,displayName,userId){
+    let url = environment.origin + 'v1/admin/egvpanel/login/updateDisplayNameEmailMobileOfUser?email='+email+'&mobile='+mobile+'&displayName='+displayName+'&userId='+userId;
+    return this.httpClient.put(url, {});
+
+  }
 }
  

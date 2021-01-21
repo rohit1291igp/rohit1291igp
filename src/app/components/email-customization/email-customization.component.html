@@ -10,7 +10,7 @@
             <div class="col-md-10 textFieldRight">
               <span>
                 <input type="file" id="deskImagefile" (change)="onImageUpload($event)" accept=" image/*" />
-                <label for="deskImagefile" class="btn-2">Upload Desktop Banner</label>
+                <label for="deskImagefile" class="btn-2">Upload Email Banner</label>
               </span>
             </div>
           </div>
@@ -19,7 +19,8 @@
               Email Subject
             </div>
             <div class="col-md-10 textFieldRight">
-              <textarea class="bodyTextArea" matInput formControlName="emailSubject" rows="2"></textarea>
+              <textarea class="bodyTextArea" matInput formControlName="emailSubject" rows="2" [maxlength]="100"></textarea>
+              <span class="characterCounter">{{emailForm.get('emailSubject').value.length}}/100</span>
             </div>
           </div>
           <!-- <div class="col-md-12">
@@ -35,7 +36,9 @@
               Email Body
             </div>
             <div class="col-md-10 textFieldRight">
-              <textarea class="bodyTextArea" matInput formControlName="emailBody" rows="5"></textarea>
+             
+              <textarea class="bodyTextArea" matInput formControlName="emailBody" rows="5" [maxlength]="1000"></textarea>
+              <span class="characterCounter">{{emailForm.get('emailBody').value.length}}/1000</span>
             </div>
           </div>
           <div class="col-md-12">
@@ -43,7 +46,9 @@
               Signature
             </div>
             <div class="col-md-10 textFieldRight">
-              <textarea class="bodyTextArea" matInput formControlName="emailFooter" rows="4"></textarea>
+              <textarea class="bodyTextArea" matInput formControlName="emailFooter" rows="4" [maxlength]="300"></textarea>
+              <span class="characterCounter">{{emailForm.get('emailFooter').value.length}}/300</span>
+
             </div>
           </div>
           <div class="col-md-12">
