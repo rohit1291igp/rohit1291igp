@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output, ViewChild } from '@angular/core';
 import { BackendService } from '../../services/backend.service';
 import { UtilityService } from '../../services/utility.service';
 import {environment} from "../../../environments/environment";
 import { Observable } from "rxjs";
 import { IntervalObservable } from "rxjs/observable/IntervalObservable";
+import { OrdersActionTrayComponent } from '../orders-action-tray/orders-action-tray.component';
 
 @Component({
   selector: 'app-feeds',
@@ -11,6 +12,10 @@ import { IntervalObservable } from "rxjs/observable/IntervalObservable";
   styleUrls: ['./feeds.component.css']
 })
 export class FeedsComponent implements OnInit {
+    searchModel : any = {};
+    @ViewChild(OrdersActionTrayComponent) child: OrdersActionTrayComponent;
+    @Output() onOrderSearch: EventEmitter<any> = new EventEmitter();
+    notification = false;
   _feeds=[
       {
           "orderId": "1004300",
@@ -103,9 +108,66 @@ export class FeedsComponent implements OnInit {
             }
             console.log('feeds Response --->', response.result);
             _this.feedData=response.result;
+            response.result.find(function(feed){
+                _this.notification = false;
+                if(!feed.flagRead){
+                   return _this.notification = true;  
+                }
+            })
         });
       }
       
+  }
+
+  openTray(e, flagRead){
+    console.log('SearchKey==========>', e.target.text);
+    e.target.text = e.target.text.trim();
+    if(!e.target.text) return;
+    var parameters = {e:e, searchkey: e.target.text};
+    this.onOrderSearch.emit(parameters);
+    if(!flagRead){
+        var _this=this;
+        const fkAssociateId = localStorage.getItem('fkAssociateId') ? localStorage.getItem('fkAssociateId') : null;
+        var reqObj={
+            url:'markVendorInstructionRead?fkAssociateId='+fkAssociateId+'&orderId='+e.target.text,
+            method:'put'
+        };
+        _this.BackendService.makeAjax(reqObj, function(err, response, headers){
+            if(err || response.error) {
+                console.log('Error=============>', err, response.errorCode);
+            }
+            console.log('feeds Response --->', response.result);
+            _this.feedData=response.result;
+            response.result.find(function(feed){
+                _this.notification = false;
+                if(!feed.flagRead){
+                return _this.notification = true;  
+                }
+            })
+        });
+    }
+  }
+
+  markAsRead(orderId){
+    var _this=this;
+    const fkAssociateId = localStorage.getItem('fkAssociateId') ? localStorage.getItem('fkAssociateId') : null;
+    var reqObj={
+        url:'markVendorInstructionRead?fkAssociateId='+fkAssociateId+'&orderId='+orderId,
+        method:'put'
+    };
+    _this.BackendService.makeAjax(reqObj, function(err, response, headers){
+      if(err || response.error) {
+          console.log('Error=============>', err, response.errorCode);
+      }
+        console.log('feeds Response --->', response.result);
+        _this.feedData=response.result;
+        response.result.find(function(feed){
+            _this.notification = false;
+          if(!feed.flagRead){
+             return _this.notification = true;  
+          }
+            })
+        });
   }
 
 }

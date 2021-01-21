@@ -451,7 +451,7 @@
   bottom: 0;
   width: 100%;
   padding: 1em;
-  background-color: #ffffff;
+  background-color: #C3404E;
 
 }
 
@@ -474,8 +474,8 @@
 }
 
 .orderLogContInner.slideropen .orderLogContInner2, .uIContInner.slideropen .uIContInner2{
-    height: 103% ! important;
-    max-height: 103% ! important;
+    height: auto ! important;
+    max-height: fit-content ! important;
 }
 
 .mob .orderLogContInner.slideropen .orderLogContInner2, .mob .uIContInner.slideropen .uIContInner2{
@@ -484,13 +484,18 @@
 }
 
 .orderLogContInner.slideropen, .uIContInner.slideropen{
-    height: 103% ! important;
-    max-height: 103% ! important;
+    height: auto ! important;
+    max-height: fit-content ! important;
     -moz-transition-duration: 0.5s ! important;
     -webkit-transition-duration: 0.5s ! important;
     -o-transition-duration: 0.5s ! important;
     transition-duration: 0.5s ! important;
     bottom: -0.5em ! important;
+}
+
+.orderLogContInner.slideropen{
+    position: absolute;
+    /* top: 10em; */
 }
 
 .mob .orderLogContInner.slideropen, .mob .uIContInner.slideropen{
@@ -570,7 +575,7 @@
 }
 
 .orderLogContInner2 .content{
-  height: 272px;
+  height: 25em;
   overflow: auto;
 }
 

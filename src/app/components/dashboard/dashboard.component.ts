@@ -212,9 +212,10 @@ export class DashboardComponent implements OnInit {
         localStorage.removeItem("vendorGrpId");
       }
       var _this = this;
+      let sector = this.selectedSector ? this.selectedSector : '';
       var cookieFDate = _this.UtilityService.getCookie("festivalDate") ? JSON.parse(_this.UtilityService.getCookie("festivalDate")) : null;
       var cookieFDatwFormatted = cookieFDate ? cookieFDate.date.year + '-' + cookieFDate.date.month + '-' + cookieFDate.date.day : null;
-      this.dashboardService.getDashboardData(cookieFDatwFormatted, function (result) {
+      this.dashboardService.getDashboardData(cookieFDatwFormatted, sector, function (result) {
         /*if(!result.new[0] || (result.new[0] && result.new[0].deliveryTimes !== "today")) {
             _this.dashboardData = _this.dashboardService.getCustomData();
             return;

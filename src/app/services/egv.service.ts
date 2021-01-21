@@ -83,7 +83,22 @@ export class EgvService {
     return this.httpClient.get(url);
   }
 
-  getUserDetails( userId){
+  walletDiscount(walletId){
+   const url = `${environment.origin}v1/admin/egvpanel/wallet/discount?walletId=${walletId}`;
+   return this.httpClient.get(url);
+  }
+
+  getContactFaqPage(walletId, userId, pagetype){
+    const url = `${environment.origin}v1/admin/get/contanctusfaq?walletId=${walletId}&userId=${userId}&pageType=${pagetype}`;
+   return this.httpClient.get(url);
+  }
+  
+  postContactFaqPage(payload){
+    const url = `${environment.origin}v1/admin/edit/contanctusfaq`;
+   return this.httpClient.post(url, payload);
+  }
+
+  getUserDetails(userId){
     let url = environment.origin + 'v1/admin/egvpanel/login/getDisplayNameEmailMobileOfUser?userId='+userId ;
     return this.httpClient.get(url);
   }
