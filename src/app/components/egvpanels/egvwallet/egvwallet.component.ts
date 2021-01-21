@@ -538,6 +538,7 @@ export class WalletDiscountComponent implements OnInit {
   discountForm: FormGroup;
   public discountChange = new Subject<string>();
   public amountChange = new Subject<string>();
+  whitelabelStyle: any;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -568,6 +569,7 @@ export class WalletDiscountComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.whitelabelStyle = localStorage.getItem('whitelabelDetails') ? JSON.parse(localStorage.getItem('whitelabelDetails')) : null;
     this.discountForm = this.fb.group({
       discountPercent: ['', Validators.required],
       amount: ['', Validators.required],
