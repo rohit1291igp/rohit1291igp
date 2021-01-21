@@ -432,7 +432,8 @@ export class EgvwalletComponent implements OnInit {
     }
     reqObj.url += "&comments=" + data['comments'].slice(0, -10);
 
-    $this.checkWalletDiscount().then((res:any) => {
+    $this.checkWalletDiscount(data.fkasid).then((res:any) => {
+      
       if (res && res.walletId && approval) {
         res['amount'] = data.Amount;
         //open dialog box on basis of get reponse
@@ -483,10 +484,10 @@ export class EgvwalletComponent implements OnInit {
     return str;
   }
 
-  checkWalletDiscount() {
+  checkWalletDiscount(walletId) {
     const _this = this;
     return new Promise((resolve, reject) => {
-      _this.EgvService.walletDiscount(localStorage.fkAssociateId).subscribe(
+      _this.EgvService.walletDiscount(walletId).subscribe(
         (result: any) => {
           if (result.error) {
             _this.openSnackBar(result.errorMessage);
@@ -557,7 +558,11 @@ export class WalletDiscountComponent implements OnInit {
           this.discountForm.patchValue({discountPercent: 100});
           this.formValidation = 100 ? Math.ceil(100) : false;
           this.discountForm.patchValue({discountAmount: this.percentage(100, this.data.amount) });
-        }else{
+        } else if(data < 0){
+          this.discountForm.patchValue({discountPercent: 0});
+          this.formValidation = 0 ? Math.ceil(0) : false;
+          this.discountForm.patchValue({discountAmount: this.percentage(0, this.data.amount) });
+        } else{
         this.formValidation = data ? Math.ceil(data) : false;
         this.discountForm.patchValue({discountAmount: this.percentage(data, this.data.amount) });
         }
@@ -575,7 +580,11 @@ export class WalletDiscountComponent implements OnInit {
           this.discountForm.patchValue({discountAmount: this.data.amount});
           this.formValidation = (this.data.amount-1) ? Math.ceil(this.data.amount) : false;
           this.discountForm.patchValue({discountPercent: this.calculateDiscount(this.data.amount, this.data.amount) });
-        }else{
+        } else if(dataAmt < 0){
+          this.discountForm.patchValue({discountAmount: 0});
+          this.formValidation = (0) ? Math.ceil(0) : false;
+          this.discountForm.patchValue({discountPercent: this.calculateDiscount(0, this.data.amount) });
+        } else{
         this.formValidation = dataAmt ? Math.ceil(dataAmt) : false;
         this.discountForm.patchValue({discountPercent: this.calculateDiscount(dataAmt, this.data.amount) });
         }
