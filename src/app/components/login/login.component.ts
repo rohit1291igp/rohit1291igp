@@ -186,7 +186,7 @@ export class LoginComponent implements OnInit {
         let _this = this;
         let reqObj = {
 
-            url: `egvpanel/login/ResetUserPassword?associatename=${_this.forgotPasswordModel.associatename}&username=${_this.forgotPasswordModel.username}`,
+            url: `egvpanel/login/ResetUserPassword?associateName=${_this.forgotPasswordModel.associatename}&userName=${_this.forgotPasswordModel.username}`,
             method: "put",
             payload: {}
         };
