@@ -82,18 +82,25 @@ export class PasswordChangeComponent implements OnInit {
 
   onEdit() {
     let _this = this;
-    let req_body = {
-      "fk_associate_id": localStorage.getItem('fkAssociateId'),
-      "password": this.confirm_password,
-      "id": localStorage.getItem('fkUserId')
-    }
-    this.egvService.editUserDetails(this.email, this.mobile_number, this.display_name, localStorage.fkUserId).subscribe((res) => {
-      if (res['error']) {
-        _this.openSnackBar(res['errorMessage']);
-      }
+    const re_email = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    if (re_email.test(this.email)) {
+      this.egvService.editUserDetails(this.email, this.mobile_number, this.display_name, localStorage.fkUserId).subscribe((res) => {
+        if (res['error']) {
+          _this.openSnackBar(res['errorMessage']);
+        }
 
-      _this.openSnackBar('Account Updated Successfully');
-    })
+        _this.openSnackBar('Account Updated Successfully');
+      })
+    }
   }
+
+  validateMob(event: any) {
+    const pattern = /[0-9\+\-\ ]/;
+    let inputChar = String.fromCharCode(event.charCode);
+    if (event.keyCode != 8 && !pattern.test(inputChar)) {
+      event.preventDefault();
+    }
+  }
+
 
 }
