@@ -30,7 +30,7 @@ export class FaqComponent implements OnInit {
 		_this._egvService.getContactFaqPage(localStorage.fkAssociateId, localStorage.fkUserId, 2).subscribe(
 			(res:any )=>{
 					if(res.status == 'Success'){
-						_this.htmlContent = res.data.contanctUs;
+						_this.htmlContent = res.data.faq;
 					}else{
 						_this.openSnackBar('Something went wrong.');
 					}

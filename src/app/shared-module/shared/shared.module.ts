@@ -10,6 +10,7 @@ import { PrintTemplateComponent } from '../../components/print-template/print-te
 import { WidgetsComponent } from '../../components/widgets/widgets.component';
 import { ReplacePipe } from '../../customPipes/replace.pipe';
 import { AutoSelectionComponent } from 'app/components/autoselection/auto-selection.component';
+import { SafeHtmlPipe } from 'app/customPipes/dom-sanitize.pipe';
 
 
 @NgModule({
@@ -48,9 +49,10 @@ import { AutoSelectionComponent } from 'app/components/autoselection/auto-select
     LoaderComponent,
     PrintTemplateComponent,
     ReplacePipe,
-    AutoSelectionComponent
+    AutoSelectionComponent,
+    SafeHtmlPipe
   ],
-  providers: [ReplacePipe],
+  providers: [ReplacePipe, SafeHtmlPipe],
   exports: [
     FormsModule,
     ReactiveFormsModule,
@@ -85,7 +87,8 @@ import { AutoSelectionComponent } from 'app/components/autoselection/auto-select
     AutoSelectionComponent,
     MatSidenavModule,
     MatTabsModule,
-    MatChipsModule
+    MatChipsModule,
+    SafeHtmlPipe
   ],
 })
 export class SharedModule {

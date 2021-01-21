@@ -575,7 +575,7 @@ export class WalletDiscountComponent implements OnInit {
     });
     let perc = this.percentage(this.data.percent, this.data.amount);
     
-    this.discountForm.patchValue({discountPercent: this.data.percent ? Number(this.data.percent) : 0.00, amount: this.data.amount ? this.data.amount : 0.00, discountAmount: perc})
+    this.discountForm.patchValue({discountPercent: this.data.percent ? Number(this.data.percent) : null, amount: this.data.amount ? this.data.amount : null, discountAmount: perc})
   }
 
   walletDiscount(data){
