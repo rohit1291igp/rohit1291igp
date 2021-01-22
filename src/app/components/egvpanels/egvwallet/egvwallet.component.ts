@@ -442,7 +442,7 @@ export class EgvwalletComponent implements OnInit {
         });
         dialogRef.afterClosed().subscribe(result => {
           if(result){
-          reqObj.url +=`flagApproveCredit=${(approval ? this.flagApproveCreditMap.adminApproved : this.flagApproveCreditMap.reject)}&discountPercent=${result.discountPercent}&discountAmount=${result.discountAmount}&discountFlag=true`;
+          reqObj.url +=`&flagApproveCredit=${(approval ? this.flagApproveCreditMap.adminApproved : this.flagApproveCreditMap.reject)}&discountPercent=${result.discountPercent}&discountAmount=${result.discountAmount}&discountFlag=true`;
 
           $this.EgvService.getEgvService(reqObj).subscribe(
             (result, error) => {
