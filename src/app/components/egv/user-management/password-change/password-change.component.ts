@@ -83,6 +83,10 @@ export class PasswordChangeComponent implements OnInit {
   onEdit() {
     let _this = this;
     const re_email = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    if (this.display_name) {
+      _this.openSnackBar('Please Enter Display Name.');
+      return;
+    }
     if (!re_email.test(this.email)) {
       _this.openSnackBar('Please Enter Valid Email ID.');
       return;
@@ -95,7 +99,6 @@ export class PasswordChangeComponent implements OnInit {
       if (res['error']) {
         _this.openSnackBar(res['errorMessage']);
       }
-
       _this.openSnackBar(res['errorMessage']);
     })
   }
