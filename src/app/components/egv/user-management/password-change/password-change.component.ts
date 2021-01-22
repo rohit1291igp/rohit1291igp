@@ -83,15 +83,21 @@ export class PasswordChangeComponent implements OnInit {
   onEdit() {
     let _this = this;
     const re_email = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    if (re_email.test(this.email)) {
-      this.egvService.editUserDetails(this.email, this.mobile_number, this.display_name, localStorage.fkUserId).subscribe((res) => {
-        if (res['error']) {
-          _this.openSnackBar(res['errorMessage']);
-        }
-
-        _this.openSnackBar('Account Updated Successfully');
-      })
+    if (!re_email.test(this.email)) {
+      _this.openSnackBar('Please Enter Valid Email ID.');
+      return;
     }
+    if (this.mobile_number.toString().length!=10) {
+      _this.openSnackBar('Please Enter Valid Mobile Number.');
+      return;
+    }
+    this.egvService.editUserDetails(this.email, this.mobile_number, this.display_name, localStorage.fkUserId).subscribe((res) => {
+      if (res['error']) {
+        _this.openSnackBar(res['errorMessage']);
+      }
+
+      _this.openSnackBar(res['errorMessage']);
+    })
   }
 
   validateMob(event: any) {
