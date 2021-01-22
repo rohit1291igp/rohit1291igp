@@ -26,7 +26,7 @@ export class ContactUsComponent implements OnInit {
 
 	getContactPage(){
 		const _this = this;
-		_this._egvService.getContactFaqPage(localStorage.fkAssociateId, localStorage.fkUserId, 1).subscribe(
+		_this._egvService.getContactFaqPage(localStorage.fkAssociateId, localStorage.fkUserId, 1, localStorage.userType, false).subscribe(
 			(res:any )=>{
 					if(res.status == 'Success'){
 						_this.htmlContent = res.data.contanctUs;
