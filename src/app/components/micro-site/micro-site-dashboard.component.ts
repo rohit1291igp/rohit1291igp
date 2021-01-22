@@ -119,7 +119,9 @@ export class MicroSiteDasboardComponent implements OnInit {
     ngOnInit() {
         this.whitelabelStyle = localStorage.getItem('whitelabelDetails') ? JSON.parse(localStorage.getItem('whitelabelDetails')) : null;
         if (this.whitelabelStyle) {
-            this.userTypeForTransaction = this.userAccessService.userAccessDetails && this.userAccessService.userAccessDetails.find(f => f.route.includes('voucher-credit')) ? true : false;
+            let isVoucherCredit = this.userAccessService.userAccessDetails && this.userAccessService.userAccessDetails.find(f => f.children && f.children.find(a => a.route.includes('voucher-credit')));
+            isVoucherCredit = isVoucherCredit && isVoucherCredit.children && isVoucherCredit.children.find(h => h.route.includes('voucher-credit'));
+            this.userTypeForTransaction = isVoucherCredit ? true : false;
         }
         this.fksId = localStorage.getItem('fkAssociateId');
         this.vendorName = localStorage.getItem('vendorName');
