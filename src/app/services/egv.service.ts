@@ -88,8 +88,8 @@ export class EgvService {
    return this.httpClient.get(url);
   }
 
-  getContactFaqPage(walletId, userId, pagetype){
-    const url = `${environment.origin}v1/admin/get/contanctusfaq?walletId=${walletId}&userId=${userId}&pageType=${pagetype}`;
+  getContactFaqPage(walletId, userId, pagetype, userType, isEdit){
+    const url = `${environment.origin}v1/admin/get/contanctusfaq?walletId=${walletId}&userId=${userId}&pageType=${pagetype}&loginType=${userType}&edit=${isEdit}`;
    return this.httpClient.get(url);
   }
   

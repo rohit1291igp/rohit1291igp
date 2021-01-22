@@ -63,7 +63,7 @@ export class ContactUsEditComponent implements OnInit {
 
 	getContactPage(){
 		const _this = this;
-		_this._egvService.getContactFaqPage(localStorage.fkAssociateId, localStorage.fkUserId, 1).subscribe(
+		_this._egvService.getContactFaqPage(localStorage.fkAssociateId, localStorage.fkUserId, 1, localStorage.userType, true).subscribe(
 			(res:any )=>{
 					if(res.status == 'Success'){
 						_this.htmlContent = res.data.contanctUs;
