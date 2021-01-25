@@ -28,6 +28,7 @@ import { SearchRankingComponent } from 'app/components/search-ranking/search-ran
 import { PayoutDashboardComponent, PayoutDashboardModule } from 'app/components/payout-dashboard/payout-dashboard.component';
 import { PendingOrderComponent } from 'app/components/pending-order/pending-order.component';
 import { BulkUploadComponent } from 'app/components/bulk-upload/bulk-upload.component';
+import { DownloadEmailComponent } from 'app/components/download-email/download-email.component';
 
 
 const routes: Routes = [{
@@ -125,7 +126,12 @@ const routes: Routes = [{
     path: 'pending-orders',
     component: PendingOrderComponent,
     canActivate: [AuthGuard]
-  }
+  },
+  {
+    path: 'download/:fileFor/:filedate/:fileTime',
+    component: DownloadEmailComponent,
+    canActivate: [AuthGuard]
+  },
 
   ]
 }
@@ -161,7 +167,8 @@ const routes: Routes = [{
     UploadedImageReportComponent,
     OfferPageManagementComponent,
     SearchRankingComponent,
-    PendingOrderComponent
+    PendingOrderComponent,
+    DownloadEmailComponent
   ],
   providers: [NavService, UserAccessService]
 })

@@ -52,11 +52,11 @@ const route: Routes = [
     loadChildren: './modules/voucher.module#VoucherModule',
     canActivate: [AuthGuard]
   },
-  {
-    path: 'download/:fileFor/:filedate/:fileTime',
-    component: DownloadEmailComponent,
-    canActivate: [AuthGuard]
-  },
+  // {
+  //   path: 'download/:fileFor/:filedate/:fileTime',
+  //   component: DownloadEmailComponent,
+  //   canActivate: [AuthGuard]
+  // },
   {
     path: 'add-delivery-boy',
     component: AddDeliveryBoyComponent,
@@ -107,9 +107,9 @@ const route: Routes = [
   //   component:AlertManagementComponent,
   //   canActivate:[AuthGuard,EgvGuard]
   // },
-  { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+  { path: '', redirectTo: 'new-dashboard', pathMatch: 'full' },
   // otherwise redirect to home
-  { path: '**', redirectTo: 'dashboard' }
+  { path: '**', redirectTo: 'new-dashboard' }
 ];
 
 export const routing = RouterModule.forRoot(route, { useHash: true });

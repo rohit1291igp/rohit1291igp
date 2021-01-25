@@ -1,1 +1,4 @@
-<h1 style="padding:2em;">Please wait! File is being downloaded...</h1>
+<h1 *ngIf="isDownloading else downloaded" style="padding:2em;">Please wait! File is being downloaded...</h1>
+<ng-template #downloaded>
+        <h1 style="padding:2em;">File has been downloaded</h1>
+</ng-template>
