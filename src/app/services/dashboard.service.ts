@@ -68,7 +68,12 @@ export class DashboardService {
             let userType = localStorage.getItem('userType');
             
             if(userType == 'warehouse'||userType == 'microsite' || userType == 'microsite-zeapl' || userType == 'admin' || userType == 'vendor' || userType ==  'parent_manager'){
-                this.router.navigate(['/new-dashboard']);
+                if(location.href && location.href.includes('new-dashboard')){
+                    let link = location.href.split("#") as any;
+                    this.router.navigate([link[1]]);
+                }else{
+                    this.router.navigate(['/new-dashboard']);
+                }
             }
             
             // if(userType == 'warehouse'){
