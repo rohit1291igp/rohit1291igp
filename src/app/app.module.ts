@@ -91,7 +91,7 @@ export function init_app(appLoadService: AppLoadService) {
     BlogCreateComponent,
     BlogListComponent,
     BlogViewComponent,
-    DownloadEmailComponent,
+    // DownloadEmailComponent,
     AddDeliveryBoyComponent,
     NotificationComponent,
     ImgPreviewComponent,

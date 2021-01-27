@@ -4,16 +4,13 @@
     <div class='col-md-12'>
       <div class='headerUnderLine addMoney col-md-12'>
         Summary
-
-
       </div>
-
 
       <div class="balance col-md-12 marginB20" style="padding: 0px 14px;">
         <div class="col-md-12 marginB20" style="margin-bottom:20px"
           *ngIf="env.userType == 'egv_admin' || env.userType.includes('parent')">
           <mat-form-field class="addMoneyInput width15" *ngIf="env.userType =='egv_admin'">
-            <mat-label>Select a Wallet</mat-label>
+            <mat-label>Select an Account</mat-label>
             <input type="text" matInput formControlName="selectedUser" [matAutocomplete]="auto">
             <mat-autocomplete #auto="matAutocomplete" (optionSelected)='getUserSelected($event.option.value)'
               [displayWith]="userDisplayFn">
@@ -21,9 +18,9 @@
                 {{option.company_name}}</mat-option>
             </mat-autocomplete>
           </mat-form-field>
-          <mat-form-field class="filterElement" *ngIf="addMoneyForm.value.selectedUser">
-            <mat-label>Select a wallet</mat-label>
-            <input type="text" matInput placeholder='Select a wallet' formControlName="selectedChild"
+          <mat-form-field class="filterElement addMoneyInput width15" *ngIf="addMoneyForm.value.selectedUser">
+            <mat-label>Select an Account</mat-label>
+            <input type="text" matInput placeholder='Select a account' formControlName="selectedChild"
               [matAutocomplete]="auto">
             <mat-autocomplete #auto="matAutocomplete" (optionSelected)='getChildSelected($event.option.value)'
               [displayWith]="userDisplayFn">
@@ -33,9 +30,8 @@
           </mat-form-field>
         </div>
         <div *ngIf="loadingSummary else loaded">
-          Select a Wallet to view Summary.
+          Select a Account to view Summary.
         </div>
-
 
         <ng-template #loaded>
           <div class="d-flex flex-wrap-wrap" style="width: 100%">
@@ -93,9 +89,9 @@
                   <i class="fa fa-calendar summary-icon-circle"></i>
                 </div>
                 <div style="flex: 5;text-align: end;padding-right: 0.5em;">
-                  <div style="margin:auto;font-size: 1.1em;">&#8377;
-                    {{walletSummary.creditLimitDays || '0' | indianNumeric}}</div>
-                  <div class="summaryIcon"> Daily Limit</div>
+                  <div style="margin:auto;font-size: 1.1em;">
+                    {{walletSummary.creditLimitDays || '0' | indianNumeric}} {{(walletSummary.creditLimitDays>1)?'days':'day'}}</div>
+                  <div class="summaryIcon">Credit Period</div>
                 </div>
             </div>
 
@@ -116,9 +112,7 @@
                   <div class="summaryIcon text-white">Status</div>
                 </div>
             </div>
-
           </div>
-
         </ng-template>
       </div>
     </div>
@@ -126,7 +120,7 @@
     <div style="background: #fff;width: 96%;margin: 0 auto;overflow: auto;padding: 6px 19px;border-radius: 3px;
     box-shadow: 0px 1px 3px 0px #ccc;" *ngIf="env.userType == 'egv_admin' || env.userType.includes('parent')">
       <div class='addMoney headerUnderLine col-md-12'>
-        Add Money To Wallet
+        Add Money To Account
       </div>
       <div class="col-md-12 marginB20">
 

@@ -51,3 +51,12 @@
 .bodyTextArea{
     width: 500px;
 }
+
+.characterCounter{
+    /* background-color: #cfcbcb; */
+    border-radius: 10px;
+    padding: 2px;
+    margin-left: 5px;
+    font-size:12px;
+    position: absolute;
+}

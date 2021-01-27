@@ -39,6 +39,7 @@
     vertical-align: middle;
     margin-bottom: 20px;
     margin-left: 10px;
+    text-align: center;
 }
 
 [type="file"]+label:hover {

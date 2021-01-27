@@ -82,5 +82,30 @@ export class EgvService {
     let url = environment.origin + 'v1/admin/internal/bulk-egv/resendCardDetails?fkAssociateId='+fkAssociateId+'&uniqueOrderId='+txnDetails ;
     return this.httpClient.get(url);
   }
+
+  walletDiscount(walletId){
+   const url = `${environment.origin}v1/admin/egvpanel/wallet/discount?walletId=${walletId}`;
+   return this.httpClient.get(url);
+  }
+
+  getContactFaqPage(walletId, userId, pagetype, userType, isEdit){
+    const url = `${environment.origin}v1/admin/get/contanctusfaq?walletId=${walletId}&userId=${userId}&pageType=${pagetype}&loginType=${userType}&edit=${isEdit}`;
+   return this.httpClient.get(url);
+  }
+  
+  postContactFaqPage(payload){
+    const url = `${environment.origin}v1/admin/edit/contanctusfaq`;
+   return this.httpClient.post(url, payload);
+  }
+
+  getUserDetails(userId){
+    let url = environment.origin + 'v1/admin/egvpanel/login/getDisplayNameEmailMobileOfUser?userId='+userId ;
+    return this.httpClient.get(url);
+  }
+  editUserDetails(email,mobile,displayName,userId){
+    let url = environment.origin + 'v1/admin/egvpanel/login/updateDisplayNameEmailMobileOfUser?email='+email+'&mobile='+mobile+'&displayName='+displayName+'&userId='+userId;
+    return this.httpClient.put(url, {});
+
+  }
 }
  

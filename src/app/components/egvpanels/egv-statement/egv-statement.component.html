@@ -6,7 +6,7 @@
           <div style="margin-bottom: 0.5em;">
             <!-- *ngIf="env.userType=='egv_admin'" -->
             <mat-form-field class="addMoneyInput width15" *ngIf="env.userType =='egv_admin'">
-              <mat-label>Select a Wallet</mat-label>
+              <mat-label>Select a Account</mat-label>
               <input type="text" matInput formControlName="selectedUser" [matAutocomplete]="auto">
               <mat-autocomplete #auto="matAutocomplete" (optionSelected)='getUserSelected($event.option.value)'
                 [displayWith]="userDisplayFn">
@@ -16,8 +16,8 @@
             </mat-form-field>
             <mat-form-field class="filterElement"
               *ngIf="statementForm.value.selectedUser && (env.userType =='egv_admin' || env.userType.includes('parent'))">
-              <mat-label>Select a wallet</mat-label>
-              <input type="text" matInput placeholder='Select a wallet' formControlName="selectedChild"
+              <mat-label>Select a Account</mat-label>
+              <input type="text" matInput placeholder='Select a Account' formControlName="selectedChild"
                 [matAutocomplete]="auto">
               <mat-autocomplete #auto="matAutocomplete" (optionSelected)='getChildSelected($event.option.value)'
                 [displayWith]="userDisplayFn">

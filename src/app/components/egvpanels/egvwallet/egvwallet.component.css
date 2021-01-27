@@ -127,6 +127,14 @@ mat-cell:nth-child(8), mat-header-cell:nth-child(8) {
     flex: 0 0 15%;
 }
 
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    margin: 0; 
+}
+
 .summary-icon-circle {
     background: #ceb884;
     border-radius: 49%;
