@@ -1,34 +1,49 @@
 <div class="container">
   <div class="row m-top-1">
     <div class="col-sm-3">
+      <mat-form-field appearance="fill" style="margin-top: 1em;">
+        <mat-label>Choose Search</mat-label>
+        <mat-select [(ngModel)]="searchType">
+          <ng-container *ngFor="let x of searchOptions">
+              <mat-option value="{{x}}">{{x}}</mat-option>
+          </ng-container>
+        </mat-select>
+      </mat-form-field>
+      <br>
+      <mat-form-field class="m-top-1" appearance="fill">
+          <mat-label>Sort By</mat-label>
+          <mat-select [(ngModel)]="sortBy">
+            <mat-option [value]="option.value" *ngFor="let option of sortOptions">{{ option.title }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+    </div>
+    <div class="col-sm-3">
       <mat-form-field class="example-full-width m-top-1">
-        <mat-label>Search Keyword</mat-label>
+        <mat-label>{{searchType}} Keyword</mat-label>
         <input matInput placeholder="Search" [(ngModel)]="searchKeyword">
       </mat-form-field>
       <br>
-      <button type="button" mat-raised-button (click)="onSubmit()" [disabled]="getSearchRandkingResultInvoked">Submit</button>
+      <button type="button" mat-raised-button (click)="onSubmit()"
+        [disabled]="getSearchRandkingResultInvoked" style="margin-top: 1.2em;background:#c3404e;color:#fff">Submit</button>
     </div>
     <div class="col-sm-3">
       <mat-form-field class="example-full-width">
         <mat-label>Solr Url</mat-label>
-        <textarea matInput placeholder="Solr Url e.g. http://solr.igp.com:8983/solr/product" [(ngModel)]="solr"></textarea>
+        <textarea matInput placeholder="Solr Url e.g. http://solr.igp.com:8983/solr/product"
+          [(ngModel)]="solr"></textarea>
         <mat-hint>Only change ip from url (e.g. http://solr.igp.com:8983)</mat-hint>
       </mat-form-field>
     </div>
     <div class="col-sm-3">
       <mat-form-field class="example-full-width">
         <mat-label>ML Url</mat-label>
-        <textarea matInput placeholder="ML Url e.g. http://10.0.4.168/api/v1/get_products_id?initial_query" [(ngModel)]="ml"></textarea>
+        <textarea matInput placeholder="ML Url e.g. http://10.0.4.168/api/v1/get_products_id?initial_query"
+          [(ngModel)]="ml"></textarea>
         <mat-hint>Only change ip from url (e.g. http://10.0.4.168)</mat-hint>
       </mat-form-field>
     </div>
-    <mat-form-field class="col-sm-2 m-top-1" appearance="fill">
-      <mat-label>Sort By</mat-label>
-      <mat-select [(ngModel)]="sortBy">
-        <mat-option [value]="option.value" *ngFor="let option of sortOptions">{{ option.title }}</mat-option>
-      </mat-select>
-    </mat-form-field>
-    <div  class="col-sm-1 m-top-1">
+    
+    <div class="col-sm-1 m-top-1">
     </div>
   </div>
   <div *ngIf="dataSource.data.length>0" class="row m-top-1">
@@ -40,24 +55,30 @@
 
     <mat-table #table [dataSource]="dataSource">
       <ng-container *ngFor="let headerColumn of displayedColumns" matColumnDef="{{headerColumn}}">
-        <mat-header-cell *matHeaderCellDef [ngClass]="{'text-right':headerColumn==='price','text-center':headerColumn==='rating'}"> {{headerColumn | titlecase}} </mat-header-cell>
+        <mat-header-cell *matHeaderCellDef
+          [ngClass]="{'text-right':headerColumn==='price','text-center':headerColumn==='rating'}">
+          {{headerColumn | titlecase}} </mat-header-cell>
         <ng-container *ngIf="headerColumn!=='image'">
           <ng-container *ngIf="headerColumn!=='price'">
-            <mat-cell *matCellDef="let element" [ngClass]="{'text-center':headerColumn==='rating'}"> {{element[headerColumn]}} </mat-cell>
+            <mat-cell *matCellDef="let element" [ngClass]="{'text-center':headerColumn==='rating'}">
+              {{element[headerColumn]}} </mat-cell>
           </ng-container>
-            <ng-container *ngIf="headerColumn==='price'">
-              <mat-cell *matCellDef="let element" style="text-align:right; width: 100px;"> {{element.price.mrp_inr}} </mat-cell>
-            </ng-container>
+          <ng-container *ngIf="headerColumn==='price'">
+            <mat-cell *matCellDef="let element" style="text-align:right; width: 100px;"> {{element.price.mrp_inr}}
+            </mat-cell>
+          </ng-container>
         </ng-container>
         <ng-container *ngIf="headerColumn==='image'">
-          <mat-cell *matCellDef="let element"> <img [src]="imgCdn+element[headerColumn]" style="padding: 5px 0px;" [alt]="element[headerColumn]" width="100px"> </mat-cell>
+          <mat-cell *matCellDef="let element"> <img [src]="imgCdn+element[headerColumn]" style="padding: 5px 0px;"
+              [alt]="element[headerColumn]" width="100px"> </mat-cell>
         </ng-container>
       </ng-container>
-  
+
       <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
       <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
     </mat-table>
-    <mat-paginator [pageSizeOptions]="[50]" (page)="onPageChange($event)" [length]="dataSource?.data?.length" ></mat-paginator>
+    <mat-paginator [pageSizeOptions]="[50]" (page)="onPageChange($event)" [length]="dataSource?.data?.length">
+    </mat-paginator>
   </div>
   <div *ngIf="dataSource.data.length<1" class="row m-top-1">
     <mat-card>
