@@ -362,8 +362,10 @@ export class EgvStatementComponent implements OnInit {
 				if (element.TransactionMethod == 2) data.tableHeaders.push("Recipient_Email");
 				if (element.TransactionMethod == 3) {
 					let index = data.tableHeaders.indexOf('OrderId');
-					data.tableHeaders.splice(index,1);;
+					data.tableHeaders.splice(index,1);
 					data.tableHeaders.splice(index,0,"Recipient_Email");
+					data.tableHeaders.push("Actions");
+					data.transactionId = element.TxnDetails;
 				}
 				if (element.Status == 'Delivered') data.tableHeaders.push("Actions");
 
@@ -449,9 +451,8 @@ export class EgvStatementComponent implements OnInit {
 	}
 	getTxnDetails(element){
 		 
-		// console.log("Hiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii",element);
 		let str = (element['TxnDetails']||"")+(element['comments'].trim()!=""?" - ":"")+element['comments']
-		 console.log(str);
+		//  console.log(str);
 		return str;
 	}
 }
@@ -572,14 +573,22 @@ export class transactionReportDialog implements OnInit {
 
 
 	resendGV(element) {
+		
 		let $this = this;
-		console.log(element)
-		this.EgvService.resendgv(this.data.fkasid, element['OrderId']).subscribe(
-			result => {
-				$this.openSnackBar(result['data']);
-
-
+		console.log(element);
+		if(element.TransactionMethod == 2){
+			this.EgvService.resendBulkGv(this.data.fkasid, element['OrderId']).subscribe(
+				result => {
+					$this.openSnackBar(result['data']);
 			})
+		}
+		else if(element.TransactionMethod == 3){
+			this.EgvService.resendPointMail(element['Recipient_Email'],this.data.fkasid, this.data.transactionId).subscribe(
+				result => {
+					$this.openSnackBar(result['data']);
+			})
+		}
+		
 	}
 
 	applyFilter(event: Event) {

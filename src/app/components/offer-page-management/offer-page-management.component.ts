@@ -235,6 +235,7 @@ export class OfferPageManagementComponent implements OnInit, AfterViewChecked {
     1:'percentage based'
   }
   onFetchVoucherDetail(voucher_code) {
+    debugger;
     if (voucher_code) {
       this.voucherService.getVoucherDetails(voucher_code).subscribe(res => {
         if (res['status'].toLowerCase() === "Success".toLowerCase()) {
