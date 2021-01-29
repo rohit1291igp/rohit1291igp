@@ -24,6 +24,8 @@ export class SearchRankingComponent implements OnInit {
   dataSource = new MatTableDataSource([]);
   totalResult=0;
   modified_query="";
+  searchOptions = ['Pid','Sku','Mobile','Email','Cid','search'];
+  searchType:string;
 
   sortOptions=[
     {title : "Ascending by Score",value:'score%2Basc'},
@@ -36,6 +38,7 @@ export class SearchRankingComponent implements OnInit {
 
 
   ngOnInit() {
+    this.searchType = 'search';
   }
 
   onSubmit(){
@@ -49,7 +52,7 @@ export class SearchRankingComponent implements OnInit {
   getSearchRandkingResultInvoked=false;
   getSearchRankingResult(skip=0,limit=100){
     this.getSearchRandkingResultInvoked=true;
-    this.searchRankingService.getSearchRanking(this.searchKeyword,this.solr,this.ml,skip,limit,this.sortBy).subscribe((res:any)=>{
+    this.searchRankingService.getSearchRanking(this.searchKeyword,this.solr,this.ml,skip,limit,this.sortBy, this.searchType.toLowerCase()).subscribe((res:any)=>{
       this.getSearchRandkingResultInvoked=false;
       if(res.status==='Success'){
         if('products' in res.data){
