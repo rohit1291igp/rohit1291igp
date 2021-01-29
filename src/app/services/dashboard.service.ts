@@ -66,8 +66,9 @@ export class DashboardService {
         private router: Router
         ) { 
             let userType = localStorage.getItem('userType');
-            
-            if(userType == 'warehouse'||userType == 'microsite' || userType == 'microsite-zeapl' || userType == 'admin' || userType == 'vendor' || userType ==  'parent_manager'){
+            const userTypeList = ['admin', 'vendor', 'warehouse', 'egv_admin', 'parent_manager','parent_executive', 'manager', 'executive', 'marketing', 'microsite', "microsite-zeapl", 'hdextnp'] as any;
+
+            if(userTypeList.includes(userType)){
                 if(location.href && location.href.includes('new-dashboard')){
                     let link = location.href.split("#") as any;
                     this.router.navigate([link[1]]);
