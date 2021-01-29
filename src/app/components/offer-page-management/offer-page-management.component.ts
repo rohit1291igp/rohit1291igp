@@ -231,8 +231,8 @@ export class OfferPageManagementComponent implements OnInit, AfterViewChecked {
 
   voucher_details = {};
   coupon_type={
-    0:'value based',
-    1:'percentage based'
+    1:'value based',
+    0:'percentage based'
   }
   onFetchVoucherDetail(voucher_code) {
     if (voucher_code) {
