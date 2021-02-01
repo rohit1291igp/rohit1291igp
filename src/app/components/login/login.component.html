@@ -1,5 +1,5 @@
 <div class="login-container">
-    <mat-card *ngIf="!forgotPassword">
+    <mat-card *ngIf="forgotPassword == 'login'">
         <div class="apierror" *ngIf="apierror">{{apierror}}</div>
 
         <!-- <div class="col-md-6 col-md-offset-3"> -->
@@ -49,13 +49,12 @@
                 <img *ngIf="loading"
                     src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
                 <!--<a [routerLink]="['/register']" class="btn btn-link">Register</a>-->
-                <span (click)="forgotPassword = 'true'" style="float: right;cursor: pointer;">Forgot Password</span>
+                <span (click)="forgotPassword = 'passReset'" style="float: right;cursor: pointer;">Forgot Password</span>
             </div>
         </form>
         <!-- </div> -->
     </mat-card>
-
-    <mat-card *ngIf="forgotPassword">
+    <mat-card *ngIf="forgotPassword == 'passReset'" [@fadeOutLeft]="animState" (@fadeOutLeft.done)="animDone($event)">
         <div class="apierror" *ngIf="apierror">{{apierror}}</div>
         <h4 class="form-title" [ngStyle]="{'color': whitelabelStyle ? whitelabelStyle.primaryColor : '' }">Forgot Password</h4>
        
@@ -74,10 +73,12 @@
             <div class="form-group">
                
                 <button class="login-btn" [disabled]="loading && f.form.valid" mat-raised-button [ngStyle]="{'background-color': whitelabelStyle ? whitelabelStyle.primaryColor : '', 'color': whitelabelStyle ? whitelabelStyle.secondaryColor : '' }" (click)="resetPassword()">Submit</button>
-                <span (click)="forgotPassword = false" style="float: right; cursor: pointer;">Back to Login</span>
+                <span (click)="forgotPassword = 'login'" style="float: right; cursor: pointer;">Back to Login</span>
             </div>
        
     </mat-card>
+
+    <mat-card *ngIf="forgotPassword == 'resetMsg'">{{apierror}}</mat-card>
 </div>
 
 

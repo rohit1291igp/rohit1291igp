@@ -6,11 +6,17 @@ import { BackendService } from '../../services/backend.service';
 import { UtilityService } from '../../services/utility.service';
 import { CookieService } from 'app/services/cookie.service';
 import { AppLoadService } from 'app/services/app.load.service';
+import { fadeOutAnimation, fadeInAnimation, fadeOutLeftAnimation } from 'angular-animations';
 
 @Component({
     selector: 'app-login',
     templateUrl: './login.component.html',
-    styleUrls: ['./login.component.css']
+    styleUrls: ['./login.component.css'],
+    animations:[
+        fadeOutAnimation(),
+    fadeInAnimation(),
+    fadeOutLeftAnimation()
+    ]
 })
 
 export class LoginComponent implements OnInit {
@@ -19,8 +25,10 @@ export class LoginComponent implements OnInit {
     returnUrl: string;
     apierror: string;
     whitelabelStyle;
-    forgotPassword = false;
+    forgotPassword = 'login';
     forgotPasswordModel: any = {}
+    animating = false;
+    animState = false;
 
     constructor(
         public route1: ActivatedRoute,
@@ -177,13 +185,15 @@ export class LoginComponent implements OnInit {
             });
         }
     }
+    test = false;
     resetPassword() {
+        let _this = this;
         //http://localhost:8083/v1/admin/egvpanel/login/ResetUserPassword?associateName=PBS&userName=PBS
-        if (!(this.forgotPasswordModel.associatename && this.forgotPasswordModel.username)) {
-            this.apierror = "Please fill all the fields."
+        if (!(_this.forgotPasswordModel.associatename && _this.forgotPasswordModel.username)) {
+            _this.apierror = "Please fill all the fields."
             return
         }
-        let _this = this;
+        
         let reqObj = {
 
             url: `egvpanel/login/ResetUserPassword?associateName=${_this.forgotPasswordModel.associatename}&userName=${_this.forgotPasswordModel.username}`,
@@ -193,7 +203,24 @@ export class LoginComponent implements OnInit {
 
         _this.BackendService.makeAjax(reqObj, function (err, response, headers) {
             _this.apierror = response.result;
+            _this.toggleAnimation();
+            setTimeout(()=>{
+                _this.toggleAnimation();
+                _this.forgotPassword = 'resetMsg';
+            },1000)
         })
     }
 
+    toggleAnimation() {
+        console.log('toggleAnimation', this.animating)
+        this.animating = !this.animating;
+        this.animState = !this.animState;
+    }
+    
+    animDone(event: AnimationEvent) {
+        console.log('stop', this.animating)
+        if (this.animating) {
+            this.animState = !this.animState;
+        }
+    }
 }
