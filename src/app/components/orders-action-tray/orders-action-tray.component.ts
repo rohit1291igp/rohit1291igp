@@ -175,13 +175,16 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
      this.deliveryBoyEnabled = localStorage.getItem('deliveryBoyEnabled') === 'true' ? true : false;
      this.setlDatePicker(null);
      this.setRejectInitialValue();
-     if(environment.userType === 'vendor'){
-        this.getDeliveryBoyList();
-        this.getRejectResons('reject');
-     }
+    //  if(environment.userType === 'vendor'){
+    //     this.getDeliveryBoyList();
+    //     this.getRejectResons('reject');
+    //  }
      if(environment.userType === 'admin'){
         this.getFeeds();
         this.getRejectResons('reassign');
+     }else{
+        this.getDeliveryBoyList();
+        this.getRejectResons('reject');
      }
      //this.statusReasonModel.OrderProductsList = [];
   }
