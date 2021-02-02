@@ -2115,7 +2115,9 @@ getDeliveryBoyList(){
                     address:_this.reportAddAction.reportAddActionModel.address,
                     user:_this.reportAddAction.reportAddActionModel.user,
                     password:_this.reportAddAction.reportAddActionModel.password,
-                    phone:_this.reportAddAction.reportAddActionModel.phone
+                    phone:_this.reportAddAction.reportAddActionModel.phone,
+                    vendorType:_this.reportAddAction.reportAddActionModel.vendorType,
+                    vendorCity:_this.reportAddAction.reportAddActionModel.vendorCity,
                 };
                 break;
 
