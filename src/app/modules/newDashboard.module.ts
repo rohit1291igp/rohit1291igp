@@ -123,6 +123,16 @@ const routes: Routes = [{
     canActivate: [AuthGuard]
   },
   {
+    path: 'voucher-generation',
+    loadChildren: './microsite.module#MicroSiteModule',
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'voucher-generation-whitelabel',
+    loadChildren: './microsite.module#MicroSiteModule',
+    canActivate: [AuthGuard]
+  },
+  {
     path: 'pending-orders',
     component: PendingOrderComponent,
     canActivate: [AuthGuard]
