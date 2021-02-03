@@ -118,7 +118,7 @@ export class MicroSiteDasboardComponent implements OnInit {
 
     ngOnInit() {
         this.whitelabelStyle = localStorage.getItem('whitelabelDetails') ? JSON.parse(localStorage.getItem('whitelabelDetails')) : null;
-        if (this.whitelabelStyle) {
+        if (this.whitelabelStyle || location.href.includes('whitelabel')) {
             let isVoucherCredit = this.userAccessService.userAccessDetails && this.userAccessService.userAccessDetails.find(f => f.children && f.children.find(a => a.route.includes('voucher-credit')));
             isVoucherCredit = isVoucherCredit && isVoucherCredit.children && isVoucherCredit.children.find(h => h.route.includes('voucher-credit'));
             this.userTypeForTransaction = isVoucherCredit ? true : false;
@@ -252,7 +252,7 @@ export class MicroSiteDasboardComponent implements OnInit {
                 break;
         }
         let reqObj;
-        if (_this.whitelabelStyle) {
+        if (_this.whitelabelStyle || location.href.includes('whitelabel')) {
             reqObj = {
                 url: `whitelabel/getuserrecord?fromdate=${datefrom}&todate=${dateto}&emailid=&type=${this.SearchForm.value.filtertype}&fkAssociateId=${localStorage.fkAssociateId}&fkUserId=0`,
                 method: "get"
@@ -274,7 +274,7 @@ export class MicroSiteDasboardComponent implements OnInit {
                 response.data.length > 0 && response.data.forEach(m => m.uploadDate = pipe.transform(m.uploadDate, 'dd/MM/yyyy'));
                 response.data.length > 0 && response.data.forEach(m => m.couponUsedDate = pipe.transform(m.couponUsedDate, 'dd/MM/yyyy'));
                 _this.dataSource = new MatTableDataSource(response.data);
-                if (_this.whitelabelStyle) _this.setTableColumn('whitelabel');
+                if (_this.whitelabelStyle || location.href.includes('whitelabel')) _this.setTableColumn('whitelabel');
                 else
                     _this.setTableColumn('all');
                 setTimeout(() => {
@@ -320,7 +320,7 @@ export class MicroSiteDasboardComponent implements OnInit {
         }
 
         let reqObj;
-        if (_this.whitelabelStyle) {
+        if (_this.whitelabelStyle || location.href.includes('whitelabel')) {
 
             reqObj = {
                 url: `whitelabel/getuserrecord?fromdate=${datefrom}&todate=${dateto}&emailid=${data.value.email}&type=${data.value.filtertype}&fkAssociateId=${localStorage.fkAssociateId}&fkUserId=0`,
@@ -357,9 +357,9 @@ export class MicroSiteDasboardComponent implements OnInit {
                     }
                     response.data.length > 0 && response.data.forEach(m => m.uploadDate = pipe.transform(m.uploadDate, 'dd/MM/yy'));
                     response.data.length > 0 && response.data.forEach(m => m.couponUsedDate = pipe.transform(m.couponUsedDate, 'dd/MM/yy'));
-                    if (_this.whitelabelStyle) { }
+                    if (_this.whitelabelStyle || location.href.includes('whitelabel')) { }
                     _this.dataSource = new MatTableDataSource(response.data);
-                    if (_this.whitelabelStyle) _this.setTableColumn('whitelabel');
+                    if (_this.whitelabelStyle || location.href.includes('whitelabel')) _this.setTableColumn('whitelabel');
                     else _this.setTableColumn(data.value.filtertype);
                     setTimeout(() => {
                         _this.dataSource.sort = _this.sort;
@@ -380,7 +380,7 @@ export class MicroSiteDasboardComponent implements OnInit {
                         if (i == userData.length) {
                             isdataready = true;
                         }
-                        if (_this.whitelabelStyle) {
+                        if (_this.whitelabelStyle || location.href.includes('whitelabel')) {
                             let a = {
                                 "emailId": f.emailId,
                                 "uploadDate": f.uploadDate,
@@ -407,7 +407,7 @@ export class MicroSiteDasboardComponent implements OnInit {
                     })
 
                     userData.length > 0 && userData.forEach(m => m.uploadDate = pipe.transform(m.uploadDate, 'dd/MM/yy'));
-                    if (!_this.whitelabelStyle) {
+                    if (!_this.whitelabelStyle && !location.href.includes('whitelabel')) {
                         userData.length > 0 && userData.forEach(m => m.couponUsedDate ? m.couponUsedDate = pipe.transform(m.couponUsedDate, 'dd/MM/yy') : m.couponUsedDate = '');
 
                     }// let headerData = _this.swap(response.data[0]);
@@ -492,7 +492,7 @@ export class MicroSiteDasboardComponent implements OnInit {
             }
 
             let reqObj;
-            if (_this.whitelabelStyle) {
+            if (_this.whitelabelStyle || location.href.includes('whitelabel')) {
                 reqObj = {
                     url:
                         `whitelabel/userupload?fkAssociateId=${localStorage.fkAssociateId}&fkUserId=${localStorage.fkUserId}`,
