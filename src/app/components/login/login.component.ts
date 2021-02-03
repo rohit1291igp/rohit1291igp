@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { environment } from "../../../environments/environment";
 import { AuthenticationService } from '../../services/authentication.service';
@@ -6,30 +6,31 @@ import { BackendService } from '../../services/backend.service';
 import { UtilityService } from '../../services/utility.service';
 import { CookieService } from 'app/services/cookie.service';
 import { AppLoadService } from 'app/services/app.load.service';
-import { fadeOutAnimation, fadeInAnimation, fadeOutLeftAnimation } from 'angular-animations';
+import { Subject, Observable, Subscriber, Subscription } from 'rxjs';
 
 @Component({
     selector: 'app-login',
     templateUrl: './login.component.html',
-    styleUrls: ['./login.component.css'],
-    animations:[
-        fadeOutAnimation(),
-    fadeInAnimation(),
-    fadeOutLeftAnimation()
-    ]
+    styleUrls: ['./login.component.css']
 })
 
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
     model: any = {};
     loading = false;
     returnUrl: string;
     apierror: string;
+    apiSuccess: string;
     whitelabelStyle;
     forgotPassword = 'login';
-    forgotPasswordModel: any = {}
-    animating = false;
-    animState = false;
-
+    forgotPasswordModel: any = {};
+    newPassModel: any = {};
+    otpModel:string;
+    animating1 = false;
+    animState1 = false;
+    animating2 = false;
+    animState2 = false;
+    public otpInputChange = new Subject<string>();
+    subscription:Subscription;
     constructor(
         public route1: ActivatedRoute,
         public router: Router,
@@ -39,7 +40,27 @@ export class LoginComponent implements OnInit {
         private cookieService: CookieService,
         private AppLoadService: AppLoadService
     ) {
-
+        this.subscription = this.otpInputChange
+        .map((value:any) => event.target['value'])
+        .debounceTime(300)
+        .distinctUntilChanged()
+        .flatMap((search) => {
+            return Observable.of(search).delay(100);
+        })
+        .subscribe((data) => {
+            let tempdata = [];
+            // if(data.length > 6){
+            //     this.otpModel = this.otpModel.slice(0, -1);
+            // }
+            
+            data = data.split("");
+            data.forEach((f,i) => {
+            if(i < 6){
+                tempdata.push(f);
+            }
+            });
+            this.otpModel = tempdata.join("");
+        });
     }
 
     ngOnInit() {
@@ -47,7 +68,10 @@ export class LoginComponent implements OnInit {
         this.model.username = "";
         this.model.password = "";
         this.forgotPasswordModel.associatename = "";
-        this.forgotPasswordModel.username = ""
+        this.forgotPasswordModel.username = "";
+        this.newPassModel.newPassword = '';
+        this.newPassModel.confirmPassword = '';
+        this.otpModel = '';
 
         if (this.cookieService.getCookie('currentUserToken') || localStorage.getItem('currentUser')) {
             this.router.navigate(['/dashboard']);
@@ -92,7 +116,7 @@ export class LoginComponent implements OnInit {
             let reqObj = {
                 //url : "IGPService/login?username="+this.model.username+"&password="+this.model.password,
                 // url : "login?username="+this.model.username+"&password="+this.model.password,
-                url: `login?associatename=${_this.model.associatename}&username=${_this.model.username}&password=${this.model.password}`,
+                url: `login?associatename=${_this.model.associatename}&username=${_this.model.username}&password=${_this.model.password}`,
                 method: "post",
                 payload: {}
             };
@@ -185,42 +209,127 @@ export class LoginComponent implements OnInit {
             });
         }
     }
-    test = false;
+
     resetPassword() {
         let _this = this;
+        _this.apiSuccess = '';
+        _this.apierror = '';
+        const userdata = {
+            'associatename': _this.forgotPasswordModel.associatename,
+            'username': _this.forgotPasswordModel.username
+        }
+
+        //animation code
+        // _this.toggleAnimation(1);
+        //         setTimeout(()=>{
+        //             _this.toggleAnimation(1);
+        //             _this.forgotPassword = 'otpForm';
+        //             _this.toggleAnimation(1);
+        //             setTimeout(()=>{
+        //                 _this.toggleAnimation(1);
+        //                 _this.forgotPassword = 'otpForm';
+        //             },500)
+        //         },500);
+
+
         //http://localhost:8083/v1/admin/egvpanel/login/ResetUserPassword?associateName=PBS&userName=PBS
         if (!(_this.forgotPasswordModel.associatename && _this.forgotPasswordModel.username)) {
             _this.apierror = "Please fill all the fields."
             return
         }
-        
-        let reqObj = {
 
-            url: `egvpanel/login/ResetUserPassword?associateName=${_this.forgotPasswordModel.associatename}&userName=${_this.forgotPasswordModel.username}`,
+        let reqObj = {
+            url: `egvpanel/login/SendOTP?associateName=${_this.forgotPasswordModel.associatename}&userName=${_this.forgotPasswordModel.username}`,
             method: "put",
             payload: {}
-        };
+        }
 
         _this.BackendService.makeAjax(reqObj, function (err, response, headers) {
-            _this.apierror = response.result;
-            _this.toggleAnimation();
-            setTimeout(()=>{
-                _this.toggleAnimation();
-                _this.forgotPassword = 'resetMsg';
-            },1000)
+            if (!response.error) {
+                sessionStorage.setItem('resetUserData', JSON.stringify(userdata));
+                _this.apiSuccess = response.result;
+                setTimeout(()=>{
+                    _this.model.associatename = '';
+                    _this.model.username = '';
+                    _this.model.password = '';
+                    _this.forgotPasswordModel.associatename = '';
+                    _this.forgotPasswordModel.username = '';
+                    _this.forgotPassword = 'otpForm';
+                    _this.apiSuccess = '';
+                    _this.apierror = '';
+                },500)
+            } else {
+                _this.apierror = response.result;
+            }
+
         })
     }
 
-    toggleAnimation() {
-        console.log('toggleAnimation', this.animating)
-        this.animating = !this.animating;
-        this.animState = !this.animState;
-    }
-    
-    animDone(event: AnimationEvent) {
-        console.log('stop', this.animating)
-        if (this.animating) {
-            this.animState = !this.animState;
+    otpSubmit() {
+        let _this = this;
+        _this.apiSuccess = '';
+        _this.apierror = '';
+        const userData = sessionStorage.resetUserData ? JSON.parse(sessionStorage.resetUserData) : null;
+        let reqObj = {
+            url: `egvpanel/login/verifyForgotPasswordOTP?associateName=${userData.associatename}&userName=${userData.username}&otp=${_this.otpModel}`,
+            method: "get",
+            payload: {}
         }
+
+        _this.BackendService.makeAjax(reqObj, function (err, response, headers) {
+            if (!response.error) {
+                _this.apiSuccess = response.result;
+                setTimeout(()=>{
+                    _this.otpModel = '';
+                    _this.forgotPassword = 'confirmPass';
+                    _this.apiSuccess = '';
+                    _this.apierror = '';
+                },500)
+            } else {
+                _this.apierror = response.result;
+            }
+
+        })
+
+    }
+    confirmPassword() {
+        let _this = this;
+        _this.apiSuccess = '';
+        _this.apierror = '';
+        const userData = sessionStorage.resetUserData ? JSON.parse(sessionStorage.resetUserData) : null;
+
+        if (!(_this.newPassModel.newPassword && _this.newPassModel.confirmPassword)) {
+            _this.apierror = "Please fill all the fields."
+            return
+        }
+        if((_this.newPassModel.newPassword.trim() && _this.newPassModel.confirmPassword.trim()) && (_this.newPassModel.newPassword != _this.newPassModel.confirmPassword)){
+            _this.apierror = "The new password and confirmation password do not match."
+            return
+        }
+        let reqObj = {
+            url: `egvpanel/login/ResetUserPassword?associateName=${userData.associatename}&userName=${userData.username}&password=${_this.newPassModel.newPassword}`,
+            method: "put",
+            payload: {}
+        }
+
+        _this.BackendService.makeAjax(reqObj, function (err, response, headers) {
+            if (!response.error) {
+                _this.apiSuccess = response.result;
+                setTimeout(()=>{
+                    _this.newPassModel.newPassword = '';
+                    _this.newPassModel.confirmPassword = '';
+                    _this.forgotPassword = 'login';
+                    _this.apiSuccess = '';
+                    _this.apierror = '';
+                }, 500);
+            } else {
+                _this.apierror = response.result;
+            }
+
+        })
+
+    }
+    ngOnDestroy(){
+        this.subscription.unsubscribe();
     }
 }

@@ -3,17 +3,11 @@ import { UtilityService } from '../services/utility.service';
 // import { BarcodeFormat } from '@zxing/library';
 import { BehaviorSubject } from 'rxjs';
 import { MatDialog } from '@angular/material';
-import { collapseAnimation, rubberBandAnimation, fadeInOnEnterAnimation, fadeOutOnLeaveAnimation, fadeOutAnimation, fadeInAnimation, fadeOutLeftAnimation } from 'angular-animations';
  
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css'],
-  animations: [
-    fadeOutAnimation(),
-    fadeInAnimation(),
-    fadeOutLeftAnimation()
-  ]
+  styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit, OnChanges{
   title = 'app works!';
