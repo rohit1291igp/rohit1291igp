@@ -462,7 +462,7 @@ export class EgvwalletComponent implements OnInit {
           // }
         })
       }else{
-        reqObj.url +=`flagApproveCredit=${(approval ? this.flagApproveCreditMap.adminApproved : this.flagApproveCreditMap.reject)}`;
+        reqObj.url +=`&flagApproveCredit=${(approval ? this.flagApproveCreditMap.adminApproved : this.flagApproveCreditMap.reject)}`;
         $this.EgvService.getEgvService(reqObj).subscribe(
           (result, error) => {
             if (result.error || error) {

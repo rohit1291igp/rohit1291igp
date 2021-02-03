@@ -3,7 +3,7 @@ import { UtilityService } from '../services/utility.service';
 // import { BarcodeFormat } from '@zxing/library';
 import { BehaviorSubject } from 'rxjs';
 import { MatDialog } from '@angular/material';
-
+ 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
