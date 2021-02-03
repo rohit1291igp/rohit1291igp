@@ -315,6 +315,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         $this.BackendService.makeAjax(reqObj, function (err, response, headers) {
             if (!response.error) {
                 $this.apiSuccess = response.result;
+                sessionStorage.removeItem('resetUserData');
                 setTimeout(()=>{
                     $this.newPassModel.newPassword = '';
                     $this.newPassModel.confirmPassword = '';
