@@ -213,6 +213,8 @@
                             <div *ngIf="f.submitted && !user.valid" class="help-block theme-red">Please provide user!</div>
                             <div *ngIf="f.submitted && !password.valid" class="help-block theme-red">Please provide password!</div>
                             <div *ngIf="f.submitted && !phone.valid" class="help-block theme-red">Please provide phone!</div>
+                            <div *ngIf="f.submitted && !vendorType.valid" class="help-block theme-red">Please provide Vendor Type!</div>
+                            <div *ngIf="f.submitted && !vendorCity.valid" class="help-block theme-red">Please provide Vendor City!</div>
                             <button class="btn btn-primary m-top-1">Submit</button>
                         </form>
                     </div>
