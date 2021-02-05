@@ -174,6 +174,7 @@ export class EmailCustomizationComponent implements OnInit {
       });
   }
 
-
-
+  // getFormat(str){
+  //  return str.replace(/\n/g,"\n")
+  // }
 }
