@@ -95,7 +95,9 @@
   </div>
   <div class="row">
     <div style="margin-top: 20px; margin-left: 10px;" class="button-group">
-      <button clas="btnColor" type="submit" mat-raised-button>Submit</button>
+      <button clas="btnColor" type="submit" mat-raised-button>Create
+         <ng-container *ngIf="data['account_type'] == 'client' else accountType">Account</ng-container>
+        <ng-template #accountType>{{data['account_type']|titlecase}}</ng-template></button>
       <button type="button" mat-raised-button (click)="onClear(f)">Clear</button>
     </div>
   </div>
