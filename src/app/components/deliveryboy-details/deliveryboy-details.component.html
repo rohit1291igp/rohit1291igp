@@ -3,7 +3,7 @@
         <h4>Filter Agent</h4>
         <div class="search-container">
             <mat-form-field>
-                <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+                <input matInput [(ngModel)]="agentNameInput" (keyup)="applyFilter($event.target.value)" placeholder="Filter">
             </mat-form-field>
         </div>
         <div>
@@ -19,9 +19,8 @@
         </div>
     </mat-card>
     <br><br>
-
     <ng-container
-        *ngIf="(dataSource?._renderData | async) && (dataSource?._renderData | async ).length > 0 else noRecord">
+        *ngIf="dataSource?.filteredData && dataSource?.filteredData.length > 0 else noRecord">
         <mat-card>
             <mat-table #table mat-table [dataSource]="dataSource" matSort>
                 <!-- {{columnNames | json}} -->
@@ -43,6 +42,7 @@
                 <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
                 <mat-row class="delivery-boy-row" *matRowDef="let row; columns: displayedColumns;"></mat-row>
             </mat-table>
+            <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
         </mat-card>
 
     </ng-container>
