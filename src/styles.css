@@ -918,6 +918,9 @@ body .dashboard-content, body .orders-button{
 .width-fit-content{
     width: fit-content;
 }
+.font-weight-bold{
+    font-weight: bold !important;
+}
 /* common Ends */
 .is-active {
     background: #fff;

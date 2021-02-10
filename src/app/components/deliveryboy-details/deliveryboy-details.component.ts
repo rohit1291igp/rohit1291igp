@@ -199,6 +199,8 @@ export class DeliveryBoyDetailsComponent implements OnInit {
             if(this.agentNameInput){
                 this.dataSource.filter = this.agentNameInput.trim().toLowerCase();
             }
+            this.dataSource.sort = this.sort;
+            this.dataSource.paginator = this.paginator;
         } else {
             let TempdataSource = this.originalDataSource.filter(f => f.Status && f);
 
@@ -206,6 +208,8 @@ export class DeliveryBoyDetailsComponent implements OnInit {
             if(this.agentNameInput){
                 this.dataSource.filter = this.agentNameInput.trim().toLowerCase();
             }
+            this.dataSource.sort = this.sort;
+            this.dataSource.paginator = this.paginator;
         }
 
 

@@ -1,166 +1,353 @@
-<mat-drawer-container class="example-container" autosize>
-  <mat-drawer #drawer class="example-sidenav" mode="side" style="width: 25%">
-    <!-- <button (click)="showFiller = !showFiller" mat-raised-button>
-      Toggle extra text
-    </button> -->
-  </mat-drawer>
-
-  <div class="example-sidenav-content">
-    <div class="">
-      <div class="" style="display: block; overflow:scroll; background: transparent;">
-        <div class="modal-dialog modal-lg">
-          <div class="modal-content" style="margin-left:25%; width:50%;">
-            <div class="modal-header" style="border-bottom:none;">
-              <div class="caption">Upload File</div>
-            </div>
-            <div class="modal-body center-align">
-              <form (ngSubmit)="f.form.valid && uploadExcel($event)" #f="ngForm" nonvalidate>
-                <!-- <select id="selectedStatus" name="selectedStatus" class="form-control"
-                  [(ngModel)]="_data.selectedStatus" #selectedStatus="ngModel" required
-                  (ngModelChange)="selectStatusChanges($event)">
-                  <option selected disabled>Select Status</option>
-                  <option *ngFor="let issue of _data.statuslist" [ngValue]="issue">
-                    <span class="capitalize">{{issue}}</span>
-                  </option>
-                </select>
-
-                <ng-container *ngIf="_data.selectedStatus != 'Select Status'">
-                  <ng-container
-                    *ngIf="_data.selectedStatus == 'Confirmed' || _data.selectedStatus == 'Released' || _data.selectedStatus == 'Dispatched' || _data.selectedStatus == 'Delivered'">
-                    <br />
-                    <select id="selectedCourier" name="selectedCourier" class="form-control"
-                      [(ngModel)]="_data.selectedCourier" #selectedCourier="ngModel" required>
-                      <option selected disabled>Select Courier</option>
-                      <option *ngFor="let issue of _data.courierlist" [ngValue]="issue">
-                        <span class="capitalize">{{issue}}</span>
-                      </option>
-                    </select>
+<mat-tab-group mat-align-tabs="start">
+  <mat-tab label="Payu Recon">
+    <mat-card style="padding-bottom: 16px;width: fit-content;margin: 18px auto;text-align: center;">
+      <mat-form-field style="margin: 0px 10px;">
+        <!-- <input matInput type="datetime-local" [(ngModel)]="payuReconFormModel.startDate" placeholder="Start date"> -->
+        <input matInput [matDatepicker]="pickerFrom" placeholder="From" [(ngModel)]="payuReconFormModel.startDate" (ngModelChange)="payuModelChange = true" autocomplete="off">
+        <mat-datepicker-toggle matSuffix [for]="pickerFrom"></mat-datepicker-toggle>
+        <mat-datepicker #pickerFrom></mat-datepicker>
+      </mat-form-field>
+      <mat-form-field style="margin: 0px 10px;">
+        <!-- <input matInput type="datetime-local" [(ngModel)]="payuReconFormModel.endDate" placeholder="End date"> -->
+        <input matInput [matDatepicker]="pickerTo" [(ngModel)]="payuReconFormModel.endDate" (ngModelChange)="payuModelChange = true" placeholder="To" autocomplete="off">
+        <mat-datepicker-toggle matSuffix [for]="pickerTo"></mat-datepicker-toggle>
+        <mat-datepicker #pickerTo></mat-datepicker>
+      </mat-form-field>
+      <button class="btn btn-primary" (click)="getPayuRecon()" [disabled]="!payuReconFormModel.startDate || !payuReconFormModel.endDate">Search</button>
+      <button *ngIf="!payuModelChange && (payuReconTabledate && payuReconTabledate.length > 0)" class="btn btn-primary" (click)="downloadFile('file', 'payu')">Download</button>
+    </mat-card>
+    <mat-card style="margin: 0 auto;width: 70%;
+      margin-bottom: 18px;padding: 0">
+      
+      <ng-container *ngIf="(payuReconTabledate && payuReconTabledate.length > 0) else payuNoRecord">
+        <ng-container *ngFor="let userData of payuReconTabledate; index as i">
+          <mat-card style="margin: 0 auto;width: 100%;margin-bottom: 18px;overflow-x:auto;">
+            <ng-container
+              *ngIf="userData.userTempOrdeDetailWrtTempID && userData.userTempOrdeDetailWrtTempID.length > 0">
+              <table class="customers" style="margin-bottom: 10px;">
+                <thead>
+                  <ng-container *ngFor="let HeaderText of objectKeys(userData.userTempOrdeDetailWrtTempID[0])">
+                    <th>{{ HeaderText }}</th>
                   </ng-container>
-                </ng-container> -->
-
-                <div class="m-top-1 left-align">
-                  <input id="excelFile" class="form-control custom-control m-top-1" type="file" name="file"
-                    (change)="fileChange($event)" accept=".xls, .xlsx, .csv" required>
-                </div>
-                <div class="m-top-1 left-align" *ngIf="isUploading">
-                  <h3 style="text-align: center;">Upload File...</h3>
-                </div>
-                <!-- <div class="checkbox"
-                  *ngIf="_data.selectedStatus == 'Dispatched' || _data.selectedStatus == 'Delivered'"
-                  style="text-align: left;margin-top: 5%;margin-bottom: 1px;">
-                  <label>
-                    <input type="checkbox" name="isFeatured" [(ngModel)]="_data.sendEmail" #isFeatured="ngModel" />Send
-                    Email
-                  </label>
-                </div> -->
-                <ng-container *ngIf="!isUploading">
-                  <button class="btn btn-primary m-top-1" *ngIf="!isUploading">Upload</button>
+                </thead>
+                <tbody>
+                  <ng-container *ngFor="let dataText of userData.userTempOrdeDetailWrtTempID; index as dataTextIndex">
+                    <tr>
+                      <td *ngFor="let innerDataText of objectKeys(dataText)">
+                        {{dataText[innerDataText]}}
+                      </td>
+                    </tr>
+                  </ng-container>
+                </tbody>
+              </table>
+            </ng-container>
+            <table class="customers">
+              <thead>
+                <ng-container *ngFor="let HeaderText of objectKeys(userData.userTempOrdeDetailWrtTempID)">
+                  <th>{{ HeaderText }}</th>
                 </ng-container>
+                <th>Generate Order</th>
+              </thead>
+              <tbody>
+                <tr>
+                  <td *ngFor="let dataText of objectKeys(userData.userTempOrdeDetailWrtTempID)">
+                    {{userData.userTempOrdeDetailWrtTempID[dataText]}}
+                  </td>
+                  <td class="text-align-center">
+                    <ng-container *ngIf="_data.enableOrderGenerateBtn[i] == 'failed'">
+                      <span class="theme-red">Failed</span>
+                    </ng-container>
+                    <ng-container *ngIf="_data.enableOrderGenerateBtn[i] != 'done' else orderGenerated">
+                      <select id="selectedPaymentGateway" name="selectedPaymentGateway" class="form-control" required
+                        (change)="selectPaymentGateway($event); _data.enableOrderGenerateBtn[i] = $event.target.value ">
+                        <option selected disabled>Select Payment Gateway</option>
+                        <option *ngFor="let issue of _data.paymentGatewayList" [ngValue]="issue">
+                          <span class="capitalize">{{issue}}</span>
+                        </option>
+                      </select>
+                      <br>
+                      <button *ngIf="_data.enableOrderGenerateBtn[i]" class="btn btn-primary"
+                        (click)="generateOrder(userData.userTempOrdeDetailWrtTempID, _data.enableOrderGenerateBtn[i], i)">Submit</button>
+                    </ng-container>
 
-                <!-- <div class="help-block theme-red" *ngIf="f.submitted && selectedStatus != 'Select Status'">Please
-                    select a
-                    Status.</div> -->
-                <div class="help-block theme-red" *ngIf="_flags.emptyFileValidation">Please choose a xlsx file.</div>
-                <div class="help-block theme-red" *ngIf="_data.errorMessage && !_flags.uploadSuccessFlag">
-                  {{_data.errorMessage}}</div>
+                    <ng-template #orderGenerated>
+                      <span class="text-green">Order Generated</span>
+                    </ng-template>
 
-                <div class="m-top-1 text-bold text-green" *ngIf="_flags.uploadSuccessFlag">All orders are uploaded
-                  successfully
-                  from {{_data.uploadFileName}}!</div>
-              </form>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </mat-card>
+        </ng-container>
+      </ng-container>
+      <ng-template #payuNoRecord>
+        <div *ngIf="payuReconError" class="theme-red padding1 font-weight-bold">{{payuReconError}}</div>
+      </ng-template>
+    </mat-card>
+  </mat-tab>
+  <mat-tab label="Paytm Recon">
+    <mat-card style="padding-bottom: 16px;width: fit-content;margin: 18px auto;text-align: center;">
+      <mat-form-field style="margin: 0px 10px;">
+        <!-- <input matInput type="datetime-local" [(ngModel)]="payTmReconFormModel.startDate" placeholder="Start date"> -->
+        <input matInput [matDatepicker]="paytmPickerFrom" [(ngModel)]="payTmReconFormModel.startDate" (ngModelChange)="paytmModelChange = true" placeholder="From" autocomplete="off">
+        <mat-datepicker-toggle matSuffix [for]="paytmPickerFrom"></mat-datepicker-toggle>
+        <mat-datepicker #paytmPickerFrom></mat-datepicker>
+      </mat-form-field>
+      <mat-form-field style="margin: 0px 10px;">
+        <!-- <input matInput type="datetime-local" [(ngModel)]="payTmReconFormModel.endDate" placeholder="End date"> -->
+        <input matInput [matDatepicker]="paytmPickerTo" [(ngModel)]="payTmReconFormModel.endDate" (ngModelChange)="paytmModelChange = true" placeholder="To" autocomplete="off">
+        <mat-datepicker-toggle matSuffix [for]="paytmPickerTo"></mat-datepicker-toggle>
+        <mat-datepicker #paytmPickerTo></mat-datepicker>
+      </mat-form-field>
+      <button class="btn btn-primary" (click)="getPayTmRecon()" [disabled]="!payTmReconFormModel.startDate || !payTmReconFormModel.endDate">Search</button>
+      <button *ngIf="!paytmModelChange && (payTmReconTabledate && payTmReconTabledate.length > 0)" class="btn btn-primary" (click)="downloadFile('file', 'payTm')">Download</button>
+    </mat-card>
+    <mat-card style="margin: 0 auto;width: 70%;
+          margin-bottom: 18px;padding: 0">
+      <ng-container *ngIf="(payTmReconTabledate && payTmReconTabledate.length > 0) else payTmNoRecord">
+        <ng-container *ngFor="let userData of payTmReconTabledate; index as i">
+          <mat-card style="margin: 0 auto;width: 100%;margin-bottom: 18px;overflow-x:auto;">
+            <ng-container
+              *ngIf="userData.userTempOrdeDetailWrtTempID && userData.userTempOrdeDetailWrtTempID.length > 0">
+              <table class="customers" style="margin-bottom: 10px;">
+                <thead>
+                  <ng-container *ngFor="let HeaderText of objectKeys(userData.userTempOrdeDetailWrtTempID[0])">
+                    <th>{{ HeaderText }}</th>
+                  </ng-container>
+                </thead>
+                <tbody>
+                  <ng-container *ngFor="let dataText of userData.userTempOrdeDetailWrtTempID; index as dataTextIndex">
+                    <tr>
+                      <td *ngFor="let innerDataText of objectKeys(dataText)">
+                        {{dataText[innerDataText]}}
+                      </td>
+                    </tr>
+                  </ng-container>
+                </tbody>
+              </table>
+            </ng-container>
+            <table class="customers">
+              <thead>
+                <ng-container *ngFor="let HeaderText of objectKeys(userData.userTempOrdeDetailWrtTempID)">
+                  <th>{{ HeaderText }}</th>
+                </ng-container>
+                <th>Generate Order</th>
+              </thead>
+              <tbody>
+                <tr>
+                  <td *ngFor="let dataText of objectKeys(userData.userTempOrdeDetailWrtTempID)">
+                    {{userData.userTempOrdeDetailWrtTempID[dataText]}}
+                  </td>
+                  <td class="text-align-center">
+                    <ng-container *ngIf="_data.enableOrderGenerateBtn[i] == 'failed'">
+                      <span class="theme-red">Failed</span>
+                    </ng-container>
+                    <ng-container *ngIf="_data.enableOrderGenerateBtn[i] != 'done' else orderGenerated">
+                      <select id="selectedPaymentGateway" name="selectedPaymentGateway" class="form-control" required
+                        (change)="selectPaymentGateway($event); _data.enableOrderGenerateBtn[i] = $event.target.value ">
+                        <option selected disabled>Select Payment Gateway</option>
+                        <option *ngFor="let issue of _data.paymentGatewayList" [ngValue]="issue">
+                          <span class="capitalize">{{issue}}</span>
+                        </option>
+                      </select>
+                      <br>
+                      <button *ngIf="_data.enableOrderGenerateBtn[i]" class="btn btn-primary"
+                        (click)="generateOrder(userData.userTempOrdeDetailWrtTempID, _data.enableOrderGenerateBtn[i], i)">Submit</button>
+                    </ng-container>
+
+                    <ng-template #orderGenerated>
+                      <span class="text-green">Order Generated</span>
+                    </ng-template>
+
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </mat-card>
+        </ng-container>
+      </ng-container>
+      <ng-template #payTmNoRecord>
+        <div *ngIf="payTmReconError" class="theme-red padding1 font-weight-bold">{{payTmReconError}}</div>
+      </ng-template>
+    </mat-card>
+  </mat-tab>
+  <mat-tab label="Others Recon">
+    <mat-drawer-container class="example-container" autosize>
+      <mat-drawer #drawer class="example-sidenav" mode="side" style="width: 25%">
+        <!-- <button (click)="showFiller = !showFiller" mat-raised-button>
+        Toggle extra text
+      </button> -->
+      </mat-drawer>
+
+      <div class="example-sidenav-content">
+        <div class="">
+          <div class="" style="display: block; overflow:scroll; background: transparent;">
+            <div class="modal-dialog modal-lg">
+              <div class="modal-content" style="margin-left:25%; width:50%;">
+                <div class="modal-header" style="border-bottom:none;">
+                  <div class="caption">Upload File</div>
+                </div>
+                <div class="modal-body center-align">
+                  <form (ngSubmit)="f.form.valid && uploadExcel($event)" #f="ngForm" nonvalidate>
+                    <!-- <select id="selectedStatus" name="selectedStatus" class="form-control"
+                    [(ngModel)]="_data.selectedStatus" #selectedStatus="ngModel" required
+                    (ngModelChange)="selectStatusChanges($event)">
+                    <option selected disabled>Select Status</option>
+                    <option *ngFor="let issue of _data.statuslist" [ngValue]="issue">
+                      <span class="capitalize">{{issue}}</span>
+                    </option>
+                  </select>
+  
+                  <ng-container *ngIf="_data.selectedStatus != 'Select Status'">
+                    <ng-container
+                      *ngIf="_data.selectedStatus == 'Confirmed' || _data.selectedStatus == 'Released' || _data.selectedStatus == 'Dispatched' || _data.selectedStatus == 'Delivered'">
+                      <br />
+                      <select id="selectedCourier" name="selectedCourier" class="form-control"
+                        [(ngModel)]="_data.selectedCourier" #selectedCourier="ngModel" required>
+                        <option selected disabled>Select Courier</option>
+                        <option *ngFor="let issue of _data.courierlist" [ngValue]="issue">
+                          <span class="capitalize">{{issue}}</span>
+                        </option>
+                      </select>
+                    </ng-container>
+                  </ng-container> -->
+
+                    <div class="m-top-1 left-align">
+                      <input id="excelFile" class="form-control custom-control m-top-1" type="file" name="file"
+                        (change)="fileChange($event)" accept=".xls, .xlsx, .csv" required>
+                    </div>
+                    <div class="m-top-1 left-align" *ngIf="isUploading">
+                      <h3 style="text-align: center;">Upload File...</h3>
+                    </div>
+                    <!-- <div class="checkbox"
+                    *ngIf="_data.selectedStatus == 'Dispatched' || _data.selectedStatus == 'Delivered'"
+                    style="text-align: left;margin-top: 5%;margin-bottom: 1px;">
+                    <label>
+                      <input type="checkbox" name="isFeatured" [(ngModel)]="_data.sendEmail" #isFeatured="ngModel" />Send
+                      Email
+                    </label>
+                  </div> -->
+                    <div title="Download sample File" style="position: absolute;
+                  right: 17px;
+                  cursor: pointer;
+                  font-size: 2em;
+                  top: 2em;
+                  background: #c3404e !important;
+                  color: #fff;border-radius: 4px;" class="m-top-1 material-icons-outlined" (click)="downloadFile('sample')">
+                      file_download</div>
+
+                    <ng-container *ngIf="!isUploading">
+                      <button class="btn btn-primary m-top-1" *ngIf="!isUploading">Upload</button>
+                    </ng-container>
+
+                    <!-- <div class="help-block theme-red" *ngIf="f.submitted && selectedStatus != 'Select Status'">Please
+                      select a
+                      Status.</div> -->
+                    <div class="help-block theme-red" *ngIf="_flags.emptyFileValidation">Please choose a xlsx file.
+                    </div>
+                    <div class="help-block theme-red" *ngIf="_data.errorMessage && !_flags.uploadSuccessFlag">
+                      {{_data.errorMessage}}</div>
+
+                    <div class="m-top-1 text-bold text-green" *ngIf="_flags.uploadSuccessFlag">All orders are uploaded
+                      successfully
+                      from {{_data.uploadFileName}}!</div>
+                  </form>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </div>
 
-    <mat-card style="margin: 0 auto;width: 70%;
-    margin-bottom: 18px;padding: 0">
-      <ng-container *ngFor="let userData of tableData; index as i">
-        <mat-card style="margin: 0 auto;width: 100%;margin-bottom: 18px;overflow-x:auto;">
-          <ng-container *ngIf="userData.userOrderListWrtEmailID.length > 0">
-            <table class="customers" style="margin-bottom: 10px;">
-              <thead>
-                <ng-container *ngFor="let HeaderText of objectKeys(userData.userOrderListWrtEmailID[0])">
-                  <th>{{ HeaderText }}</th>
-                </ng-container>
-              </thead>
-              <tbody>
-                <ng-container *ngFor="let dataText of userData.userOrderListWrtEmailID; index as dataTextIndex">
+        <mat-card style="margin: 0 auto;width: 70%;
+      margin-bottom: 18px;padding: 0">
+          <ng-container *ngFor="let userData of tableData; index as i">
+            <mat-card style="margin: 0 auto;width: 100%;margin-bottom: 18px;overflow-x:auto;">
+              <ng-container *ngIf="userData.userOrderListWrtEmailID.length > 0">
+                <table class="customers" style="margin-bottom: 10px;">
+                  <thead>
+                    <ng-container *ngFor="let HeaderText of objectKeys(userData.userOrderListWrtEmailID[0])">
+                      <th>{{ HeaderText }}</th>
+                    </ng-container>
+                  </thead>
+                  <tbody>
+                    <ng-container *ngFor="let dataText of userData.userOrderListWrtEmailID; index as dataTextIndex">
+                      <tr>
+                        <td *ngFor="let innerDataText of objectKeys(dataText)">
+                          {{dataText[innerDataText]}}
+                        </td>
+                      </tr>
+                    </ng-container>
+                  </tbody>
+                </table>
+              </ng-container>
+              <table class="customers">
+                <thead>
+                  <ng-container *ngFor="let HeaderText of objectKeys(userData.userTempOrdeDetailWrtTempID)">
+                    <th>{{ HeaderText }}</th>
+                  </ng-container>
+                  <th>Generate Order</th>
+                </thead>
+                <tbody>
                   <tr>
-                    <td *ngFor="let innerDataText of objectKeys(dataText)">
-                      {{dataText[innerDataText]}}
+                    <td *ngFor="let dataText of objectKeys(userData.userTempOrdeDetailWrtTempID)">
+                      {{userData.userTempOrdeDetailWrtTempID[dataText]}}
+                    </td>
+                    <td class="text-align-center">
+                      <ng-container *ngIf="_data.enableOrderGenerateBtn[i] == 'failed'">
+                        <span class="theme-red">Failed</span>
+                      </ng-container>
+                      <ng-container *ngIf="_data.enableOrderGenerateBtn[i] != 'done' else orderGenerated">
+                        <select id="selectedPaymentGateway" name="selectedPaymentGateway" class="form-control" required
+                          (change)="selectPaymentGateway($event); _data.enableOrderGenerateBtn[i] = $event.target.value ">
+                          <option selected disabled>Select Payment Gateway</option>
+                          <option *ngFor="let issue of _data.paymentGatewayList" [ngValue]="issue">
+                            <span class="capitalize">{{issue}}</span>
+                          </option>
+                        </select>
+                        <br>
+                        <button *ngIf="_data.enableOrderGenerateBtn[i]" class="btn btn-primary"
+                          (click)="generateOrder(userData.userTempOrdeDetailWrtTempID, _data.enableOrderGenerateBtn[i], i)">Submit</button>
+                      </ng-container>
+
+                      <ng-template #orderGenerated>
+                        <span class="text-green">Order Generated</span>
+                      </ng-template>
+
                     </td>
                   </tr>
-                </ng-container>
-              </tbody>
-            </table>
+                </tbody>
+              </table>
+            </mat-card>
           </ng-container>
-          <table class="customers">
-            <thead>
-              <ng-container *ngFor="let HeaderText of objectKeys(userData.userTempOrdeDetailWrtTempID)">
-                <th>{{ HeaderText }}</th>
-              </ng-container>
-              <th>Generate Order</th>
-            </thead>
-            <tbody>
-              <tr>
-                <td *ngFor="let dataText of objectKeys(userData.userTempOrdeDetailWrtTempID)">
-                  {{userData.userTempOrdeDetailWrtTempID[dataText]}}
-                </td>
-                <td class="text-align-center">
-                  <ng-container *ngIf="_data.enableOrderGenerateBtn[i] == 'failed'">
-                    <span class="theme-red">Failed</span>
-                  </ng-container>
-                  <ng-container *ngIf="_data.enableOrderGenerateBtn[i] != 'done' else orderGenerated">
-                    <select id="selectedPaymentGateway" name="selectedPaymentGateway" class="form-control" required
-                      (change)="selectPaymentGateway($event); _data.enableOrderGenerateBtn[i] = $event.target.value ">
-                      <option selected disabled>Select Payment Gateway</option>
-                      <option *ngFor="let issue of _data.paymentGatewayList" [ngValue]="issue">
-                        <span class="capitalize">{{issue}}</span>
-                      </option>
-                    </select>
-                    <br>
-                    <button *ngIf="_data.enableOrderGenerateBtn[i]" class="btn btn-primary"
-                      (click)="generateOrder(userData.userTempOrdeDetailWrtTempID, _data.enableOrderGenerateBtn[i], i)">Submit</button>
-                  </ng-container>
-
-                  <ng-template #orderGenerated>
-                    <span class="text-green">Order Generated</span>
-                  </ng-template>
-
-                </td>
-              </tr>
-            </tbody>
-          </table>
         </mat-card>
-      </ng-container>
-    </mat-card>
 
-    <!-- <div class="error-section"
-      [ngClass]="{'show-error-section': _data.uploadErrorList.length, 'hide-error-section': !_data.uploadErrorList.length}">
-      <div class="colInline col-sm-1 col-md-1" style="top: 1em; right: 1em; position: absolute;">
-        <a href="#/sendemail" (click)="closeErrorSection($event)" style="color:#000;">
-          <i class="glyphicon glyphicon-remove close-tray"></i>
-        </a>
-      </div>
-
-      <h3 style="text-decoration:underline;">{{_data.uploadFileName}}</h3>
-      <div class="count text-green" *ngIf="_data.uploadErrorCount && _data.uploadErrorCount.correct">
-        Success - {{_data.uploadErrorCount.correct}}
-      </div>
-
-      <div>
-        <div class="count text-igp" *ngIf="_data.uploadErrorCount && _data.uploadErrorCount.fail">Failed -
-          {{_data.uploadErrorCount.fail}}</div>
-        <button class="btn btn-primary m-top-1" (click)="downloadErrorList()">Download</button>
-
-        <div class="caption m-top-1">List:-</div>
-        <div class="errorCont" *ngFor="let err of _data.uploadErrorList">
-          <div>row: {{err.row}}</div>
-          <div>message: {{err.msg}}</div>
+        <!-- <div class="error-section"
+        [ngClass]="{'show-error-section': _data.uploadErrorList.length, 'hide-error-section': !_data.uploadErrorList.length}">
+        <div class="colInline col-sm-1 col-md-1" style="top: 1em; right: 1em; position: absolute;">
+          <a href="#/sendemail" (click)="closeErrorSection($event)" style="color:#000;">
+            <i class="glyphicon glyphicon-remove close-tray"></i>
+          </a>
         </div>
+  
+        <h3 style="text-decoration:underline;">{{_data.uploadFileName}}</h3>
+        <div class="count text-green" *ngIf="_data.uploadErrorCount && _data.uploadErrorCount.correct">
+          Success - {{_data.uploadErrorCount.correct}}
+        </div>
+  
+        <div>
+          <div class="count text-igp" *ngIf="_data.uploadErrorCount && _data.uploadErrorCount.fail">Failed -
+            {{_data.uploadErrorCount.fail}}</div>
+          <button class="btn btn-primary m-top-1" (click)="downloadErrorList()">Download</button>
+  
+          <div class="caption m-top-1">List:-</div>
+          <div class="errorCont" *ngFor="let err of _data.uploadErrorList">
+            <div>row: {{err.row}}</div>
+            <div>message: {{err.msg}}</div>
+          </div>
+        </div>
+      </div> -->
       </div>
-    </div> -->
-  </div>
-</mat-drawer-container>
+    </mat-drawer-container>
+  </mat-tab>
+</mat-tab-group>
