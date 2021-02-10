@@ -1782,8 +1782,12 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
     getDeliveryBoyList(){
         var _this = this
         _this.deliveryBoyAssignBtnText = false;
+        
+    let start = 0;
+    let end = 100;
+    function apiCall (){
         const reqObj = {
-            url: `deliveryBoyDetails?fkAssociateId=${localStorage.getItem('fkAssociateId')}&endLimit=100&fkUserId=`,
+            url: `deliveryBoyDetails?fkAssociateId=${localStorage.getItem('fkAssociateId')}&startLimit=${start}&endLimit=${end}&fkUserId=`,
             method: "get",
             payload: {}
         };
@@ -1794,9 +1798,17 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
                 return;
             }
             if (response && response.tableData) {
-                _this.deliveryBoyList = response.tableData;
+                _this.deliveryBoyList.push(...response.tableData);
+                //check total record summary and call api
+                if((response.summary && response.summary[0]['value']) && _this.deliveryBoyList.length < Number(response.summary[0]['value'])){
+                    start = start + 100;
+                    end = end + 100;
+                    apiCall();
+                }
             }
         });
+    };
+    apiCall();  
     }
 
     assignToDeliveryBoy(data, orderData){

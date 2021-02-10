@@ -194,10 +194,17 @@
                             <input name="contactPerson" class="form-control custom-control m-top-1" [(ngModel)]="reportAddAction.reportAddActionModel.contactPerson" #contactPerson="ngModel" placeholder="Contact Person" required>
                             <input name="email" class="form-control custom-control m-top-1" [(ngModel)]="reportAddAction.reportAddActionModel.email" #email="ngModel" placeholder="Email" required>
                             <textarea name="address" class="form-control custom-control m-top-1" rows="3" style="resize:none" [(ngModel)]="reportAddAction.reportAddActionModel.address" #address="ngModel" placeholder="Address" required></textarea>
+                            <input name="vendorCity" class="form-control custom-control m-top-1" [(ngModel)]="reportAddAction.reportAddActionModel.vendorCity" #phone="ngModel" placeholder="Vendor City" required>
                             <input name="user" class="form-control custom-control m-top-1" [(ngModel)]="reportAddAction.reportAddActionModel.user" #user="ngModel" placeholder="User Name" required>
                             <input name="password" type="password" class="form-control custom-control m-top-1" [(ngModel)]="reportAddAction.reportAddActionModel.password" #password="ngModel" placeholder="Password" required>
-                            <input name="phone" class="form-control custom-control m-top-1" [(ngModel)]="reportAddAction.reportAddActionModel.phone" #phone="ngModel" placeholder="Phone" required>
-
+                            <input name="phone" class="form-control custom-control m-top-1" [(ngModel)]="reportAddAction.reportAddActionModel.phone" #phone="ngModel" placeholder="Phone" required> 
+                            <select name="vendorType" class="form-control m-top-1" [(ngModel)]="reportAddAction.reportAddActionModel.vendorType" required>
+                                <option [ngValue]="undefined" disabled selected>Select a Vendor Type</option>
+                                <option value="Baker">Baker</option>
+                                <option value="Florist">Florist</option>
+                                <option value="Baker And Florist">Baker and Florist</option>
+                            </select>
+                            
 
                             <div *ngIf="f.submitted && !associateName.valid" class="help-block theme-red">Please provide associate Name!</div>
                             <div *ngIf="f.submitted && !contactPerson.valid" class="help-block theme-red">Please provide contact Person!</div>
@@ -206,6 +213,8 @@
                             <div *ngIf="f.submitted && !user.valid" class="help-block theme-red">Please provide user!</div>
                             <div *ngIf="f.submitted && !password.valid" class="help-block theme-red">Please provide password!</div>
                             <div *ngIf="f.submitted && !phone.valid" class="help-block theme-red">Please provide phone!</div>
+                            <div *ngIf="f.submitted && !vendorType.valid" class="help-block theme-red">Please provide Vendor Type!</div>
+                            <div *ngIf="f.submitted && !vendorCity.valid" class="help-block theme-red">Please provide Vendor City!</div>
                             <button class="btn btn-primary m-top-1">Submit</button>
                         </form>
                     </div>

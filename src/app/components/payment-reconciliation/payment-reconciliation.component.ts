@@ -3,6 +3,10 @@ import { Headers, RequestOptions, Response } from '@angular/http';
 //import { UtilityService } from '../../services/utility.service';
 import { environment } from '../../../environments/environment';
 import { BackendService } from '../../services/backend.service';
+import * as Excel from 'exceljs/dist/exceljs.min.js';
+import * as fs from 'file-saver';
+import { DatePipe } from '@angular/common';
+import { Angular5Csv } from 'angular5-csv/dist/Angular5-csv';
 @Component({
   selector: 'app-payment-reconciliation',
   templateUrl: './payment-reconciliation.component.html',
@@ -45,6 +49,16 @@ export class PaymentReconciliationComponent implements OnInit {
   objectKeys = Object.keys;
 
   tableData = [];
+  payuReconTabledate = [];
+  payuReconError = '';
+  payuReconFormModel = {
+    startDate: new Date(),
+    endDate: new Date()
+  }
+  payTmReconFormModel = {
+    startDate: new Date(),
+    endDate: new Date()
+  }
   // [
   //   {
   //     "userOrderListWrtEmailID": [
@@ -120,6 +134,10 @@ export class PaymentReconciliationComponent implements OnInit {
   //   }
   // ];
   @ViewChild('drawer') infoDrawer: any;
+  payTmReconTabledate = [];
+  payTmReconError = '';
+  paytmModelChange:boolean;
+  payuModelChange:boolean;
   constructor(
     private _elementRef: ElementRef,
     public BackendService: BackendService, //public UtilityService: UtilityService
@@ -283,7 +301,7 @@ public onClick(targetElement) {
       }
       if (response && response.status == 'Success') {
         _this._data.enableOrderGenerateBtn[index] = 'done';
-      }else{
+      } else {
         _this._data.enableOrderGenerateBtn[index] = 'failed';
       }
     });
@@ -291,6 +309,101 @@ public onClick(targetElement) {
 
   selectPaymentGateway(e) {
     console.log(e.target.value)
+  }
+
+  getPayuRecon() {
+    let _this = this;
+    _this.payuReconTabledate = []
+    _this.payuReconError = '';
+    let pipe = new DatePipe('en-US');
+    ///v1/admin/reconciliation/payment/payu/callbacks?startDate=2021-02-03&endDate=2021-02-09
+    const reqObj = {
+      url: `reconciliation/payment/payu/callbacks?startDate=${pipe.transform(_this.payuReconFormModel.startDate, 'yyyy-MM-dd')}&endDate=${pipe.transform(_this.payuReconFormModel.endDate, 'yyyy-MM-dd')}`,
+      method: 'get'
+    };
+    _this.BackendService.makeAjax(reqObj, function (err, response, headers) {
+      if (err || response.error) {
+        console.log('Error=============>', err);
+      }
+      if (response && response.status == 'Success' && response.data && Array.isArray(response.data)) {
+        _this.payuReconTabledate = response.data;
+        _this.payuModelChange = false;
+      } else {
+        _this.payuReconError = response.data;
+        console.log(response)
+      }
+    });
+  }
+
+  getPayTmRecon() {
+    let _this = this;
+    _this.payTmReconTabledate = []
+    console.log(_this.payTmReconFormModel)
+    let pipe = new DatePipe('en-US');
+    ///v1/admin/reconciliation/payment/payu/callbacks?startDate=2021-02-03&endDate=2021-02-09
+    const reqObj = {
+      url: `reconciliation/payment/paytm/callbacks?startDate=${pipe.transform(_this.payTmReconFormModel.startDate, 'yyyy-MM-dd')}&endDate=${pipe.transform(_this.payTmReconFormModel.endDate, 'yyyy-MM-dd')}`,
+      method: 'get'
+    };
+    _this.BackendService.makeAjax(reqObj, function (err, response, headers) {
+      if (err || response.error) {
+        console.log('Error=============>', err);
+      }
+      if (response && response.status == 'Success' && response.data && Array.isArray(response.data)) {
+        _this.paytmModelChange = false;
+        _this.payTmReconTabledate = response.data;
+      } else {
+        _this.payTmReconTabledate = [];
+        _this.payTmReconError = response.data;
+        console.log(response)
+      }
+    });
+  }
+  //Download flag sample file or table data
+  downloadFile(sample, recon?: string) {
+    if (sample == 'sample') {
+      let workbook = new Excel.Workbook();
+      let worksheet1 = workbook.addWorksheet('Template');
+      let titleRow = worksheet1.addRow(['emailid', 'temporderid']);
+
+      workbook.xlsx.writeBuffer().then((data) => {
+        let blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+        fs.saveAs(blob, 'Sample Recon File.xlsx');
+      });
+    } else {
+      if (recon == 'payu' && Array.isArray(this.payuReconTabledate)) {
+        const pipe = new DatePipe('en-US');
+        const datefrom = pipe.transform(this.payuReconFormModel.startDate, 'dd-MM-yyyy');
+        const dateto = pipe.transform(this.payuReconFormModel.endDate, 'dd-MM-yyyy');
+        var options = {
+          showLabels: true,
+          showTitle: false,
+          headers: Object.keys(this.payuReconTabledate.map(m => m.userTempOrdeDetailWrtTempID)[0]).map(m => m.charAt(0).toUpperCase() + m.slice(1)),
+          nullToEmptyString: false,
+        };
+        // userData.unshift(headerData);
+
+        let filedate = datefrom + '-' + dateto ;
+        let download = new Angular5Csv(this.payuReconTabledate.map(m => m.userTempOrdeDetailWrtTempID), 'Payu-Recon-' + filedate, options);
+      }
+      
+      if (recon == 'payTm' && Array.isArray(this.payTmReconTabledate)) {
+        const pipe = new DatePipe('en-US');
+        const datefrom = pipe.transform(this.payuReconFormModel.startDate, 'dd-MM-yyyy');
+        const dateto = pipe.transform(this.payuReconFormModel.endDate, 'dd-MM-yyyy');
+        var options = {
+          showLabels: true,
+          showTitle: false,
+          headers: Object.keys(this.payTmReconTabledate.map(m => m.userTempOrdeDetailWrtTempID)[0]).map(m => m.charAt(0).toUpperCase() + m.slice(1)),
+          nullToEmptyString: false,
+        };
+        // userData.unshift(headerData);
+
+        let filedate = datefrom + '-' + dateto ;
+        let download = new Angular5Csv(this.payTmReconTabledate.map(m => m.userTempOrdeDetailWrtTempID), 'PayTm-Recon-' + filedate, options);
+      }
+
+    }
   }
 
 }
