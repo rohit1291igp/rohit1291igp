@@ -166,7 +166,7 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
       public time12Pipe: Time12Pipe,
       public addDeliveryBoyDialog: MatDialog,
       private _snackBar: MatSnackBar,
-      public S3UploadService: S3UploadService,
+      public S3UploadService: S3UploadService
       ) { }
   sidePanelDataFilter;
   ngOnInit() {
@@ -205,7 +205,7 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
   }
 
   isRdc(){
-      console.log("isRDC")
+    //   console.log("isRDC")
       return localStorage.getItem('vendorName').includes('rdc')
   }
 
@@ -617,6 +617,8 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
       }else if(orderByStatus){
           let orderDate = e.currentTarget.dataset.orderday;
           let orderDeliveryTime = e.currentTarget.dataset.deliverytime;
+          const loadTrayData = {sector:sector,orderByStatus: orderByStatus, dashBoardDataType:dashBoardDataType, orderDate:orderDate, orderDeliveryTime:orderDeliveryTime}
+            localStorage.setItem('loadTrayData', JSON.stringify(loadTrayData));
           let spDate = Date.parse(orderDate); //Date.now();
           let orderStatus = orderByStatus;
           let section;
@@ -1702,10 +1704,13 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
   printDropDown(args){
       var _this=this, _e=args.e,
           value=args.value;
+        //   _this.router.navigate([`/dashboard/print/${value}`]);
+          this.router.navigate([]).then(result => {  window.open(`/#/new-dashboard/dashboard/print/${value}`, '_blank'); });
       if(value === 'order'){
-          _this.print(_e, 'order', null, null, null, 'all');
+         
+        //   _this.print(_e, 'order', null, null, null, 'all');
       }else{
-          _this.print(_e, 'message', null, null, null, 'all');
+        //   _this.print(_e, 'message', null, null, null, 'all');
       }
   }
 

@@ -65,24 +65,26 @@ export class FeedsComponent implements OnInit {
 
     ];
     public feedObservable;
-
+    ajaxCallDone = 1;
   constructor(
       public BackendService : BackendService,
       public UtilityService: UtilityService
   ) {}
 
   ngOnInit() {
-     //var _this=this;
+     var _this=this;
     console.log("sdfsdf");
       if(environment.userType == "vendor"){
-          this.getFeeds();
-          this.feedObservable=Observable.interval(1000 * 60)
+        _this.getFeeds();
+        _this.feedObservable=Observable.interval(10000)
               .subscribe(() => {
-                  console.log('IntervalObservable working !!!')
-                  this.getFeeds();
+                console.log('IntervalObservable working !!!')
+                if(_this.ajaxCallDone == 1){
+                    _this.getFeeds();
+                }
               });
       }else{
-          this.feedData=[];
+        _this.feedData=[];
       }
 
   }
@@ -95,6 +97,7 @@ export class FeedsComponent implements OnInit {
 
   getFeeds(){
       var _this=this;
+      _this.ajaxCallDone = 0;
       const fkAssociateId = localStorage.getItem('fkAssociateId') ? localStorage.getItem('fkAssociateId') : null;
       var reqObj={
           url:'vendorinstructionfeed?fkAssociateId='+fkAssociateId,
@@ -106,7 +109,12 @@ export class FeedsComponent implements OnInit {
             if(err || response.error) {
                 console.log('Error=============>', err, response.errorCode);
             }
-            console.log('feeds Response --->', response.result);
+            // console.log('feeds Response --->', response.result);
+            if(response && !response.error){
+                setTimeout(()=>{
+                  _this.ajaxCallDone = 1;
+                }, 500)
+              }
             _this.feedData=response.result;
             response.result.find(function(feed){
                 _this.notification = false;
@@ -136,7 +144,7 @@ export class FeedsComponent implements OnInit {
             if(err || response.error) {
                 console.log('Error=============>', err, response.errorCode);
             }
-            console.log('feeds Response --->', response.result);
+            // console.log('feeds Response --->', response.result);
             _this.feedData=response.result;
             response.result.find(function(feed){
                 _this.notification = false;
@@ -159,7 +167,7 @@ export class FeedsComponent implements OnInit {
       if(err || response.error) {
           console.log('Error=============>', err, response.errorCode);
       }
-        console.log('feeds Response --->', response.result);
+        // console.log('feeds Response --->', response.result);
         _this.feedData=response.result;
         response.result.find(function(feed){
             _this.notification = false;
