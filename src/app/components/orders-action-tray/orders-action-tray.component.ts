@@ -1705,7 +1705,8 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
       var _this=this, _e=args.e,
           value=args.value;
         //   _this.router.navigate([`/dashboard/print/${value}`]);
-          this.router.navigate([]).then(result => {  window.open(`/#/new-dashboard/dashboard/print/${value}`, '_blank'); });
+        value = value == 'message' ? 'orderMessage' : value;
+          this.router.navigate([]).then(result => {  window.open(`${location.href.split("#")[0]}#/new-dashboard/dashboard/print/${value}`, '_blank'); });
       if(value === 'order'){
          
         //   _this.print(_e, 'order', null, null, null, 'all');
@@ -1895,14 +1896,17 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
             duration: 5 * 1000,
         });
     }
-
+    
     onSrcError(event){
         let tempSrc = event.target.currentSrc.split('/th');
         // tempSrc = tempSrc[1].split('/');
         // tempSrc = tempSrc[1].split('?');
-        tempSrc = tempSrc[1].split('/')
-        tempSrc = tempSrc[1];
+        if(tempSrc && tempSrc[1]){
+            tempSrc = tempSrc[1].split('/')
+            tempSrc = tempSrc[1];
             event.target.src = `${environment.componentImageUrl}${tempSrc}`;
+        }
+        
     }
 
     uploadFiles(event) {
