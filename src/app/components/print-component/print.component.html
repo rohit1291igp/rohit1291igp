@@ -1,0 +1,18 @@
+<ng-container *ngIf="sidePanelData && sidePanelData.length > 0"></ng-container>
+<button class="btn" mat-raised-button style="position: fixed;
+right: 23px;background: #C3404E;color: #fff;cursor: pointer;outline: none;z-index: 1000;"
+    (click)="openPrint()">Print</button>
+
+<ng-container *ngFor="let order of sidePanelData;">
+    <!-- Print Template start -->
+    <ng-container *ngIf="printType && printType == 'order'">
+        <app-print-template [order]="order" [printType]="printType" [pageRender]="true"></app-print-template>
+    </ng-container>
+    <ng-container *ngIf="printType && printType == 'orderMessage'">
+        <app-print-template [order]="order" [printType]="printType" [pageRender]="true"></app-print-template>
+    </ng-container>
+    <!-- Print Template end -->
+</ng-container>
+<div [ngStyle]="{display: loading ? 'flex' : 'none'}" class="spinner">
+    <mat-spinner [diameter]="40"></mat-spinner>
+</div>

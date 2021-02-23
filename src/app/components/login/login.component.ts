@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RoutesRecognized } from '@angular/router';
 import { environment } from "../../../environments/environment";
 import { AuthenticationService } from '../../services/authentication.service';
 import { BackendService } from '../../services/backend.service';
@@ -31,6 +31,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     animState2 = false;
     public otpInputChange = new Subject<string>();
     subscription:Subscription;
+    previousUrl = '';
     constructor(
         public route1: ActivatedRoute,
         public router: Router,
@@ -40,6 +41,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         private cookieService: CookieService,
         private AppLoadService: AppLoadService
     ) {
+        
         this.subscription = this.otpInputChange
         .map((value:any) => event.target['value'])
         .debounceTime(300)
@@ -129,7 +131,7 @@ export class LoginComponent implements OnInit, OnDestroy {
                     $this.apierror = response.error ? response.errorMessage : "Login Failed (Either UserId/Password wrong)";
                     return;
                 }
-
+                const previousUrl = sessionStorage.previousUrl;
                 const token = _response.result.token;
                 const fkAssociateId = _response.result.fkAssociateId;
                 const associateName = _response.result.associateName;
@@ -173,19 +175,22 @@ export class LoginComponent implements OnInit, OnDestroy {
                 if (userType === 'deliveryboy') {
                     $this.router.navigate(['/delivery-app']);
                 } else if (userType === 'microsite' || userType === 'microsite-zeapl' || userType == 'microsite-loylty') {
-                    $this.router.navigate(['/new-dashboard']);
+                    // $this.router.navigate(['/new-dashboard']);
+                    $this.navigationStrategy(previousUrl, '/new-dashboard');
                 } else if (userType === 'voucher') {
                     $this.router.navigate(['/voucher/voucher']);
                 } else if (userType === 'gv') {
                     $this.router.navigate(['/voucher/gv']);
                 } else if (userType === 'warehouse' || userType === 'marketing' || userType === 'mldatascience') {
-                    $this.router.navigate(['/new-dashboard']);
+                    // $this.router.navigate(['/new-dashboard']);
+                    $this.navigationStrategy(previousUrl, '/new-dashboard');
                 } else if ((userType === 'egv_admin' || userType === 'sub_egv_admin' || localStorage.getItem('userType') === 'wb_yourigpstore') || (userType === 'manager' || userType === 'sub_manager') || (userType === 'executive' || userType === 'sub_executive' || userType == 'parent_manager' || userType == 'parent_executive')) {
                     if ((userType === 'manager' || userType === 'sub_manager') || (userType === 'executive' || userType === 'sub_executive' || userType == 'parent_manager' || userType == 'parent_executive') && !$this.whitelabelStyle) {
                         $this.AppLoadService.getMicrositeDetails($this.model.associatename);
                         let timer = setInterval(() => {
                             if ($this.AppLoadService.micrositeDetails) {
-                                $this.router.navigate(['/new-dashboard']);
+                                // $this.router.navigate(['/new-dashboard']);
+                                $this.navigationStrategy(previousUrl, '/new-dashboard');
                                 clearInterval(timer);
                             }
                         }, 10);
@@ -198,15 +203,24 @@ export class LoginComponent implements OnInit, OnDestroy {
                         // localStorage.setItem('whitelabelDetails', JSON.stringify(data));
 
                     } else {
-                        $this.router.navigate(['/new-dashboard']);
+                        // $this.router.navigate(['/new-dashboard']);
+                        $this.navigationStrategy(previousUrl, '/new-dashboard');
                     }
                 } else if (userType === 'admin' || userType === 'vendor' || userType == 'hdextnp') {
-                    $this.router.navigate(['/new-dashboard/dashboard']);
+                    $this.navigationStrategy(previousUrl, '/new-dashboard/dashboard');
                 }
                 else {
                     $this.router.navigate(['/dashboard']);
                 }
             });
+        }
+    }
+
+    navigationStrategy(previousUrl, landingPage){
+        if(previousUrl && previousUrl.includes('new-dashboard')){
+            this.router.navigate([previousUrl]);
+        }else{
+            this.router.navigate([landingPage]);
         }
     }
 

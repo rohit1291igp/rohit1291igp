@@ -1,4 +1,4 @@
-    <div class="row page orderPage hide" id="order_{{getUniqueOrderId(order)}}"  *ngIf="printType === 'order'">
+    <div class="row page orderPage {{ pageRender ? '' : 'hide'}}"  id="order_{{getUniqueOrderId(order)}}"  *ngIf="printType === 'order'">
     <section class="innerContent">
     <section class="messgae-box-cont" *ngIf="order.commments">
             <div style="width:100%;">
@@ -164,7 +164,7 @@
  </div>
 
 
-<div id="order_message_{{getUniqueOrderId(order)}}" class="hide page messagePage" *ngIf="order.commments && printType === 'orderMessage'">
+<div id="order_message_{{getUniqueOrderId(order)}}" class="{{ pageRender ? '' : 'hide'}} page messagePage" *ngIf="order.commments && printType === 'orderMessage'">
     <section class="innerContent">
         <section class="messgae-box-cont2">
             <div style="width:100%;">
