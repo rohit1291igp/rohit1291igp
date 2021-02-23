@@ -29,6 +29,7 @@ export class DashboardComponent implements OnInit {
   fkAssociateId = localStorage.fkAssociateId;
   vendorName = localStorage.getItem('associateName');
   loading = false;
+  loadingCount = 0;
   public mainHeaderComponent: MainHeaderComponent;
   public dashboardData: any;
   public masterData: Object;
@@ -113,6 +114,7 @@ export class DashboardComponent implements OnInit {
         setTimeout(()=>{
           _this.ajaxCallDone = 1;
           _this.loading = false;
+          _this.loadingCount++;
         }, 500)
       }
       /*if(!result.new[0] || (result.new[0] && result.new[0].deliveryTimes !== "pas")) {

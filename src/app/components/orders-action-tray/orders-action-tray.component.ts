@@ -1705,13 +1705,15 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
       var _this=this, _e=args.e,
           value=args.value;
         //   _this.router.navigate([`/dashboard/print/${value}`]);
-        value = value == 'message' ? 'orderMessage' : value;
-          this.router.navigate([]).then(result => {  window.open(`${location.href.split("#")[0]}#/new-dashboard/dashboard/print/${value}`, '_blank'); });
+        //Enable this code for print All route
+        // value = value == 'message' ? 'orderMessage' : value;
+        //   this.router.navigate([]).then(result => {  window.open(`${location.href.split("#")[0]}#/new-dashboard/dashboard/print/${value}`, '_blank'); });
+        //Ends
       if(value === 'order'){
          
-        //   _this.print(_e, 'order', null, null, null, 'all');
+          _this.print(_e, 'order', null, null, null, 'all');
       }else{
-        //   _this.print(_e, 'message', null, null, null, 'all');
+          _this.print(_e, 'message', null, null, null, 'all');
       }
   }
 
