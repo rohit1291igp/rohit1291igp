@@ -66,6 +66,7 @@ import { ScriptService } from './services/script.service';
 import { SerachRankingService } from './services/serach-ranking.service';
 import { environment } from 'environments/environment';
 import { AppLoadService } from './services/app.load.service';
+import { ServiceWorkerModule } from '@angular/service-worker';
 
 
 export function init_app(appLoadService: AppLoadService) {
@@ -148,7 +149,8 @@ export function init_app(appLoadService: AppLoadService) {
     DateFormatterPipeModule,
     // PayoutDashboardModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    environment.production ? ServiceWorkerModule.register('/ngsw-worker.js') : [],
     // RouterModule
   ],
   providers: [

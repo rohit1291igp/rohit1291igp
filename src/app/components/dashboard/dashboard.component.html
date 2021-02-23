@@ -563,3 +563,7 @@
             </div>
         </div>
 </ng-container>
+
+<div *ngIf="!loadingCount" [ngStyle]="{display: loading ? 'flex' : 'none'}" class="spinner">
+        <mat-spinner [diameter]="40"></mat-spinner>
+        </div>

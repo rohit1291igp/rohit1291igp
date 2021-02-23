@@ -47,6 +47,9 @@ export class AppComponent implements OnInit, OnChanges{
         },1500);
     }
   }
+  reload(){
+    window && window.location && window.location.reload();
+  }
 }
 
 @Component({
@@ -157,4 +160,5 @@ export class testComponent{
   // fileChange(e){
   //   console.log(e)
   // }
+  
 }

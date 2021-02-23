@@ -6,11 +6,14 @@ import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-print-template',
-  templateUrl: './print-template.component.html'
+  templateUrl: './print-template.component.html',
+  styleUrls: ['./print-template.component.css']
 })
 export class PrintTemplateComponent implements OnInit {
   @Input('order') order : any;
   @Input('printType') printType : string;
+  @Input('pageRender') pageRender : boolean;
+
     productsURL = environment.productsURL;
     productsCompURL = environment.productsCompURL;
     messageBgImage = 'assets/images/IGP-logo-for-order-sheet.png';

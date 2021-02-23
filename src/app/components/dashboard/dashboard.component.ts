@@ -8,6 +8,7 @@ import { MainHeaderComponent } from '../main-header/main-header.component';
 import { UtilityService } from '../../services/utility.service';
 import { environment } from "../../../environments/environment";
 import { Observable } from "rxjs";
+
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 
 
@@ -27,6 +28,8 @@ export class DashboardComponent implements OnInit {
   selectedSector;
   fkAssociateId = localStorage.fkAssociateId;
   vendorName = localStorage.getItem('associateName');
+  loading = false;
+  loadingCount = 0;
   public mainHeaderComponent: MainHeaderComponent;
   public dashboardData: any;
   public masterData: Object;
@@ -52,6 +55,7 @@ export class DashboardComponent implements OnInit {
   public dashboardObservable;
   //list of vendors
   vendorsList = [];
+  ajaxCallDone = 1;
   constructor(
     public router: Router,
     public dashboardService: DashboardService,
@@ -70,23 +74,26 @@ export class DashboardComponent implements OnInit {
       this.getDashboardFiltersOptions();
       localStorage.removeItem("vendorGrpId");
     }
+    var $this=this;
     if (environment.userType !== 'blogger') {
-      this.isRowAlert = this.dashboardService.getAlertRow();
-      this.dashboardData = this.dashboardService.getCustomData();
-      this.loadDbData('');
-      this.dashboardObservable = Observable.interval(1000 * 60 * 1.5)
-        .subscribe(() => {
+      $this.isRowAlert = $this.dashboardService.getAlertRow();
+      $this.dashboardData = $this.dashboardService.getCustomData();
+      $this.loadDbData('');
+      $this.dashboardObservable = Observable.interval(1000 * 60 * 1.5)
+      .subscribe(() => {
           console.log('Dasboard IntervalObservable working !!!');
-          this.loadDbData(this.selectedSector);
+          if($this.ajaxCallDone == 1){
+          $this.loadDbData($this.selectedSector);
+          }
         });
 
     }
 
     if (environment.userType === 'deliveryboy') {
-      this.router.navigate(['/delivery-app/task']);
+      $this.router.navigate(['/delivery-app/task']);
     }
   }
-
+  
   ngOnDestroy() {
     if (environment.userType !== 'blogger') {
       this.dashboardObservable && this.dashboardObservable.unsubscribe();
@@ -96,10 +103,20 @@ export class DashboardComponent implements OnInit {
   loadDbData(sector) {
     
     var _this = this;
+    _this.loading = true;
+    _this.ajaxCallDone = 0;
     if (!sector) { sector = ''; }
     var cookieFDate = this.UtilityService.getCookie("festivalDate") ? JSON.parse(_this.UtilityService.getCookie("festivalDate")) : null;
     var cookieFDatwFormatted = cookieFDate ? cookieFDate.date.year + '-' + cookieFDate.date.month + '-' + cookieFDate.date.day : null;
     this.dashboardService.getDashboardData(cookieFDatwFormatted, sector, function (result) {
+
+      if(result && !result.error){
+        setTimeout(()=>{
+          _this.ajaxCallDone = 1;
+          _this.loading = false;
+          _this.loadingCount++;
+        }, 500)
+      }
       /*if(!result.new[0] || (result.new[0] && result.new[0].deliveryTimes !== "pas")) {
        _this.dashboardData = _this.dashboardService.getCustomData();
        return;
@@ -240,7 +257,7 @@ export class DashboardComponent implements OnInit {
 
   getDashboardFiltersOptions() {
     var _this = this;
-
+    _this.loading = true;
     const reqObj = {
       url: `getDashboardFilters`,
       method: "get"
@@ -251,6 +268,7 @@ export class DashboardComponent implements OnInit {
         return;
       }
       if (response.result) {
+        _this.loading = false;
         for (var prop in response.result) {
           var item = { id: prop, value: response.result[prop] };
           _this.vendorsList.push(item);
