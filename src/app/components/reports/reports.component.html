@@ -87,7 +87,7 @@
                     <!--<h4 class="modal-title" id="myModalLabel">Modal Header</h4>-->
                 </div>
                 <div class="modal-body center-align">
-                    <img class="img-responsive" src="{{imagePreviewSrc}}" alt="product_img_preview">
+                    <img loading="lazy" class="img-responsive" src="{{imagePreviewSrc}}" alt="product_img_preview">
                     <!--<p>Some text in the modal.</p>-->
                 </div>
                 <!--<div class="modal-footer">
@@ -127,7 +127,7 @@
                                             <div class="image-container">
                                                 <div class="row">
                                                     <div class="col-md-4">
-                                                        <img style="width:100%" src="{{image.Location}}" class="image-responsive" />
+                                                        <img loading="lazy" style="width:100%" src="{{image.Location}}" class="image-responsive" />
                                                     </div>
                                                     <div class="col-md-8">
                                                         <p><strong>Name</strong> : {{image.key}}</p>
@@ -318,7 +318,7 @@
                                                     <div class="image-container">
                                                         <div class="row">
                                                             <div class="col-md-2">
-                                                                <img style="width:100%" src="{{image.Location}}" class="image-responsive" />
+                                                                <img loading="lazy" style="width:100%" src="{{image.Location}}" class="image-responsive" />
                                                             </div>
                                                             <div class="col-md-10">
                                                                 <p><strong>Name</strong> : {{image.key}}</p>
@@ -384,9 +384,9 @@
                 <div class="summaryBlockCont">
                     <div class="summaryBlock inline m-top-1" *ngFor="let summ of reportDataLoader.summary; index as i;">
                         <div class="icon l" aria-hidden="true">
-                            <img src="assets/images/icons/gift.svg" alt="orders" *ngIf="i === 0">
-                            <img src="assets/images/icons/inr.svg" alt="inr" *ngIf="i === 1">
-                            <img src="assets/images/icons/inr.svg" alt="inr" *ngIf="i === 2">
+                            <img loading="lazy" src="assets/images/icons/gift.svg" alt="orders" *ngIf="i === 0">
+                            <img loading="lazy" src="assets/images/icons/inr.svg" alt="inr" *ngIf="i === 1">
+                            <img loading="lazy" src="assets/images/icons/inr.svg" alt="inr" *ngIf="i === 2">
                         </div>
                         <div class="text-igp">{{summ.label}}</div>
                         <div class="text-bold">{{summ.value}}</div>
@@ -484,9 +484,9 @@
                 <div class="summaryBlockCont">
                     <div class="summaryBlock inline m-top-1" *ngFor="let summ of reportData.summary; index as i;" [style.width.%]="100/reportData.summary.length">
                         <div class="icon l" aria-hidden="true">
-                            <img src="assets/images/icons/gift.svg" alt="orders" *ngIf="i === 0">
-                            <img src="assets/images/icons/inr.svg" alt="inr" *ngIf="i === 1">
-                            <img src="assets/images/icons/inr.svg" alt="inr" *ngIf="i === 2">
+                            <img loading="lazy" src="assets/images/icons/gift.svg" alt="orders" *ngIf="i === 0">
+                            <img loading="lazy" src="assets/images/icons/inr.svg" alt="inr" *ngIf="i === 1">
+                            <img loading="lazy" src="assets/images/icons/inr.svg" alt="inr" *ngIf="i === 2">
                         </div>
                         <div class="text-igp summaryLabel">{{summ.label}}</div>
                         <div class="text-bold">{{summ.value | number}}</div>
@@ -535,9 +535,9 @@
           <div class="summaryBlockCont">
             <div class="summaryBlock inline m-top-1" *ngFor="let summ of reportData.summary; index as i;" [style.width.%]="100/reportData.summary.length">
               <div class="icon l" aria-hidden="true">
-                <img src="assets/images/icons/gift.svg" alt="orders" *ngIf="i === 0">
-                <img src="assets/images/icons/inr.svg" alt="inr" *ngIf="i === 1">
-                <img src="assets/images/icons/inr.svg" alt="inr" *ngIf="i === 2">
+                <img loading="lazy" src="assets/images/icons/gift.svg" alt="orders" *ngIf="i === 0">
+                <img loading="lazy" src="assets/images/icons/inr.svg" alt="inr" *ngIf="i === 1">
+                <img loading="lazy" src="assets/images/icons/inr.svg" alt="inr" *ngIf="i === 2">
               </div>
               <div class="text-igp summaryLabel">{{summ.label}}</div>
               <div class="text-bold">{{summ.value | number}}</div>
@@ -670,17 +670,17 @@
                                             <span class="capitalize">{{tableLabel | replace : '_'}}</span>
                                             <span class="sortIcons" *ngIf="orginalReportData.tableData.length>0">
                                                 <span class="icon s" aria-hidden="true" (click)="setReportsHeadersState($event, tableLabel, 'filterdd', false)" *ngIf="reportLabelState[tableLabel]['filterdd']">
-                                                    <img class="arrowU" src="assets/images/icons/arrowD.svg" alt="up-arrow">
+                                                    <img loading="lazy" class="arrowU" src="assets/images/icons/arrowD.svg" alt="up-arrow">
                                                 </span>
                                                 <span class="icon s" aria-hidden="true" (click)="setReportsHeadersState($event, tableLabel, 'filterdd', true)" *ngIf="!reportLabelState[tableLabel]['filterdd']">
-                                                    <img class="" src="assets/images/icons/arrowD.svg" alt="down-arrow">
+                                                    <img loading="lazy" class="" src="assets/images/icons/arrowD.svg" alt="down-arrow">
                                                 </span>
                                             </span>
                                         </span>
         
                                         <div class="clearfix"></div>
                                         <div class="removeFilter icon m" (click)="removeColumnFilter($event, tableLabel)" *ngIf="reportLabelState[tableLabel].filterValue">
-                                            <img class="" src="assets/images/icons/removeFilter.png" alt="remove-filter" title="Remove Column Filter">
+                                            <img loading="lazy" class="" src="assets/images/icons/removeFilter.png" alt="remove-filter" title="Remove Column Filter">
                                         </div>
         
                                         <div class="abs searchSortDd col-sm-12 col-md-12" [ngClass]="{'ddOpen' :reportLabelState[tableLabel]['filterdd'] ,'ddleft' : a==0, 'ddRight' : (a== reportData.tableHeaders.length-1)}" *ngIf="orginalReportData.tableData.length>0">
@@ -692,11 +692,11 @@
                                                     </div>
                                                     <div class="col-sm-6 col-md-6 no-padding" style="margin-left: -1.5em;">
                                                         <div class="icon s" aria-hidden="true" (click)="sortTableCol($event, tableLabel, a, 'asc')" style="transform: translate(0,-0.5em);" [ngClass]="{'hideVisibility' :!reportLabelState[tableLabel]['sortdec']}">
-                                                            <img class="arrowU" src="assets/images/icons/arrowD.svg" alt="inr" title="Sort asc">
+                                                            <img loading="lazy" class="arrowU" src="assets/images/icons/arrowD.svg" alt="inr" title="Sort asc">
                                                         </div>
         
                                                         <div class="icon s" aria-hidden="true" (click)="sortTableCol($event, tableLabel, a, 'desc')" style="transform: translate(0,-1.2em);" [ngClass]="{'hideVisibility' : !reportLabelState[tableLabel]['sortIncr']}">
-                                                            <img class="" src="assets/images/icons/arrowD.svg" alt="inr" title="Sort desc">
+                                                            <img loading="lazy" class="" src="assets/images/icons/arrowD.svg" alt="inr" title="Sort desc">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -759,18 +759,18 @@
                                                 </span>
                                                 
                                                 <span *ngIf="tableCol == 'Component Image' || tableCol == 'Component_Image'" >
-                                                    <img class="clk" style="width: 4em; box-shadow: 0 1px 3px #888888;" src="{{componentImageUrl}}thumb/{{getCellValue(tableRowValue[tableCol])}}" alt="{{getCellValue(tableRowValue[tableCol])}}" (click)="imagePreview($event, componentImageUrl +(getCellValue(tableRowValue[tableCol])))">
+                                                    <img loading="lazy" class="clk" style="width: 4em; box-shadow: 0 1px 3px #888888;" src="{{componentImageUrl}}thumb/{{getCellValue(tableRowValue[tableCol])}}" alt="{{getCellValue(tableRowValue[tableCol])}}" (click)="imagePreview($event, componentImageUrl +(getCellValue(tableRowValue[tableCol])))">
                                                 </span>
                                                 <span *ngIf="tableCol == 'Product Image' || tableCol == 'Product_Image'" >
-                                                    <img class="clk" style="width: 4em; box-shadow: 0 1px 3px #888888;" src="{{productsURL}}th/{{getCellValue(tableRowValue[tableCol])}}" alt="{{getCellValue(tableRowValue[tableCol])}}" (click)="imagePreview($event, productsURL+'l/'+(getCellValue(tableRowValue[tableCol])))">
+                                                    <img loading="lazy" class="clk" style="width: 4em; box-shadow: 0 1px 3px #888888;" src="{{productsURL}}th/{{getCellValue(tableRowValue[tableCol])}}" alt="{{getCellValue(tableRowValue[tableCol])}}" (click)="imagePreview($event, productsURL+'l/'+(getCellValue(tableRowValue[tableCol])))">
                                                 </span>
             
                                                 <span *ngIf="tableCol == 'Out Of Delivery' || tableCol == 'Out_Of_Delivery' " >
-                                                    <img class="clk inline" style="width: 4em; box-shadow: 0 1px 3px #888888; margin-left:0.5em;" src="{{imgsrc}}" alt="{{getCellValue(tableRowValue[tableCol])}}" (click)="imagePreview($event, imgsrc)" *ngFor="let imgsrc of getCellValue(tableRowValue[tableCol])">
+                                                    <img loading="lazy" class="clk inline" style="width: 4em; box-shadow: 0 1px 3px #888888; margin-left:0.5em;" src="{{imgsrc}}" alt="{{getCellValue(tableRowValue[tableCol])}}" (click)="imagePreview($event, imgsrc)" *ngFor="let imgsrc of getCellValue(tableRowValue[tableCol])">
                                                 </span>
             
                                                 <span *ngIf="tableCol == 'Proof Of Delivery' || tableCol == 'Proof_Of_Delivery' " >
-                                                    <img class="clk inline" style="width: 4em; box-shadow: 0 1px 3px #888888; margin-left:0.5em;" src="{{imgsrc}}" alt="{{getCellValue(tableRowValue[tableCol])}}" (click)="imagePreview($event, imgsrc)" *ngFor="let imgsrc of getCellValue(tableRowValue[tableCol])">
+                                                    <img loading="lazy" class="clk inline" style="width: 4em; box-shadow: 0 1px 3px #888888; margin-left:0.5em;" src="{{imgsrc}}" alt="{{getCellValue(tableRowValue[tableCol])}}" (click)="imagePreview($event, imgsrc)" *ngFor="let imgsrc of getCellValue(tableRowValue[tableCol])">
                                                 </span>
             
                                                 <span *ngIf="tableCol == 'Ship_Type'" >{{getDeliveryName(getCellValue(tableRowValue[tableCol])) | replace : '`updated'}}</span>
@@ -781,7 +781,7 @@
                                                 justify-content: center;" *ngIf="tableCol == 'component'">
                                                 <span *ngFor="let prodComponent of getCellValue(tableRowValue['component']); let i='index'" style="margin-right: 1em;">
                                                         <div class="product-component relative">
-                                                                <img class="component-image clk" style="height: 80px;width: 70px;" src="{{componentImageUrl}}{{prodComponent.componentImage}}" alt="Component_img" (click)="imagePreview($event, componentImageUrl+prodComponent.componentImage)" (error)="onSrcError($event)">
+                                                                <img loading="lazy" class="component-image clk" style="height: 80px;width: 70px;" src="{{componentImageUrl}}{{prodComponent.componentImage}}" alt="Component_img" (click)="imagePreview($event, componentImageUrl+prodComponent.componentImage)" (error)="onSrcError($event)">
                                                                 <div class="component-quantity center-align">x {{prodComponent.quantity | number | replace}}</div>
                                                           <div class="component-name center-align">{{prodComponent.componentName}} </div>
                                                         </div>
@@ -808,7 +808,7 @@
                                                         </mat-menu>
                                                     </span>-->
                                                     <span class="testing" *ngIf="tableCol == 'sku'" style="display:inline-block;">
-                                                            <img class="clk" style="width: 4em; box-shadow: 0 1px 3px #888888;" src="{{productsURL}}th/{{getCellValue(tableRowValue['barcodeImage'])}}" alt="{{getCellValue(tableRowValue['barcodeImage'])}}" (click)="imagePreview($event, productsURL+'l/'+(getCellValue(tableRowValue['barcodeImage'])))">
+                                                            <img loading="lazy" class="clk" style="width: 4em; box-shadow: 0 1px 3px #888888;" src="{{productsURL}}th/{{getCellValue(tableRowValue['barcodeImage'])}}" alt="{{getCellValue(tableRowValue['barcodeImage'])}}" (click)="imagePreview($event, productsURL+'l/'+(getCellValue(tableRowValue['barcodeImage'])))">
                                                             <br/><br/><span>{{getCellValue(tableRowValue['barcode'])}}</span>
                                                     </span>
                                                     <span class="delboy" *ngIf="tableCol == 'Delivery_Boy_App'" style="display:inline-block;">
@@ -819,7 +819,7 @@
                                                 </span>
                                                 &nbsp; &nbsp; &nbsp;
                                                 <span class="icon m" aria-hidden="true" *ngIf="tableCol === 'Order_No'" (click)="viewOrderDetail($event, getCellValue(tableRowValue[tableCol]))">
-                                                    <img src="assets/images/icons/view.svg" alt="inr">
+                                                    <img loading="lazy" src="assets/images/icons/view.svg" alt="inr">
                                                 </span>
                                                 <span class="icon" aria-hidden="true" *ngIf="tableCol === 'invoice number'" (click)="dwldInv($event, tableRowValue['orderId'], getCellValue(tableRowValue[tableCol]))">
                                                     <span class="glyphicon glyphicon-download-alt" title="Download Invoice"></span>

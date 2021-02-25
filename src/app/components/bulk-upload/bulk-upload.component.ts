@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef, ViewChild, AfterViewInit, Inject, OnDestroy } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ViewChild, AfterViewInit, Inject, OnDestroy, NgModule } from '@angular/core';
 import { FormControl, FormGroup, FormBuilder } from '@angular/forms';
 import { MatDialog, MatSnackBar, MatPaginator, MatDialogRef, MAT_DIALOG_DATA, MatDatepickerInput } from '@angular/material';
 import { MatSort } from '@angular/material/sort';
@@ -8,7 +8,7 @@ import { AddDeliveryBoyComponent } from '../add-deliveryboy/add-deliveryboy.comp
 import { NotificationComponent } from '../notification/notification.component';
 import { ActivatedRoute } from '@angular/router';
 import { ReportsService } from 'app/services/reports.service';
-import { DatePipe } from '@angular/common';
+import { DatePipe, CommonModule } from '@angular/common';
 import { Angular5Csv } from 'angular5-csv/dist/Angular5-csv';
 import { environment } from "../../../environments/environment";
 import { startWith, map } from 'rxjs/operators';
@@ -17,6 +17,7 @@ import * as Excel from 'exceljs/dist/exceljs.min.js';
 import * as fs from 'file-saver';
 import { MatSidenav } from "@angular/material/sidenav";
 import { isArray } from 'util';
+import { SharedModule } from 'app/shared-module/shared/shared.module';
 
 @Component({
   selector: 'app-bulk-upload',
@@ -223,3 +224,14 @@ export class BulkUploadComponent implements OnInit {
   }
 
 }
+
+@NgModule({
+  imports:[CommonModule,SharedModule],
+  declarations: [ 
+    BulkUploadComponent
+  ],
+  exports: [
+    BulkUploadComponent
+  ]
+})
+export class BulkUploadModule {}

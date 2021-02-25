@@ -1,10 +1,12 @@
-import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, NgModule } from '@angular/core';
 import { MatDialog, MatSnackBar, MatPaginator } from '@angular/material';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { BackendService } from '../../services/backend.service';
 import { AddDeliveryBoyComponent } from '../add-deliveryboy/add-deliveryboy.component';
 import { NotificationComponent } from '../notification/notification.component';
+import { CommonModule } from '@angular/common';
+import { SharedModule } from 'app/shared-module/shared/shared.module';
 
 @Component({
     selector: 'app-deliveryboy-details',
@@ -216,3 +218,13 @@ export class DeliveryBoyDetailsComponent implements OnInit {
     }
 }
 
+@NgModule({
+    imports:[CommonModule,SharedModule],
+    declarations: [ 
+      DeliveryBoyDetailsComponent
+    ],
+    exports: [
+      DeliveryBoyDetailsComponent
+    ]
+  })
+  export class DeliveryBoyDetailsModule {}

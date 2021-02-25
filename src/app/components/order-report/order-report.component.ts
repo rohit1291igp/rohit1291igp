@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef, ViewChild, AfterViewInit, Inject, OnDestroy } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ViewChild, AfterViewInit, Inject, OnDestroy, NgModule } from '@angular/core';
 import { FormControl, FormGroup, FormBuilder } from '@angular/forms';
 import { MatDialog, MatSnackBar, MatPaginator, MatDialogRef, MAT_DIALOG_DATA, MatDatepickerInput } from '@angular/material';
 import { MatSort } from '@angular/material/sort';
@@ -6,20 +6,21 @@ import { MatTableDataSource } from '@angular/material/table';
 import { BackendService } from '../../services/backend.service';
 import { AddDeliveryBoyComponent } from '../add-deliveryboy/add-deliveryboy.component';
 import { NotificationComponent } from '../notification/notification.component';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Routes, RouterModule } from '@angular/router';
 import { ReportsService } from 'app/services/reports.service';
-import { DatePipe } from '@angular/common';
+import { DatePipe, CommonModule } from '@angular/common';
 import { Angular5Csv } from 'angular5-csv/dist/Angular5-csv';
 import { environment } from "../../../environments/environment";
 import { startWith, map } from 'rxjs/operators';
 import { OrdersActionTrayComponent } from '../orders-action-tray/orders-action-tray.component';
+import { SharedModule } from 'app/shared-module/shared/shared.module';
 
 @Component({
   selector: 'app-order-report',
   templateUrl: './order-report.component.html',
   styleUrls: ['./order-report.component.css']
 })
-export class OrderReportComponent implements OnInit {
+export class OrderReportComponent implements OnInit, OnDestroy {
 
 
   @ViewChild(OrdersActionTrayComponent) child: OrdersActionTrayComponent;
@@ -514,4 +515,7 @@ export class OrderReportComponent implements OnInit {
     }
   }
 
+  ngOnDestroy(){
+    this.BackendService.abortLastHttpCall();
+  }
 }

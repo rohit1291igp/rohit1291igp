@@ -18,18 +18,6 @@ const routes: Routes = [{
 {
   path: 'uploadtemplate',
   component: NewExcelUploadComponent
-},
-{
-  path: 'orderupdatestatus',
-  component: OrderUpdateStatusComponent
-},
-{
-  path: 'payment-reconciliation',
-  component: PaymentReconciliationComponent
-},
-{
-  path: 'addressUpdate',
-  component: AddressUpdateComponent
 }];
 
 @NgModule({
@@ -44,11 +32,7 @@ const routes: Routes = [{
   ],
   declarations: [
     SendEmailComponent,
-    NewExcelUploadComponent,
-    OrderUpdateStatusComponent,
-    PaymentReconciliationComponent,
-    AddressUpdateComponent,
-    AddressUpdateHeaderPipe
+    NewExcelUploadComponent
   ]
 })
 export class SendEmailModule { }
