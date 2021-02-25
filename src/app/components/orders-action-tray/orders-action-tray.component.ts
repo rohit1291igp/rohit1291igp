@@ -183,6 +183,9 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
         this.getFeeds();
         this.getRejectResons('reassign');
      }else{
+        if(environment.userType == 'microsite'){
+            return;
+        } 
         this.getDeliveryBoyList();
         this.getRejectResons('reject');
      }

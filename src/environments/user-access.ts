@@ -105,7 +105,7 @@ export const userAcess = {
                     route: '/new-dashboard/performanceReport'
                 }
             ]
-        },{
+        }, {
             displayName: 'Bulk Upload',
             iconName: 'cloud_upload',
             route: '/new-dashboard/bulkupload',
@@ -257,10 +257,10 @@ export const userAcess = {
             route: '/new-dashboard/reports/whitelabelReport',
         },
         {
-           displayName: 'Email Template',
-           iconName: 'email',
-           route: '/new-dashboard/egv/email-customization',
-       }
+            displayName: 'Email Template',
+            iconName: 'email',
+            route: '/new-dashboard/egv/email-customization',
+        }
     ],
     parent_executive: [
         {
@@ -304,10 +304,10 @@ export const userAcess = {
             route: '/new-dashboard/reports/whitelabelReport',
         },
         {
-           displayName: 'Email Template',
-           iconName: 'email',
-           route: '/new-dashboard/egv/email-customization',
-       }
+            displayName: 'Email Template',
+            iconName: 'email',
+            route: '/new-dashboard/egv/email-customization',
+        }
     ],
     manager: [
         {
@@ -336,10 +336,10 @@ export const userAcess = {
             route: '/new-dashboard/egv/change-password',
         },
         {
-           displayName: 'Email Template',
-           iconName: 'email',
-           route: '/new-dashboard/egv/email-customization',
-       } ],
+            displayName: 'Email Template',
+            iconName: 'email',
+            route: '/new-dashboard/egv/email-customization',
+        }],
     executive: [
         {
             displayName: 'Wallet',
@@ -367,10 +367,10 @@ export const userAcess = {
             route: '/new-dashboard/reports/whitelabelReport',
         },
         {
-           displayName: 'Email Template',
-           iconName: 'email',
-           route: '/new-dashboard/egv/email-customization',
-       }
+            displayName: 'Email Template',
+            iconName: 'email',
+            route: '/new-dashboard/egv/email-customization',
+        }
 
     ],
     marketing: [
@@ -384,7 +384,7 @@ export const userAcess = {
             iconName: 'local_offer',
             route: '/new-dashboard/offerpagemanagement',
         }
-        
+
     ],
     mldatascience: [
         {
@@ -392,7 +392,7 @@ export const userAcess = {
             iconName: 'image',
             route: '/new-dashboard/searchRanking',
         },
-        
+
 
 
     ],
@@ -406,7 +406,7 @@ export const userAcess = {
     {
         displayName: 'Current Balance',
         iconName: 'account_balance_wallet',
-        route: '/new-dashboard/reports/whitelabelReport',
+        route: '/new-dashboard/reports/itcReport',
     },
     {
         displayName: 'Pending orders',
@@ -422,7 +422,7 @@ export const userAcess = {
     {
         displayName: 'Current Balance',
         iconName: 'account_balance_wallet',
-        route: '/new-dashboard/reports/whitelabelReport',
+        route: '/new-dashboard/reports/zeaplReport',
     },
     {
         displayName: 'Pending orders',
@@ -594,12 +594,12 @@ export const userAcess = {
             route: '/new-dashboard/dashboard-microsite',
         },
         {
-        displayName: 'Current Balance',
-        iconName: 'receipt',
-        route: '/new-dashboard/reports/wb-yourigpstore',
+            displayName: 'Current Balance',
+            iconName: 'receipt',
+            route: '/new-dashboard/reports/wb-yourigpstore',
         }
     ],
-    hdextnp:[
+    hdextnp: [
         {
             displayName: 'Dashboard',
             iconName: 'home',
