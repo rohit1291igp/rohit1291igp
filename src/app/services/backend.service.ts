@@ -74,6 +74,8 @@ export class BackendService {
               }
           },
           error => {
+            const errorLoader = document.getElementById("serverErrorMsg");
+            errorLoader.style.display = 'flex';
               if(document.getElementById("cLoader")) document.getElementById("cLoader").classList.add("hide");
               if(document.getElementById("cLoader2")) document.getElementById("cLoader2").classList.add("hide");
               return cb(error);
@@ -92,7 +94,8 @@ export class BackendService {
     'microsite-zeapl': 'v1/admin/',
     'voucher': 'v1',
     'gv': 'v1',
-    'other': 'v1/admin/handels/'
+    'other': 'v1/admin/handels/',
+    'alkem' : 'v1/admin/alkem/'
 
   }
 

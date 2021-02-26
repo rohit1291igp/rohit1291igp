@@ -1,0 +1,137 @@
+<h4>
+  New Employee Details
+</h4>
+
+<form [formGroup]="newUser" (ngSubmit)="onSubmit(f)" name="newUser" #f="ngForm">
+  <div class="col-md-12" style="padding: 0 10px;">
+    <div class="col-md-6">
+      <mat-form-field class="example-form-field">
+        <mat-label>Employee Code</mat-label>
+        <input matInput type="text" formControlName="emp_code" required>
+        <mat-error *ngIf="newUser.get('emp_code').hasError('required')">
+          Employee Code is <strong>required</strong> 
+        </mat-error>
+      </mat-form-field><br>
+
+      <mat-form-field class="example-form-field">
+        <mat-label>Employee Name</mat-label>
+        <input matInput type="text" formControlName="emp_name" required>
+        <mat-error *ngIf="newUser.get('emp_name').hasError('required')">
+          Employee Name is <strong>required</strong>
+        </mat-error>
+      </mat-form-field><br>
+
+      <mat-form-field class="example-form-field">
+        <mat-label>Zone</mat-label>
+        <input matInput type="text" formControlName="zone" required>
+        <mat-error *ngIf="newUser.get('zone').hasError('required')">
+          Zone is <strong>required</strong>
+        </mat-error>
+      </mat-form-field><br>
+
+
+      <mat-form-field class="example-form-field">
+        <mat-label>Region</mat-label>
+        <input matInput type="text" formControlName="region" required>
+        <mat-error *ngIf="newUser.get('region').hasError('required')">
+          Region is <strong>required</strong>
+        </mat-error>
+      </mat-form-field><br>
+
+      <mat-form-field class="example-form-field">
+        <mat-label>DSM HQ</mat-label>
+        <input matInput type="text" formControlName="dsm_hq" required>
+        <mat-error *ngIf="newUser.get('dsm_hq').hasError('required')">
+          DSM HQ is <strong>required</strong>
+        </mat-error>
+      </mat-form-field><br>
+
+      <mat-form-field class="example-form-field">
+        <mat-label>ABM HQ</mat-label>
+        <input matInput type="text" formControlName="abm_hq" required>
+        <mat-error *ngIf="newUser.get('abm_hq').hasError('required')">
+          ABM HQ is <strong>required</strong>
+        </mat-error>
+      </mat-form-field><br>
+
+      <mat-form-field class="example-form-field">
+        <mat-label>HQ Name</mat-label>
+        <input matInput type="text" formControlName="hq_name" required>
+        <mat-error *ngIf="newUser.get('hq_name').hasError('required')">
+          HQ Name is <strong>required</strong>
+        </mat-error>
+      </mat-form-field><br>
+
+    </div>
+    <div class="col-md-6">
+      <mat-form-field class="example-form-field">
+        <mat-label>Garnet Code</mat-label>
+        <input matInput type="text" formControlName="garnet_code" required>
+        <mat-error *ngIf="newUser.get('garnet_code').hasError('required')">
+          Garnet Code is <strong>required</strong>
+        </mat-error>
+      </mat-form-field><br>
+
+      <mat-form-field class="example-form-field">
+        <mat-label>Current Category</mat-label>
+        <input matInput type="text" formControlName="current_category" required>
+        <mat-error *ngIf="newUser.get('current_category').hasError('required')">
+          Current Category is <strong>required</strong>
+        </mat-error>
+      </mat-form-field><br>
+
+      <mat-form-field class="example-form-field">
+        <mat-label>Mobile Number</mat-label>
+        <input matInput type="text" formControlName="mobile_number" required>
+        <mat-error *ngIf="newUser.get('mobile_number').hasError('required')">
+          Mobile Number is <strong>required</strong>
+        </mat-error>
+      </mat-form-field><br>
+
+      <mat-form-field class="example-form-field">
+        <mat-label>Whatsapp Number</mat-label>
+        <input matInput type="text" formControlName="whatsapp_number" required>
+        <mat-error *ngIf="newUser.get('whatsapp_number').hasError('required')">
+          Whatsapp Number is <strong>required</strong>
+        </mat-error>
+      </mat-form-field><br>
+
+      <!-- <mat-form-field class="example-form-field">
+        <mat-label>Date of Birth</mat-label>
+        <input matInput type="text" formControlName="dob" required>
+        <mat-error *ngIf="newUser.get('dob').hasError('required')">
+          D.O.B. is <strong>required</strong>
+        </mat-error>
+      </mat-form-field><br> -->
+
+      <mat-form-field>
+        <mat-label>Date of Birth</mat-label>
+        <input matInput [matDatepicker]="dob" [max]="maxDate"
+          (dateInput)="addEventFrom('input','dob', $event)"
+          (dateChange)="addEventFrom('change','dob', $event)" [value]="newUser.get('dob').value"
+          autocomplete="off">
+        <mat-datepicker-toggle matSuffix [for]="dob"></mat-datepicker-toggle>
+        <mat-datepicker #dob></mat-datepicker>
+      </mat-form-field><br>
+
+      <mat-form-field>
+        <mat-label>D.O.W.</mat-label>
+        <input matInput [matDatepicker]="dow" [max]="maxDate"
+          (dateInput)="addEventFrom('input','dow', $event)"
+          (dateChange)="addEventFrom('change','dow', $event)" [value]="newUser.get('dow').value"
+          autocomplete="off">
+        <mat-datepicker-toggle matSuffix [for]="dow"></mat-datepicker-toggle>
+        <mat-datepicker #dow></mat-datepicker>
+      </mat-form-field><br>
+
+    </div>
+  </div>
+  <button type="submit" mat-raised-button>Register</button>
+</form>
+
+<!-- emp_code:["",Validators.required],
+      emp_name:["",Validators.required],
+      zone:["",Validators.required],
+      region:["",Validators.required],
+      dsm_hq:["",Validators.required],
+      -->

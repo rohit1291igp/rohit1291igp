@@ -4,8 +4,7 @@
 
 <section class="dbMobile" *ngIf="isMobile">
         <div class="topSection">
-
-
+            
             <div class="col-md-12 vendor-detail m-top-1">
                 <!--<p>Hi <span class="text-igp">{{vendorName}}!</span></p>-->
                 <p>Below is the schedule of orders you need to fulfil:</p>
@@ -238,8 +237,21 @@
 
 <section class="content-section" *ngIf="!isMobile">
 <div class="container-fluid dashboardTable">
-    <div class="row padding-extra dbTableHeader">
+    <div class="row padding-extra dbTableHeader" style="width: fit-content;margin-top: 1.8em;">
         <!--<p>Hi {{vendorName}}!</p>-->
+        <p *ngIf="fkAssociateId !=72">
+            <mat-form-field appearance="fill">
+            <mat-label>Select a sector</mat-label>
+            <mat-select (change) = "loadDbData($event.value)" [(ngModel)] = "selectedSector" >
+                <mat-option [value]=" " >
+                   All
+                </mat-option>
+              <mat-option *ngFor="let sector of sectors" [value]="sector" >
+                {{sector}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </p>
         <p>Below is the schedule of orders you need to fulfil:</p>
     </div>
     <div class="row dashboard-content">
@@ -494,7 +506,7 @@
 
 
 <div *ngIf="environment.userType === 'vendor' else adminUser" class="d-flex" [ngClass]="{'flex-direction-column': isMobile}" style="background: #F2F2F2;padding: 2em 0;">
-<app-feeds [ngStyle]="{'width': isMobile ? '100%' : '50%'}"></app-feeds>
+<app-feeds (onOrderSearch)="search($event)" [ngStyle]="{'width': isMobile ? '100%' : '50%'}"></app-feeds>
 <app-payout-dashboard [ngStyle]="{'width': isMobile ? '100%' : '49%'}"></app-payout-dashboard>    
 </div>
 <ng-template #adminUser>
@@ -551,3 +563,7 @@
             </div>
         </div>
 </ng-container>
+
+<div *ngIf="!loadingCount" [ngStyle]="{display: loading ? 'flex' : 'none'}" class="spinner">
+        <mat-spinner [diameter]="40"></mat-spinner>
+        </div>

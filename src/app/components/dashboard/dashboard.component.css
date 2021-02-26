@@ -1,5 +1,5 @@
 .padding-extra {
-    padding: 10px 20px 0;
+    padding: 0px 20px 0;
 }
 
 .custom-date-picker {
@@ -193,7 +193,21 @@
 .title-well{
     letter-spacing: 1px;
 }
-
+/* 
 .content-section{
     margin: 20px 0 0 0;
+} */
+
+.spinner {
+    display: flex;
+    justify-content: center;
+    height: 100vh;
+    background: #fff;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    text-align: center;
+    padding: 100px;
+    align-items: center;
+    opacity: 0.8;
 }

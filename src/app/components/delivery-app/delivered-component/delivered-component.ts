@@ -212,6 +212,7 @@ export class DeliveredComponent implements OnInit {
     }
 
     fileChange(event) {
+        debugger;
         var this$ = this;
         this$.commonError = false;
         this$.loading = true;

@@ -9,6 +9,7 @@ import { PaymentReconciliationComponent } from 'app/components/payment-reconcili
 import { SendEmailComponent } from 'app/components/send-email/send-email.component';
 import { SharedModule } from 'app/shared-module/shared/shared.module';
 import { MyDatePickerModule } from 'mydatepicker';
+import { DateFormatterPipeModule } from 'app/customPipes/date-formatter';
 
 const routes: Routes = [{
   path: 'sendemail',
@@ -38,7 +39,8 @@ const routes: Routes = [{
     FormsModule,
     ReactiveFormsModule,
     MyDatePickerModule,
-    SharedModule
+    SharedModule,
+    DateFormatterPipeModule
   ],
   declarations: [
     SendEmailComponent,

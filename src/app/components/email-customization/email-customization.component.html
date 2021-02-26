@@ -1,0 +1,102 @@
+<div class="main-container">
+  <mat-card>
+    <form [formGroup]="emailForm">
+      <div class='row'>
+        <div class="col-md-6">
+          <div class="col-md-12">
+            <div class="col-md-2 textFieldLeft">
+              Banner image
+            </div>
+            <div class="col-md-10 textFieldRight">
+              <span>
+                <input type="file" id="deskImagefile" (change)="onImageUpload($event)" accept=" image/*" />
+                <label for="deskImagefile" class="btn-2">Upload Email Banner</label>
+              </span>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="col-md-2 textFieldLeft">
+              Email Subject
+            </div>
+            <div class="col-md-10 textFieldRight">
+              <textarea class="bodyTextArea" matInput formControlName="emailSubject" rows="2"
+                [maxlength]="60"></textarea>
+              <span class="characterCounter">{{emailForm.get('emailSubject').value.length}}/60</span>
+            </div>
+          </div>
+          <!-- <div class="col-md-12">
+            <div class="col-md-2 textFieldLeft ">
+              Sender's Name
+            </div>
+            <div class="col-md-10 textFieldRight">
+              <input matInput type="text" class="bodyTextArea" formControlName="emailName">
+            </div>
+          </div> -->
+          <div class="col-md-12">
+            <div class="col-md-2 textFieldLeft">
+              Email Body
+            </div>
+            <div class="col-md-10 textFieldRight">
+
+              <textarea class="bodyTextArea" matInput formControlName="emailBody" rows="5" [maxlength]="500"></textarea>
+              <span class="characterCounter">{{emailForm.get('emailBody').value.length}}/500</span>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="col-md-2 textFieldLeft">
+              Signature
+            </div>
+            <div class="col-md-10 textFieldRight">
+              <textarea class="bodyTextArea" matInput formControlName="emailFooter" rows="4"
+                [maxlength]="100"></textarea>
+              <span class="characterCounter">{{emailForm.get('emailFooter').value.length}}/100</span>
+
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="col-md-2 textFieldLeft ">
+              Test Recipient Mail:
+            </div>
+            <div class="col-md-10 textFieldRight">
+              <input matInput type="text" class="bodyTextArea" formControlName="emailTestMail">
+            </div>
+          </div>
+          <div class="col-md-12 buttons">
+            <button class="btnRadius" (click)="createUpdateEmail()" mat-raised-button>Save Changes</button>
+            <button class="btnRadius" (click)="getEmail()" mat-raised-button>Discard Changes</button>
+            <button class="btnRadius" (click)="sendTestEmail()" mat-raised-button>Send test Email</button>
+            
+           
+
+          </div>
+        </div>
+
+
+        <div class="col-md-6">
+
+          <!-- <div>
+            <span *ngIf="deskImageUrl"> Uploaded Image:</span>
+            <img [src]="deskImageUrl" *ngIf="deskImageUrl" style="max-width: 100%;border:1px solid black">
+          </div> -->
+          Email Preview : 
+          <div
+            style="text-align:center;font-family:verdana;width: 100%;padding: 15px; margin: auto;border:1px solid #ccc">
+            <!-- <div style="width: 800px;padding: 15px;font-family:verdana;margin: auto;border:1px solid #ccc;">-->
+            <img [src]="deskImageUrl" style="max-width: 80%">
+            <br>
+            <div style="text-align: left;white-space: pre-wrap;">
+              <p>Dear XYZ,</p>
+              <p> {{emailForm.value.emailBody}} </p>
+              <p><b>Voucher code: </b>testcode
+                <br><b>Voucher amount: </b>99.99
+                <br><b>Validity: </b>1 Jan,2020
+              </p>
+              <p>{{emailForm.value.emailFooter}}</p>
+              <!-- </div>-->
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </mat-card>
+</div>

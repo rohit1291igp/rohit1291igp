@@ -16,3 +16,17 @@
     padding: 5px 0px 1px;
     background: #f2f2f2;
 }
+#serverErrorMsg {
+    display: none;
+    justify-content: center;
+    height: 100vh;
+    background: #fff;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    text-align: center;
+    padding: 100px;
+    align-items: center;
+    /* opacity: 0.8; */
+    z-index: 10000;
+}

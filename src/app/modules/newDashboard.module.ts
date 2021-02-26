@@ -27,8 +27,8 @@ import { MatSlideToggleModule } from '@angular/material';
 import { SearchRankingComponent } from 'app/components/search-ranking/search-ranking.component';
 import { PayoutDashboardComponent, PayoutDashboardModule } from 'app/components/payout-dashboard/payout-dashboard.component';
 import { PendingOrderComponent } from 'app/components/pending-order/pending-order.component';
-
-
+import { BulkUploadComponent } from 'app/components/bulk-upload/bulk-upload.component';
+import { DownloadEmailComponent } from 'app/components/download-email/download-email.component';
 const routes: Routes = [{
   path: '',
   component: NewDasboardComponent,
@@ -49,6 +49,11 @@ const routes: Routes = [{
   {
     path: 'orderReport',
     component: OrderReportComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'bulkupload',
+    component: BulkUploadComponent,
     canActivate: [AuthGuard]
   },
   {
@@ -116,10 +121,25 @@ const routes: Routes = [{
     canActivate: [AuthGuard]
   },
   {
+    path: 'voucher-generation',
+    loadChildren: './microsite.module#MicroSiteModule',
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'voucher-generation-whitelabel',
+    loadChildren: './microsite.module#MicroSiteModule',
+    canActivate: [AuthGuard]
+  },
+  {
     path: 'pending-orders',
     component: PendingOrderComponent,
     canActivate: [AuthGuard]
-  }
+  },
+  {
+    path: 'download/:fileFor/:filedate/:fileTime',
+    component: DownloadEmailComponent,
+    canActivate: [AuthGuard]
+  },
 
   ]
 }
@@ -148,14 +168,18 @@ const routes: Routes = [{
     DeliveryPriorityComponent,
     DailyOpsReportComponent,
     OrderReportComponent,
+    BulkUploadComponent,
     PerformanceReportComponent,
     StockComponentsReportsComponent,
     DeliveryBoyDetailsComponent,
     UploadedImageReportComponent,
     OfferPageManagementComponent,
     SearchRankingComponent,
-    PendingOrderComponent
+    PendingOrderComponent,
+    DownloadEmailComponent,
+
   ],
-  providers: [NavService, UserAccessService]
+  providers: [NavService, UserAccessService],
+  entryComponents: []
 })
 export class NewDashboardModule { }

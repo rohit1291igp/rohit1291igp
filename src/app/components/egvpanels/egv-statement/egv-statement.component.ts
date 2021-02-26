@@ -36,12 +36,14 @@ export class EgvStatementComponent implements OnInit {
 	childList: any;
 	filteredChildList: any;
 	childSelected: any;
+	
 
 	constructor(
 		private fb: FormBuilder,
 		private EgvService: EgvService,
 		private cdRef: ChangeDetectorRef,
-		public dialog: MatDialog
+		public dialog: MatDialog,
+		private _snackBar: MatSnackBar
 	) { }
 
 	ngOnInit() {
@@ -102,6 +104,14 @@ export class EgvStatementComponent implements OnInit {
 		_this.getStatement();
 
 
+	}
+
+	openSnackBar(data) {
+		this._snackBar.openFromComponent(NotificationComponent, {
+			data: data,
+			duration: 5 * 1000,
+			panelClass: ['snackbar-background']
+		});
 	}
 
 	ngAfterViewChecked() {
@@ -282,7 +292,7 @@ export class EgvStatementComponent implements OnInit {
 
 				}
 				if (!result.tableData.length) {
-					alert('No Records found');
+					_this.openSnackBar('No Records found');
 				}
 				var options = {
 					showLabels: true,
@@ -297,10 +307,11 @@ export class EgvStatementComponent implements OnInit {
 					for (let pi = 0; pi < result.tableData.length; pi++) {
 						let temp = {}
 						for (let k of result.tableHeaders) {
+							k = (k=='Transaction Details')?"TxnDetails":k.split(' ').join('')
 							if (typeof result.tableData[pi][k] == 'object' && result.tableData[pi][k] != null) {
 								result.tableData[pi][k] = result.tableData[pi][k].value ? result.tableData[pi][k].value : '';
 							}
-							temp[k] = result.tableData[pi][k];
+							temp[k] = result.tableData[pi][k]?result.tableData[pi][k]:'';
 						}
 						reportDownloadData.push(temp);
 						if (pi == (result.tableData.length - 1)) {
@@ -308,6 +319,7 @@ export class EgvStatementComponent implements OnInit {
 						}
 					}
 				}).then((data) => {
+					
 					// console.log(data)
 					let download = new Angular5Csv(data, 'Statement' + dateToday, options);
 				})
@@ -328,12 +340,12 @@ export class EgvStatementComponent implements OnInit {
 		let _this = this;
 		let newdate = element.Date.substring(0, 10).split("-").reverse().join("-");
 		let reqObj: any = {
-			url: 'reconcile/gettransactionwisereport?endDate=' + newdate + "&startDate=" + newdate + "&fkasid=" + element.fkasid,
+			url: 'reconcile/gettransactionwisereport?endDate=' + newdate + "&startDate=" + newdate + "&fkasid=" + element.fkasid + "&transactionId=" + element.TxnDetails + "&transactionMethod=" + element.TransactionMethod,
 			method: "get",
 		};
 		if (document.getElementById("cLoader")) document.getElementById("cLoader").classList.remove("hide");
-		reqObj.url += element.IsBulkEGV ? "&IsBulkEGV=true" : "";
-		reqObj.url += element.IsBulkEGV ? "&transactionId=" + element.TxnDetails : "";
+		reqObj.url += (element.TransactionMethod == 2) ? "&IsBulkEGV=true" : "";
+		// reqObj.url += element.IsBulkEGV ? "&transactionId=" + element.TxnDetails : "";
 		this.EgvService.getEgvService(reqObj).subscribe(
 			result => {
 				if (document.getElementById("cLoader")) document.getElementById("cLoader").classList.add("hide");
@@ -344,9 +356,17 @@ export class EgvStatementComponent implements OnInit {
 
 				}
 				let data: any = {};
+				data.fkasid = element.fkasid;
 				data.dataSource = new MatTableDataSource(result.tableData);
 				data.tableHeaders = result.tableHeaders;
-				if (element.IsBulkEGV) data.tableHeaders.push("Recipient_Email");
+				if (element.TransactionMethod == 2) data.tableHeaders.push("Recipient_Email");
+				if (element.TransactionMethod == 3) {
+					let index = data.tableHeaders.indexOf('OrderId');
+					data.tableHeaders.splice(index,1);
+					data.tableHeaders.splice(index,0,"Recipient_Email");
+					data.tableHeaders.push("Actions");
+					data.transactionId = element.TxnDetails;
+				}
 				if (element.Status == 'Delivered') data.tableHeaders.push("Actions");
 
 				_this.dialog.open(transactionReportDialog, { data });
@@ -391,14 +411,20 @@ export class EgvStatementComponent implements OnInit {
 
 				}
 				if (!result.tableData.length) {
-					alert('No Records found');
+					_this.openSnackBar('No Records found');
 				}
+				
+					let index = result.tableHeaders.indexOf('OrderId');
+					result.tableHeaders.splice(index,0,"Recipient_Email");
+				
+				console.log(result.tableHeaders);
 				var options = {
 					showLabels: true,
 					showTitle: false,
 					headers: result.tableHeaders,
 					nullToEmptyString: true,
 				};
+				
 
 				let data = [];
 				let reportDownloadData = [];
@@ -406,10 +432,11 @@ export class EgvStatementComponent implements OnInit {
 					for (let pi = 0; pi < result.tableData.length; pi++) {
 						let temp = {}
 						for (let k of result.tableHeaders) {
+							k = (k== 'Order Id') ? (k.split(' ').join('')) : k;
 							if (typeof result.tableData[pi][k] == 'object' && result.tableData[pi][k] != null) {
 								result.tableData[pi][k] = result.tableData[pi][k].value ? result.tableData[pi][k].value : '';
 							}
-							temp[k] = result.tableData[pi][k];
+							temp[k] = result.tableData[pi][k]?result.tableData[pi][k]:'';
 						}
 						reportDownloadData.push(temp);
 						if (pi == (result.tableData.length - 1)) {
@@ -421,6 +448,12 @@ export class EgvStatementComponent implements OnInit {
 					let download = new Angular5Csv(data, 'Transaction Report', options);
 				})
 			})
+	}
+	getTxnDetails(element){
+		 
+		let str = (element['TxnDetails']||"")+(element['comments'].trim()!=""?" - ":"")+element['comments']
+		//  console.log(str);
+		return str;
 	}
 }
 
@@ -440,14 +473,20 @@ export class EgvStatementComponent implements OnInit {
         <ng-container [matColumnDef]="column" *ngFor="let column of data.tableHeaders">
           <mat-header-cell mat-sort-header *matHeaderCellDef> {{column}} </mat-header-cell>
           <mat-cell *matCellDef="let element">
-		  <ng-container *ngIf="column != 'Balance' && column != 'Order Value' && column != 'Actions'">
+		  <ng-container *ngIf="column != 'Balance' && column != 'Order Value' && column != 'Actions' && column != 'Order Id'  && column != 'Transfer Price'  && column != 'Order Price'">
               {{element[column] || '-'}}
 			</ng-container>
 			<ng-container *ngIf="column == 'Balance'">
 			{{element[column] || '-'| indianNumeric}}
 		  </ng-container>
+		  <ng-container *ngIf="column == 'Transfer Price'">
+			{{element['TransferPrice'] || '-'}}
+		  </ng-container>
+		  <ng-container *ngIf="column == 'Order Id'">
+			{{element['OrderId'] || '-'| indianNumeric}}
+		  </ng-container>
 		  <ng-container *ngIf="column == 'Order Value'">
-			{{element[column]|number:'1.2-2'}}
+			{{element['Order Value'] || '-'| indianNumeric}}
 		  </ng-container>
 		  <ng-container *ngIf="column == 'Actions'">
 		  <button (click)="resendGV(element)" mat-button color="primary">Resend Mail</button>
@@ -476,7 +515,8 @@ export class transactionReportDialog implements OnInit {
 	constructor(
 		public dialogRef: MatDialogRef<transactionReportDialog>,
 		@Inject(MAT_DIALOG_DATA) public data: any,
-		private EgvService: EgvService
+		private EgvService: EgvService,
+		private _snackBar: MatSnackBar
 	) {
 		setTimeout(() => {
 			data.dataSource.paginator = this.paginator;
@@ -491,12 +531,19 @@ export class transactionReportDialog implements OnInit {
 			this.dataSource.sort = this.sort;
 		}, 100)
 	}
+	openSnackBar(data) {
+		this._snackBar.openFromComponent(NotificationComponent, {
+			data: data,
+			duration: 5 * 1000,
+			panelClass: ['snackbar-background']
+		});
+	}
 	downloadStatement() {
 
 		var options = {
 			showLabels: true,
 			showTitle: false,
-			headers: this.data.tableHeaders,
+			headers: this.data.tableHeaders.filter(ele => { return ele != 'Actions' }),
 			nullToEmptyString: true,
 		};
 
@@ -506,10 +553,11 @@ export class transactionReportDialog implements OnInit {
 			for (let pi = 0; pi < this.data.dataSource.data.length; pi++) {
 				let temp = {}
 				for (let k of this.data.tableHeaders) {
+					k = (k== 'Order Id') ? (k.split(' ').join('')) : k;
 					if (typeof this.data.dataSource.data[pi][k] == 'object' && this.data.dataSource.data[pi][k] != null) {
 						this.data.dataSource.data[pi][k] = this.data.dataSource.data[pi][k].value ? this.data.dataSource.data[pi][k].value : '';
 					}
-					temp[k] = this.data.dataSource.data[pi][k];
+					temp[k] = this.data.dataSource.data[pi][k]?this.data.dataSource.data[pi][k]:'';
 				}
 				reportDownloadData.push(temp);
 				if (pi == (this.data.dataSource.data.length - 1)) {
@@ -517,17 +565,30 @@ export class transactionReportDialog implements OnInit {
 				}
 			}
 		}).then((data) => {
+			
 			// console.log(data)
 			let download = new Angular5Csv(data, 'Transaction Statement', options);
 		})
 	}
 
+
 	resendGV(element) {
-		console.log(element)
-		this.EgvService.resendgv(localStorage.fkAssociateId, element['LR OrderId']).subscribe(
-			result => {
-				alert(result['data']);
+		
+		let $this = this;
+		console.log(element);
+		if(element.TransactionMethod == 2){
+			this.EgvService.resendBulkGv(this.data.fkasid, element['OrderId']).subscribe(
+				result => {
+					$this.openSnackBar(result['data']);
 			})
+		}
+		else if(element.TransactionMethod == 3){
+			this.EgvService.resendPointMail(element['Recipient_Email'],this.data.fkasid, this.data.transactionId).subscribe(
+				result => {
+					$this.openSnackBar(result['data']);
+			})
+		}
+		
 	}
 
 	applyFilter(event: Event) {

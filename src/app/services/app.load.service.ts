@@ -9,7 +9,7 @@ export class AppLoadService {
 
   initializeApp(): Promise<any> {
     return new Promise((resolve, reject) => {
-          if(location.href.includes('login') && location.href.split('login/')[1]){
+          if((location.href.includes('login') && location.href.split('login/')[1]) || (location.href.includes('login') && location.host.split(".")[1])){
             localStorage.removeItem('whitelabelDetails');
 
             // if(location.href.split('login/')[1].includes('yourigpstore')){
@@ -22,7 +22,8 @@ export class AppLoadService {
             //         localStorage.setItem('whitelabelDetails', JSON.stringify(data));
             //     resolve(true);
             // }
-            this.getMicrositeDetails(location.href.split('login/')[1]);
+            let whitelabelname = location.href.split('login/')[1] ? location.href.split('login/')[1] : location.host.split(".")[1];
+            this.getMicrositeDetails(whitelabelname);
             let timer = setInterval(() => {
               if(this.micrositeDetails){
                 clearInterval(timer)

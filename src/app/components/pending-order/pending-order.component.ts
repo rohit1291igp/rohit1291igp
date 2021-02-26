@@ -87,7 +87,7 @@ export class PendingOrderComponent implements OnInit {
     ///v1/admin/popanel/getPOList?status=pending&orderId=1000098&fromDate=2018-12-01&toDate=2018-12-30
     // http://18.233.106.34:8081/v1/admin/egvpanel/reconcile/getdatewisereport?startEnd=2020-09-14&endDate=2020-09-15
 
-    // debugger;
+    // 
     if (!this.statementForm.value.startDate || !this.statementForm.value.endDate) {
       return;
     }

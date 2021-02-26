@@ -32,6 +32,9 @@
                     </div>
                     <div class="resetBtn" *ngIf="enableResetBtn" (click)="resetAll()"><i class="fa fa-times-circle"
                             (click)="resetAll()"></i> Reset All</div>
+                    <div>
+                        <button (click)="downloadAll($event)" mat-raised-button>Download All Excel</button>
+                    </div>
                 </form>
             </mat-card>
         </div>

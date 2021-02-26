@@ -1,0 +1,75 @@
+<div class="main-container" style="min-height: 85vh;">
+  <div class="col-md-12">
+    <div class="col-md-4 rightAlign" style="padding-top: 20px;">
+      Enter Your Employee ID:
+    </div>
+    <div class="col-md-4">
+      <mat-form-field style="margin:0 20px" class="filterElement">
+        <mat-label>Employee Id</mat-label>
+        <input matInput #input [(ngModel)]="empCode">
+      </mat-form-field>
+      <button mat-raised-button (click)="getEmployeeDetails()">Search</button>
+    </div>
+    <div class="col-md-4" *ngIf="emp_id" style="padding-top: 20px;">
+      <strong>Employee ID : </strong> {{emp_id}}
+      <strong>Employee Name : </strong> {{emp_name}}
+    </div>
+    <div class="col-md-12" *ngIf="!emp_id" style="text-align: center;margin-top:20px">
+      Not a registered user?<a class="registerBtn" (click)="registerEmp()"> Register</a>
+    </div>
+  </div>
+  <form [formGroup]="doctorsForms">
+    <div *ngFor="let control of doctorsForms.get('tableEntries')['controls'] , let index = index"
+      formArrayName="tableEntries">
+      <div class="col-md-12 topBorder" [formGroupName]="index">
+
+        <h4>Enter Doctors Details:</h4>
+        <div class="col-md-4">
+          <mat-form-field class="example-form-field">
+            <mat-label>Name</mat-label>
+            <input matInput type="text" formControlName="name" required>
+          </mat-form-field><br>
+
+          <mat-form-field class="example-form-field">
+            <mat-label>Specialty</mat-label>
+            <input matInput type="text" formControlName="specialty" required>
+          </mat-form-field><br>
+
+          <mat-form-field class="example-form-field">
+            <mat-label>Mobile Number</mat-label>
+            <input matInput type="text" formControlName="mobile_number" required>
+          </mat-form-field><br>
+
+          <mat-form-field class="example-form-field">
+            <mat-label>Delivery Address</mat-label>
+            <input matInput type="text" formControlName="delivery_address" required>
+          </mat-form-field><br>
+        </div>
+        <div class="col-md-4">
+          <mat-form-field class="example-form-field">
+            <mat-label>City</mat-label>
+            <input matInput type="text" formControlName="city" required>
+          </mat-form-field><br>
+
+          <mat-form-field class="example-form-field">
+            <mat-label>State</mat-label>
+            <input matInput type="text" formControlName="state" required>
+          </mat-form-field><br>
+
+          <mat-form-field class="example-form-field">
+            <mat-label>Pincode</mat-label>
+            <input matInput type="text" formControlName="pincode" required>
+          </mat-form-field><br>
+
+          <input type="file" id="deskImagefile" (change)="onImageUpload($event,index)" accept=" image/*" />
+        </div>
+        <div class="col-md-4" *ngIf="doctorsData[index]">
+          <img src="{{s3ImageUrlPrefix + doctorsData[index] }}" style="max-width: 80%;max-height: 80%">
+        </div>
+      </div>
+      <button mat-raised-button (click)="addDoctor()">Add doctor</button>
+      <button mat-raised-button style="margin:auto" (click)='saveDoctorData()'> Save All</button>
+    </div>
+  </form>
+
+</div>

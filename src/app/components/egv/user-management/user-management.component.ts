@@ -43,16 +43,17 @@ export class UserManagementComponent implements OnInit {
         fkid=localStorage.getItem('fkAssociateId');
       }
       else if( environment.userType==='parent_manager'){
-        egvUserType='EGV_Admin';
+        egvUserType='Parent_Manager';
         parentID=localStorage.getItem('fkAssociateId');
       }
       this.egvService.getUserList(egvUserType,fkid,parentID).subscribe((res:any)=>{
         if(res.tableData.length){
           // this.displayedColumns=Object.keys(res.tableData[0]).filter(ele=>ele!=='access');
-            res.tableHeaders.forEach(a =>{
-              this.columnLables[a]= this.capitalizeFirstLetter(a.replace('_', ' '));
-            })
+            // res.tableHeaders.forEach(a =>{
+            //   this.columnLables[a]= this.capitalizeFirstLetter(a.replace('_', ' '));
+            // })
           this.displayedColumns= res.tableHeaders;
+          this.displayedColumns.push('edit');
           this.dataSource=res.tableData;
         }
       })
@@ -92,10 +93,19 @@ export class UserManagementComponent implements OnInit {
   }
 
   columnLables={
+    "display_name":"Display Name",
+    "company_name"  : "Company Name",
+    "Role" : "Role",
+    "Status" : "Status"
   }
 
   accountEnabledStatus={
     1:"Enabled",
     0:"Disabled"
+  }
+
+  getHeader(column){
+    // console.log(column +'  ' +  this.columnLables[column]);
+   return this.columnLables[column];
   }
 }

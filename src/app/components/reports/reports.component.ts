@@ -14,6 +14,8 @@ import { OrdersActionTrayComponent } from '../orders-action-tray/orders-action-t
 import { OrderStockComponent } from '../order-stocks/order-stock.component';
 import { HttpHeaders } from '@angular/common/http';
 import { DatePipe } from '@angular/common';
+import * as Excel from 'exceljs/dist/exceljs.min.js';
+import * as fs from 'file-saver';
 
 @Component({
   selector: 'app-reports',
@@ -356,10 +358,11 @@ export class ReportsComponent implements OnInit{
             if(_this.reportType === 'whitelabelReport'){
                 _this.reportType = 'whitelabel/report';
                 _this.searchResultModel["fkAssociateId"]=localStorage.fkAssociateId;
-                _this.searchResultModel["fkUserId"]=localStorage.fkUserId;
+                _this.searchResultModel["fkUserId"]=0;
+                _this.searchResultModel["emailid"]='';
                 const pipe = new DatePipe('en-US');
-                _this.searchResultModel["toDate"]  = pipe.transform(new Date(), 'yyyy-MM-dd');
-                _this.searchResultModel["fromDate"] = pipe.transform(new Date().setMonth(new Date().getMonth() - 1), 'yyyy-MM-dd');
+                _this.searchResultModel["todate"]  = pipe.transform(new Date(), 'yyyy-MM-dd');
+                _this.searchResultModel["fromdate"] = pipe.transform(new Date().setMonth(new Date().getMonth() - 1), 'yyyy-MM-dd');
             }
           /* set default vendor - start */
           if(_this.defaultVendor && ( _this.reportType === 'getVendorReport' || _this.reportType === 'getComponentReport' || _this.reportType === 'getPincodeReport') && (_this.environment.userType && _this.environment.userType === 'admin')){
@@ -398,8 +401,17 @@ export class ReportsComponent implements OnInit{
                     }
                     console.log('reportLabelState===>', _this.reportLabelState);
                     /* report label states - end */
+                    if(_this.reportType === "whitelabel/report"){
+                       
+                        let index =  _reportData.tableHeaders.indexOf('giftVouchers');
+                        _reportData.tableHeaders.splice(index,1);;
+                    }
                     _this.dataSource = _reportData.tableData ? _reportData.tableData : [];
                     _this.tableHeaders = _reportData.tableHeaders ? _reportData.tableHeaders : [];
+                    
+                    if (environment.userType == 'hdextnp' && _this.reportType == 'getVendorReport'){
+                        _this.tableHeaders.splice(_this.tableHeaders.indexOf('Price'), 1);
+                    }
                     _reportData.searchFields = _this.reportDataLoader.searchFields;
                     _this.reportData = _reportData;
                     _this.orginalReportData = JSON.parse(JSON.stringify(_this.reportData)); //Object.assign({}, _this.reportData);
@@ -439,6 +451,10 @@ getDeliveryBoyList(){
         }
         if (response && response.tableData) {
             _this.deliveryBoyList = response.tableData;
+            _this.deliveryBoyList.push(...response.tableData);
+                if((response.summary && response.summary[0]['value']) && _this.deliveryBoyList.length < Number(response.summary[0]['value'])){
+                    _this.getDeliveryBoyList();
+                }
         }
     });
 }
@@ -986,13 +1002,75 @@ getDeliveryBoyList(){
                 if(_this.reportType == 'getbarcodestoverify'){
                     _this.reportData = _reportData;
                 }
+               
                 _this.orginalReportData.tableData = _reportData.tableData; //
                 _this.dataSource = _reportData.tableData ? _reportData.tableData : [];
                 _this.tableHeaders = _reportData.tableHeaders ? _reportData.tableHeaders : [];
+                if(_this.reportType === "whitelabel/report"){
+                   
+                     let index =   _this.tableHeaders.indexOf('giftVouchers');
+                     _this.tableHeaders.splice(index,1);;
+                 }
+                 if (environment.userType == 'hdextnp' && _this.reportType == 'getVendorReport'){
+                    _this.tableHeaders.splice(_this.tableHeaders.indexOf('Price'), 1);
+                }
                 _this.orginalReportData.tableData.concat(_reportData.tableData);
                 // if(e){
                     _this.columnFilterSubmit(e);
                     _this.showMoreTableData(e);
+                if(_this.isDownload){
+                    
+                    var options = {
+                        showLabels: true, 
+                        showTitle: false,
+                        headers: Object.keys(_this.orginalReportData.tableData[0]).map(m => m.charAt(0).toUpperCase() + m.slice(1)),
+                        nullToEmptyString: true,
+                        };
+
+                        if(_this.reportType === "whitelabel/report"){
+                   
+                          options.headers = _this.tableHeaders.map(ele => ele.replace(/([A-Z])/g, ' $1').replace(/^./, function(str){ return str.toUpperCase()}) )
+                        }
+                        if(environment.userType == 'hdextnp' && _this.reportType == 'getVendorReport'){
+                            options.headers =  _this.tableHeaders
+                        }
+
+                    let data = [];
+                    let reportDownloadData = [];
+                    new Promise((resolve)=>{
+                        for(let pi=0; pi < _this.orginalReportData.tableData.length; pi++){
+                            let temp = {}
+                            for(let k in _this.orginalReportData.tableData[pi]){
+
+                                if(typeof _this.orginalReportData.tableData[pi][k] == 'object' &&_this.orginalReportData.tableData[pi][k] != null){
+                                    _this.orginalReportData.tableData[pi][k] = _this.orginalReportData.tableData[pi][k].value ? _this.orginalReportData.tableData[pi][k].value : '';
+                                }
+                                
+                                if (_this.reportType === "whitelabel/report") {
+                                   if(k != 'giftVouchers') temp[k] = _this.orginalReportData.tableData[pi][k];
+                                }
+                                else if(environment.userType == 'hdextnp' && _this.reportType == 'getVendorReport'){
+                                    if(k != 'Price') temp[k] = _this.orginalReportData.tableData[pi][k];
+                                }
+                                else {
+                                    if(k == "Outskirt")       temp[k] = _this.orginalReportData.tableData[pi][k] ? "Yes" : "No";
+                                    else temp[k] = _this.orginalReportData.tableData[pi][k];
+                                   
+                                }
+                            }
+                            reportDownloadData.push(temp);
+                            if(pi == (_this.orginalReportData.tableData.length-1)){
+                                resolve(reportDownloadData);
+                            }
+                        }
+                    }).then((data)=>{
+                        // data = _this.orginalReportData.tableData;
+                        let download = new Angular5Csv(data, _this.reportType, options);
+                        _this.isDownload = false;
+                    })
+                    
+                    
+                }
                 // }
             }else{
                 _this.orginalReportData.summary = [];
@@ -1105,15 +1183,31 @@ getDeliveryBoyList(){
                     nullToEmptyString: true,
                   };
                 let data = [];
+                let reportDownloadData = [];
                 new Promise((resolve)=>{
                     for(let pi=0; pi < _this.orginalReportData.tableData.length; pi++){
+                        let temp = {}
                         for(let k in _this.orginalReportData.tableData[pi]){
+
                             if(typeof _this.orginalReportData.tableData[pi][k] == 'object' &&_this.orginalReportData.tableData[pi][k] != null){
                                 _this.orginalReportData.tableData[pi][k] = _this.orginalReportData.tableData[pi][k].value ? _this.orginalReportData.tableData[pi][k].value : '';
                             }
+                            
+                            if (_this.reportType === "whitelabel/report") {
+                               if(k != 'giftVouchers') temp[k] = _this.orginalReportData.tableData[pi][k];
+                            }
+                            else if(environment.userType == 'hdextnp' && _this.reportType == 'getVendorReport'){
+                                if(k != 'Price') temp[k] = _this.orginalReportData.tableData[pi][k];
+                            }
+                            else {
+                                if(k == "Outskirt")       temp[k] = _this.orginalReportData.tableData[pi][k] ? "Yes" : "No";
+                                else temp[k] = _this.orginalReportData.tableData[pi][k];
+                               
+                            }
                         }
+                        reportDownloadData.push(temp);
                         if(pi == (_this.orginalReportData.tableData.length-1)){
-                            resolve(_this.orginalReportData.tableData);
+                            resolve(reportDownloadData);
                         }
                     }
                 }).then((data)=>{
@@ -1489,6 +1583,8 @@ getDeliveryBoyList(){
     }
 
     getActBtnTxt(actBtnTxt, cellValue){
+        
+        console.log(actBtnTxt,cellValue,"yahahaahahahhahaah")
         var _actBtnTxt="";
         if(/stock/gi.test(actBtnTxt)){
             if(cellValue === 'Out of Stock')
@@ -2023,7 +2119,9 @@ getDeliveryBoyList(){
                     address:_this.reportAddAction.reportAddActionModel.address,
                     user:_this.reportAddAction.reportAddActionModel.user,
                     password:_this.reportAddAction.reportAddActionModel.password,
-                    phone:_this.reportAddAction.reportAddActionModel.phone
+                    phone:_this.reportAddAction.reportAddActionModel.phone,
+                    vendorType:_this.reportAddAction.reportAddActionModel.vendorType,
+                    vendorCity:_this.reportAddAction.reportAddActionModel.vendorCity,
                 };
                 break;
 
@@ -2208,11 +2306,17 @@ getDeliveryBoyList(){
     }
 
     getHeaderCellValue(headerData: any) {
+        console.log(headerData);
         if (headerData.includes('_')) {
-            return headerData.replace(/_|_/g, ' ');
+            console.log('underscore');
+            return headerData.replace(/_/g, " ").replace(/^\w|\s\w/g, function (letter) {
+                return letter.toUpperCase();
+              })
         } else {
-            return headerData;
+            console.log('camel');
+            return headerData.replace(/([A-Z])/g, ' $1').replace(/^./, function(str){ return str.toUpperCase();});
         }
+        
     }
 
     getRowCellValue(rowData: any) {
@@ -2343,6 +2447,16 @@ getDeliveryBoyList(){
             }
         });
 
+    }
+    downloadSamplePincode(){
+        let workbook = new Excel.Workbook();
+        let worksheet1 = workbook.addWorksheet('Template');
+        let titleRow = worksheet1.addRow(['Vendor Id', 'Ship Type', 'Pincode','Ship Charge','Sector','Outskirt']);
+
+        workbook.xlsx.writeBuffer().then((data) => {
+            let blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+            fs.saveAs(blob, 'Pincode_Sample.xlsx');
+        });
     }
 }
 

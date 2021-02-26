@@ -5,5 +5,14 @@
 
 <app-footer></app-footer>
 </ng-container>
-<ng-template #offine><h2 style="text-align: center;color:#c3404e;">There is no Internet!</h2></ng-template>
+<ng-template #offine><h2 style="text-align: center;color:#c3404e;padding: 10px 21px;">There is no Internet!</h2></ng-template>
+<div id="serverErrorMsg">
+    <div style="margin-top: -18em;">
+        <h2 style="margin-bottom: 18px;">Oh Snap !</h2>
+        <h4 style="margin-bottom: 18px;">It's not you. It's us.</h4>
+        <p style="margin-bottom: 18px;">We're experiencing internal server error.</p>
+        <button mat-raised-button color="primary" (click)="reload()">Reload</button>
+    </div>
+</div>
+
 

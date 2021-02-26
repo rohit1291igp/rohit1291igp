@@ -35,10 +35,18 @@ export class AlertManagementComponent implements OnInit {
   userType=""
   fkid=""
   ngOnInit() {
+    console.log('alert')
     this.userType=localStorage.getItem('userType');
-    if(this.userType!=='egv_admin' && this.userType!=='sub_egv_admin' && this.userType!=='parent_manager' && this.userType!=='wb_yourigpstore' ){
+    this.fkid=localStorage.getItem('fkAssociateId');
+    this.getAlerts();
+    
+    if(this.userType.includes('parent')){
+      this.getAccounts(localStorage.getItem('fkAssociateId'));
       this.fkid=localStorage.getItem('fkAssociateId')
-      this.getAlerts();
+    }
+    else if(this.userType!=='egv_admin' && this.userType!=='sub_egv_admin'){
+      this.fkid=localStorage.getItem('fkAssociateId')
+      
       this.alertsEmails=[...this.alerts.alertEmailIds]
         this.alertsMobile=[...this.alerts.alertMobNums]
         this.alertLimit=this.alerts.alertLimit;
@@ -48,7 +56,7 @@ export class AlertManagementComponent implements OnInit {
         this.sosMobile=[...this.alerts.sosmobNums]
         this.SosLimit=this.alerts.sosLimit;
     }else{
-      this.getAccounts()
+      this.getAccounts(null)
     }
   }
   alerts= {
@@ -264,10 +272,12 @@ export class AlertManagementComponent implements OnInit {
   }
 
   unique_accounts=[]
-  getAccounts(){
-    this.egvService.getCompanyList(null).subscribe((res:any)=>{
+  getAccounts(fkid){
+    this.egvService.getCompanyList(fkid).subscribe((res:any)=>{
       this.unique_accounts=res;
+      if(this.userType.includes('parent')) this.fkid =  this.unique_accounts[0].fk_associate_id
     })
+   
   }
 
   onFkidSelect(){
@@ -278,7 +288,7 @@ export class AlertManagementComponent implements OnInit {
   getAlerts(){
     this.egvService.getEGVAlerts(this.fkid).subscribe((res:any)=>{
       if(res.error){
-        alert('something went wrong')
+         this.openSnackBar('something went wrong')
       }else{
         this.alerts=res.result;
         console.log(this.alerts)
@@ -313,11 +323,10 @@ export class AlertManagementComponent implements OnInit {
 
   openSnackBar(data) {
     this._snackBar.openFromComponent(NotificationComponent, {
-      data: data,
-      duration: 5 * 1000,
-      panelClass: ['snackbar-success'],
-      verticalPosition: "top"
+        data: data,
+        duration: 5 * 1000,
+        panelClass: ['snackbar-background']
     });
-  }
+}
 
 }

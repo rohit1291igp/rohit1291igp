@@ -1,5 +1,6 @@
 import { RouterModule, Routes } from '@angular/router';
 import { AddDeliveryBoyComponent } from './components/add-deliveryboy/add-deliveryboy.component';
+import { AlkemWebformComponent } from './components/alkem-webform/alkem-webform.component';
 import { BlogCreateComponent } from './components/blog-create/blog-create.component';
 import { BlogListComponent } from './components/blog-list/blog-list.component';
 import { BlogViewComponent } from './components/blog-view/blog-view.component';
@@ -52,11 +53,11 @@ const route: Routes = [
     loadChildren: './modules/voucher.module#VoucherModule',
     canActivate: [AuthGuard]
   },
-  {
-    path: 'download/:fileFor/:filedate/:fileTime',
-    component: DownloadEmailComponent,
-    canActivate: [AuthGuard]
-  },
+  // {
+  //   path: 'download/:fileFor/:filedate/:fileTime',
+  //   component: DownloadEmailComponent,
+  //   canActivate: [AuthGuard]
+  // },
   {
     path: 'add-delivery-boy',
     component: AddDeliveryBoyComponent,
@@ -107,9 +108,13 @@ const route: Routes = [
   //   component:AlertManagementComponent,
   //   canActivate:[AuthGuard,EgvGuard]
   // },
-  { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+  {
+    path: 'alkem-my-doctor',
+    component: AlkemWebformComponent
+  },
+  { path: '', redirectTo: 'new-dashboard', pathMatch: 'full' },
   // otherwise redirect to home
-  { path: '**', redirectTo: 'dashboard' }
+  { path: '**', redirectTo: 'new-dashboard' }
 ];
 
 export const routing = RouterModule.forRoot(route, { useHash: true });

@@ -486,7 +486,7 @@
                 </select>
             </p>
             <p class="text-grey no-margin">Total - <span *ngIf="!sidePanelData">0</span><span *ngIf="sidePanelData">{{sidePanelData.length}}</span> Orders</p>
-            <div class="pullAll" *ngIf="!isMobile && env.userType == 'vendor'" [ngClass]="{'disableBtn' : !sidePanelData}">
+            <div class="pullAll" *ngIf="!isMobile && (env.userType == 'vendor' || env.userType == 'hdextnp')" [ngClass]="{'disableBtn' : !sidePanelData}">
                 <app-widgets (onWidgetClickEvent)="printDropDown($event)" [wOptions]="{type : 'dropDown', data:printDropDwonData}"></app-widgets>
                 <!--<button type="button" class="btn btn-secondary" (click)="print($event, 'order', null, null, null, 'all')">Print All</button>-->
             </div>
@@ -764,6 +764,7 @@
                           <span class="dtm" *ngIf="order && order.orderProducts[0] && order.orderProducts[0].orderProductExtraInfo">
                               <span class="uppercase delivery-time text-bold" attr.data-dt="{{order.orderProducts[0].orderProductExtraInfo.deliveryDate}}" attr.data-pd="{{order.datePurchased}}" >{{getDeliveryDetail(order.orderProducts[0].orderProductExtraInfo, order.datePurchased)}}</span>
                             <br/><span class="uppercase delivery-time text-bold" >{{order.orderOccasion}}</span>
+                            <br/><span class="uppercase delivery-time text-bold" >{{order?.orderProducts[0].deliverySector}}</span>
                           </span>
                         <span *ngIf="deliveryBoyEnabled && order?.orderProducts[0]?.deliveryBoyName" class="delivery-boy">Delivery Boy Name:- {{order?.orderProducts[0]?.deliveryBoyName}}</span>
 
@@ -781,6 +782,8 @@
                       <div class="text-bold">Deliver to: {{order.deliveryName}}</div>
                       <div class="address">{{order.addressType}} Address - {{order.deliveryStreetAddress}}, <span *ngIf="order.deliveryStreetAddress2">{{order.deliveryStreetAddress2}},</span>{{order.deliveryCity}}-{{order.deliveryPostcode}}, {{order.deliveryState}}</div>
                       <div class="contact">CONTACT NUMBER - {{order.deliveryMobile}} <span *ngIf="order.deliveryAlternateMobile">,{{order.deliveryAlternateMobile}}</span></div>
+                      
+                      
                     </div>
                     <div class="col-md-4 order-actions" [ngClass]="{'borderLeft': !isMobile}" *ngIf="!isMobile">
 
@@ -790,7 +793,7 @@
                                 <span *ngIf="order.orderProducts[0].fkUserId"><i class="fa fa-edit"></i> {{order.orderProducts[0].deliveryBoyName}}</span>
                             </button>
 
-                            <mat-menu #menu="matMenu">
+                            <mat-menu #menu="matMenu" style="max-height: 300px;" >
                                 <ng-container *ngFor="let x of deliveryBoyList" >
                                     <button mat-menu-item *ngIf="order.orderProducts[0].fkUserId !== x.fkUserId && x.Status" (click)="assignToDeliveryBoy(x, order)">
                                         {{x.Full_Name}}
@@ -975,7 +978,11 @@
                                 <div class="product-main relative">
                                     <div class="component-eggless prod-img abs" *ngIf="orderProduct.productQuantity>1">X {{orderProduct.productQuantity}}</div>
                                     <img class="product-image clk" src="{{productsURL}}th/{{orderProduct.productImage}}?th={{orderProduct.productUpdateDateTime}}" alt="product_img" (click)="imagePreview($event, productsURL+'l/'+(orderProduct.productImage)+'?th='+orderProduct.productUpdateDateTime)">
+<<<<<<< HEAD
                                     <div *ngIf="env.userType!='hdextnp'" class="price-display">Rs. {{orderProduct.vendorPrice}}</div>
+=======
+                                    <div class="price-display" *ngIf="env.userType!='hdextnp'">Rs. {{orderProduct.vendorPrice}}</div>
+>>>>>>> upstream/master
                                 </div>
                                 <div class="equal-sign table-inline-display" *ngIf="orderProduct && orderProduct.componentList && orderProduct.componentList.length">
                                    <div class="table-cell-display v-align-middle">=</div>
@@ -988,7 +995,11 @@
                                 <div class="component-quantity center-align">x {{prodComponent.quantity | number | replace}}</div>
                                 <div class="component-name center-align">{{prodComponent.componentName}} </div>
                                 <div class="price-display" *ngIf="env.userType!='hdextnp' && prodComponent.componentPrice && prodComponent.componentPrice !== 'N/A' && prodComponent.componentName !== 'Adjustment' " style="margin-top: 6px; font-size: 0.80em;">{{prodComponent.componentPrice | number | replace}}x{{prodComponent.quantity | number}}={{prodComponent.componentPrice  * prodComponent.quantity}}</div>
+<<<<<<< HEAD
                                 <div class="price-display" *ngIf=" env.userType!='hdextnp' && prodComponent.componentPrice && prodComponent.componentPrice !== 'N/A' && prodComponent.componentName === 'Adjustment'" style="margin-top: 6px; font-size: 0.80em;">Rs. {{prodComponent.componentPrice | number | replace}}</div>
+=======
+                                <div class="price-display" *ngIf="env.userType!='hdextnp' && prodComponent.componentPrice && prodComponent.componentPrice !== 'N/A' && prodComponent.componentName === 'Adjustment'" style="margin-top: 6px; font-size: 0.80em;">Rs. {{prodComponent.componentPrice | number | replace}}</div>
+>>>>>>> upstream/master
                               </div>
                               <div class="table-inline-display plus-sign" *ngIf="(i+1) !== orderProduct.componentList.length">
                                 <div class="table-cell-display v-align-middle">+</div>
@@ -999,7 +1010,11 @@
                     </div>
                   </div>
 
+<<<<<<< HEAD
                     <div *ngIf="env.userType!='hdextnp'"  class="row">
+=======
+                    <div *ngIf="env.userType!='hdextnp'" class="row">
+>>>>>>> upstream/master
                         <div class="col-md-4 pull-left text-bold" [ngClass]="{'no-padding m-b-1' : isMobile}">
                             <div >Net Product Price  <span style="margin-left:0.1em;">
                                 <span class="theme-red rightAlignrdNumber" *ngIf="order.vendorOrderTotal" [style.width]="(order.vendorOrderTotal).toString().length < 4 ? '3.5em': (order.vendorOrderTotal).toString().length+'em' ">Rs. <span class="pull-right">{{order.orderNetProductPrice | number : '2.0-0' | replace}}</span></span></span>
@@ -1118,7 +1133,7 @@
                             <span *ngIf="order.orderProducts[0].fkUserId"><i class="fa fa-edit"></i> {{order.orderProducts[0].deliveryBoyName}}</span>
                         </button>
 
-                        <mat-menu #menu="matMenu">
+                        <mat-menu #menu="matMenu" style="max-height: 300px;">
                             <ng-container *ngFor="let x of deliveryBoyList" >
                                 <button mat-menu-item *ngIf="order.orderProducts[0].fkUserId !== x.fkUserId && x.Status" (click)="assignToDeliveryBoy(x, order)">
                                     {{x.Full_Name}}

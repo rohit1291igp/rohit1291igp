@@ -13,6 +13,7 @@ import { environment } from "../../../environments/environment";
 import { BackendService } from '../../services/backend.service';
 import { SharedModule } from 'app/shared-module/shared/shared.module';
 import { CommonModule } from '@angular/common';
+import { Angular5Csv } from 'angular5-csv/dist/Angular5-csv';
 
 
 
@@ -250,6 +251,52 @@ export class PayoutDashboardComponent implements OnInit {
     this.enableResetBtn = false;
     this.myForm.reset();
     this.init();
+  }
+  downloadAll(e){
+    debugger;
+    e.preventDefault();
+    let _this = this;
+    const reqObj = {
+      url: `getAllVendorHandelsPayoutDashboard?month=${this.date.value.split('/')[0]}&year=${this.date.value.split('/')[1]}`,
+      method: "get",
+      payload: {}
+    };
+    _this.BackendService.makeAjax(reqObj, function (err, result, headers) {
+      //if(!response) response={result:[]};
+      if (err || result.error) {
+        console.log('Error=============>', err);
+        return;
+      }
+      var options = {
+        showLabels: true,
+        showTitle: false,
+        headers: result.tableHeaders,
+        nullToEmptyString: true,
+      };
+
+      let data = [];
+      let reportDownloadData = [];
+      new Promise((resolve) => {
+        for (let pi = 0; pi < result.tableData.length; pi++) {
+          let temp = {}
+          for (let k of result.tableHeaders) {
+          
+            if (typeof result.tableData[pi][k] == 'object' && result.tableData[pi][k] != null) {
+              result.tableData[pi][k] = result.tableData[pi][k].value ? result.tableData[pi][k].value : '';
+            }
+            temp[k] = result.tableData[pi][k]?result.tableData[pi][k]:'';
+          }
+          reportDownloadData.push(temp);
+          if (pi == (result.tableData.length - 1)) {
+            resolve(reportDownloadData);
+          }
+        }
+      }).then((data) => {
+        
+        // console.log(data)
+        let download = new Angular5Csv(data, 'Statement', options);
+      })
+    });
   }
 
 }

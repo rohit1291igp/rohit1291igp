@@ -48,7 +48,7 @@
 }
 
 .searchFieldsSubmit {
-    bottom: 0.5em;
+    /* bottom: 0.5em; */
     position: absolute;
     right: 1em;
 }
@@ -411,6 +411,12 @@ table thead th {
 .searchFields2 .addActionBtn {
     position: absolute;
     right: 0.7em;
+    top: 0.5em;
+}
+
+.searchFields2 .addActionBtn1 {
+    position: absolute;
+    right: 8.7em;
     top: 0.5em;
 }
 

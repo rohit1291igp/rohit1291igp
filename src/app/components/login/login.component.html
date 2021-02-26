@@ -1,5 +1,5 @@
 <div class="login-container">
-    <mat-card>
+    <mat-card *ngIf="forgotPassword == 'login'">
         <div class="apierror" *ngIf="apierror">{{apierror}}</div>
 
         <!-- <div class="col-md-6 col-md-offset-3"> -->
@@ -31,12 +31,11 @@
                 <div *ngIf="f.submitted && !username.valid" class="help-block">User Name is required</div>
             </div> -->
             <mat-form-field class="example-full-width">
-                    <mat-label class="primary-color">Password</mat-label>
-                    <input type="password" matInput name="password" [(ngModel)]="model.password"
-                    #password="ngModel" required
-                        autocomplete="off">
-                    <!-- <div *ngIf="f.submitted && !associatename.valid" class="help-block">Associate Name is required</div> -->
-                </mat-form-field>
+                <mat-label class="primary-color">Password</mat-label>
+                <input type="password" matInput name="password" [(ngModel)]="model.password" #password="ngModel"
+                    required autocomplete="off">
+                <!-- <div *ngIf="f.submitted && !associatename.valid" class="help-block">Associate Name is required</div> -->
+            </mat-form-field>
             <!-- <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !password.valid }">
                 <label for="password">Password</label>
                 <input type="password" class="form-control" name="password" [(ngModel)]="model.password"
@@ -45,14 +44,109 @@
             </div> -->
             <div class="form-group">
                 <!-- <button [disabled]="loading" class="btn btn-primary">Login</button> -->
-                <button class="login-btn" [disabled]="loading && f.form.valid" mat-raised-button [ngStyle]="{'background-color': whitelabelStyle ? whitelabelStyle.primaryColor : '', 'color': whitelabelStyle ? whitelabelStyle.secondaryColor : '' }">Login</button>
+                <button class="login-btn" [disabled]="loading && f.form.valid" mat-raised-button
+                    [ngStyle]="{'background-color': whitelabelStyle ? whitelabelStyle.primaryColor : '', 'color': whitelabelStyle ? whitelabelStyle.secondaryColor : '' }">Login</button>
                 <img *ngIf="loading"
                     src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
                 <!--<a [routerLink]="['/register']" class="btn btn-link">Register</a>-->
+                <span (click)="forgotPassword = 'passReset'" style="float: right;cursor: pointer;">Forgot
+                    Password</span>
             </div>
         </form>
         <!-- </div> -->
     </mat-card>
+   <!-- Password Reset Form -->
+    <mat-card *ngIf="forgotPassword == 'passReset'">
+        <div class="apierror" *ngIf="apierror">{{apierror}}</div>
+        <h4 *ngIf="!apiSuccess" class="form-title"
+            [ngStyle]="{'color': whitelabelStyle ? whitelabelStyle.primaryColor : '' }">Forgot Password</h4>
+        <ng-container *ngIf="!apiSuccess else apiSuccessMsg">
+            <mat-form-field class="example-full-width">
+                <mat-label class="primary-color">Associate Name</mat-label>
+                <input matInput name="associatename" [(ngModel)]="forgotPasswordModel.associatename" required
+                    autocomplete="off">
+            </mat-form-field>
+
+            <mat-form-field class="example-full-width">
+                <mat-label class="primary-color">User Name</mat-label>
+                <input matInput name="username" [(ngModel)]="forgotPasswordModel.username" required autocomplete="off">
+            </mat-form-field>
+
+            <div class="form-group">
+
+                <button class="login-btn" [disabled]="loading && f.form.valid" mat-raised-button
+                    [ngStyle]="{'background-color': whitelabelStyle ? whitelabelStyle.primaryColor : '', 'color': whitelabelStyle ? whitelabelStyle.secondaryColor : '' }"
+                    (click)="resetPassword()">Submit</button>
+                <span (click)="forgotPassword = 'login'" style="float: right; cursor: pointer;">Back to Login</span>
+            </div>
+        </ng-container>
+
+        <ng-template #apiSuccessMsg>
+            <h4 class="form-title" style="font-size: 1.2em;
+                color: green;">{{apiSuccess}}</h4>
+        </ng-template>
+
+
+    </mat-card>
+   <!-- Password Reset Form Ends -->
+
+   <!-- OTP Form -->
+    <mat-card *ngIf="forgotPassword == 'otpForm'">
+        <div class="apierror" *ngIf="apierror">{{apierror}}</div>
+        <h4 *ngIf="!apiSuccess" class="form-title"
+            [ngStyle]="{'color': whitelabelStyle ? whitelabelStyle.primaryColor : '' }">OTP sent Successfully, Please
+            check registered Email.</h4>
+        <ng-container *ngIf="!apiSuccess else apiSuccessMsg">
+            <mat-form-field class="example-full-width">
+                <mat-label class="primary-color">Enter OTP</mat-label>
+                <input type="number" matInput name="otp" [(ngModel)]="otpModel" required autocomplete="off"
+                    (keyup)="otpInputChange.next()">
+            </mat-form-field>
+
+            <div class="form-group">
+                <button class="login-btn" [disabled]="!otpModel" mat-raised-button
+                    [ngStyle]="{'background-color': whitelabelStyle ? whitelabelStyle.primaryColor : '', 'color': whitelabelStyle ? whitelabelStyle.secondaryColor : '' }"
+                    (click)="otpSubmit()">Submit</button>
+            </div>
+        </ng-container>
+        <ng-template #apiSuccessMsg>
+            <h4 class="form-title" style="font-size: 1.2em;
+            color: green;">{{apiSuccess}}</h4>
+        </ng-template>
+    </mat-card>
+    <!-- OTP Form Ends -->
+
+    <!-- Set New Password -->
+    <mat-card *ngIf="forgotPassword == 'confirmPass'">
+        <div class="apierror" *ngIf="apierror">{{apierror}}</div>
+        <h4 *ngIf="!apiSuccess" class="form-title"
+            [ngStyle]="{'color': whitelabelStyle ? whitelabelStyle.primaryColor : '' }">Your OTP has been verified. You
+            can reset the password below.</h4>
+        <ng-container *ngIf="!apiSuccess else apiSuccessMsg">
+            <mat-form-field class="example-full-width">
+                <mat-label class="primary-color">New password</mat-label>
+                <input matInput type="password" name="newpass" [(ngModel)]="newPassModel.newPassword" required
+                    autocomplete="off">
+            </mat-form-field>
+            <mat-form-field class="example-full-width">
+                <mat-label class="primary-color">Confirm password</mat-label>
+                <input matInput type="password" name="confirmpass" [(ngModel)]="newPassModel.confirmPassword" required
+                    autocomplete="off">
+            </mat-form-field>
+
+            <div class="form-group">
+                <button class="login-btn" [disabled]="!newPassModel.newPassword && !newPassModel.confirmPassword"
+                    mat-raised-button
+                    [ngStyle]="{'background-color': whitelabelStyle ? whitelabelStyle.primaryColor : '', 'color': whitelabelStyle ? whitelabelStyle.secondaryColor : '' }"
+                    (click)="confirmPassword()">Submit</button>
+            </div>
+        </ng-container>
+        <ng-template #apiSuccessMsg>
+            <h4 class="form-title" style="font-size: 1.2em;
+            color: green;">{{apiSuccess}}</h4>
+        </ng-template>
+    </mat-card>
+    <!-- Set New Password Ends -->
 </div>
 
 

@@ -74,12 +74,11 @@ export class BulkEgvComponent implements OnInit {
 
   openSnackBar(data) {
     this._snackBar.openFromComponent(NotificationComponent, {
-      data: data,
-      duration: 5 * 1000,
-      panelClass: ['snackbar-success'],
-      verticalPosition: "top"
+        data: data,
+        duration: 5 * 1000,
+        panelClass: ['snackbar-background']
     });
-  }
+}
 
   getProductSelected(obj: any) {
     this.userSelected = obj;
@@ -123,14 +122,16 @@ export class BulkEgvComponent implements OnInit {
   }
 
   generateManualBulkEgv() {
-
+    if(!this.bulkegvform.value.selectedProduct){
+      this.openSnackBar('Please select a Product');
+    }
     console.log(this.bulkegvform.invalid);
     if (this.bulkegvform.invalid) { return }
     if (this.bulkegvform.value.denomination < this.minValue || this.bulkegvform.value.denomination > this.maxValue) {
-      alert("Denomination should be between " + this.minValue + " and " + this.maxValue)
+      this.openSnackBar("Denomination should be between " + this.minValue + " and " + this.maxValue)
       return;
     }
-    debugger;
+    
     let _this = this;
     let payload = {
       "productCode": this.bulkegvform.value.selectedProduct.productCode,
@@ -194,7 +195,9 @@ export class BulkEgvComponent implements OnInit {
             });
           }
           if (rowNumber != 1 && _this.validExcel) {
+            
             if (!(row.values[1] && row.values[2] && row.values[3] && row.values[4] && row.values[5] )) {
+              console.log(row.values[1],row.values[2],row.values[3],row.values[4],row.values[5] );
               _this.errorList.push({ row: rowNumber, msg: "Values cannot be empty" })
             }
             else {
@@ -229,10 +232,10 @@ export class BulkEgvComponent implements OnInit {
 
   genrateBulkExcelEgv() {
     //apicall
-    debugger;
+    
     let _this = this;
     if (!_this.excelFileUpload) {
-      alert("No file imported");
+      _this.openSnackBar("No file imported");
       return
     }
     let excelData = new FormData();
@@ -242,7 +245,7 @@ export class BulkEgvComponent implements OnInit {
     let scheduleDate = this.formatDate(this.bulkegvform.value.scheduleDate, 'yyyy-MM-dd')
     // _this.sidenav.open();
     this.EgvService.generateBulkEgvExcel(fk_associateId, fkUserId, scheduleDate, excelData).subscribe(
-      result => {
+      result => { 
         if (result['status'] == "Error") {
           if (result['data']['errorList']) {
             _this.errorList = result['data']['errorList']

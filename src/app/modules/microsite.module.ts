@@ -6,11 +6,15 @@ import { MicroSiteDasboardComponent } from 'app/components/micro-site/micro-site
 import { SharedModule } from 'app/shared-module/shared/shared.module';
 import { MyDatePickerModule } from 'mydatepicker';
 import { CdkTableModule } from '@angular/cdk/table';
-import { MatFormFieldModule, MatInputModule, MatTableModule, MatCardModule, MatButtonModule, MatMenuModule, MatDialogModule, MatSnackBarModule, MatPaginatorModule, MatSortModule, MatDatepickerModule, MatRadioModule, MatSelectModule } from '@angular/material';
+import { MatFormFieldModule, MatInputModule, MatTableModule, MatCardModule, MatButtonModule, MatMenuModule, MatDialogModule, MatSnackBarModule, MatPaginatorModule, MatSortModule, MatDatepickerModule, MatRadioModule, MatSelectModule, MatSidenavModule } from '@angular/material';
 
 const routes: Routes = [
   {
     path: '',
+    component: MicroSiteDasboardComponent
+  },
+  {
+    path: 'voucher-credit',
     component: MicroSiteDasboardComponent
   }
 ];
@@ -36,7 +40,8 @@ const routes: Routes = [
     MatDatepickerModule,
     MatRadioModule,
     MatSelectModule,
-    // SharedModule
+    MatSidenavModule,
+    SharedModule
   ],
   declarations: [
     MicroSiteDasboardComponent

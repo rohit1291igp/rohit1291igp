@@ -6,7 +6,7 @@ import { MyDatePickerModule } from 'mydatepicker';
 import { MatFormFieldModule, MatAutocompleteModule, MatInputModule, MatTableModule, MatCardModule, MatButtonModule, MatMenuModule, MatDialogModule, MatSnackBarModule, MatPaginatorModule, MatSortModule, MatDatepickerModule, MatRadioModule, MatSelectModule, MatIconModule, MatChip, MatChipsModule, MatSidenavModule, MatCheckboxModule } from '@angular/material';
 import { EgvService } from '../services/egv.service';
 import { EgvStatementComponent, transactionReportDialog } from 'app/components/egvpanels/egv-statement/egv-statement.component';
-import { EgvwalletComponent } from 'app/components/egvpanels/egvwallet/egvwallet.component';
+import { EgvwalletComponent, WalletDiscountComponent } from 'app/components/egvpanels/egvwallet/egvwallet.component';
 import { environment } from 'environments/environment';
 import { IndianNumericPipe } from '../customPipes/indian-numeric.pipe';
 import { EgvDashboardComponent } from 'app/components/egvpanels/egv-dashboard/egv-dashboard.component';
@@ -17,7 +17,16 @@ import { AuthGuard } from 'app/services/auth-guard.service';
 import { AlertManagementComponent } from 'app/components/egv/alert-management/alert-management.component';
 import { NewUserFormComponent } from 'app/components/egv/user-management/new-user-form/new-user-form.component';
 import { EditUserComponent } from 'app/components/egv/user-management/edit-user/edit-user.component';
-import { BulkEgvComponent } from 'app/components/egvpanels/bulk-egv/bulk-egv.component'
+import { BulkEgvComponent } from 'app/components/egvpanels/bulk-egv/bulk-egv.component';
+import { EmailCustomizationComponent } from 'app/components/email-customization/email-customization.component';
+import { CKEditorModule } from 'ng2-ckeditor';
+import { ScriptService } from 'app/services/script.service';
+import { ContactUsEditComponent } from 'app/components/contact-us-edit/contact-us-edit.component';
+import { FaqEditComponent } from 'app/components/faq-edit/faq-edit.component';
+import { FaqComponent } from 'app/components/faq/faq.component';
+import { ContactUsComponent } from 'app/components/contact-us/contact-us.component';
+import { SharedModule } from 'app/shared-module/shared/shared.module';
+
 
 
 const routes: Routes = [
@@ -49,8 +58,27 @@ const routes: Routes = [
     path: 'bulkegv',
     component: BulkEgvComponent,
     canActivate: [AuthGuard, EgvGuard]
+  },
+  {
+    path: 'email-customization',
+    component: EmailCustomizationComponent
+  },
+  {
+    path: 'contact-us-edit',
+    component: ContactUsEditComponent
+  },
+  {
+    path: 'faq-edit',
+    component: FaqEditComponent
+  },
+  {
+    path: 'contact-us',
+    component: ContactUsComponent
+  },
+  {
+    path: 'faq',
+    component: FaqComponent
   }
-
 ];
 
 @NgModule({
@@ -58,27 +86,8 @@ const routes: Routes = [
     MatCardModule,
     CommonModule,
     RouterModule.forChild(routes),
-    FormsModule,
-    ReactiveFormsModule,
-    MyDatePickerModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatTableModule,
-    MatCardModule,
-    MatButtonModule,
-    MatMenuModule,
-    MatDialogModule,
-    MatSnackBarModule,
-    MatAutocompleteModule,
-    MatPaginatorModule,
-    MatSortModule,
-    MatDatepickerModule,
-    MatRadioModule,
-    MatSelectModule,
-    MatIconModule,
-    MatChipsModule,
-    MatSidenavModule,
-    MatCheckboxModule
+    CKEditorModule,
+    SharedModule
   ],
   declarations: [
     EgvwalletComponent, 
@@ -91,8 +100,14 @@ const routes: Routes = [
     transactionReportDialog,
     IndianNumericPipe,
     EgvDashboardComponent,
-    BulkEgvComponent],
-  providers: [EgvService],
-  entryComponents: [transactionReportDialog,NewUserFormComponent,EditUserComponent]
+    BulkEgvComponent,
+    EmailCustomizationComponent,
+    ContactUsEditComponent,
+    FaqEditComponent,
+    ContactUsComponent,
+    FaqComponent,
+    WalletDiscountComponent],
+  providers: [EgvService, ScriptService],
+  entryComponents: [transactionReportDialog,NewUserFormComponent,EditUserComponent,WalletDiscountComponent]
 })
 export class EgvpanelModule { }
