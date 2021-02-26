@@ -11,7 +11,8 @@
       <button mat-raised-button (click)="getEmployeeDetails()">Search</button>
     </div>
     <div class="col-md-4" *ngIf="emp_id" style="padding-top: 20px;">
-      <strong>Employee ID : </strong> {{emp_id}}
+      <strong>Employee ID : </strong> {{empCode}}
+      <br>
       <strong>Employee Name : </strong> {{emp_name}}
     </div>
     <div class="col-md-12" *ngIf="!emp_id" style="text-align: center;margin-top:20px">
@@ -67,8 +68,11 @@
           <img src="{{s3ImageUrlPrefix + doctorsData[index] }}" style="max-width: 80%;max-height: 80%">
         </div>
       </div>
-      <button mat-raised-button (click)="addDoctor()">Add doctor</button>
-      <button mat-raised-button style="margin:auto" (click)='saveDoctorData()'> Save All</button>
+    </div>
+    <div class="col-md-12"  *ngIf="emp_id">
+      <button mat-raised-button (click)="addDoctor()">Add More Doctor</button>
+      <button mat-raised-button style="margin:auto" (click)='saveDoctorData()'> Save Doctor Data</button>
+      <button mat-raised-button (click)="resetPage()"> Clear </button>
     </div>
   </form>
 

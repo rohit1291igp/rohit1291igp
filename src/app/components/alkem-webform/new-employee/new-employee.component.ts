@@ -1,7 +1,8 @@
 import { DatePipe } from '@angular/common';
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatDatepickerInput, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { MatDatepickerInput, MatDialogRef, MatSnackBar, MAT_DIALOG_DATA } from '@angular/material';
+import { NotificationComponent } from 'app/components/notification/notification.component';
 import { AlkemService } from 'app/services/alkem.service';
 // import { BackendService } from '../../../services/backend.service';
 
@@ -18,7 +19,8 @@ export class NewEmployeeComponent implements OnInit {
     public dialogRef: MatDialogRef<NewEmployeeComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private fb: FormBuilder,
-    private AlkemService: AlkemService
+    private AlkemService: AlkemService,
+    private _snackBar: MatSnackBar
   ) { }
 
   ngOnInit() {
@@ -43,6 +45,15 @@ export class NewEmployeeComponent implements OnInit {
   addEventFrom(type: string, field: string, event: MatDatepickerInput<Date>) {
     this.newUser.patchValue({
       [field]: event.value
+    });
+  }
+
+  
+  openSnackBar(data) {
+    this._snackBar.openFromComponent(NotificationComponent, {
+      data: data,
+      duration: 5 * 1000,
+      panelClass: ['snackbar-background']
     });
   }
 
@@ -77,6 +88,10 @@ export class NewEmployeeComponent implements OnInit {
     this.AlkemService.getAlkemService(reqObj).subscribe(
       result=>{
         console.log(result);
+        this.openSnackBar(result.errorMessage);
+        if(!result.error){
+          this.dialogRef.close();
+        }
       }
     )
   }

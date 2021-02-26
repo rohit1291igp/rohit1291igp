@@ -29,6 +29,8 @@ import { PayoutDashboardComponent, PayoutDashboardModule } from 'app/components/
 import { PendingOrderComponent } from 'app/components/pending-order/pending-order.component';
 import { BulkUploadComponent } from 'app/components/bulk-upload/bulk-upload.component';
 import { DownloadEmailComponent } from 'app/components/download-email/download-email.component';
+
+
 const routes: Routes = [{
   path: '',
   component: NewDasboardComponent,
@@ -176,8 +178,7 @@ const routes: Routes = [{
     OfferPageManagementComponent,
     SearchRankingComponent,
     PendingOrderComponent,
-    DownloadEmailComponent,
-
+    DownloadEmailComponent
   ],
   providers: [NavService, UserAccessService],
   entryComponents: []

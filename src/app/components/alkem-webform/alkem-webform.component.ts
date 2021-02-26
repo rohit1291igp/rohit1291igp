@@ -78,7 +78,7 @@ export class AlkemWebformComponent implements OnInit, AfterViewChecked {
       this.openSnackBar(result.errorMessage)
       if (result.error) {
         this.emp_id = 0;
-  
+
         return;
 
       }
@@ -199,12 +199,23 @@ export class AlkemWebformComponent implements OnInit, AfterViewChecked {
 
     this.AlkemService.getAlkemService(reqObj).subscribe(response => {
       console.log(response);
-      if(response.errorList){
+      if (response.errorList) {
         this.openSnackBar(response.errorList);
+
       }
-      else{
-        this.openSnackBar('All Doctor Data uploaded successfully')
+      else {
+        this.openSnackBar('All Doctor Data uploaded successfully');
+        this.resetPage();
+
       }
     })
+  }
+
+  resetPage() {
+    this.doctorsData = [];
+    this.doctorsForms.get("tableEntries")["controls"] = [];
+    // this.emp_id = '';
+    // this.empCode = '';
+    // this.emp_name = '';
   }
 }
