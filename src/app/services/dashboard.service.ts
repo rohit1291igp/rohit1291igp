@@ -813,12 +813,12 @@ export class DashboardService {
             //let specificDate = Date.parse(spcificDate) || 0;
             let specificDate = spcificDate || 0;
             //console.log('environment----->', environment);
-            let apiPath = this.isAdmin ? 'getDashboardDetail' : 'getVendorCountDetail';
+            let apiPath = this.isAdmin ? 'getDashboardDetail' : 'optimize/getVendorCountDetail';
             let reqObj;
             
             if(vendorGroupId){
                 reqObj = {
-                    url : apiPath+"?responseType=json&scopeId=1&fkAssociateId="+fkAssociateId+"&specificDate="+specificDate+"&filterId="+vendorGroupId+"&sector="+sector,
+                    url : apiPath+"?responseType=json&scopeId=1&fkAssociateId="+fkAssociateId+"&specificDate="+specificDate+"&filterId="+vendorGroupId+"&sector="+sector+"&redisFlag=1",
                     method : "get",
                     payload : {}
                 };
@@ -827,7 +827,7 @@ export class DashboardService {
 
                 reqObj = {
                     //url : "?responseType=json&scopeId=1&fkAssociateId="+fkAssociateId+"&specificDate="+specificDate+"&method=igp.vendor.getVendorCountDetail",
-                    url : apiPath+"?responseType=json&scopeId=1&fkAssociateId="+fkAssociateId+"&specificDate="+specificDate+"&sector="+sector,
+                    url : apiPath+"?responseType=json&scopeId=1&fkAssociateId="+fkAssociateId+"&specificDate="+specificDate+"&sector="+sector+"&redisFlag=1",
                     method : "get",
                     payload : {}
                 };

@@ -217,14 +217,3 @@ export class DeliveryBoyDetailsComponent implements OnInit {
 
     }
 }
-
-@NgModule({
-    imports:[CommonModule,SharedModule],
-    declarations: [ 
-      DeliveryBoyDetailsComponent
-    ],
-    exports: [
-      DeliveryBoyDetailsComponent
-    ]
-  })
-  export class DeliveryBoyDetailsModule {}

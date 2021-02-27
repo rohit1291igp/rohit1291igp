@@ -224,14 +224,3 @@ export class BulkUploadComponent implements OnInit {
   }
 
 }
-
-@NgModule({
-  imports:[CommonModule,SharedModule],
-  declarations: [ 
-    BulkUploadComponent
-  ],
-  exports: [
-    BulkUploadComponent
-  ]
-})
-export class BulkUploadModule {}

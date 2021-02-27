@@ -155,7 +155,8 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
   deliveryBoyAssignBtnText: boolean;
   assignedDeliveryBoy:string;
   deliveryBoyEnabled:any;
-    reajectoption: any;
+  reajectoption: any;
+  pageNo = 0;
   constructor(
       private _elementRef: ElementRef,
       public BackendService : BackendService,
@@ -183,6 +184,9 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
         this.getFeeds();
         this.getRejectResons('reassign');
      }else{
+        if(environment.userType == 'microsite'){
+            return;
+        } 
         this.getDeliveryBoyList();
         this.getRejectResons('reject');
      }
@@ -1970,5 +1974,18 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
             }
         }
         }
+
+    // On Scroll up and end 
+    scrolled(e) {
+
+        //Api call for further data
+        if(e.offsetHeight + e.scrollTop >= e.scrollHeight){
+            console.log('next api call', this.pageNo++);
+        }
+        //Api call previous data
+        if(e.scrollTop == e.scrollLeft){
+            console.log('previous api call', this.pageNo--);
+        }
+    }
 
 }

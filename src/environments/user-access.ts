@@ -398,7 +398,7 @@ export const userAcess = {
     {
         displayName: 'Current Balance',
         iconName: 'account_balance_wallet',
-        route: '/new-dashboard/reports/whitelabelReport',
+        route: '/new-dashboard/handels/reports/itcReport',
     },
     {
         displayName: 'Pending orders',
@@ -414,7 +414,7 @@ export const userAcess = {
     {
         displayName: 'Current Balance',
         iconName: 'account_balance_wallet',
-        route: '/new-dashboard/reports/whitelabelReport',
+        route: '/new-dashboard/handels/reports/zeaplReport',
     },
     {
         displayName: 'Pending orders',
