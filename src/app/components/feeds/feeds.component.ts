@@ -76,7 +76,7 @@ export class FeedsComponent implements OnInit {
     console.log("sdfsdf");
       if(environment.userType == "vendor"){
         _this.getFeeds();
-        _this.feedObservable=Observable.interval(10000)
+        _this.feedObservable=Observable.interval(30000)
               .subscribe(() => {
                 console.log('IntervalObservable working !!!')
                 if(_this.ajaxCallDone == 1){
