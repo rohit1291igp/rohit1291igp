@@ -1,0 +1,15 @@
+.registerBtn{
+    cursor: pointer;
+}
+
+.topBorder{
+    border-top:1px solid #ccc;
+    margin-top: 20px;
+}
+
+.rightAlign{
+    text-align: right;
+}
+.example-form-field{
+    width:50%
+}

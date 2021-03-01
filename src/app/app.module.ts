@@ -68,6 +68,11 @@ import { environment } from 'environments/environment';
 import { AppLoadService } from './services/app.load.service';
 import { ServiceWorkerModule } from '@angular/service-worker';
 
+ import { AlkemWebformComponent } from './components/alkem-webform/alkem-webform.component';
+import { AlkemService } from './services/alkem.service';
+import { NewEmployeeComponent } from './components/alkem-webform/new-employee/new-employee.component';
+// import { AlkemWebformComponent } from './alkem-webform/alkem-webform.component';
+
 
 export function init_app(appLoadService: AppLoadService) {
   return () => appLoadService.initializeApp();
@@ -103,7 +108,9 @@ export function init_app(appLoadService: AppLoadService) {
     ProductReportComponent,
     DeliveryTimeManagementComponent,
     DownloadStockedComponent,
-    DownloadStockedComponentProduct
+    DownloadStockedComponentProduct,
+    AlkemWebformComponent,
+    NewEmployeeComponent
   ],
   imports: [
     BrowserModule,
@@ -195,9 +202,10 @@ export function init_app(appLoadService: AppLoadService) {
     ScriptService,
     SerachRankingService,
     Location,
+    AlkemService
     // {provide: LocationStrategy, useClass: PathLocationStrategy}
   ],
-  entryComponents: [UploadExcelComponent, NotificationComponent, ImgPreviewComponent, SelectItemForDelivered, OrderStockComponent, editComponent, DownloadStockedComponent, DownloadStockedComponentProduct],
+  entryComponents: [UploadExcelComponent, NotificationComponent, ImgPreviewComponent, SelectItemForDelivered, OrderStockComponent, editComponent, DownloadStockedComponent, DownloadStockedComponentProduct,NewEmployeeComponent],
   bootstrap: [AppComponent],
   exports: [RouterModule]
 })

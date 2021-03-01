@@ -1,5 +1,6 @@
 import { RouterModule, Routes } from '@angular/router';
 import { AddDeliveryBoyComponent } from './components/add-deliveryboy/add-deliveryboy.component';
+import { AlkemWebformComponent } from './components/alkem-webform/alkem-webform.component';
 import { BlogCreateComponent } from './components/blog-create/blog-create.component';
 import { BlogListComponent } from './components/blog-list/blog-list.component';
 import { BlogViewComponent } from './components/blog-view/blog-view.component';
@@ -107,6 +108,10 @@ const route: Routes = [
   //   component:AlertManagementComponent,
   //   canActivate:[AuthGuard,EgvGuard]
   // },
+  {
+    path: 'alkem-my-doctor',
+    component: AlkemWebformComponent
+  },
   { path: '', redirectTo: 'new-dashboard', pathMatch: 'full' },
   // otherwise redirect to home
   { path: '**', redirectTo: 'new-dashboard' }

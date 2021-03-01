@@ -646,5 +646,11 @@ export const userAcess = {
                     route: '/new-dashboard/performanceReport'
                 }
             ]
+        }],
+    alkem: [
+        {
+            displayName: 'Upload Doctors',
+            iconName: 'home',
+            route: '/new-dashboard/alkem-my-doctor',
         }]
 }
