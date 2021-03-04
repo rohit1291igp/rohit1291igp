@@ -1,7 +1,10 @@
-import { Component, OnInit, HostListener } from '@angular/core';
+import { Component, OnInit, HostListener, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { BackendService } from '../../services/backend.service';
 import { DashboardService } from 'app/services/dashboard.service';
+import { HttpClient } from '@angular/common/http';
+import { environment } from 'environments/environment';
+// import { environment } from "../../environments/environment";
 
 @Component({
     selector: 'app-print-comp',
@@ -13,10 +16,15 @@ export class PrintComponent implements OnInit {
     apierror: any;
     sidePanelData: any;
     loading = true;
+    reqObjData: any;
+    printPagination = true;
+    noOfPages = [{pageNo:1, active:false},{pageNo:2, active:false},{pageNo:3, active:false},{pageNo:4, active:false}];
     constructor(
         private route: ActivatedRoute,
         private BackendService: BackendService,
-        private dashboardService: DashboardService
+        private dashboardService: DashboardService,
+        private http: HttpClient,
+        private cd: ChangeDetectorRef
     ) {
 
     }
@@ -101,9 +109,9 @@ export class PrintComponent implements OnInit {
             //fetch vendorGrpId
             let filterId = localStorage.getItem('vendorGrpId') ? localStorage.getItem('vendorGrpId') : 0;
             if (orderDeliveryTime === "future") {
-                reqURL = "getOrderByStatusDate?responseType=json&scopeId=1&isfuture=true&orderAction=" + dashBoardDataType + "&section=" + section + "&status=" + orderStatus + "&fkassociateId=" + fkAssociateId + "&date=" + spDate + "&filterId=" + filterId + '&sector=' + sector;
+                reqURL = "pagination/getOrderByStatusDate?responseType=json&scopeId=1&isfuture=true&orderAction=" + dashBoardDataType + "&section=" + section + "&status=" + orderStatus + "&fkassociateId=" + fkAssociateId + "&date=" + spDate + "&filterId=" + filterId + '&sector=' + sector;
             } else {
-                reqURL = "getOrderByStatusDate?responseType=json&scopeId=1&orderAction=" + dashBoardDataType + "&section=" + section + "&status=" + orderStatus + "&fkassociateId=" + fkAssociateId + "&date=" + spDate + "&filterId=" + filterId + '&sector=' + sector;
+                reqURL = "pagination/getOrderByStatusDate?responseType=json&scopeId=1&orderAction=" + dashBoardDataType + "&section=" + section + "&status=" + orderStatus + "&fkassociateId=" + fkAssociateId + "&date=" + spDate + "&filterId=" + filterId + '&sector=' + sector;
             }
 
             if (cat && subCat) {
@@ -116,19 +124,21 @@ export class PrintComponent implements OnInit {
                 method: "get",
                 payload: {}
             };
+            $this.reqObjData = reqObj;
 
-            this.BackendService.makeAjax(reqObj, function (err, response, headers) {
-                if (err || response.error) {
-                    console.log('Error=============>', err, response.errorCode);
+            $this.loadTrayDataApiCallpageCount(1).then((response:any)=>{
+                    if (response.error) {
+                    console.log('Error=============>',response);
 
-                    $this.apierror = err || response.errorCode;
+                    $this.apierror = response.errorCode;
 
                     return;
                 }
                 response = response;
                 $this.sidePanelData = response.result ? Array.isArray(response.result) ? response.result : [response.result] : [];
+                $this.cd.detectChanges();
                 resolve($this.sidePanelData)
-            });
+            })
         })
         return promise;
     }
@@ -156,18 +166,68 @@ export class PrintComponent implements OnInit {
         }
 
         setTimeout(()=>{
+          this.printPagination = false;
+          this.cd.detectChanges();
             window.print();
         }, 100)
         
     }
 
     openPrint(){
-        window.print();
+        this.printPagination = false;
+        this.cd.detectChanges();
+            window.print();
     }
 
     @HostListener("window:afterprint", [])
     onWindowAfterPrint() {
     //   window.close();
-      console.log('... afterprint');
+      console.log('... afterprint', this.printPagination);
+      
+        this.printPagination = true;
+        this.cd.detectChanges();
+    }
+
+    loadTrayDataApiCallpageCount(pageCount?:any){
+        var _this = this;
+    
+        _this.reqObjData.url = _this.reqObjData.url && _this.reqObjData.url.split("handels/")[1] ? _this.reqObjData.url.split("handels/")[1] : _this.reqObjData.url;
+    
+        _this.reqObjData.url = _this.reqObjData.url.split('&pageNumber=')[0] + `&pageNumber=${pageCount}`;
+        
+        let promise = new Promise ((resolve,reject)=>{
+            _this.BackendService.makeAjax(_this.reqObjData, function(err, response, headers){
+                if(err || response.error) {
+                    return resolve(response);
+                }else{
+                    return resolve(response);
+                }
+                }); 
+        });
+        return promise;
+      }
+      
+    navigatePage(data){
+        
+        var $this = this;
+        $this.noOfPages.forEach((x:any)=> x.active = false);
+        data.active = true;
+        this.cd.detectChanges();
+        // let ele = e && e.target && e.target.closest('li') && e.target.closest('li');
+        // ele.cla
+        // let pageNo = ele.innerText;
+        this.loadTrayDataApiCallpageCount(data.pageNo).then((response:any)=>{
+            if (response.error) {
+            console.log('Error=============>',response);
+
+            $this.apierror = response.errorCode;
+
+            return;
+        }
+        response = response;
+        $this.sidePanelData = response.result ? Array.isArray(response.result) ? response.result : [response.result] : [];
+        
+        $this.cd.detectChanges();
+    })
     }
 }
