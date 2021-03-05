@@ -6,15 +6,15 @@
   <div class="col-md-12" style="padding: 0 10px;">
     <div class="col-md-6">
       <mat-form-field class="example-form-field">
-        <mat-label>Employee Code</mat-label>
+        <mat-label> ME Employee Code</mat-label>
         <input matInput type="text" formControlName="emp_code" required>
         <mat-error *ngIf="newUser.get('emp_code').hasError('required')">
-          Employee Code is <strong>required</strong> 
+          Employee Code is <strong>required</strong>
         </mat-error>
       </mat-form-field><br>
 
       <mat-form-field class="example-form-field">
-        <mat-label>Employee Name</mat-label>
+        <mat-label> ME Employee Name</mat-label>
         <input matInput type="text" formControlName="emp_name" required>
         <mat-error *ngIf="newUser.get('emp_name').hasError('required')">
           Employee Name is <strong>required</strong>
@@ -55,7 +55,7 @@
       </mat-form-field><br>
 
       <mat-form-field class="example-form-field">
-        <mat-label>HQ Name</mat-label>
+        <mat-label> ME HQ Name</mat-label>
         <input matInput type="text" formControlName="hq_name" required>
         <mat-error *ngIf="newUser.get('hq_name').hasError('required')">
           HQ Name is <strong>required</strong>
@@ -64,64 +64,43 @@
 
     </div>
     <div class="col-md-6">
+
       <mat-form-field class="example-form-field">
-        <mat-label>Garnet Code</mat-label>
-        <input matInput type="text" formControlName="garnet_code" required>
-        <mat-error *ngIf="newUser.get('garnet_code').hasError('required')">
-          Garnet Code is <strong>required</strong>
+        <mat-label>ME Full Delivery Address</mat-label>
+        <input matInput type="text" formControlName="delivery_address" required>
+        <mat-error *ngIf="newUser.get('delivery_address').hasError('required')">
+          ME Full Delivery Address is <strong>required</strong>
         </mat-error>
       </mat-form-field><br>
 
       <mat-form-field class="example-form-field">
-        <mat-label>Current Category</mat-label>
-        <input matInput type="text" formControlName="current_category" required>
-        <mat-error *ngIf="newUser.get('current_category').hasError('required')">
-          Current Category is <strong>required</strong>
+        <mat-label>City</mat-label>
+        <input matInput type="text" formControlName="city" required>
+        <mat-error *ngIf="newUser.get('city').hasError('required')">
+          City is <strong>required</strong>
+        </mat-error>
+      </mat-form-field><br>
+      <mat-form-field class="example-form-field">
+        <mat-label>State</mat-label>
+        <input matInput type="text" formControlName="state" required>
+        <mat-error *ngIf="newUser.get('state').hasError('required')">
+          State is <strong>required</strong>
+        </mat-error>
+      </mat-form-field><br>
+      <mat-form-field class="example-form-field">
+        <mat-label>Pincode</mat-label>
+        <input matInput type="number" formControlName="pincode" required>
+        <mat-error *ngIf="newUser.get('pincode').hasError('required')">
+          Pincode is <strong>required</strong>
         </mat-error>
       </mat-form-field><br>
 
       <mat-form-field class="example-form-field">
-        <mat-label>Mobile Number</mat-label>
-        <input matInput type="text" formControlName="mobile_number" required>
+        <mat-label>ME Mobile Number</mat-label>
+        <input matInput type="number" formControlName="mobile_number" required>
         <mat-error *ngIf="newUser.get('mobile_number').hasError('required')">
           Mobile Number is <strong>required</strong>
         </mat-error>
-      </mat-form-field><br>
-
-      <mat-form-field class="example-form-field">
-        <mat-label>Whatsapp Number</mat-label>
-        <input matInput type="text" formControlName="whatsapp_number" required>
-        <mat-error *ngIf="newUser.get('whatsapp_number').hasError('required')">
-          Whatsapp Number is <strong>required</strong>
-        </mat-error>
-      </mat-form-field><br>
-
-      <!-- <mat-form-field class="example-form-field">
-        <mat-label>Date of Birth</mat-label>
-        <input matInput type="text" formControlName="dob" required>
-        <mat-error *ngIf="newUser.get('dob').hasError('required')">
-          D.O.B. is <strong>required</strong>
-        </mat-error>
-      </mat-form-field><br> -->
-
-      <mat-form-field>
-        <mat-label>Date of Birth</mat-label>
-        <input matInput [matDatepicker]="dob" [max]="maxDate"
-          (dateInput)="addEventFrom('input','dob', $event)"
-          (dateChange)="addEventFrom('change','dob', $event)" [value]="newUser.get('dob').value"
-          autocomplete="off">
-        <mat-datepicker-toggle matSuffix [for]="dob"></mat-datepicker-toggle>
-        <mat-datepicker #dob></mat-datepicker>
-      </mat-form-field><br>
-
-      <mat-form-field>
-        <mat-label>D.O.W.</mat-label>
-        <input matInput [matDatepicker]="dow" [max]="maxDate"
-          (dateInput)="addEventFrom('input','dow', $event)"
-          (dateChange)="addEventFrom('change','dow', $event)" [value]="newUser.get('dow').value"
-          autocomplete="off">
-        <mat-datepicker-toggle matSuffix [for]="dow"></mat-datepicker-toggle>
-        <mat-datepicker #dow></mat-datepicker>
       </mat-form-field><br>
 
     </div>

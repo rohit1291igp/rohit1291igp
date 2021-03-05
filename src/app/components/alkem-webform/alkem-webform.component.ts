@@ -1,6 +1,6 @@
 import { Component, OnInit, NgModule, ViewChild, ChangeDetectorRef, AfterViewChecked } from '@angular/core';
-import { FormControl, FormGroup, FormBuilder, FormArray, FormsModule } from '@angular/forms';
-import { MatDialog, MatPaginator, MatSort, MatTableDataSource, MatDatepickerInputEvent, MatAutocompleteModule, MatIcon, MatSidenavModule, MatTableModule, MatSnackBar, _MatChipListMixinBase } from '@angular/material';
+import { FormControl, FormGroup, FormBuilder, FormArray, FormsModule, Validators } from '@angular/forms';
+import { MatDialog, MatPaginator, MatSort, MatTableDataSource, MatDatepickerInputEvent, MatAutocompleteModule, MatIcon, MatSidenavModule, MatTableModule, MatSnackBar, _MatChipListMixinBase, MatDatepickerInput } from '@angular/material';
 import { AlkemService } from '../../services/alkem.service';
 import { DatePipe, CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
@@ -27,12 +27,17 @@ import { NewEmployeeComponent } from './new-employee/new-employee.component'
 export class AlkemWebformComponent implements OnInit, AfterViewChecked {
   empCode: string;
   doctorsForms: any;
-  doctorsData = [];
+  doctorsData = [
+
+  ];
   mobImageArray: Array<any> = [];
   emp_id: any;
   image: Array<any> = [];
   s3ImageUrlPrefix = "https://s3.amazonaws.com/vendorimageupload/AlkemDoctorImages/";
   emp_name: any;
+  categoryList = ['AZ', 'BZ', 'L1']
+  exsitingDoctorCount: any;
+  maxDate: Date;
 
   constructor(
     public fb: FormBuilder,
@@ -46,7 +51,9 @@ export class AlkemWebformComponent implements OnInit, AfterViewChecked {
   }
 
   ngOnInit() {
-
+    // localStorage.userType = 'alkem';
+    document.getElementById("headerText").innerHTML = "Alkem - My Doctor Campaign";
+    this.maxDate = new Date();
   }
 
   ngAfterViewChecked() {
@@ -60,12 +67,24 @@ export class AlkemWebformComponent implements OnInit, AfterViewChecked {
     });
   }
 
+  addEventFrom(type: string, field: string, event: MatDatepickerInput<Date>, index) {
+    this.doctorsForms.get("tableEntries")["controls"][index].patchValue({
+      [field]: event.value
+    });
+  }
+
   openSnackBar(data) {
     this._snackBar.openFromComponent(NotificationComponent, {
       data: data,
       duration: 5 * 1000,
       panelClass: ['snackbar-background']
     });
+  }
+
+  formatDate(date, format) {
+    const pipe = new DatePipe('en-US');
+    const datefrom = pipe.transform(date, format);
+    return datefrom;
   }
 
   getEmployeeDetails() {
@@ -83,14 +102,16 @@ export class AlkemWebformComponent implements OnInit, AfterViewChecked {
 
       }
       this.emp_id = result.result.id;
-      this.emp_name = result.result.me_name
+      this.emp_name = result.result.me_name;
+      this.exsitingDoctorCount = result.result.exsitingDoctorCount;
       this.doctorsForms.get("tableEntries")['controls'] = [];
-     this.addDoctor();
+      if (result.result.exsitingDoctorCount == 0) { this.addDoctor(); }
+
 
     })
   }
 
-  onImageUpload(event, index) {
+  onImageUpload(event, index, type) {
     console.log(event);
 
     if (event.target.files && event.target.files[0]) {
@@ -109,7 +130,7 @@ export class AlkemWebformComponent implements OnInit, AfterViewChecked {
         .then(
           result => {
             console.log(result);
-            this.doctorsData[index] = result['result']['uploadedFilePath'].s3commonupload[0].slice(this.s3ImageUrlPrefix.length)
+            this.doctorsData[index][type] = result['result']['uploadedFilePath'].s3commonupload[0].slice(this.s3ImageUrlPrefix.length)
           }
         ).catch((err) => {
           this.openSnackBar(err.errorMessage);
@@ -142,29 +163,35 @@ export class AlkemWebformComponent implements OnInit, AfterViewChecked {
   }
 
   addDoctor() {
-    const control = this.fb.group({
-      name: [],
-      specialty: [],
-      mobile_number: [],
-      delivery_address: [],
-      city: [],
-      state: [],
-      pincode: []
-    });
-    (<FormArray>this.doctorsForms.get("tableEntries")).push(control);
-    this.doctorsData.push('');
+    for (let i = 0; i < 3; i++) {
+      const control = this.fb.group({
+        name: ["", Validators.required],
+        specialty: ["", Validators.required],
+        mobile_number: ["", Validators.compose([Validators.required, Validators.minLength(10), Validators.maxLength(10)])],
+        category: ["", Validators.required],
+        garnet_code: ["", Validators.required],
+        dob: [""],
+        pincode: ["", Validators.compose([Validators.required, Validators.minLength(6), Validators.maxLength(6)])],
+      });
+      (<FormArray>this.doctorsForms.get("tableEntries")).push(control);
+      this.doctorsData.push({ solo: '', couple: '', family: '' });
+    }
   }
 
   saveDoctorData() {
     let payload = [];
     let formError = false;
+   
     if (!this.emp_id) {
       this.openSnackBar('Please Enter a Employee Code');
       formError = true;
       return;
     }
+    if (this.doctorsForms.get("tableEntries").value.length != 3) {
+      this.openSnackBar('Please Enter a Employee Code');
+    }
     this.doctorsForms.get("tableEntries").value.forEach((element, index) => {
-      if (!this.doctorsData[index]) {
+      if (!this.doctorsData[index].solo || !this.doctorsData[index].couple || !this.doctorsData[index].family) {
         this.openSnackBar('Please upload all the images.');
         formError = true;
       }
@@ -173,17 +200,22 @@ export class AlkemWebformComponent implements OnInit, AfterViewChecked {
         "name": element.name,
         "specialty": element.specialty,
         "mobile_number": element.mobile_number,
-        "delivery_address": element.delivery_address,
-        "city": element.city,
-        "state": element.state,
+        "garnet_code": element.garnet_code,
+        "DOB": this.formatDate(element.dob, 'yyyy-MM-dd'),
+        "solo_picture": this.doctorsData[index].solo,
+        "couple_picture": this.doctorsData[index].couple,
+        "family_picture": this.doctorsData[index].family,
+        "sales_manager_id": this.emp_id,
+        "category": element.category,
         "pincode": element.pincode,
-        "picture": this.doctorsData[index],
-        "sales_manager_id": this.emp_id
       }
       payload.push(temp)
     });
     if (formError) {
       return
+    }
+    if (!this.doctorsForms.get("tableEntries").valid) {
+      return;
     }
     console.log(payload);
     let reqObj: any = {
@@ -201,8 +233,7 @@ export class AlkemWebformComponent implements OnInit, AfterViewChecked {
         this.openSnackBar('All Doctor Data uploaded successfully');
         this.doctorsData = [];
         this.doctorsForms.get("tableEntries")["controls"] = [];
-        this.addDoctor();
-
+        this.resetPage();
       }
     })
   }
