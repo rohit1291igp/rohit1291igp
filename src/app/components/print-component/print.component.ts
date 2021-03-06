@@ -18,7 +18,7 @@ export class PrintComponent implements OnInit {
     loading = true;
     reqObjData: any;
     printPagination = true;
-    noOfPages = [{pageNo:1, active:false},{pageNo:2, active:false},{pageNo:3, active:false},{pageNo:4, active:false}];
+    noOfPages = [];//[{pageNo:1, active:false},{pageNo:2, active:false},{pageNo:3, active:false},{pageNo:4, active:false}];
     constructor(
         private route: ActivatedRoute,
         private BackendService: BackendService,
@@ -108,6 +108,7 @@ export class PrintComponent implements OnInit {
             }
             //fetch vendorGrpId
             let filterId = localStorage.getItem('vendorGrpId') ? localStorage.getItem('vendorGrpId') : 0;
+
             if (orderDeliveryTime === "future") {
                 reqURL = "pagination/getOrderByStatusDate?responseType=json&scopeId=1&isfuture=true&orderAction=" + dashBoardDataType + "&section=" + section + "&status=" + orderStatus + "&fkassociateId=" + fkAssociateId + "&date=" + spDate + "&filterId=" + filterId + '&sector=' + sector;
             } else {
@@ -125,24 +126,65 @@ export class PrintComponent implements OnInit {
                 payload: {}
             };
             $this.reqObjData = reqObj;
-
-            $this.loadTrayDataApiCallpageCount(1).then((response:any)=>{
+            if ($this.noOfPages && $this.noOfPages.length == 0) {
+                $this.loadTrayDataApiCallpageCount(1, true).then((response: any) => {
                     if (response.error) {
-                    console.log('Error=============>',response);
+                        console.log('Error=============>', response);
 
-                    $this.apierror = response.errorCode;
+                        $this.apierror = response.errorCode;
 
-                    return;
-                }
-                response = response;
-                $this.sidePanelData = response.result ? Array.isArray(response.result) ? response.result : [response.result] : [];
-                $this.cd.detectChanges();
-                resolve($this.sidePanelData)
-            })
+                        return;
+                    }
+                    if (response && response.status == 'Success') {
+                        let orderCount = Number(response.data);
+                        // orderCount = 900;
+                        let count = (orderCount / 500);
+                        if (count) {
+                            if ($this.isFloat(count)) {
+                                count = Number(String(count).split(".")[0]);
+                                count = count + 1;
+                            }
+                            for (let i = 0; i < count; i++) {
+                                $this.noOfPages.push({ pageNo: i + 1, active: false })
+                            }
+                        }
+
+                    }
+                    $this.cd.detectChanges();
+                    $this.loadTrayDataApiCallpageCount(1).then((response: any) => {
+                        if (response.error) {
+                            console.log('Error=============>', response);
+
+                            $this.apierror = response.errorCode;
+
+                            return;
+                        }
+                        response = response;
+                        $this.sidePanelData = response.result ? Array.isArray(response.result) ? response.result : [response.result] : [];
+                        $this.noOfPages[0].active = true;
+                        $this.cd.detectChanges();
+                        resolve($this.sidePanelData)
+                    })
+                })
+                // }else{
+                //     $this.loadTrayDataApiCallpageCount(1).then((response:any)=>{
+                //         if (response.error) {
+                //         console.log('Error=============>',response);
+
+                //         $this.apierror = response.errorCode;
+
+                //         return;
+                //     }
+                //     response = response;
+                //     $this.sidePanelData = response.result ? Array.isArray(response.result) ? response.result : [response.result] : [];
+                //     $this.cd.detectChanges();
+                //     resolve($this.sidePanelData)
+                // })
+            }
         })
         return promise;
     }
-    
+
     print(print_type, orderId, deliveryDate, deliveryTime, all) {
 
         let printContents = "", popupWin;
@@ -165,69 +207,79 @@ export class PrintComponent implements OnInit {
             printContents = printTargetCont.innerHTML;
         }
 
-        setTimeout(()=>{
-          this.printPagination = false;
-          this.cd.detectChanges();
+        setTimeout(() => {
+            this.printPagination = false;
+            this.cd.detectChanges();
             window.print();
         }, 100)
-        
+
     }
 
-    openPrint(){
+    openPrint() {
         this.printPagination = false;
         this.cd.detectChanges();
-            window.print();
+        window.print();
     }
 
     @HostListener("window:afterprint", [])
     onWindowAfterPrint() {
-    //   window.close();
-      console.log('... afterprint', this.printPagination);
-      
+        //   window.close();
+        console.log('... afterprint', this.printPagination);
+
         this.printPagination = true;
         this.cd.detectChanges();
     }
 
-    loadTrayDataApiCallpageCount(pageCount?:any){
+    loadTrayDataApiCallpageCount(pageCount?: any, orderCount?: boolean) {
         var _this = this;
-    
+
         _this.reqObjData.url = _this.reqObjData.url && _this.reqObjData.url.split("handels/")[1] ? _this.reqObjData.url.split("handels/")[1] : _this.reqObjData.url;
-    
+
         _this.reqObjData.url = _this.reqObjData.url.split('&pageNumber=')[0] + `&pageNumber=${pageCount}`;
-        
-        let promise = new Promise ((resolve,reject)=>{
-            _this.BackendService.makeAjax(_this.reqObjData, function(err, response, headers){
-                if(err || response.error) {
+        if (_this.noOfPages && _this.noOfPages.length == 0 && orderCount) {
+            _this.reqObjData.url = _this.reqObjData.url.replace('pagination/getOrderByStatusDate', 'count/getOrderByStatus');
+        } else {
+            _this.reqObjData.url = _this.reqObjData.url.replace('count/getOrderByStatus', 'pagination/getOrderByStatusDate');
+            _this.reqObjData.url += "&printall=" + true;
+        }
+        let promise = new Promise((resolve, reject) => {
+            _this.BackendService.makeAjax(_this.reqObjData, function (err, response, headers) {
+                if (err || response.error) {
                     return resolve(response);
-                }else{
+                } else {
                     return resolve(response);
                 }
-                }); 
+            });
         });
         return promise;
-      }
-      
-    navigatePage(data){
-        
-        var $this = this;
-        $this.noOfPages.forEach((x:any)=> x.active = false);
-        data.active = true;
-        this.cd.detectChanges();
-        // let ele = e && e.target && e.target.closest('li') && e.target.closest('li');
-        // ele.cla
-        // let pageNo = ele.innerText;
-        this.loadTrayDataApiCallpageCount(data.pageNo).then((response:any)=>{
-            if (response.error) {
-            console.log('Error=============>',response);
+    }
 
-            $this.apierror = response.errorCode;
+    navigatePage(data) {
+        if (!data.active) {
+            var $this = this;
+            $this.noOfPages.forEach((x: any) => x.active = false);
+            data.active = true;
+            $this.loading = true;
+            this.cd.detectChanges();
+            // let ele = e && e.target && e.target.closest('li') && e.target.closest('li');
+            // ele.cla
+            // let pageNo = ele.innerText;
+            this.loadTrayDataApiCallpageCount(data.pageNo, false).then((response: any) => {
+                if (response.error) {
+                    console.log('Error=============>', response);
 
-            return;
+                    $this.apierror = response.errorCode;
+
+                    return;
+                }
+                response = response;
+                $this.sidePanelData = response.result ? Array.isArray(response.result) ? response.result : [response.result] : [];
+                $this.loading = false;
+                $this.cd.detectChanges();
+            })
         }
-        response = response;
-        $this.sidePanelData = response.result ? Array.isArray(response.result) ? response.result : [response.result] : [];
-        
-        $this.cd.detectChanges();
-    })
+    }
+    isFloat(n) {
+        return Number(n) === n && n % 1 !== 0;
     }
 }
