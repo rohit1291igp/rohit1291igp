@@ -119,23 +119,50 @@ export class AlkemWebformComponent implements OnInit, AfterViewChecked {
       //   this.openSnackBar('File name should be of maximum 25 characters long with no symbols');
       //   return;
       // }
+      if ((event.target.files[0].size / (1024 * 1024)) < 1) {
+        this.openSnackBar('Image size should be minimum 1MB');
+        event.target.value = '';
+        return;
+      }
       this.image[index] = event.target.files[0];
       var reader = new FileReader();
-      reader.readAsDataURL(event.target.files[0]); // read file as data url
+      // reader.readAsDataURL(event.target.files[0]); // read file as data url
 
       let deskformData = new FormData();
 
-      deskformData.append(this.image[index].name.slice(0, -4), this.image[index]);
-      this.uploadImageToS3(deskformData, this.image[index].name.slice(0, -4))
-        .then(
-          result => {
-            console.log(result);
-            this.doctorsData[index][type] = result['result']['uploadedFilePath'].s3commonupload[0].slice(this.s3ImageUrlPrefix.length)
+      let img = new Image();
+
+      img.src = window.URL.createObjectURL(event.target.files[0]);
+      reader.readAsDataURL(event.target.files[0]);
+      reader.onload = () => {
+        setTimeout(() => {
+          const width = img.naturalWidth;
+          const height = img.naturalHeight;
+
+          window.URL.revokeObjectURL(img.src);
+          console.log(width + '*' + height);
+          if (width < 1400 && height < 1400) {
+            this.openSnackBar('Image should minimum be 1400 x 1400 size');
+            event.target.value = '';
+            return;
+            // form.reset();
+          } else {
+            this.image[index] = reader.result;
+            deskformData.append(this.image[index].name.slice(0, -4), this.image[index]);
+            this.uploadImageToS3(deskformData, this.image[index].name.slice(0, -4))
+              .then(
+                result => {
+                  console.log(result);
+                  this.doctorsData[index][type] = result['result']['uploadedFilePath'].s3commonupload[0].slice(this.s3ImageUrlPrefix.length)
+                }
+              ).catch((err) => {
+                this.openSnackBar(err.errorMessage);
+                console.log(err);
+              });;
           }
-        ).catch((err) => {
-          this.openSnackBar(err.errorMessage);
-          console.log(err);
-        });;
+        }, 2000);
+      }
+
     }
   }
 
@@ -171,7 +198,7 @@ export class AlkemWebformComponent implements OnInit, AfterViewChecked {
         category: ["", Validators.required],
         garnet_code: ["", Validators.required],
         dob: [""],
-        pincode: ["", Validators.compose([Validators.required, Validators.minLength(6), Validators.maxLength(6)])],
+        // pincode: ["", Validators.compose([Validators.required, Validators.minLength(6), Validators.maxLength(6)])],
       });
       (<FormArray>this.doctorsForms.get("tableEntries")).push(control);
       this.doctorsData.push({ solo: '', couple: '', family: '' });
@@ -181,7 +208,7 @@ export class AlkemWebformComponent implements OnInit, AfterViewChecked {
   saveDoctorData() {
     let payload = [];
     let formError = false;
-   
+
     if (!this.emp_id) {
       this.openSnackBar('Please Enter a Employee Code');
       formError = true;
@@ -207,7 +234,7 @@ export class AlkemWebformComponent implements OnInit, AfterViewChecked {
         "family_picture": this.doctorsData[index].family,
         "sales_manager_id": this.emp_id,
         "category": element.category,
-        "pincode": element.pincode,
+        "pincode": 'abc',
       }
       payload.push(temp)
     });
