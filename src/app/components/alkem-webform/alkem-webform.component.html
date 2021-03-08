@@ -19,7 +19,10 @@
       Not a registered user?<a class="registerBtn" (click)="registerEmp()"> Register</a>
     </div>
   </div>
-  <form [formGroup]="doctorsForms">
+  <div *ngIf="exsitingDoctorCount == 3" class="col-md-12 noForm">
+    {{emp_name}} has already uploaded details for 3 Doctors.
+  </div>
+  <form [formGroup]="doctorsForms" (ngSubmit)="saveDoctorData()">
     <div *ngFor="let control of doctorsForms.get('tableEntries')['controls'] , let index = index"
       formArrayName="tableEntries">
       <div class="col-md-12 topBorder" [formGroupName]="index">
@@ -27,8 +30,13 @@
         <h4>Enter Doctors Details:</h4>
         <div class="col-md-4">
           <mat-form-field class="example-form-field">
-            <mat-label>Name</mat-label>
+            <mat-label>Doctor Name</mat-label>
             <input matInput type="text" formControlName="name" required>
+          </mat-form-field><br>
+
+          <mat-form-field class="example-form-field">
+            <mat-label>Garnet Code</mat-label>
+            <input matInput type="text" formControlName="garnet_code" required>
           </mat-form-field><br>
 
           <mat-form-field class="example-form-field">
@@ -36,43 +44,56 @@
             <input matInput type="text" formControlName="specialty" required>
           </mat-form-field><br>
 
+          <mat-form-field class="filterElement">
+            <mat-label>Category</mat-label>
+            <mat-select formControlName="category">
+              <mat-option *ngFor="let option of categoryList" [value]="option">{{option|uppercase}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+
+
+        </div>
+        <div class="col-md-4">
+
           <mat-form-field class="example-form-field">
             <mat-label>Mobile Number</mat-label>
             <input matInput type="text" formControlName="mobile_number" required>
           </mat-form-field><br>
 
-          <mat-form-field class="example-form-field">
-            <mat-label>Delivery Address</mat-label>
-            <input matInput type="text" formControlName="delivery_address" required>
-          </mat-form-field><br>
-        </div>
-        <div class="col-md-4">
-          <mat-form-field class="example-form-field">
-            <mat-label>City</mat-label>
-            <input matInput type="text" formControlName="city" required>
-          </mat-form-field><br>
-
-          <mat-form-field class="example-form-field">
-            <mat-label>State</mat-label>
-            <input matInput type="text" formControlName="state" required>
-          </mat-form-field><br>
-
-          <mat-form-field class="example-form-field">
+          <!-- <mat-form-field class="example-form-field">
             <mat-label>Pincode</mat-label>
             <input matInput type="text" formControlName="pincode" required>
+          </mat-form-field><br> -->
+
+          <mat-form-field>
+            <mat-label>Date of Birth</mat-label>
+            <input matInput [matDatepicker]="dob" [max]="maxDate"
+              (dateInput)="addEventFrom('input','dob', $event,index)"
+              (dateChange)="addEventFrom('change','dob', $event,index)" [value]="control.get('dob').value"
+              autocomplete="off">
+            <mat-datepicker-toggle matSuffix [for]="dob"></mat-datepicker-toggle>
+            <mat-datepicker #dob></mat-datepicker>
           </mat-form-field><br>
 
-          <input type="file" id="deskImagefile" (change)="onImageUpload($event,index)" accept=" image/*" />
+          <div style="margin: 5px;">Solo Picture : <input type="file" (change)="onImageUpload($event,index,'solo')"
+              accept=" image/*" style="display:inline" /></div>
+          <div style="margin: 5px;">Couple Picture : <input type="file" (change)="onImageUpload($event,index,'couple')"
+              accept=" image/*" style="display:inline" /></div>
+          <div style="margin: 5px;">Family Picture : <input type="file" (change)="onImageUpload($event,index,'family')"
+              accept=" image/*" style="display:inline" /></div>
+          <div style="margin: 5px;">(Note: Image size should be minimum 1400px*1400px and 1 MB)</div>
         </div>
         <div class="col-md-4" *ngIf="doctorsData[index]">
-          <img src="{{s3ImageUrlPrefix + doctorsData[index] }}" style="max-width: 80%;max-height: 80%">
+          <!-- <img src="{{s3ImageUrlPrefix + doctorsData[index] }}" style="max-width: 80%;max-height: 80%"> -->
         </div>
       </div>
-      <button mat-raised-button style="margin:20px" *ngIf="doctorsForms.get('tableEntries')['controls'].length > 1" (click)="removeDoctor(index)">Remove Doctor</button>
+      <!-- <button mat-raised-button style="margin:20px" *ngIf="doctorsForms.get('tableEntries')['controls'].length > 1" (click)="removeDoctor(index)">Remove Doctor</button> -->
     </div>
-    <div class="col-md-12"  *ngIf="doctorsForms.get('tableEntries')['controls'].length > 0">
-      <button mat-raised-button (click)="addDoctor()">Add More Doctor</button>
-      <button mat-raised-button style="margin:auto" (click)='saveDoctorData()'> Save Doctor Data</button>
+    <div class="col-md-12" *ngIf="doctorsForms.get('tableEntries')['controls'].length > 0">
+      <!-- <button mat-raised-button (click)="addDoctor()">Add More Doctor</button> -->
+      <button mat-raised-button style="margin:auto" type="submit"> Save Doctor Data</button>
       <button mat-raised-button (click)="resetPage()"> Clear </button>
     </div>
   </form>

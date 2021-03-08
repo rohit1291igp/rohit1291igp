@@ -43,7 +43,8 @@ export class PendingOrderComponent implements OnInit {
     private fb: FormBuilder,
     private BackendService: BackendService,
     private cdRef: ChangeDetectorRef,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private _snackBar: MatSnackBar
   ) { }
 
   ngOnInit() {
@@ -123,13 +124,21 @@ export class PendingOrderComponent implements OnInit {
       }
       _this.dataSource = new MatTableDataSource(response.tableData);
       _this.tableHeaders = response.tableHeaders;
-      if(this.statementForm.value.transactionType == 'pending') _this.tableHeaders.push("Actions");
-      if(this.statementForm.value.transactionType == 'pending') _this.tableHeaders.push("Order ID");
+      if(_this.statementForm.value.transactionType == 'pending') _this.tableHeaders.push("Actions");
+      // if(_this.statementForm.value.transactionType == 'pending') _this.tableHeaders.push("Order ID");
       setTimeout(() => {
         _this.dataSource.paginator = _this.paginator;
         _this.dataSource.sort = _this.sort;
       }, 100)
     })
+  }
+
+  openSnackBar(data) {
+    this._snackBar.openFromComponent(NotificationComponent, {
+      data: data,
+      duration: 5 * 1000,
+      panelClass: ['snackbar-background']
+    });
   }
 
   applyFilter(event: Event) {
@@ -153,7 +162,8 @@ export class PendingOrderComponent implements OnInit {
     reqObj.payload['Status'] = approval;
     console.log("payload object", data)
     this.BackendService.makeAjax(reqObj, function (err, response, headers) {
-
+      _this.openSnackBar(response.errorMessage);
+      _this.getStatement();
     })
 
   }

@@ -32,12 +32,11 @@ export class NewEmployeeComponent implements OnInit {
       dsm_hq: ["", Validators.required],
       abm_hq: ["", Validators.required],
       hq_name: ["", Validators.required],
-      garnet_code: ["", Validators.required],
-      current_category: ["", Validators.required],
-      mobile_number: ["", Validators.required],
-      whatsapp_number: ["", Validators.required],
-      dob: ["", Validators.required],
-      dow: ["", Validators.required],
+      mobile_number: ["", Validators.compose([Validators.required, Validators.minLength(10), Validators.maxLength(10)])],
+      state: ["", Validators.required],
+      city: ["", Validators.required],
+      pincode: ["", Validators.compose([Validators.required, Validators.minLength(6), Validators.maxLength(6)])],
+      delivery_address: ["", Validators.required],
     });
     this.maxDate = new Date();
   }
@@ -48,7 +47,7 @@ export class NewEmployeeComponent implements OnInit {
     });
   }
 
-  
+
   openSnackBar(data) {
     this._snackBar.openFromComponent(NotificationComponent, {
       data: data,
@@ -61,6 +60,9 @@ export class NewEmployeeComponent implements OnInit {
   // ["",Validators.compose([Validators.required,Validators.email])],
 
   onSubmit(form) {
+    if (!form.valid) {
+      return;
+    }
     let formValue = form.value;
     let payload =
     {
@@ -71,14 +73,14 @@ export class NewEmployeeComponent implements OnInit {
       "region": formValue.region,
       "dsm_hq": formValue.dsm_hq,
       "abm_hq": formValue.abm_hq,
-      "hq_name": formValue.hq_name,
-      "garnet_code": formValue.garnet_code,
-      "current_category": formValue.current_category,
+      "me_hq_name": formValue.hq_name,
       "mobile_number": formValue.mobile_number,
-      "whatsapp_number": formValue.whatsapp_number,
-      "DOB": this.formatDate(formValue.dob,'yyyy-mm-dd'),
-      "DOW": this.formatDate(formValue.dow,'yyyy-mm-dd')
+      "state": formValue.state,
+      "city": formValue.city,
+      "pincode": formValue.pincode,
+      "me_delivery_address": formValue.delivery_address,
     }
+
     console.log(payload);
     let reqObj: any = {
       url: 'CreateSalesManager?',
@@ -86,10 +88,10 @@ export class NewEmployeeComponent implements OnInit {
       payload: payload
     };
     this.AlkemService.getAlkemService(reqObj).subscribe(
-      result=>{
+      result => {
         console.log(result);
         this.openSnackBar(result.errorMessage);
-        if(!result.error){
+        if (!result.error) {
           this.dialogRef.close();
         }
       }
