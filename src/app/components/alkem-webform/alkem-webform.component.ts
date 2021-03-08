@@ -38,6 +38,7 @@ export class AlkemWebformComponent implements OnInit, AfterViewChecked {
   categoryList = ['AZ', 'BZ', 'L1']
   exsitingDoctorCount: any;
   maxDate: Date;
+  imageUploaderStatus = [];
 
   constructor(
     public fb: FormBuilder,
@@ -113,6 +114,7 @@ export class AlkemWebformComponent implements OnInit, AfterViewChecked {
 
   onImageUpload(event, index, type) {
     console.log(event);
+    this.imageUploaderStatus[index][type] = true;
 
     if (event.target.files && event.target.files[0]) {
       // if (!RegExp(/^[a-zA-Z0-9\ ]{0,25}$/g).test(event.target.files[0].name.split('.').slice(0, -1).join('.'))) {
@@ -122,6 +124,7 @@ export class AlkemWebformComponent implements OnInit, AfterViewChecked {
       if ((event.target.files[0].size / (1024 * 1024)) < 1) {
         this.openSnackBar('Image size should be minimum 1MB');
         event.target.value = '';
+        this.imageUploaderStatus[index][type] = false;
         return;
       }
       this.image[index] = event.target.files[0];
@@ -144,18 +147,22 @@ export class AlkemWebformComponent implements OnInit, AfterViewChecked {
           if (width < 1400 && height < 1400) {
             this.openSnackBar('Image should minimum be 1400 x 1400 size');
             event.target.value = '';
+            this.imageUploaderStatus[index][type] = false;
             return;
             // form.reset();
           } else {
             // this.image[index] = reader.result;
             deskformData.append(this.image[index].name.substr(0, this.image[index].name.lastIndexOf('.')), this.image[index]);
+
             this.uploadImageToS3(deskformData, this.image[index].name.substr(0, this.image[index].name.lastIndexOf('.')))
               .then(
                 result => {
+                  this.imageUploaderStatus[index][type] = false;
                   console.log(result);
                   this.doctorsData[index][type] = result['result']['uploadedFilePath'].s3commonupload[0].slice(this.s3ImageUrlPrefix.length)
                 }
               ).catch((err) => {
+                this.imageUploaderStatus[index][type] = false;
                 this.openSnackBar(err.errorMessage);
                 console.log(err);
               });;
@@ -202,6 +209,7 @@ export class AlkemWebformComponent implements OnInit, AfterViewChecked {
       });
       (<FormArray>this.doctorsForms.get("tableEntries")).push(control);
       this.doctorsData.push({ solo: '', couple: '', family: '' });
+      this.imageUploaderStatus.push({ solo: false, couple: false, family: false });
     }
   }
 
