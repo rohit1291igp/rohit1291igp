@@ -148,8 +148,8 @@ export class AlkemWebformComponent implements OnInit, AfterViewChecked {
             // form.reset();
           } else {
             this.image[index] = reader.result;
-            deskformData.append(this.image[index].name.slice(0, -4), this.image[index]);
-            this.uploadImageToS3(deskformData, this.image[index].name.slice(0, -4))
+            deskformData.append(this.image[index].slice(0, -4), this.image[index]);
+            this.uploadImageToS3(deskformData, this.image[index].slice(0, -4))
               .then(
                 result => {
                   console.log(result);
@@ -233,8 +233,7 @@ export class AlkemWebformComponent implements OnInit, AfterViewChecked {
         "couple_picture": this.doctorsData[index].couple,
         "family_picture": this.doctorsData[index].family,
         "sales_manager_id": this.emp_id,
-        "category": element.category,
-        "pincode": 'abc',
+        "category": element.category
       }
       payload.push(temp)
     });
