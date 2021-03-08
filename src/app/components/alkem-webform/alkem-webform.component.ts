@@ -147,9 +147,9 @@ export class AlkemWebformComponent implements OnInit, AfterViewChecked {
             return;
             // form.reset();
           } else {
-            this.image[index] = reader.result;
-            deskformData.append(this.image[index].slice(0, -4), this.image[index]);
-            this.uploadImageToS3(deskformData, this.image[index].slice(0, -4))
+            // this.image[index] = reader.result;
+            deskformData.append(this.image[index].name.substr(0, this.image[index].name.lastIndexOf('.')), this.image[index]);
+            this.uploadImageToS3(deskformData, this.image[index].name.substr(0, this.image[index].name.lastIndexOf('.')))
               .then(
                 result => {
                   console.log(result);
