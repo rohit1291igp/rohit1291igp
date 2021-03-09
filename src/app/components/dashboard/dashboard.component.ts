@@ -65,7 +65,7 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit() {
     // var _this = this;
-    if (localStorage.fkAssociateId != 72 && environment.userType !== 'blogger') {
+    if (environment.userType == 'vendor' || environment.userType == 'hdextnp') {
       this.getSectorList().then(response => {
       
       this.sectors = response;
