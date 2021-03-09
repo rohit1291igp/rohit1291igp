@@ -76,7 +76,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         this.otpModel = '';
 
         if (this.cookieService.getCookie('currentUserToken') || localStorage.getItem('currentUser')) {
-            this.router.navigate(['/dashboard']);
+            this.router.navigate(['/new-dashboard']);
         }
         this.whitelabelStyle = localStorage.getItem('whitelabelDetails') ? JSON.parse(localStorage.getItem('whitelabelDetails')) : null;
     }
