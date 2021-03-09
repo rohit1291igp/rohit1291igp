@@ -40,7 +40,6 @@ import { OrderStockComponent } from './components/order-stocks/order-stock.compo
 import { DownloadStockedComponentProduct, ProductReportComponent } from './components/product-report/product-report.component';
 import { DownloadStockedComponent, editComponent } from './components/reports/reports.component';
 import { SelectItemForDelivered } from './components/select-item/select-item.component';
-import { UploadExcelComponent } from './components/upload-excel/upload-excel.component';
 import { CapitalizePipeModule } from './customPipes/capitalze.pipe';
 import { DateFormatterPipeModule } from './customPipes/date-formatter';
 import { ObjectKeyValuePipe } from './customPipes/object-key-value.pipe';
@@ -93,7 +92,6 @@ export function init_app(appLoadService: AppLoadService) {
     FooterComponent,
     Time12Pipe,
     ObjectKeyValuePipe,
-    UploadExcelComponent,
     BlogCreateComponent,
     BlogListComponent,
     BlogViewComponent,
@@ -205,7 +203,7 @@ export function init_app(appLoadService: AppLoadService) {
     AlkemService
     // {provide: LocationStrategy, useClass: PathLocationStrategy}
   ],
-  entryComponents: [UploadExcelComponent, NotificationComponent, ImgPreviewComponent, SelectItemForDelivered, OrderStockComponent, editComponent, DownloadStockedComponent, DownloadStockedComponentProduct,NewEmployeeComponent],
+  entryComponents: [NotificationComponent, ImgPreviewComponent, SelectItemForDelivered, OrderStockComponent, editComponent, DownloadStockedComponent, DownloadStockedComponentProduct,NewEmployeeComponent],
   bootstrap: [AppComponent],
   exports: [RouterModule]
 })

@@ -66,7 +66,7 @@ export class DashboardService {
         private router: Router
         ) { 
             let userType = localStorage.getItem('userType');
-            const userTypeList = ['admin', 'vendor', 'warehouse', 'egv_admin', 'parent_manager','parent_executive', 'manager', 'executive', 'marketing', 'microsite', "microsite-zeapl", 'hdextnp'] as any;
+            const userTypeList = ['admin', 'vendor', 'warehouse', 'egv_admin', 'parent_manager','parent_executive', 'manager', 'executive', 'marketing', 'microsite', "microsite-zeapl", 'hdextnp', 'root'] as any;
 
             if(userTypeList.includes(userType)){
                 if(location.href && location.href.includes('new-dashboard')){

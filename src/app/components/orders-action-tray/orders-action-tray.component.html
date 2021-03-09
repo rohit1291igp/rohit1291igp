@@ -993,7 +993,7 @@
                                 <div class="component-quantity center-align">x {{prodComponent.quantity | number | replace}}</div>
                                 <div class="component-name center-align">{{prodComponent.componentName}} </div>
                                 <div class="price-display" *ngIf="env.userType!='hdextnp' && prodComponent.componentPrice && prodComponent.componentPrice !== 'N/A' && prodComponent.componentName !== 'Adjustment' " style="margin-top: 6px; font-size: 0.80em;">{{prodComponent.componentPrice | number | replace}}x{{prodComponent.quantity | number}}={{prodComponent.componentPrice  * prodComponent.quantity}}</div>
-                                <div class="price-display" *ngIf=" env.userType!='hdextnp' && prodComponent.componentPrice && prodComponent.componentPrice !== 'N/A' && prodComponent.componentName === 'Adjustment'" style="margin-top: 6px; font-size: 0.80em;">Rs. {{prodComponent.componentPrice | number | replace}}</div>
+                                <div class="price-display" *ngIf="env.userType!='hdextnp' && prodComponent.componentPrice && prodComponent.componentPrice !== 'N/A' && prodComponent.componentName === 'Adjustment'" style="margin-top: 6px; font-size: 0.80em;">Rs. {{prodComponent.componentPrice | number | replace}}</div>
                               </div>
                               <div class="table-inline-display plus-sign" *ngIf="(i+1) !== orderProduct.componentList.length">
                                 <div class="table-cell-display v-align-middle">+</div>
@@ -1006,17 +1006,17 @@
 
                     <div *ngIf="env.userType!='hdextnp'" class="row">
                         <div class="col-md-4 pull-left text-bold" [ngClass]="{'no-padding m-b-1' : isMobile}">
-                            <div >Net Product Price  <span style="margin-left:0.1em;">
+                            <div>Net Product Price  <span style="margin-left:0.1em;">
                                 <span class="theme-red rightAlignrdNumber" *ngIf="order.vendorOrderTotal" [style.width]="(order.vendorOrderTotal).toString().length < 4 ? '3.5em': (order.vendorOrderTotal).toString().length+'em' ">Rs. <span class="pull-right">{{order.orderNetProductPrice | number : '2.0-0' | replace}}</span></span></span>
                             </div>
                             <div style="margin-top:0.5em;">Delivery Charges <span style="margin-left:0.5em;">  <span class="theme-red rightAlignrdNumber" *ngIf="order.vendorOrderTotal" [style.width]="(order.vendorOrderTotal).toString().length < 4 ? '3.5em': (order.vendorOrderTotal).toString().length+'em' ">  Rs. <span class="pull-right">{{order.vendorDeliveryCharge | number : '2.0-0' | replace}}</span></span></span></div>
                             <div class="" style="margin-top:0.5em;">Total Order Value <span style="margin-left:0.5em;">  <span class="theme-red rightAlignrdNumber" *ngIf="order.vendorOrderTotal" [style.width]="(order.vendorOrderTotal).toString().length < 4 ? '3.5em': (order.vendorOrderTotal).toString().length+'em' ">Rs. <span class="pull-right">{{order.vendorOrderTotal | number : '2.0-0' | replace}}</span></span></span></div>
+                            <!--<div class="" style="margin-top:0.5em;">Price Adjustment <span style="margin-left:0;"> - <span class="theme-red">Rs. {{order.priceAdjustment | number : '2.0-0'}}</span></span></div>-->
                         </div>
                         <div class="col-md-4">&nbsp;</div>
                         <div class="col-md-4 text-bold">
                         </div>
                     </div>
-                            <!--<div class="" style="margin-top:0.5em;">Price Adjustment <span style="margin-left:0;"> - <span class="theme-red">Rs. {{order.priceAdjustment | number : '2.0-0'}}</span></span></div>-->
 
                     <div class="orderLogContInner"  [ngClass]="{'slideropen': order.orderLogFlag, 'sliderclosed' : !order.orderLogFlag}" >
                         <div class="pull-right logClosebtn" (click)="orderLog($event, false, orderIndex)"> × </div>
@@ -1296,4 +1296,3 @@
   </div>
 
 </div>
-

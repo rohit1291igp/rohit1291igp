@@ -279,9 +279,10 @@ export class DashboardComponent implements OnInit {
 
   getSectorList() {
     let reqObj = {
-      url: `getSectorListForVendor?fkAssociateId=` + localStorage.fkAssociateId,
+      url: this.isAdmin ? `admin/handels/getSectorListForVendor?fkAssociateId=` + localStorage.fkAssociateId : `handels/getSectorListForVendor?fkAssociateId=` + localStorage.fkAssociateId,
       method: "get"
     };
+
     return new Promise((resolve, reject) => {
       this.BackendService.makeAjax(reqObj, function (err, response, headers) {
         
