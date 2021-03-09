@@ -169,7 +169,7 @@ export class UtilityService {
         var _this=this, userType = environment.userType;
         for (var i in _this.router.config) {
             if (userType ==='root' && _this.router.config[i].path == "dashboard") {
-                _this.router.config[i].component = UploadExcelComponent;
+                // _this.router.config[i].component = UploadExcelComponent;
                 break;
             }
         }
