@@ -818,7 +818,7 @@ export class DashboardService {
             
             if(vendorGroupId){
                 reqObj = {
-                    url : apiPath+"?responseType=json&scopeId=1&fkAssociateId="+fkAssociateId+"&specificDate="+specificDate+"&filterId="+vendorGroupId+"&sector="+sector+"&redisFlag=1",
+                    url : apiPath+"?responseType=json&scopeId=1&fkAssociateId="+fkAssociateId+"&specificDate="+specificDate+"&filterId="+vendorGroupId+"&sector="+sector+"&redisFlag=0",
                     method : "get",
                     payload : {}
                 };
@@ -827,7 +827,7 @@ export class DashboardService {
 
                 reqObj = {
                     //url : "?responseType=json&scopeId=1&fkAssociateId="+fkAssociateId+"&specificDate="+specificDate+"&method=igp.vendor.getVendorCountDetail",
-                    url : apiPath+"?responseType=json&scopeId=1&fkAssociateId="+fkAssociateId+"&specificDate="+specificDate+"&sector="+sector+"&redisFlag=1",
+                    url : apiPath+"?responseType=json&scopeId=1&fkAssociateId="+fkAssociateId+"&specificDate="+specificDate+"&sector="+sector+"&redisFlag=0",
                     method : "get",
                     payload : {}
                 };
