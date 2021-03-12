@@ -2124,6 +2124,8 @@ getDeliveryBoyList(){
                     phone:_this.reportAddAction.reportAddActionModel.phone,
                     vendorType:_this.reportAddAction.reportAddActionModel.vendorType,
                     vendorCity:_this.reportAddAction.reportAddActionModel.vendorCity,
+                    gstNo:_this.reportAddAction.reportAddActionModel.gstNo,
+                    fssai:_this.reportAddAction.reportAddActionModel.fssai,
                 };
                 break;
 
