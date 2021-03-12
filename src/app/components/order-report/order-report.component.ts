@@ -84,9 +84,15 @@ export class OrderReportComponent implements OnInit {
         return
       }
       console.log('sidePanel Response --->', _reportData);
-      _this.dataSource = new MatTableDataSource(_reportData.tableData);
+      let tableData = _reportData.tableData;
+      for (let i = 1; i < tableData.length; i++) {
+        if (tableData[i]["Order_No"] == tableData[i - 1]["Order_No"]) {
+          tableData[i]['Discount'] = '0.00'
+        }
+      }
+      _this.dataSource = new MatTableDataSource(tableData);
       _this.tableHeaders = _reportData.tableHeaders;
-      if(environment.userType == 'admin') _this.tableHeaders.push('Discount');
+      if (environment.userType == 'admin') _this.tableHeaders.push('Discount');
       if (environment.userType == 'hdextnp') _this.tableHeaders.splice(_this.tableHeaders.indexOf('Amount'), 1)
       setTimeout(() => {
         _this.dataSource.paginator = _this.paginator;
@@ -181,8 +187,15 @@ export class OrderReportComponent implements OnInit {
         return
       }
       console.log('sidePanel Response --->', _reportData);
-      _this.dataSource = new MatTableDataSource(_reportData.tableData);
+      let tableData = _reportData.tableData;
+      for (let i = 1; i < tableData.length; i++) {
+        if (tableData[i]["Order_No"] == tableData[i - 1]["Order_No"]) {
+          tableData[i]['Discount'] = '0.00'
+        }
+      }
+      _this.dataSource = new MatTableDataSource(tableData);
       _this.tableHeaders = _reportData.tableHeaders;
+      if (environment.userType == 'admin') _this.tableHeaders.push('Discount');
       if (environment.userType == 'hdextnp') _this.tableHeaders.splice(_this.tableHeaders.indexOf('Amount'), 1)
       setTimeout(() => {
         _this.dataSource.paginator = _this.paginator;
@@ -246,11 +259,19 @@ export class OrderReportComponent implements OnInit {
       }
 
       $this.BackendService.makeAjax(downreqObj, function (error, _reportData) {
+        let tableData = _reportData.tableData;
+        for (let i = 1; i < _reportData.tableData.length; i++) {
+          if (_reportData.tableData[i]["Order_No"] == _reportData.tableData[i - 1]["Order_No"]) {
+            _reportData.tableData[i]['Discount'] = '0.00'
+          }
+        }
+        // _this.dataSource = new MatTableDataSource(tableData);
         $this.dowloadingSummary = false;
         let headers = Object.keys(_reportData.tableData[0]).map(m => m.charAt(0).toUpperCase() + m.slice(1))
         // _this.tableHeaders = _reportData.tableHeaders;
         headers.splice(headers.indexOf('Order_Product_Id'), 1)
         if (environment.userType == 'hdextnp') headers.splice(headers.indexOf('Amount'), 1)
+        if (environment.userType == 'vendor') headers.splice(headers.indexOf('Discount'), 1)
         var options = {
           showLabels: true,
           showTitle: false,
@@ -270,7 +291,7 @@ export class OrderReportComponent implements OnInit {
               if (!(environment.userType == 'hdextnp' && k == "Amount"))
                 if (k != 'Order_Product_Id') temp[k] = _reportData.tableData[pi][k];
             }
-            
+
             reportDownloadData.push(temp);
             if (pi == (_reportData.tableData.length - 1)) {
               resolve(reportDownloadData);
@@ -482,7 +503,14 @@ export class OrderReportComponent implements OnInit {
           return;
         }
         console.log('searchReportSubmit _reportData=============>', _reportData);
-        _this.dataSource.data = _this.dataSource.data.concat(_reportData.tableData);
+        let tableData = _reportData.tableData;
+        for (let i = 1; i < tableData.length; i++) {
+          if (tableData[i]["Order_No"] == tableData[i - 1]["Order_No"]) {
+            tableData[i]['Discount'] = '0.00'
+          }
+        }
+        // _this.dataSource = new MatTableDataSource(tableData);
+        _this.dataSource.data = _this.dataSource.data.concat(tableData);
         // _this.showMoreTableData(e);
       });
     }
