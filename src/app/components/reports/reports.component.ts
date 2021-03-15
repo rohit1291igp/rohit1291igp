@@ -1,4 +1,4 @@
-import { animate, Component, ElementRef, HostListener, Inject, OnInit, sequence, style, transition, trigger, ViewChild, Output, EventEmitter } from '@angular/core';
+import { animate, Component, ElementRef, HostListener, Inject, OnInit, sequence, style, transition, trigger, ViewChild, Output, EventEmitter, AfterViewChecked, AfterViewInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { Headers, RequestOptions } from "@angular/http";
 import { MatDialog, MatDialogRef, MatSnackBar, MAT_DIALOG_DATA, MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
@@ -156,6 +156,8 @@ export class ReportsComponent implements OnInit{
       ],
       "tableDataAction" : []
   };
+
+  
   reportLabelState:any={};
   columnFilterList:any={};
   columnSearchObj:any={
@@ -2122,6 +2124,8 @@ getDeliveryBoyList(){
                     phone:_this.reportAddAction.reportAddActionModel.phone,
                     vendorType:_this.reportAddAction.reportAddActionModel.vendorType,
                     vendorCity:_this.reportAddAction.reportAddActionModel.vendorCity,
+                    gstNo:_this.reportAddAction.reportAddActionModel.gstNo,
+                    fssai:_this.reportAddAction.reportAddActionModel.fssai,
                 };
                 break;
 
