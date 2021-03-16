@@ -209,6 +209,8 @@ export class PrintComponent implements OnInit {
 
         setTimeout(() => {
             this.printPagination = false;
+            let ele = document.getElementsByTagName("mat-drawer-container") as any;
+            ele[0].style.paddingTop = '0em';
             this.cd.detectChanges();
             window.print();
         }, 100)
@@ -216,6 +218,8 @@ export class PrintComponent implements OnInit {
     }
 
     openPrint() {
+        let ele = document.getElementsByTagName("mat-drawer-container") as any;
+        ele[0].style.paddingTop = '0em';
         this.printPagination = false;
         this.cd.detectChanges();
         window.print();
@@ -225,7 +229,8 @@ export class PrintComponent implements OnInit {
     onWindowAfterPrint() {
         //   window.close();
         console.log('... afterprint', this.printPagination);
-
+        let ele = document.getElementsByTagName("mat-drawer-container") as any;
+        ele[0].style.paddingTop = '2em';
         this.printPagination = true;
         this.cd.detectChanges();
     }
