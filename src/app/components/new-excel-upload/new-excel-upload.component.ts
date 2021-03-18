@@ -1,6 +1,6 @@
 import { Component, ElementRef, HostListener, OnInit } from '@angular/core';
 import { Headers, RequestOptions } from '@angular/http';
-//import { UtilityService } from '../../services/utility.service';
+import { UtilityService } from '../../services/utility.service';
 import { environment } from '../../../environments/environment';
 import { BackendService } from '../../services/backend.service';
 
@@ -17,14 +17,14 @@ export class NewExcelUploadComponent implements OnInit {
     fileOversizeValidation: false,
     emptyFileValidation: false,
     uploadSuccessFlag: false,
-    wrongFileFormat:false
+    wrongFileFormat: false
   };
 
   _data = {
     uploadFileName: '',
     uploadErrorList: [],
     sentCount: 0,
-    notSentCount : 0,
+    notSentCount: 0,
     uploadErrorCount: {
       correct: '',
       fail: ''
@@ -35,7 +35,7 @@ export class NewExcelUploadComponent implements OnInit {
   constructor(
     private _elementRef: ElementRef,
     public BackendService: BackendService //public UtilityService: UtilityService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this._data.selectedIssue = '';
@@ -94,8 +94,8 @@ public onClick(targetElement) {
       //headers.append('Accept', 'application/json');
       let options = new RequestOptions({ headers: headers });
       console.log('Upload File - formData =============>', formData, options);
-      let elObj=_this._elementRef.nativeElement.querySelector('#selectedIssue');
-         let issueCode=_this._data.selectedIssue;
+      let elObj = _this._elementRef.nativeElement.querySelector('#selectedIssue');
+      let issueCode = _this._data.selectedIssue;
       // let fkAssociateId = localStorage.getItem('fkAssociateId');
       let reqObj = {
         url:
@@ -108,7 +108,7 @@ public onClick(targetElement) {
       _this._flags.wrongFileFormat = false;
       _this._data.uploadErrorList = [];
 
-      _this.BackendService.makeAjax(reqObj, function(err, response, headers) {
+      _this.BackendService.makeAjax(reqObj, function (err, response, headers) {
 
         if (err || response.error) {
           console.log('Error=============>', err, response.errorCode);
@@ -128,12 +128,12 @@ public onClick(targetElement) {
           _this._data.uploadErrorCount = response.data.count;
         } else {
           if (response.data && response.status != "Error") {
-            _this._data.uploadErrorList  = response.data;
+            _this._data.uploadErrorList = response.data;
             console.log(_this._data.uploadErrorList);
           } else {
             _this._data.uploadErrorList = [];
-            if(response.status == "Error"){
-              _this._data.uploadErrorList.push({error:true, message:response.data[0]});
+            if (response.status == "Error") {
+              _this._data.uploadErrorList.push({ error: true, message: response.data[0] });
               _this._flags.wrongFileFormat = true;
             }
           }
@@ -154,20 +154,20 @@ public onClick(targetElement) {
   }
 
   capitalize(text) {
-    return text.replace(/\b\w/g , function(m){ return m.toUpperCase(); } );
+    return text.replace(/\b\w/g, function (m) { return m.toUpperCase(); });
   }
-  getOptions(){
-    
-    var _this=this;
+  getOptions() {
+
+    var _this = this;
     let reqObj = {
       url:
         'template/upload/list',
       method: 'get'
     };
-    _this.BackendService.makeAjax(reqObj, function(err, response, headers) {
+    _this.BackendService.makeAjax(reqObj, function (err, response, headers) {
       console.log(response);
-      if(response.data && response.data.length > 0){
-        for(let i=0; i < response.data.length;i++ ){
+      if (response.data && response.data.length > 0) {
+        for (let i = 0; i < response.data.length; i++) {
           _this._data.issuelist.push({ issue: _this.capitalize(Object.keys(response.data[i]).map(key => response.data[i][key])[0]), value: Object.keys(response.data[i])[0] })
         }
       }

@@ -1,0 +1,45 @@
+<div class="" style="height:85vh;">
+  <div class="" style="display: block; overflow:scroll; background: transparent;">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content" style="margin-top:25%; margin-left:25%; width:50%;">
+        <div class="modal-header" style="border-bottom:none;">
+          <div class="caption">Upload Image File</div>
+        </div>
+        <div class="modal-body center-align">
+          <form (ngSubmit)="f.form.valid && uploadImage($event)" #f="ngForm" nonvalidate>
+            <select id="selectedVendor" name="selectedVendor" class="form-control" [(ngModel)]="_data.selectedVendor"
+              #selectedVendor="ngModel" required>
+              <option *ngFor="let vendor of _data.vendorlist" [ngValue]="vendor.value">
+                <span class="capitalize">{{vendor.user}}</span>
+              </option>
+            </select>
+
+            <div class="m-top-1 left-align">
+              <input id="imageFile" class="form-control custom-control m-top-1" type="file" name="file"
+                (change)="fileChange($event)" accept=".jpg, .png" required>
+            </div>
+            <div class="m-top-1 left-align" *ngIf="isUploading">
+              <h3 style="text-align: center;">Uploading Image...</h3>
+            </div>
+
+            <button class="btn btn-primary m-top-1" *ngIf="!isUploading">Upload</button>
+            <div class="help-block theme-red" *ngIf="f.submitted && !selectedVendor.valid">Please select a user.</div>
+            <div class="help-block theme-red" *ngIf="_flags.emptyFileValidation">Please choose a Image file.</div>
+          </form>
+          <div *ngIf="_flags.uploadSuccessFlag">
+            <div>
+              <span class="m-top-1 text-bold"> Image
+                Name:</span>&nbsp;&nbsp;
+              <input class="m-top-1 left-align" type="text" value={{_data.imageName}} #userinput>
+              <svg (click)="copyInputMessage(userinput)" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24">
+                <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+            </div>
+          </div>
+
+          <div class="m-top-1 text-bold text-green" *ngIf="_flags.uploadSuccessFlag"> Image Is uploaded
+            successfully!</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
