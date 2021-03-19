@@ -55,6 +55,7 @@ export class NewImageUploadComponent implements OnInit {
         selectedVendor: ""
     };
     
+ 
       copyInputMessage(inputElement){
         inputElement.select();
         document.execCommand('copy');
@@ -70,6 +71,8 @@ export class NewImageUploadComponent implements OnInit {
 
     fileChange(e) {
         console.log('file changed');
+        let _this = this;
+        _this._flags.emptyFileValidation = false;
     }
 
     uploadImage(event) {
