@@ -15,12 +15,12 @@
 
 @font-face {
     font-family: message;
-    src: url(/assets/fonts/Quicksand-LightItalic.otf);
+    src: url(/src/assets/fonts/Quicksand-LightItalic.otf);
 }
 
 @font-face {
     font-family: message2;
-    src: url(/assets/fonts/Quicksand-Italic.otf);
+    src: url(/src/assets/fonts/Quicksand-Italic.otf);
 }
 
 body {
@@ -35,6 +35,10 @@ body {
 
 .message-txt {
     font-family: message2, Papyrus, fantasy, cursive;
+}
+
+.message-txt>div {
+    font-family: message2, Papyrus, fantasy, cursive !important;
 }
 
 .pagebreak {
@@ -100,6 +104,9 @@ page[size="A5"][layout="portrait"] {
     }
     .message-txt {
         font-family: message2, Papyrus, fantasy, cursive;
+    }
+    .message-txt>div {
+        font-family: message2, Papyrus, fantasy, cursive !important;
     }
     .pagebreak {
         page-break-before: always;
