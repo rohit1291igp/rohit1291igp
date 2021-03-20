@@ -65,10 +65,12 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit() {
     // var _this = this;
-    this.getSectorList().then(response => {
+    if (environment.userType == 'vendor' || environment.userType == 'hdextnp') {
+      this.getSectorList().then(response => {
       
       this.sectors = response;
-    })
+     })
+  }
 
     if (environment.userType == 'admin') {
       this.getDashboardFiltersOptions();
@@ -282,6 +284,7 @@ export class DashboardComponent implements OnInit {
       url: `getSectorListForVendor?fkAssociateId=` + localStorage.fkAssociateId,
       method: "get"
     };
+
     return new Promise((resolve, reject) => {
       this.BackendService.makeAjax(reqObj, function (err, response, headers) {
         

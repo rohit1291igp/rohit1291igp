@@ -1,0 +1,116 @@
+<h4>
+  New Employee Details
+</h4>
+
+<form [formGroup]="newUser" (ngSubmit)="onSubmit(f)" name="newUser" #f="ngForm">
+  <div class="col-md-12" style="padding: 0 10px;">
+    <div class="col-md-6">
+      <mat-form-field class="example-form-field">
+        <mat-label> ME Employee Code</mat-label>
+        <input matInput type="text" formControlName="emp_code" required>
+        <mat-error *ngIf="newUser.get('emp_code').hasError('required')">
+          Employee Code is <strong>required</strong>
+        </mat-error>
+      </mat-form-field><br>
+
+      <mat-form-field class="example-form-field">
+        <mat-label> ME Employee Name</mat-label>
+        <input matInput type="text" formControlName="emp_name" required>
+        <mat-error *ngIf="newUser.get('emp_name').hasError('required')">
+          Employee Name is <strong>required</strong>
+        </mat-error>
+      </mat-form-field><br>
+
+      <mat-form-field class="example-form-field">
+        <mat-label>Zone</mat-label>
+        <input matInput type="text" formControlName="zone" required>
+        <mat-error *ngIf="newUser.get('zone').hasError('required')">
+          Zone is <strong>required</strong>
+        </mat-error>
+      </mat-form-field><br>
+
+
+      <mat-form-field class="example-form-field">
+        <mat-label>Region</mat-label>
+        <input matInput type="text" formControlName="region" required>
+        <mat-error *ngIf="newUser.get('region').hasError('required')">
+          Region is <strong>required</strong>
+        </mat-error>
+      </mat-form-field><br>
+
+      <mat-form-field class="example-form-field">
+        <mat-label>DSM HQ</mat-label>
+        <input matInput type="text" formControlName="dsm_hq" required>
+        <mat-error *ngIf="newUser.get('dsm_hq').hasError('required')">
+          DSM HQ is <strong>required</strong>
+        </mat-error>
+      </mat-form-field><br>
+
+      <mat-form-field class="example-form-field">
+        <mat-label>ABM HQ</mat-label>
+        <input matInput type="text" formControlName="abm_hq" required>
+        <mat-error *ngIf="newUser.get('abm_hq').hasError('required')">
+          ABM HQ is <strong>required</strong>
+        </mat-error>
+      </mat-form-field><br>
+
+      <mat-form-field class="example-form-field">
+        <mat-label> ME HQ Name</mat-label>
+        <input matInput type="text" formControlName="hq_name" required>
+        <mat-error *ngIf="newUser.get('hq_name').hasError('required')">
+          HQ Name is <strong>required</strong>
+        </mat-error>
+      </mat-form-field><br>
+
+    </div>
+    <div class="col-md-6">
+
+      <mat-form-field class="example-form-field">
+        <mat-label>ME Full Delivery Address</mat-label>
+        <input matInput type="text" formControlName="delivery_address" required>
+        <mat-error *ngIf="newUser.get('delivery_address').hasError('required')">
+          ME Full Delivery Address is <strong>required</strong>
+        </mat-error>
+      </mat-form-field><br>
+
+      <mat-form-field class="example-form-field">
+        <mat-label>City</mat-label>
+        <input matInput type="text" formControlName="city" required>
+        <mat-error *ngIf="newUser.get('city').hasError('required')">
+          City is <strong>required</strong>
+        </mat-error>
+      </mat-form-field><br>
+      <mat-form-field class="example-form-field">
+        <mat-label>State</mat-label>
+        <input matInput type="text" formControlName="state" required>
+        <mat-error *ngIf="newUser.get('state').hasError('required')">
+          State is <strong>required</strong>
+        </mat-error>
+      </mat-form-field><br>
+      <mat-form-field class="example-form-field">
+        <mat-label>Pincode</mat-label>
+        <input matInput type="number" formControlName="pincode" required>
+        <mat-error *ngIf="newUser.get('pincode').hasError('required')">
+          Pincode is <strong>required</strong>
+        </mat-error>
+      </mat-form-field><br>
+
+      <mat-form-field class="example-form-field">
+        <mat-label>ME Mobile Number</mat-label>
+        <input matInput type="number" formControlName="mobile_number" required>
+        <mat-error *ngIf="newUser.get('mobile_number').hasError('required')">
+          Mobile Number is <strong>required</strong>
+        </mat-error>
+      </mat-form-field><br>
+
+    </div>
+  </div>
+  <button type="submit" mat-raised-button>Register</button>
+</form>
+
+<!-- emp_code:["",Validators.required],
+      emp_name:["",Validators.required],
+      zone:["",Validators.required],
+      region:["",Validators.required],
+      dsm_hq:["",Validators.required],
+      -->

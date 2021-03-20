@@ -94,7 +94,8 @@ export class BackendService {
     'microsite-zeapl': 'v1/admin/',
     'voucher': 'v1',
     'gv': 'v1',
-    'other': 'v1/admin/handels/'
+    'other': 'v1/admin/handels/',
+    'alkem' : 'v1/admin/alkem/'
 
   }
 

@@ -10,6 +10,7 @@ import { SendEmailComponent } from 'app/components/send-email/send-email.compone
 import { SharedModule } from 'app/shared-module/shared/shared.module';
 import { MyDatePickerModule } from 'mydatepicker';
 import { DateFormatterPipeModule } from 'app/customPipes/date-formatter';
+import { UploadExcelComponent } from 'app/components/upload-excel/upload-excel.component';
 
 const routes: Routes = [{
   path: 'sendemail',
@@ -18,6 +19,21 @@ const routes: Routes = [{
 {
   path: 'uploadtemplate',
   component: NewExcelUploadComponent
+},
+{
+  path: 'orderupdatestatus',
+  component: OrderUpdateStatusComponent
+},
+{
+  path: 'payment-reconciliation',
+  component: PaymentReconciliationComponent
+},
+{
+  path: 'addressUpdate',
+  component: AddressUpdateComponent
+},{
+  path: 'upload-excel',
+  component: UploadExcelComponent
 }];
 
 @NgModule({
@@ -32,7 +48,12 @@ const routes: Routes = [{
   ],
   declarations: [
     SendEmailComponent,
-    NewExcelUploadComponent
+    NewExcelUploadComponent,
+    OrderUpdateStatusComponent,
+    PaymentReconciliationComponent,
+    AddressUpdateComponent,
+    AddressUpdateHeaderPipe,
+    UploadExcelComponent
   ]
 })
 export class SendEmailModule { }

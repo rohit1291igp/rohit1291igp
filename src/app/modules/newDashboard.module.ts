@@ -102,6 +102,7 @@ const routes: Routes = [{
     PendingOrderComponent,
     DownloadEmailComponent
   ],
-  providers: [NavService, UserAccessService]
+  providers: [NavService, UserAccessService],
+  entryComponents: []
 })
 export class NewDashboardModule { }

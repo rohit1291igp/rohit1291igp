@@ -76,7 +76,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         this.otpModel = '';
 
         if (this.cookieService.getCookie('currentUserToken') || localStorage.getItem('currentUser')) {
-            this.router.navigate(['/dashboard']);
+            this.router.navigate(['/new-dashboard']);
         }
         this.whitelabelStyle = localStorage.getItem('whitelabelDetails') ? JSON.parse(localStorage.getItem('whitelabelDetails')) : null;
     }
@@ -181,11 +181,11 @@ export class LoginComponent implements OnInit, OnDestroy {
                     $this.router.navigate(['/voucher/voucher']);
                 } else if (userType === 'gv') {
                     $this.router.navigate(['/voucher/gv']);
-                } else if (userType === 'warehouse' || userType === 'marketing' || userType === 'mldatascience') {
+                } else if (userType === 'warehouse' || userType === 'marketing' || userType === 'mldatascience' || userType === 'root') {
                     // $this.router.navigate(['/new-dashboard']);
                     $this.navigationStrategy(previousUrl, '/new-dashboard');
                 } else if ((userType === 'egv_admin' || userType === 'sub_egv_admin' || localStorage.getItem('userType') === 'wb_yourigpstore') || (userType === 'manager' || userType === 'sub_manager') || (userType === 'executive' || userType === 'sub_executive' || userType == 'parent_manager' || userType == 'parent_executive')) {
-                    if ((userType === 'manager' || userType === 'sub_manager') || (userType === 'executive' || userType === 'sub_executive' || userType == 'parent_manager' || userType == 'parent_executive') && !$this.whitelabelStyle) {
+                    if ((userType === 'manager' || userType === 'sub_manager') || (userType === 'executive' || userType === 'sub_executive' || userType == 'parent_manager' || userType == 'parent_executive' || userType == 'parent_executive') && !$this.whitelabelStyle) {
                         $this.AppLoadService.getMicrositeDetails($this.model.associatename);
                         let timer = setInterval(() => {
                             if ($this.AppLoadService.micrositeDetails) {
