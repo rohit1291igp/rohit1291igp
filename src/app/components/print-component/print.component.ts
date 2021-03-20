@@ -209,6 +209,8 @@ export class PrintComponent implements OnInit {
 
         setTimeout(() => {
             this.printPagination = false;
+            let scrollEle = document.querySelector("*") as any;
+            scrollEle.style.overflow = 'hidden';
             let ele = document.getElementsByTagName("mat-drawer-container") as any;
             ele[0].style.paddingTop = '0em';
             let footerEle = document.getElementsByTagName("app-footer") as any;
@@ -220,6 +222,8 @@ export class PrintComponent implements OnInit {
     }
 
     openPrint() {
+        let scrollEle = document.querySelector("*") as any;
+        scrollEle.style.overflow = 'hidden';
         let ele = document.getElementsByTagName("mat-drawer-container") as any;
         ele[0].style.paddingTop = '0em';
         let footerEle = document.getElementsByTagName("app-footer") as any;
@@ -233,6 +237,8 @@ export class PrintComponent implements OnInit {
     onWindowAfterPrint() {
         //   window.close();
         console.log('... afterprint', this.printPagination);
+        let scrollEle = document.querySelector("*") as any;
+        scrollEle.style.overflow = 'auto';
         let ele = document.getElementsByTagName("mat-drawer-container") as any;
         ele[0].style.paddingTop = '2em';
         let footerEle = document.getElementsByTagName("app-footer") as any;
