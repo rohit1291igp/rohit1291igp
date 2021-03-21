@@ -604,8 +604,10 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck, On
     _this.pageNo = _this.pageNo + 1;
 
     _this.reqObjData.url = _this.reqObjData.url && _this.reqObjData.url.split("handels/")[1] ? _this.reqObjData.url.split("handels/")[1] : _this.reqObjData.url;
-
-    _this.reqObjData.url = _this.reqObjData.url.split('&pageNumber=')[0] + `&pageNumber=${_this.pageNo}`;
+    if(environment.userType != 'admin'){
+        _this.reqObjData.url = _this.reqObjData.url.split('&pageNumber=')[0] + `&pageNumber=${_this.pageNo}`;
+    }
+    
     
     let promise = new Promise ((resolve,reject)=>{
         _this.BackendService.makeAjax(_this.reqObjData, function(err, response, headers){
@@ -704,11 +706,20 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck, On
           }
           //fetch vendorGrpId
           let filterId = localStorage.getItem('vendorGrpId') ? localStorage.getItem('vendorGrpId') : 0;
-          if(orderDeliveryTime === "future"){
-              reqURL ="pagination/getOrderByStatusDate?responseType=json&scopeId=1&isfuture=true&orderAction="+dashBoardDataType+"&section="+section+"&status="+orderStatus+"&fkassociateId="+fkAssociateId+"&date="+spDate+"&filterId="+filterId+'&sector='+sector+"&pageNumber=";
+          if(environment.userType === 'admin'){
+            if(orderDeliveryTime === "future"){
+                reqURL ="getOrderByStatusDate?responseType=json&scopeId=1&isfuture=true&orderAction="+dashBoardDataType+"&section="+section+"&status="+orderStatus+"&fkassociateId="+fkAssociateId+"&date="+spDate+"&filterId="+filterId+'&sector='+sector;
+            }else{
+                reqURL ="getOrderByStatusDate?responseType=json&scopeId=1&orderAction="+dashBoardDataType+"&section="+section+"&status="+orderStatus+"&fkassociateId="+fkAssociateId+"&date="+spDate+"&filterId="+filterId+'&sector='+sector;
+            }
           }else{
-              reqURL ="pagination/getOrderByStatusDate?responseType=json&scopeId=1&orderAction="+dashBoardDataType+"&section="+section+"&status="+orderStatus+"&fkassociateId="+fkAssociateId+"&date="+spDate+"&filterId="+filterId+'&sector='+sector+"&pageNumber=";
+            if(orderDeliveryTime === "future"){
+                reqURL ="pagination/getOrderByStatusDate?responseType=json&scopeId=1&isfuture=true&orderAction="+dashBoardDataType+"&section="+section+"&status="+orderStatus+"&fkassociateId="+fkAssociateId+"&date="+spDate+"&filterId="+filterId+'&sector='+sector+"&pageNumber=";
+            }else{
+                reqURL ="pagination/getOrderByStatusDate?responseType=json&scopeId=1&orderAction="+dashBoardDataType+"&section="+section+"&status="+orderStatus+"&fkassociateId="+fkAssociateId+"&date="+spDate+"&filterId="+filterId+'&sector='+sector+"&pageNumber=";
+            }
           }
+          
 
           if(cat && subCat){
               reqURL = reqURL+"&category="+cat+"&subcategory="+subCat;
@@ -2049,6 +2060,7 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck, On
     // On Scroll up and end 
     scrolled(e) {
        var _this = this;
+       if(environment.userType != 'admin'){
         //Api call for further data
         if(e.offsetHeight + e.scrollTop >= e.scrollHeight){
             // this.pageNo = this.pageNo + 1;
@@ -2080,6 +2092,7 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck, On
         if(e.scrollTop == e.scrollLeft){
             console.log('previous api call', this.pageNo--);
         }
+      }
     }
 
     ngOnDestroy(){

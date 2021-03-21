@@ -108,12 +108,20 @@ export class PrintComponent implements OnInit {
             }
             //fetch vendorGrpId
             let filterId = localStorage.getItem('vendorGrpId') ? localStorage.getItem('vendorGrpId') : 0;
-
-            if (orderDeliveryTime === "future") {
-                reqURL = "pagination/getOrderByStatusDate?responseType=json&scopeId=1&isfuture=true&orderAction=" + dashBoardDataType + "&section=" + section + "&status=" + orderStatus + "&fkassociateId=" + fkAssociateId + "&date=" + spDate + "&filterId=" + filterId + '&sector=' + sector;
-            } else {
-                reqURL = "pagination/getOrderByStatusDate?responseType=json&scopeId=1&orderAction=" + dashBoardDataType + "&section=" + section + "&status=" + orderStatus + "&fkassociateId=" + fkAssociateId + "&date=" + spDate + "&filterId=" + filterId + '&sector=' + sector;
+            if(environment.userType === 'admin'){
+                if (orderDeliveryTime === "future") {
+                    reqURL = "getOrderByStatusDate?responseType=json&scopeId=1&isfuture=true&orderAction=" + dashBoardDataType + "&section=" + section + "&status=" + orderStatus + "&fkassociateId=" + fkAssociateId + "&date=" + spDate + "&filterId=" + filterId + '&sector=' + sector;
+                } else {
+                    reqURL = "getOrderByStatusDate?responseType=json&scopeId=1&orderAction=" + dashBoardDataType + "&section=" + section + "&status=" + orderStatus + "&fkassociateId=" + fkAssociateId + "&date=" + spDate + "&filterId=" + filterId + '&sector=' + sector;
+                }
+            }else{
+                if (orderDeliveryTime === "future") {
+                    reqURL = "pagination/getOrderByStatusDate?responseType=json&scopeId=1&isfuture=true&orderAction=" + dashBoardDataType + "&section=" + section + "&status=" + orderStatus + "&fkassociateId=" + fkAssociateId + "&date=" + spDate + "&filterId=" + filterId + '&sector=' + sector;
+                } else {
+                    reqURL = "pagination/getOrderByStatusDate?responseType=json&scopeId=1&orderAction=" + dashBoardDataType + "&section=" + section + "&status=" + orderStatus + "&fkassociateId=" + fkAssociateId + "&date=" + spDate + "&filterId=" + filterId + '&sector=' + sector;
+                }
             }
+            
 
             if (cat && subCat) {
                 reqURL = reqURL + "&category=" + cat + "&subcategory=" + subCat;
@@ -252,13 +260,16 @@ export class PrintComponent implements OnInit {
 
         _this.reqObjData.url = _this.reqObjData.url && _this.reqObjData.url.split("handels/")[1] ? _this.reqObjData.url.split("handels/")[1] : _this.reqObjData.url;
 
-        _this.reqObjData.url = _this.reqObjData.url.split('&pageNumber=')[0] + `&pageNumber=${pageCount}`;
-        if (_this.noOfPages && _this.noOfPages.length == 0 && orderCount) {
-            _this.reqObjData.url = _this.reqObjData.url.replace('pagination/getOrderByStatusDate', 'count/getOrderByStatus');
-        } else {
-            _this.reqObjData.url = _this.reqObjData.url.replace('count/getOrderByStatus', 'pagination/getOrderByStatusDate');
-            _this.reqObjData.url += "&printall=" + true;
+        if(environment.userType != 'admin'){
+            _this.reqObjData.url = _this.reqObjData.url.split('&pageNumber=')[0] + `&pageNumber=${pageCount}`;
+            if (_this.noOfPages && _this.noOfPages.length == 0 && orderCount) {
+                _this.reqObjData.url = _this.reqObjData.url.replace('pagination/getOrderByStatusDate', 'count/getOrderByStatus');
+            } else {
+                _this.reqObjData.url = _this.reqObjData.url.replace('count/getOrderByStatus', 'pagination/getOrderByStatusDate');
+                _this.reqObjData.url += "&printall=" + true;
+            }
         }
+        
         let promise = new Promise((resolve, reject) => {
             _this.BackendService.makeAjax(_this.reqObjData, function (err, response, headers) {
                 if (err || response.error) {

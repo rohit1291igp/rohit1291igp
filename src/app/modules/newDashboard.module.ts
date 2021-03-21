@@ -78,8 +78,7 @@ const routes: Routes = [{
     path: 'download/:fileFor/:filedate/:fileTime',
     component: DownloadEmailComponent,
     canActivate: [AuthGuard]
-  },
-
+  }
   ]
 }
 ];
