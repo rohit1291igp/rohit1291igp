@@ -4,14 +4,10 @@ import { AlkemWebformComponent } from './components/alkem-webform/alkem-webform.
 import { BlogCreateComponent } from './components/blog-create/blog-create.component';
 import { BlogListComponent } from './components/blog-list/blog-list.component';
 import { BlogViewComponent } from './components/blog-view/blog-view.component';
-import { DailyOpsReportComponent } from './components/daily-ops-report/daily-ops-report.component';
 import { DeliveryTimeManagementComponent } from './components/delivery-time-management/delivery-time-management.component';
-import { DownloadEmailComponent } from './components/download-email/download-email.component';
 import { LoginComponent } from './components/login/login.component';
-
-import { OfferPageManagementComponent } from './components/offer-page-management/offer-page-management.component';
-import { ProductReportComponent } from './components/product-report/product-report.component';
 import { AuthGuard } from './services/auth-guard.service';
+
 // import { EgvGuard } from './services/egv.guard';
 // import { AlertManagementComponent } from './components/egv/alert-management/alert-management.component';
 // import { PasswordChangeComponent } from './components/egv/user-management/password-change/password-change.component';
@@ -76,11 +72,6 @@ const route: Routes = [
   {
     path: 'voucher',
     loadChildren: './modules/voucher.module#VoucherModule',
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'productReport',
-    component: ProductReportComponent,
     canActivate: [AuthGuard]
   },
   {

@@ -733,7 +733,7 @@
             </div>
             </div>
         </div>
-        <div *ngIf="sidePanelData">
+        <div *ngIf="sidePanelData" style="height: 100vh;overflow:auto" #sidePanelDataEle (scroll)="scrolled(sidePanelDataEle)">
             <div  id="order-{{order.orderId}}" class="col-md-12 order-row" *ngFor="let order of sidePanelData; let orderIndex='index'" style="margin-bottom: 0;" [@anim]="order.state" (click)="changeDd($event, false, orderIndex)" [ngClass]="{'mob' : isMobile, 'slaAlert' : (order.orderProducts[0].alertFlag || order.orderProducts[0].slaFlag)}">
                 <div class="triangle-topright" [ngClass]="{'mob' : isMobile, 'redBorder' : order.orderProducts[0].alertFlag, 'greenBorder' : order.orderProducts[0].slaFlag}">
                     <div class="slaAlert-flag abs" *ngIf="order.orderProducts[0].alertFlag">High Alert</div>
