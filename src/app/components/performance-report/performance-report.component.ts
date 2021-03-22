@@ -1,21 +1,23 @@
-import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, OnDestroy, NgModule } from '@angular/core';
 import { MatDialog, MatSnackBar, MatPaginator } from '@angular/material';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { BackendService } from '../../services/backend.service';
 import { AddDeliveryBoyComponent } from '../add-deliveryboy/add-deliveryboy.component';
 import { NotificationComponent } from '../notification/notification.component';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterModule, Routes } from '@angular/router';
 import { ReportsService } from 'app/services/reports.service';
-import { DatePipe } from '@angular/common';
+import { DatePipe, CommonModule } from '@angular/common';
 import { Angular5Csv } from 'angular5-csv/dist/Angular5-csv';
+import { SharedModule } from 'app/shared-module/shared/shared.module';
+import { NewReportsComponentModule } from '../new-reports-component/new-reports.component';
 
 @Component({
     selector: 'app-performance-report',
     templateUrl: './performance-report.component.html',
     styleUrls: ['./performance-report.component.css']
 })
-export class PerformanceReportComponent implements OnInit {
+export class PerformanceReportComponent implements OnInit, OnDestroy {
     displayedColumns = [];
     viewDisabledItems = false;
     originalDataSource: any;
@@ -181,5 +183,8 @@ export class PerformanceReportComponent implements OnInit {
             }
         });
     }
-}
 
+    ngOnDestroy(){
+        this.BackendService.abortLastHttpCall();
+    }
+}
