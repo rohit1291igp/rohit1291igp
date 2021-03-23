@@ -8,9 +8,9 @@
         <div class="modal-body center-align">
           <form (ngSubmit)="f.form.valid && uploadImage($event)" #f="ngForm" nonvalidate>
             <select id="selectedVendor" name="selectedVendor" class="form-control" [(ngModel)]="_data.selectedVendor"
-              #selectedVendor="ngModel" required>
-              <option value="default">Select Vender</option>
-              <option *ngFor="let vendor of _data.vendorlist" [ngValue]="vendor.value">
+              #selectedVendor="ngModel" [compareWith]="compareByOptionId" required>
+              <!-- <option value="default">Select Vender</option> -->
+              <option *ngFor="let vendor of _data.vendorlist" [ngValue]="vendor">
                 <span class="capitalize">{{vendor.user}}</span>
               </option>
             </select>
