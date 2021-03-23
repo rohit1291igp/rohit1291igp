@@ -48,7 +48,7 @@ export class ImageUploadComponent implements OnInit {
           { user: "DesiClick", value: "desiclik" },
           { user: "DTDC", value: "dtdc" }
       ],
-      selectedVendor: ""
+      selectedVendor: { user: "Select Vendor", value: "" }
   };
 
 
@@ -56,9 +56,7 @@ export class ImageUploadComponent implements OnInit {
   constructor(
       private _elementRef: ElementRef,
       public BackendService: BackendService,
-      private _snackBar: MatSnackBar,
-      private _ChangeDetectorRef:ChangeDetectorRef,
-      
+      private _snackBar: MatSnackBar
   ) { }
 
 
@@ -98,7 +96,7 @@ uploadImage(event) {
         for (var i = 0; i < fileList.length; i++) {
             formData.append("file" + i, fileList[i]);
         }
-        let vendorCode = _this._data.selectedVendor;
+        let vendorCode = _this._data.selectedVendor.value;
         let reqObj = {
             url: 'marketplaceorder/upload/image?value=' + vendorCode,
             method: "post",
@@ -112,6 +110,7 @@ uploadImage(event) {
             if (fileInput && 'value' in fileInput) {
                 _this._data.uploadFileName = fileInput.value.slice(fileInput.value.lastIndexOf('\\') + 1)
                 _this._flags.uploadSuccessFlag = true;
+                _this._data.selectedVendor = {user: "Select Vendor", value: ""};
             } else {
                 _this._data.uploadFileName = "";     
 
@@ -126,5 +125,9 @@ uploadImage(event) {
 
     }
 }
+
+compareByOptionId(idFist, idSecond) {
+    return idFist && idSecond && idFist.value == idSecond.value;
+ }
 
 }
