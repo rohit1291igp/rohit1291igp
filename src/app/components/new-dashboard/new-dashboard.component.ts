@@ -52,11 +52,11 @@ export class NewDasboardComponent implements OnInit, AfterViewInit, OnDestroy {
     ngOnInit() {
        
         let $this=this;
-        $this.router.events.subscribe(e => {
-            if (e instanceof ActivationStart){
-                $this.outlet && $this.outlet.deactivate();
-                }
-          });
+        // $this.router.events.subscribe(e => {
+        //     // if (e instanceof ActivationStart){
+        //     //     $this.outlet && $this.outlet.deactivate();
+        //     //     }
+        //   });
         $this.whitelabelStyle = localStorage.getItem('whitelabelDetails') ? JSON.parse(localStorage.getItem('whitelabelDetails')) : null;
         $this.username = localStorage.getItem('vendorName') ? localStorage.getItem('vendorName') : '';
         $this.bodyEle = document.getElementsByTagName('body');
