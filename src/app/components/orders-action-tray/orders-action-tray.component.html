@@ -977,7 +977,7 @@
                            <span>
                                 <div class="product-main relative">
                                     <div class="component-eggless prod-img abs" *ngIf="orderProduct.productQuantity>1">X {{orderProduct.productQuantity}}</div>
-                                    <img class="product-image clk" src="{{productsURL}}th/{{orderProduct.productImage}}?th={{orderProduct.productUpdateDateTime}}" alt="product_img" (click)="imagePreview($event, productsURL+'l/'+(orderProduct.productImage)+'?th='+orderProduct.productUpdateDateTime)">
+                                    <img class="product-image clk" loading="lazy" src="{{productsURL}}th/{{orderProduct.productImage}}?th={{orderProduct.productUpdateDateTime}}" alt="product_img" (click)="imagePreview($event, productsURL+'l/'+(orderProduct.productImage)+'?th='+orderProduct.productUpdateDateTime)">
 
                                     <div *ngIf="env.userType!='hdextnp'" class="price-display">Rs. {{orderProduct.vendorPrice}}</div>
 
@@ -989,7 +989,7 @@
                           <span *ngFor="let prodComponent of orderProduct.componentList; let i='index'">
                               <div class="product-component relative">
                                   <div class="component-eggless abs" *ngIf="prodComponent.eggless">Eggless</div>
-                                <img class="component-image clk" src="{{productsCompURL}}th/{{prodComponent.componentImage}}?th={{prodComponent.timestamp}}" alt="Component_img" (click)="imagePreview($event, productsCompURL+'full/'+(prodComponent.componentImage)+'?th='+prodComponent.timestamp)" (error)="onSrcError($event)">
+                                <img class="component-image clk" loading="lazy" src="{{productsCompURL}}{{prodComponent.componentImage}}?th={{prodComponent.timestamp}}" alt="Component_img" (click)="imagePreview($event, productsCompURL+'full/'+(prodComponent.componentImage)+'?th='+prodComponent.timestamp)" (error)="onSrcError($event)">
                                 <div class="component-quantity center-align">x {{prodComponent.quantity | number | replace}}</div>
                                 <div class="component-name center-align">{{prodComponent.componentName}} </div>
                                 <div class="price-display" *ngIf="env.userType!='hdextnp' && prodComponent.componentPrice && prodComponent.componentPrice !== 'N/A' && prodComponent.componentName !== 'Adjustment' " style="margin-top: 6px; font-size: 0.80em;">{{prodComponent.componentPrice | number | replace}}x{{prodComponent.quantity | number}}={{prodComponent.componentPrice  * prodComponent.quantity}}</div>

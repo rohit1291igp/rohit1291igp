@@ -19,5 +19,6 @@ export const environment = {
   interfloraBlogCDN : 'https://res.cloudinary.com/interflora/f_auto,q_auto,t_blogimage/blogs/',
   componentImageUrl : 'https://handelscomponents.s3.amazonaws.com/',
   blogsAcl : 'public-read',  
-  bannerImageUrl : 'https://handelscomponents.s3.amazonaws.com/'
+  bannerImageUrl : 'https://handelscomponents.s3.amazonaws.com/',
+  newbarcodeUrl: '//ck.indiangiftsportal.com/newbarcode-exc.php?number='
 };
