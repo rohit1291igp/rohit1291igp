@@ -344,9 +344,9 @@ export class OrderReportComponent implements OnInit, OnDestroy {
   viewOrderDetail(e, orderId) {
     console.log('viewOrderDetail-------->', orderId);
     if (e.event) {
-      this.child.toggleTray(e.event, "", e.orderId, null);
+      this.child.toggleTray(e.event, "", e.orderId,null, null);
     } else {
-      this.child.toggleTray(e, "", orderId, null);
+      this.child.toggleTray(e, "", orderId, null, null);
     }
   }
 

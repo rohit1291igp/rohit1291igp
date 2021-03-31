@@ -67,25 +67,25 @@ export class DashboardComponent implements OnInit {
     // var _this = this;
     if (environment.userType == 'vendor' || environment.userType == 'hdextnp') {
       this.getSectorList().then(response => {
-      
-      this.sectors = response;
-     })
-  }
+
+        this.sectors = response;
+      })
+    }
 
     if (environment.userType == 'admin') {
       this.getDashboardFiltersOptions();
       localStorage.removeItem("vendorGrpId");
     }
-    var $this=this;
+    var $this = this;
     if (environment.userType !== 'blogger') {
       $this.isRowAlert = $this.dashboardService.getAlertRow();
       $this.dashboardData = $this.dashboardService.getCustomData();
       $this.loadDbData('');
       $this.dashboardObservable = Observable.interval(1000 * 60 * 1.5)
-      .subscribe(() => {
+        .subscribe(() => {
           console.log('Dasboard IntervalObservable working !!!');
-          if($this.ajaxCallDone == 1){
-          $this.loadDbData($this.selectedSector);
+          if ($this.ajaxCallDone == 1) {
+            $this.loadDbData($this.selectedSector);
           }
         });
 
@@ -95,7 +95,7 @@ export class DashboardComponent implements OnInit {
       $this.router.navigate(['/delivery-app/task']);
     }
   }
-  
+
   ngOnDestroy() {
     if (environment.userType !== 'blogger') {
       this.dashboardObservable && this.dashboardObservable.unsubscribe();
@@ -103,7 +103,7 @@ export class DashboardComponent implements OnInit {
   }
 
   loadDbData(sector) {
-    
+
     var _this = this;
     _this.loading = true;
     _this.ajaxCallDone = 0;
@@ -112,8 +112,8 @@ export class DashboardComponent implements OnInit {
     var cookieFDatwFormatted = cookieFDate ? cookieFDate.date.year + '-' + cookieFDate.date.month + '-' + cookieFDate.date.day : null;
     this.dashboardService.getDashboardData(cookieFDatwFormatted, sector, function (result) {
 
-      if(result && !result.error){
-        setTimeout(()=>{
+      if (result && !result.error) {
+        setTimeout(() => {
           _this.ajaxCallDone = 1;
           _this.loading = false;
           _this.loadingCount++;
@@ -138,17 +138,18 @@ export class DashboardComponent implements OnInit {
   }
 
   search(parameters) {
-    this.child.toggleTray(parameters.e, "", parameters.searchkey, null);
+    this.child.toggleTray(parameters.e, "", parameters.searchkey, null, null);
     this.disableAllTableCell();
   }
 
   searchWithProdIds(e, orderId, orderProductId, orderStatus) {
-    this.child.toggleTray(e, orderStatus, { "orderId": orderId, "orderProductIds": orderProductId }, null);
+    this.child.toggleTray(e, orderStatus, { "orderId": orderId, "orderProductIds": orderProductId },null, null);
   }
 
-  viewOrders(e) {
+  viewOrders(e, count) {
     e.preventDefault();
     e.stopPropagation();
+    console.log(count);
     e.sector = this.selectedSector ? this.selectedSector : ''
     let cat = e.currentTarget.dataset.cat;
     let subCat = e.currentTarget.dataset.subcat;
@@ -161,7 +162,7 @@ export class DashboardComponent implements OnInit {
       status = { "cat": cat, "subCat": subCat, "status": status };
     }
     console.log('viewOrders called>>>>>>>>>>status', status);
-    this.child.toggleTray(e, status, orderId, this.dashBoardDataType);
+    this.child.toggleTray(e, status, orderId, count,  this.dashBoardDataType);
 
     //changing clicked element position if its index greater than 0
     if (_status === "processing" || _status === "notAlloted" || _status === "Processed" || _status === "Confirmed" || _status === "OutForDelivery") {
@@ -181,10 +182,11 @@ export class DashboardComponent implements OnInit {
   }
 
   openPanel(e, status) {
+    debugger;
     e.preventDefault();
     e.stopPropagation();
 
-    this.child.toggleTray(e, status, null, this.dashBoardDataType);
+    this.child.toggleTray(e, status, null,null,  this.dashBoardDataType);
     this.disableAllTableCell();
     console.log('Side-panel opened for status: ', status);
   }
@@ -196,7 +198,7 @@ export class DashboardComponent implements OnInit {
   onDateChanged(event: IMyDateModel) {
     console.log('Date changed');
     let sector = this.selectedSector ? this.selectedSector : '';
-    
+
     console.log('onDateChanged(): ', event.date, ' - jsdate: ', new Date(event.jsdate).toLocaleDateString(), ' - formatted: ', event.formatted, ' - epoc timestamp: ', event.epoc);
     let selectedDate = event.date.year + '-' + event.date.month + '-' + event.date.day; //new Date(event.jsdate).toLocaleDateString(); //event.jsdate;
     var _this = this;
@@ -287,7 +289,7 @@ export class DashboardComponent implements OnInit {
 
     return new Promise((resolve, reject) => {
       this.BackendService.makeAjax(reqObj, function (err, response, headers) {
-        
+
         if (err || response.error) {
           console.log('Error=============>', err);
           reject([]);
