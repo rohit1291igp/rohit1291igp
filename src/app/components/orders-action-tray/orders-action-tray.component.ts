@@ -228,7 +228,7 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck, On
   }
 
   productsURL = environment.productsURL;
-  productsCompURL = environment.productsCompURL;
+  productsCompURL = environment.componentImageUrl;
 
  @HostListener('document:click', ['$event.target'])
     public onClick(targetElement) {
