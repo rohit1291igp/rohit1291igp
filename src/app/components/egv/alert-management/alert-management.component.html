@@ -1,28 +1,29 @@
 <div class="container">
-  <div *ngIf="userType==='egv_admin'" class="row m-top-1" style="padding-left: 15px;">
+  <div *ngIf="userType==='egv_admin' || userType=== 'parent_manager'" class="row m-top-1" style="padding-left: 15px;">
     <mat-form-field appearance="fill">
       <mat-label>Select Account</mat-label>
-      <mat-select [(ngModel)]="fkid" (change)="onFkidSelect()">
+      <mat-select  [(ngModel)]="fkid" (change)="onFkidSelect()">
         <mat-option [value]="option.fk_associate_id" *ngFor="let option of unique_accounts">{{ option.company_name }}</mat-option>
       </mat-select>
     </mat-form-field>
   </div>
   <div class="row m-top-1">
     <div class="col-sm-6">
-      <mat-card>
+      <mat-card style="font-family: verdana;">
         <h4>
           <span style="margin-top: 5px;">Balance Update</span>
-          <div style="float: right;">
-            <span style="color: rgba(0,0,0,.38);">&#8377;</span><mat-form-field class="example-full-width">
+          <div style="padding:1em;">
+            <span style="color: rgba(0,0,0,.38);">&#8377;</span>
+            <mat-form-field style="width:75%">
               <mat-label>Threshold 1</mat-label>
               <input type="number" matInput placeholder="Balance Update" [(ngModel)]="alertLimit" [disabled]="isAlertAmountDisabled">
             </mat-form-field>
             <button *ngIf="!isAlertAmountDisabled" (click)="alertAmountChange()" mat-icon-button>
-              <mat-icon>check_circle</mat-icon>
+              <mat-icon class="btnColor">check_circle</mat-icon>
             </button>
             <button mat-icon-button (click)="toggleAlertAmountBtn()">
-              <mat-icon *ngIf="isAlertAmountDisabled">edit</mat-icon>
-              <mat-icon *ngIf="!isAlertAmountDisabled">cancel</mat-icon>
+              <mat-icon class="btnColor material-icons-outlined" *ngIf="isAlertAmountDisabled">edit</mat-icon>
+              <mat-icon class="btnColor material-icons-outlined" *ngIf="!isAlertAmountDisabled">cancel</mat-icon>
             </button>
           </div>
 
@@ -30,65 +31,66 @@
         <hr style="margin-top: 31px;">
         <div class="row">
           <div class="col-sm-12">
-            <h5 style="font-weight: bold;">
+            <h5 style="">
               Email &nbsp;
                 <button (click)="addAlertEmailFlag=!addAlertEmailFlag" mat-icon-button>
-                  <mat-icon *ngIf="!addAlertEmailFlag">person_add</mat-icon>
-                  <mat-icon *ngIf="addAlertEmailFlag">cancel</mat-icon>
+                  <mat-icon class="btnColor material-icons-outlined" *ngIf="!addAlertEmailFlag">person_add</mat-icon>
+                  <mat-icon class="btnColor material-icons-outlined" *ngIf="addAlertEmailFlag">cancel</mat-icon>
                 </button>
             </h5>
             <div *ngIf="addAlertEmailFlag">
-              <mat-form-field class="example-full-width">
+              <mat-form-field class="width80">
                 <mat-label>Add Email Address</mat-label>
                 <input matInput type="email" placeholder="Email" [(ngModel)]="newAlertEmail">
               </mat-form-field>
-              <button mat-raised-button (click)="onAdd('alertEmail')">Add</button>
+              <button style="margin-left: 15px;" mat-raised-button (click)="onAdd('alertEmail')">Add</button>
             </div>
             <mat-chip-list aria-label="Fish selection">
-              <mat-chip style="margin-top:10px; font-weight: bold;" *ngFor="let alertEmail of alertsEmails">{{alertEmail}} <mat-icon matChipRemove (click)="delete('alert_email',alertEmail)">cancel</mat-icon></mat-chip>
+              <mat-chip style="margin-top:10px; " *ngFor="let alertEmail of alertsEmails">{{alertEmail}} <mat-icon class="btnColor" matChipRemove (click)="delete('alert_email',alertEmail)">cancel</mat-icon></mat-chip>
             </mat-chip-list>
           </div>
         </div>
         <hr>
         <div class="row">
           <div class="col-sm-12">
-            <h5 style="font-weight: bold;">
+            <h5 style="">
               Mobile
               <button (click)="addAlertMobFlag=!addAlertMobFlag" mat-icon-button>
-                <mat-icon *ngIf="!addAlertMobFlag">person_add</mat-icon>
-                <mat-icon *ngIf="addAlertMobFlag">cancel</mat-icon>
+                <mat-icon class="btnColor material-icons-outlined" *ngIf="!addAlertMobFlag">person_add</mat-icon>
+                <mat-icon class="btnColor material-icons-outlined" *ngIf="addAlertMobFlag">cancel</mat-icon>
               </button>
             </h5>
             <div *ngIf="addAlertMobFlag">
-              <mat-form-field class="example-full-width">
+              <mat-form-field class="width80">
                 <mat-label>Add Mobile No.</mat-label>
                 <input matInput placeholder="Mobile" (paste)="validateMob($event)" minlength=10 maxlength=10 (keypress)="validateMob($event)" type="text" [(ngModel)]="newAlertMob">
               </mat-form-field>
-              <button mat-raised-button (click)="onAdd('alertMob')">Add</button>
+              <button  style="margin-left: 15px;" mat-raised-button (click)="onAdd('alertMob')">Add</button>
             </div>
             <mat-chip-list>
-              <mat-chip style="margin-top:10px; font-weight: bold;" *ngFor="let alertMob of alertsMobile">{{alertMob}} <mat-icon matChipRemove (click)="delete('alert_mobile',alertMob)">cancel</mat-icon></mat-chip>
+              <mat-chip style="margin-top:10px; " *ngFor="let alertMob of alertsMobile">{{alertMob}} <mat-icon class="btnColor" matChipRemove (click)="delete('alert_mobile',alertMob)">cancel</mat-icon></mat-chip>
             </mat-chip-list>
           </div>
         </div>
       </mat-card>
     </div>
     <div class="col-sm-6">
-      <mat-card>
+      <mat-card style="font-family: verdana;">
         <h4>
-          Low Balance Alert
-          <div style="float: right;">
+          
+          <span style="margin-top: 5px;">Low Balance Alert</span>
+          <div style="padding:1em">
             <span style="color: rgba(0,0,0,.38);">&#8377;</span>
-            <mat-form-field class="example-full-width">
+            <mat-form-field class="example-full-width" style="width:75%">
               <mat-label>Threshold 2</mat-label>
               <input type="number" matInput placeholder="Low Balance Alert" [(ngModel)]="SosLimit" [disabled]="isSosAmountDisabled">
             </mat-form-field>
             <button *ngIf="!isSosAmountDisabled" (click)="SosAmountChange()" mat-icon-button>
-              <mat-icon>check_circle</mat-icon>
+              <mat-icon class="btnColor material-icons-outlined">check_circle</mat-icon>
             </button>
             <button mat-icon-button (click)="toggleSosAmountBtn()">
-              <mat-icon *ngIf="isSosAmountDisabled">edit</mat-icon>
-              <mat-icon *ngIf="!isSosAmountDisabled">cancel</mat-icon>
+              <mat-icon class="btnColor material-icons-outlined" *ngIf="isSosAmountDisabled">edit</mat-icon>
+              <mat-icon class="btnColor material-icons-outlined" *ngIf="!isSosAmountDisabled">cancel</mat-icon>
             </button>
           </div>
         </h4>
@@ -96,44 +98,44 @@
 
         <div class="row">
           <div class="col-sm-12">
-            <h5 style="font-weight: bold;">
+            <h5 style="">
               Email &nbsp;
-                <button (click)="addSosEmailFlag=!addSosEmailFlag" mat-icon-button>
-                  <mat-icon *ngIf="!addSosEmailFlag">person_add</mat-icon>
-                  <mat-icon *ngIf="addSosEmailFlag">cancel</mat-icon>
+                <button (click)="addSosEmailFlag=!addSosEmailFlag" mat-icon-button material-icons-outlined>
+                  <mat-icon class="btnColor material-icons-outlined" *ngIf="!addSosEmailFlag">person_add</mat-icon>
+                  <mat-icon class="btnColor material-icons-outlined" *ngIf="addSosEmailFlag">cancel</mat-icon>
                 </button>
             </h5>
             <div *ngIf="addSosEmailFlag">
-              <mat-form-field class="example-full-width">
+              <mat-form-field class="width80">
                 <mat-label>Add Email Address</mat-label>
                 <input matInput placeholder="Email" [(ngModel)]="newSosEmail">
               </mat-form-field>
-              <button mat-raised-button (click)="onAdd('sosEmail')">Add</button>
+              <button  style="margin-left: 15px;" mat-raised-button (click)="onAdd('sosEmail')">Add</button>
             </div>
             <mat-chip-list aria-label="Fish selection">
-              <mat-chip style="margin-top:10px; font-weight: bold;" *ngFor="let sosEmail of sosEmails">{{sosEmail}} <mat-icon matChipRemove (click)="delete('sos_email',sosEmail)">cancel</mat-icon></mat-chip>
+              <mat-chip style="margin-top:10px; " *ngFor="let sosEmail of sosEmails">{{sosEmail}} <mat-icon class="btnColor" matChipRemove (click)="delete('sos_email',sosEmail)">cancel</mat-icon></mat-chip>
             </mat-chip-list>
           </div>
         </div>
         <hr>
         <div class="row">
           <div class="col-sm-12">
-            <h5 style="font-weight: bold;">
+            <h5 style="">
               Mobile
               <button (click)="addSosMobFlag=!addSosMobFlag" mat-icon-button>
-                <mat-icon *ngIf="!addSosMobFlag">person_add</mat-icon>
-                <mat-icon *ngIf="addSosMobFlag">cancel</mat-icon>
+                <mat-icon class="btnColor material-icons-outlined" *ngIf="!addSosMobFlag">person_add</mat-icon>
+                <mat-icon class="btnColor material-icons-outlined" *ngIf="addSosMobFlag">cancel</mat-icon>
               </button>
             </h5>
             <div *ngIf="addSosMobFlag">
-              <mat-form-field class="example-full-width">
+              <mat-form-field class="width80">
                 <mat-label>Add Mobile No.</mat-label>
                 <input matInput type="text" (paste)="validateMob($event)" minlength=10 maxlength=10 (keypress)="validateMob($event)" [(ngModel)]="newSosMob" placeholder="Mobile">
               </mat-form-field>
-              <button mat-raised-button (click)="onAdd('sosMob')">Add</button>
+              <button  style="margin-left: 15px;" mat-raised-button (click)="onAdd('sosMob')">Add</button>
             </div>
             <mat-chip-list>
-              <mat-chip style="margin-top:10px; font-weight: bold;" *ngFor="let sosMob of sosMobile">{{sosMob}} <mat-icon matChipRemove (click)="delete('sos_mobile',sosMob)">cancel</mat-icon></mat-chip>
+              <mat-chip style="margin-top:10px; " *ngFor="let sosMob of sosMobile">{{sosMob}} <mat-icon class="btnColor" matChipRemove (click)="delete('sos_mobile',sosMob)">cancel</mat-icon></mat-chip>
             </mat-chip-list>
           </div>
         </div>

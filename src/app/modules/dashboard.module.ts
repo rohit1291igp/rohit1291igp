@@ -12,12 +12,19 @@ import { SharedModule } from 'app/shared-module/shared/shared.module';
 import { MyDatePickerModule } from 'mydatepicker';
 import { AuthGuard } from 'app/services/auth-guard.service';
 import { PayoutDashboardModule } from 'app/components/payout-dashboard/payout-dashboard.component';
+import { PrintComponent } from 'app/components/print-component/print.component';
 const routes: Routes = [
   {
     path: '',
     component: DashboardComponent,
     canActivate: [AuthGuard]
+  },
+  {
+    path: 'print/:printType',
+    component: PrintComponent,
+    canActivate: [AuthGuard]
   }
+  
 ];
 
 @NgModule({
@@ -36,7 +43,8 @@ const routes: Routes = [
     ButtonViewComponent,
     NoOrdersComponent,
     FeedsComponent,
-    HeaderTabsComponent
+    HeaderTabsComponent,
+    PrintComponent,
   ]
 
 })

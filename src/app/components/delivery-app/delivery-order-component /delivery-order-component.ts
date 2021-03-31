@@ -349,11 +349,14 @@ export class DeliveryOrderComponent implements OnInit {
 
     selectItemForDelivery(index) {
         this.commonError = !this.commonError;
-        this.selectProductsForDelivery = this.order.flatMap(m => m.orderProducts.flatMap(i => i.orderProductId))
-        for (let i = 0, len = this.selectProductsForDelivery.length; i < len; i++) {
-            if (!this.checked[i]) {
-                this.selectProductsForDelivery.splice(index, 1);
+        // let tempProductsList = this.order.flatMap(m => m.orderProducts.flatMap(i => i.orderProductId));
+        this.selectProductsForDelivery = [];
+        this.checked.forEach((element, index) => {
+            if (element) {
+                let tempProductsList = this.order.flatMap(m => m.orderProducts.flatMap(i => i.orderProductId));
+                this.selectProductsForDelivery.push(tempProductsList.splice(index, 1));
             }
-        }
+        });
+
     }
 }

@@ -1,10 +1,11 @@
 // Modules
 import { CdkTableModule } from '@angular/cdk/table';
 import { DatePipe } from '@angular/common';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { NgModule } from '@angular/core';
+import { HttpClientModule, HTTP_INTERCEPTORS, HttpClient } from '@angular/common/http';
+import { NgModule, APP_INITIALIZER, Injectable } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { HttpModule } from '@angular/http';
+import {Location, LocationStrategy, PathLocationStrategy} from '@angular/common';
 import { MatAutocompleteModule, MatButtonModule, MatCardModule, MatCheckboxModule, MatDatepickerModule, MatDialogModule, MatDialogRef, MatFormFieldModule, MatIconModule, MatInputModule, MatListModule, MatMenuModule, MatNativeDateModule, MatPaginatorModule, MatProgressBarModule, MatProgressSpinnerModule, MatRadioModule, MatSelectModule, MatSidenavModule, MatSlideToggleModule, MatSnackBarModule, MatSortModule, MatTableModule, MatTabsModule, MAT_DATE_LOCALE, MAT_DIALOG_DATA, MatChipsModule } from '@angular/material';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -39,7 +40,6 @@ import { OrderStockComponent } from './components/order-stocks/order-stock.compo
 import { DownloadStockedComponentProduct, ProductReportComponent } from './components/product-report/product-report.component';
 import { DownloadStockedComponent, editComponent } from './components/reports/reports.component';
 import { SelectItemForDelivered } from './components/select-item/select-item.component';
-import { UploadExcelComponent } from './components/upload-excel/upload-excel.component';
 import { CapitalizePipeModule } from './customPipes/capitalze.pipe';
 import { DateFormatterPipeModule } from './customPipes/date-formatter';
 import { ObjectKeyValuePipe } from './customPipes/object-key-value.pipe';
@@ -59,25 +59,30 @@ import { UtilityService } from './services/utility.service';
 import { VoucherService } from './services/voucher.service';
 import { SharedModule } from './shared-module/shared/shared.module';
 import { CookieService } from './services/cookie.service';
-// import { OrderReportComponent} from './components/order-report/order-report.component';
-// import { NewUserFormComponent } from './components/egv/user-management/new-user-form/new-user-form.component';
 import { EgvGuard } from './services/egv.guard';
 import { EgvService } from './services/egv.service';
 import { ScriptService } from './services/script.service';
 import { SerachRankingService } from './services/serach-ranking.service';
-// import { AlertManagementComponent } from './components/egv/alert-management/alert-management.component';
-// import { EditUserComponent } from './components/egv/user-management/edit-user/edit-user.component';
-// import { PasswordChangeComponent } from './components/egv/user-management/password-change/password-change.component';
+import { environment } from 'environments/environment';
+import { AppLoadService } from './services/app.load.service';
+import { ServiceWorkerModule } from '@angular/service-worker';
+
+ import { AlkemWebformComponent } from './components/alkem-webform/alkem-webform.component';
+import { AlkemService } from './services/alkem.service';
+import { NewEmployeeComponent } from './components/alkem-webform/new-employee/new-employee.component';
+// import { AlkemWebformComponent } from './alkem-webform/alkem-webform.component';
 
 
-
+export function init_app(appLoadService: AppLoadService) {
+  return () => appLoadService.initializeApp();
+}
 
 
 //env config
-/*import {envConfig} from "./others/env.config";
-export function ConfigLoader(envConfig: envConfig) {
-    return () => envConfig.load();
-}*/
+// import {envConfig} from "./others/env.config";
+// export function ConfigLoader() {
+//     return () => function(){console.log('first load')};
+// }
 @NgModule({
   declarations: [
     AppComponent,
@@ -87,11 +92,10 @@ export function ConfigLoader(envConfig: envConfig) {
     FooterComponent,
     Time12Pipe,
     ObjectKeyValuePipe,
-    UploadExcelComponent,
     BlogCreateComponent,
     BlogListComponent,
     BlogViewComponent,
-    DownloadEmailComponent,
+    // DownloadEmailComponent,
     AddDeliveryBoyComponent,
     NotificationComponent,
     ImgPreviewComponent,
@@ -102,7 +106,9 @@ export function ConfigLoader(envConfig: envConfig) {
     ProductReportComponent,
     DeliveryTimeManagementComponent,
     DownloadStockedComponent,
-    DownloadStockedComponentProduct
+    DownloadStockedComponentProduct,
+    AlkemWebformComponent,
+    NewEmployeeComponent
   ],
   imports: [
     BrowserModule,
@@ -148,7 +154,8 @@ export function ConfigLoader(envConfig: envConfig) {
     DateFormatterPipeModule,
     // PayoutDashboardModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    environment.production ? ServiceWorkerModule.register('/ngsw-worker.js') : [],
     // RouterModule
   ],
   providers: [
@@ -163,12 +170,14 @@ export function ConfigLoader(envConfig: envConfig) {
     { provide: MAT_DIALOG_DATA, useValue: {} },
     { provide: MatDialogRef, useValue: {} },
     { provide: MAT_DATE_LOCALE, useValue: 'en-GB' },
-    /*  envConfig,
-    {
-      provide: APP_INITIALIZER,
-      useFactory: ConfigLoader,
-      deps: [envConfig]
-    },*/
+    // envConfig,
+    AppLoadService,
+    { provide: APP_INITIALIZER, useFactory: init_app, deps: [AppLoadService], multi: true },
+    // {
+    //   provide: APP_INITIALIZER,
+    //   useFactory: ConfigLoader,
+    //   multi: true
+    // },
     BackendService,
     UtilityService,
     Logger,
@@ -189,9 +198,12 @@ export function ConfigLoader(envConfig: envConfig) {
     NavService,
     CookieService,
     ScriptService,
-    SerachRankingService
+    SerachRankingService,
+    Location,
+    AlkemService
+    // {provide: LocationStrategy, useClass: PathLocationStrategy}
   ],
-  entryComponents: [UploadExcelComponent, NotificationComponent, ImgPreviewComponent, SelectItemForDelivered, OrderStockComponent, editComponent, DownloadStockedComponent, DownloadStockedComponentProduct],
+  entryComponents: [NotificationComponent, ImgPreviewComponent, SelectItemForDelivered, OrderStockComponent, editComponent, DownloadStockedComponent, DownloadStockedComponentProduct,NewEmployeeComponent],
   bootstrap: [AppComponent],
   exports: [RouterModule]
 })

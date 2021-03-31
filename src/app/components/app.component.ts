@@ -3,7 +3,7 @@ import { UtilityService } from '../services/utility.service';
 // import { BarcodeFormat } from '@zxing/library';
 import { BehaviorSubject } from 'rxjs';
 import { MatDialog } from '@angular/material';
-
+ 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -46,6 +46,9 @@ export class AppComponent implements OnInit, OnChanges{
             status.classList.remove('online');
         },1500);
     }
+  }
+  reload(){
+    window && window.location && window.location.reload();
   }
 }
 
@@ -157,4 +160,5 @@ export class testComponent{
   // fileChange(e){
   //   console.log(e)
   // }
+  
 }

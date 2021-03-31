@@ -10,7 +10,7 @@ import * as jsPDF from 'jspdf';
   styleUrls: ['./download-email.component.css']
 })
 export class DownloadEmailComponent implements OnInit {
-
+ isDownloading = true;
   constructor(
     public BackendService: BackendService,
     public UtilityService: UtilityService,
@@ -78,6 +78,9 @@ export class DownloadEmailComponent implements OnInit {
       const str = _this.ConvertToCSV(response.data);
       if(str){
         _this.downloadCSV(str, fileName);
+        setTimeout(()=>{
+          _this.isDownloading = false;
+        }, 500);
       }
      }
    });

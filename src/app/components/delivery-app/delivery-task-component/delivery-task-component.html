@@ -69,6 +69,7 @@
     <!--Delivery Ends-->
     <div *ngIf="noDeliveryError" class="errorBlock">{{errorMsg}}</div>
     <mat-accordion multi>
+       
         <mat-expansion-panel [expanded]="orders?.toBePickedUp?.total > 0">
             <mat-expansion-panel-header>
                 <mat-panel-title>

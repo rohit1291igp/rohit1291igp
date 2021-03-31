@@ -2,3 +2,33 @@
     width: 100%;
     margin: 2px 0;
 }
+
+::ng-deep .mat-sort-header-container {
+    display: flex;
+    /* display:flex; */
+    /* justify-content: flex-end; */
+    justify-content: center;
+    text-align: center;
+    cursor: pointer;
+}
+
+.mat-cell, .mat-header-cell{
+    text-align: inherit !important;
+}
+
+.btnColor{
+    background-color: #626869;
+    color: white;
+}
+
+mat-cell:nth-child(5), mat-header-cell:nth-child(5) {
+    flex: 0 0 4%;
+    justify-content: center;
+    text-align: center;
+    cursor: pointer;
+
+}
+
+mat-cell:nth-child(4), mat-header-cell:nth-child(4) {
+    flex: 0 0 15%;
+}

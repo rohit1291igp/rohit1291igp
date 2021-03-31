@@ -1,23 +1,32 @@
-<nav>
+<ng-container *ngIf="!loading">
+<nav id="navBar" [ngStyle]="{'background-color': whitelabelStyle ? whitelabelStyle.primaryColor : '', 'color': whitelabelStyle ? whitelabelStyle.secondaryColor : '' }">
     <i class="fa fa-bars" aria-hidden="true" (click)="drawer.toggle()" (mouseover)="drawer.open()" style="cursor: pointer"></i>
     <div class="d-flex align-items-baseline" style="float: right;">
         <p *ngIf="username" style="margin-right: 12px;text-transform: capitalize;">
-            <a *ngIf="env.userType==='egv_admin'||env.userType==='manager'||env.userType==='executive' else noEGV" style="text-decoration: none; cursor: pointer; color: white; font-weight: bold;" routerLink="/new-dashboard/egv/change-password">{{username}}</a>
+            <a *ngIf="(env.userType==='egv_admin' || env.userType==='sub_egv_admin' || env.userType==='wb_yourigpstore') || (env.userType==='manager' || env.userType==='sub_manager') || (env.userType==='executive' || env.userType==='sub_executive') else noEGV" style="text-decoration: none; cursor: pointer; color: white; font-weight: bold;" routerLink="/new-dashboard/egv/change-password">{{username}}</a>
             <ng-template #noEGV>{{username}}</ng-template>
         </p>
         <i (click)="logout($event)" class="fa fa-sign-out" aria-hidden="true"></i>
     </div>
-        <img src="../../../assets/images/igp-logo.png" class="homeLogo" routerLink="/new-dashboard" width="6%" alt="igp">
+        <ng-container *ngIf="whitelabelStyle else defaultImg">
+            <img id="homePageLogo" src="{{whitelabelStyle.headerLogoUrl}}" class="homeLogo" routerLink="/new-dashboard" width="10%" alt="igp" (click)="home()">
+        </ng-container>
+        <ng-template #defaultImg>
+            <img id="homePageLogo" src="../../../assets/images/igp-logo.png" class="homeLogo" routerLink="/new-dashboard" width="6%" alt="igp" (click)="home()">
+        </ng-template>
 </nav>
-<mat-drawer-container class="example-container" autosize style="width: 100%;height: 100vh;">
-    <mat-drawer #drawer #appDrawer class="example-sidenav" mode="side">
+<mat-drawer-container class="example-container" autosize style="width: 100%;min-height: 90vh;background: #f2f2f2;padding-top: 2em;" >
+        <div *ngIf="backBtnShow" class="back-nav-btn" [ngStyle]="{'color': whitelabelStyle ? whitelabelStyle.primaryColor : '' }" (click)="home('back')"><i class="fa fa-arrow-left" aria-hidden="true"></i> Back </div>
+    <mat-drawer #drawer #appDrawer class="example-sidenav" style="max-width: 350px;" mode="side" [ngStyle]="{'background-color': whitelabelStyle ? whitelabelStyle.primaryColor : '', 'color': whitelabelStyle ? whitelabelStyle.secondaryColor : '' }">
         <!-- <a routerLink="/new-dashboard" style="text-decoration: none;">
             <mat-icon aria-hidden="false" aria-label="Example home icon" style="color: #fff;">home
             </mat-icon>
         </a> -->
+        <ng-container *ngIf="navItems && navItems.length > 0">
         <ng-container *ngFor="let item of navItems">
             <app-menu-list-item [item]="item"></app-menu-list-item>
         </ng-container>
+    </ng-container>
     </mat-drawer>
 
     <div class="example-sidenav-content">
@@ -25,20 +34,36 @@
         <div *ngIf="openPage">
             <router-outlet></router-outlet>
         </div>
-        <ng-container *ngIf="navItems[0]">
+        <ng-container *ngIf="navItems && navItems.length > 0 && navItems[0]">
             <div *ngIf="!openPage" class="d-flex justify-content-left flex-wrap-wrap" style="padding: 10px;width: 70%;
             margin: auto;">
                 <ng-container *ngFor="let x of pages">
-                    <a class="page-view" routerLink="{{x.route}}" (click)="navigate('page')">
-                        <div class="img-hover-zoom">
-                            <div class="icon-title-container" style="text-align: center;">
-                                <mat-icon style="width:fit-content" aria-hidden="false" aria-label="Example home icon">{{x.iconName}}</mat-icon>
-                                <p>{{x.displayName}}</p>
+                    <ng-container *ngIf="x.children else page">
+                        <a href="javascript:void(0);" class="page-view" (click)="openChildren(x.children)">
+                            <div class="img-hover-zoom">
+                                <div class="icon-title-container" style="text-align: center;">
+                                    <mat-icon style="width:fit-content" [ngStyle]="{'color': whitelabelStyle ? whitelabelStyle.primaryColor : '' }" aria-hidden="false" aria-label="Example home icon" class="material-icons-outlined">{{x.iconName}}</mat-icon>
+                                    <p>{{x.displayName}}</p>
+                                </div>
                             </div>
-                        </div>
-                    </a>
+                        </a>
+                    </ng-container>
+                    <ng-template #page>
+                            <a class="page-view" routerLink="{{x.route}}" (click)="navigate('page')">
+                                    <div class="img-hover-zoom">
+                                        <div class="icon-title-container" style="text-align: center;">
+                                            <mat-icon style="width:fit-content" [ngStyle]="{'color': whitelabelStyle ? whitelabelStyle.primaryColor : '' }" aria-hidden="false" aria-label="Example home icon" class="material-icons-outlined">{{x.iconName}}</mat-icon>
+                                            <p>{{x.displayName}}</p>
+                                        </div>
+                                    </div>
+                                </a>
+                    </ng-template>
                 </ng-container>
             </div>
         </ng-container>
     </div>
 </mat-drawer-container>
+</ng-container>
+<div [ngStyle]="{display: loading ? 'flex' : 'none'}" class="spinner">
+    <mat-spinner [diameter]="40"></mat-spinner>
+    </div>

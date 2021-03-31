@@ -1,4 +1,20 @@
-nav {
+/* @font-face {
+	font-family: "Intro-Light-Regular";
+	font-weight: 100;
+	src: url("./../../../assets/fonts/Intro\ Light\ Regular.otf") format("opentype");
+}
+
+@font-face {
+	font-family: "Intro Light Bold";
+	font-weight: 100;
+	src: url("/src/assets/fonts/Intro\ Cond\ Bold.otf") format("opentype");
+} */
+
+ *{
+     font-family: 'Intro Semi Bold';
+ }
+
+#navBar {
     background: #c3404e;
     color: #fff;
     padding: 8px;
@@ -12,6 +28,9 @@ nav {
     cursor: pointer;
     border-radius: 5px;
     margin: 5px;
+    background: #fff;
+    box-shadow: 0px 1px 3px 0px #ccc;
+    border-radius: 2px;
 }
 
 .page-view:hover {
@@ -22,7 +41,7 @@ nav {
     /* height: 300px; */
     /* [1.1] Set it as per your need */
     overflow: hidden;
-    border: 1px solid #ccc;
+    /* border: 1px solid #ccc; */
     height: 200px;
     position: relative;
     /* [1.2] Hide the overflowing of child elements */
@@ -68,3 +87,26 @@ nav {
 .homeLogo:focus {
     outline: 0;
 }
+
+.spinner {
+    display: flex;
+    justify-content: center;
+    height: 100vh;
+    background: #fff;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    text-align: center;
+    padding: 100px;
+    align-items: center;
+    opacity: 0.8;
+}
+
+.back-nav-btn{
+    color: #c3404e;
+    font-size: 1.2em;
+    margin: 5px 9px;
+    width: fit-content;
+    cursor: pointer;
+}
+

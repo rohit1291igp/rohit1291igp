@@ -1,10 +1,12 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, NgModule } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { DatePipe } from '@angular/common';
+import { DatePipe, CommonModule } from '@angular/common';
 import { MatTableDataSource, MatPaginator, MatSnackBar, MatDatepickerInput } from '@angular/material';
 import { ReportsService } from 'app/services/reports.service';
 import { environment } from 'environments/environment';
 import { OrdersActionTrayComponent } from '../orders-action-tray/orders-action-tray.component';
+import { SharedModule } from 'app/shared-module/shared/shared.module';
+import { Routes, RouterModule } from '@angular/router';
 
 
 @Component({
@@ -108,9 +110,9 @@ export class UploadedImageReportComponent implements OnInit {
   viewOrderDetail(e, orderId) {
     console.log('viewOrderDetail-------->', orderId);
     if (e.event) {
-      this.child.toggleTray(e.event, "", e.orderId, null);
+      this.child.toggleTray(e.event, "", e.orderId, null, null);
     } else {
-      this.child.toggleTray(e, "", orderId, null);
+      this.child.toggleTray(e, "", orderId, null, null);
     }
   }
 

@@ -1,0 +1,66 @@
+.filterElement {
+    width: 80%;
+    margin-right: 15px;
+}
+
+.addMoneyInput{
+    width:80%
+}
+
+.is-invalid {
+    border: 1px solid red
+}
+
+.marginLR10 {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+[type="file"] {
+    height: 0; 
+    overflow: hidden;
+    width: 0;
+}
+
+[type="file"]+label {
+    border: none;
+    border-radius: 5px;
+    color: #fff;
+    cursor: pointer;
+    display: inline-block;
+    font-family: 'Poppins', sans-serif;
+    font-size: inherit;
+    font-weight: 600;
+    outline: none;
+    margin-bottom: 0;
+    padding: 10px 50px;
+    position: relative;
+    transition: all 0.3s;
+    vertical-align: middle;
+    margin-bottom: 20px;
+    margin-left: 10px;
+    text-align: center;
+}
+
+[type="file"]+label:hover {
+    background-color: darken(#f15d22, 10%);
+}
+
+[type="file"]+label.btn-2 {
+    background-color: #626869;
+    overflow: hidden;
+}
+
+input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type=number] {
+    -moz-appearance: textfield;
+}
+
+.btnColor{
+    background-color: #626869;
+    color: white;
+}

@@ -1,0 +1,141 @@
+<mat-sidenav-container (backdropClick)="sidenavClose('backdrop')">
+  <mat-sidenav #sidenav position="end" (keydown.escape)="sidenavClose('escape')" style="width: 50%;" disableClose>
+    <mat-card>
+      <div class="row">
+        <span style="float: right; font-size: 1.8em; cursor: pointer;" (click)="sidenav.close()">&times;</span>
+        <h4 class="col-sm-6" style="color:rgb(195, 64, 78)" *ngIf="errorList?.length">Errors : {{errorList.length}}</h4>
+      </div>
+    </mat-card>
+    <mat-card *ngFor="let ele of errorList">
+      Row:{{ele.row}} :- {{ele.msg}}
+    </mat-card>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <div class="main-container " style="height:90vh; background-color: #f0f0f0; padding:10px;">
+
+      <div class="col-md-12">
+
+        <div class="col-md-4" style="background-color: white; padding:10px; margin:10px">
+
+          <div class="col-md-12 marginLR10" style="margin-bottom: 15px;margin-top: 15px">
+            <mat-radio-group [(ngModel)]="excelAction" aria-label="Upload By">
+              <mat-radio-button style="margin-right: 20px;" value="manual">Single Product</mat-radio-button>
+              <mat-radio-button style="margin-right: 20px;" value="excel">Multiple Product</mat-radio-button>
+            </mat-radio-group>
+          </div>
+          <div class="col-md-12 marginLR10" *ngIf="excelAction === 'manual'">
+            <form [formGroup]="bulkegvform" (ngSubmit)="generateManualBulkEgv()">
+              <div>
+                <!-- *ngIf="env.userType=='egv_admin'" -->
+
+                <mat-form-field class="filterElement width20 marginLR10 ">
+
+                  <mat-label>Select a Product</mat-label>
+                  <input type="text" matInput placeholder='Select a Product' formControlName="selectedProduct"
+                    [matAutocomplete]="auto">
+                  <mat-autocomplete #auto="matAutocomplete" (optionSelected)='getProductSelected($event.option.value)'
+                    [displayWith]="productDisplayFn">
+                    <mat-option *ngFor="let option of filteredProductList | async" [value]="option">
+                      {{option.displayName}}</mat-option>
+                  </mat-autocomplete>
+                </mat-form-field>
+                <br>
+                <mat-form-field class="addMoneyInput width20 marginLR10" style="margin-bottom:20px">
+                  <mat-label> Denomination*</mat-label>
+                  <input matInput name='denomination' type="number" placeholder="Enter Amount"
+                    formControlName="denomination">
+                  <mat-hint align="start" *ngIf="!(bulkegvform.get('selectedProduct').value.flagSlab)"><strong>Min.
+                      {{minValue}} - Max. {{maxValue}}</strong> </mat-hint>
+                </mat-form-field>
+                <br>
+                <mat-form-field class="addMoneyInput width20 marginLR10">
+                  <mat-label> Quantity*</mat-label>
+                  <input matInput name='quantity' type="number" formControlName="quantity">
+                </mat-form-field>
+              </div>
+              <div>
+                <mat-form-field class="addMoneyInput width20 marginLR10">
+                  <mat-label> Recipient Name*</mat-label>
+                  <input matInput name='receipent_name' type="text" formControlName="receipent_name">
+                </mat-form-field>
+                <br>
+                <mat-form-field class="addMoneyInput width20 marginLR10" style="margin-bottom: 15px;">
+                  <mat-label> Recipient Email*</mat-label>
+                  <input matInput name='receipent_email' type="email" [email]="true" formControlName="receipent_email">
+                  <mat-hint>Note - Bulk E-Gift Voucher will be sent on above mentioned email id.</mat-hint>
+                </mat-form-field>
+                <br>
+                <mat-form-field class="addMoneyInput width20 marginLR10">
+                  <mat-label>Delivery Date</mat-label>
+                  <input matInput [matDatepicker]="scheduleDate" [min]="minDate"
+                    (dateInput)="addEventFrom('input','scheduleDate', $event)"
+                    (dateChange)="addEventFrom('change','scheduleDate', $event)"
+                    [value]="bulkegvform.get('scheduleDate').value" autocomplete="off">
+                  <mat-datepicker-toggle matSuffix [for]="scheduleDate"></mat-datepicker-toggle>
+                  <mat-datepicker #scheduleDate></mat-datepicker>
+                </mat-form-field>
+                <br>
+                <button class="btnColor" type='submit' style="margin-left: 10px;" mat-raised-button>Generate E-Gift Voucher</button>
+              </div>
+            </form>
+          </div>
+          <div class="col-md-12 marginLR10" *ngIf="excelAction === 'excel'">
+            <div>
+              <input type="file" id="file" (change)="readExcel($event)" />
+              <label for="file" class="btn-2 addMoneyInput" (change)="readExcel($event)">
+                <i class="fa fa-upload" aria-hidden="true"></i>
+                Upload Excel
+              </label>
+              <br>
+              <mat-form-field class=" width20 marginLR10 addMoneyInput">
+                <mat-label>Delivery Date</mat-label>
+                <input matInput [matDatepicker]="scheduleDate" [min]="minDate"
+                  (dateInput)="addEventFrom('input','scheduleDate', $event)"
+                  (dateChange)="addEventFrom('change','scheduleDate', $event)"
+                  [value]="bulkegvform.get('scheduleDate').value" autocomplete="off">
+                <mat-datepicker-toggle matSuffix [for]="scheduleDate"></mat-datepicker-toggle>
+                <mat-datepicker #scheduleDate></mat-datepicker>
+              </mat-form-field>
+              <br>
+              <button style="margin-top:10px;margin-left: 10px;background-color: #626869;" (click)="genrateBulkExcelEgv()" mat-raised-button
+                color="primary">Generate E-Gift Vouchers</button>
+            </div>
+            <div style="margin-top:20px">
+              <button (click)="downloadProductList()" mat-button color="primary">Download Bulk GV Template and
+                Vouchers
+                List</button>
+              <!-- <button (click)="downloadSample()" mat-button color="primary">Download Bulk GV Template</button> -->
+            </div>
+          </div>
+
+        </div>
+
+        <div class="col-md-7" style="background-color: white; padding:10px ;margin:10px" *ngIf="excelAction === 'excel'">
+          <h5>Imported File Preview:</h5>
+          <div class="mat-elevation-z8" *ngIf="dataSource?.data?.length > 0   else noRecord">
+
+            <mat-table [dataSource]="dataSource">
+              <ng-container [matColumnDef]="column" *ngFor="let column of tableHeaders">
+                <mat-header-cell *matHeaderCellDef> {{column|uppercase}} </mat-header-cell>
+                <mat-cell *matCellDef="let element">
+                  <ng-container>
+                    {{element[column] || '-'}}
+                  </ng-container>
+                </mat-cell>
+              </ng-container>
+              <mat-header-row *matHeaderRowDef="tableHeaders"></mat-header-row>
+              <mat-row *matRowDef="let row; columns: tableHeaders;"></mat-row>
+            </mat-table>
+            <mat-paginator [pageSizeOptions]="[20]" length="{{dataSource?.length}}" showFirstLastButtons>
+            </mat-paginator>
+          </div>
+          <ng-template #noRecord>
+            <mat-card style="color: #C3404E;">No Record</mat-card>
+          </ng-template>
+        </div>
+      </div>
+
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

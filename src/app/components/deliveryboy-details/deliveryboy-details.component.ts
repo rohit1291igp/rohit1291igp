@@ -1,10 +1,12 @@
-import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
-import { MatDialog, MatSnackBar } from '@angular/material';
+import { Component, OnInit, ViewChild, AfterViewInit, NgModule } from '@angular/core';
+import { MatDialog, MatSnackBar, MatPaginator } from '@angular/material';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { BackendService } from '../../services/backend.service';
 import { AddDeliveryBoyComponent } from '../add-deliveryboy/add-deliveryboy.component';
 import { NotificationComponent } from '../notification/notification.component';
+import { CommonModule } from '@angular/common';
+import { SharedModule } from 'app/shared-module/shared/shared.module';
 
 @Component({
     selector: 'app-deliveryboy-details',
@@ -12,11 +14,13 @@ import { NotificationComponent } from '../notification/notification.component';
     styleUrls: ['./deliveryboy-details.component.css']
 })
 export class DeliveryBoyDetailsComponent implements OnInit {
-    dataSource;
+    public dataSource:MatTableDataSource<any> = new MatTableDataSource([]);
     displayedColumns = [];
     @ViewChild(MatSort) sort: MatSort;
+    @ViewChild(MatPaginator) paginator: MatPaginator;
     viewDisabledItems = false;
-    originalDataSource: any;
+    originalDataSource: any[] = [];
+    agentNameInput: any;
     constructor(
         private BackendService: BackendService,
         public addDeliveryBoyDialog: MatDialog,
@@ -66,24 +70,40 @@ export class DeliveryBoyDetailsComponent implements OnInit {
     }
 
     getdeliveryBoy() {
-        var _this = this
-        const reqObj = {
-            url: `deliveryBoyDetails?fkAssociateId=${localStorage.getItem('fkAssociateId')}&endLimit=100&fkUserId=`,
-            method: "get",
-            payload: {}
+        var _this = this;
+        _this.dataSource.data = [];
+        let start = 0;
+        let end = 100;
+        function apiCall (){
+            const reqObj = {
+                url: `deliveryBoyDetails?fkAssociateId=${localStorage.getItem('fkAssociateId')}&startLimit=${start}&endLimit=${end}&fkUserId=`,
+                method: "get",
+                payload: {}
+            };
+            _this.BackendService.makeAjax(reqObj, function (err, response, headers) {
+                //if(!response) response={result:[]};
+                if (err || response.error) {
+                    console.log('Error=============>', err);
+                    return;
+                }
+                if (response && response.tableData) {
+                    // _this.deliveryBoyList.push(...response.tableData);
+                    _this.originalDataSource.push(...response.tableData);
+                    // _this.dataSource = new MatTableDataSource(_this.originalDataSource.filter(f => f.Status));
+                    _this.dataSource.data.push(...response.tableData.filter(f => f.Status));
+
+                    _this.dataSource.sort = _this.sort;
+                    _this.dataSource.paginator = _this.paginator;
+                    //check total record summary and call api
+                    if((response.summary && response.summary[0]['value']) && _this.originalDataSource.length < Number(response.summary[0]['value'])){
+                        start = start + 100;
+                        end = end + 100;
+                        apiCall();
+                    }
+                }
+            });
         };
-        _this.BackendService.makeAjax(reqObj, function (err, response, headers) {
-            
-            if (err || response.error) {
-                console.log('Error=============>', err);
-                return;
-            }
-            if (response) {
-                _this.originalDataSource = response.tableData;
-                _this.dataSource = new MatTableDataSource(response.tableData.filter(f => f.Status));
-                _this.dataSource.sort = _this.sort;
-            }
-        });
+        apiCall();
     }
 
     openNewDeliveryBoyDialog(data?: any): void {
@@ -172,18 +192,28 @@ export class DeliveryBoyDetailsComponent implements OnInit {
 
     disabledItemsToggle() {
         this.viewDisabledItems = !this.viewDisabledItems;
-
+        // this.originalDataSource = this.agentNameInput ? this.originalDataSource.filter(f => f && f.)
+        
         if (this.viewDisabledItems) {
             let TempdataSource = this.originalDataSource.filter(f => !f.Status && f);
 
-            this.dataSource = new MatTableDataSource(TempdataSource)
+            this.dataSource = new MatTableDataSource(TempdataSource);
+            if(this.agentNameInput){
+                this.dataSource.filter = this.agentNameInput.trim().toLowerCase();
+            }
+            this.dataSource.sort = this.sort;
+            this.dataSource.paginator = this.paginator;
         } else {
             let TempdataSource = this.originalDataSource.filter(f => f.Status && f);
 
-            this.dataSource = new MatTableDataSource(TempdataSource)
+            this.dataSource = new MatTableDataSource(TempdataSource);
+            if(this.agentNameInput){
+                this.dataSource.filter = this.agentNameInput.trim().toLowerCase();
+            }
+            this.dataSource.sort = this.sort;
+            this.dataSource.paginator = this.paginator;
         }
 
 
     }
 }
-

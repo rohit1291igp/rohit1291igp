@@ -178,7 +178,7 @@ page[size="A5"][layout="portrait"] {
     }
 
     .messgae-box-cont{
-        height:335px;
+        /*height:335px;
         /*border-bottom: 2px dotted #757575;*/
         background: #fff;
         /*padding: 80px 0;*/
@@ -527,7 +527,7 @@ page[size="A5"][layout="portrait"] {
 }
 
 .messgae-box-cont{
-    height:335px;
+    /*height:335px;
     /*border-bottom: 2px dotted #757575;*/
     background: #fff;
     /*padding: 80px 0;*/

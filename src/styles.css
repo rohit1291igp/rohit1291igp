@@ -1,5 +1,13 @@
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
 /* You can add global styles to this file, and also import other style files */
+
+@font-face {
+    font-family: 'Intro Semi Bold';
+    src: url(./assets/fonts/Intro-Book-Regular.otf) format('opentype'), 
+    url(./assets/fonts/Intro-Book-Regular.otf) format('opentype'), 
+    url(./assets/fonts/Intro-Book-Regular.otf) format('opentype');
+ }
+
 html{
     font-size: 14px;
 }
@@ -156,6 +164,10 @@ body{
 
 .padding1{
     padding:1em;
+}
+
+.padding-0{
+    padding: 0 !important;
 }
 
 
@@ -852,6 +864,9 @@ body .dashboard-content, body .orders-button{
 .text-align-center{
     text-align: center;
 }
+.text-align-justify{
+    text-align: justify;
+}
 .m-8{
     margin: 8px;
 }
@@ -872,6 +887,9 @@ body .dashboard-content, body .orders-button{
 }
 .justify-content-space-around{
     justify-content: space-around;
+}
+.justify-content-space-between{
+    justify-content: space-between;
 }
 .justify-content-flex-end{
     justify-content: flex-end;
@@ -897,7 +915,17 @@ body .dashboard-content, body .orders-button{
 .flex-wrap-wrap{
     flex-wrap: wrap;
 }
+.width-fit-content{
+    width: fit-content;
+}
+.font-weight-bold{
+    font-weight: bold !important;
+}
+/* common Ends */
 .is-active {
     background: #fff;
     color: #C3404E !important;
 }
+
+
+

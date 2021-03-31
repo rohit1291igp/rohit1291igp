@@ -13,7 +13,7 @@
 }
 
 
-::ng-deep .mat-sort-header-container {
+::ng-deep .mat-sort-header-container{
     display: flex;
     /* display:flex; */
     /* justify-content: flex-end; */
@@ -22,12 +22,24 @@
     cursor: pointer;
 }
 
-::ng-deep .mat-cell {
+::ng-deep .mat-header-cell.mat-column-Amount,
+::ng-deep .mat-header-cell.mat-column-Order-Value,
+::ng-deep .mat-header-cell.mat-column-TransferPrice,
+::ng-deep .mat-header-cell.mat-column-Denomination,
+::ng-deep .mat-header-cell.mat-column-Balance,
+::ng-deep .mat-header-cell.mat-column-Denomination {
+    justify-content: flex-end;
+    text-align: right !important;
+    display: flex;
+}
+
+::ng-deep .mat-cell,
+::ng-deep .mat-column-Status {
     text-align: center;
     justify-content: center;
 }
 
-.mat-column-Amount,
+::ng-deep .mat-column-Amount,
 ::ng-deep .mat-column-Order-Value,
 ::ng-deep .mat-column-TransferPrice,
 ::ng-deep .mat-column-Denomination,
@@ -35,4 +47,26 @@
 ::ng-deep .mat-column-Denomination 
 {
     text-align: right !important;
+}
+
+.search-container-box{
+    margin: 1px 19px 12px auto;
+    border: 1px solid #a6a6a6;
+    width: fit-content;
+    padding: 0px 10px;
+    border-radius: 3px;
+}
+.search-container-box>input{
+    width: 200px;
+    padding: 6px 4px;
+}
+.search-container-box>i{
+    font-size: 1.2em;
+    margin-bottom: 9px;
+    color: #a6a6a6;
+}
+
+.main-container {
+    width: 98%;
+    margin: 0 auto;
 }

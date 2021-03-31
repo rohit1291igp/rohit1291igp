@@ -1,16 +1,13 @@
 import { RouterModule, Routes } from '@angular/router';
 import { AddDeliveryBoyComponent } from './components/add-deliveryboy/add-deliveryboy.component';
+import { AlkemWebformComponent } from './components/alkem-webform/alkem-webform.component';
 import { BlogCreateComponent } from './components/blog-create/blog-create.component';
 import { BlogListComponent } from './components/blog-list/blog-list.component';
 import { BlogViewComponent } from './components/blog-view/blog-view.component';
-import { DailyOpsReportComponent } from './components/daily-ops-report/daily-ops-report.component';
 import { DeliveryTimeManagementComponent } from './components/delivery-time-management/delivery-time-management.component';
-import { DownloadEmailComponent } from './components/download-email/download-email.component';
 import { LoginComponent } from './components/login/login.component';
-
-import { OfferPageManagementComponent } from './components/offer-page-management/offer-page-management.component';
-import { ProductReportComponent } from './components/product-report/product-report.component';
 import { AuthGuard } from './services/auth-guard.service';
+
 // import { EgvGuard } from './services/egv.guard';
 // import { AlertManagementComponent } from './components/egv/alert-management/alert-management.component';
 // import { PasswordChangeComponent } from './components/egv/user-management/password-change/password-change.component';
@@ -18,7 +15,8 @@ import { AuthGuard } from './services/auth-guard.service';
 
 const route: Routes = [
 
-  { path: 'login', component: LoginComponent },
+  { path: 'login', component: LoginComponent},
+  { path: 'login/:micrositeName', component: LoginComponent},
   {
     path: 'dashboard',
     loadChildren: './modules/dashboard.module#DashboardModule',
@@ -51,11 +49,11 @@ const route: Routes = [
     loadChildren: './modules/voucher.module#VoucherModule',
     canActivate: [AuthGuard]
   },
-  {
-    path: 'download/:fileFor/:filedate/:fileTime',
-    component: DownloadEmailComponent,
-    canActivate: [AuthGuard]
-  },
+  // {
+  //   path: 'download/:fileFor/:filedate/:fileTime',
+  //   component: DownloadEmailComponent,
+  //   canActivate: [AuthGuard]
+  // },
   {
     path: 'add-delivery-boy',
     component: AddDeliveryBoyComponent,
@@ -74,11 +72,6 @@ const route: Routes = [
   {
     path: 'voucher',
     loadChildren: './modules/voucher.module#VoucherModule',
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'productReport',
-    component: ProductReportComponent,
     canActivate: [AuthGuard]
   },
   {
@@ -106,9 +99,13 @@ const route: Routes = [
   //   component:AlertManagementComponent,
   //   canActivate:[AuthGuard,EgvGuard]
   // },
-  { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+  {
+    path: 'alkem-my-doctor',
+    component: AlkemWebformComponent
+  },
+  { path: '', redirectTo: 'new-dashboard', pathMatch: 'full' },
   // otherwise redirect to home
-  { path: '**', redirectTo: 'dashboard' }
+  { path: '**', redirectTo: 'new-dashboard' }
 ];
 
 export const routing = RouterModule.forRoot(route, { useHash: true });

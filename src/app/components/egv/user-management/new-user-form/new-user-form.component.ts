@@ -1,9 +1,9 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, NgForm } from '@angular/forms';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { MatDialogRef, MatSnackBar, MAT_DIALOG_DATA } from '@angular/material';
 import { EgvService } from 'app/services/egv.service';
 import { environment } from "environments/environment";
-
+import { NotificationComponent } from 'app/components/notification/notification.component';
 @Component({
   selector: 'app-new-user-form',
   templateUrl: './new-user-form.component.html',
@@ -13,19 +13,24 @@ export class NewUserFormComponent implements OnInit {
 
   env=environment
   newUser:FormGroup
-  selectedFkid=""
+  selectedFkid="";
+  parentId='';
+  fksId;
   accounts_list=[]
+  public walletType = 'master_wallet';
   constructor(
     private fb:FormBuilder,
     private egvService:EgvService,
-    public dialogRef: MatDialogRef<NewUserFormComponent>,
+    public dialogRef: MatDialogRef<NewUserFormComponent>,    
+    private _snackBar: MatSnackBar,
     @Inject(MAT_DIALOG_DATA) public data: any) { }
 
   ngOnInit() {
     console.log(this.data)
+    this.fksId=localStorage.getItem('fkAssociateId');
     this.setUserForm()
-    if(this.env.userType==='egv_admin'){
-      this.getAccountsList()
+    if(this.env.userType==='egv_admin' || this.env.userType==='sub_egv_admin' || this.env.userType==='parent_manager' || this.env.userType==='wb_yourigpstore'){
+      this.getAccountsList(this.env.userType)
     }else{
       this.selectedFkid=localStorage.getItem('fkAssociateId');
     }
@@ -40,7 +45,10 @@ export class NewUserFormComponent implements OnInit {
       email:["",Validators.compose([Validators.required,Validators.email])],
       username:["",Validators.required],
       mobile:["",Validators.required]
-    })
+    });
+    if(this.env.userType==='parent_manager'){
+      this.newUser.addControl('parentId',this.fb.control('',[]))
+    }
   }
   setCompanyForm(){
     this.newUser.addControl('company_name',this.fb.control('',[Validators.required]))
@@ -50,37 +58,56 @@ export class NewUserFormComponent implements OnInit {
       this.newUser.addControl('company_number',this.fb.control('',[]))
   }
 
-  getAccountsList(){
-    this.egvService.getCompanyList().subscribe((res:any)=>{
+  getAccountsList(userType){
+    let parentId = userType == 'parent_manager' ? localStorage.getItem('fkAssociateId') : null;
+    this.egvService.getCompanyList(parentId).subscribe((res:any)=>{
       this.accounts_list=res;
     })
   }
 
   onSubmit(f:NgForm){
+    
+    let $this = this;
     console.log(f)
     if(f.valid){
+      let obj = f.value;
+      
       if(this.data.account_type==='client'){
-        f.value.fk_associate_id=Number(localStorage.getItem('fkAssociateId'));
+        obj.fk_associate_id=Number(localStorage.getItem('fkAssociateId'));
+        
+        if(this.env.userType==='egv_admin' && this.walletType == 'master_wallet'){
+          obj['flagParent'] = true;
+        }
+        else  obj['parentId'] = f.value.fk_associate_id;       
+
       }
       if(this.data.account_type==='manager'){
-        f.value.fk_associate_id=Number(this.selectedFkid);
+        obj.fk_associate_id=Number(this.selectedFkid);
+        if(this.env.userType==='egv_admin') obj['flagParent'] = true;
+
       }else if(this.data.account_type==='executive'){
-        if(this.env.userType==='egv_admin'){
-          f.value.fk_associate_id=Number(this.selectedFkid);
+        obj['parentId'] = this.fksId;
+        if(this.env.userType==='egv_admin') obj['flagParent'] = true;
+        if(this.env.userType === 'egv_admin' || this.env.userType==='parent_manager' || this.env.userType === 'wb_yourigpstore'){
+          obj.fk_associate_id=Number(this.selectedFkid);
         }else{
-          f.value.fk_associate_id=Number(localStorage.getItem('fkAssociateId'));
+          obj.fk_associate_id=Number(localStorage.getItem('fkAssociateId'));
         }
       }
+      if(this.env.userType==='parent_manager' && (Number(this.selectedFkid) == Number(localStorage.getItem('fkAssociateId')))){
+        obj.flagParent = true;
+      }
       // defaul
-      f.value.usertype=this.UserTypesMap[this.data.account_type]
-      f.value.id=0;
+      obj.usertype=this.UserTypesMap[this.data.account_type]
+      obj.id=0;
 
-      console.log(f.value)
-      this.egvService.createEgvUser(f.value).subscribe((res:any)=>{
+      console.log(obj)
+      this.egvService.createEgvUser(obj).subscribe((res:any)=>{
+        
         if(res.error){
-          alert('unable to create new user')
+          this.openSnackBar('Unable to create new user')
         }else{
-          alert('Egv user created successfully')
+           this.openSnackBar('User created successfully')
           this.dialogRef.close();
         }
       })
@@ -110,5 +137,13 @@ export class NewUserFormComponent implements OnInit {
   onNoClick(): void {
     this.dialogRef.close();
   }
+
+  openSnackBar(data) {
+    this._snackBar.openFromComponent(NotificationComponent, {
+        data: data,
+        duration: 5 * 1000,
+        panelClass: ['snackbar-background']
+    });
+}
 
 }

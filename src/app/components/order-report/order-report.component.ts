@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef, ViewChild, AfterViewInit, Inject, OnDestroy } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ViewChild, AfterViewInit, Inject, OnDestroy, NgModule } from '@angular/core';
 import { FormControl, FormGroup, FormBuilder } from '@angular/forms';
 import { MatDialog, MatSnackBar, MatPaginator, MatDialogRef, MAT_DIALOG_DATA, MatDatepickerInput } from '@angular/material';
 import { MatSort } from '@angular/material/sort';
@@ -6,20 +6,21 @@ import { MatTableDataSource } from '@angular/material/table';
 import { BackendService } from '../../services/backend.service';
 import { AddDeliveryBoyComponent } from '../add-deliveryboy/add-deliveryboy.component';
 import { NotificationComponent } from '../notification/notification.component';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Routes, RouterModule } from '@angular/router';
 import { ReportsService } from 'app/services/reports.service';
-import { DatePipe } from '@angular/common';
+import { DatePipe, CommonModule } from '@angular/common';
 import { Angular5Csv } from 'angular5-csv/dist/Angular5-csv';
 import { environment } from "../../../environments/environment";
 import { startWith, map } from 'rxjs/operators';
 import { OrdersActionTrayComponent } from '../orders-action-tray/orders-action-tray.component';
+import { SharedModule } from 'app/shared-module/shared/shared.module';
 
 @Component({
   selector: 'app-order-report',
   templateUrl: './order-report.component.html',
   styleUrls: ['./order-report.component.css']
 })
-export class OrderReportComponent implements OnInit {
+export class OrderReportComponent implements OnInit, OnDestroy {
 
 
   @ViewChild(OrdersActionTrayComponent) child: OrdersActionTrayComponent;
@@ -84,8 +85,16 @@ export class OrderReportComponent implements OnInit {
         return
       }
       console.log('sidePanel Response --->', _reportData);
-      _this.dataSource = new MatTableDataSource(_reportData.tableData);
+      let tableData = _reportData.tableData;
+      for (let i = 1; i < tableData.length; i++) {
+        if (tableData[i]["Order_No"] == tableData[i - 1]["Order_No"]) {
+          tableData[i]['Discount'] = '0.00'
+        }
+      }
+      _this.dataSource = new MatTableDataSource(tableData);
       _this.tableHeaders = _reportData.tableHeaders;
+      if (environment.userType == 'admin') _this.tableHeaders.push('Discount');
+      if (environment.userType == 'hdextnp') _this.tableHeaders.splice(_this.tableHeaders.indexOf('Amount'), 1)
       setTimeout(() => {
         _this.dataSource.paginator = _this.paginator;
         _this.dataSource.sort = _this.sort;
@@ -179,8 +188,16 @@ export class OrderReportComponent implements OnInit {
         return
       }
       console.log('sidePanel Response --->', _reportData);
-      _this.dataSource = new MatTableDataSource(_reportData.tableData);
+      let tableData = _reportData.tableData;
+      for (let i = 1; i < tableData.length; i++) {
+        if (tableData[i]["Order_No"] == tableData[i - 1]["Order_No"]) {
+          tableData[i]['Discount'] = '0.00'
+        }
+      }
+      _this.dataSource = new MatTableDataSource(tableData);
       _this.tableHeaders = _reportData.tableHeaders;
+      if (environment.userType == 'admin') _this.tableHeaders.push('Discount');
+      if (environment.userType == 'hdextnp') _this.tableHeaders.splice(_this.tableHeaders.indexOf('Amount'), 1)
       setTimeout(() => {
         _this.dataSource.paginator = _this.paginator;
         _this.dataSource.sort = _this.sort;
@@ -189,76 +206,96 @@ export class OrderReportComponent implements OnInit {
   }
 
   downloadData(data) {
-    let _this = this;
-    _this.queryObj = {};
-    const dateToday = _this.formatDate(Date.now(), 'yyyy-MM-dd');
-    if (_this.env.userType == 'admin') {
+    let $this = this;
+    $this.queryObj = {};
+    const dateToday = $this.formatDate(Date.now(), 'yyyy-MM-dd');
+    if ($this.env.userType == 'admin') {
       if (data.value.vendorGroup) {
-        _this.queryObj.filterId = data.value.vendorGroup.key;
+        $this.queryObj.filterId = data.value.vendorGroup.key;
       }
-      if (_this.vendorSelected) {
-        _this.queryObj.fkAssociateId = _this.vendorSelected.Vendor_Id
+      if ($this.vendorSelected) {
+        $this.queryObj.fkAssociateId = $this.vendorSelected.Vendor_Id
       }
     }
 
     if (data.value.deliveryFrom) {
-      _this.queryObj.deliveryDateFrom = _this.formatDate(data.value.deliveryFrom, 'yyyy/MM/dd');
+      $this.queryObj.deliveryDateFrom = $this.formatDate(data.value.deliveryFrom, 'yyyy/MM/dd');
     }
     if (data.value.deliveryTo) {
-      _this.queryObj.deliveryDateTo = _this.formatDate(data.value.deliveryTo, 'yyyy/MM/dd');
+      $this.queryObj.deliveryDateTo = $this.formatDate(data.value.deliveryTo, 'yyyy/MM/dd');
     }
     if (data.value.orderFrom) {
-      _this.queryObj.orderDateFrom = _this.formatDate(data.value.orderFrom, 'yyyy/MM/dd');
+      $this.queryObj.orderDateFrom = $this.formatDate(data.value.orderFrom, 'yyyy/MM/dd');
     }
     if (data.value.orderTo) {
-      _this.queryObj.orderDateTo = _this.formatDate(data.value.orderTo, 'yyyy/MM/dd');
+      $this.queryObj.orderDateTo = $this.formatDate(data.value.orderTo, 'yyyy/MM/dd');
     }
     if (data.value.status && data.value.status != "All Order Status") {
-      _this.queryObj.status = data.value.status.split(' ').join('');
+      $this.queryObj.status = data.value.status.split(' ').join('');
     }
 
     if (data.value.orderNo) {
-      _this.queryObj.orderNumber = data.value.orderNo
+      $this.queryObj.orderNumber = data.value.orderNo
     }
-    _this.queryObj.endLimit = 100;
-    let url = _this.generateQueryString(_this.queryObj);
-    _this.dowloadingSummary = true;
+    $this.queryObj.endLimit = 100;
+    let url = $this.generateQueryString($this.queryObj);
+    $this.dowloadingSummary = true;
     let reqObj: any = {
       url: 'getOrderReport?',
       method: "get",
     };
     reqObj.url += url;
     reqObj.url += "&startLimit=0&flag_count=1";
-    _this.reportsService.getReportData('getOrderReport', reqObj.url, function (error, _reportData) {
+    $this.reportsService.getReportData('getOrderReport', reqObj.url, function (error, _reportData) {
       let downreqObj: any = {
         url: 'getOrderReport?',
         method: "get",
       };
-      _this.queryObj.endLimit = _reportData.summary[0].value;
-      let downurl = _this.generateQueryString(_this.queryObj);
+      $this.queryObj.endLimit = _reportData.summary[0].value;
+      let downurl = $this.generateQueryString($this.queryObj);
       downreqObj.url += downurl;
       downreqObj.url += "&startLimit=0&flag_count=0";
-      if(_this.env.userType == 'vendor'){
+      if ($this.env.userType == 'vendor' || $this.env.userType == 'hdextnp') {
         downreqObj.url += `&fkAssociateId=${localStorage.getItem('fkAssociateId')}`;
+      }
+
+      $this.BackendService.makeAjax(downreqObj, function (error, _reportData) {
+        let tableData = _reportData.tableData;
+        for (let i = 1; i < _reportData.tableData.length; i++) {
+          if (_reportData.tableData[i]["Order_No"] == _reportData.tableData[i - 1]["Order_No"]) {
+            _reportData.tableData[i]['Discount'] = '0.00'
+          }
         }
-      _this.BackendService.makeAjax(downreqObj, function (error, _reportData) {
-        _this.dowloadingSummary = false;
+        // _this.dataSource = new MatTableDataSource(tableData);
+        $this.dowloadingSummary = false;
+        let headers = Object.keys(_reportData.tableData[0]).map(m => m.charAt(0).toUpperCase() + m.slice(1))
+        // _this.tableHeaders = _reportData.tableHeaders;
+        headers.splice(headers.indexOf('Order_Product_Id'), 1)
+        if (environment.userType == 'hdextnp') headers.splice(headers.indexOf('Amount'), 1)
+        if (environment.userType == 'vendor') headers.splice(headers.indexOf('Discount'), 1)
         var options = {
           showLabels: true,
           showTitle: false,
-          headers: Object.keys(_reportData.tableData[0]).map(m => m.charAt(0).toUpperCase() + m.slice(1)),
+          headers: headers,
           nullToEmptyString: true,
         };
         let data = [];
+        let reportDownloadData = [];
         new Promise((resolve) => {
+
           for (let pi = 0; pi < _reportData.tableData.length; pi++) {
+            let temp = {}
             for (let k in _reportData.tableData[pi]) {
               if (typeof _reportData.tableData[pi][k] == 'object' && _reportData.tableData[pi][k] != null) {
                 _reportData.tableData[pi][k] = _reportData.tableData[pi][k].value ? _reportData.tableData[pi][k].value : '';
               }
+              if (!(environment.userType == 'hdextnp' && k == "Amount"))
+                if (k != 'Order_Product_Id') temp[k] = _reportData.tableData[pi][k];
             }
+
+            reportDownloadData.push(temp);
             if (pi == (_reportData.tableData.length - 1)) {
-              resolve(_reportData.tableData);
+              resolve(reportDownloadData);
             }
           }
         }).then((data) => {
@@ -307,9 +344,9 @@ export class OrderReportComponent implements OnInit {
   viewOrderDetail(e, orderId) {
     console.log('viewOrderDetail-------->', orderId);
     if (e.event) {
-      this.child.toggleTray(e.event, "", e.orderId, null);
+      this.child.toggleTray(e.event, "", e.orderId,null, null);
     } else {
-      this.child.toggleTray(e, "", orderId, null);
+      this.child.toggleTray(e, "", orderId, null, null);
     }
   }
 
@@ -467,7 +504,14 @@ export class OrderReportComponent implements OnInit {
           return;
         }
         console.log('searchReportSubmit _reportData=============>', _reportData);
-        _this.dataSource.data = _this.dataSource.data.concat(_reportData.tableData);
+        let tableData = _reportData.tableData;
+        for (let i = 1; i < tableData.length; i++) {
+          if (tableData[i]["Order_No"] == tableData[i - 1]["Order_No"]) {
+            tableData[i]['Discount'] = '0.00'
+          }
+        }
+        // _this.dataSource = new MatTableDataSource(tableData);
+        _this.dataSource.data = _this.dataSource.data.concat(tableData);
         // _this.showMoreTableData(e);
       });
     }
@@ -500,4 +544,7 @@ export class OrderReportComponent implements OnInit {
     }
   }
 
+  ngOnDestroy(){
+    this.BackendService.abortLastHttpCall();
+  }
 }

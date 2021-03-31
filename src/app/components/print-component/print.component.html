@@ -1,0 +1,40 @@
+<div *ngIf="printPagination" class="pagination-container">
+        <ul>
+            <ng-container *ngFor="let x of noOfPages; let i = index">
+                <li (click)="navigatePage(x)" [ngClass]="{'active':x.active}">{{x.pageNo}}</li>
+            </ng-container>
+        </ul>
+    </div>
+<ng-container *ngIf="sidePanelData && sidePanelData.length > 0 else noData">
+    <ng-container *ngIf="printPagination">
+        <button class="btn" mat-raised-button style="position: fixed;
+        right: 23px;background: #C3404E;color: #fff;cursor: pointer;outline: none;z-index: 1000;"
+            (click)="openPrint()">Print</button>
+    </ng-container>
+    <div id="printContent">
+        <ng-container *ngFor="let order of sidePanelData;">
+            <!-- Print Template start -->
+            <ng-container *ngIf="printType && printType == 'order'">
+                <app-print-template [order]="order" [printType]="printType" [pageRender]="true"></app-print-template>
+            </ng-container>
+            <ng-container *ngIf="printType && printType == 'orderMessage'">
+                <app-print-template [order]="order" [printType]="printType" [pageRender]="true"></app-print-template>
+            </ng-container>
+            <!-- Print Template end -->
+        </ng-container>
+    </div>    
+</ng-container>
+<ng-template #noData>
+    <h3 *ngIf="!loading" class="spinner theme-red"> No {{printType}} to print.</h3>
+</ng-template>
+<div [ngStyle]="{display: loading ? 'flex' : 'none'}" class="spinner">
+    <!-- <div>Please wait.Printing page is in process...</div> -->
+    <div class="d-flex align-items-center">
+        <app-loader></app-loader>
+        <h3 style="margin-left: 10px;">Loading....</h3>
+    </div>
+    <div>
+        <h4>Please wait. This might take few seconds.</h4>
+    </div>
+    <!-- <mat-spinner [diameter]="40"></mat-spinner> -->
+</div>

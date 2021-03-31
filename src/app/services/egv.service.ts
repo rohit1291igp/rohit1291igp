@@ -23,10 +23,13 @@ export class EgvService {
     return this.httpClient[reqObj.method](url, reqObj.payload, reqObj.options1);
   }
 
-  getUserList(egvUserType,fkid){
+  getUserList(egvUserType,fkid,parentId){
     let url=environment.origin+"v1/admin/egvpanel/login/getUserList?egvUserType="+egvUserType;
     if(fkid){
       url+='&fkId='+fkid;
+    }
+    if(parentId){
+      url+='&parentId='+parentId;
     }
     return this.httpClient.get(url)
   }
@@ -51,9 +54,63 @@ export class EgvService {
     return this.httpClient.put(url,req_body);
   }
 
-  getCompanyList(){
-    let url=environment.origin+'v1/admin/egvpanel/login/getCompanyList'
+  getCompanyList(parentId) {
+    let url;
+    if(parentId){
+        url = environment.origin + `v1/admin/egvpanel/login/getCompanyList?parentId=${parentId}`;
+    }else{
+      url = environment.origin + 'v1/admin/egvpanel/login/getCompanyList';
+    }
+    return this.httpClient.get(url)
+  }
+  getproductList(fk_associateId) {
+    let url = environment.origin + 'v1/admin/internal/bulk-egv/products?fkAssociateId=' + fk_associateId;
     return this.httpClient.get(url)
   }
 
+  generateBulkEgv(fk_associateId, userId, payload) {
+    let url = environment.origin + 'v1/admin/internal/bulk-egv/bookOrder?fkAssociateId=' + fk_associateId + '&userId=' + userId;
+    return this.httpClient.post(url, payload);
+  }
+
+  generateBulkEgvExcel(fk_associateId, userId, scheduleDate, payload) {
+    let url = environment.origin + 'v1/admin/internal/bulk-egv/bookOrderWithExcel?fkAssociateId=' + fk_associateId + '&userId=' + userId + "&scheduleDate=" + scheduleDate;
+    return this.httpClient.post(url, payload);
+  }
+
+  resendBulkGv(fkAssociateId,txnDetails){
+    let url = environment.origin + 'v1/admin/internal/bulk-egv/resendCardDetails?fkAssociateId='+fkAssociateId+'&uniqueOrderId='+txnDetails ;
+    return this.httpClient.get(url);
+  }
+
+  walletDiscount(walletId){
+   const url = `${environment.origin}v1/admin/egvpanel/wallet/discount?walletId=${walletId}`;
+   return this.httpClient.get(url);
+  }
+
+  getContactFaqPage(walletId, userId, pagetype, userType, isEdit){
+    const url = `${environment.origin}v1/admin/get/contanctusfaq?walletId=${walletId}&userId=${userId}&pageType=${pagetype}&loginType=${userType}&edit=${isEdit}`;
+   return this.httpClient.get(url);
+  }
+  
+  postContactFaqPage(payload){
+    const url = `${environment.origin}v1/admin/edit/contanctusfaq`;
+   return this.httpClient.post(url, payload);
+  }
+
+  getUserDetails(userId){
+    let url = environment.origin + 'v1/admin/egvpanel/login/getDisplayNameEmailMobileOfUser?userId='+userId ;
+    return this.httpClient.get(url);
+  }
+  editUserDetails(email,mobile,displayName,userId){
+    let url = environment.origin + 'v1/admin/egvpanel/login/updateDisplayNameEmailMobileOfUser?email='+email+'&mobile='+mobile+'&displayName='+displayName+'&userId='+userId;
+    return this.httpClient.put(url, {});
+
+  }
+  resendPointMail(email,walletId,txnDetails){
+    // http://localhost:8087/v1/admin/points/sms/resend?emailid=shivam.sen@igp.com&transactionId=PTU-Da393&walletId=1076
+    let url = environment.origin + 'v1/admin/points/sms/resend?emailid='+email+'&transactionId='+txnDetails+'&walletId='+walletId;
+    return this.httpClient.get(url);
+  }
 }
+ 
