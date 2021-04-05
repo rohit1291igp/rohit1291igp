@@ -1,13 +1,15 @@
 <ng-container *ngIf="!loading">
 <nav id="navBar" [ngStyle]="{'background-color': whitelabelStyle ? whitelabelStyle.primaryColor : '', 'color': whitelabelStyle ? whitelabelStyle.secondaryColor : '' }">
-    <i class="fa fa-bars" aria-hidden="true" (click)="drawer.toggle()" (mouseover)="drawer.open()" style="cursor: pointer"></i>
-    <div class="d-flex align-items-baseline" style="float: right;">
+    <!--<i class="fa fa-bars" aria-hidden="true" (click)="drawer.toggle()" (mouseover)="drawer.open()" style="cursor: pointer"></i>-->
+    <mat-icon class="mat-icon-1" aria-hidden="true" (click)="drawer.toggle()" (mouseover)="drawer.open()" style="cursor: pointer">reorder</mat-icon>
+    <div class="d-flex align-items-center" style="float: right;">
         <p *ngIf="username" style="margin-right: 12px;text-transform: capitalize;">
             <a *ngIf="(env.userType==='egv_admin' || env.userType==='sub_egv_admin' || env.userType==='wb_yourigpstore') || (env.userType==='manager' || env.userType==='sub_manager') || (env.userType==='executive' || env.userType==='sub_executive') else noEGV" style="text-decoration: none; cursor: pointer; color: white; font-weight: bold;" routerLink="/new-dashboard/egv/change-password">{{username}}</a>
             <ng-template #noEGV>{{username}}</ng-template>
         </p>
-        <i (click)="logout($event)" class="fa fa-sign-out" aria-hidden="true"></i>
-    </div>
+       <!--<i (click)="logout($event)" class="fa fa-sign-out" aria-hidden="true"></i>-->
+   <mat-icon (click)="logout($event)" aria-hidden="true"style="font-size:16px;" >logout</mat-icon>
+    </div>    
         <ng-container *ngIf="whitelabelStyle else defaultImg">
             <img id="homePageLogo" src="{{whitelabelStyle.headerLogoUrl}}" class="homeLogo" routerLink="/new-dashboard" width="10%" alt="igp" (click)="home()">
         </ng-container>

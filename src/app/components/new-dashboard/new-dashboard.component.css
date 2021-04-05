@@ -46,8 +46,10 @@
     position: relative;
     /* [1.2] Hide the overflowing of child elements */
 }
-.mat-icon {
-    color: #c3404e;
+.mat-icon-1{
+    color: #f2f2f2;
+    font-size:22px;
+    vertical-align: middle;
 }
 
 .icon-title-container>.mat-icon {
