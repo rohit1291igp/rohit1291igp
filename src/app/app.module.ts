@@ -70,6 +70,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
  import { AlkemWebformComponent } from './components/alkem-webform/alkem-webform.component';
 import { AlkemService } from './services/alkem.service';
 import { NewEmployeeComponent } from './components/alkem-webform/new-employee/new-employee.component';
+
 // import { AlkemWebformComponent } from './alkem-webform/alkem-webform.component';
 
 
@@ -108,7 +109,7 @@ export function init_app(appLoadService: AppLoadService) {
     DownloadStockedComponent,
     DownloadStockedComponentProduct,
     AlkemWebformComponent,
-    NewEmployeeComponent
+    NewEmployeeComponent,
   ],
   imports: [
     BrowserModule,
