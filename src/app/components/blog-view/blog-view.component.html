@@ -58,8 +58,10 @@
                                 <div class="col-md-2">
                                     <div class="form-group" [ngClass]="{ 'has-error' : createBlog.submitted && !publishdate.valid}">
                                         <label for="">Published Date</label>
-                                        <input type="date" class="form-control" name="publishdate" placeholder="Published Date" [(ngModel)]="blogList.data.bloglist[0].publishdate" #publishdate="ngModel"
-                                            id="publishdate" min={{blogList.data.bloglist[0].minDate}} max="2019-06-30" required />
+                                        <!-- <input type="date" class="form-control" name="publishdate" placeholder="Published Date" [(ngModel)]="blogList.data.bloglist[0].publishdate" #publishdate="ngModel"
+                                            id="publishdate" min={{blogList.data.bloglist[0].minDate}} max="2019-06-30" required /> -->
+                                            <input type="date" class="form-control" name="publishdate" placeholder="Published Date" [(ngModel)]="blogList.data.bloglist[0].publishdate" #publishdate="ngModel"
+                                            id="publishdate" min={{blogList.data.bloglist[0].minDate}} required />
                                     </div>
                                 </div>
                             </div>

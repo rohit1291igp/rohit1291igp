@@ -21,18 +21,6 @@ const routes: Routes = [{
 {
   path: 'uploadtemplate',
   component: NewExcelUploadComponent
-},
-{
-  path: 'orderupdatestatus',
-  component: OrderUpdateStatusComponent
-},
-{
-  path: 'payment-reconciliation',
-  component: PaymentReconciliationComponent
-},
-{
-  path: 'addressUpdate',
-  component: AddressUpdateComponent
 },{
   path: 'upload-excel',
   component: UploadExcelComponent
@@ -56,10 +44,6 @@ const routes: Routes = [{
   declarations: [
     SendEmailComponent,
     NewExcelUploadComponent,
-    OrderUpdateStatusComponent,
-    PaymentReconciliationComponent,
-    AddressUpdateComponent,
-    AddressUpdateHeaderPipe,
     UploadExcelComponent,
     ImageUploadComponent
   ]

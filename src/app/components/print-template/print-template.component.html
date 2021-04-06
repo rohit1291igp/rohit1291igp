@@ -1,7 +1,7 @@
     <div class="row page orderPage {{ pageRender ? '' : 'hide'}}"  id="order_{{getUniqueOrderId(order)}}"  *ngIf="printType === 'order'">
     <section class="innerContent">
     <section class="messgae-box-cont" *ngIf="order.commments">
-            <div style="width:100%;">
+            <div style="width:100%;" class="d-flex align-items-center">
                 <div class="mb1">
                     <div class="messBgCont1">
                         <div class="messBgCont2">
@@ -25,7 +25,7 @@
             </div>
     </section>
 
-      <section class="header">
+      <section class="header d-flex align-items-center">
           <div class="display-inline igp-logo w-section">
               <img class="img-logo" src="assets/images/igp_black_logo.png" title="Indian Gifts Portal" data-pin-nopin="true" *ngIf="order.fkAssociateId === 5">
               <img class="img-logo" src="assets/images/interflora_black.png" title="Interflora" data-pin-nopin="true" *ngIf="order.fkAssociateId === 830">
@@ -41,7 +41,7 @@
 
         <section class="order-body">
           <section style="display: flex;border-bottom: 1px solid;padding-top: 24px;padding-bottom: 10px;">
-                <div><span class="bold">Order Id :</span> <span class="d-flex" ><img style="-webkit-user-select: none;margin: auto;" src="http://admin.indiangiftsportal.com/newbarcode-exc.php?number=*{{order.orderId}}*"></span></div>
+                <div><span class="bold">Order Id :</span> <span class="d-flex" ><img style="-webkit-user-select: none;margin: auto;" src="{{newbarcodeSrc(order.orderId)}}"></span></div>
                 <div class="divider" style="margin: 0px 29px;height: 52px;"></div>
                 <div *ngIf="order.orderProducts[0].orderProductExtraInfo">
                     <!--<span class="bold">Date of Delivery :</span> -->
@@ -167,7 +167,7 @@
 <div id="order_message_{{getUniqueOrderId(order)}}" class="{{ pageRender ? '' : 'hide'}} page messagePage" *ngIf="order.commments && printType === 'orderMessage'">
     <section class="innerContent">
         <section class="messgae-box-cont2">
-            <div style="width:100%;">
+            <div style="width:100%;" class="d-flex align-items-center">
                 <div class="mb1">
                     <div class="messBgCont1">
                         <div class="messBgCont2">

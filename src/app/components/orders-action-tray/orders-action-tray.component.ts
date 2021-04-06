@@ -1,4 +1,4 @@
-import { Component, OnInit, OnChanges, DoCheck, Input, Output, EventEmitter, HostListener, ElementRef, trigger, sequence, transition, animate, style, state } from '@angular/core';
+import { Component, OnInit, OnChanges, DoCheck, Input, Output, EventEmitter, HostListener, ElementRef, trigger, sequence, transition, animate, style, state, OnDestroy } from '@angular/core';
 import { ConnectionBackend, RequestOptions, Request, RequestOptionsArgs, Response, Http, Headers} from "@angular/http";
 import { IMyOptions, IMyDateModel } from 'mydatepicker';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -49,7 +49,7 @@ import { HttpHeaders } from '@angular/common/http';
       )
     ]
 })
-export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
+export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck, OnDestroy {
   env=environment;
   isMobile=environment.isMobile;
   isAdmin=(environment.userType && environment.userType === "admin");
@@ -89,6 +89,7 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
   emailSMSTemplate="Orders pending. Awaiting action from your end. Please <click here> to open the IGP dashboard";
   @Output() onStatusUpdate: EventEmitter<any> = new EventEmitter();
   @Output() onOfdView: EventEmitter<any> = new EventEmitter();
+  
   rejectReasons=[
       {"type" : "0", "name" : "Select reason for rejection", "value" : "" },
       {"type" : "1", "name" : "Delivery location not serviceable", "value" : "Delivery location not serviceable" },
@@ -155,7 +156,10 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
   deliveryBoyAssignBtnText: boolean;
   assignedDeliveryBoy:string;
   deliveryBoyEnabled:any;
-    reajectoption: any;
+  reajectoption: any;
+  pageNo = 0;
+  reqObjData;
+  orderCount : any = 0;
   constructor(
       private _elementRef: ElementRef,
       public BackendService : BackendService,
@@ -226,7 +230,7 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
   }
 
   productsURL = environment.productsURL;
-  productsCompURL = environment.productsCompURL;
+  productsCompURL = environment.componentImageUrl;
 
  @HostListener('document:click', ['$event.target'])
     public onClick(targetElement) {
@@ -554,10 +558,12 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
     return -change / 2 * (currentTime * (currentTime - 2) - 1) + start;
   }
 
-  toggleTray(e, orderByStatus, orderId, dashBoardDataType) {
+  toggleTray(e, orderByStatus, orderId, count,  dashBoardDataType) {
     e.preventDefault();
     e.stopPropagation();
     var _this = this;
+    this.orderCount = count ? count : 0;
+    debugger;
     this.statusMessageFlag=false;
     this.activeDashBoardDataType = dashBoardDataType;
     this.apierror = null;
@@ -596,6 +602,46 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
         if(this.orderByStatus || orderId) this.loadTrayData(e, orderByStatus, orderId, dashBoardDataType, null);
     }
   }
+  
+  loadTrayDataApiCallpageCount(pageCount?:any){
+    var _this = this;
+    _this.pageNo = _this.pageNo + 1;
+
+    _this.reqObjData.url = _this.reqObjData.url && _this.reqObjData.url.split("handels/")[1] ? _this.reqObjData.url.split("handels/")[1] : _this.reqObjData.url;
+    if(environment.userType != 'admin'){
+        _this.reqObjData.url = _this.reqObjData.url.split('&pageNumber=')[0] + `&pageNumber=${_this.pageNo}`;
+    }
+    
+    
+    let promise = new Promise ((resolve,reject)=>{
+        _this.BackendService.makeAjax(_this.reqObjData, function(err, response, headers){
+            if(err || response.error) {
+                return resolve(response);
+            }else{
+                return resolve(response);
+            }
+            }); 
+    });
+    return promise;
+  }
+  loadTrayDataApiCall(reqObj, orderByStatus){
+
+    var _this = this;
+    _this.reqObjData = reqObj;
+    let promise = new Promise ((resolve,reject)=>{
+        if(orderByStatus){
+            _this.loadTrayDataApiCallpageCount(_this.pageNo).then((res)=>{
+                return resolve(res);
+            });
+        }else{
+            _this.loadTrayDataApiCallpageCount().then((res)=>{
+                return resolve(res);
+            });;
+        }
+    });
+
+    return promise;
+  }  
 
   loadTrayData(e, orderByStatus, orderId, dashBoardDataType, cb){
       e.stopPropagation();
@@ -603,6 +649,7 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
       let sector = e.sector?e.sector:'';
       let fkAssociateId = localStorage.getItem('fkAssociateId');
       var _this = this;
+      _this.pageNo = 0;
       var reqURL:string;
       if(orderByStatus && typeof(orderByStatus) === "object" && 'cat' in orderByStatus && 'subCat' in orderByStatus){
           var cat=orderByStatus.cat;
@@ -663,11 +710,20 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
           }
           //fetch vendorGrpId
           let filterId = localStorage.getItem('vendorGrpId') ? localStorage.getItem('vendorGrpId') : 0;
-          if(orderDeliveryTime === "future"){
-              reqURL ="getOrderByStatusDate?responseType=json&scopeId=1&isfuture=true&orderAction="+dashBoardDataType+"&section="+section+"&status="+orderStatus+"&fkassociateId="+fkAssociateId+"&date="+spDate+"&filterId="+filterId+'&sector='+sector;
+          if(environment.userType === 'admin'){
+            if(orderDeliveryTime === "future"){
+                reqURL ="getOrderByStatusDate?responseType=json&scopeId=1&isfuture=true&orderAction="+dashBoardDataType+"&section="+section+"&status="+orderStatus+"&fkassociateId="+fkAssociateId+"&date="+spDate+"&filterId="+filterId+'&sector='+sector;
+            }else{
+                reqURL ="getOrderByStatusDate?responseType=json&scopeId=1&orderAction="+dashBoardDataType+"&section="+section+"&status="+orderStatus+"&fkassociateId="+fkAssociateId+"&date="+spDate+"&filterId="+filterId+'&sector='+sector;
+            }
           }else{
-              reqURL ="getOrderByStatusDate?responseType=json&scopeId=1&orderAction="+dashBoardDataType+"&section="+section+"&status="+orderStatus+"&fkassociateId="+fkAssociateId+"&date="+spDate+"&filterId="+filterId+'&sector='+sector;
+            if(orderDeliveryTime === "future"){
+                reqURL ="pagination/getOrderByStatusDate?responseType=json&scopeId=1&isfuture=true&orderAction="+dashBoardDataType+"&section="+section+"&status="+orderStatus+"&fkassociateId="+fkAssociateId+"&date="+spDate+"&filterId="+filterId+'&sector='+sector+"&pageNumber=";
+            }else{
+                reqURL ="pagination/getOrderByStatusDate?responseType=json&scopeId=1&orderAction="+dashBoardDataType+"&section="+section+"&status="+orderStatus+"&fkassociateId="+fkAssociateId+"&date="+spDate+"&filterId="+filterId+'&sector='+sector+"&pageNumber=";
+            }
           }
+          
 
           if(cat && subCat){
               reqURL = reqURL+"&category="+cat+"&subcategory="+subCat;
@@ -680,34 +736,62 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
           payload : {}
       };
 
-      this.BackendService.makeAjax(reqObj, function(err, response, headers){
-          if(err || response.error) {
-              console.log('Error=============>', err, response.errorCode);
-              if(cb){
-                  return cb(err || response.errorCode);
-              }else{
-                  _this.apierror = err || response.errorCode;
-              }
-              return;
-          } 
-          response = response;
-          //console.log('sidePanel Response --->', response.result);
-          if(response.result){
-            _this.assignedDeliveryBoy = response.result[0].orderProducts[0].deliveryBoyName;
-          }
-          if(cb){
-              return cb(null, response.result ? Array.isArray(response.result) ? response.result : [response.result] : []);
-          }else{
-              _this.sidePanelData = response.result ? Array.isArray(response.result) ? response.result : [response.result] : [];
-              _this.sidePanelDataFilter = [..._this.sidePanelData]
-              //_this.getNxtOrderStatus(_this.sidePanelData[0].ordersStatus);
-              _this.scrollTo(document.getElementById("mainOrderSection"), 0, 0); // scroll to top
-              setTimeout(function(){
-                  _this.printDropDwonData.dDOptions[1].pageLength=document.getElementsByClassName('messagePage').length;
-              },1000);
-          }
+    //   this.BackendService.makeAjax(reqObj, function(err, response, headers){
+    //       if(err || response.error) {
+    //           console.log('Error=============>', err, response.errorCode);
+    //           if(cb){
+    //               return cb(err || response.errorCode);
+    //           }else{
+    //               _this.apierror = err || response.errorCode;
+    //           }
+    //           return;
+    //       } 
+    //       response = response;
+    //       //console.log('sidePanel Response --->', response.result);
+    //       if(response.result){
+    //         _this.assignedDeliveryBoy = response.result[0].orderProducts[0].deliveryBoyName;
+    //       }
+    //       if(cb){
+    //           return cb(null, response.result ? Array.isArray(response.result) ? response.result : [response.result] : []);
+    //       }else{
+    //           _this.sidePanelData = response.result ? Array.isArray(response.result) ? response.result : [response.result] : [];
+    //           _this.sidePanelDataFilter = [..._this.sidePanelData]
+    //           //_this.getNxtOrderStatus(_this.sidePanelData[0].ordersStatus);
+    //           _this.scrollTo(document.getElementById("mainOrderSection"), 0, 0); // scroll to top
+    //           setTimeout(function(){
+    //               _this.printDropDwonData.dDOptions[1].pageLength=document.getElementsByClassName('messagePage').length;
+    //           },1000);
+    //       }
 
-      });
+    //   });
+
+      _this.loadTrayDataApiCall(reqObj, orderByStatus).then((res:any)=>{
+        if(res.error) {
+            console.log('Error=============>', res.errorCode);
+            if(cb){
+                return cb(res.errorCode);
+            }else{
+                _this.apierror = res.errorCode;
+            }
+            return;
+        } 
+        res = res;
+        //console.log('sidePanel res --->', res.result);
+        if(res.result){
+          _this.assignedDeliveryBoy = res.result[0].orderProducts[0].deliveryBoyName;
+        }
+        if(cb){
+            return cb(null, res.result ? Array.isArray(res.result) ? res.result : [res.result] : []);
+        }else{
+            _this.sidePanelData = res.result ? Array.isArray(res.result) ? res.result : [res.result] : [];
+            _this.sidePanelDataFilter = [..._this.sidePanelData]
+            //_this.getNxtOrderStatus(_this.sidePanelData[0].ordersStatus);
+            _this.scrollTo(document.getElementById("mainOrderSection"), 0, 0); // scroll to top
+            setTimeout(function(){
+                _this.printDropDwonData.dDOptions[1].pageLength=document.getElementsByClassName('messagePage').length;
+            },1000);
+        }
+      })
   }
 
   getOrderProductFromPanel(orderId, cb, e){
@@ -1709,14 +1793,17 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
           value=args.value;
         //   _this.router.navigate([`/dashboard/print/${value}`]);
         //Enable this code for print All route
-        // value = value == 'message' ? 'orderMessage' : value;
-        //   this.router.navigate([]).then(result => {  window.open(`${location.href.split("#")[0]}#/new-dashboard/dashboard/print/${value}`, '_blank'); });
+        if(_this.reqObjData.url.includes('getOrderByStatusDate')){
+            value = value == 'message' ? 'orderMessage' : value;
+            this.router.navigate([]).then(result => {  window.open(`${location.href.split("#")[0]}#/new-dashboard/dashboard/print/${value}`, '_blank'); });
+        }
+       
         //Ends
       if(value === 'order'){
          
-          _this.print(_e, 'order', null, null, null, 'all');
+        //   _this.print(_e, 'order', null, null, null, 'all');
       }else{
-          _this.print(_e, 'message', null, null, null, 'all');
+        //   _this.print(_e, 'message', null, null, null, 'all');
       }
   }
 
@@ -1974,4 +2061,45 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck {
         }
         }
 
+    // On Scroll up and end 
+    scrolled(e) {
+       var _this = this;
+       if(environment.userType != 'admin'){
+        //Api call for further data
+        if(e.offsetHeight + e.scrollTop >= e.scrollHeight){
+            // this.pageNo = this.pageNo + 1;
+            // console.log('next api call', this.pageNo++);
+            if(_this.reqObjData.url.includes('getOrderByStatusDate')){
+                _this.loadTrayDataApiCallpageCount(this.pageNo).then((res:any)=>{
+                    if(res.error) {
+                        console.log('Error=============>', res.errorCode);
+                            _this.apierror = res.errorCode;
+                        return;
+                    }
+                    //console.log('sidePanel res --->', res.result);
+                    // if(res.result){
+                    //   _this.assignedDeliveryBoy = res.result[0].orderProducts[0].deliveryBoyName;
+                    // }
+                    _this.sidePanelData && _this.sidePanelData.push(...res.result);
+                    _this.sidePanelDataFilter = [..._this.sidePanelData]
+                    //_this.getNxtOrderStatus(_this.sidePanelData[0].ordersStatus);
+                    // _this.scrollTo(document.getElementById("mainOrderSection"), 0, 0); // scroll to top
+                    // setTimeout(function(){
+                    //     _this.printDropDwonData.dDOptions[1].pageLength=document.getElementsByClassName('messagePage').length;
+                    // },1000);
+                
+                });
+            }
+            
+        }
+        //Api call previous data
+        if(e.scrollTop == e.scrollLeft){
+            console.log('previous api call', this.pageNo--);
+        }
+      }
+    }
+
+    ngOnDestroy(){
+        console.log('ngOnDestroy tray')
+    }
 }

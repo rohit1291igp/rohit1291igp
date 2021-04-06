@@ -8,37 +8,32 @@ export const userAcess = {
         {
             displayName: 'Holiday Calender Management',
             iconName: 'calendar_today',
-            route: '/new-dashboard/HolidayCalendarManagement',
-        },
-        {
-            displayName: 'Offer Management',
-            iconName: 'local_offer',
-            route: '/new-dashboard/offer',
+            route: '/new-dashboard/warehouse/HolidayCalendarManagement',
         },
         {
             displayName: 'Product Decentralization',
             iconName: 'card_giftcard',
-            route: '/new-dashboard/productDecentralization',
+            route: '/new-dashboard/warehouse/productDecentralization',
         },
         {
             displayName: 'Ops-Report',
             iconName: 'analytics',
-            route: '/new-dashboard/dailywarehouseOpsReport',
+            route: '/new-dashboard/warehouse/dailywarehouseOpsReport',
         },
         {
             displayName: 'Order Update',
             iconName: 'analytics',
-            route: '/new-dashboard/sendemail/orderupdatestatus'
+            route: '/new-dashboard/warehouse/orderupdatestatus'
         },
         {
             displayName: 'Payment Reconciliation',
             iconName: 'payments',
-            route: '/new-dashboard/sendemail/payment-reconciliation'
+            route: '/new-dashboard/warehouse/payment-reconciliation'
         },
         {
             displayName: 'Address Update',
             iconName: 'location_on',
-            route: '/new-dashboard/sendemail/addressUpdate'
+            route: '/new-dashboard/warehouse/addressUpdate'
         },
         {
             displayName: 'Send Email Module',
@@ -72,43 +67,43 @@ export const userAcess = {
                 {
                     displayName: 'Order Report',
                     iconName: 'receipt',
-                    route: '/new-dashboard/orderReport',
+                    route: '/new-dashboard/handels/orderReport',
                 },
                 {
                     displayName: 'Product Report',
                     iconName: 'shop',
-                    route: '/new-dashboard/reports/getVendorReport'
+                    route: '/new-dashboard//handels/reports/getVendorReport'
                 },
                 {
                     displayName: 'Pincode Report',
                     iconName: 'location_on',
-                    route: '/new-dashboard/reports/getPincodeReport'
+                    route: '/new-dashboard/handels/reports/getPincodeReport'
                 },
                 {
                     displayName: 'Delivery Boy Details',
                     iconName: 'transfer_within_a_station',
-                    route: '/new-dashboard/deliveryBoyDetails'
+                    route: '/new-dashboard/handels/deliveryBoyDetails'
                 },
                 {
                     displayName: 'Uploaded Image',
                     iconName: 'collections',
-                    route: '/new-dashboard/uploaded-image'
+                    route: '/new-dashboard/handels/uploaded-image'
                 },
                 {
                     displayName: 'Stock Component Report',
                     iconName: 'store',
-                    route: '/new-dashboard/stockReport'
+                    route: '/new-dashboard/handels/stockReport'
                 },
                 {
                     displayName: 'Performance Report',
                     iconName: 'analytics',
-                    route: '/new-dashboard/performanceReport'
+                    route: '/new-dashboard/handels/performanceReport'
                 }
             ]
         }, {
             displayName: 'Bulk Upload',
             iconName: 'cloud_upload',
-            route: '/new-dashboard/bulkupload',
+            route: '/new-dashboard/handels/bulkupload',
         }],
     admin: [
         {
@@ -119,7 +114,7 @@ export const userAcess = {
         {
             displayName: 'Payout Dashboard',
             iconName: 'home',
-            route: '/new-dashboard/payout-dashboard',
+            route: '/new-dashboard/handels/payout-dashboard',
         },
         {
             displayName: 'Reports',
@@ -129,62 +124,62 @@ export const userAcess = {
                 {
                     displayName: 'Order Report',
                     iconName: 'receipt',
-                    route: '/new-dashboard/orderReport',
+                    route: '/new-dashboard/handels/orderReport',
                 },
                 {
                     displayName: 'Product Report',
                     iconName: 'shop',
-                    route: '/new-dashboard/reports/getVendorReport'
+                    route: '/new-dashboard/handels/reports/getVendorReport'
                 },
                 {
                     displayName: 'Pincode Report',
                     iconName: 'location_on',
-                    route: '/new-dashboard/reports/getPincodeReport'
+                    route: '/new-dashboard/handels/reports/getPincodeReport'
                 },
                 {
                     displayName: 'Payout and Taxes',
                     iconName: 'shop',
-                    route: '/new-dashboard/reports/getPayoutAndTaxesReport'
+                    route: '/new-dashboard/handels/reports/getPayoutAndTaxesReport'
                 },
                 {
                     displayName: 'Uploaded Image',
                     iconName: 'collections',
-                    route: '/new-dashboard/uploaded-image'
+                    route: '/new-dashboard/handels/uploaded-image'
                 },
                 {
                     displayName: 'Stock Component Report',
                     iconName: 'store',
-                    route: '/new-dashboard/stockReport'
+                    route: '/new-dashboard/handels/stockReport'
                 },
                 {
                     displayName: 'Performance Report',
                     iconName: 'analytics',
-                    route: '/new-dashboard/performanceReport'
+                    route: '/new-dashboard/handels/performanceReport'
                 },
                 {
                     displayName: 'Vendor Details',
                     iconName: 'location_on',
-                    route: '/new-dashboard/reports/getVendorDetails'
+                    route: '/new-dashboard/handels/reports/getVendorDetails'
                 },
                 {
                     displayName: 'SLA Reports',
                     iconName: 'location_on',
-                    route: '/new-dashboard/reports/getSlaReport'
+                    route: '/new-dashboard/handels/reports/getSlaReport'
                 },
                 {
                     displayName: 'Barcode',
                     iconName: 'location_on',
-                    route: '/new-dashboard/reports/getBarcodeToComponentReport'
+                    route: '/new-dashboard/handels/reports/getBarcodeToComponentReport'
                 },
                 {
                     displayName: 'Barcode verify',
                     iconName: 'location_on',
-                    route: '/new-dashboard/reports/getbarcodestoverify'
+                    route: '/new-dashboard/handels/reports/getbarcodestoverify'
                 },
                 {
                     displayName: 'Component Report',
                     iconName: 'location_on',
-                    route: '/new-dashboard/reports/getComponentReport'
+                    route: '/new-dashboard/handels/reports/getComponentReport'
                 }
             ]
         }],
@@ -377,12 +372,12 @@ export const userAcess = {
         {
             displayName: 'Banner Panel',
             iconName: 'image',
-            route: '/new-dashboard/banner',
+            route: '/new-dashboard/marketing/banner',
         },
         {
             displayName: 'Offer Panel',
             iconName: 'local_offer',
-            route: '/new-dashboard/offerpagemanagement',
+            route: '/new-dashboard/marketing/offerpagemanagement',
         }
 
     ],
@@ -391,10 +386,7 @@ export const userAcess = {
             displayName: 'Search Ranking',
             iconName: 'image',
             route: '/new-dashboard/searchRanking',
-        },
-
-
-
+        }
     ],
 
     microsite: [{
@@ -406,7 +398,7 @@ export const userAcess = {
     {
         displayName: 'Current Balance',
         iconName: 'account_balance_wallet',
-        route: '/new-dashboard/reports/itcReport',
+        route: '/new-dashboard/handels/reports/itcReport',
     },
     {
         displayName: 'Pending orders',
@@ -422,7 +414,7 @@ export const userAcess = {
     {
         displayName: 'Current Balance',
         iconName: 'account_balance_wallet',
-        route: '/new-dashboard/reports/zeaplReport',
+        route: '/new-dashboard/handels/reports/zeaplReport',
     },
     {
         displayName: 'Pending orders',
