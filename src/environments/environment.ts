@@ -8,10 +8,9 @@ export const environment = {
   log : true,
  // origin: 'http://35.171.85.169:8081/',54.88.211.119
   //  origin: 'http://34.229.23.111:8081/',
-  //origin:'http://18.233.106.34:8081/',
-  origin:'http://3.84.233.196:8081/',
+  // origin:'http://3.84.233.196:8081/',
   // origin:'http://adminapi.igp.com/',
-  // origin:'http://adminapi.igp.com/',
+  origin:'http://adminapi.igp.com/',
   originMock: 'https://5a43a511342c490012f3fca2.mockapi.io/',
   productsURL : 'http://img1.igp.com/p/',
   productsCompURL : 'http://admin.indiangiftsportal.com/handelscomponents/',
@@ -29,6 +28,6 @@ export const environment = {
   interfloraBlogCDN: 'https://res.cloudinary.com/interflora/f_auto,q_auto,t_blogimage/blogs/',
   componentImageUrl: 'https://handelscomponents.s3.amazonaws.com/',
   blogsAcl: 'public-read',
-  bannerImageUrl : 'https://handelscomponents.s3.amazonaws.com/'
-
+  bannerImageUrl : 'https://handelscomponents.s3.amazonaws.com/',
+  newbarcodeUrl: '//ck.indiangiftsportal.com/newbarcode-exc.php?number='
 };

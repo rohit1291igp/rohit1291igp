@@ -655,6 +655,11 @@ export const userAcess = {
             displayName: 'upload-template',
             iconName: 'collections',
             route: '/new-dashboard/sendemail/uploadtemplate',
+        },
+        {
+            displayName: 'upload-image',
+            iconName: 'collections',
+            route: '/new-dashboard/sendemail/uploadimage',
         }
     
     ]

@@ -89,6 +89,7 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck, On
   emailSMSTemplate="Orders pending. Awaiting action from your end. Please <click here> to open the IGP dashboard";
   @Output() onStatusUpdate: EventEmitter<any> = new EventEmitter();
   @Output() onOfdView: EventEmitter<any> = new EventEmitter();
+  
   rejectReasons=[
       {"type" : "0", "name" : "Select reason for rejection", "value" : "" },
       {"type" : "1", "name" : "Delivery location not serviceable", "value" : "Delivery location not serviceable" },
@@ -158,6 +159,7 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck, On
   reajectoption: any;
   pageNo = 0;
   reqObjData;
+  orderCount : any = 0;
   constructor(
       private _elementRef: ElementRef,
       public BackendService : BackendService,
@@ -228,7 +230,7 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck, On
   }
 
   productsURL = environment.productsURL;
-  productsCompURL = environment.productsCompURL;
+  productsCompURL = environment.componentImageUrl;
 
  @HostListener('document:click', ['$event.target'])
     public onClick(targetElement) {
@@ -556,10 +558,12 @@ export class OrdersActionTrayComponent implements OnInit, OnChanges, DoCheck, On
     return -change / 2 * (currentTime * (currentTime - 2) - 1) + start;
   }
 
-  toggleTray(e, orderByStatus, orderId, dashBoardDataType) {
+  toggleTray(e, orderByStatus, orderId, count,  dashBoardDataType) {
     e.preventDefault();
     e.stopPropagation();
     var _this = this;
+    this.orderCount = count ? count : 0;
+    debugger;
     this.statusMessageFlag=false;
     this.activeDashBoardDataType = dashBoardDataType;
     this.apierror = null;

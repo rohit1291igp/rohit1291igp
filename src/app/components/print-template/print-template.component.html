@@ -41,7 +41,7 @@
 
         <section class="order-body">
           <section style="display: flex;border-bottom: 1px solid;padding-top: 24px;padding-bottom: 10px;">
-                <div><span class="bold">Order Id :</span> <span class="d-flex" ><img style="-webkit-user-select: none;margin: auto;" src="http://admin.indiangiftsportal.com/newbarcode-exc.php?number=*{{order.orderId}}*"></span></div>
+                <div><span class="bold">Order Id :</span> <span class="d-flex" ><img style="-webkit-user-select: none;margin: auto;" src="{{newbarcodeSrc(order.orderId)}}"></span></div>
                 <div class="divider" style="margin: 0px 29px;height: 52px;"></div>
                 <div *ngIf="order.orderProducts[0].orderProductExtraInfo">
                     <!--<span class="bold">Date of Delivery :</span> -->

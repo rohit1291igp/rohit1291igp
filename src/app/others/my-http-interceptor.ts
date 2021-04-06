@@ -4,20 +4,23 @@ import { Observable } from 'rxjs/Rx';
 import 'rxjs/add/observable/throw'
 import 'rxjs/add/operator/catch';
 import {environment} from "../../environments/environment";
+import { CookieService } from 'app/services/cookie.service';
 
 @Injectable()
 export class MyHttpInterceptor implements HttpInterceptor {
-    constructor() { }
+    constructor(private cookieService: CookieService) { }
 
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 
-        let logoutOnce = localStorage.getItem('logoutOnce') ? localStorage.getItem('logoutOnce') : null;
+        let logoutOnce = localStorage.getItem('clearCache') ? localStorage.getItem('clearCache') : null;
         if(!logoutOnce){
-            localStorage.setItem('logoutOnce', 'true');
-            let logoutBtn = document.getElementsByClassName("logout") as any;
-            if(logoutBtn.length > 0){
-                logoutBtn[0].click();
-            }
+            localStorage.setItem('clearCache', 'true');
+            this.cookieService.deleteCookie('currentUserToken');
+            window.location.reload();
+            // let logoutBtn = document.getElementsByClassName("logout") as any;
+            // if(logoutBtn.length > 0){
+            //     logoutBtn[0].click();
+            // }
         }
 
         console.log("intercepted request ... ");
