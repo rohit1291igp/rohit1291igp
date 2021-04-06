@@ -1,7 +1,10 @@
-import { Component, OnInit, HostListener } from '@angular/core';
+import { Component, OnInit, HostListener, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { BackendService } from '../../services/backend.service';
 import { DashboardService } from 'app/services/dashboard.service';
+import { HttpClient } from '@angular/common/http';
+import { environment } from 'environments/environment';
+// import { environment } from "../../environments/environment";
 
 @Component({
     selector: 'app-print-comp',
@@ -13,10 +16,15 @@ export class PrintComponent implements OnInit {
     apierror: any;
     sidePanelData: any;
     loading = true;
+    reqObjData: any;
+    printPagination = true;
+    noOfPages = [];//[{pageNo:1, active:false},{pageNo:2, active:false},{pageNo:3, active:false},{pageNo:4, active:false}];
     constructor(
         private route: ActivatedRoute,
         private BackendService: BackendService,
-        private dashboardService: DashboardService
+        private dashboardService: DashboardService,
+        private http: HttpClient,
+        private cd: ChangeDetectorRef
     ) {
 
     }
@@ -100,11 +108,20 @@ export class PrintComponent implements OnInit {
             }
             //fetch vendorGrpId
             let filterId = localStorage.getItem('vendorGrpId') ? localStorage.getItem('vendorGrpId') : 0;
-            if (orderDeliveryTime === "future") {
-                reqURL = "getOrderByStatusDate?responseType=json&scopeId=1&isfuture=true&orderAction=" + dashBoardDataType + "&section=" + section + "&status=" + orderStatus + "&fkassociateId=" + fkAssociateId + "&date=" + spDate + "&filterId=" + filterId + '&sector=' + sector;
-            } else {
-                reqURL = "getOrderByStatusDate?responseType=json&scopeId=1&orderAction=" + dashBoardDataType + "&section=" + section + "&status=" + orderStatus + "&fkassociateId=" + fkAssociateId + "&date=" + spDate + "&filterId=" + filterId + '&sector=' + sector;
+            if(environment.userType === 'admin'){
+                if (orderDeliveryTime === "future") {
+                    reqURL = "getOrderByStatusDate?responseType=json&scopeId=1&isfuture=true&orderAction=" + dashBoardDataType + "&section=" + section + "&status=" + orderStatus + "&fkassociateId=" + fkAssociateId + "&date=" + spDate + "&filterId=" + filterId + '&sector=' + sector;
+                } else {
+                    reqURL = "getOrderByStatusDate?responseType=json&scopeId=1&orderAction=" + dashBoardDataType + "&section=" + section + "&status=" + orderStatus + "&fkassociateId=" + fkAssociateId + "&date=" + spDate + "&filterId=" + filterId + '&sector=' + sector;
+                }
+            }else{
+                if (orderDeliveryTime === "future") {
+                    reqURL = "pagination/getOrderByStatusDate?responseType=json&scopeId=1&isfuture=true&orderAction=" + dashBoardDataType + "&section=" + section + "&status=" + orderStatus + "&fkassociateId=" + fkAssociateId + "&date=" + spDate + "&filterId=" + filterId + '&sector=' + sector;
+                } else {
+                    reqURL = "pagination/getOrderByStatusDate?responseType=json&scopeId=1&orderAction=" + dashBoardDataType + "&section=" + section + "&status=" + orderStatus + "&fkassociateId=" + fkAssociateId + "&date=" + spDate + "&filterId=" + filterId + '&sector=' + sector;
+                }
             }
+            
 
             if (cat && subCat) {
                 reqURL = reqURL + "&category=" + cat + "&subcategory=" + subCat;
@@ -116,23 +133,66 @@ export class PrintComponent implements OnInit {
                 method: "get",
                 payload: {}
             };
+            $this.reqObjData = reqObj;
+            if ($this.noOfPages && $this.noOfPages.length == 0) {
+                $this.loadTrayDataApiCallpageCount(1, true).then((response: any) => {
+                    if (response.error) {
+                        console.log('Error=============>', response);
 
-            this.BackendService.makeAjax(reqObj, function (err, response, headers) {
-                if (err || response.error) {
-                    console.log('Error=============>', err, response.errorCode);
+                        $this.apierror = response.errorCode;
 
-                    $this.apierror = err || response.errorCode;
+                        return;
+                    }
+                    if (response && response.status == 'Success') {
+                        let orderCount = Number(response.data);
+                        // orderCount = 900;
+                        let count = (orderCount / 500);
+                        if (count) {
+                            if ($this.isFloat(count)) {
+                                count = Number(String(count).split(".")[0]);
+                                count = count + 1;
+                            }
+                            for (let i = 0; i < count; i++) {
+                                $this.noOfPages.push({ pageNo: i + 1, active: false })
+                            }
+                        }
 
-                    return;
-                }
-                response = response;
-                $this.sidePanelData = response.result ? Array.isArray(response.result) ? response.result : [response.result] : [];
-                resolve($this.sidePanelData)
-            });
+                    }
+                    $this.cd.detectChanges();
+                    $this.loadTrayDataApiCallpageCount(1).then((response: any) => {
+                        if (response.error) {
+                            console.log('Error=============>', response);
+
+                            $this.apierror = response.errorCode;
+
+                            return;
+                        }
+                        response = response;
+                        $this.sidePanelData = response.result ? Array.isArray(response.result) ? response.result : [response.result] : [];
+                        $this.noOfPages[0].active = true;
+                        $this.cd.detectChanges();
+                        resolve($this.sidePanelData)
+                    })
+                })
+                // }else{
+                //     $this.loadTrayDataApiCallpageCount(1).then((response:any)=>{
+                //         if (response.error) {
+                //         console.log('Error=============>',response);
+
+                //         $this.apierror = response.errorCode;
+
+                //         return;
+                //     }
+                //     response = response;
+                //     $this.sidePanelData = response.result ? Array.isArray(response.result) ? response.result : [response.result] : [];
+                //     $this.cd.detectChanges();
+                //     resolve($this.sidePanelData)
+                // })
+            }
         })
         return promise;
     }
-    
+
     print(print_type, orderId, deliveryDate, deliveryTime, all) {
 
         let printContents = "", popupWin;
@@ -155,19 +215,99 @@ export class PrintComponent implements OnInit {
             printContents = printTargetCont.innerHTML;
         }
 
-        setTimeout(()=>{
+        setTimeout(() => {
+            this.printPagination = false;
+            let scrollEle = document.querySelector("*") as any;
+            scrollEle.style.overflow = 'hidden';
+            let ele = document.getElementsByTagName("mat-drawer-container") as any;
+            ele[0].style.paddingTop = '0em';
+            let footerEle = document.getElementsByTagName("app-footer") as any;
+            footerEle[0].style.display = "none";
+            this.cd.detectChanges();
             window.print();
         }, 100)
-        
+
     }
 
-    openPrint(){
+    openPrint() {
+        let scrollEle = document.querySelector("*") as any;
+        scrollEle.style.overflow = 'hidden';
+        let ele = document.getElementsByTagName("mat-drawer-container") as any;
+        ele[0].style.paddingTop = '0em';
+        let footerEle = document.getElementsByTagName("app-footer") as any;
+        footerEle[0].style.display = "none";
+        this.printPagination = false;
+        this.cd.detectChanges();
         window.print();
     }
 
     @HostListener("window:afterprint", [])
     onWindowAfterPrint() {
-    //   window.close();
-      console.log('... afterprint');
+        //   window.close();
+        console.log('... afterprint', this.printPagination);
+        let scrollEle = document.querySelector("*") as any;
+        scrollEle.style.overflow = 'auto';
+        let ele = document.getElementsByTagName("mat-drawer-container") as any;
+        ele[0].style.paddingTop = '2em';
+        let footerEle = document.getElementsByTagName("app-footer") as any;
+        footerEle[0].style.display = "block";
+        this.printPagination = true;
+        this.cd.detectChanges();
+    }
+
+    loadTrayDataApiCallpageCount(pageCount?: any, orderCount?: boolean) {
+        var _this = this;
+
+        _this.reqObjData.url = _this.reqObjData.url && _this.reqObjData.url.split("handels/")[1] ? _this.reqObjData.url.split("handels/")[1] : _this.reqObjData.url;
+
+        if(environment.userType != 'admin'){
+            _this.reqObjData.url = _this.reqObjData.url.split('&pageNumber=')[0] + `&pageNumber=${pageCount}`;
+            if (_this.noOfPages && _this.noOfPages.length == 0 && orderCount) {
+                _this.reqObjData.url = _this.reqObjData.url.replace('pagination/getOrderByStatusDate', 'count/getOrderByStatus');
+            } else {
+                _this.reqObjData.url = _this.reqObjData.url.replace('count/getOrderByStatus', 'pagination/getOrderByStatusDate');
+                _this.reqObjData.url += "&printall=" + true;
+            }
+        }
+        
+        let promise = new Promise((resolve, reject) => {
+            _this.BackendService.makeAjax(_this.reqObjData, function (err, response, headers) {
+                if (err || response.error) {
+                    return resolve(response);
+                } else {
+                    return resolve(response);
+                }
+            });
+        });
+        return promise;
+    }
+
+    navigatePage(data) {
+        if (!data.active) {
+            var $this = this;
+            $this.noOfPages.forEach((x: any) => x.active = false);
+            data.active = true;
+            $this.loading = true;
+            this.cd.detectChanges();
+            // let ele = e && e.target && e.target.closest('li') && e.target.closest('li');
+            // ele.cla
+            // let pageNo = ele.innerText;
+            this.loadTrayDataApiCallpageCount(data.pageNo, false).then((response: any) => {
+                if (response.error) {
+                    console.log('Error=============>', response);
+
+                    $this.apierror = response.errorCode;
+
+                    return;
+                }
+                response = response;
+                $this.sidePanelData = response.result ? Array.isArray(response.result) ? response.result : [response.result] : [];
+                $this.loading = false;
+                $this.cd.detectChanges();
+            })
+        }
+    }
+    isFloat(n) {
+        return Number(n) === n && n % 1 !== 0;
     }
 }
