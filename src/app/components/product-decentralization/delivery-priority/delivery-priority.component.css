@@ -104,3 +104,10 @@
 [type="file"]+label.btn-2:hover::before {
     right: 75%;
 }
+.mat-icon{
+    font-size: inherit;
+    font-weight: 600;
+    margin-top:.5rem;
+    padding-left:.9rem;
+    vertical-align:middle;
+}

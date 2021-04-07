@@ -135,9 +135,15 @@ input[type=number]::-webkit-outer-spin-button {
     margin: 0; 
 }
 
-.summary-icon-circle {
+ .summary-icon-circle {
     background: #ceb884;
     border-radius: 49%;
     padding: 10px;
     color: #fff;
+}
+mat-icon{
+    font-size:inherit;
+    vertical-align: middle;
+    margin-top:10px;
+    font-weight:bold;
 }

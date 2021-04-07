@@ -78,7 +78,7 @@ textarea::-webkit-scrollbar-thumb {
 [type="file"] {
     height: 0;
     overflow: hidden;
-    width: 0;
+    width: 0;   
 }
 
 [type="file"]+label {
@@ -143,4 +143,11 @@ table {
 .saveButton{
     background-color: #28a745;
     color:#fff
+}
+.mat-icon{
+    font-size: inherit;
+    font-weight: 600;
+    margin-top:.5rem;
+    padding-left:.9rem;
+    vertical-align:middle;
 }

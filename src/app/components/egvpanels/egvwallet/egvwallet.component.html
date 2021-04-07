@@ -39,7 +39,7 @@
 
             <div class="col-md-3 col-sm-12 summaryBox d-flex align-items-center">
               <div style="flex: 1;font-size: 1.3em;">
-                <i class="fa fa-balance-scale summary-icon-circle" ></i>
+                <i class="fa fa-balance-scale summary-icon-circle" ></i> 
               </div>
               <div style="flex: 5;text-align: end;padding-right: 0.5em;">
                 <div style="margin:auto;font-size: 1.1em;">&#8377; {{walletSummary.balance || '0' | indianNumeric}}
@@ -47,13 +47,14 @@
                 <div class="summaryIcon"> Balance</div>
               </div>
             </div>
-
+            
             <div class="col-md-3 col-sm-12 summaryBox d-flex align-items-center"
               *ngIf="env.userType=='egv_admin'|| env.userType == 'wb_yourigpstore'">
               <!-- <div style='margin:auto'>&#8377; {{walletSummary.dailyTransLimit || '0' | indianNumeric}}</div>
               <div class="summaryIcon"><i class="fa fa-sliders fa-rotate-90"></i> Daily Limit </div> -->
-              <div style="flex: 1;font-size: 1.3em;">
-                <i class="fa fa-sliders fa-rotate-90 summary-icon-circle"></i>
+              <div style="flex: 1;font-size: 1.3em;"> 
+               <i class="fa fa-sliders fa-rotate-90 summary-icon-circle"></i>
+                <mat-icon>check_circle_outline</mat-icon>
               </div>
               <div style="flex: 5;text-align: end;padding-right: 0.5em;">
                 <div style="margin:auto;font-size: 1.1em;">&#8377;
@@ -205,9 +206,11 @@
             </ng-container>
             <ng-container *ngIf="column == 'Actions'">
               <button mat-button color="primary" (click)='approveTransaction($event,element,true)'>
-                <i class="fa fa-check"></i> Approve</button>
-              <button mat-button color="warn" (click)='approveTransaction($event,element,false)'><i
-                  class="fa fa-times"></i>
+                 <!-- <i class="fa fa-check"></i> --><mat-icon>check</mat-icon> Approve</button>
+               
+              <button mat-button color="warn" (click)='approveTransaction($event,element,false)'>
+                <!-- <i class="fa fa-times"></i> -->
+                <mat-icon>close</mat-icon>
                 Reject</button>
             </ng-container>
           </mat-cell>
