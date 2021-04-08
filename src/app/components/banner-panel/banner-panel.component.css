@@ -47,3 +47,7 @@ mat-cell:nth-child(11), mat-header-cell:nth-child(11){
 mat-cell{
     padding:0 5px;
 } 
+mat-icon{
+    font-size: inherit;
+    font-weight: bold;
+}
