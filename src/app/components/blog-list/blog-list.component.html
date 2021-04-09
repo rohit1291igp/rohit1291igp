@@ -38,7 +38,8 @@
                                             <button class="btn" (click)="viewBlog(list)" title="View"><a class="edtview" ng-href="#/blog-view" routerLink="/blog-view/{{list.id}}/view"><!--<i class="fa fa-eye"></i>-->  
                                                 <mat-icon>visibility</mat-icon></a></button>                                        
                                             <button class="btn" (click)="deleteBlog(list)" title="Delete"><!--<i class="fa fa-trash"></i>--><mat-icon>delete</mat-icon></button>
-                                            <button class="btn" *ngIf="list.status == 0" (click)="publishUnpublishBlog(list)" title="Publish Blog"><i class="fa fa-cloud-upload" aria-hidden="true"></i></button>
+                                            <button class="btn" *ngIf="list.status == 0" (click)="publishUnpublishBlog(list)" title="Publish Blog"><!--<i class="fa fa-cloud-upload" aria-hidden="true"></i>-->
+                                                <mat-icon aria-hidden="true">cloud_upload</mat-icon></button>
                                             <button class="btn" *ngIf="list.status == 1" (click)="publishUnpublishBlog(list)" title="UnPublish Blog"><!--<i class="fa fa-cloud-download" aria-hidden="true"></i>-->
                                                 <mat-icon aria-hidden="true">cloud_download</mat-icon>
                                         </button>
