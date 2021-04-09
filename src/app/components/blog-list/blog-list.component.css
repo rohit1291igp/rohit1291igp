@@ -19,3 +19,7 @@
  .panel{
     /* margin-top: 37px; */
  }
+ mat-icon{
+     font-size:1.3em;
+     margin-top:.3em;
+ }
